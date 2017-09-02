@@ -53,6 +53,8 @@ public class MusicActivity extends AppCompatActivity {
 
     private Handler mHandler = new Handler();
 
+    private boolean alertDiagUp = true;
+
     private OnClickListener mClickListener = new OnClickListener() {
 
         @Override
@@ -91,6 +93,7 @@ public class MusicActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("Musicacvitity","oncreate");
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_music);
@@ -115,6 +118,7 @@ public class MusicActivity extends AppCompatActivity {
         // Check if we have permissions
         if (Settings.Secure.getString(this.getContentResolver(),"enabled_notification_listeners").contains(getApplicationContext().getPackageName()))
         {
+            alertDiagUp = false;
             MediaSessionManager mm = (MediaSessionManager) this.getSystemService(
                     Context.MEDIA_SESSION_SERVICE);
             List<MediaController> controllers = mm.getActiveSessions(
@@ -126,18 +130,7 @@ public class MusicActivity extends AppCompatActivity {
             }
         } else {
             // Need permissions to read notifications
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(getString(R.string.notification_alert_title));
-            builder.setMessage(getString(R.string.notification_alert_body));
-            builder.setPositiveButton(android.R.string.ok, null);
-            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @TargetApi(23)
-                public void onDismiss(DialogInterface dialog) {
-                    getApplicationContext().startActivity(new Intent(
-                            "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
-                }
-            });
-            builder.show();
+            requestPermissions();
         }
     }
 
@@ -146,26 +139,19 @@ public class MusicActivity extends AppCompatActivity {
         super.onResume();
         // Need permissions to read notifications
         if (Settings.Secure.getString(this.getContentResolver(),"enabled_notification_listeners").contains(getApplicationContext().getPackageName())) {
+            alertDiagUp = false;
             mHandler.post(mUpdateMetaData);
         } else {
             // Need permissions to read notifications
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(getString(R.string.notification_alert_title));
-            builder.setMessage(getString(R.string.notification_alert_body));
-            builder.setPositiveButton(android.R.string.ok, null);
-            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @TargetApi(23)
-                public void onDismiss(DialogInterface dialog) {
-                    getApplicationContext().startActivity(new Intent(
-                            "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
-                }
-            });
-            builder.show();
+            if (!alertDiagUp) {
+                requestPermissions();
+            }
         }
     }
 
     @Override
     public void onPause() {
+        Log.d("Musicacvitity","onpause");
         super.onPause();
         mHandler.removeCallbacks(mUpdateMetaData);
     }
@@ -205,6 +191,22 @@ public class MusicActivity extends AppCompatActivity {
             mHandler.postDelayed(this, 1000); //setting up update event after one second
         }
     };
+
+    private void requestPermissions(){
+        // Need permissions to read notifications
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.notification_alert_title));
+        builder.setMessage(getString(R.string.notification_alert_body));
+        builder.setPositiveButton(android.R.string.ok, null);
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @TargetApi(23)
+            public void onDismiss(DialogInterface dialog) {
+                getApplicationContext().startActivity(new Intent(
+                        "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+            }
+        });
+        builder.show();
+    }
 
     protected void refreshMetaData(){
         // Check if we have permissions

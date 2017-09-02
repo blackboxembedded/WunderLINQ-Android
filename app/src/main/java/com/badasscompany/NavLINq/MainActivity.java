@@ -31,6 +31,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -151,6 +152,21 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(mBondingBroadcast,new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
         gattServiceIntent = new Intent(MainActivity.this, BluetoothLeService.class);
 
+        if (!Settings.Secure.getString(this.getContentResolver(),"enabled_notification_listeners").contains(getApplicationContext().getPackageName())) {
+            // Need permissions to read notifications
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(getString(R.string.notification_alert_title));
+            builder.setMessage(getString(R.string.notification_alert_body));
+            builder.setPositiveButton(android.R.string.ok, null);
+            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @TargetApi(23)
+                public void onDismiss(DialogInterface dialog) {
+                    getApplicationContext().startActivity(new Intent(
+                            "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+                }
+            });
+            builder.show();
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // Check Write permissions
             if (this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -179,12 +195,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 builder.show();
-            } else {
-                setupBLE();
             }
-        } else {
-            setupBLE();
         }
+
     }
 
     private void showActionBar(){

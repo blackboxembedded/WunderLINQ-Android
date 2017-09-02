@@ -29,8 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MusicActivity"
-            android:launchMode="singleTop" />
+            android:name=".MusicActivity" />
         <activity
             android:name=".TaskActivity"
             android:launchMode="singleTop" />
