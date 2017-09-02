@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/info_title" >
+        <EditTextPreference
+            android:title="@string/pref_homeAddress_name"
+            android:summary="@string/pref_homeAddress_summary"
+            android:inputType="textPostalAddress"
+            android:key="prefHomeAddress" />
+        <EditTextPreference
+            android:title="@string/pref_homePhone_name"
+            android:summary="@string/pref_homePhone_summary"
+            android:inputType="phone"
+            android:key="prefHomePhone" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/ui_title" >
+        <ListPreference
+            android:key="prefPressureF"
+            android:title="@string/pref_pressuref_name"
+            android:entries="@array/pressuref_array"
+            android:entryValues="@array/pressuref_arrayValues"
+            android:defaultValue="0"
+            />
+        <ListPreference
+            android:key="prefTempF"
+            android:title="@string/pref_tempf_name"
+            android:entries="@array/tempf_array"
+            android:entryValues="@array/tempf_arrayValues"
+            android:defaultValue="0"
+            />
+        <ListPreference
+            android:key="prefDistance"
+            android:title="@string/pref_distance_name"
+            android:entries="@array/distance_array"
+            android:entryValues="@array/distance_arrayValues"
+            android:defaultValue="0"
+            />
+        <ListPreference
+            android:key="prefBearing"
+            android:title="@string/pref_bearing_name"
+            android:entries="@array/bearing_array"
+            android:entryValues="@array/bearing_arrayValues"
+            android:defaultValue="0"
+            />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:disableDependentsState="true"
+            android:key="prefNightMode"
+            android:summary="@string/pref_nightMode_summary"
+            android:title="@string/pref_nightMode_name" >
+        </CheckBoxPreference>
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="prefNightMode"
+            android:key="prefAutoNightMode"
+            android:summary="@string/pref_autoNightMode_summary"
+            android:title="@string/pref_autoNightMode_name" >
+        </CheckBoxPreference>
+        <EditTextPreference
+            android:dependency="prefNightMode"
+            android:title="@string/pref_autoNightModeDelay_name"
+            android:summary="@string/pref_autoNightModeDelay_summary"
+            android:defaultValue="30"
+            android:inputType="number"
+            android:key="prefAutoNightModeDelay" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/advanced_settings_title" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="prefDataLogging"
+            android:summary="@string/pref_dataLogging_summary"
+            android:title="@string/pref_dataLogging_name" >
+        </CheckBoxPreference>
+    </PreferenceCategory>
+
+</PreferenceScreen>
