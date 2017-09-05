@@ -2,9 +2,13 @@ package com.badasscompany.NavLINq;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -13,7 +17,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,6 +29,8 @@ public class TaskActivity extends AppCompatActivity {
 
     private ListView taskList;
 
+    private SharedPreferences sharedPrefs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,21 +38,24 @@ public class TaskActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_task);
 
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
         taskList = (ListView) findViewById(R.id.lv_tasks);
 
         showActionBar();
 
-        String[] taskTitles = new String[] {
+        final String[] taskTitles = new String[] {
                 getResources().getString(R.string.task_title_gohome),
                 getResources().getString(R.string.task_title_callhome)
         };
+        Integer[] iconId = {
+                R.drawable.ic_home,
+                R.drawable.ic_phone
+        };
 
-        final ArrayList<String> list = new ArrayList<String>();
-        for (int i = 0; i < taskTitles.length; ++i) {
-            list.add(taskTitles [i]);
-        }
-        final StableArrayAdapter adapter = new StableArrayAdapter(this,
-                android.R.layout.simple_list_item_1, list);
+        TaskListView adapter = new
+                TaskListView(this, taskTitles, iconId);
+        taskList=(ListView)findViewById(R.id.lv_tasks);
         taskList.setAdapter(adapter);
 
         taskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -55,17 +63,30 @@ public class TaskActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
-                // TODO: Add actual actions
                 final String item = (String) parent.getItemAtPosition(position);
-                view.animate().setDuration(2000).alpha(0)
-                        .withEndAction(new Runnable() {
-                            @Override
-                            public void run() {
-                                list.remove(item);
-                                adapter.notifyDataSetChanged();
-                                view.setAlpha(1);
-                            }
-                        });
+                Log.d(TAG,"Item "+ position + ":" + item );
+                switch (position){
+                    case 0:
+                        //Navigate Home
+                        String address = sharedPrefs.getString("prefHomeAddress","");
+                        if ( address != "" ) {
+                            Intent goHomeIntent = new Intent();
+                            goHomeIntent.setData(Uri.parse("geo:0,0?q=" + address));
+                            startActivity(goHomeIntent);
+                        } else {
+                            //TODO Toast
+                        }
+                    case 1:
+                        //Call Home
+                        String phonenumber = sharedPrefs.getString("prefHomePhone","");
+                        if (phonenumber != "") {
+                            Intent callHomeIntent = new Intent(Intent.ACTION_DIAL);
+                            callHomeIntent.setData(Uri.parse("tel:" + phonenumber));
+                            startActivity(callHomeIntent);
+                        } else {
+                            //TODO Toast
+                        }
+                }
             }
 
         });

@@ -152,8 +152,8 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(mBondingBroadcast,new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
         gattServiceIntent = new Intent(MainActivity.this, BluetoothLeService.class);
 
+        // Check read notification permissions
         if (!Settings.Secure.getString(this.getContentResolver(),"enabled_notification_listeners").contains(getApplicationContext().getPackageName())) {
-            // Need permissions to read notifications
             final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(getString(R.string.notification_alert_title));
             builder.setMessage(getString(R.string.notification_alert_body));
@@ -197,7 +197,6 @@ public class MainActivity extends AppCompatActivity {
                 builder.show();
             }
         }
-
     }
 
     private void showActionBar(){
@@ -434,7 +433,6 @@ public class MainActivity extends AppCompatActivity {
     };
 
     BroadcastReceiver mBondingBroadcast = new BroadcastReceiver() {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             final int state = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.ERROR);
@@ -455,7 +453,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         }
-
     };
 
     // Handles various events fired by the Service.
@@ -621,7 +618,6 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, "Unknown Message ID: " + String.format("%02x", msgID));
             }
         }
-
     }
 
     private static IntentFilter makeGattUpdateIntentFilter() {
@@ -663,15 +659,11 @@ public class MainActivity extends AppCompatActivity {
                             mBluetoothLeService.setCharacteristicNotification(
                                     gattCharacteristic, true);
                         }
-
                     }
                 }
             }
         }
-
     }
-
-
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {

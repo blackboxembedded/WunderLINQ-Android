@@ -37,7 +37,7 @@
     <string name="pref_homeAddress_name">Home Address</string>
     <string name="pref_homeAddress_summary">Format: 12345 Street, City, State 12345</string>
     <string name="pref_homePhone_name">Home Phone Number</string>
-    <string name="pref_homePhone_summary">Format: 1-123-456-7890</string>
+    <string name="pref_homePhone_summary">Format: 11234567890</string>
 
     <string name="ui_title">User Interface</string>
     <string name="pref_tempf_name">Temperature Unit</string>
@@ -51,8 +51,8 @@
     </string-array>
     <string name="pref_distance_name">Distance Unit</string>
     <string-array name="distance_array">
-        <item name="1">Imperial</item>
-        <item name="2">Metric</item>
+        <item name="1">Metric</item>
+        <item name="2">Imperial</item>
     </string-array>
     <string-array name="distance_arrayValues">
         <item name="1">0</item>
