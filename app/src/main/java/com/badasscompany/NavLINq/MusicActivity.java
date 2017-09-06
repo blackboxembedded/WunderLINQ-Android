@@ -220,9 +220,9 @@ public class MusicActivity extends AppCompatActivity {
                 controls = controller.getTransportControls();
                 PlaybackState playbackState = controller.getPlaybackState();
                 if (playbackState.getState() != PlaybackState.STATE_PLAYING) {
-                    mPlayPauseButton.setImageResource(android.R.drawable.ic_media_play);
+                    mPlayPauseButton.setImageResource(R.drawable.ic_play);
                 } else {
-                    mPlayPauseButton.setImageResource(android.R.drawable.ic_media_pause);
+                    mPlayPauseButton.setImageResource(R.drawable.ic_pause);
                 }
 
                 metaData = controller.getMetadata();

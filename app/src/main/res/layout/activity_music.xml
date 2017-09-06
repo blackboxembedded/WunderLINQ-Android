@@ -15,19 +15,19 @@
             android:id="@+id/prev_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_media_previous" />
+            android:src="@drawable/ic_backward" />
 
         <ImageButton
             android:id="@+id/play_pause_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_media_play" />
+            android:src="@drawable/ic_play" />
 
         <ImageButton
             android:id="@+id/next_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_media_next" />
+            android:src="@drawable/ic_forward" />
     </LinearLayout>
 
     <LinearLayout
