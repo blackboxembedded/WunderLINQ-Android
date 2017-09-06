@@ -50,5 +50,6 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/action_settings"
         android:layout_centerHorizontal="true"
+        android:gravity="center"
         android:text="Title" />
 </RelativeLayout>
