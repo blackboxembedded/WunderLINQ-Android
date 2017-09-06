@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +27,7 @@ public class TaskActivity extends AppCompatActivity {
 
     private ImageButton backButton;
     private ImageButton forwardButton;
+    private TextView navbarTitle;
 
     private ListView taskList;
 
@@ -125,6 +127,9 @@ public class TaskActivity extends AppCompatActivity {
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setCustomView(v);
+
+        navbarTitle = (TextView) findViewById(R.id.action_title);
+        navbarTitle.setText(R.string.quicktask_title);
 
         backButton = (ImageButton) findViewById(R.id.action_back);
         forwardButton = (ImageButton) findViewById(R.id.action_forward);

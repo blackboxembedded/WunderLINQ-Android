@@ -46,6 +46,7 @@ public class MusicActivity extends AppCompatActivity {
 
     private ImageButton backButton;
     private ImageButton forwardButton;
+    private TextView navbarTitle;
 
     private MediaController.TransportControls controls;
     private MediaController controller;
@@ -175,8 +176,11 @@ public class MusicActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled (false);
         actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setCustomView(v);
+
+        navbarTitle = (TextView) findViewById(R.id.action_title);
+        navbarTitle.setText(R.string.music_title);
 
         backButton = (ImageButton) findViewById(R.id.action_back);
         forwardButton = (ImageButton) findViewById(R.id.action_forward);

@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton settingsButton;
     private ImageButton connectButton;
 
+    private TextView navbarTitle;
     private TextView textView1;
     private TextView textView2;
     private TextView textView3;
@@ -207,12 +208,16 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setDisplayShowHomeEnabled (false);
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
+
         actionBar.setCustomView(v);
 
         backButton = (ImageButton) findViewById(R.id.action_back);
         forwardButton = (ImageButton) findViewById(R.id.action_forward);
         settingsButton = (ImageButton) findViewById(R.id.action_settings);
         connectButton = (ImageButton) findViewById(R.id.action_connect);
+
+        navbarTitle = (TextView) findViewById(R.id.action_title);
+        navbarTitle.setText(R.string.main_title);
 
         backButton.setOnClickListener(mClickListener);
         forwardButton.setOnClickListener(mClickListener);

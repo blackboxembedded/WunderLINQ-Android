@@ -28,6 +28,7 @@ public class CompassActivity extends AppCompatActivity {
 
     private ImageButton backButton;
     private ImageButton forwardButton;
+    private TextView navbarTitle;
 
     private TextView compassTextView;
 
@@ -113,6 +114,9 @@ public class CompassActivity extends AppCompatActivity {
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setCustomView(v);
+
+        navbarTitle = (TextView) findViewById(R.id.action_title);
+        navbarTitle.setText(R.string.compass_title);
 
         backButton = (ImageButton) findViewById(R.id.action_back);
         forwardButton = (ImageButton) findViewById(R.id.action_forward);

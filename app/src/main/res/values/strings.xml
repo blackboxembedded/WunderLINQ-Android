@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">NavLINq</string>
     <!-- MainActivity -->
+    <string name="main_title">My Motorcycle</string>
     <!-- Permission Requests -->
     <string name="location_alert_title">NavLINq needs write access</string>
     <string name="location_alert_body">Please grant write access so this app can log data from your NavLINq</string>
@@ -18,7 +19,11 @@
     <string name="trip2_label">Trip 2</string>
     <string name="gear_label">Gear</string>
 
+    <!-- CompassActivity -->
+    <string name="compass_title">Compass</string>
+
     <!-- MusicActivity -->
+    <string name="music_title">Music</string>
     <string name="title_activity_music">MusicActivity</string>
     <string name="start_media_player">Start your favorite media player for controls</string>
     <string name="unknown">Unknown</string>
@@ -26,6 +31,7 @@
     <string name="notification_alert_body">Please grant notification access so this app can control your music player</string>
 
     <!-- TaskActivity -->
+    <string name="quicktask_title">Quick Tasks</string>
     <string name="task_title_gohome">Go Home</string>
     <string name="task_title_callhome">Call Home</string>
     <string name="task_title_waypoint">Mark Waypoint</string>
