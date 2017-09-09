@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class TaskActivity extends AppCompatActivity {
 
@@ -72,7 +73,7 @@ public class TaskActivity extends AppCompatActivity {
                             goHomeIntent.setData(Uri.parse("google.navigation:q=" + address));
                             startActivity(goHomeIntent);
                         } else {
-                            //TODO Toast
+                            Toast.makeText(TaskActivity.this, R.string.toast_address_not_set, Toast.LENGTH_SHORT).show();
                         }
                         break;
                     case 1:
@@ -83,7 +84,7 @@ public class TaskActivity extends AppCompatActivity {
                             callHomeIntent.setData(Uri.parse("tel:" + phonenumber));
                             startActivity(callHomeIntent);
                         } else {
-                            //TODO Toast
+                            Toast.makeText(TaskActivity.this, R.string.toast_phone_not_set, Toast.LENGTH_SHORT).show();
                         }
                         break;
                 }
