@@ -13,13 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import java.util.HashMap;
-import java.util.List;
 
 public class TaskActivity extends AppCompatActivity {
 
@@ -72,12 +68,13 @@ public class TaskActivity extends AppCompatActivity {
                         //Navigate Home
                         String address = sharedPrefs.getString("prefHomeAddress","");
                         if ( address != "" ) {
-                            Intent goHomeIntent = new Intent();
-                            goHomeIntent.setData(Uri.parse("geo:0,0?q=" + address));
+                            Intent goHomeIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                            goHomeIntent.setData(Uri.parse("google.navigation:q=" + address));
                             startActivity(goHomeIntent);
                         } else {
                             //TODO Toast
                         }
+                        break;
                     case 1:
                         //Call Home
                         String phonenumber = sharedPrefs.getString("prefHomePhone","");
@@ -88,34 +85,11 @@ public class TaskActivity extends AppCompatActivity {
                         } else {
                             //TODO Toast
                         }
+                        break;
                 }
             }
 
         });
-    }
-
-    private class StableArrayAdapter extends ArrayAdapter<String> {
-
-        HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
-
-        public StableArrayAdapter(Context context, int textViewResourceId,
-                                  List<String> objects) {
-            super(context, textViewResourceId, objects);
-            for (int i = 0; i < objects.size(); ++i) {
-                mIdMap.put(objects.get(i), i);
-            }
-        }
-
-        @Override
-        public long getItemId(int position) {
-            String item = getItem(position);
-            return mIdMap.get(item);
-        }
-
-        @Override
-        public boolean hasStableIds() {
-            return true;
-        }
     }
 
     private void showActionBar(){
