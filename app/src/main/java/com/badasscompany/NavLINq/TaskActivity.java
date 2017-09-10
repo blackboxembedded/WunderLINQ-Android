@@ -56,7 +56,6 @@ public class TaskActivity extends AppCompatActivity {
                 TaskListView(this, taskTitles, iconId);
         taskList=(ListView)findViewById(R.id.lv_tasks);
         taskList.setAdapter(adapter);
-
         taskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override

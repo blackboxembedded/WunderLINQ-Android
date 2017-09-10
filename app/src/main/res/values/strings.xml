@@ -3,10 +3,10 @@
     <!-- MainActivity -->
     <string name="main_title">My Motorcycle</string>
     <!-- Permission Requests -->
-    <string name="location_alert_title">NavLINq needs write access</string>
-    <string name="location_alert_body">Please grant write access so this app can log data from your NavLINq</string>
-    <string name="write_alert_title">NavLINq needs location access</string>
-    <string name="write_alert_body">Please grant location access so this app can detect your NavLINq</string>
+    <string name="location_alert_title">NavLINq needs location permission</string>
+    <string name="location_alert_body">Please grant location permission so this app can log your trip</string>
+    <string name="write_alert_title">NavLINq needs write permission</string>
+    <string name="write_alert_body">Please grant write permission so this app can log data from your NavLINq</string>
     <!-- BLE Stuff Below -->
     <string name="toast_ble_not_supported">BLE is not supported</string>
     <string name="toast_error_bluetooth_not_supported">Bluetooth not supported.</string>

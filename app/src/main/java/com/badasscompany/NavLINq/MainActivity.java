@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
     public final static UUID UUID_MOTORCYCLE_SERVICE =
             UUID.fromString(GattAttributes.MOTORCYCLE_SERVICE);
 
-    private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
+    private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
     private static final int PERMISSION_REQUEST_WRITE_STORAGE = 112;
 
     @Override
@@ -178,13 +178,13 @@ public class MainActivity extends AppCompatActivity {
                 builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @TargetApi(23)
                     public void onDismiss(DialogInterface dialog) {
-                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_COARSE_LOCATION);
+                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_WRITE_STORAGE);
                     }
                 });
                 builder.show();
             }
             // Check Location permissions
-            if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (this.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(getString(R.string.location_alert_title));
                 builder.setMessage(getString(R.string.location_alert_body));
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
                 builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @TargetApi(23)
                     public void onDismiss(DialogInterface dialog) {
-                        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_COARSE_LOCATION);
+                        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_FINE_LOCATION);
                     }
                 });
                 builder.show();
@@ -389,7 +389,6 @@ public class MainActivity extends AppCompatActivity {
                     bluetoothLeScanner.stopScan(mLeScanCallback);
                 }
             }, SCAN_PERIOD);
-            //bluetoothLeScanner.startScan(mLeScanCallback);
 
             //scan specified devices only with ScanFilter
             ScanFilter scanFilter =
@@ -710,7 +709,7 @@ public class MainActivity extends AppCompatActivity {
                     builder.show();
                 }
             }
-            case PERMISSION_REQUEST_COARSE_LOCATION: {
+            case PERMISSION_REQUEST_FINE_LOCATION: {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.d(TAG, "coarse location permission granted");
                 } else {
