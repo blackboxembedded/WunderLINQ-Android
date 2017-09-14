@@ -46,7 +46,6 @@ public class MusicActivity extends AppCompatActivity {
 
     private ImageButton backButton;
     private ImageButton forwardButton;
-    private TextView navbarTitle;
 
     private MediaController.TransportControls controls;
     private MediaController controller;
@@ -179,6 +178,7 @@ public class MusicActivity extends AppCompatActivity {
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setCustomView(v);
 
+        TextView navbarTitle;
         navbarTitle = (TextView) findViewById(R.id.action_title);
         navbarTitle.setText(R.string.music_title);
 

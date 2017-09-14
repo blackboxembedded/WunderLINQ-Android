@@ -24,7 +24,6 @@ public class TaskActivity extends AppCompatActivity {
 
     private ImageButton backButton;
     private ImageButton forwardButton;
-    private TextView navbarTitle;
 
     private ListView taskList;
 
@@ -102,6 +101,7 @@ public class TaskActivity extends AppCompatActivity {
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setCustomView(v);
 
+        TextView navbarTitle;
         navbarTitle = (TextView) findViewById(R.id.action_title);
         navbarTitle.setText(R.string.quicktask_title);
 

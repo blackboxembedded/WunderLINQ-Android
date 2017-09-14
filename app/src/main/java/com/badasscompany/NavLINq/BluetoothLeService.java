@@ -1,5 +1,6 @@
 package com.badasscompany.NavLINq;
 
+import android.Manifest;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -13,15 +14,24 @@ import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Binder;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.List;
 import java.util.UUID;
 
 import static android.bluetooth.BluetoothGatt.CONNECTION_PRIORITY_HIGH;
+import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 /**
  * Service for managing connection and data communication with a GATT server hosted on a
@@ -34,12 +44,8 @@ public class BluetoothLeService extends Service {
     private BluetoothAdapter mBluetoothAdapter;
     private String mBluetoothDeviceAddress;
     private BluetoothGatt mBluetoothGatt;
-    private int mConnectionState = STATE_DISCONNECTED;
-    private LogData logger = null;
-
-    private static final int STATE_DISCONNECTED = 0;
-    private static final int STATE_CONNECTING = 1;
-    private static final int STATE_CONNECTED = 2;
+    private Logger logger = null;
+    public Location lastLocation;
 
     public final static String ACTION_GATT_CONNECTED =
             "com.example.bluetooth.le.ACTION_GATT_CONNECTED";
@@ -63,7 +69,6 @@ public class BluetoothLeService extends Service {
             String intentAction;
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 intentAction = ACTION_GATT_CONNECTED;
-                mConnectionState = STATE_CONNECTED;
                 broadcastUpdate(intentAction);
                 Log.i(TAG, "Connected to GATT server.");
                 // Attempts to discover services after successful connection.
@@ -72,7 +77,6 @@ public class BluetoothLeService extends Service {
 
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 intentAction = ACTION_GATT_DISCONNECTED;
-                mConnectionState = STATE_DISCONNECTED;
                 Log.i(TAG, "Disconnected from GATT server.");
                 broadcastUpdate(intentAction);
             }
@@ -112,10 +116,6 @@ public class BluetoothLeService extends Service {
                                  final BluetoothGattCharacteristic characteristic) {
         final Intent intent = new Intent(action);
 
-        // This is special handling for the Heart Rate Measurement profile.  Data parsing is
-        // carried out as per profile specifications:
-        // http://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.heart_rate_measurement.xml
-
         if (UUID_LIN_MESSAGE.equals(characteristic.getUuid())) {
             // For all other profiles, writes the data formatted in HEX.
             final byte[] data = characteristic.getValue();
@@ -129,11 +129,106 @@ public class BluetoothLeService extends Service {
                 if (sharedPrefs.getBoolean("prefDataLogging", false)) {
                     // Log data
                     if (logger == null) {
-                        logger = new LogData();
+                        logger = new Logger();
                     }
                     logger.write(stringBuilder.toString());
                 }
                 Log.d(TAG, "serviceData: " + stringBuilder.toString());
+
+                byte msgID = data[0];
+                switch (msgID) {
+                    case 0x00:
+                        Log.d(TAG, "Message ID 0");
+                        break;
+                    case 0x01:
+                        Log.d(TAG, "Message ID 1");
+                        break;
+                    case 0x02:
+                        Log.d(TAG, "Message ID 2");
+                        break;
+                    case 0x03:
+                        Log.d(TAG, "Message ID 3");
+                        break;
+                    case 0x04:
+                        Log.d(TAG, "Message ID 4");
+                        break;
+                    case 0x05:
+                        Log.d(TAG, "Message ID 5");
+                        // Tire Pressure
+                        double rdcFront = (data[4] & 0xFF) / 50;
+                        double rdcRear = (data[5] & 0xFF) / 50;
+
+                        Data.setFrontTirePressure(rdcFront);
+                        Data.setRearTirePressure(rdcRear);
+
+                        break;
+                    case 0x06:
+                        Log.d(TAG, "Message ID 6");
+                        String gear;
+                        switch (data[2] & 0xFF) {
+                            case 0x10:
+                                gear = "1";
+                                break;
+                            case 0x20:
+                                gear = "N";
+                                break;
+                            case 0x40:
+                                gear = "2";
+                                break;
+                            case 0x70:
+                                gear = "3";
+                                break;
+                            case 0x80:
+                                gear = "4";
+                                break;
+                            case 0xB0:
+                                gear = "5";
+                                break;
+                            case 0xD0:
+                                gear = "6";
+                                break;
+                            case 0xF0:
+                                // Inbetween Gears
+                                gear = "-";
+                                break;
+                            default:
+                                gear = "--";
+                                Log.d(TAG, "Unknown gear value");
+                        }
+                        Data.setGear(gear);
+
+                        double engineTemp = ((data[4] & 0xFF) * 0.75) - 25;
+                        Data.setEngineTemperature(engineTemp);
+                        break;
+                    case 0x07:
+                        Log.d(TAG, "Message ID 7");
+                        break;
+                    case 0x08:
+                        Log.d(TAG, "Message ID 8");
+                        double ambientTemp = ((data[1] & 0xFF) * 0.50) - 40;
+                        Data.setAmbientTemperature(ambientTemp);
+                        break;
+                    case 0x09:
+                        Log.d(TAG, "Message ID 9");
+                        break;
+                    case 0x0a:
+                        Log.d(TAG, "Message ID 10");
+                        double odometer = (data[3] + data[2] + data[1]) & 0xFF;
+                        Data.setOdometer(odometer);
+                        break;
+                    case 0x0b:
+                        Log.d(TAG, "Message ID 11");
+                        break;
+                    case 0x0c:
+                        Log.d(TAG, "Message ID 12");
+                        double trip1 = (data[3] + data[2] + data[1]) & 0xFF;
+                        double trip2 = (data[6] + data[5] + data[4]) & 0xFF;
+                        Data.setTripOne(trip1);
+                        Data.setTripTwo(trip2);
+                        break;
+                    default:
+                        Log.d(TAG, "Unknown Message ID: " + String.format("%02x", msgID));
+                }
             }
         }
         sendBroadcast(intent);
@@ -208,12 +303,7 @@ public class BluetoothLeService extends Service {
                 && mBluetoothGatt != null) {
             Log.d(TAG, "Trying to use an existing mBluetoothGatt for connection.");
             mBluetoothGatt.requestConnectionPriority(CONNECTION_PRIORITY_HIGH);
-            if (mBluetoothGatt.connect()) {
-                mConnectionState = STATE_CONNECTING;
-                return true;
-            } else {
-                return false;
-            }
+            return mBluetoothGatt.connect();
         }
 
         final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
@@ -226,7 +316,6 @@ public class BluetoothLeService extends Service {
         mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
         Log.d(TAG, "Trying to create a new connection.");
         mBluetoothDeviceAddress = address;
-        mConnectionState = STATE_CONNECTING;
         return true;
     }
 
@@ -305,5 +394,34 @@ public class BluetoothLeService extends Service {
         if (mBluetoothGatt == null) return null;
 
         return mBluetoothGatt.getServices();
+    }
+
+    public void getLastLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            // permission has been granted, continue as usual
+            // Get last known recent location using new Google Play Services SDK (v11+)
+            FusedLocationProviderClient locationClient = getFusedLocationProviderClient(this);
+
+            locationClient.getLastLocation()
+                    .addOnSuccessListener(new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            // GPS location can be null if GPS is switched off
+                            if (location != null) {
+                                lastLocation = location;
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(TAG, "Error trying to get last GPS location");
+                            e.printStackTrace();
+                        }
+                    });
+        } else {
+            Log.d(TAG, "No permissions to obtain location");
+        }
     }
 }

@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton settingsButton;
     private ImageButton connectButton;
 
-    private TextView navbarTitle;
     private TextView textView1;
     private TextView textView2;
     private TextView textView3;
@@ -216,6 +215,7 @@ public class MainActivity extends AppCompatActivity {
         settingsButton = (ImageButton) findViewById(R.id.action_settings);
         connectButton = (ImageButton) findViewById(R.id.action_connect);
 
+        TextView navbarTitle;
         navbarTitle = (TextView) findViewById(R.id.action_title);
         navbarTitle.setText(R.string.main_title);
 
@@ -395,7 +395,7 @@ public class MainActivity extends AppCompatActivity {
                     new ScanFilter.Builder()
                             .setDeviceName("NavLINq")
                             .build();
-            List<ScanFilter> scanFilters = new ArrayList<ScanFilter>();
+            List<ScanFilter> scanFilters = new ArrayList<>();
             scanFilters.add(scanFilter);
 
             ScanSettings scanSettings =
@@ -481,148 +481,11 @@ public class MainActivity extends AppCompatActivity {
                 connectButton.setImageResource(R.drawable.ic_bluetooth_on);
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 Log.d(TAG,"GATT_DATA_AVAILABLE");
-                displayData(intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA));
+                //displayData(intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA));
+                updateDisplay();
             }
         }
     };
-
-    private void displayData(byte[] data) {
-        if (data != null) {
-            final StringBuilder stringBuilder = new StringBuilder(data.length);
-            for (byte byteChar : data)
-                stringBuilder.append(String.format("%02x", byteChar));
-            Log.d(TAG, "displayData: " + stringBuilder.toString());
-
-            //Parse and Display Data
-            String temperatureUnit = "C";
-            String distanceUnit = "km";
-            String pressureUnit = "bar";
-            byte msgID = data[0];
-            switch (msgID) {
-                case 0x00:
-                    Log.d(TAG, "Message ID 0");
-                    break;
-                case 0x01:
-                    Log.d(TAG, "Message ID 1");
-                    break;
-                case 0x02:
-                    Log.d(TAG, "Message ID 2");
-                    break;
-                case 0x03:
-                    Log.d(TAG, "Message ID 3");
-                    break;
-                case 0x04:
-                    Log.d(TAG, "Message ID 4");
-                    break;
-                case 0x05:
-                    Log.d(TAG, "Message ID 5");
-                    // Tire Pressure
-                    double rdcFront = ( data[4] & 0xFF) / 50;
-                    double rdcRear = ( data[5] & 0xFF ) / 50;
-                    String pressureFormat = sharedPrefs.getString("prefPressureF", "0");
-                    if (pressureFormat.contains("1")) {
-                        // KPa
-                        rdcFront = barTokPa(rdcFront);
-                        rdcRear = barTokPa(rdcRear);
-                        pressureUnit = "KPa";
-                    } else if (pressureFormat.contains("2")) {
-                        // Kg-f
-                        rdcFront = barTokgf(rdcFront);
-                        rdcRear = barTokgf(rdcRear);
-                        pressureUnit = "Kg-f";
-                    } else if (pressureFormat.contains("3")) {
-                        // Psi
-                        rdcFront = barToPsi(rdcFront);
-                        rdcRear = barToPsi(rdcRear);
-                        pressureUnit = "psi";
-                    }
-                    textView1.setText((int) (rdcFront + 0.5d) + " " + pressureUnit);
-                    textView5.setText((int) (rdcRear + 0.5d) + " " + pressureUnit);
-                    break;
-                case 0x06:
-                    Log.d(TAG, "Message ID 6");
-                    switch (data[2] & 0xFF) {
-                        case 0x10:
-                            textView3.setText("1");
-                            break;
-                        case 0x20:
-                            textView3.setText("N");
-                            break;
-                        case 0x40:
-                            textView3.setText("2");
-                            break;
-                        case 0x70:
-                            textView3.setText("3");
-                            break;
-                        case 0x80:
-                            textView3.setText("4");
-                            break;
-                        case 0xB0:
-                            textView3.setText("5");
-                            break;
-                        case 0xD0:
-                            textView3.setText("6");
-                            break;
-                        case 0xF0:
-                            // Inbetween Gears
-                            textView3.setText("-");
-                            break;
-                        default:
-                            Log.d(TAG,"Unknown gear value");
-                    }
-                    double engineTemp = ( ( data[4] & 0xFF ) * 0.75 ) - 25;
-                    if (sharedPrefs.getString("preftempf", "0").contains("0")) {
-                        // F
-                        engineTemp = celsiusToFahrenheit(engineTemp);
-                        temperatureUnit = "F";
-                    }
-                    textView2.setText((int) Math.round(engineTemp) + " " + temperatureUnit);
-                    break;
-                case 0x07:
-                    Log.d(TAG, "Message ID 7");
-                    break;
-                case 0x08:
-                    Log.d(TAG, "Message ID 8");
-                    double ambientTemp = ( ( data[1] & 0xFF ) * 0.50 ) - 40;
-                    if (sharedPrefs.getString("preftempf", "0").contains("0")) {
-                        // F
-                        ambientTemp = celsiusToFahrenheit(ambientTemp);
-                        temperatureUnit = "F";
-                    }
-                    textView6.setText((int) Math.round(ambientTemp) + " " + temperatureUnit);
-                    break;
-                case 0x09:
-                    Log.d(TAG, "Message ID 9");
-                    break;
-                case 0x0a:
-                    Log.d(TAG, "Message ID 10");
-                    double odometer = (data[3] + data[2] + data[1]) & 0xFF;
-                    if (sharedPrefs.getString("prefdistance", "0").contains("0")) {
-                        distanceUnit = "m";
-                        odometer = kmToMiles(odometer);
-                    }
-                    textView7.setText(Math.round(odometer) + " " + distanceUnit);
-                    break;
-                case 0x0b:
-                    Log.d(TAG, "Message ID 11");
-                    break;
-                case 0x0c:
-                    Log.d(TAG, "Message ID 12");
-                    double trip1 = (data[3] + data[2] + data[1]) & 0xFF;
-                    double trip2 = (data[6] + data[5] + data[4]) & 0xFF;
-                    if (sharedPrefs.getString("prefdistance", "0").contains("0")) {
-                        distanceUnit = "m";
-                        trip1 = kmToMiles(trip1);
-                        trip2 = kmToMiles(trip2);
-                    }
-                    textView4.setText(Math.round(trip1) + " " + distanceUnit);
-                    textView8.setText(Math.round(trip2) + " " + distanceUnit);
-                    break;
-                default :
-                    Log.d(TAG, "Unknown Message ID: " + String.format("%02x", msgID));
-            }
-        }
-    }
 
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
@@ -727,6 +590,88 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    // Update Display
+    private void updateDisplay(){
+        String pressureUnit = "bar";
+        String pressureFormat = sharedPrefs.getString("prefPressureF", "0");
+        if (pressureFormat.contains("1")) {
+            // KPa
+            pressureUnit = "KPa";
+        } else if (pressureFormat.contains("2")) {
+            // Kg-f
+            pressureUnit = "Kg-f";
+        } else if (pressureFormat.contains("3")) {
+            // Psi
+            pressureUnit = "psi";
+        }
+        String temperatureUnit = "C";
+        String temperatureFormat = sharedPrefs.getString("preftempf", "0");
+        if (temperatureFormat.contains("0")) {
+            // F
+            temperatureUnit = "F";
+        }
+        String distanceUnit = "km";
+        String distanceFormat = sharedPrefs.getString("prefdistance", "0");
+        if (distanceFormat.contains("0")) {
+            distanceUnit = "mi";
+        }
+        if(Data.getFrontTirePressure() != null){
+            Double rdcFront = Data.getFrontTirePressure();
+            Double rdcRear = Data.getRearTirePressure();
+            if (pressureFormat.contains("1")) {
+                // KPa
+                rdcFront = barTokPa(rdcFront);
+                rdcRear = barTokPa(rdcRear);
+            } else if (pressureFormat.contains("2")) {
+                // Kg-f
+                rdcFront = barTokgf(rdcFront);
+                rdcRear = barTokgf(rdcRear);
+            } else if (pressureFormat.contains("3")) {
+                // Psi
+                rdcFront = barToPsi(rdcFront);
+                rdcRear = barToPsi(rdcRear);
+            }
+            textView1.setText((int) (rdcFront + 0.5d) + " " + pressureUnit);
+            textView5.setText((int) (rdcRear + 0.5d) + " " + pressureUnit);
+        }
+        if(Data.getGear() != null){
+            textView3.setText(Data.getGear());
+        }
+        if(Data.getEngineTemperature() != null ){
+            Double engineTemp = Data.getEngineTemperature();
+            if (temperatureFormat.contains("0")) {
+                // F
+                engineTemp = celsiusToFahrenheit(engineTemp);
+            }
+            textView2.setText((int) Math.round(engineTemp) + " " + temperatureUnit);
+        }
+        if(Data.getAmbientTemperature() != null ){
+            Double ambientTemp = Data.getAmbientTemperature();
+            if (temperatureFormat.contains("0")) {
+                // F
+                ambientTemp = celsiusToFahrenheit(ambientTemp);
+            }
+            textView6.setText((int) Math.round(ambientTemp) + " " + temperatureUnit);
+        }
+        if(Data.getOdometer() != null){
+            Double odometer = Data.getOdometer();
+            if (distanceFormat.contains("0")) {
+                odometer = kmToMiles(odometer);
+            }
+            textView7.setText(Math.round(odometer) + " " + distanceUnit);
+        }
+        if(Data.getTripOne() != null) {
+            Double trip1 = Data.getTripOne();
+            Double trip2 = Data.getTripTwo();
+            if (distanceFormat.contains("0")) {
+                trip1 = kmToMiles(trip1);
+                trip2 = kmToMiles(trip2);
+            }
+            textView4.setText(Math.round(trip1) + " " + distanceUnit);
+            textView8.setText(Math.round(trip2) + " " + distanceUnit);
+        }
     }
 
     // Unit Conversion Functions
