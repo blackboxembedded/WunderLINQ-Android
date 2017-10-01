@@ -3,12 +3,12 @@ package com.badasscompany.NavLINq;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -44,11 +44,13 @@ public class TaskActivity extends AppCompatActivity {
 
         final String[] taskTitles = new String[] {
                 getResources().getString(R.string.task_title_gohome),
-                getResources().getString(R.string.task_title_callhome)
+                getResources().getString(R.string.task_title_callhome),
+                getResources().getString(R.string.task_title_callcontact)
         };
-        Integer[] iconId = {
-                R.drawable.ic_home,
-                R.drawable.ic_phone
+        Drawable[] iconId = {
+                getResources().getDrawable(R.drawable.ic_home,getTheme()),
+                getResources().getDrawable(R.drawable.ic_phone,getTheme()),
+                getResources().getDrawable(R.drawable.ic_address_book,getTheme())
         };
 
         TaskListView adapter = new
@@ -61,7 +63,6 @@ public class TaskActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
                 final String item = (String) parent.getItemAtPosition(position);
-                Log.d(TAG,"Item "+ position + ":" + item );
                 switch (position){
                     case 0:
                         //Navigate Home
@@ -84,6 +85,11 @@ public class TaskActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(TaskActivity.this, R.string.toast_phone_not_set, Toast.LENGTH_SHORT).show();
                         }
+                        break;
+                    case 2:
+                        //Call Contact
+                        Intent forwardIntent = new Intent(TaskActivity.this, ContactListActivity.class);
+                        startActivity(forwardIntent);
                         break;
                 }
             }

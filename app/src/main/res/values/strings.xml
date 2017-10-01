@@ -34,8 +34,34 @@
     <string name="quicktask_title">Quick Tasks</string>
     <string name="task_title_gohome">Go Home</string>
     <string name="task_title_callhome">Call Home</string>
+    <string name="task_title_callcontact">Call Contact</string>
+    <string name="task_title_voicecontrol">Voice Control</string>
     <string name="toast_address_not_set">No Go Home address set in Settings</string>
     <string name="toast_phone_not_set">No Call Home phone number set in Settings</string>
+
+    <!-- ContactListActivity -->
+    <string name="contactlist_title">Contacts</string>
+    <string name="contact_type_0">Custom</string>
+    <string name="contact_type_1">Home</string>
+    <string name="contact_type_2">Mobile</string>
+    <string name="contact_type_3">Work</string>
+    <string name="contact_type_4">Work Fax</string>
+    <string name="contact_type_5">Home Fax</string>
+    <string name="contact_type_6">Pager</string>
+    <string name="contact_type_7">Other</string>
+    <string name="contact_type_8">Callback</string>
+    <string name="contact_type_9">Car</string>
+    <string name="contact_type_10">Company Main</string>
+    <string name="contact_type_11">ISDN</string>
+    <string name="contact_type_12">Main</string>
+    <string name="contact_type_13">Other Fax</string>
+    <string name="contact_type_14">Radio</string>
+    <string name="contact_type_15">Telex</string>
+    <string name="contact_type_16">TTY TDD</string>
+    <string name="contact_type_17">Work Mobile</string>
+    <string name="contact_type_18">Work Pager</string>
+    <string name="contact_type_19">Assistant</string>
+    <string name="contact_type_20">MMS</string>
 
     <!-- SettingsActivity -->
     <string name="title_activity_settings">Settings</string>

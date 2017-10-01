@@ -5,6 +5,7 @@ package com.badasscompany.NavLINq;
  */
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +17,9 @@ public class TaskListView extends ArrayAdapter<String>{
 
     private final Activity context;
     private final String[] label;
-    private final Integer[] icon;
+    private final Drawable[] icon;
     public TaskListView(Activity context,
-                      String[] label, Integer[] icon) {
+                      String[] label, Drawable[] icon) {
         super(context, R.layout.list_task, label);
         this.context = context;
         this.label = label;
@@ -33,7 +34,7 @@ public class TaskListView extends ArrayAdapter<String>{
         ImageView imageView = (ImageView) rowView.findViewById(R.id.iv_icon);
 
         txtTitle.setText(label[position]);
-        imageView.setImageResource(icon[position]);
+        imageView.setImageDrawable(icon[position]);
         return rowView;
     }
 }
