@@ -20,11 +20,8 @@ import static com.google.android.gms.location.LocationServices.getFusedLocationP
 /**
  * Created by keithconger on 9/24/17.
  *
- * Use to start:
- *
- * // use this to start and trigger a service
+ * // Use this to start and trigger a service
  * Intent i= new Intent(this, LoggingService.class);
- * // potentially add data to the intent
  * this.startService(i);
  *
  */
@@ -34,10 +31,12 @@ public class LoggingService extends Service {
     private static final String TAG = "LoggingService";
 
     Handler handler;
-    Runnable test;
+    Runnable runnable;
 
     private Location lastLocation;
     private Logger tripLogger = null;
+
+    private int loggingInterval = 60000;
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -56,7 +55,7 @@ public class LoggingService extends Service {
         // TODO Auto-generated method stub
         Log.d(TAG, "In onTaskRemoved");
 
-        handler.removeCallbacks(test);
+        handler.removeCallbacks(runnable);
         tripLogger.shutdown();
         /*
         Intent restartService = new Intent(getApplicationContext(),
@@ -70,7 +69,6 @@ public class LoggingService extends Service {
         AlarmManager alarmService = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         alarmService.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() +100, restartServicePI);
         */
-
     }
 
     @Override
@@ -82,8 +80,6 @@ public class LoggingService extends Service {
         if (tripLogger == null) {
             tripLogger = new Logger();
         }
-
-        //start a separate thread and start listening to your network object
     }
 
     public LoggingService() {
@@ -92,7 +88,7 @@ public class LoggingService extends Service {
             tripLogger = new Logger();
         }
         handler = new Handler();
-        test = new Runnable() {
+        runnable = new Runnable() {
             @Override
             public void run() {
                 getLastLocation();
@@ -107,13 +103,13 @@ public class LoggingService extends Service {
 
                 tripLogger.write("trip", locationString + "," + Data.getGear() + "," + Data.getEngineTemperature() + "," + Data.getAmbientTemperature() + "," + Data.getFrontTirePressure()
                         + "," + Data.getRearTirePressure() + "," + Data.getOdometer());
-                handler.postDelayed(test, 60000);
+                handler.postDelayed(runnable, loggingInterval);
             }
         };
-        handler.postDelayed(test, 0);
+        handler.postDelayed(runnable, 0);
     }
-    public void stopTest() {
-        handler.removeCallbacks(test);
+    public void stopLogging() {
+        handler.removeCallbacks(runnable);
     }
 
     private void getLastLocation() {
