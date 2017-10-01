@@ -15,7 +15,7 @@ class Logger {
     private static PrintWriter outFile = null;
     private static final String TAG = "NavLINq";
 
-    private static void initialize()
+    private static void initialize(String type)
     {
         try {
             File root = new File(Environment.getExternalStorageDirectory(), "/NavLINq/");
@@ -32,21 +32,34 @@ class Logger {
                 Date date = cal.getTime();
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-HH:mm:ss");
                 String curdatetime = formatter.format(date);
-
-                File logFile = new File( root, "NavLINq-raw" + curdatetime + ".csv" );
+                String filename = "NavLINq";
+                String header = "";
+                switch (type) {
+                    case "trip":
+                        filename = filename + "-TripLog-";
+                        header = "Time(UTC),Message\n";
+                        break;
+                    case "raw":
+                        filename = filename + "-raw-";
+                        header = "Time(UTC),Location,Data\n";
+                        break;
+                    default:
+                }
+                File logFile = new File( root, filename + curdatetime + ".csv" );
                 FileWriter logWriter = new FileWriter( logFile );
                 outFile = new PrintWriter( logWriter );
-                outFile.write( "Time(UTC),Message\n" );
+                outFile.write(header);
             }
         } catch (IOException e) {
             Log.d(TAG, "Could not write to file: " + e.getMessage());
         }
     }
 
-    public void write(String message)
+    public void write(String type, String entry)
     {
+
         if(outFile == null)
-            initialize();
+            initialize(type);
 
         // Write message
         if(outFile != null) {
@@ -55,7 +68,7 @@ class Logger {
             Date date = cal.getTime();
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
             String curdatetime = formatter.format(date);
-            outFile.write(curdatetime + "," + message + "\n");
+            outFile.write(curdatetime + "," + entry + "\n");
             outFile.flush();
         }
     }

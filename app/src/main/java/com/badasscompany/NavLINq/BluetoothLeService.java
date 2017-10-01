@@ -1,6 +1,5 @@
 package com.badasscompany.NavLINq;
 
-import android.Manifest;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -14,24 +13,15 @@ import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Binder;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
-
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.List;
 import java.util.UUID;
 
 import static android.bluetooth.BluetoothGatt.CONNECTION_PRIORITY_HIGH;
-import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 /**
  * Service for managing connection and data communication with a GATT server hosted on a
@@ -45,7 +35,6 @@ public class BluetoothLeService extends Service {
     private String mBluetoothDeviceAddress;
     private BluetoothGatt mBluetoothGatt;
     private Logger logger = null;
-    public Location lastLocation;
 
     public final static String ACTION_GATT_CONNECTED =
             "com.example.bluetooth.le.ACTION_GATT_CONNECTED";
@@ -131,9 +120,9 @@ public class BluetoothLeService extends Service {
                     if (logger == null) {
                         logger = new Logger();
                     }
-                    logger.write(stringBuilder.toString());
+                    logger.write("raw", stringBuilder.toString());
                 }
-                Log.d(TAG, "serviceData: " + stringBuilder.toString());
+                //Log.d(TAG, "serviceData: " + stringBuilder.toString());
 
                 byte msgID = data[0];
                 switch (msgID) {
@@ -341,6 +330,7 @@ public class BluetoothLeService extends Service {
         if (mBluetoothGatt == null) {
             return;
         }
+        logger.shutdown();
         mBluetoothGatt.close();
         mBluetoothGatt = null;
     }
@@ -394,34 +384,5 @@ public class BluetoothLeService extends Service {
         if (mBluetoothGatt == null) return null;
 
         return mBluetoothGatt.getServices();
-    }
-
-    public void getLastLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            // permission has been granted, continue as usual
-            // Get last known recent location using new Google Play Services SDK (v11+)
-            FusedLocationProviderClient locationClient = getFusedLocationProviderClient(this);
-
-            locationClient.getLastLocation()
-                    .addOnSuccessListener(new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            // GPS location can be null if GPS is switched off
-                            if (location != null) {
-                                lastLocation = location;
-                            }
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d(TAG, "Error trying to get last GPS location");
-                            e.printStackTrace();
-                        }
-                    });
-        } else {
-            Log.d(TAG, "No permissions to obtain location");
-        }
     }
 }
