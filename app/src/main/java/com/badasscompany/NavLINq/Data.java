@@ -1,15 +1,20 @@
 package com.badasscompany.NavLINq;
 
 import android.location.Location;
-import java.util.Date;
 
 /**
  * Created by keithconger on 9/10/17.
  */
 
 public class Data {
-    public Date lastLocationTime;
-    public Location lastLocation;
+    // Last Location
+    private static Location lastLocation;
+    public static Location getLastLocation() {
+        return lastLocation;
+    }
+    public static void setLastLocation(Location location){
+        Data.lastLocation = location;
+    }
 
     // Front Tire Pressure in bar
     private static Double frontTirePressure;
