@@ -57,14 +57,14 @@
             android:name=".BluetoothLeService"
             android:enabled="true"
             android:exported="true" />
-
         <service
             android:name=".LoggingService"
             android:enabled="true"
             android:exported="true" />
 
+        <activity android:name=".ContactListActivity" />
         <activity
-            android:name=".ContactListActivity"/>
+            android:name=".FaultActivity" />
     </application>
 
 </manifest>

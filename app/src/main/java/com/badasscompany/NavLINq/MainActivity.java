@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ImageButton backButton;
     private ImageButton forwardButton;
+    private ImageButton faultButton;
     private ImageButton settingsButton;
     private ImageButton connectButton;
 
@@ -75,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
     static boolean itsDark = false;
     private long darkTimer = 0;
     private long lightTimer = 0;
+
+    private static Context mContext;
 
     private Intent gattServiceIntent;
     private BluetoothAdapter mBluetoothAdapter;
@@ -100,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_main);
+
+        mContext = this;
 
         showActionBar();
 
@@ -213,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
         backButton = (ImageButton) findViewById(R.id.action_back);
         forwardButton = (ImageButton) findViewById(R.id.action_forward);
         settingsButton = (ImageButton) findViewById(R.id.action_settings);
+        faultButton = (ImageButton) findViewById(R.id.action_faults);
         connectButton = (ImageButton) findViewById(R.id.action_connect);
 
         TextView navbarTitle;
@@ -221,6 +227,7 @@ public class MainActivity extends AppCompatActivity {
 
         backButton.setOnClickListener(mClickListener);
         forwardButton.setOnClickListener(mClickListener);
+        faultButton.setOnClickListener(mClickListener);
         settingsButton.setOnClickListener(mClickListener);
     }
 
@@ -236,6 +243,10 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.action_forward:
                     Intent forwardIntent = new Intent(MainActivity.this, MusicActivity.class);
                     startActivity(forwardIntent);
+                    break;
+                case R.id.action_faults:
+                    Intent faultIntent = new Intent(MainActivity.this, FaultActivity.class);
+                    startActivity(faultIntent);
                     break;
                 case R.id.action_settings:
                     Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
@@ -672,6 +683,10 @@ public class MainActivity extends AppCompatActivity {
             textView4.setText(Math.round(trip1) + " " + distanceUnit);
             textView8.setText(Math.round(trip2) + " " + distanceUnit);
         }
+    }
+
+    public static Context getContext(){
+        return mContext;
     }
 
     // Unit Conversion Functions

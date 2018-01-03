@@ -222,25 +222,21 @@ public class ContactListActivity extends AppCompatActivity {
         LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflator.inflate(R.layout.actionbar_nav, null);
         ActionBar actionBar = getSupportActionBar();
-        try {
-            actionBar.setDisplayHomeAsUpEnabled(false);
-            actionBar.setDisplayShowHomeEnabled(false);
-            actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setDisplayShowTitleEnabled(false);
-            actionBar.setCustomView(v);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setCustomView(v);
 
-            TextView navbarTitle;
-            navbarTitle = (TextView) findViewById(R.id.action_title);
-            navbarTitle.setText(R.string.contactlist_title);
+        TextView navbarTitle;
+        navbarTitle = (TextView) findViewById(R.id.action_title);
+        navbarTitle.setText(R.string.contactlist_title);
 
-            backButton = (ImageButton) findViewById(R.id.action_back);
-            backButton.setOnClickListener(mClickListener);
+        backButton = (ImageButton) findViewById(R.id.action_back);
+        backButton.setOnClickListener(mClickListener);
 
-            ImageButton forwardButton = (ImageButton) findViewById(R.id.action_forward);
-            forwardButton.setVisibility(View.INVISIBLE);
-        } catch (NullPointerException e){
-            Log.d(TAG,"Null pointer excepetion: " + e );
-        }
+        ImageButton forwardButton = (ImageButton) findViewById(R.id.action_forward);
+        forwardButton.setVisibility(View.INVISIBLE);
     }
 
     private View.OnClickListener mClickListener = new View.OnClickListener() {

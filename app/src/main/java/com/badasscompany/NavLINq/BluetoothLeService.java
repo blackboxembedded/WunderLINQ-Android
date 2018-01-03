@@ -35,6 +35,7 @@ public class BluetoothLeService extends Service {
     private String mBluetoothDeviceAddress;
     private BluetoothGatt mBluetoothGatt;
     private Logger logger = null;
+    final FaultStatus faults = (new FaultStatus(this));
 
     public final static String ACTION_GATT_CONNECTED =
             "com.example.bluetooth.le.ACTION_GATT_CONNECTED";
@@ -143,12 +144,36 @@ public class BluetoothLeService extends Service {
                         break;
                     case 0x05:
                         Log.d(TAG, "Message ID 5");
+                        // ABS Fault
+                        // FC=ABS Fault
+                        if ((data[3] & 0xFF) == 0xFC){
+                            faults.setabsFaultActive(true);
+                        } else {
+                            faults.setabsFaultActive(false);
+                        }
                         // Tire Pressure
                         double rdcFront = (data[4] & 0xFF) / 50;
                         double rdcRear = (data[5] & 0xFF) / 50;
-
                         Data.setFrontTirePressure(rdcFront);
                         Data.setRearTirePressure(rdcRear);
+
+                        // Tire Pressure Faults
+                        // C0=Resting, C9=Front Warning, D1=Front Critical, CA=Rear Warning, D2=Rear Critical, D3=Front/Rear Critical
+                        if ((data[6] & 0xFF) == 0xC9 || (data[6] & 0xFF) == 0xD1){
+                            faults.setfrontTirePressureActive(true);
+                            faults.setrearTirePressureActive(false);
+                        } else if ((data[6] & 0xFF) == 0xCA || (data[6] & 0xFF) == 0xD2){
+                            faults.setfrontTirePressureActive(false);
+                            faults.setrearTirePressureActive(true);
+                        } else if ((data[6] & 0xFF) == 0xD3){
+                            faults.setfrontTirePressureActive(true);
+                            faults.setrearTirePressureActive(true);
+                        } else if ((data[6] & 0xFF) == 0xC0){
+                            faults.setfrontTirePressureActive(false);
+                            faults.setrearTirePressureActive(false);
+                        } else {
+
+                        }
 
                         break;
                     case 0x06:
@@ -196,6 +221,37 @@ public class BluetoothLeService extends Service {
                         Log.d(TAG, "Message ID 8");
                         double ambientTemp = ((data[1] & 0xFF) * 0.50) - 40;
                         Data.setAmbientTemperature(ambientTemp);
+
+                        // Front Signal Lamp Faults
+                        // 00=Resting, 20=Left, 40=Right, 60=Both
+                        if ((data[4] & 0xFF) == 0x20){
+                            faults.setfrontLeftSignalActive(true);
+                            faults.setfrontRightSignalActive(false);
+                        } else if ((data[4] & 0xFF) == 0x40){
+                            faults.setfrontLeftSignalActive(false);
+                            faults.setfrontRightSignalActive(true);
+                        } else if ((data[4] & 0xFF) == 0x60){
+                            faults.setfrontLeftSignalActive(true);
+                            faults.setfrontRightSignalActive(true);
+                        } else {
+                            faults.setfrontLeftSignalActive(false);
+                            faults.setfrontRightSignalActive(false);
+                        }
+                        // Rear Signal Lamp Faults
+                        // C0=Resting, C8=Left, D0=Right, D8=Both
+                        if ((data[5] & 0xFF) == 0xC8){
+                            faults.setrearLeftSignalActive(true);
+                            faults.setrearRightSignalActive(false);
+                        } else if ((data[5] & 0xFF) == 0xD0){
+                            faults.setrearLeftSignalActive(false);
+                            faults.setrearRightSignalActive(true);
+                        } else if ((data[5] & 0xFF) == 0xD8){
+                            faults.setrearLeftSignalActive(true);
+                            faults.setrearRightSignalActive(true);
+                        } else {
+                            faults.setrearLeftSignalActive(false);
+                            faults.setrearRightSignalActive(false);
+                        }
                         break;
                     case 0x09:
                         Log.d(TAG, "Message ID 9");

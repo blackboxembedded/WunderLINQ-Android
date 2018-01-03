@@ -19,6 +19,18 @@
     <string name="trip2_label">Trip 2</string>
     <string name="gear_label">Gear</string>
 
+    <!-- FaultActivity -->
+    <string name="fault_title">Active Faults</string>
+    <!-- Fault strings -->
+    <string name="fault_ABSF">ABS Fault</string>
+    <string name="fault_FUELF">Low Fuel</string>
+    <string name="fault_TIREFF">Front Tire Pressure</string>
+    <string name="fault_TIRERF">Rear Tire Pressure</string>
+    <string name="fault_SIGFLF">Front Left Signal</string>
+    <string name="fault_SIGFRF">Front Right Signal</string>
+    <string name="fault_SIGRLF">Rear Left Signal</string>
+    <string name="fault_SIGRRF">Rear Right Signal</string>
+
     <!-- CompassActivity -->
     <string name="compass_title">Compass</string>
 
@@ -122,4 +134,5 @@
     <string name="advanced_settings_title">Advanced Settings</string>
     <string name="pref_dataLogging_name">Raw Message Logging</string>
     <string name="pref_dataLogging_summary">Enable Raw Message Logging To /sdcard/NavLINq/</string>
+    <string name="title_activity_fault">FaultActivity</string>
 </resources>

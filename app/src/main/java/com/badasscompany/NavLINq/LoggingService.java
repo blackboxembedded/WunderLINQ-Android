@@ -28,7 +28,7 @@ import static com.google.android.gms.location.LocationServices.getFusedLocationP
 
 public class LoggingService extends Service {
 
-    private static final String TAG = "LoggingService";
+    private static final String TAG = "NavLINq";
 
     Handler handler;
     Runnable runnable;
@@ -73,7 +73,6 @@ public class LoggingService extends Service {
 
     @Override
     public void onCreate() {
-        // TODO Auto-generated method stub
         Log.d(TAG, "In onCreate");
         super.onCreate();
 
@@ -94,8 +93,6 @@ public class LoggingService extends Service {
                 getLastLocation();
                 Data.setLastLocation(lastLocation);
                 // Log data
-
-                Log.d(TAG,"In Logging Handler");
                 String locationString ="No Fix";
                 if (lastLocation != null){
                     locationString = lastLocation.toString();
