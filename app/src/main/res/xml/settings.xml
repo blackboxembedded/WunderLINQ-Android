@@ -70,6 +70,9 @@
             android:summary="@string/pref_dataLogging_summary"
             android:title="@string/pref_dataLogging_name" >
         </CheckBoxPreference>
+        <Preference android:title="@string/pref_btn_sendlogs_title"
+            android:key="prefSendLog"
+            android:summary="@string/pref_btn_sendlogs_summary"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

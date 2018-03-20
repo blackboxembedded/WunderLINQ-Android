@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -229,6 +230,23 @@ public class CompassActivity extends AppCompatActivity {
             output[i] = output[i] + ALPHA * (input[i] - output[i]);
         }
         return output;
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        Log.d(TAG, "Keycode: " + keyCode);
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_ESCAPE:
+                Intent backIntent = new Intent(CompassActivity.this, MusicActivity.class);
+                startActivity(backIntent);
+                return true;
+            case KeyEvent.KEYCODE_ENTER:
+                Intent forwardIntent = new Intent(CompassActivity.this, TaskActivity.class);
+                startActivity(forwardIntent);
+                return true;
+            default:
+                return super.onKeyUp(keyCode, event);
+        }
     }
 
 }

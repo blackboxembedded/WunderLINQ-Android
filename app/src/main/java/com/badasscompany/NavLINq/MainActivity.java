@@ -544,22 +544,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        Log.d(TAG, "Keycode: " + keyCode);
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_ESCAPE:
-                Intent backIntent = new Intent(MainActivity.this, TaskActivity.class);
-                startActivity(backIntent);
-                return true;
-            case 34:
-                Intent forwardIntent = new Intent(MainActivity.this, MusicActivity.class);
-                startActivity(forwardIntent);
-                return true;
-            default:
-                return super.onKeyUp(keyCode, event);
-        }
-    }
-    @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode)
@@ -682,6 +666,23 @@ public class MainActivity extends AppCompatActivity {
             }
             textView4.setText(Math.round(trip1) + " " + distanceUnit);
             textView8.setText(Math.round(trip2) + " " + distanceUnit);
+        }
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        Log.d(TAG, "Keycode: " + keyCode);
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_ESCAPE:
+                Intent backIntent = new Intent(MainActivity.this, TaskActivity.class);
+                startActivity(backIntent);
+                return true;
+            case KeyEvent.KEYCODE_ENTER:
+                Intent forwardIntent = new Intent(MainActivity.this, MusicActivity.class);
+                startActivity(forwardIntent);
+                return true;
+            default:
+                return super.onKeyUp(keyCode, event);
         }
     }
 

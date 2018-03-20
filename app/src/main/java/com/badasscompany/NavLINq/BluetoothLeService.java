@@ -109,7 +109,7 @@ public class BluetoothLeService extends Service {
         if (UUID_LIN_MESSAGE.equals(characteristic.getUuid())) {
             // For all other profiles, writes the data formatted in HEX.
             final byte[] data = characteristic.getValue();
-            if (data != null && data.length == 9) {
+            if (data != null) {
                 intent.putExtra(EXTRA_DATA, data);
                 final StringBuilder stringBuilder = new StringBuilder(data.length);
                 for (byte byteChar : data)

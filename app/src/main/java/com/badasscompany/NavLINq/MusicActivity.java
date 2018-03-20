@@ -21,6 +21,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -272,6 +273,23 @@ public class MusicActivity extends AppCompatActivity {
         canvas.drawBitmap(bitmap, m, new Paint());
 
         return output;
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        Log.d(TAG, "Keycode: " + keyCode);
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_ESCAPE:
+                Intent backIntent = new Intent(MusicActivity.this, MainActivity.class);
+                startActivity(backIntent);
+                return true;
+            case KeyEvent.KEYCODE_ENTER:
+                Intent forwardIntent = new Intent(MusicActivity.this, CompassActivity.class);
+                startActivity(forwardIntent);
+                return true;
+            default:
+                return super.onKeyUp(keyCode, event);
+        }
     }
 
 }

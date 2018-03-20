@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -133,4 +135,21 @@ public class TaskActivity extends AppCompatActivity {
             }
         }
     };
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        Log.d(TAG, "Keycode: " + keyCode);
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_ESCAPE:
+                Intent backIntent = new Intent(TaskActivity.this, CompassActivity.class);
+                startActivity(backIntent);
+                return true;
+            case KeyEvent.KEYCODE_ENTER:
+                Intent forwardIntent = new Intent(TaskActivity.this, MainActivity.class);
+                startActivity(forwardIntent);
+                return true;
+            default:
+                return super.onKeyUp(keyCode, event);
+        }
+    }
 }
