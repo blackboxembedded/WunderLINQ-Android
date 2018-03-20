@@ -123,7 +123,7 @@ public class BluetoothLeService extends Service {
                     }
                     logger.write("raw", stringBuilder.toString());
                 }
-                //Log.d(TAG, "serviceData: " + stringBuilder.toString());
+                Log.d(TAG, "serviceData: " + stringBuilder.toString());
 
                 byte msgID = data[0];
                 switch (msgID) {
@@ -152,10 +152,14 @@ public class BluetoothLeService extends Service {
                             faults.setabsFaultActive(false);
                         }
                         // Tire Pressure
-                        double rdcFront = (data[4] & 0xFF) / 50;
-                        double rdcRear = (data[5] & 0xFF) / 50;
-                        Data.setFrontTirePressure(rdcFront);
-                        Data.setRearTirePressure(rdcRear);
+                        if ((data[4] & 0xFF) != 0xFF){
+                            double rdcFront = (data[4] & 0xFF) / 50;
+                            Data.setFrontTirePressure(rdcFront);
+                        }
+                        if ((data[5] & 0xFF) != 0xFF){
+                            double rdcRear = (data[5] & 0xFF) / 50;
+                            Data.setRearTirePressure(rdcRear);
+                        }
 
                         // Tire Pressure Faults
                         // C0=Resting, C9=Front Warning, D1=Front Critical, CA=Rear Warning, D2=Rear Critical, D3=Front/Rear Critical
@@ -258,7 +262,7 @@ public class BluetoothLeService extends Service {
                         break;
                     case 0x0a:
                         Log.d(TAG, "Message ID 10");
-                        double odometer = (data[3] + data[2] + data[1]) & 0xFF;
+                        double odometer = bytesToInt(data[3],data[2],data[1]);
                         Data.setOdometer(odometer);
                         break;
                     case 0x0b:
@@ -266,8 +270,8 @@ public class BluetoothLeService extends Service {
                         break;
                     case 0x0c:
                         Log.d(TAG, "Message ID 12");
-                        double trip1 = (data[3] + data[2] + data[1]) & 0xFF;
-                        double trip2 = (data[6] + data[5] + data[4]) & 0xFF;
+                        double trip1 = bytesToInt(data[3],data[2],data[1]) / 10;
+                        double trip2 = bytesToInt(data[6],data[5],data[4]) / 10;
                         Data.setTripOne(trip1);
                         Data.setTripTwo(trip2);
                         break;
@@ -386,7 +390,10 @@ public class BluetoothLeService extends Service {
         if (mBluetoothGatt == null) {
             return;
         }
-        logger.shutdown();
+        if (logger != null){
+            logger.shutdown();
+        }
+
         mBluetoothGatt.close();
         mBluetoothGatt = null;
     }
@@ -420,7 +427,6 @@ public class BluetoothLeService extends Service {
         }
         mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
 
-        // This is specific to Heart Rate Measurement.
         if (UUID_LIN_MESSAGE.equals(characteristic.getUuid())) {
             BluetoothGattDescriptor descriptor = characteristic.getDescriptor(
                     UUID.fromString(GattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
@@ -440,5 +446,15 @@ public class BluetoothLeService extends Service {
         if (mBluetoothGatt == null) return null;
 
         return mBluetoothGatt.getServices();
+    }
+
+    private int bytesToInt(byte a, byte b, byte c) {
+        int ia = (a & 0xFF);
+        ia <<= 16;
+        int ib = (b & 0xFF);
+        ib <<= 8;
+        int ic = (c & 0xFF);
+        int ret = (short)(ia | ib | ic);
+        return ret;
     }
 }
