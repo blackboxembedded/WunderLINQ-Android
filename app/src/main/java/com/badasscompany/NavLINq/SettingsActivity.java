@@ -9,7 +9,6 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.support.v4.content.FileProvider;
-import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +46,6 @@ public class SettingsActivity extends PreferenceActivity {
                     try {
                         Runtime.getRuntime().exec(
                                 "logcat -f " + outputFile.getAbsolutePath());
-                        Log.d("NavLINqSettings","running logcat");
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
