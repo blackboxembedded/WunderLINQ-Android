@@ -139,6 +139,6 @@
     <string name="pref_btn_sendlogs_summary">Send Logs to KCWB</string>
     <string name="pref_sendlogs_email">keith.conger@gmail.com</string>
     <string name="pref_sendlogs_subject">NavLINq Debug Logs</string>
-    <string name="pref_sendlogs_body">NavLINq Debug Logs</string>
+    <string name="pref_sendlogs_body">Please describe your problem below:</string>
     <string name="pref_sendlogs_intent_title">Send Logs...</string>
 </resources>

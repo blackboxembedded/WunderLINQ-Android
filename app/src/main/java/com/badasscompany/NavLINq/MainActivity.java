@@ -625,11 +625,13 @@ public class MainActivity extends AppCompatActivity {
                 rdcRear = barTokgf(rdcRear);
             } else if (pressureFormat.contains("3")) {
                 // Psi
+                Log.d(TAG,"Bar Selected: " + rdcFront +", " + rdcRear);
                 rdcFront = barToPsi(rdcFront);
                 rdcRear = barToPsi(rdcRear);
+                Log.d(TAG,"PSI Selected: " + rdcFront +", " + rdcRear);
             }
-            textView1.setText((int) (rdcFront + 0.5d) + " " + pressureUnit);
-            textView5.setText((int) (rdcRear + 0.5d) + " " + pressureUnit);
+            textView1.setText((int) Math.round(rdcFront) + " " + pressureUnit);
+            textView5.setText((int) Math.round(rdcRear) + " " + pressureUnit);
         }
         if(Data.getGear() != null){
             textView3.setText(Data.getGear());

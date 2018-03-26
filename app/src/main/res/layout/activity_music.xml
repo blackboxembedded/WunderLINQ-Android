@@ -15,19 +15,30 @@
             android:id="@+id/prev_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_backward" />
+            android:src="@drawable/ic_backward"
+            android:focusable="true"
+            android:nextFocusUp="@+id/next_button"
+            android:nextFocusDown="@+id/play_pause_button"/>
 
         <ImageButton
             android:id="@+id/play_pause_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_play" />
+            android:src="@drawable/ic_play"
+            android:focusable="true"
+            android:nextFocusUp="@+id/prev_button"
+            android:nextFocusDown="@+id/next_button">
+            <requestFocus />
+        </ImageButton>
 
         <ImageButton
             android:id="@+id/next_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_forward" />
+            android:src="@drawable/ic_forward"
+            android:focusable="true"
+            android:nextFocusUp="@+id/play_pause_button"
+            android:nextFocusDown="@+id/prev_button"/>
     </LinearLayout>
 
     <LinearLayout

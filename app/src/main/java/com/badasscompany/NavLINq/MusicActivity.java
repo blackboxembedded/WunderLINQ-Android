@@ -62,21 +62,27 @@ public class MusicActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch(v.getId()) {
                 case R.id.prev_button:
-                    controls.skipToPrevious();
-                    refreshMetaData();
+                    if (controller != null) {
+                        controls.skipToPrevious();
+                        refreshMetaData();
+                    }
                     break;
                 case R.id.next_button:
-                    controls.skipToNext();
-                    refreshMetaData();
+                    if (controller != null) {
+                        controls.skipToNext();
+                        refreshMetaData();
+                    }
                     break;
                 case R.id.play_pause_button:
-                    PlaybackState playbackState = controller.getPlaybackState();
-                    if(playbackState.getState() != PlaybackState.STATE_PLAYING){
-                        controls.play();
-                        refreshMetaData();
-                    } else {
-                        controls.pause();
-                        refreshMetaData();
+                    if (controller != null) {
+                        PlaybackState playbackState = controller.getPlaybackState();
+                        if (playbackState.getState() != PlaybackState.STATE_PLAYING) {
+                            controls.play();
+                            refreshMetaData();
+                        } else {
+                            controls.pause();
+                            refreshMetaData();
+                        }
                     }
                     break;
                 case R.id.action_back:
