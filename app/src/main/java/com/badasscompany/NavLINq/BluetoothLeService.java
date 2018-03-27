@@ -147,10 +147,8 @@ public class BluetoothLeService extends Service {
                         // ABS Fault
                         // FC=ABS Fault
                         if ((data[3] & 0xFF) == 0xFB){
-                            Log.d(TAG, "ABS Fault!");
                             faults.setabsFaultActive(true);
                         } else {
-                            Log.d(TAG, "No ABS Fault!");
                             faults.setabsFaultActive(false);
                         }
                         // Tire Pressure
