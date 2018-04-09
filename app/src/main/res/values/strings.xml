@@ -141,4 +141,123 @@
     <string name="pref_sendlogs_subject">NavLINq Debug Logs</string>
     <string name="pref_sendlogs_body">Please describe your problem below:</string>
     <string name="pref_sendlogs_intent_title">Send Logs...</string>
+    <string name="pref_btn_dfumode_title">NavLINq Update</string>
+    <string name="pref_btn_dfumode_summary">Enter NavLINq Firmware Update Mode</string>
+
+    <!-- OTA -->
+    <!-- bluetooth button elements -->
+    <string name="bluetooth_pair_start">Pairing started…\nPlease wait…</string>
+    <string name="bluetooth_pair">Paired</string>
+    <string name="bluetooth_unpair">Not Paired</string>
+    <string name="bluetooth_pair_unpair_failed">Pair/Unpair failed</string>
+    <!--Data Logger file-->
+    <string name="dl_directory">CySmart</string>
+    <string name="dl_file_extension">.txt</string>
+    <string name="dl_commaseparator">" , "</string>
+    <!--Connection logs-->
+    <string name="dl_connection_request"> Connection request sent </string>
+    <string name="dl_connection_established"> Connection established </string>
+    <string name="dl_connection_establishing"> Connection establishing </string>
+    <string name="dl_connection_pairing_request"> Pairing request sent </string>
+    <string name="dl_connection_pairing_request_received"> Pairing request received </string>
+    <string name="dl_connection_paired"> Paired </string>
+    <string name="dl_connection_unpaired"> Unpaired </string>
+    <string name="dl_connection_pairing_unsupported"> Unable to pair. Check whether the device is advertising and supports pairing. </string>
+    <string name="dl_connection_disconnected"> Disconnected </string>
+    <string name="dl_disconnection_request"> Disconnection request sent </string>
+    <!--Service logs-->
+    <string name="dl_service_discovery_request"> Service discovery request sent </string>
+    <string name="dl_service_discovery_status"> Service discovery status </string>
+    <!--Characteristics logs-->
+    <string name="dl_characteristic_write_request"> Write request sent with value </string>
+    <string name="dl_characteristic_write_request_status"> Write request status </string>
+    <string name="dl_characteristic_start_notification"> Start notification request sent </string>
+    <string name="dl_characteristic_start_indication"> Start indication request sent </string>
+    <string name="dl_characteristic_notification_response"> Notification received with value </string>
+    <string name="dl_characteristic_indication_response"> Indication received with value </string>
+    <string name="dl_characteristic_stop_notification"> Stop notification request sent </string>
+    <string name="dl_characteristic_stop_indication"> Stop indication request sent </string>
+    <string name="dl_characteristic_read_request"> Read request sent </string>
+    <string name="dl_characteristic_read_request_status"> Read request status </string>
+    <string name="dl_characteristic_read_response"> Read response received with value </string>
+    <!--Common logs-->
+    <string name="dl_status_success">" - Success"</string>
+    <string name="dl_status_failure">" - Failed with error code : "</string>
+    <!-- Descriptor parser  -->
+    <string name="descriptor_notification_enabled">Notifications enabled</string>
+    <string name="descriptor_notification_disabled">Notifications disabled</string>
+    <string name="descriptor_indication_enabled">Indication enabled</string>
+    <string name="descriptor_indication_disabled">Indication disabled</string>
+    <string name="descriptor_reliablewrite_enabled">Reliable Write enabled</string>
+    <string name="descriptor_reliablewrite_disabled">Reliable Write disabled</string>
+    <string name="descriptor_writableauxillary_enabled">Writable Auxiliaries enabled</string>
+    <string name="descriptor_writableauxillary_disabled">Writable Auxiliaries disabled</string>
+    <string name="descriptor_broadcast_enabled">Broadcast enabled</string>
+    <string name="descriptor_broadcast_disabled">Broadcast disabled</string>
+    <string name="descriptor_bluetoothSIGAssignedNo">Bluetooth SIG Assigned Numbers</string>
+    <string name="descriptor_reservedforFutureUse">Reserved for future use</string>
+    <string name="descriptor_format">Format</string>
+    <string name="exponent">Exponent</string>
+    <string name="unit">Unit</string>
+    <string name="namespace">Namespace</string>
+    <string name="description">Description</string>
+    <string name="exchange_mtu">"Exchange GATT MTU"</string>
+    <string name="exchange_mtu_request">"[%1$s | %2$s] %3$s request, MTU: %4$d, Status: %5$d"</string>
+    <string name="exchange_mtu_rsp">"[%1$s | %2$s] %3$s request completed, MTU: %4$d, Status: %5$d"</string>
+    <string name="alert_message_exit_ok">OK</string>
+    <string name="alert_message_bluetooth_connect">The BLE device is connected</string>
+    <string name="alert_message_bluetooth_disconnect">The BLE device is disconnected</string>
+    <string name="alert_message_bluetooth_reconnect">Please Turn Bluetooth ON</string>
+    <string name="alert_message_bonding_title">Bonding</string>
+    <string name="alert_message_bonding_message">Bonding is in process \nPlease wait..</string>
+    <string name="alert_message_yes">Yes</string>
+    <string name="alert_message_no">No</string>
+    <string name="alert_message_ota_cancel">Do you want to cancel the OTA update?</string>
+    <string name="alert_message_ota_resume">Do you want to resume the OTA Update?</string>
+    <string name="alert_message_ota_pending">You have firmware upgrade in progress. Going back will stop the firmware upgrade and disconnect from the device. Do you want to continue?</string>
+    <string name="alert_message_ota_user_warning">While firmware upgrade is in progress don\'t press back button or home button. Please stay in the page till the upgrade is complete</string>
+    <string name="alert_message_ota_error">Firmware update canceled\nError: </string>
+    <string name="alert_message_silicon_id_error">Error: The SiliconID or SiliconRev does not match</string>
+    <string name="alert_message_checksum_error">Error: The checksum do not match</string>
+    <string name="alert_message_row_out_of_bounds_error">Error: The row number exceeds the bounds</string>
+    <string name="alert_message_write_error_code">Error code:</string>
+    <string name="toast_selection_cancelled">Selection cancelled</string>
+    <!-- OTA profile elements -->
+    <string name="ota_list">Select Upgrade Option</string>
+    <string name="ota_file_list">Select Firmware Upgrade files</string>
+    <string name="ota_list_app_download">Application Upgrade</string>
+    <string name="ota_list_app_stack_down_comb">Application and Stack Upgrade (Combined Files)</string>
+    <string name="ota_list_app_stack_down_sep">Application and Stack Upgrade (Separate Files)</string>
+    <string name="ota_upgrade">UPGRADE</string>
+    <string name="ota_next">NEXT</string>
+    <string name="ota_stop">STOP</string>
+    <string name="ota_file_read">Reading file, Please wait..</string>
+    <string name="ota_file_read_complete">File Read Completed</string>
+    <string name="ota_file_writ">Writing file, Please wait..</string>
+    <string name="ota_enter_bootloader">Executing Enter Bootloader Command…</string>
+    <string name="ota_get_flash_size">Executing Get Flash Size Command…</string>
+    <string name="ota_program_row">Firmware Upgrade in progress…</string>
+    <string name="ota_verify_row">Firmware Upgrade in progress…</string>
+    <string name="ota_verify_checksum">Executing Verify Checksum Command…</string>
+    <string name="ota_end_bootloader">Executing Exit Bootloader Command…</string>
+    <string name="ota_end_success">Firmware upgrade completed successfully.</string>
+    <string name="toast_ota_dev_address">Different devices....!!</string>
+    <string name="toast_ota_no_update">No update found</string>
+    <string name="toast_ota_pending">You have a Second file to Upgrade.</string>
+    <string name="toast_ota_completed">OTA successfully Completed</string>
+    <string name="toast_ota_one_completion">Stack successfully Updated. Please select the same profile to Upgrade the Application</string>
+    <string name="ota_title">OTA Firmware Upgrade</string>
+    <string name="ota_stack_file">Select the Stack Upgrade file</string>
+    <string name="ota_app_file">Select the Application Upgrade file</string>
+    <string name="ota_toast_stack_file_selected">Stack file selected</string>
+    <string name="ota_toast_pair">Please PAIR the device before starting the Upgrade</string>
+    <string name="ota_notification_title">CySmart</string>
+    <string name="ota_notification_ongoing">OTA Upgrade in progress</string>
+    <string name="ota_notification_stack_file">Stack upgrade completed successfully. Application upgrade pending.</string>
+    <string name="ota_notification_both_file">OTA Firmware Upgrade</string>
+    <string name="ota_alert_invalid_file">Invalid or corrupted file</string>
+    <string name="ota_alert_file_application">Select a file for application upgrade!</string>
+    <string name="ota_alert_file_applicationstackcomb">Select a file for both stack and application upgrade with combined file!</string>
+    <string name="ota_alert_file_applicationstacksep_app_sel">Select the application upgrade file to proceed!</string>
+    <string name="ota_alert_file_applicationstacksep_stack_sel">Select the stack upgrade file to proceed!</string>
 </resources>

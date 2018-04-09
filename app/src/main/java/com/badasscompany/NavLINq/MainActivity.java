@@ -44,12 +44,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.badasscompany.NavLINq.OTAFirmwareUpdate.OTAFirmwareUpgradeActivity;
+import com.badasscompany.NavLINq.OTAFirmwareUpdate.UUIDDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-
-import static com.badasscompany.NavLINq.BluetoothLeService.UUID_LIN_MESSAGE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -80,9 +81,10 @@ public class MainActivity extends AppCompatActivity {
     private static Context mContext;
 
     private Intent gattServiceIntent;
-    private BluetoothAdapter mBluetoothAdapter;
+    public static BluetoothAdapter mBluetoothAdapter;
     private Handler mHandler;
     private BluetoothLeService mBluetoothLeService;
+    public static BluetoothGattCharacteristic gattDFUCharacteristic;
     private BluetoothGattCharacteristic mNotifyCharacteristic;
     List<BluetoothGattCharacteristic> gattCharacteristics;
     private String mDeviceAddress;
@@ -318,8 +320,9 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(mBondingBroadcast,new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
         if (mBluetoothLeService != null) {
-            final boolean result = mBluetoothLeService.connect(mDeviceAddress);
-            Log.d(TAG, "Connect request result=" + result);
+            //final boolean result =
+            mBluetoothLeService.connect(mDeviceAddress,"NavLINq",this);
+            //Log.d(TAG, "Connect request result=" + result);
         } else {
             setupBLE();
         }
@@ -328,7 +331,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbindService(mServiceConnection);
+        try {
+            unbindService(mServiceConnection);
+        } catch (IllegalArgumentException e){
+
+        }
         mBluetoothLeService = null;
     }
 
@@ -361,7 +368,7 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
             // Automatically connects to the device upon successful start-up initialization.
-            mBluetoothLeService.connect(mDeviceAddress);
+            mBluetoothLeService.connect(mDeviceAddress,"NavLINq",MainActivity.this);
         }
 
         @Override
@@ -424,7 +431,6 @@ public class MainActivity extends AppCompatActivity {
     private ScanCallback mLeScanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
-            //Log.d(TAG,"In onScanResult()");
             super.onScanResult(callbackType, result);
             String device = result.getDevice().getName();
             if (device != null) {
@@ -482,7 +488,8 @@ public class MainActivity extends AppCompatActivity {
             final String action = intent.getAction();
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 Log.d(TAG,"GATT_CONNECTED");
-                checkGattServices(mBluetoothLeService.getSupportedGattServices());
+                mBluetoothLeService.discoverServices();
+                //checkGattServices(mBluetoothLeService.getSupportedGattServices());
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 Log.d(TAG,"GATT_DISCONNECTED");
                 connectButton.setImageResource(R.drawable.ic_bluetooth_off);
@@ -492,7 +499,6 @@ public class MainActivity extends AppCompatActivity {
                 connectButton.setImageResource(R.drawable.ic_bluetooth_on);
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 Log.d(TAG,"GATT_DATA_AVAILABLE");
-                //displayData(intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA));
                 updateDisplay();
             }
         }
@@ -508,10 +514,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkGattServices(List<BluetoothGattService> gattServices) {
+        Log.d(TAG,"In checkGattServices");
         if (gattServices == null) return;
         String uuid;
         // Loops through available GATT Services.
         for (BluetoothGattService gattService : gattServices) {
+            Log.d(TAG,"In checkGattServices: for loop");
             if (UUID_MOTORCYCLE_SERVICE.equals(gattService.getUuid())){
                 uuid = gattService.getUuid().toString();
                 Log.d(TAG,"Motorcycle Service Found: " + uuid);
@@ -520,7 +528,7 @@ public class MainActivity extends AppCompatActivity {
                 for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
                     uuid = gattCharacteristic.getUuid().toString();
                     Log.d(TAG,"Characteristic Found: " + uuid);
-                    if (UUID_LIN_MESSAGE.equals(gattCharacteristic.getUuid())) {
+                    if (UUID.fromString(GattAttributes.LIN_MESSAGE_CHARACTERISTIC).equals(gattCharacteristic.getUuid())) {
                         int charaProp = gattCharacteristic.getProperties();
                         if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
                             // If there is an active notification on a characteristic, clear
@@ -537,8 +545,17 @@ public class MainActivity extends AppCompatActivity {
                             mBluetoothLeService.setCharacteristicNotification(
                                     gattCharacteristic, true);
                         }
+                    } else if (UUID.fromString(GattAttributes.DFU_CHARACTERISTIC).equals(gattCharacteristic.getUuid())){
+                        //TODO
+                        gattDFUCharacteristic = gattCharacteristic;
                     }
                 }
+            } else if (UUIDDatabase.UUID_OTA_UPDATE_SERVICE.equals(gattService.getUuid())){
+                Log.d(TAG,"OTA Service Found");
+                //mBluetoothLeService.disconnect();
+                Intent oTAIntent = new Intent(MainActivity.this, OTAFirmwareUpgradeActivity.class);
+                oTAIntent.putExtra("device", mDeviceAddress);
+                startActivity(oTAIntent);
             }
         }
     }

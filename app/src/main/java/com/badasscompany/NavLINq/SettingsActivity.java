@@ -1,6 +1,7 @@
 package com.badasscompany.NavLINq;
 
 
+import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class SettingsActivity extends PreferenceActivity {
+
+    private final static String TAG = "SettingsActivity";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,23 @@ public class SettingsActivity extends PreferenceActivity {
                     return true;
                 }
             });
+            Preference dfuButton = findPreference("prefDfuMode");
+            if (MainActivity.gattDFUCharacteristic != null) {
+                dfuButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        byte[] valueByte = {01};
+                        BluetoothGattCharacteristic characteristic = MainActivity.gattDFUCharacteristic;
+                        characteristic.setValue(valueByte);
+                        if (BluetoothLeService.writeCharacteristic(characteristic)){
+                            //TODO : GO Back to MainActivity
+                        }
+                        return true;
+                    }
+                });
+            } else {
+                dfuButton.setEnabled(false);
+            }
         }
     }
 }

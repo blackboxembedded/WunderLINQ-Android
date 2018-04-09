@@ -73,6 +73,9 @@
         <Preference android:title="@string/pref_btn_sendlogs_title"
             android:key="prefSendLog"
             android:summary="@string/pref_btn_sendlogs_summary"/>
+        <Preference android:title="@string/pref_btn_dfumode_title"
+            android:key="prefDfuMode"
+            android:summary="@string/pref_btn_dfumode_summary"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

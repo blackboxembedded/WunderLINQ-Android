@@ -5,4 +5,14 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="translucent_black">#C0000000</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <!--File Read/Write progress colors-->
+    <color name="file_read_progress">#751abb00</color>
+    <color name="grey">#EFEFF4</color>
+    <color name="green">#701ABB00</color>
+    <color name="colorProgressBar">#FF4081</color>
+
 </resources>
