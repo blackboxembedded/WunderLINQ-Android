@@ -17,6 +17,14 @@ public class OTAFileModel {
      */
     private String mFileParent = null;
     /**
+     * Remote file
+     */
+    private String mFileRemote = null;
+    /**
+     * File Description
+     */
+    private String mFileDescription = null;
+    /**
      *Selection Flag
      *
      */
@@ -24,12 +32,14 @@ public class OTAFileModel {
 
 
     // Constructor
-    public OTAFileModel(String fileName, String filePath, boolean selected, String fileParent) {
+    public OTAFileModel(String fileName, String filePath, boolean selected, String fileParent, String mFileRemote, String mFileDescription) {
         super();
         this.mFileName = fileName;
         this.mFilePath = filePath;
         this.mSelected = selected;
         this.mFileParent = fileParent;
+        this.mFileRemote = mFileRemote;
+        this.mFileDescription = mFileDescription;
     }
 
     public OTAFileModel() {
@@ -42,6 +52,14 @@ public class OTAFileModel {
 
     public String getmFileParent() {
         return mFileParent;
+    }
+
+    public String getFileRemote() {
+        return mFileRemote;
+    }
+
+    public String getFileDescription() {
+        return mFileDescription;
     }
 
     public void setmFileParent(String mFileParent) {
@@ -58,6 +76,14 @@ public class OTAFileModel {
 
     public void setName(String mFilePath) {
         this.mFilePath = mFilePath;
+    }
+
+    public void setRemote(String mFileRemote) {
+        this.mFileRemote = mFileRemote;
+    }
+
+    public void setDescription(String mFileDescription) {
+        this.mFileDescription = mFileDescription;
     }
 
     public boolean isSelected() {

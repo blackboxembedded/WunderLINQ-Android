@@ -1,7 +1,8 @@
 package com.badasscompany.NavLINq;
 
-
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.support.v4.content.FileProvider;
+import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,8 +46,14 @@ public class SettingsActivity extends PreferenceActivity {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     // save logcat in file
+                    File root = new File(Environment.getExternalStorageDirectory(), "/NavLINq/debug/");
+                    if(!root.exists()){
+                        if(!root.mkdirs()){
+                            Log.d(TAG,"Unable to create directory: " + root);
+                        }
+                    }
                     File outputFile = new File(Environment.getExternalStorageDirectory(),
-                            "/NavLINq/logcat.txt");
+                            "/NavLINq/debug/logcat.txt");
                     try {
                         Runtime.getRuntime().exec(
                                 "logcat -f " + outputFile.getAbsolutePath());
@@ -81,7 +89,8 @@ public class SettingsActivity extends PreferenceActivity {
                         BluetoothGattCharacteristic characteristic = MainActivity.gattDFUCharacteristic;
                         characteristic.setValue(valueByte);
                         if (BluetoothLeService.writeCharacteristic(characteristic)){
-                            //TODO : GO Back to MainActivity
+                            //TODO : Restart application or go back to MainActivity
+
                         }
                         return true;
                     }
@@ -91,4 +100,5 @@ public class SettingsActivity extends PreferenceActivity {
             }
         }
     }
+
 }

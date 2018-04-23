@@ -223,9 +223,10 @@
     <string name="alert_message_write_error_code">Error code:</string>
     <string name="toast_selection_cancelled">Selection cancelled</string>
     <!-- OTA profile elements -->
-    <string name="ota_list">Select Upgrade Option</string>
-    <string name="ota_file_list">Select Firmware Upgrade files</string>
-    <string name="ota_list_app_download">Application Upgrade</string>
+    <string name="ota_url">https://storage.googleapis.com/navlinq-test/firmware.xml</string>
+    <string name="ota_list">Upgrade your NavLINq</string>
+    <string name="ota_file_list">Select Firmware Upgrade file</string>
+    <string name="ota_list_app_download">Select Firmware</string>
     <string name="ota_list_app_stack_down_comb">Application and Stack Upgrade (Combined Files)</string>
     <string name="ota_list_app_stack_down_sep">Application and Stack Upgrade (Separate Files)</string>
     <string name="ota_upgrade">UPGRADE</string>

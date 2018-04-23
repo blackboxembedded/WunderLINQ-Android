@@ -35,38 +35,53 @@
 package com.badasscompany.NavLINq.OTAFirmwareUpdate;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.badasscompany.NavLINq.R;
+import android.os.AsyncTask;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.InputStream;
+import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+
+import org.xmlpull.v1.XmlPullParserException;
+
+import com.badasscompany.NavLINq.R;
+import com.badasscompany.NavLINq.OTAFirmwareUpdate.FirmwareXMLParser.Entry;
+
 
 /**
  * Fragment that display the firmware files.User can select the firmware file for upgrade
  */
 public class OTAFilesListingActivity extends Activity {
 
+    public final static String TAG = "OTAFlsLstActivity";
     //Constants
     private static int mFilesCount;
     private final ArrayList<OTAFileModel> mArrayListFiles = new ArrayList<OTAFileModel>();
     private final ArrayList<String> mArrayListPaths = new ArrayList<String>();
     private final ArrayList<String> mArrayListFileNames = new ArrayList<String>();
 
+    List<Entry> entries = null;
 
     private OTAFileListAdapter mFirmwareAdapter;
     private ListView mFileListView;
@@ -75,6 +90,10 @@ public class OTAFilesListingActivity extends Activity {
     private TextView mHeading;
 
     public static Boolean mApplicationInBackground = false;
+
+    // Progress Dialog
+    private ProgressDialog pDialog;
+    public static final int progress_bar_type = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,15 +118,52 @@ public class OTAFilesListingActivity extends Activity {
         mNext = (Button) findViewById(R.id.next_button);
         mHeading = (TextView) findViewById(R.id.heading_2);
 
-        /**
-         * Shows the cyacd file in the device
-         */
-        File filedir = new File(Environment.getExternalStorageDirectory()
-                + File.separator + "NavLINq");
         mFirmwareAdapter = new OTAFileListAdapter(this,
                 mArrayListFiles, mFilesCount);
         mFileListView.setAdapter(mFirmwareAdapter);
-        searchRequiredFile(filedir);
+
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    List<Entry> entries = null;
+                    FirmwareXMLParser firmwareXMLParser = new FirmwareXMLParser();
+
+
+                    URL url = new URL(getResources().getString((R.string.ota_url)));
+                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                    urlConnection.connect();
+
+                    if (urlConnection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                        Log.e(TAG, "run: http request error");
+                        return;
+                    }
+
+                    String firmwareRoot = Environment.getExternalStorageDirectory() + "/NavLINq/firmware/";
+                    entries = firmwareXMLParser.parse(urlConnection.getInputStream());
+                    for (Entry entry : entries) {
+                        OTAFileModel fileModel = new OTAFileModel(entry.name,
+                                firmwareRoot + entry.name + ".navfw", false, firmwareRoot, entry.file, entry.description );
+                        mArrayListFiles.add(fileModel);
+                        mFirmwareAdapter.addFiles(mArrayListFiles);
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                // Stuff that updates the UI
+                                mFirmwareAdapter.notifyDataSetChanged();
+
+                            }
+                        });
+
+                    }
+                } catch (XmlPullParserException | IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
 
         if (mFilesCount == OTAFirmwareUpgradeActivity.mApplicationAndStackSeparate) {
             mHeading.setText(getResources().getString((R.string.ota_stack_file)));
@@ -125,6 +181,17 @@ public class OTAFilesListingActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
 
+                String remoteFile = mArrayListFiles.get(position).getFileRemote();
+
+                File root = new File(mArrayListFiles.get(position).getFilePath());
+                if(!root.exists()){
+                    Log.d(TAG, "Not downloaded yet: " + mArrayListFiles.get(position).getFilePath());
+                    new DownloadFileFromURL().execute(remoteFile);
+                } else {
+                    Log.d(TAG, "Already downloaded: " + mArrayListFiles.get(position).getFilePath());
+                    mFirmwareAdapter.notifyDataSetChanged();
+                }
+
                 OTAFileModel model = mArrayListFiles.get(position);
                 model.setSelected(!model.isSelected());
                 for (int i = 0; i < mArrayListFiles.size(); i++) {
@@ -132,7 +199,6 @@ public class OTAFilesListingActivity extends Activity {
                         mArrayListFiles.get(i).setSelected(false);
                     }
                 }
-                mFirmwareAdapter.notifyDataSetChanged();
             }
         });
 
@@ -140,17 +206,20 @@ public class OTAFilesListingActivity extends Activity {
          * returns to the type selection fragment by selecting the required files
          */
         mUpgrade.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
 
                 if (mFilesCount == OTAFirmwareUpgradeActivity.mApplicationAndStackSeparate) {
+                    Log.d(TAG,"if1");
                     for (int count = 0; count < mArrayListFiles.size(); count++) {
                         if (mArrayListFiles.get(count).isSelected()) {
                             mArrayListPaths.add(1, mArrayListFiles.get(count).getFilePath());
                             mArrayListFileNames.add(1, mArrayListFiles.get(count).getFileName());
                         }
                     }
-                } else {
+                } else { // Fixed bootloader
+                    Log.d(TAG,"else1");
                     for (int count = 0; count < mArrayListFiles.size(); count++) {
                         if (mArrayListFiles.get(count).isSelected()) {
                             mArrayListPaths.add(0, mArrayListFiles.get(count).getFilePath());
@@ -161,6 +230,7 @@ public class OTAFilesListingActivity extends Activity {
 
                 if (mFilesCount == OTAFirmwareUpgradeActivity.mApplicationAndStackSeparate) {
                     if (mArrayListPaths.size() == 2) {
+                        Log.d(TAG,"if2");
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra(Constants.SELECTION_FLAG, true);
                         returnIntent.putExtra(Constants.ARRAYLIST_SELECTED_FILE_PATHS, mArrayListPaths);
@@ -172,13 +242,15 @@ public class OTAFilesListingActivity extends Activity {
                     }
                 } else if (mFilesCount != OTAFirmwareUpgradeActivity.mApplicationAndStackSeparate
                         && mArrayListPaths.size() == 1) {
+                    Log.d(TAG,"elif2");
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra(Constants.SELECTION_FLAG, true);
                     returnIntent.putExtra(Constants.ARRAYLIST_SELECTED_FILE_PATHS, mArrayListPaths);
                     returnIntent.putExtra(Constants.ARRAYLIST_SELECTED_FILE_NAMES, mArrayListFileNames);
                     setResult(RESULT_OK, returnIntent);
                     finish();
-                } else {
+                } else { // Fixed bootloader
+                    Log.d(TAG,"else2");
                     if (mFilesCount != OTAFirmwareUpgradeActivity.mApplicationAndStackCombined) {
                         alertFileSelection(getResources().getString(R.string.ota_alert_file_application));
                     } else {
@@ -218,41 +290,6 @@ public class OTAFilesListingActivity extends Activity {
     );
 }
 
-
-    /**
-     * Method to search phone/directory for the .cyacd files
-     *
-     * @param dir
-     */
-    void searchRequiredFile(File dir) {
-        if (dir.exists()) {
-            String filePattern = "cyacd";
-            File[] allFilesList = dir.listFiles();
-            for (int pos = 0; pos < allFilesList.length; pos++) {
-                File analyseFile = allFilesList[pos];
-                if (analyseFile != null) {
-                    if (analyseFile.isDirectory()) {
-                        searchRequiredFile(analyseFile);
-                    } else {
-                        Uri selectedUri = Uri.fromFile(analyseFile);
-                        String fileExtension
-                                = MimeTypeMap.getFileExtensionFromUrl(selectedUri.toString());
-                        if (fileExtension.equalsIgnoreCase(filePattern)) {
-                            OTAFileModel fileModel = new OTAFileModel(analyseFile.getName(),
-                                    analyseFile.getAbsolutePath(), false, analyseFile.getParent());
-                            mArrayListFiles.add(fileModel);
-                            mFirmwareAdapter.addFiles(mArrayListFiles);
-                            mFirmwareAdapter.notifyDataSetChanged();
-                        }
-                    }
-
-                }
-            }
-        } else {
-            Toast.makeText(this, "Directory does not exist", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     void alertFileSelection(String message) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(message)
@@ -277,6 +314,133 @@ public class OTAFilesListingActivity extends Activity {
     protected void onPause() {
         mApplicationInBackground = true;
         super.onPause();
+    }
+
+    /**
+     * Showing Dialog
+     * */
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case progress_bar_type: // we set this to 0
+                pDialog = new ProgressDialog(this);
+                pDialog.setMessage("Downloading file. Please wait...");
+                pDialog.setIndeterminate(false);
+                pDialog.setMax(100);
+                pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                pDialog.setCancelable(true);
+                pDialog.show();
+                return pDialog;
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Background Async Task to download file
+     * */
+    class DownloadFileFromURL extends AsyncTask<String, String, String> {
+
+        /**
+         * Before starting background thread Show Progress Bar Dialog
+         * */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showDialog(progress_bar_type);
+        }
+
+        /**
+         * Downloading file in background thread
+         * */
+        @Override
+        protected String doInBackground(String... f_url) {
+            int count;
+            try {
+                URL url = new URL(f_url[0]);
+                String path = url.getPath();
+                String file = path.substring(path.lastIndexOf('/') + 1);
+                URLConnection conection = url.openConnection();
+                conection.connect();
+
+                // this will be useful so that you can show a tipical 0-100%
+                // progress bar
+                int lenghtOfFile = conection.getContentLength();
+
+                // download the file
+                InputStream input = new BufferedInputStream(url.openStream(),
+                        8192);
+
+                File root = new File(Environment.getExternalStorageDirectory(), "/NavLINq/firmware/");
+                if(!root.exists()){
+                    if(!root.mkdirs()){
+                        Log.d(TAG,"Unable to create directory: " + root);
+                    }
+                }
+
+                // Output stream
+                OutputStream output = new FileOutputStream(Environment
+                        .getExternalStorageDirectory().toString()
+                        + "/NavLINq/firmware/" + file);
+
+                byte data[] = new byte[1024];
+
+                long total = 0;
+
+                while ((count = input.read(data)) != -1) {
+                    total += count;
+                    // publishing the progress....
+                    // After this onProgressUpdate will be called
+                    publishProgress("" + (int) ((total * 100) / lenghtOfFile));
+
+                    // writing data to file
+                    output.write(data, 0, count);
+                }
+
+                // flushing output
+                output.flush();
+
+                // closing streams
+                output.close();
+                input.close();
+
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+
+                        // Stuff that updates the UI
+                        mFirmwareAdapter.notifyDataSetChanged();
+
+                    }
+                });
+
+            } catch (Exception e) {
+                Log.e("Error: ", e.getMessage());
+            }
+
+            return null;
+        }
+
+        /**
+         * Updating progress bar
+         * */
+        protected void onProgressUpdate(String... progress) {
+            // setting progress percentage
+            pDialog.setProgress(Integer.parseInt(progress[0]));
+        }
+
+        /**
+         * After completing background task Dismiss the progress dialog
+         * **/
+        @Override
+        protected void onPostExecute(String file_url) {
+            // dismiss the dialog after the file was downloaded
+            dismissDialog(progress_bar_type);
+
+        }
+
     }
 }
 

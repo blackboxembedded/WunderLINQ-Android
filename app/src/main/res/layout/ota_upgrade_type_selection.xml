@@ -44,7 +44,8 @@
         android:padding="@dimen/padding_child_ten"
         android:text="@string/ota_list_app_stack_down_comb"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="@dimen/textsize_tiny" />
+        android:textSize="@dimen/textsize_tiny"
+        android:visibility="gone"/>
 
 
     <Button
@@ -58,7 +59,8 @@
         android:padding="@dimen/padding_child_ten"
         android:text="@string/ota_list_app_stack_down_sep"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="@dimen/textsize_tiny" />
+        android:textSize="@dimen/textsize_tiny"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/file_status"

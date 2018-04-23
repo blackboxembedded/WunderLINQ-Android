@@ -52,6 +52,7 @@ public class OTAFileListAdapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.listitem_firmware, null);
             mViewHolder = new MyViewHolder();
             mViewHolder.fileName = (TextView) convertView.findViewById(R.id.file_name);
+            mViewHolder.fileDescription = (TextView) convertView.findViewById(R.id.file_description);
             mViewHolder.layout =  (LinearLayout) convertView.findViewById(R.id.itemParent);
             mViewHolder.fileSelect = (CheckBox) convertView.findViewById(R.id.file_checkbox);
             convertView.setTag(mViewHolder);
@@ -59,6 +60,7 @@ public class OTAFileListAdapter extends BaseAdapter {
         mViewHolder = (MyViewHolder) convertView.getTag();
         OTAFileModel file = mFileList.get(position);
         mViewHolder.fileName.setText(file.getFileName());
+        mViewHolder.fileDescription.setText(file.getFileDescription());
         mViewHolder.fileSelect.setChecked(file.isSelected());
 
         return convertView;
@@ -70,6 +72,7 @@ public class OTAFileListAdapter extends BaseAdapter {
 
     private class MyViewHolder {
         TextView fileName;
+        TextView fileDescription;
         CheckBox fileSelect;
         LinearLayout layout;
     }

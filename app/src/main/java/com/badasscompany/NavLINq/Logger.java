@@ -18,7 +18,7 @@ class Logger {
     private static void initialize(String type)
     {
         try {
-            File root = new File(Environment.getExternalStorageDirectory(), "/NavLINq/");
+            File root = new File(Environment.getExternalStorageDirectory(), "/NavLINq/debug/");
             if(!root.exists()){
                 if(!root.mkdirs()){
                     Log.d(TAG,"Unable to create directory: " + root);
