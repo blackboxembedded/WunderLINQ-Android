@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -44,15 +46,22 @@ public class TaskActivity extends AppCompatActivity {
 
         showActionBar();
 
+        String videoTaskText = getResources().getString(R.string.task_title_start_record);
+        if (((MyApplication) this.getApplication()).getVideoRecording()){
+            videoTaskText = getResources().getString(R.string.task_title_stop_record);
+        }
+
         final String[] taskTitles = new String[] {
                 getResources().getString(R.string.task_title_gohome),
                 getResources().getString(R.string.task_title_callhome),
-                getResources().getString(R.string.task_title_callcontact)
+                getResources().getString(R.string.task_title_callcontact),
+                videoTaskText
         };
         Drawable[] iconId = {
                 getResources().getDrawable(R.drawable.ic_home,getTheme()),
                 getResources().getDrawable(R.drawable.ic_phone,getTheme()),
-                getResources().getDrawable(R.drawable.ic_address_book,getTheme())
+                getResources().getDrawable(R.drawable.ic_address_book,getTheme()),
+                getResources().getDrawable(R.drawable.ic_video_camera,getTheme())
         };
 
         TaskListView adapter = new
@@ -93,10 +102,42 @@ public class TaskActivity extends AppCompatActivity {
                         Intent forwardIntent = new Intent(TaskActivity.this, ContactListActivity.class);
                         startActivity(forwardIntent);
                         break;
+                    case 3:
+                        //Record Video
+                        TextView taskText=(TextView)view.findViewById(R.id.tv_label);
+                        if (taskText.getText().equals(getResources().getString(R.string.task_title_start_record))) {
+                            if (Build.VERSION.SDK_INT >= 23) {
+                                if (!Settings.canDrawOverlays(TaskActivity.this)) {
+                                    Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                            Uri.parse("package:" + getPackageName()));
+                                    startActivityForResult(intent, 1234);
+                                } else {
+                                    startService(new Intent(TaskActivity.this, VideoRecService.class));
+                                }
+                            } else {
+                                startService(new Intent(TaskActivity.this, VideoRecService.class));
+                            }
+                            taskText.setText(getResources().getString(R.string.task_title_stop_record));
+                        } else {
+                            stopService(new Intent(TaskActivity.this, VideoRecService.class));
+                            taskText.setText(getResources().getString(R.string.task_title_start_record));
+                        }
+
+                        break;
                 }
             }
 
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1234) {
+            startService(new Intent(TaskActivity.this,
+                    VideoRecService.class));
+
+        }
     }
 
     private void showActionBar(){

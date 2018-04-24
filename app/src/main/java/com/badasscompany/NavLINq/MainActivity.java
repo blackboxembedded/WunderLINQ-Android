@@ -26,6 +26,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -199,6 +200,22 @@ public class MainActivity extends AppCompatActivity {
                     @TargetApi(23)
                     public void onDismiss(DialogInterface dialog) {
                         requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_FINE_LOCATION);
+                    }
+                });
+                builder.show();
+            }
+            // Check overlay permissions
+            if (!Settings.canDrawOverlays(this)) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(getString(R.string.overlay_alert_title));
+                builder.setMessage(getString(R.string.overlay_alert_body));
+                builder.setPositiveButton(android.R.string.ok, null);
+                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @TargetApi(23)
+                    public void onDismiss(DialogInterface dialog) {
+                        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                Uri.parse("package:" + getPackageName()));
+                        startActivity(intent);
                     }
                 });
                 builder.show();

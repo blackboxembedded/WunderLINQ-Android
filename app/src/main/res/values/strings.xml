@@ -7,6 +7,8 @@
     <string name="location_alert_body">Please grant location permission so this app can log your trip</string>
     <string name="write_alert_title">NavLINq needs write permission</string>
     <string name="write_alert_body">Please grant write permission so this app can log data from your NavLINq</string>
+    <string name="overlay_alert_title">NavLINq needs overlay permission</string>
+    <string name="overlay_alert_body">Please grant overlay permission so this app can record video</string>
     <!-- BLE Stuff Below -->
     <string name="toast_ble_not_supported">BLE is not supported</string>
     <string name="toast_error_bluetooth_not_supported">Bluetooth not supported.</string>
@@ -47,6 +49,8 @@
     <string name="task_title_gohome">Go Home</string>
     <string name="task_title_callhome">Call Home</string>
     <string name="task_title_callcontact">Call Contact</string>
+    <string name="task_title_start_record">Start Recording</string>
+    <string name="task_title_stop_record">Stop Recording</string>
     <string name="task_title_voicecontrol">Voice Control</string>
     <string name="toast_address_not_set">No Go Home address set in Settings</string>
     <string name="toast_phone_not_set">No Call Home phone number set in Settings</string>
@@ -74,6 +78,9 @@
     <string name="contact_type_18">Work Pager</string>
     <string name="contact_type_19">Assistant</string>
     <string name="contact_type_20">MMS</string>
+
+    <!-- VideoRecService -->
+    <string name="title_video_notification">Settings</string>
 
     <!-- SettingsActivity -->
     <string name="title_activity_settings">Settings</string>
