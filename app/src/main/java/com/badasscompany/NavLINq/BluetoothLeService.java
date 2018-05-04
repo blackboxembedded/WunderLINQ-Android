@@ -519,7 +519,7 @@ public class BluetoothLeService extends Service {
                     if (logger == null) {
                         logger = new Logger();
                     }
-                    logger.write("raw", stringBuilder.toString());
+                    logger.write(stringBuilder.toString());
                 }
                 Log.d(TAG, "serviceData: " + stringBuilder.toString());
 
@@ -625,6 +625,14 @@ public class BluetoothLeService extends Service {
                         Log.d(TAG, "Message ID 8");
                         double ambientTemp = ((data[1] & 0xFF) * 0.50) - 40;
                         Data.setAmbientTemperature(ambientTemp);
+
+                        //TODO: Testing
+                        // Fuel Fault?
+                        if ((data[3] & 0xFF) == 0x80){
+                            faults.setfuelFaultActive(true);
+                        } else {
+                            faults.setfuelFaultActive(false);
+                        }
 
                         // Front Signal Lamp Faults
                         // 00=Resting, 20=Left, 40=Right, 60=Both

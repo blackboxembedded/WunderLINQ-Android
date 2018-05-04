@@ -15,7 +15,7 @@ class Logger {
     private static PrintWriter outFile = null;
     private static final String TAG = "NavLINq";
 
-    private static void initialize(String type)
+    private static void initialize()
     {
         try {
             File root = new File(Environment.getExternalStorageDirectory(), "/NavLINq/debug/");
@@ -27,24 +27,13 @@ class Logger {
 
             if(root.canWrite()){
                 Log.d(TAG,"Initialize Logging");
-                // Get current time in UTC
+                // Get current time
                 Calendar cal = Calendar.getInstance();
                 Date date = cal.getTime();
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-HH:mm:ss");
                 String curdatetime = formatter.format(date);
-                String filename = "NavLINq";
-                String header = "";
-                switch (type) {
-                    case "trip":
-                        filename = filename + "-TripLog-";
-                        header = "Time(UTC),Message\n";
-                        break;
-                    case "raw":
-                        filename = filename + "-raw-";
-                        header = "Time(UTC),Location,Data\n";
-                        break;
-                    default:
-                }
+                String filename = "NavLINq-raw-";
+                String header = "Time,Message\n";
                 File logFile = new File( root, filename + curdatetime + ".csv" );
                 FileWriter logWriter = new FileWriter( logFile );
                 outFile = new PrintWriter( logWriter );
@@ -55,11 +44,11 @@ class Logger {
         }
     }
 
-    public void write(String type, String entry)
+    public void write(String entry)
     {
 
         if(outFile == null)
-            initialize(type);
+            initialize();
 
         // Write message
         if(outFile != null) {

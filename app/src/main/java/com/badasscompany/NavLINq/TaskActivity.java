@@ -51,17 +51,24 @@ public class TaskActivity extends AppCompatActivity {
             videoTaskText = getResources().getString(R.string.task_title_stop_record);
         }
 
+        String tripTaskText = getResources().getString(R.string.task_title_start_trip);
+        if (((MyApplication) this.getApplication()).getTripRecording()){
+            tripTaskText = getResources().getString(R.string.task_title_stop_trip);
+        }
+
         final String[] taskTitles = new String[] {
                 getResources().getString(R.string.task_title_gohome),
                 getResources().getString(R.string.task_title_callhome),
                 getResources().getString(R.string.task_title_callcontact),
-                videoTaskText
+                videoTaskText,
+                tripTaskText
         };
         Drawable[] iconId = {
                 getResources().getDrawable(R.drawable.ic_home,getTheme()),
                 getResources().getDrawable(R.drawable.ic_phone,getTheme()),
                 getResources().getDrawable(R.drawable.ic_address_book,getTheme()),
-                getResources().getDrawable(R.drawable.ic_video_camera,getTheme())
+                getResources().getDrawable(R.drawable.ic_video_camera,getTheme()),
+                getResources().getDrawable(R.drawable.ic_road,getTheme())
         };
 
         TaskListView adapter = new
@@ -122,7 +129,19 @@ public class TaskActivity extends AppCompatActivity {
                             stopService(new Intent(TaskActivity.this, VideoRecService.class));
                             taskText.setText(getResources().getString(R.string.task_title_start_record));
                         }
-
+                        break;
+                    case 4:
+                        //Trip Log
+                        Log.d(TAG,"Start recording selected");
+                        TextView tripTaskText=(TextView)view.findViewById(R.id.tv_label);
+                        if (tripTaskText.getText().equals(getResources().getString(R.string.task_title_start_trip))) {
+                            startService(new Intent(TaskActivity.this, LoggingService.class));
+                            Log.d(TAG,"Start recording");
+                            tripTaskText.setText(getResources().getString(R.string.task_title_stop_trip));
+                        } else {
+                            stopService(new Intent(TaskActivity.this, LoggingService.class));
+                            tripTaskText.setText(getResources().getString(R.string.task_title_start_trip));
+                        }
                         break;
                 }
             }

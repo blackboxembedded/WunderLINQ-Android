@@ -5,6 +5,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -15,16 +16,15 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
-/**
- * Created by keithconger on 9/24/17.
- *
- * // Use this to start and trigger a service
- * Intent i= new Intent(this, LoggingService.class);
- * this.startService(i);
- *
- */
+import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 public class LoggingService extends Service {
 
@@ -34,9 +34,9 @@ public class LoggingService extends Service {
     Runnable runnable;
 
     private Location lastLocation;
-    private Logger tripLogger = null;
+    private PrintWriter outFile = null;
 
-    private int loggingInterval = 60000;
+    private int loggingInterval = 10000;
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -54,9 +54,12 @@ public class LoggingService extends Service {
     public void onTaskRemoved(Intent rootIntent) {
         // TODO Auto-generated method stub
         Log.d(TAG, "In onTaskRemoved");
-
+        if(outFile != null) {
+            outFile.flush();
+            outFile.close();
+        }
         handler.removeCallbacks(runnable);
-        tripLogger.shutdown();
+        ((MyApplication) this.getApplication()).setTripRecording(false);
         /*
         Intent restartService = new Intent(getApplicationContext(),
                 this.getClass());
@@ -75,38 +78,74 @@ public class LoggingService extends Service {
     public void onCreate() {
         Log.d(TAG, "In onCreate");
         super.onCreate();
-
-        if (tripLogger == null) {
-            tripLogger = new Logger();
-        }
+        ((MyApplication) this.getApplication()).setTripRecording(true);
     }
 
     public LoggingService() {
         Log.d(TAG, "In LoggingService()");
-        if (tripLogger == null) {
-            tripLogger = new Logger();
-        }
-        handler = new Handler();
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                getLastLocation();
-                Data.setLastLocation(lastLocation);
-                // Log data
-                String locationString ="No Fix";
-                if (lastLocation != null){
-                    locationString = lastLocation.toString();
-                }
 
-                tripLogger.write("trip", locationString + "," + Data.getGear() + "," + Data.getEngineTemperature() + "," + Data.getAmbientTemperature() + "," + Data.getFrontTirePressure()
-                        + "," + Data.getRearTirePressure() + "," + Data.getOdometer());
-                handler.postDelayed(runnable, loggingInterval);
+        try {
+            File root = new File(Environment.getExternalStorageDirectory(), "/NavLINq/logs/");
+            if(!root.exists()){
+                if(!root.mkdirs()){
+                    Log.d(TAG,"Unable to create directory: " + root);
+                }
             }
-        };
-        handler.postDelayed(runnable, 0);
+
+            if(root.canWrite()){
+                Log.d(TAG,"Initialize Logging");
+                // Get current time in UTC
+                Calendar cal = Calendar.getInstance();
+                Date date = cal.getTime();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-HH:mm:ss");
+                String curdatetime = formatter.format(date);
+                String filename = "NavLINq-TripLog-";
+                String header = "Time,Location,Gear,Engine Temperature(Celcius),Ambient Temperature(Celcius),Front Tire Pressure(bar),Rear Tire Pressure(bar),Odometer(Kilometers)\n";
+                File logFile = new File( root, filename + curdatetime + ".csv" );
+                FileWriter logWriter = new FileWriter( logFile );
+                outFile = new PrintWriter( logWriter );
+                outFile.write(header);
+                outFile.flush();
+            }
+
+            handler = new Handler();
+            runnable = new Runnable() {
+                @Override
+                public void run() {
+                    getLastLocation();
+                    Data.setLastLocation(lastLocation);
+                    // Log data
+                    Calendar cal = Calendar.getInstance();
+                    Date date = cal.getTime();
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+                    String curdatetime = formatter.format(date);
+                    String locationString ="No Fix";
+                    if (lastLocation != null){
+                        locationString = lastLocation.toString();
+                    }
+                    outFile.write(curdatetime + "," + locationString + "," + Data.getGear() + "," + Data.getEngineTemperature() + "," + Data.getAmbientTemperature() + "," + Data.getFrontTirePressure()
+                            + "," + Data.getRearTirePressure() + "," + Data.getOdometer() + "\n");
+                    outFile.flush();
+                    handler.postDelayed(runnable, loggingInterval);
+                }
+            };
+            handler.postDelayed(runnable, 0);
+
+        } catch (IOException e) {
+            Log.d(TAG, "Could not write to file: " + e.getMessage());
+            ((MyApplication) this.getApplication()).setTripRecording(false);
+        }
     }
-    public void stopLogging() {
+
+    @Override
+    public void onDestroy() {
+        Log.d(TAG,"In onDestroy()");
+        if(outFile != null) {
+            outFile.flush();
+            outFile.close();
+        }
         handler.removeCallbacks(runnable);
+        ((MyApplication) this.getApplication()).setTripRecording(false);
     }
 
     private void getLastLocation() {
