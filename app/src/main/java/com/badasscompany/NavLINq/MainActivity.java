@@ -48,7 +48,9 @@ import android.widget.Toast;
 import com.badasscompany.NavLINq.OTAFirmwareUpdate.OTAFirmwareUpgradeActivity;
 import com.badasscompany.NavLINq.OTAFirmwareUpdate.UUIDDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -221,28 +223,41 @@ public class MainActivity extends AppCompatActivity {
                 builder.show();
             }
         }
-        // Disclaimer Warning
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.disclaimer_alert_title));
-        builder.setMessage(getString(R.string.disclaimer_alert_body));
-        builder.setPositiveButton(R.string.disclaimer_ok,
-                new DialogInterface.OnClickListener() {
+        // Daily Disclaimer Warning
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String currentDate = sdf.format(new Date());
+        if (sharedPrefs.getString("LAST_LAUNCH_DATE","nodate").contains(currentDate)){
+            // Date matches. User has already Launched the app once today. So do nothing.
+        }
+        else
+        {
+            // Display dialog text here......
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(getString(R.string.disclaimer_alert_title));
+            builder.setMessage(getString(R.string.disclaimer_alert_body));
+            builder.setPositiveButton(R.string.disclaimer_ok,
+                    new DialogInterface.OnClickListener() {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-        builder.setNegativeButton(R.string.disclaimer_quit,
-                new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+            builder.setNegativeButton(R.string.disclaimer_quit,
+                    new DialogInterface.OnClickListener() {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // End App
-                        finishAndRemoveTask();
-                    }
-                });
-        builder.show();
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // End App
+                            finishAndRemoveTask();
+                        }
+                    });
+            builder.show();
+            // Set the last Launched date to today.
+            SharedPreferences.Editor editor = sharedPrefs.edit();
+            editor.putString("LAST_LAUNCH_DATE", currentDate);
+            editor.commit();
+        }
     }
 
     private void showActionBar(){
@@ -682,13 +697,12 @@ public class MainActivity extends AppCompatActivity {
                 rdcRear = barTokgf(rdcRear);
             } else if (pressureFormat.contains("3")) {
                 // Psi
-                Log.d(TAG,"Bar Selected: " + rdcFront +", " + rdcRear);
                 rdcFront = barToPsi(rdcFront);
                 rdcRear = barToPsi(rdcRear);
-                Log.d(TAG,"PSI Selected: " + rdcFront +", " + rdcRear);
             }
             textView1.setText((int) Math.round(rdcFront) + " " + pressureUnit);
             textView5.setText((int) Math.round(rdcRear) + " " + pressureUnit);
+
         } else {
             textView1.setText("--");
             textView5.setText("--");
