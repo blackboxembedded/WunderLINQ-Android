@@ -551,11 +551,11 @@ public class BluetoothLeService extends Service {
                         }
                         // Tire Pressure
                         if ((data[4] & 0xFF) != 0xFF){
-                            double rdcFront = (data[4] & 0xFF) / 50;
+                            double rdcFront = (data[4] & 0xFF) / 50.0;
                             Data.setFrontTirePressure(rdcFront);
                         }
                         if ((data[5] & 0xFF) != 0xFF){
-                            double rdcRear = (data[5] & 0xFF) / 50;
+                            double rdcRear = (data[5] & 0xFF) / 50.0;
                             Data.setRearTirePressure(rdcRear);
                         }
 
@@ -581,29 +581,31 @@ public class BluetoothLeService extends Service {
                     case 0x06:
                         Log.d(TAG, "Message ID 6");
                         String gear;
-                        switch (data[2] & 0xFF) {
-                            case 0x10:
+                        int lowNibble = (data[2] & 0xFF)  & 0x0f; // the lowest 4 bits
+                        int hiNibble = ((data[2] & 0xFF)  >> 4) & 0x0f; // the highest 4 bits.
+                        switch (hiNibble) {
+                            case 0x1:
                                 gear = "1";
                                 break;
-                            case 0x20:
+                            case 0x2:
                                 gear = "N";
                                 break;
-                            case 0x40:
+                            case 0x4:
                                 gear = "2";
                                 break;
-                            case 0x70:
+                            case 0x7:
                                 gear = "3";
                                 break;
-                            case 0x80:
+                            case 0x8:
                                 gear = "4";
                                 break;
-                            case 0xB0:
+                            case 0xB:
                                 gear = "5";
                                 break;
-                            case 0xD0:
+                            case 0xD:
                                 gear = "6";
                                 break;
-                            case 0xF0:
+                            case 0xF:
                                 // Inbetween Gears
                                 gear = "-";
                                 break;
