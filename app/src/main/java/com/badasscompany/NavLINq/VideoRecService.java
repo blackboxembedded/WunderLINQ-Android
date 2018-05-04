@@ -1,6 +1,5 @@
 package com.badasscompany.NavLINq;
 import java.io.File;
-import java.io.IOException;
 import java.util.Date;
 import android.app.Service;
 import android.app.Notification;
@@ -21,6 +20,7 @@ import android.support.v4.app.NotificationCompat;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
@@ -40,8 +40,8 @@ public class VideoRecService extends Service implements SurfaceHolder.Callback {
     @Override
     public void onCreate() {
         ((MyApplication) this.getApplication()).setVideoRecording(true);
-        recordingFile = new File(Environment.getExternalStorageDirectory()+"/NavLINq/videos/"+
-                DateFormat.format("NavLINq-yyyy-MM-dd_kk-mm-ss", new Date().getTime())+
+        recordingFile = new File(Environment.getExternalStorageDirectory()+"/NavLINq/videos/NavLINq-"+
+                DateFormat.format("yyyy-MM-dd_kk-mm-ss", new Date().getTime())+
                 ".mp4");
         // Start foreground service to avoid unexpected kill
         String CHANNEL_ID = "NavLINq";
@@ -56,7 +56,7 @@ public class VideoRecService extends Service implements SurfaceHolder.Callback {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setChannelId(CHANNEL_ID)
-                .setContentTitle("Background Video Recorder")
+                .setContentTitle(getResources().getString(R.string.title_video_notification))
                 .setContentText("")
                 .setSmallIcon(R.drawable.ic_video_camera);
         Notification notification = builder.build();
@@ -81,6 +81,32 @@ public class VideoRecService extends Service implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
 
+        WindowManager windowService = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        int rotation = 0;
+
+        switch (windowService.getDefaultDisplay().getRotation()) {
+            case Surface.ROTATION_0:
+                Log.d(TAG,"Rotation 0");
+                rotation = 90;
+                break;
+            case Surface.ROTATION_90:
+                Log.d(TAG,"Rotation 90");
+                rotation = 0;
+                break;
+            case Surface.ROTATION_180:
+                Log.d(TAG,"Rotation 180");
+                rotation = 0;
+                break;
+            case Surface.ROTATION_270:
+                Log.d(TAG,"Rotation 270");
+                rotation = 180;
+                break;
+            default:
+                Log.d(TAG,"Rotation " + windowService.getDefaultDisplay().getRotation());
+                rotation = 0;
+                break;
+        }
+
         camera = Camera.open();
         mediaRecorder = new MediaRecorder();
         camera.unlock();
@@ -90,6 +116,7 @@ public class VideoRecService extends Service implements SurfaceHolder.Callback {
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
         mediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
         mediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
+        mediaRecorder.setOrientationHint(rotation);
 
         File root = new File(Environment.getExternalStorageDirectory(), "/NavLINq/videos/");
         if(!root.exists()){

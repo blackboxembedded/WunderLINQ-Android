@@ -221,6 +221,28 @@ public class MainActivity extends AppCompatActivity {
                 builder.show();
             }
         }
+        // Disclaimer Warning
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.disclaimer_alert_title));
+        builder.setMessage(getString(R.string.disclaimer_alert_body));
+        builder.setPositiveButton(R.string.disclaimer_ok,
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        builder.setNegativeButton(R.string.disclaimer_quit,
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // End App
+                        finishAndRemoveTask();
+                    }
+                });
+        builder.show();
     }
 
     private void showActionBar(){
@@ -509,6 +531,8 @@ public class MainActivity extends AppCompatActivity {
                 //checkGattServices(mBluetoothLeService.getSupportedGattServices());
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 Log.d(TAG,"GATT_DISCONNECTED");
+                Data.clear();
+                updateDisplay();
                 connectButton.setImageResource(R.drawable.ic_bluetooth_off);
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 Log.d(TAG,"GATT_SERVICE_DISCOVERED");
@@ -563,7 +587,6 @@ public class MainActivity extends AppCompatActivity {
                                     gattCharacteristic, true);
                         }
                     } else if (UUID.fromString(GattAttributes.DFU_CHARACTERISTIC).equals(gattCharacteristic.getUuid())){
-                        //TODO
                         gattDFUCharacteristic = gattCharacteristic;
                     }
                 }
@@ -666,9 +689,14 @@ public class MainActivity extends AppCompatActivity {
             }
             textView1.setText((int) Math.round(rdcFront) + " " + pressureUnit);
             textView5.setText((int) Math.round(rdcRear) + " " + pressureUnit);
+        } else {
+            textView1.setText("--");
+            textView5.setText("--");
         }
         if(Data.getGear() != null){
             textView3.setText(Data.getGear());
+        } else {
+            textView3.setText("--");
         }
         if(Data.getEngineTemperature() != null ){
             Double engineTemp = Data.getEngineTemperature();
@@ -677,6 +705,8 @@ public class MainActivity extends AppCompatActivity {
                 engineTemp = celsiusToFahrenheit(engineTemp);
             }
             textView2.setText((int) Math.round(engineTemp) + " " + temperatureUnit);
+        } else {
+            textView2.setText("--");
         }
         if(Data.getAmbientTemperature() != null ){
             Double ambientTemp = Data.getAmbientTemperature();
@@ -685,6 +715,8 @@ public class MainActivity extends AppCompatActivity {
                 ambientTemp = celsiusToFahrenheit(ambientTemp);
             }
             textView6.setText((int) Math.round(ambientTemp) + " " + temperatureUnit);
+        } else {
+            textView6.setText("--");
         }
         if(Data.getOdometer() != null){
             Double odometer = Data.getOdometer();
@@ -692,6 +724,8 @@ public class MainActivity extends AppCompatActivity {
                 odometer = kmToMiles(odometer);
             }
             textView7.setText(Math.round(odometer) + " " + distanceUnit);
+        } else {
+            textView7.setText("--");
         }
         if(Data.getTripOne() != null) {
             Double trip1 = Data.getTripOne();
@@ -702,6 +736,9 @@ public class MainActivity extends AppCompatActivity {
             }
             textView4.setText(Math.round(trip1) + " " + distanceUnit);
             textView8.setText(Math.round(trip2) + " " + distanceUnit);
+        } else {
+            textView4.setText("--");
+            textView8.setText("--");
         }
     }
 

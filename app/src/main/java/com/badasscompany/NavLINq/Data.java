@@ -106,4 +106,18 @@ public class Data {
         Data.gear = gear;
     }
 
+    // Utility functions
+    public static void clear(){
+        Data.lastLocation = null;
+        Data.frontTirePressure = null;
+        Data.rearTirePressure = null;
+        Data.ambientTemperature = null;
+        Data.engineTemperature = null;
+        Data.odometer = null;
+        Data.tripOne = null;
+        Data.tripTwo = null;
+        Data.numberOfShifts = null;
+        Data.numberOfBrakes = null;
+        Data.gear = null;
+    }
 }

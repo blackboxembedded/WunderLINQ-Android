@@ -9,6 +9,13 @@
     <string name="write_alert_body">Please grant write permission so this app can log data from your NavLINq</string>
     <string name="overlay_alert_title">NavLINq needs overlay permission</string>
     <string name="overlay_alert_body">Please grant overlay permission so this app can record video</string>
+    <string name="disclaimer_alert_title">WARNING!</string>
+    <string name="disclaimer_alert_body">
+        Never take your eyes of the road and always use your best judgment.
+        Black Box Embedded is not responsible for any harm or damages caused by this products use.
+    </string>
+    <string name="disclaimer_ok">I agree</string>
+    <string name="disclaimer_quit">Quit</string>
     <!-- BLE Stuff Below -->
     <string name="toast_ble_not_supported">BLE is not supported</string>
     <string name="toast_error_bluetooth_not_supported">Bluetooth not supported.</string>
@@ -80,7 +87,7 @@
     <string name="contact_type_20">MMS</string>
 
     <!-- VideoRecService -->
-    <string name="title_video_notification">Settings</string>
+    <string name="title_video_notification">NavLINq recording video</string>
 
     <!-- SettingsActivity -->
     <string name="title_activity_settings">Settings</string>
