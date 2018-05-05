@@ -26,7 +26,7 @@ class Logger {
             }
 
             if(root.canWrite()){
-                Log.d(TAG,"Initialize Logging");
+                Log.d(TAG,"Initialize Raw Message Logging");
                 // Get current time
                 Calendar cal = Calendar.getInstance();
                 Date date = cal.getTime();

@@ -61,14 +61,16 @@ public class TaskActivity extends AppCompatActivity {
                 getResources().getString(R.string.task_title_callhome),
                 getResources().getString(R.string.task_title_callcontact),
                 videoTaskText,
-                tripTaskText
+                tripTaskText,
+                getResources().getString(R.string.task_title_voicecontrol)
         };
         Drawable[] iconId = {
                 getResources().getDrawable(R.drawable.ic_home,getTheme()),
                 getResources().getDrawable(R.drawable.ic_phone,getTheme()),
                 getResources().getDrawable(R.drawable.ic_address_book,getTheme()),
                 getResources().getDrawable(R.drawable.ic_video_camera,getTheme()),
-                getResources().getDrawable(R.drawable.ic_road,getTheme())
+                getResources().getDrawable(R.drawable.ic_road,getTheme()),
+                getResources().getDrawable(R.drawable.ic_microphone,getTheme())
         };
 
         TaskListView adapter = new
@@ -132,16 +134,18 @@ public class TaskActivity extends AppCompatActivity {
                         break;
                     case 4:
                         //Trip Log
-                        Log.d(TAG,"Start recording selected");
                         TextView tripTaskText=(TextView)view.findViewById(R.id.tv_label);
                         if (tripTaskText.getText().equals(getResources().getString(R.string.task_title_start_trip))) {
                             startService(new Intent(TaskActivity.this, LoggingService.class));
-                            Log.d(TAG,"Start recording");
                             tripTaskText.setText(getResources().getString(R.string.task_title_stop_trip));
                         } else {
                             stopService(new Intent(TaskActivity.this, LoggingService.class));
                             tripTaskText.setText(getResources().getString(R.string.task_title_start_trip));
                         }
+                        break;
+                    case 5:
+                        //Voice Assistant
+                        startActivity(new Intent(Intent.ACTION_VOICE_COMMAND).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         break;
                 }
             }
