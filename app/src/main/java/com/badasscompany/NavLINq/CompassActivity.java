@@ -58,7 +58,6 @@ public class CompassActivity extends AppCompatActivity {
 
         compassTextView = (TextView) findViewById(R.id.compassTextView);
         compassTextView.setGravity(Gravity.CENTER | Gravity.CENTER_VERTICAL);
-        compassTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 120);
 
         // Sensor Stuff
         sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);

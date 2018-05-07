@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
             UUID.fromString(GattAttributes.MOTORCYCLE_SERVICE);
 
     private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
+    private static final int PERMISSION_REQUEST_CAMERA = 100;
     private static final int PERMISSION_REQUEST_WRITE_STORAGE = 112;
 
     @Override
@@ -162,22 +163,21 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(mBondingBroadcast,new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
         gattServiceIntent = new Intent(MainActivity.this, BluetoothLeService.class);
 
-        // Check read notification permissions
-        if (!Settings.Secure.getString(this.getContentResolver(),"enabled_notification_listeners").contains(getApplicationContext().getPackageName())) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(getString(R.string.notification_alert_title));
-            builder.setMessage(getString(R.string.notification_alert_body));
-            builder.setPositiveButton(android.R.string.ok, null);
-            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @TargetApi(23)
-                public void onDismiss(DialogInterface dialog) {
-                    getApplicationContext().startActivity(new Intent(
-                            "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
-                }
-            });
-            builder.show();
-        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // Check Camera permissions
+            if (this.checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(getString(R.string.camera_alert_title));
+                builder.setMessage(getString(R.string.camera_alert_body));
+                builder.setPositiveButton(android.R.string.ok, null);
+                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @TargetApi(23)
+                    public void onDismiss(DialogInterface dialog) {
+                        requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
+                    }
+                });
+                builder.show();
+            }
             // Check Write permissions
             if (this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -223,6 +223,21 @@ public class MainActivity extends AppCompatActivity {
                 builder.show();
             }
         }
+        // Check read notification permissions
+        if (!Settings.Secure.getString(this.getContentResolver(),"enabled_notification_listeners").contains(getApplicationContext().getPackageName())) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(getString(R.string.notification_alert_title));
+            builder.setMessage(getString(R.string.notification_alert_body));
+            builder.setPositiveButton(android.R.string.ok, null);
+            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @TargetApi(23)
+                public void onDismiss(DialogInterface dialog) {
+                    getApplicationContext().startActivity(new Intent(
+                            "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+                }
+            });
+            builder.show();
+        }
         // Daily Disclaimer Warning
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String currentDate = sdf.format(new Date());
@@ -258,6 +273,7 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("LAST_LAUNCH_DATE", currentDate);
             editor.commit();
         }
+        updateDisplay();
     }
 
     private void showActionBar(){
@@ -285,6 +301,8 @@ public class MainActivity extends AppCompatActivity {
         forwardButton.setOnClickListener(mClickListener);
         faultButton.setOnClickListener(mClickListener);
         settingsButton.setOnClickListener(mClickListener);
+
+        faultButton.setVisibility(View.GONE);
     }
 
     private View.OnClickListener mClickListener = new View.OnClickListener() {
@@ -620,6 +638,25 @@ public class MainActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode)
         {
+            case PERMISSION_REQUEST_CAMERA: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    Log.d(TAG, "Camera permission granted");
+                    setupBLE();
+                } else
+                {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.negative_alert_title));
+                    builder.setMessage(getString(R.string.negative_camera_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
+                }
+            }
             case PERMISSION_REQUEST_WRITE_STORAGE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 {
@@ -628,8 +665,8 @@ public class MainActivity extends AppCompatActivity {
                 } else
                 {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle("Functionality limited");
-                    builder.setMessage("Since write access has not been granted, this app will not be able to log data");
+                    builder.setTitle(getString(R.string.negative_alert_title));
+                    builder.setMessage(getString(R.string.negative_write_alert_body));
                     builder.setPositiveButton(android.R.string.ok, null);
                     builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
@@ -644,8 +681,8 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, "coarse location permission granted");
                 } else {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle("Functionality limited");
-                    builder.setMessage("Since location access has not been granted, this app will not be able to discover your NavLINq when in the background.");
+                    builder.setTitle(getString(R.string.negative_alert_title));
+                    builder.setMessage(getString(R.string.negative_location_alert_body));
                     builder.setPositiveButton(android.R.string.ok, null);
                     builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
@@ -661,6 +698,16 @@ public class MainActivity extends AppCompatActivity {
 
     // Update Display
     private void updateDisplay(){
+        //Check for active faults
+        FaultStatus faults;
+        faults = (new FaultStatus(this));
+        ArrayList<String> faultListData = faults.getallActiveDesc();
+        if (!faultListData.isEmpty()){
+            faultButton.setVisibility(View.VISIBLE);
+        } else {
+            faultButton.setVisibility(View.GONE);
+        }
+
         String pressureUnit = "bar";
         String pressureFormat = sharedPrefs.getString("prefPressureF", "0");
         if (pressureFormat.contains("1")) {
@@ -704,13 +751,13 @@ public class MainActivity extends AppCompatActivity {
             textView5.setText((int) Math.round(rdcRear) + " " + pressureUnit);
 
         } else {
-            textView1.setText("--");
-            textView5.setText("--");
+            textView1.setText(getString(R.string.blank_field));
+            textView5.setText(getString(R.string.blank_field));
         }
         if(Data.getGear() != null){
             textView3.setText(Data.getGear());
         } else {
-            textView3.setText("--");
+            textView3.setText(getString(R.string.blank_field));
         }
         if(Data.getEngineTemperature() != null ){
             Double engineTemp = Data.getEngineTemperature();
@@ -720,7 +767,7 @@ public class MainActivity extends AppCompatActivity {
             }
             textView2.setText((int) Math.round(engineTemp) + " " + temperatureUnit);
         } else {
-            textView2.setText("--");
+            textView2.setText(getString(R.string.blank_field));
         }
         if(Data.getAmbientTemperature() != null ){
             Double ambientTemp = Data.getAmbientTemperature();
@@ -730,7 +777,7 @@ public class MainActivity extends AppCompatActivity {
             }
             textView6.setText((int) Math.round(ambientTemp) + " " + temperatureUnit);
         } else {
-            textView6.setText("--");
+            textView6.setText(getString(R.string.blank_field));
         }
         if(Data.getOdometer() != null){
             Double odometer = Data.getOdometer();
@@ -739,7 +786,7 @@ public class MainActivity extends AppCompatActivity {
             }
             textView7.setText(Math.round(odometer) + " " + distanceUnit);
         } else {
-            textView7.setText("--");
+            textView7.setText(getString(R.string.blank_field));
         }
         if(Data.getTripOne() != null) {
             Double trip1 = Data.getTripOne();
@@ -751,8 +798,8 @@ public class MainActivity extends AppCompatActivity {
             textView4.setText(Math.round(trip1) + " " + distanceUnit);
             textView8.setText(Math.round(trip2) + " " + distanceUnit);
         } else {
-            textView4.setText("--");
-            textView8.setText("--");
+            textView4.setText(getString(R.string.blank_field));
+            textView8.setText(getString(R.string.blank_field));
         }
     }
 

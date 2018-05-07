@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -25,16 +26,18 @@
                 android:layout_height="wrap_content"
                 android:text="@string/rdc_front_label"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="--"
+                android:text="@string/blank_field"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="36sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -53,16 +56,18 @@
                 android:layout_height="wrap_content"
                 android:text="@string/engine_temp_label"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="--"
+                android:text="@string/blank_field"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="36sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -81,16 +86,19 @@
                 android:layout_height="wrap_content"
                 android:text="@string/gear_label"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="--"
+                android:text="@string/blank_field"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textAllCaps="false"
+                android:textSize="36sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -109,16 +117,18 @@
                 android:layout_height="wrap_content"
                 android:text="@string/trip1_label"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="--"
+                android:text="@string/blank_field"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="36sp"
+                android:textStyle="bold" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
@@ -136,16 +146,18 @@
                 android:layout_height="wrap_content"
                 android:text="@string/rdc_rear_label"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="--"
+                android:text="@string/blank_field"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="36sp"
+                android:textStyle="bold" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
@@ -163,16 +175,18 @@
                 android:layout_height="wrap_content"
                 android:text="@string/ambient_temp_label"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView6"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="--"
+                android:text="@string/blank_field"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="36sp"
+                android:textStyle="bold" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
@@ -190,16 +204,18 @@
                 android:layout_height="wrap_content"
                 android:text="@string/odometer_label"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView7"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="--"
+                android:text="@string/blank_field"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="36sp"
+                android:textStyle="bold" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
@@ -217,16 +233,18 @@
                 android:layout_height="wrap_content"
                 android:text="@string/trip2_label"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView8"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="--"
+                android:text="@string/blank_field"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="36sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
     </GridLayout>

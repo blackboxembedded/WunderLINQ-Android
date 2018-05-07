@@ -56,20 +56,26 @@ public class TaskActivity extends AppCompatActivity {
             tripTaskText = getResources().getString(R.string.task_title_stop_trip);
         }
 
+        // Tasks
+        // Order must match between text, icon and onItemClick case
         final String[] taskTitles = new String[] {
                 getResources().getString(R.string.task_title_gohome),
                 getResources().getString(R.string.task_title_callhome),
                 getResources().getString(R.string.task_title_callcontact),
+                getResources().getString(R.string.task_title_photo),
                 videoTaskText,
                 tripTaskText,
+                getResources().getString(R.string.task_title_waypoint),
                 getResources().getString(R.string.task_title_voicecontrol)
         };
         Drawable[] iconId = {
                 getResources().getDrawable(R.drawable.ic_home,getTheme()),
                 getResources().getDrawable(R.drawable.ic_phone,getTheme()),
                 getResources().getDrawable(R.drawable.ic_address_book,getTheme()),
+                getResources().getDrawable(R.drawable.ic_camera,getTheme()),
                 getResources().getDrawable(R.drawable.ic_video_camera,getTheme()),
                 getResources().getDrawable(R.drawable.ic_road,getTheme()),
+                getResources().getDrawable(R.drawable.ic_map_marker,getTheme()),
                 getResources().getDrawable(R.drawable.ic_microphone,getTheme())
         };
 
@@ -112,6 +118,13 @@ public class TaskActivity extends AppCompatActivity {
                         startActivity(forwardIntent);
                         break;
                     case 3:
+                        //Take photo
+                        Log.d(TAG,"Take photo");
+                        Intent photoIntent = new Intent(TaskActivity.this, PhotoService.class);
+                        photoIntent.putExtra("camera",0);
+                        startService(photoIntent);
+                        break;
+                    case 4:
                         //Record Video
                         TextView taskText=(TextView)view.findViewById(R.id.tv_label);
                         if (taskText.getText().equals(getResources().getString(R.string.task_title_start_record))) {
@@ -132,7 +145,7 @@ public class TaskActivity extends AppCompatActivity {
                             taskText.setText(getResources().getString(R.string.task_title_start_record));
                         }
                         break;
-                    case 4:
+                    case 5:
                         //Trip Log
                         TextView tripTaskText=(TextView)view.findViewById(R.id.tv_label);
                         if (tripTaskText.getText().equals(getResources().getString(R.string.task_title_start_trip))) {
@@ -143,7 +156,11 @@ public class TaskActivity extends AppCompatActivity {
                             tripTaskText.setText(getResources().getString(R.string.task_title_start_trip));
                         }
                         break;
-                    case 5:
+                    case 6:
+                        //Waypoint
+                        //TODO: Add saving of waypoint
+                        break;
+                    case 7:
                         //Voice Assistant
                         startActivity(new Intent(Intent.ACTION_VOICE_COMMAND).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         break;
@@ -151,6 +168,7 @@ public class TaskActivity extends AppCompatActivity {
             }
 
         });
+        // End of Tasks
     }
 
     @Override

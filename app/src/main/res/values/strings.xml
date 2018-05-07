@@ -2,13 +2,20 @@
     <string name="app_name">NavLINq</string>
     <!-- MainActivity -->
     <string name="main_title">My Motorcycle</string>
+    <string name="blank_field">∞</string>
     <!-- Permission Requests -->
+    <string name="camera_alert_title">NavLINq needs permissions to use your camera</string>
+    <string name="camera_alert_body">Please grant camera permissions so this app can take photos</string>
     <string name="location_alert_title">NavLINq needs location permission</string>
     <string name="location_alert_body">Please grant location permission so this app can log your trip</string>
     <string name="write_alert_title">NavLINq needs write permission</string>
     <string name="write_alert_body">Please grant write permission so this app can log data from your NavLINq</string>
     <string name="overlay_alert_title">NavLINq needs overlay permission</string>
     <string name="overlay_alert_body">Please grant overlay permission so this app can record video</string>
+    <string name="negative_alert_title">Functionality limited</string>
+    <string name="negative_location_alert_body">Since location access has not been granted, this app will not be able to discover your NavLINq when in the background.</string>
+    <string name="negative_write_alert_body">Since write access has not been granted, this app will not be able to log data.</string>
+    <string name="negative_camera_alert_body">Since camera access has not been granted, this app will not be able to take photos.</string>
     <string name="disclaimer_alert_title">WARNING!</string>
     <string name="disclaimer_alert_body">
         Never take your eyes of the road and always use your best judgment.
@@ -56,10 +63,12 @@
     <string name="task_title_gohome">Go Home</string>
     <string name="task_title_callhome">Call Home</string>
     <string name="task_title_callcontact">Call Contact</string>
+    <string name="task_title_photo">Take Photo</string>
     <string name="task_title_start_record">Start Recording</string>
     <string name="task_title_stop_record">Stop Recording</string>
     <string name="task_title_start_trip">Start Trip Log</string>
     <string name="task_title_stop_trip">Stop Trip Log</string>
+    <string name="task_title_waypoint">Save Waypoint</string>
     <string name="task_title_voicecontrol">Voice Assistant</string>
     <string name="toast_address_not_set">No Go Home address set in Settings</string>
     <string name="toast_phone_not_set">No Call Home phone number set in Settings</string>

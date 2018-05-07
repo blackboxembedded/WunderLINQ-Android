@@ -40,7 +40,7 @@ public class VideoRecService extends Service implements SurfaceHolder.Callback {
     @Override
     public void onCreate() {
         ((MyApplication) this.getApplication()).setVideoRecording(true);
-        recordingFile = new File(Environment.getExternalStorageDirectory()+"/NavLINq/videos/NavLINq-"+
+        recordingFile = new File(Environment.getExternalStorageDirectory()+"/NavLINq/videos/NavLINq-Video-"+
                 DateFormat.format("yyyy-MM-dd_kk-mm-ss", new Date().getTime())+
                 ".mp4");
         // Start foreground service to avoid unexpected kill

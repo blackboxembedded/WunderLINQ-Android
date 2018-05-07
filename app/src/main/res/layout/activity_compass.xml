@@ -8,8 +8,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="-"
+        android:text="@string/blank_field"
         android:textAlignment="center"
-        android:textSize="18sp" />
+        android:textSize="150sp"
+        android:textStyle="bold" />
 
 </LinearLayout>

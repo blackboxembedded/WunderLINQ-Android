@@ -6,7 +6,7 @@
     <LinearLayout
         android:id="@+id/buttons_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100sp"
         android:layout_alignParentBottom="true"
         android:gravity="center"
         android:orientation="horizontal" >
@@ -14,8 +14,11 @@
         <ImageButton
             android:id="@+id/prev_button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:src="@drawable/ic_backward"
+            android:adjustViewBounds="true"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
             android:focusable="true"
             android:nextFocusUp="@+id/next_button"
             android:nextFocusDown="@+id/play_pause_button"/>
@@ -23,8 +26,11 @@
         <ImageButton
             android:id="@+id/play_pause_button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:src="@drawable/ic_play"
+            android:adjustViewBounds="true"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
             android:focusable="true"
             android:nextFocusUp="@+id/prev_button"
             android:nextFocusDown="@+id/next_button">
@@ -34,8 +40,11 @@
         <ImageButton
             android:id="@+id/next_button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:src="@drawable/ic_forward"
+            android:adjustViewBounds="true"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
             android:focusable="true"
             android:nextFocusUp="@+id/play_pause_button"
             android:nextFocusDown="@+id/prev_button"/>
@@ -68,7 +77,8 @@
             android:gravity="center"
             android:paddingTop="40sp"
             android:text="@string/unknown"
-            android:textSize="18sp" />
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/title_text"
@@ -77,7 +87,8 @@
             android:layout_below="@id/artist_text"
             android:gravity="center"
             android:text="@string/unknown"
-            android:textSize="18sp" />
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/album_text"
@@ -86,7 +97,8 @@
             android:layout_below="@id/title_text"
             android:gravity="center"
             android:text="@string/unknown"
-            android:textSize="18sp" />
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 </RelativeLayout>
