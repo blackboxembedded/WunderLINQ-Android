@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.badasscompany.NavLINq">
+    package="com.blackboxembedded.WunderLINQ">
 
     <uses-feature
         android:name="android.hardware.bluetooth_le"
@@ -52,7 +52,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.badasscompany.navlinq.fileprovider"
+            android:authorities="com.blackboxembedded.wunderlinq.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -85,6 +85,12 @@
             android:name=".PhotoService"
             android:enabled="true"
             android:exported="true" />
+        <receiver
+            android:name=".BTConnectReceiver">
+            <intent-filter>
+                <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

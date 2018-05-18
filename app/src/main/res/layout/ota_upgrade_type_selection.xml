@@ -82,7 +82,7 @@
         android:padding="10dp"
         android:visibility="invisible">
 
-        <com.badasscompany.NavLINq.OTAFirmwareUpdate.TextProgressBar
+        <com.blackboxembedded.WunderLINQ.OTAFirmwareUpdate.TextProgressBar
             android:id="@+id/upgrade_progress_bar_top"
             style="@style/CustomProgressBar"
             android:layout_width="match_parent"
@@ -113,7 +113,7 @@
         android:padding="10dp"
         android:visibility="invisible">
 
-        <com.badasscompany.NavLINq.OTAFirmwareUpdate.TextProgressBar
+        <com.blackboxembedded.WunderLINQ.OTAFirmwareUpdate.TextProgressBar
             android:id="@+id/upgrade_progress_bar_bottom"
             style="@style/CustomProgressBar"
             android:layout_width="match_parent"
