@@ -25,6 +25,15 @@ public class Data {
         Data.lastLocation = location;
     }
 
+    // Speed
+    private static Double speed;
+    public static Double getSpeed() {
+        return speed;
+    }
+    public static void setSpeed(Double speed){
+        Data.speed = speed;
+    }
+
     // Front Tire Pressure in bar
     private static Double frontTirePressure;
     public static Double getFrontTirePressure() {

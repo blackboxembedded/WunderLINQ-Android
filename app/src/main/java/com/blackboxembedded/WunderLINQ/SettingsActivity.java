@@ -36,6 +36,7 @@ public class SettingsActivity extends PreferenceActivity {
             super.onStop();
             if (alertDialog != null) {
                 alertDialog.dismiss();
+                Log.d(TAG,"In onStop alertdialog.dismiss");
                 alertDialog = null;
             }
         }
@@ -68,7 +69,6 @@ public class SettingsActivity extends PreferenceActivity {
                         Runtime.getRuntime().exec(
                                 "logcat -f " + outputFile.getAbsolutePath());
                     } catch (IOException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
 
@@ -95,45 +95,37 @@ public class SettingsActivity extends PreferenceActivity {
                 dfuButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
-                        //TODO : Restart application or go back to MainActivity
-                        byte[] valueByte = {01};
-                        BluetoothGattCharacteristic characteristic = MainActivity.gattDFUCharacteristic;
-                        characteristic.setValue(valueByte);
-                        if (BluetoothLeService.writeCharacteristic(characteristic)){
+                        try {
+                            // Display dialog text here......
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setTitle(R.string.pref_btn_dfumode_warning_title);
+                            builder.setMessage(R.string.pref_btn_dfumode_warning_body);
+                            builder.setPositiveButton(R.string.alert_message_exit_ok,
+                                    new DialogInterface.OnClickListener() {
 
-                            //Intent i = new Intent(getActivity(), MainActivity.class);
-                            //startActivity(i);
-
-                            try {
-                                // Display dialog text here......
-                                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                                builder.setTitle("You have placed the WunderLINQ into DFU mode");
-                                builder.setMessage("You have placed the WunderLINQ into DFU mode, the LED should be green.  " +
-                                        "You will be be returned to the main screen and when the app reconnects it should prompt to update,");
-                                builder.setPositiveButton(R.string.alert_message_exit_ok,
-                                        new DialogInterface.OnClickListener() {
-
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            byte[] valueByte = {01};
+                                            BluetoothGattCharacteristic characteristic = MainActivity.gattDFUCharacteristic;
+                                            characteristic.setValue(valueByte);
+                                            if (BluetoothLeService.writeCharacteristic(characteristic)) {
                                                 if (alertDialog != null && alertDialog.isShowing()) {
                                                     alertDialog.dismiss();
                                                 }
                                                 Intent i = new Intent(getActivity(), MainActivity.class);
                                                 startActivity(i);
-                                                getActivity().finish();
-
                                             }
-                                        });
-                                alertDialog = builder.create();
-                                alertDialog.show();
+
+                                        }
+                                    });
+                            alertDialog = builder.create();
+                            alertDialog.show();
 
 
-                            } catch (NullPointerException e){
-                                return false;
-                            }
-                            return true;
+                        } catch (NullPointerException e){
+                            return false;
                         }
-                        return false;
+                        return true;
                     }
                 });
             } else {

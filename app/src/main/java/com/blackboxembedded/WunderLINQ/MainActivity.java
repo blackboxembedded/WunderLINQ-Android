@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton backButton;
     private ImageButton forwardButton;
     private ImageButton faultButton;
+    private ImageButton dataButton;
     private ImageButton settingsButton;
     private ImageButton connectButton;
 
@@ -291,6 +292,7 @@ public class MainActivity extends AppCompatActivity {
         backButton = (ImageButton) findViewById(R.id.action_back);
         forwardButton = (ImageButton) findViewById(R.id.action_forward);
         settingsButton = (ImageButton) findViewById(R.id.action_settings);
+        dataButton = (ImageButton) findViewById(R.id.action_data);
         faultButton = (ImageButton) findViewById(R.id.action_faults);
         connectButton = (ImageButton) findViewById(R.id.action_connect);
 
@@ -302,6 +304,7 @@ public class MainActivity extends AppCompatActivity {
         forwardButton.setOnClickListener(mClickListener);
         faultButton.setOnClickListener(mClickListener);
         settingsButton.setOnClickListener(mClickListener);
+        dataButton.setOnClickListener(mClickListener);
 
         faultButton.setVisibility(View.GONE);
     }
@@ -326,6 +329,10 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.action_settings:
                     Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
                     startActivity(settingsIntent);
+                    break;
+                case R.id.action_data:
+                    Intent dataIntent = new Intent(MainActivity.this, DataActivity.class);
+                    startActivity(dataIntent);
                     break;
             }
         }

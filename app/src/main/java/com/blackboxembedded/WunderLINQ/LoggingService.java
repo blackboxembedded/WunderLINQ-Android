@@ -5,6 +5,8 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.Criteria;
+import android.location.LocationManager;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
@@ -100,7 +102,7 @@ public class LoggingService extends Service {
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-HH:mm:ss");
                 String curdatetime = formatter.format(date);
                 String filename = "WunderLINQ-TripLog-";
-                String header = "Time,Location,Gear,Engine Temperature(Celcius),Ambient Temperature(Celcius),Front Tire Pressure(bar),Rear Tire Pressure(bar),Odometer(Kilometers)\n";
+                String header = "Time,Location,Speed,Gear,Engine Temperature(Celcius),Ambient Temperature(Celcius),Front Tire Pressure(bar),Rear Tire Pressure(bar),Odometer(Kilometers)\n";
                 File logFile = new File( root, filename + curdatetime + ".csv" );
                 FileWriter logWriter = new FileWriter( logFile );
                 outFile = new PrintWriter( logWriter );
@@ -113,17 +115,18 @@ public class LoggingService extends Service {
                 @Override
                 public void run() {
                     getLastLocation();
+                    //getSpeed();
                     Data.setLastLocation(lastLocation);
                     // Log data
                     Calendar cal = Calendar.getInstance();
                     Date date = cal.getTime();
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String curdatetime = formatter.format(date);
                     String locationString ="No Fix";
                     if (lastLocation != null){
                         locationString = lastLocation.toString();
                     }
-                    outFile.write(curdatetime + "," + locationString + "," + Data.getGear() + "," + Data.getEngineTemperature() + "," + Data.getAmbientTemperature() + "," + Data.getFrontTirePressure()
+                    outFile.write(curdatetime + "," + locationString + "," + Data.getSpeed() + "," + Data.getGear() + "," + Data.getEngineTemperature() + "," + Data.getAmbientTemperature() + "," + Data.getFrontTirePressure()
                             + "," + Data.getRearTirePressure() + "," + Data.getOdometer() + "\n");
                     outFile.flush();
                     handler.postDelayed(runnable, loggingInterval);
@@ -162,6 +165,7 @@ public class LoggingService extends Service {
                             // GPS location can be null if GPS is switched off
                             if (location != null) {
                                 lastLocation = location;
+                                Data.setSpeed((double)location.getSpeed());
                             }
                         }
                     })

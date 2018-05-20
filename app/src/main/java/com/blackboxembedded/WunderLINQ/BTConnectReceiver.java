@@ -16,8 +16,8 @@ public class BTConnectReceiver extends BroadcastReceiver {
             // Get the BluetoothDevice object from the Intent
             BluetoothDevice device = intent
                     .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-            if (device.getName().contains(MainActivity.getContext().getString(R.string.device_name))){
-                Log.d(TAG,MainActivity.getContext().getString(R.string.device_name) + " Connected");
+            if (device.getName().contains("WunderLINQ")){
+                Log.d(TAG,"WunderLINQ Connected, launching App");
                 // Start activity
                 Intent i = new Intent();
                 i.setClassName("com.blackboxembedded.WunderLINQ", "com.blackboxembedded.WunderLINQ.MainActivity");

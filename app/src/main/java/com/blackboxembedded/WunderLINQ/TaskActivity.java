@@ -1,14 +1,20 @@
 package com.blackboxembedded.WunderLINQ;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,6 +27,10 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class TaskActivity extends AppCompatActivity {
 
@@ -59,6 +69,7 @@ public class TaskActivity extends AppCompatActivity {
         // Tasks
         // Order must match between text, icon and onItemClick case
         final String[] taskTitles = new String[] {
+                getResources().getString(R.string.task_title_navigation),
                 getResources().getString(R.string.task_title_gohome),
                 getResources().getString(R.string.task_title_callhome),
                 getResources().getString(R.string.task_title_callcontact),
@@ -69,6 +80,7 @@ public class TaskActivity extends AppCompatActivity {
                 getResources().getString(R.string.task_title_voicecontrol)
         };
         Drawable[] iconId = {
+                getResources().getDrawable(R.drawable.ic_map,getTheme()),
                 getResources().getDrawable(R.drawable.ic_home,getTheme()),
                 getResources().getDrawable(R.drawable.ic_phone,getTheme()),
                 getResources().getDrawable(R.drawable.ic_address_book,getTheme()),
@@ -91,6 +103,11 @@ public class TaskActivity extends AppCompatActivity {
                 final String item = (String) parent.getItemAtPosition(position);
                 switch (position){
                     case 0:
+                        //Navigation
+                        Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                        navIntent.setData(Uri.parse("google.navigation:q="));
+                        startActivity(navIntent);
+                    case 1:
                         //Navigate Home
                         String address = sharedPrefs.getString("prefHomeAddress","");
                         if ( address != "" ) {
@@ -101,7 +118,7 @@ public class TaskActivity extends AppCompatActivity {
                             Toast.makeText(TaskActivity.this, R.string.toast_address_not_set, Toast.LENGTH_SHORT).show();
                         }
                         break;
-                    case 1:
+                    case 2:
                         //Call Home
                         String phonenumber = sharedPrefs.getString("prefHomePhone","");
                         if (phonenumber != "") {
@@ -112,19 +129,19 @@ public class TaskActivity extends AppCompatActivity {
                             Toast.makeText(TaskActivity.this, R.string.toast_phone_not_set, Toast.LENGTH_SHORT).show();
                         }
                         break;
-                    case 2:
+                    case 3:
                         //Call Contact
                         Intent forwardIntent = new Intent(TaskActivity.this, ContactListActivity.class);
                         startActivity(forwardIntent);
                         break;
-                    case 3:
+                    case 4:
                         //Take photo
                         Log.d(TAG,"Take photo");
                         Intent photoIntent = new Intent(TaskActivity.this, PhotoService.class);
                         photoIntent.putExtra("camera",0);
                         startService(photoIntent);
                         break;
-                    case 4:
+                    case 5:
                         //Record Video
                         TextView taskText=(TextView)view.findViewById(R.id.tv_label);
                         if (taskText.getText().equals(getResources().getString(R.string.task_title_start_record))) {
@@ -145,7 +162,7 @@ public class TaskActivity extends AppCompatActivity {
                             taskText.setText(getResources().getString(R.string.task_title_start_record));
                         }
                         break;
-                    case 5:
+                    case 6:
                         //Trip Log
                         TextView tripTaskText=(TextView)view.findViewById(R.id.tv_label);
                         if (tripTaskText.getText().equals(getResources().getString(R.string.task_title_start_trip))) {
@@ -156,11 +173,58 @@ public class TaskActivity extends AppCompatActivity {
                             tripTaskText.setText(getResources().getString(R.string.task_title_start_trip));
                         }
                         break;
-                    case 6:
-                        //Waypoint
-                        //TODO: Add saving of waypoint
-                        break;
                     case 7:
+                        //Waypoint
+                        // Get location
+                        try {
+                            // Get the location manager
+                            double lat;
+                            double lon;
+                            double speed = 0;
+                            String waypoint = "";
+                            LocationManager locationManager = (LocationManager)
+                                    TaskActivity.this.getSystemService(LOCATION_SERVICE);
+                            Criteria criteria = new Criteria();
+                            String bestProvider = locationManager.getBestProvider(criteria, false);
+                            if (ActivityCompat.checkSelfPermission(TaskActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(TaskActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                // TODO: Consider calling
+                                //    ActivityCompat#requestPermissions
+                                // here to request the missing permissions, and then overriding
+                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                //                                          int[] grantResults)
+                                // to handle the case where the user grants the permission. See the documentation
+                                // for ActivityCompat#requestPermissions for more details.
+                                return;
+                            }
+                            Location location = locationManager.getLastKnownLocation(bestProvider);
+                            try {
+                                lat = location.getLatitude();
+                                lon = location.getLongitude();
+                                waypoint = lat + "," + lon;
+                                // Get current date/time
+                                Calendar cal = Calendar.getInstance();
+                                Date date = cal.getTime();
+                                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                                String curdatetime = formatter.format(date);
+                                // Open database
+                                WaypointDatasource datasource = new WaypointDatasource(TaskActivity.this);
+                                datasource.open();
+
+                                WaypointRecord record = new WaypointRecord(curdatetime, waypoint);
+                                datasource.addRecord (record);
+                                datasource.close();
+
+                            } catch (NullPointerException e) {
+                                lat = -1.0;
+                                lon = -1.0;
+                            }
+
+                        }catch (Exception ex){
+                            ex.printStackTrace();
+                        }
+
+                        break;
+                    case 8:
                         //Voice Assistant
                         startActivity(new Intent(Intent.ACTION_VOICE_COMMAND).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         break;

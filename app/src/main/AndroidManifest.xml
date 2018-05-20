@@ -27,6 +27,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="***REMOVED***" />
+
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize"
@@ -47,7 +54,9 @@
             android:label="@string/title_activity_settings" />
         <activity android:name=".ContactListActivity" />
         <activity android:name=".FaultActivity" />
-        <activity android:name=".OTAFirmwareUpdate.OTAFirmwareUpgradeActivity" />
+        <activity
+            android:name=".OTAFirmwareUpdate.OTAFirmwareUpgradeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".OTAFirmwareUpdate.OTAFilesListingActivity" />
 
         <provider
@@ -85,12 +94,17 @@
             android:name=".PhotoService"
             android:enabled="true"
             android:exported="true" />
-        <receiver
-            android:name=".BTConnectReceiver">
+
+        <receiver android:name=".BTConnectReceiver">
             <intent-filter>
                 <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".DataActivity" />
+        <activity android:name=".WaypointActivity" />
+        <activity android:name=".WaypointViewActivity" />
+        <activity android:name=".TripsActivity"></activity>
     </application>
 
 </manifest>

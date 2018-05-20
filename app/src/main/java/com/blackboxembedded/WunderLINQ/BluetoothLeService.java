@@ -318,7 +318,6 @@ public class BluetoothLeService extends Service {
                 dataLog = "[" + serviceName + "|" + characteristicName + "] " +
                         mContext.getResources().getString(R.string.dl_characteristic_write_request_status)
                         + mContext.getResources().getString(R.string.dl_status_success);
-                //TODO:
                 if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_DFU_CHARACTERISTIC)){
                     Log.d(TAG,"DFU Write Success");
                     Set<BluetoothDevice> pairedDevices = MainActivity.mBluetoothAdapter.getBondedDevices();
@@ -326,6 +325,8 @@ public class BluetoothLeService extends Service {
                         for (BluetoothDevice devices : pairedDevices) {
                             if (devices.getName().equals("WunderLINQ")) {
                                 Log.d(TAG, "WunderLINQ previously paired");
+                                //TODO: KEC playing around
+                                /*
                                 try {
                                     Log.d("unpairDevice()", "Start Un-Pairing...");
                                     Method m = devices.getClass().getMethod("removeBond", (Class[]) null);
@@ -334,13 +335,12 @@ public class BluetoothLeService extends Service {
                                 } catch (Exception e) {
                                     Log.e(TAG, e.getMessage());
                                 }
+                                */
+                                //TODO: KEC playing around end
                             }
                         }
                     }
                 }
-
-
-
 
                 //timeStamp("OTA WRITE RESPONSE TIMESTAMP ");
 
@@ -798,7 +798,9 @@ public class BluetoothLeService extends Service {
             Log.d(TAG,"Cache cleared on disconnect!");
             BluetoothLeService.refreshDeviceCache(BluetoothLeService.mBluetoothGatt);
         }
-
+        //TODO: KEC playing around
+        BluetoothLeService.refreshDeviceCache(mBluetoothGatt);
+        //TODO: KEC playing around end
         mBluetoothDeviceAddress = address;
         mBluetoothDeviceName = devicename;
         /**
@@ -865,6 +867,7 @@ public class BluetoothLeService extends Service {
             BluetoothGatt localBluetoothGatt = gatt;
             Method localMethod = localBluetoothGatt.getClass().getMethod("refresh");
             if (localMethod != null) {
+                Log.d(TAG,"In refreshDeviceCache");
                 return (Boolean) localMethod.invoke(localBluetoothGatt);
             }
         } catch (Exception localException) {
