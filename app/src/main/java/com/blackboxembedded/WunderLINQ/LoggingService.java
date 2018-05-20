@@ -5,8 +5,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.Criteria;
-import android.location.LocationManager;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
@@ -102,7 +100,7 @@ public class LoggingService extends Service {
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-HH:mm:ss");
                 String curdatetime = formatter.format(date);
                 String filename = "WunderLINQ-TripLog-";
-                String header = "Time,Location,Speed,Gear,Engine Temperature(Celcius),Ambient Temperature(Celcius),Front Tire Pressure(bar),Rear Tire Pressure(bar),Odometer(Kilometers)\n";
+                String header = "Time,Latitude,Longitude,Altitude(meters),Speed(meters/second),Gear,Engine Temperature(celcius),Ambient Temperature(celcius),Front Tire Pressure(bar),Rear Tire Pressure(bar),Odometer(kilometers)\n";
                 File logFile = new File( root, filename + curdatetime + ".csv" );
                 FileWriter logWriter = new FileWriter( logFile );
                 outFile = new PrintWriter( logWriter );
@@ -122,11 +120,17 @@ public class LoggingService extends Service {
                     Date date = cal.getTime();
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String curdatetime = formatter.format(date);
-                    String locationString ="No Fix";
+                    String lat = "No Fix";
+                    String lon = "No Fix";
+                    String alt = "No Fix";
+                    String spd = "No Fix";
                     if (lastLocation != null){
-                        locationString = lastLocation.toString();
+                        lat = Double.toString(lastLocation.getLatitude());
+                        lon = Double.toString(lastLocation.getLongitude());
+                        alt = Double.toString(lastLocation.getAltitude());
+                        spd = Float.toString(lastLocation.getSpeed());
                     }
-                    outFile.write(curdatetime + "," + locationString + "," + Data.getSpeed() + "," + Data.getGear() + "," + Data.getEngineTemperature() + "," + Data.getAmbientTemperature() + "," + Data.getFrontTirePressure()
+                    outFile.write(curdatetime + "," + lat + "," + lon + "," + alt + "," + spd + "," + Data.getGear() + "," + Data.getEngineTemperature() + "," + Data.getAmbientTemperature() + "," + Data.getFrontTirePressure()
                             + "," + Data.getRearTirePressure() + "," + Data.getOdometer() + "\n");
                     outFile.flush();
                     handler.postDelayed(runnable, loggingInterval);
@@ -165,7 +169,6 @@ public class LoggingService extends Service {
                             // GPS location can be null if GPS is switched off
                             if (location != null) {
                                 lastLocation = location;
-                                Data.setSpeed((double)location.getSpeed());
                             }
                         }
                     })
