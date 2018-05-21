@@ -101,7 +101,7 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
         startActivity(intent);
     }
 
-    // Delete button press
+    // Open button press
     public void onClickOpen(View view) {
         //Navigation
         Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW,Uri.parse("geo:0,0?q=" + record.getData() + "(" + getString(R.string.waypoint_view_waypoint_label) + " " + record.getDate() + ")"));

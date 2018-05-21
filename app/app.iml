@@ -176,6 +176,7 @@
     <orderEntry type="library" name="Gradle: com.android.support:support-core-utils-27.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-auth-api-phone-12.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-analytics-license-12.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: de.siegmar:fastcsv:1.0.2@jar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.code.findbugs:jsr305:2.0.1@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-storage-12.0.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-core:1.3@jar" level="project" />

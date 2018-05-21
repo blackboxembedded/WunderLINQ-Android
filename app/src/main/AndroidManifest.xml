@@ -104,7 +104,8 @@
         <activity android:name=".DataActivity" />
         <activity android:name=".WaypointActivity" />
         <activity android:name=".WaypointViewActivity" />
-        <activity android:name=".TripsActivity"></activity>
+        <activity android:name=".TripsActivity" />
+        <activity android:name=".TripViewActivity" />
     </application>
 
 </manifest>

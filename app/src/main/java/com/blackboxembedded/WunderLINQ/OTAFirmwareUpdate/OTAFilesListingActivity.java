@@ -148,7 +148,7 @@ public class OTAFilesListingActivity extends Activity {
                     entries = firmwareXMLParser.parse(urlConnection.getInputStream());
                     for (Entry entry : entries) {
                         OTAFileModel fileModel = new OTAFileModel(entry.name,
-                                firmwareRoot + entry.name + ".navfw", false, firmwareRoot, entry.file, entry.description );
+                                firmwareRoot + entry.name + ".fw", false, firmwareRoot, entry.file, entry.description );
                         mArrayListFiles.add(fileModel);
                         mFirmwareAdapter.addFiles(mArrayListFiles);
                         runOnUiThread(new Runnable() {

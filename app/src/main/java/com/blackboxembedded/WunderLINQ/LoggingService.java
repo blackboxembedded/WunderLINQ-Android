@@ -36,7 +36,7 @@ public class LoggingService extends Service {
     private Location lastLocation;
     private PrintWriter outFile = null;
 
-    private int loggingInterval = 10000;
+    private int loggingInterval = 1000;
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -130,8 +130,10 @@ public class LoggingService extends Service {
                         alt = Double.toString(lastLocation.getAltitude());
                         spd = Float.toString(lastLocation.getSpeed());
                     }
-                    outFile.write(curdatetime + "," + lat + "," + lon + "," + alt + "," + spd + "," + Data.getGear() + "," + Data.getEngineTemperature() + "," + Data.getAmbientTemperature() + "," + Data.getFrontTirePressure()
-                            + "," + Data.getRearTirePressure() + "," + Data.getOdometer() + "\n");
+                    outFile.write(curdatetime + "," + lat + "," + lon + "," + alt + "," + spd + ","
+                            + Data.getGear() + "," + Data.getEngineTemperature() + "," + Data.getAmbientTemperature()
+                            + "," + Data.getFrontTirePressure() + "," + Data.getRearTirePressure() + ","
+                            + Data.getOdometer() + "\n");
                     outFile.flush();
                     handler.postDelayed(runnable, loggingInterval);
                 }
