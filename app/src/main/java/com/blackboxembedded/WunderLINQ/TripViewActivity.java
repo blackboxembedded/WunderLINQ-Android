@@ -271,7 +271,6 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
         //milliseconds
         long different = endDate.getTime() - startDate.getTime();
 
-
         long secondsInMilli = 1000;
         long minutesInMilli = secondsInMilli * 60;
         long hoursInMilli = minutesInMilli * 60;

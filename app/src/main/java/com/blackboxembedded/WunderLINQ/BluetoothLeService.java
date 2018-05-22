@@ -620,8 +620,7 @@ public class BluetoothLeService extends Service {
                         double engineTemp = ((data[4] & 0xFF) * 0.75) - 25;
                         Data.setEngineTemperature(engineTemp);
 
-                        //TODO: Testing
-                        // ASC Fault?
+                        // ASC Fault
                         int ascValue = ((data[5] & 0xFF)  >> 4) & 0x0f; // the highest 4 bits.
                         if ((ascValue) == 0xB){
                             faults.setascFaultActive(true);
@@ -632,8 +631,11 @@ public class BluetoothLeService extends Service {
                         break;
                     case 0x07:
                         Log.d(TAG, "Message ID 7");
-                        //TODO: Testing
-                        // Fuel Fault?
+                        //Voltage
+                        double voltage = (data[4] & 0xFF) / 10;
+                        Data.setvoltage(voltage);
+
+                        // Fuel Fault
                         int fuelValue = ((data[5] & 0xFF)  >> 4) & 0x0f; // the highest 4 bits.
                         if ((fuelValue) == 0xE){
                             faults.setfuelFaultActive(true);

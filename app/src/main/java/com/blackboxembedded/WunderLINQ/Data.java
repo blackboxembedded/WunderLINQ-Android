@@ -115,6 +115,15 @@ public class Data {
         Data.gear = gear;
     }
 
+    // Voltage
+    private static Double voltage;
+    public static Double getvoltage() {
+        return voltage;
+    }
+    public static void setvoltage(Double voltage){
+        Data.voltage = voltage;
+    }
+
     // Utility functions
     public static void clear(){
         Data.lastLocation = null;
@@ -129,5 +138,6 @@ public class Data {
         Data.numberOfShifts = null;
         Data.numberOfBrakes = null;
         Data.gear = null;
+        Data.voltage = null;
     }
 }
