@@ -100,7 +100,7 @@ public class LoggingService extends Service {
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-HH:mm:ss");
                 String curdatetime = formatter.format(date);
                 String filename = "WunderLINQ-TripLog-";
-                String header = "Time,Latitude,Longitude,Altitude(meters),Speed(meters/second),Gear,Engine Temperature(celcius),Ambient Temperature(celcius),Front Tire Pressure(bar),Rear Tire Pressure(bar),Odometer(kilometers)\n";
+                String header = "Time,Latitude,Longitude,Altitude(meters),Speed(meters/second),Gear,Engine Temperature(celcius),Ambient Temperature(celcius),Front Tire Pressure(bar),Rear Tire Pressure(bar),Odometer(kilometers),Voltage(Volts)\n";
                 File logFile = new File( root, filename + curdatetime + ".csv" );
                 FileWriter logWriter = new FileWriter( logFile );
                 outFile = new PrintWriter( logWriter );
@@ -133,7 +133,7 @@ public class LoggingService extends Service {
                     outFile.write(curdatetime + "," + lat + "," + lon + "," + alt + "," + spd + ","
                             + Data.getGear() + "," + Data.getEngineTemperature() + "," + Data.getAmbientTemperature()
                             + "," + Data.getFrontTirePressure() + "," + Data.getRearTirePressure() + ","
-                            + Data.getOdometer() + "\n");
+                            + Data.getOdometer() + "," + Data.getvoltage()+ "\n");
                     outFile.flush();
                     handler.postDelayed(runnable, loggingInterval);
                 }
