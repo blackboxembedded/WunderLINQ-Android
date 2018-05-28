@@ -107,6 +107,7 @@ public class TaskActivity extends AppCompatActivity {
                         Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
                         navIntent.setData(Uri.parse("google.navigation:q="));
                         startActivity(navIntent);
+                        break;
                     case 1:
                         //Navigate Home
                         String address = sharedPrefs.getString("prefHomeAddress","");
