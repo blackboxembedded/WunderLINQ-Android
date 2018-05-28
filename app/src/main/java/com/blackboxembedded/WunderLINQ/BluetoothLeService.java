@@ -523,8 +523,6 @@ public class BluetoothLeService extends Service {
                     }
                     logger.write(stringBuilder.toString());
                 }
-                Log.d(TAG, "serviceData: " + stringBuilder.toString());
-
                 byte msgID = data[0];
                 switch (msgID) {
                     case 0x00:
@@ -545,12 +543,70 @@ public class BluetoothLeService extends Service {
                     case 0x05:
                         Log.d(TAG, "Message ID 5");
                         // ABS Fault
-                        // FC=ABS Fault
-                        if ((data[3] & 0xFF) == 0xFB){
-                            faults.setabsFaultActive(true);
-                        } else {
-                            faults.setabsFaultActive(false);
+                        int absValue = (data[3] & 0xFF) & 0x0f; // the lowest 4 bits
+                        switch (absValue){
+                            case 0x2:
+                                faults.setAbsSelfDiagActive(false);
+                                faults.setAbsDeactivatedActive(false);
+                                faults.setabsErrorActive(true);
+                                break;
+                            case 0x3:
+                                faults.setAbsSelfDiagActive(true);
+                                faults.setAbsDeactivatedActive(false);
+                                faults.setabsErrorActive(false);
+                                break;
+                            case 0x5:
+                                faults.setAbsSelfDiagActive(false);
+                                faults.setAbsDeactivatedActive(false);
+                                faults.setabsErrorActive(true);
+                                break;
+                            case 0x6:
+                                faults.setAbsSelfDiagActive(false);
+                                faults.setAbsDeactivatedActive(false);
+                                faults.setabsErrorActive(true);
+                                break;
+                            case 0x7:
+                                faults.setAbsSelfDiagActive(false);
+                                faults.setAbsDeactivatedActive(false);
+                                faults.setabsErrorActive(true);
+                                break;
+                            case 0x8:
+                                faults.setAbsSelfDiagActive(false);
+                                faults.setAbsDeactivatedActive(true);
+                                faults.setabsErrorActive(false);
+                                break;
+                            case 0xA:
+                                faults.setAbsSelfDiagActive(false);
+                                faults.setAbsDeactivatedActive(false);
+                                faults.setabsErrorActive(true);
+                                break;
+                            case 0xB:
+                                faults.setAbsSelfDiagActive(true);
+                                faults.setAbsDeactivatedActive(false);
+                                faults.setabsErrorActive(false);
+                                break;
+                            case 0xD:
+                                faults.setAbsSelfDiagActive(false);
+                                faults.setAbsDeactivatedActive(false);
+                                faults.setabsErrorActive(true);
+                                break;
+                            case 0xE:
+                                faults.setAbsSelfDiagActive(false);
+                                faults.setAbsDeactivatedActive(false);
+                                faults.setabsErrorActive(true);
+                                break;
+                            case 0xF:
+                                faults.setAbsSelfDiagActive(false);
+                                faults.setAbsDeactivatedActive(false);
+                                faults.setabsErrorActive(true);
+                                break;
+                            default:
+                                faults.setAbsSelfDiagActive(false);
+                                faults.setAbsDeactivatedActive(false);
+                                faults.setabsErrorActive(false);
+                                break;
                         }
+
                         // Tire Pressure
                         if ((data[4] & 0xFF) != 0xFF){
                             double rdcFront = (data[4] & 0xFF) / 50.0;
@@ -561,6 +617,7 @@ public class BluetoothLeService extends Service {
                             Data.setRearTirePressure(rdcRear);
                         }
 
+                        // TODO: Testing
                         // Tire Pressure Faults
                         // C0=Resting, C9=Front Warning, D1=Front Critical, CA=Rear Warning, D2=Rear Critical, D3=Front/Rear Critical
                         if ((data[6] & 0xFF) == 0xC9 || (data[6] & 0xFF) == 0xD1){
@@ -622,10 +679,111 @@ public class BluetoothLeService extends Service {
 
                         // ASC Fault
                         int ascValue = ((data[5] & 0xFF)  >> 4) & 0x0f; // the highest 4 bits.
-                        if ((ascValue) == 0xB){
-                            faults.setascFaultActive(true);
-                        } else {
-                            faults.setascFaultActive(false);
+                        switch (ascValue){
+                            case 0x1:
+                                faults.setAscSelfDiagActive(false);
+                                faults.setAscInterventionActive(true);
+                                faults.setAscDeactivatedActive(false);
+                                faults.setascErrorActive(false);
+                                break;
+                            case 0x2:
+                                faults.setAscSelfDiagActive(false);
+                                faults.setAscInterventionActive(false);
+                                faults.setAscDeactivatedActive(false);
+                                faults.setascErrorActive(true);
+                                break;
+                            case 0x3:
+                                faults.setAscSelfDiagActive(true);
+                                faults.setAscInterventionActive(false);
+                                faults.setAscDeactivatedActive(false);
+                                faults.setascErrorActive(false);
+                                break;
+                            case 0x5:
+                                faults.setAscSelfDiagActive(false);
+                                faults.setAscInterventionActive(false);
+                                faults.setAscDeactivatedActive(false);
+                                faults.setascErrorActive(true);
+                                break;
+                            case 0x6:
+                                faults.setAscSelfDiagActive(false);
+                                faults.setAscInterventionActive(false);
+                                faults.setAscDeactivatedActive(false);
+                                faults.setascErrorActive(true);
+                                break;
+                            case 0x7:
+                                faults.setAscSelfDiagActive(false);
+                                faults.setAscInterventionActive(false);
+                                faults.setAscDeactivatedActive(false);
+                                faults.setascErrorActive(true);
+                                break;
+                            case 0x8:
+                                faults.setAscSelfDiagActive(false);
+                                faults.setAscInterventionActive(false);
+                                faults.setAscDeactivatedActive(true);
+                                faults.setascErrorActive(false);
+                                break;
+                            case 0x9:
+                                faults.setAscSelfDiagActive(false);
+                                faults.setAscInterventionActive(true);
+                                faults.setAscDeactivatedActive(false);
+                                faults.setascErrorActive(false);
+                                break;
+                            case 0xA:
+                                faults.setAscSelfDiagActive(false);
+                                faults.setAscInterventionActive(false);
+                                faults.setAscDeactivatedActive(false);
+                                faults.setascErrorActive(true);
+                                break;
+                            case 0xB:
+                                faults.setAscSelfDiagActive(true);
+                                faults.setAscInterventionActive(false);
+                                faults.setAscDeactivatedActive(false);
+                                faults.setascErrorActive(false);
+                                break;
+                            case 0xD:
+                                faults.setAscSelfDiagActive(false);
+                                faults.setAscInterventionActive(false);
+                                faults.setAscDeactivatedActive(false);
+                                faults.setascErrorActive(true);
+                                break;
+                            case 0xE:
+                                faults.setAscSelfDiagActive(false);
+                                faults.setAscInterventionActive(false);
+                                faults.setAscDeactivatedActive(false);
+                                faults.setascErrorActive(true);
+                                break;
+                            case 0xF:
+                                faults.setAscSelfDiagActive(false);
+                                faults.setAscInterventionActive(false);
+                                faults.setAscDeactivatedActive(false);
+                                faults.setascErrorActive(true);
+                                break;
+                            default:
+                                faults.setAscSelfDiagActive(false);
+                                faults.setAscInterventionActive(false);
+                                faults.setAscDeactivatedActive(false);
+                                faults.setascErrorActive(false);
+                                break;
+                        }
+
+                        //Oil Fault
+                        int oilValue = (data[5] & 0xFF) & 0x0f; // the lowest 4 bits
+                        switch (oilValue){
+                            case 0x2:
+                                faults.setOilLowActive(true);
+                                break;
+                            case 0x6:
+                                faults.setOilLowActive(true);
+                                break;
+                            case 0xA:
+                                faults.setOilLowActive(true);
+                                break;
+                            case 0xE:
+                                faults.setOilLowActive(true);
+                                break;
+                            default:
+                                faults.setOilLowActive(false);
+                                break;
                         }
 
                         break;
@@ -637,46 +795,592 @@ public class BluetoothLeService extends Service {
 
                         // Fuel Fault
                         int fuelValue = ((data[5] & 0xFF)  >> 4) & 0x0f; // the highest 4 bits.
-                        if ((fuelValue) == 0xE){
-                            faults.setfuelFaultActive(true);
-                        } else {
-                            faults.setfuelFaultActive(false);
+                        switch (fuelValue){
+                            case 0x2:
+                                faults.setfuelFaultActive(true);
+                                break;
+                            case 0x6:
+                                faults.setfuelFaultActive(true);
+                                break;
+                            case 0xA:
+                                faults.setfuelFaultActive(true);
+                                break;
+                            case 0xE:
+                                faults.setfuelFaultActive(true);
+                                break;
+                            default:
+                                faults.setfuelFaultActive(false);
+                                break;
+                        }
+                        // General Fault
+                        int generalFault = (data[5] & 0xFF) & 0x0f; // the lowest 4 bits
+                        switch (generalFault){
+                            case 0x1:
+                                faults.setGeneralFlashingYellowActive(true);
+                                faults.setGeneralShowsYellowActive(false);
+                                faults.setGeneralFlashingRedActive(false);
+                                faults.setGeneralShowsRedActive(false);
+                                break;
+                            case 0x2:
+                                faults.setGeneralFlashingYellowActive(false);
+                                faults.setGeneralShowsYellowActive(true);
+                                faults.setGeneralFlashingRedActive(false);
+                                faults.setGeneralShowsRedActive(false);
+                                break;
+                            case 0x4:
+                                faults.setGeneralFlashingYellowActive(false);
+                                faults.setGeneralShowsYellowActive(false);
+                                faults.setGeneralFlashingRedActive(true);
+                                faults.setGeneralShowsRedActive(false);
+                                break;
+                            case 0x5:
+                                faults.setGeneralFlashingYellowActive(true);
+                                faults.setGeneralShowsYellowActive(false);
+                                faults.setGeneralFlashingRedActive(true);
+                                faults.setGeneralShowsRedActive(false);
+                                break;
+                            case 0x6:
+                                faults.setGeneralFlashingYellowActive(false);
+                                faults.setGeneralShowsYellowActive(true);
+                                faults.setGeneralFlashingRedActive(true);
+                                faults.setGeneralShowsRedActive(false);
+                                break;
+                            case 0x7:
+                                faults.setGeneralFlashingYellowActive(false);
+                                faults.setGeneralShowsYellowActive(false);
+                                faults.setGeneralFlashingRedActive(true);
+                                faults.setGeneralShowsRedActive(false);
+                                break;
+                            case 0x8:
+                                faults.setGeneralFlashingYellowActive(false);
+                                faults.setGeneralShowsYellowActive(false);
+                                faults.setGeneralFlashingRedActive(false);
+                                faults.setGeneralShowsRedActive(true);
+                                break;
+                            case 0x9:
+                                faults.setGeneralFlashingYellowActive(false);
+                                faults.setGeneralShowsYellowActive(false);
+                                faults.setGeneralFlashingRedActive(true);
+                                faults.setGeneralShowsRedActive(true);
+                                break;
+                            case 0xA:
+                                faults.setGeneralFlashingYellowActive(false);
+                                faults.setGeneralShowsYellowActive(true);
+                                faults.setGeneralFlashingRedActive(false);
+                                faults.setGeneralShowsRedActive(true);
+                                break;
+                            case 0xB:
+                                faults.setGeneralFlashingYellowActive(false);
+                                faults.setGeneralShowsYellowActive(false);
+                                faults.setGeneralFlashingRedActive(false);
+                                faults.setGeneralShowsRedActive(true);
+                                break;
+                            case 0xD:
+                                faults.setGeneralFlashingYellowActive(true);
+                                faults.setGeneralShowsYellowActive(false);
+                                faults.setGeneralFlashingRedActive(false);
+                                faults.setGeneralShowsRedActive(false);
+                                break;
+                            case 0xE:
+                                faults.setGeneralFlashingYellowActive(false);
+                                faults.setGeneralShowsYellowActive(true);
+                                faults.setGeneralFlashingRedActive(false);
+                                faults.setGeneralShowsRedActive(false);
+                                break;
+                            default:
+                                faults.setGeneralFlashingYellowActive(false);
+                                faults.setGeneralShowsYellowActive(false);
+                                faults.setGeneralFlashingRedActive(false);
+                                faults.setGeneralShowsRedActive(false);
+                                break;
                         }
                         break;
                     case 0x08:
                         Log.d(TAG, "Message ID 8");
                         double ambientTemp = ((data[1] & 0xFF) * 0.50) - 40;
                         Data.setAmbientTemperature(ambientTemp);
-
-                        // Front Signal Lamp Faults
-                        // 00=Resting, 20=Left, 40=Right, 60=Both
-                        if ((data[4] & 0xFF) == 0x20){
-                            faults.setfrontLeftSignalActive(true);
-                            faults.setfrontRightSignalActive(false);
-                        } else if ((data[4] & 0xFF) == 0x40){
-                            faults.setfrontLeftSignalActive(false);
-                            faults.setfrontRightSignalActive(true);
-                        } else if ((data[4] & 0xFF) == 0x60){
-                            faults.setfrontLeftSignalActive(true);
-                            faults.setfrontRightSignalActive(true);
+                        if(ambientTemp <= 0.0){
+                            faults.seticeWarnActive(true);
                         } else {
-                            faults.setfrontLeftSignalActive(false);
-                            faults.setfrontRightSignalActive(false);
+                            faults.seticeWarnActive(false);
                         }
-                        // Rear Signal Lamp Faults
-                        // C0=Resting, C8=Left, D0=Right, D8=Both
-                        if ((data[5] & 0xFF) == 0xC8){
-                            faults.setrearLeftSignalActive(true);
-                            faults.setrearRightSignalActive(false);
-                        } else if ((data[5] & 0xFF) == 0xD0){
-                            faults.setrearLeftSignalActive(false);
-                            faults.setrearRightSignalActive(true);
-                        } else if ((data[5] & 0xFF) == 0xD8){
-                            faults.setrearLeftSignalActive(true);
-                            faults.setrearRightSignalActive(true);
-                        } else {
-                            faults.setrearLeftSignalActive(false);
-                            faults.setrearRightSignalActive(false);
+
+                        // LAMP Faults
+                        // LAMPF 1
+                        int lampfOneValue = ((data[3] & 0xFF)  >> 4) & 0x0f; // the highest 4 bits.
+                        switch (lampfOneValue){
+                            case 0x1:
+                                faults.setAddFrontLightOneActive(true);
+                                faults.setAddFrontLightTwoActive(false);
+                                break;
+                            case 0x2:
+                                faults.setAddFrontLightOneActive(false);
+                                faults.setAddFrontLightTwoActive(true);
+                                break;
+                            case 0x3:
+                                faults.setAddFrontLightOneActive(true);
+                                faults.setAddFrontLightTwoActive(true);
+                                break;
+                            case 0x5:
+                                faults.setAddFrontLightOneActive(true);
+                                faults.setAddFrontLightTwoActive(false);
+                                break;
+                            case 0x6:
+                                faults.setAddFrontLightOneActive(false);
+                                faults.setAddFrontLightTwoActive(true);
+                                break;
+                            case 0x9:
+                                faults.setAddFrontLightOneActive(true);
+                                faults.setAddFrontLightTwoActive(false);
+                                break;
+                            case 0xA:
+                                faults.setAddFrontLightOneActive(false);
+                                faults.setAddFrontLightTwoActive(true);
+                                break;
+                            case 0xB:
+                                faults.setAddFrontLightOneActive(true);
+                                faults.setAddFrontLightTwoActive(true);
+                                break;
+                            case 0xD:
+                                faults.setAddFrontLightOneActive(true);
+                                faults.setAddFrontLightTwoActive(false);
+                                break;
+                            case 0xE:
+                                faults.setAddFrontLightOneActive(false);
+                                faults.setAddFrontLightTwoActive(true);
+                                break;
+                            default:
+                                faults.setAddFrontLightOneActive(false);
+                                faults.setAddFrontLightTwoActive(false);
+                                break;
+                        }
+                        // LAMPF 2
+                        int lampfTwoHighValue = ((data[4] & 0xFF)  >> 4) & 0x0f; // the highest 4 bits.
+                        switch (lampfTwoHighValue) {
+                            case 0x1:
+                                faults.setDaytimeRunningActive(true);
+                                faults.setfrontLeftSignalActive(false);
+                                faults.setfrontRightSignalActive(false);
+                                break;
+                            case 0x2:
+                                faults.setDaytimeRunningActive(false);
+                                faults.setfrontLeftSignalActive(true);
+                                faults.setfrontRightSignalActive(false);
+                                break;
+                            case 0x3:
+                                faults.setDaytimeRunningActive(true);
+                                faults.setfrontLeftSignalActive(true);
+                                faults.setfrontRightSignalActive(false);
+                                break;
+                            case 0x4:
+                                faults.setDaytimeRunningActive(false);
+                                faults.setfrontLeftSignalActive(false);
+                                faults.setfrontRightSignalActive(true);
+                                break;
+                            case 0x5:
+                                faults.setDaytimeRunningActive(true);
+                                faults.setfrontLeftSignalActive(false);
+                                faults.setfrontRightSignalActive(true);
+                                break;
+                            case 0x6:
+                                faults.setDaytimeRunningActive(false);
+                                faults.setfrontLeftSignalActive(true);
+                                faults.setfrontRightSignalActive(true);
+                            case 0x7:
+                                faults.setDaytimeRunningActive(true);
+                                faults.setfrontLeftSignalActive(true);
+                                faults.setfrontRightSignalActive(true);
+                            case 0x9:
+                                faults.setDaytimeRunningActive(true);
+                                faults.setfrontLeftSignalActive(false);
+                                faults.setfrontRightSignalActive(false);
+                                break;
+                            case 0xA:
+                                faults.setDaytimeRunningActive(false);
+                                faults.setfrontLeftSignalActive(true);
+                                faults.setfrontRightSignalActive(false);
+                                break;
+                            case 0xB:
+                                faults.setDaytimeRunningActive(true);
+                                faults.setfrontLeftSignalActive(true);
+                                faults.setfrontRightSignalActive(false);
+                                break;
+                            case 0xC:
+                                faults.setDaytimeRunningActive(false);
+                                faults.setfrontLeftSignalActive(false);
+                                faults.setfrontRightSignalActive(true);
+                                break;
+                            case 0xD:
+                                faults.setDaytimeRunningActive(true);
+                                faults.setfrontLeftSignalActive(false);
+                                faults.setfrontRightSignalActive(true);
+                                break;
+                            case 0xE:
+                                faults.setDaytimeRunningActive(false);
+                                faults.setfrontLeftSignalActive(true);
+                                faults.setfrontRightSignalActive(true);
+                            case 0xF:
+                                faults.setDaytimeRunningActive(true);
+                                faults.setfrontLeftSignalActive(true);
+                                faults.setfrontRightSignalActive(true);
+                            default:
+                                faults.setDaytimeRunningActive(false);
+                                faults.setfrontLeftSignalActive(false);
+                                faults.setfrontRightSignalActive(false);
+                                break;
+                        }
+                        int lampfTwoLowValue = (data[4] & 0xFF) & 0x0f; // the lowest 4 bits
+                        switch (lampfTwoLowValue) {
+                            case 0x1:
+                                faults.setFrontParkingLightOneActive(true);
+                                faults.setFrontParkingLightTwoActive(false);
+                                faults.setLowBeamActive(false);
+                                faults.setHighBeamActive(false);
+                                break;
+                            case 0x2:
+                                faults.setFrontParkingLightOneActive(false);
+                                faults.setFrontParkingLightTwoActive(true);
+                                faults.setLowBeamActive(false);
+                                faults.setHighBeamActive(false);
+                                break;
+                            case 0x3:
+                                faults.setFrontParkingLightOneActive(true);
+                                faults.setFrontParkingLightTwoActive(true);
+                                faults.setLowBeamActive(false);
+                                faults.setHighBeamActive(false);
+                                break;
+                            case 0x4:
+                                faults.setFrontParkingLightOneActive(false);
+                                faults.setFrontParkingLightTwoActive(false);
+                                faults.setLowBeamActive(true);
+                                faults.setHighBeamActive(false);
+                                break;
+                            case 0x5:
+                                faults.setFrontParkingLightOneActive(true);
+                                faults.setFrontParkingLightTwoActive(false);
+                                faults.setLowBeamActive(true);
+                                faults.setHighBeamActive(false);
+                                break;
+                            case 0x6:
+                                faults.setFrontParkingLightOneActive(false);
+                                faults.setFrontParkingLightTwoActive(true);
+                                faults.setLowBeamActive(true);
+                                faults.setHighBeamActive(false);
+                                break;
+                            case 0x7:
+                                faults.setFrontParkingLightOneActive(true);
+                                faults.setFrontParkingLightTwoActive(true);
+                                faults.setLowBeamActive(true);
+                                faults.setHighBeamActive(false);
+                                break;
+                            case 0x8:
+                                faults.setFrontParkingLightOneActive(false);
+                                faults.setFrontParkingLightTwoActive(false);
+                                faults.setLowBeamActive(false);
+                                faults.setHighBeamActive(true);
+                                break;
+                            case 0x9:
+                                faults.setFrontParkingLightOneActive(true);
+                                faults.setFrontParkingLightTwoActive(false);
+                                faults.setLowBeamActive(false);
+                                faults.setHighBeamActive(true);
+                                break;
+                            case 0xA:
+                                faults.setFrontParkingLightOneActive(false);
+                                faults.setFrontParkingLightTwoActive(true);
+                                faults.setLowBeamActive(false);
+                                faults.setHighBeamActive(true);
+                                break;
+                            case 0xB:
+                                faults.setFrontParkingLightOneActive(true);
+                                faults.setFrontParkingLightTwoActive(true);
+                                faults.setLowBeamActive(false);
+                                faults.setHighBeamActive(true);
+                                break;
+                            case 0xC:
+                                faults.setFrontParkingLightOneActive(false);
+                                faults.setFrontParkingLightTwoActive(false);
+                                faults.setLowBeamActive(true);
+                                faults.setHighBeamActive(true);
+                                break;
+                            case 0xD:
+                                faults.setFrontParkingLightOneActive(true);
+                                faults.setFrontParkingLightTwoActive(false);
+                                faults.setLowBeamActive(true);
+                                faults.setHighBeamActive(true);
+                                break;
+                            case 0xE:
+                                faults.setFrontParkingLightOneActive(false);
+                                faults.setFrontParkingLightTwoActive(true);
+                                faults.setLowBeamActive(true);
+                                faults.setHighBeamActive(true);
+                                break;
+                            case 0xF:
+                                faults.setFrontParkingLightOneActive(true);
+                                faults.setFrontParkingLightTwoActive(true);
+                                faults.setLowBeamActive(true);
+                                faults.setHighBeamActive(true);
+                                break;
+                            default:
+                                faults.setFrontParkingLightOneActive(false);
+                                faults.setFrontParkingLightTwoActive(false);
+                                faults.setLowBeamActive(false);
+                                faults.setHighBeamActive(false);
+                                break;
+                        }
+
+                        // LAMPF 3
+                        int lampfThreeHighValue = ((data[5] & 0xFF)  >> 4) & 0x0f; // the highest 4 bits.
+                        switch (lampfThreeHighValue) {
+                            case 0x1:
+                                faults.setrearRightSignalActive(true);
+                                break;
+                            case 0x3:
+                                faults.setrearRightSignalActive(true);
+                                break;
+                            case 0x5:
+                                faults.setrearRightSignalActive(true);
+                                break;
+                            case 0x7:
+                                faults.setrearRightSignalActive(true);
+                                break;
+                            case 0x9:
+                                faults.setrearRightSignalActive(true);
+                                break;
+                            case 0xB:
+                                faults.setrearRightSignalActive(true);
+                                break;
+                            case 0xD:
+                                faults.setrearRightSignalActive(true);
+                                break;
+                            case 0xF:
+                                faults.setrearRightSignalActive(true);
+                            default:
+                                faults.setrearRightSignalActive(false);
+                                break;
+                        }
+                        int lampfThreeLowValue = (data[5] & 0xFF) & 0x0f; // the lowest 4 bits
+                        switch (lampfThreeLowValue) {
+                            case 0x1:
+                                faults.setrearLeftSignalActive(false);
+                                faults.setRearLightActive(true);
+                                faults.setBrakeLightActive(false);
+                                faults.setLicenseLightActive(false);
+                                break;
+                            case 0x2:
+                                faults.setrearLeftSignalActive(false);
+                                faults.setRearLightActive(false);
+                                faults.setBrakeLightActive(true);
+                                faults.setLicenseLightActive(false);
+                                break;
+                            case 0x3:
+                                faults.setrearLeftSignalActive(false);
+                                faults.setRearLightActive(true);
+                                faults.setBrakeLightActive(true);
+                                faults.setLicenseLightActive(false);
+                                break;
+                            case 0x4:
+                                faults.setrearLeftSignalActive(false);
+                                faults.setRearLightActive(false);
+                                faults.setBrakeLightActive(false);
+                                faults.setLicenseLightActive(true);
+                                break;
+                            case 0x5:
+                                faults.setrearLeftSignalActive(true);
+                                faults.setRearLightActive(false);
+                                faults.setBrakeLightActive(false);
+                                faults.setLicenseLightActive(true);
+                                break;
+                            case 0x6:
+                                faults.setrearLeftSignalActive(false);
+                                faults.setRearLightActive(false);
+                                faults.setBrakeLightActive(true);
+                                faults.setLicenseLightActive(true);
+                                break;
+                            case 0x7:
+                                faults.setrearLeftSignalActive(false);
+                                faults.setRearLightActive(true);
+                                faults.setBrakeLightActive(true);
+                                faults.setLicenseLightActive(true);
+                                break;
+                            case 0x8:
+                                faults.setrearLeftSignalActive(true);
+                                faults.setRearLightActive(false);
+                                faults.setBrakeLightActive(false);
+                                faults.setLicenseLightActive(false);
+                                break;
+                            case 0x9:
+                                faults.setrearLeftSignalActive(true);
+                                faults.setRearLightActive(true);
+                                faults.setBrakeLightActive(false);
+                                faults.setLicenseLightActive(false);
+                                break;
+                            case 0xA:
+                                faults.setrearLeftSignalActive(true);
+                                faults.setRearLightActive(false);
+                                faults.setBrakeLightActive(true);
+                                faults.setLicenseLightActive(false);
+                                break;
+                            case 0xC:
+                                faults.setrearLeftSignalActive(true);
+                                faults.setRearLightActive(false);
+                                faults.setBrakeLightActive(false);
+                                faults.setLicenseLightActive(true);
+                                break;
+                            case 0xD:
+                                faults.setrearLeftSignalActive(true);
+                                faults.setRearLightActive(true);
+                                faults.setBrakeLightActive(true);
+                                faults.setLicenseLightActive(false);
+                                break;
+                            case 0xE:
+                                faults.setrearLeftSignalActive(true);
+                                faults.setRearLightActive(false);
+                                faults.setBrakeLightActive(true);
+                                faults.setLicenseLightActive(true);
+                                break;
+                            case 0xF:
+                                faults.setrearLeftSignalActive(true);
+                                faults.setRearLightActive(true);
+                                faults.setBrakeLightActive(true);
+                                faults.setLicenseLightActive(true);
+                                break;
+                            default:
+                                faults.setrearLeftSignalActive(false);
+                                faults.setRearLightActive(false);
+                                faults.setBrakeLightActive(false);
+                                faults.setLicenseLightActive(false);
+                                break;
+                        }
+
+                        // LAMPF 4
+                        int lampfFourHighValue = ((data[5] & 0xFF)  >> 4) & 0x0f; // the highest 4 bits.
+                        switch (lampfFourHighValue) {
+                            case 0x1:
+                                faults.setRearFogLightActive(true);
+                                break;
+                            case 0x3:
+                                faults.setRearFogLightActive(true);
+                                break;
+                            case 0x5:
+                                faults.setRearFogLightActive(true);
+                                break;
+                            case 0x7:
+                                faults.setRearFogLightActive(true);
+                                break;
+                            case 0x9:
+                                faults.setRearFogLightActive(true);
+                                break;
+                            case 0xB:
+                                faults.setRearFogLightActive(true);
+                                break;
+                            case 0xD:
+                                faults.setRearFogLightActive(true);
+                                break;
+                            case 0xF:
+                                faults.setRearFogLightActive(true);
+                            default:
+                                faults.setRearFogLightActive(false);
+                                break;
+                        }
+                        int lampfFourLowValue = (data[5] & 0xFF) & 0x0f; // the lowest 4 bits
+                        switch (lampfFourLowValue) {
+                            case 0x1:
+                                faults.setAddDippedLightActive(true);
+                                faults.setAddBrakeLightActive(false);
+                                faults.setFrontLampOneLightActive(false);
+                                faults.setFrontLampTwoLightActive(false);
+                                break;
+                            case 0x2:
+                                faults.setAddDippedLightActive(false);
+                                faults.setAddBrakeLightActive(true);
+                                faults.setFrontLampOneLightActive(false);
+                                faults.setFrontLampTwoLightActive(false);
+                                break;
+                            case 0x3:
+                                faults.setAddDippedLightActive(true);
+                                faults.setAddBrakeLightActive(true);
+                                faults.setFrontLampOneLightActive(false);
+                                faults.setFrontLampTwoLightActive(false);
+                                break;
+                            case 0x4:
+                                faults.setAddDippedLightActive(false);
+                                faults.setAddBrakeLightActive(false);
+                                faults.setFrontLampOneLightActive(true);
+                                faults.setFrontLampTwoLightActive(false);
+                                break;
+                            case 0x5:
+                                faults.setAddDippedLightActive(true);
+                                faults.setAddBrakeLightActive(false);
+                                faults.setFrontLampOneLightActive(true);
+                                faults.setFrontLampTwoLightActive(false);
+                                break;
+                            case 0x6:
+                                faults.setAddDippedLightActive(false);
+                                faults.setAddBrakeLightActive(true);
+                                faults.setFrontLampOneLightActive(true);
+                                faults.setFrontLampTwoLightActive(false);
+                                break;
+                            case 0x7:
+                                faults.setAddDippedLightActive(true);
+                                faults.setAddBrakeLightActive(true);
+                                faults.setFrontLampOneLightActive(true);
+                                faults.setFrontLampTwoLightActive(false);
+                                break;
+                            case 0x8:
+                                faults.setAddDippedLightActive(false);
+                                faults.setAddBrakeLightActive(false);
+                                faults.setFrontLampOneLightActive(false);
+                                faults.setFrontLampTwoLightActive(true);
+                                break;
+                            case 0x9:
+                                faults.setAddDippedLightActive(true);
+                                faults.setAddBrakeLightActive(false);
+                                faults.setFrontLampOneLightActive(false);
+                                faults.setFrontLampTwoLightActive(true);
+                                break;
+                            case 0xA:
+                                faults.setAddDippedLightActive(false);
+                                faults.setAddBrakeLightActive(true);
+                                faults.setFrontLampOneLightActive(false);
+                                faults.setFrontLampTwoLightActive(true);
+                                break;
+                            case 0xB:
+                                faults.setAddDippedLightActive(true);
+                                faults.setAddBrakeLightActive(true);
+                                faults.setFrontLampOneLightActive(false);
+                                faults.setFrontLampTwoLightActive(true);
+                                break;
+                            case 0xC:
+                                faults.setAddDippedLightActive(false);
+                                faults.setAddBrakeLightActive(false);
+                                faults.setFrontLampOneLightActive(true);
+                                faults.setFrontLampTwoLightActive(true);
+                                break;
+                            case 0xD:
+                                faults.setAddDippedLightActive(true);
+                                faults.setAddBrakeLightActive(false);
+                                faults.setFrontLampOneLightActive(true);
+                                faults.setFrontLampTwoLightActive(true);
+                                break;
+                            case 0xE:
+                                faults.setAddDippedLightActive(false);
+                                faults.setAddBrakeLightActive(true);
+                                faults.setFrontLampOneLightActive(true);
+                                faults.setFrontLampTwoLightActive(true);
+                                break;
+                            case 0xF:
+                                faults.setAddDippedLightActive(true);
+                                faults.setAddBrakeLightActive(true);
+                                faults.setFrontLampOneLightActive(true);
+                                faults.setFrontLampTwoLightActive(true);
+                                break;
+                            default:
+                                faults.setAddDippedLightActive(false);
+                                faults.setAddBrakeLightActive(false);
+                                faults.setFrontLampOneLightActive(false);
+                                faults.setFrontLampTwoLightActive(false);
+                                break;
                         }
                         break;
                     case 0x09:

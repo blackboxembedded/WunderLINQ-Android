@@ -20,7 +20,7 @@
     <string name="disclaimer_alert_title">WARNING!</string>
     <string name="disclaimer_alert_body">
         Never take your eyes of the road and always use your best judgment.
-        Black Box Embedded is not responsible for any harm or damages caused by this products use.
+        Black Box Embedded, LLC is not responsible for any harm or damages caused by this products use.
     </string>
     <string name="disclaimer_ok">I agree</string>
     <string name="disclaimer_quit">Quit</string>
@@ -39,15 +39,41 @@
     <!-- FaultActivity -->
     <string name="fault_title">Active Faults</string>
     <!-- Fault strings -->
-    <string name="fault_ABSF">ABS Self-Diagnosis Not Completed</string>
-    <string name="fault_ASCF">ASC Self-Diagnosis Not Completed</string>
+    <string name="fault_ABSSLF">ABS self-diagnosis not completed</string>
+    <string name="fault_ABSERR">ABS error</string>
+    <string name="fault_ABSDAC">ABS deactivated</string>
+    <string name="fault_ASCSLF">ASC self-diagnosis not completed</string>
+    <string name="fault_ASCINT">ASC intervention</string>
+    <string name="fault_ASCERR">ASC error</string>
+    <string name="fault_ASCDAC">ASC deactivated</string>
     <string name="fault_FUELF">Low Fuel</string>
+    <string name="fault_LAMPAFL1">Additional front light 1</string>
+    <string name="fault_LAMPAFL2">Additional front light 2</string>
+    <string name="fault_LAMPDAY">Daytime running light</string>
+    <string name="fault_LAMPFLI">Front left indicator</string>
+    <string name="fault_LAMPFRI">Front right indicator</string>
+    <string name="fault_LAMPRLI">Rear left indicator</string>
+    <string name="fault_LAMPRRI">Rear right indicator</string>
+    <string name="fault_LAMPFPK1">Front parking light 1</string>
+    <string name="fault_LAMPFPK2">Front parking light 2</string>
+    <string name="fault_LAMPLOW">Low-beam</string>
+    <string name="fault_LAMPHI">High-beam</string>
+    <string name="fault_LAMPREAR">Rear Light</string>
+    <string name="fault_LAMPBRK">Brake Light</string>
+    <string name="fault_LAMPLIC">License plate Light</string>
+    <string name="fault_LAMPRFOG">Rear Fog Light</string>
+    <string name="fault_LAMPADDD">Additional dipped/high-beam</string>
+    <string name="fault_LAMPADDB">Additional brake light</string>
+    <string name="fault_LAMPFL1">Front lamp 1</string>
+    <string name="fault_LAMPFL2">Front lamp 2</string>
+    <string name="fault_ICEWARN">Ice Warning</string>
+    <string name="fault_GENWARNFSYLW">The general warning light flashes yellow</string>
+    <string name="fault_GENWARNSHYLW">The general warning light shows yellow</string>
+    <string name="fault_GENWARNFSRED">The general warning light flashes red</string>
+    <string name="fault_GENWARNSHRED">The general warning light shows red</string>
+    <string name="fault_OILLOW">Engine oil level too low</string>
     <string name="fault_TIREFF">Front Tire Pressure</string>
     <string name="fault_TIRERF">Rear Tire Pressure</string>
-    <string name="fault_SIGFLF">Front Left Signal</string>
-    <string name="fault_SIGFRF">Front Right Signal</string>
-    <string name="fault_SIGRLF">Rear Left Signal</string>
-    <string name="fault_SIGRRF">Rear Right Signal</string>
 
     <!-- DataActivity -->
     <string name="data_title">Your Data</string>
