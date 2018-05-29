@@ -27,6 +27,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -56,8 +57,26 @@
         <activity android:name=".FaultActivity" />
         <activity
             android:name=".OTAFirmwareUpdate.OTAFirmwareUpgradeActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".OTAFirmwareUpdate.OTAFilesListingActivity" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".OTAFirmwareUpdate.OTAFilesListingActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".DataActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".WaypointActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".WaypointViewActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".TripsActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".TripViewActivity"
+            android:screenOrientation="portrait"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -100,12 +119,6 @@
                 <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
             </intent-filter>
         </receiver>
-
-        <activity android:name=".DataActivity" />
-        <activity android:name=".WaypointActivity" />
-        <activity android:name=".WaypointViewActivity" />
-        <activity android:name=".TripsActivity" />
-        <activity android:name=".TripViewActivity" />
     </application>
 
 </manifest>

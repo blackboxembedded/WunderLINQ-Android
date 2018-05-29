@@ -15,8 +15,8 @@ public class DataActivity extends AppCompatActivity {
 
     private ImageButton backButton;
     private ImageButton forwardButton;
-    private Button tripsButton;
-    private Button wptButton;
+    private ImageButton tripsButton;
+    private ImageButton wptButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +25,8 @@ public class DataActivity extends AppCompatActivity {
 
         showActionBar();
 
-        tripsButton = (Button) findViewById(R.id.btnTrips);
-        wptButton = (Button) findViewById(R.id.btnWpt);
+        tripsButton = (ImageButton) findViewById(R.id.btnTrips);
+        wptButton = (ImageButton) findViewById(R.id.btnWpt);
 
         tripsButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -105,7 +105,7 @@ public class TaskActivity extends AppCompatActivity {
                     case 0:
                         //Navigation
                         Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                        navIntent.setData(Uri.parse("google.navigation:q="));
+                        navIntent.setData(Uri.parse("google.navigation:/?free=1&mode=d&entry=fnls"));
                         startActivity(navIntent);
                         break;
                     case 1:

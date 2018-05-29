@@ -16,8 +16,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+
 
 public class TripsActivity extends AppCompatActivity {
 
@@ -47,6 +49,7 @@ public class TripsActivity extends AppCompatActivity {
             }
         }
         File list[] = root.listFiles();
+        Arrays.sort(list, Collections.reverseOrder());
 
         for( int i=0; i< list.length; i++)
         {

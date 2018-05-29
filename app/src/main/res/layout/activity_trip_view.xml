@@ -70,7 +70,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Distance"
+                        android:text="@string/trip_view_tv_distance"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
@@ -96,7 +96,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Duration"
+                        android:text="@string/trip_view_tv_duration"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
@@ -123,7 +123,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Speed (Min/Avg/Max)"
+                        android:text="@string/trip_view_tv_speed"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
@@ -148,7 +148,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Gear Shifts"
+                        android:text="@string/trip_view_tv_shifts"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
@@ -169,11 +169,36 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/tvBrakesLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/trip_view_tv_brakes"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvBrakes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=""
+                        android:textAlignment="viewStart"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
                         android:id="@+id/tvAmbientLabel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Ambient Temp (Min/Avg/Max)"
+                        android:text="@string/trip_view_tv_ambient"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
@@ -198,7 +223,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Engine Temp (Min/Avg/Max)"
+                        android:text="@string/trip_view_tv_engine"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 

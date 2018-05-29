@@ -13,13 +13,24 @@
         android:layout_alignParentLeft="true"/>
 
     <ImageButton
+        android:id="@+id/action_connect"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:background="@null"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_bluetooth_off"
+        android:layout_toRightOf="@+id/action_back"
+        android:paddingLeft="10dp"
+        android:paddingTop="4dp"/>
+
+    <ImageButton
         android:id="@+id/action_faults"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:background="@null"
         android:scaleType="centerInside"
         android:src="@drawable/ic_warning"
-        android:layout_toRightOf="@+id/action_back"
+        android:layout_toRightOf="@+id/action_connect"
         android:paddingLeft="10dp"
         android:paddingTop="4dp"/>
 
@@ -30,8 +41,8 @@
         android:background="@null"
         android:scaleType="centerInside"
         android:src="@drawable/ic_area_chart"
-        android:layout_toRightOf="@+id/action_faults"
-        android:paddingLeft="10dp"
+        android:layout_toLeftOf="@+id/action_settings"
+        android:paddingRight="10dp"
         android:paddingTop="4dp"/>
 
     <ImageButton
@@ -41,17 +52,6 @@
         android:background="@null"
         android:scaleType="centerInside"
         android:src="@drawable/ic_cog"
-        android:layout_toLeftOf="@+id/action_connect"
-        android:paddingRight="10dp"
-        android:paddingTop="4dp"/>
-
-    <ImageButton
-        android:id="@+id/action_connect"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:background="@null"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_bluetooth_off"
         android:layout_toLeftOf="@+id/action_forward"
         android:paddingRight="10dp"
         android:paddingTop="4dp"/>

@@ -2,9 +2,11 @@ package com.blackboxembedded.WunderLINQ;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
@@ -50,8 +52,11 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
     private TextView tvDuration;
     private TextView tvSpeed;
     private TextView tvGearShifts;
+    private TextView tvBrakes;
     private TextView tvAmbient;
     private TextView tvEngine;
+
+    private SharedPreferences sharedPrefs;
 
     List<LatLng> routePoints;
 
@@ -67,10 +72,13 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
         tvDuration = findViewById(R.id.tvDuration);
         tvSpeed = findViewById(R.id.tvSpeed);
         tvGearShifts = findViewById(R.id.tvGearShifts);
+        tvBrakes = findViewById(R.id.tvBrakes);
         tvAmbient = findViewById(R.id.tvAmbient);
         tvEngine = findViewById(R.id.tvEngine);
 
         showActionBar();
+
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -95,6 +103,9 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
             Date endTime = null;
             Double startOdometer = null;
             Double endOdometer = null;
+            Double endShiftCnt = null;
+            Double endFrontBrakeCnt = null;
+            Double endRearBrakeCnt = null;
 
             try {
                 CsvContainer csv = csvReader.read(file, StandardCharsets.UTF_8);
@@ -148,12 +159,40 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                                 startOdometer = Double.parseDouble(row.getField(10));
                             }
                         }
+                        if (!row.getField(13).equals("null")){
+                            if (endFrontBrakeCnt == null || endFrontBrakeCnt < Double.parseDouble(row.getField(13))){
+                                endFrontBrakeCnt = Double.parseDouble(row.getField(13));
+                            }
+                        }
+                        if (!row.getField(14).equals("null")){
+                            if (endRearBrakeCnt == null || endRearBrakeCnt < Double.parseDouble(row.getField(14))){
+                                endRearBrakeCnt = Double.parseDouble(row.getField(14));
+                            }
+                        }
+                        if (!row.getField(15).equals("null")){
+                            if (endShiftCnt == null || endShiftCnt < Double.parseDouble(row.getField(15))){
+                                endShiftCnt = Double.parseDouble(row.getField(15));
+                            }
+                        }
                     }
                     if(row.getOriginalLineNumber() == 2){
                         tvDate.setText(row.getField(0));
                     }
                 }
-                // TODO: unit conversions
+
+                String distanceUnit = "km";
+                String distanceFormat = sharedPrefs.getString("prefDistance", "0");
+                if (distanceFormat.contains("1")) {
+                    distanceUnit = "mi";
+                }
+                String temperatureUnit = "C";
+                String temperatureFormat = sharedPrefs.getString("prefTempF", "0");
+                if (temperatureFormat.contains("1")) {
+                    // F
+                    temperatureUnit = "F";
+                }
+
+                // TODO: unit conversion for speed
                 if (speeds.size() > 0){
                     Double avgSpeed = 0.0;
                     for (Double speed : speeds) {
@@ -162,31 +201,64 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                     avgSpeed = avgSpeed / speeds.size();
                     tvSpeed.setText("(" + minSpeed + "/" + avgSpeed + "/" + maxSpeed + ")");
                 }
+
+                if(endShiftCnt != null){
+                    tvGearShifts.setText(Double.toString(endShiftCnt));
+                }
+
+                String frontBrakeText = "0";
+                String rearBrakeText = "0";
+                if(endFrontBrakeCnt != null){
+                    frontBrakeText = Double.toString(endFrontBrakeCnt);
+                }
+                if(endRearBrakeCnt != null){
+                    rearBrakeText = Double.toString(endRearBrakeCnt);
+                }
+                tvBrakes.setText("(" + frontBrakeText + "/" + rearBrakeText + ")");
+
                 if (engineTemps.size() > 0) {
                     Double avgEngineTemp = 0.0;
                     for (Double engineTemp : engineTemps) {
                         avgEngineTemp = avgEngineTemp + engineTemp;
                     }
                     avgEngineTemp = avgEngineTemp / ambientTemps.size();
-                    tvEngine.setText("(" + minEngineTemp + "/" + avgEngineTemp + "/" + maxEngineTemp + ")");
+                    if (temperatureFormat.contains("1")) {
+                        // F
+                        minEngineTemp = celsiusToFahrenheit(minEngineTemp);
+                        avgEngineTemp = celsiusToFahrenheit(avgEngineTemp);
+                        maxEngineTemp = celsiusToFahrenheit(maxEngineTemp);
+                    }
+                    tvEngine.setText("(" + minEngineTemp + "/" + avgEngineTemp + "/" + maxEngineTemp + ")" + " " + temperatureUnit);
                 }
+
                 if (ambientTemps.size() > 0) {
                     Double avgAmbientTemp = 0.0;
                     for (Double ambientTemp : ambientTemps) {
                         avgAmbientTemp = avgAmbientTemp + ambientTemp;
                     }
                     avgAmbientTemp = avgAmbientTemp / ambientTemps.size();
-                    tvAmbient.setText("(" + minAmbientTemp + "/" + avgAmbientTemp + "/" + maxAmbientTemp + ")");
+                    if (temperatureFormat.contains("1")) {
+                        // F
+                        minAmbientTemp = celsiusToFahrenheit(minAmbientTemp);
+                        avgAmbientTemp = celsiusToFahrenheit(avgAmbientTemp);
+                        maxAmbientTemp = celsiusToFahrenheit(maxAmbientTemp);
+                    }
+                    tvAmbient.setText("(" + minAmbientTemp + "/" + avgAmbientTemp + "/" + maxAmbientTemp + ")" + " " + temperatureUnit);
                 }
+
+                // Calculate Distance
+                double distance = endOdometer - startOdometer;
+                if (distanceFormat.contains("1")) {
+                    distance = kmToMiles(distance);
+                }
+                tvDistance.setText(String.valueOf(distance) + distanceUnit);
+
+                // Calculate Duration
+                printDifference(startTime,endTime);
+
             } catch (IOException e){
 
             }
-
-            // Calculate Distance
-            double distance = endOdometer - startOdometer;
-            tvDistance.setText(String.valueOf(distance));
-            // Calculate Duration
-            printDifference(startTime,endTime);
 
             FragmentManager myFragmentManager = getSupportFragmentManager();
             SupportMapFragment mapFragment = (SupportMapFragment) myFragmentManager.findFragmentById(R.id.map);
@@ -198,6 +270,8 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
 
     @Override
     public void onMapReady(GoogleMap map) {
+        //TODO: Start and Stop markers
+        //TODO: Fix zoom level
         map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         map.setTrafficEnabled(false);
         map.setIndoorEnabled(true);
@@ -287,6 +361,13 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
 
         long elapsedSeconds = different / secondsInMilli;
         tvDuration.setText(elapsedHours + " hours, " + elapsedMinutes + " minutes, " + elapsedSeconds + " seconds");
-
+    }
+    // kilometers to miles
+    public double kmToMiles(double kilometers){
+        return kilometers * 0.6214;
+    }
+    // Celsius to Fahrenheit
+    public double celsiusToFahrenheit(double celsius){
+        return (celsius * 1.8) + 32.0;
     }
 }

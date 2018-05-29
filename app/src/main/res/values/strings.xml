@@ -99,6 +99,13 @@
     <string name="trip_view_title">Trip</string>
     <string name="trip_view_trip_label">WunderLINQ Trip Log</string>
     <string name="trip_view_share_label">Share via</string>
+    <string name="trip_view_tv_distance">Distance</string>
+    <string name="trip_view_tv_duration">Duration</string>
+    <string name="trip_view_tv_speed">Speed (Min/Avg/Max)</string>
+    <string name="trip_view_tv_shifts">Gear Shifts</string>
+    <string name="trip_view_tv_brakes">Brakes (Front/Rear)</string>
+    <string name="trip_view_tv_ambient">Ambient Temp (Min/Avg/Max)</string>
+    <string name="trip_view_tv_engine">Engine Temp (Min/Avg/Max)</string>
 
     <!-- CompassActivity -->
     <string name="compass_title">Compass</string>

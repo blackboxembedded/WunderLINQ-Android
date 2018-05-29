@@ -44,6 +44,8 @@ public class BluetoothLeService extends Service {
     private static Logger logger = null;
     static FaultStatus faults = null;
 
+    private static int prevBrakeValue = 0;
+
     /**
      * GATT Status constants
      */
@@ -146,6 +148,8 @@ public class BluetoothLeService extends Service {
                 String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
                         mContext.getResources().getString(R.string.dl_connection_disconnected);
                 Log.d(TAG,dataLog);
+                Data.clear();
+                faults.clear();
             }
             // GATT Server Connecting
             if (newState == BluetoothProfile.STATE_CONNECTING) {
@@ -542,6 +546,31 @@ public class BluetoothLeService extends Service {
                         break;
                     case 0x05:
                         Log.d(TAG, "Message ID 5");
+                        // Brakes
+                        int brakes = ((data[2] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
+                        if(prevBrakeValue == 0){
+                            prevBrakeValue = brakes;
+                        }
+                        if (prevBrakeValue != brakes) {
+                            prevBrakeValue = brakes;
+                            switch (brakes) {
+                                case 0x6:
+                                    //Front
+                                    Data.setFrontBrake(Data.getFrontBrake() + 1);
+                                    break;
+                                case 0x9:
+                                    //Back
+                                    Data.setRearBrake(Data.getRearBrake() + 1);
+                                    break;
+                                case 0xA:
+                                    //Both
+                                    Data.setFrontBrake(Data.getFrontBrake() + 1);
+                                    Data.setRearBrake(Data.getRearBrake() + 1);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
                         // ABS Fault
                         int absValue = (data[3] & 0xFF) & 0x0f; // the lowest 4 bits
                         switch (absValue){
@@ -640,7 +669,6 @@ public class BluetoothLeService extends Service {
                     case 0x06:
                         Log.d(TAG, "Message ID 6");
                         String gear;
-                        int lowNibble = (data[2] & 0xFF) & 0x0f; // the lowest 4 bits
                         int gearValue = ((data[2] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
                         switch (gearValue) {
                             case 0x1:
@@ -669,11 +697,23 @@ public class BluetoothLeService extends Service {
                                 gear = "-";
                                 break;
                             default:
-                                gear = "--";
+                                gear = "-";
                                 Log.d(TAG, "Unknown gear value");
+                        }
+                        if(Data.getGear() != null) {
+                            if (!Data.getGear().equals(gear) && !gear.equals("-")) {
+                                Data.setNumberOfShifts(Data.getNumberOfShifts() + 1);
+                            }
                         }
                         Data.setGear(gear);
 
+                        // Throttle Position
+                        int minPosition = 36;
+                        int maxPosition = 236;
+                        double throttlePosition = (((data[3] & 0xFF) - minPosition) * 100) / (maxPosition - minPosition);
+                        Data.setThrottlePosition(throttlePosition);
+
+                        // Engine Temperature
                         double engineTemp = ((data[4] & 0xFF) * 0.75) - 25;
                         Data.setEngineTemperature(engineTemp);
 
@@ -1604,6 +1644,8 @@ public class BluetoothLeService extends Service {
                     + "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
                     mContext.getResources().getString(R.string.dl_disconnection_request);
             Log.d(TAG,dataLog);
+            Data.clear();
+            faults.clear();
             close();
         }
 

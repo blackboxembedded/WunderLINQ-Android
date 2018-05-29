@@ -13,10 +13,13 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
-        <Button
+        <ImageButton
             android:id="@+id/btnTrips"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_road"
             android:text="@string/data_trips_label" />
     </LinearLayout>
 
@@ -28,10 +31,13 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
-        <Button
+        <ImageButton
             android:id="@+id/btnWpt"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_map_marker"
             android:text="@string/data_wpt_label" />
     </LinearLayout>
 

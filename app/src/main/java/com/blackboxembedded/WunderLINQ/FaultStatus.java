@@ -615,5 +615,44 @@ public class FaultStatus extends ContextWrapper {
     public static String getOilLowDesc() {
         return oilLowDesc;
     }
+
+    // Utility functions
+    public static void clear(){
+        absSelfDiagActive = false;
+        absDeactivatedActive = false;
+        absErrorActive = false;
+        ascSelfDiagActive = false;
+        ascInterventionActive = false;
+        ascDeactivatedActive = false;
+        ascErrorActive = false;
+        fuelFaultActive = false;
+        frontTirePressureActive = false;
+        rearTirePressureActive = false;
+        addFrontLightOneActive = false;
+        addFrontLightTwoActive = false;
+        daytimeRunningActive = false;
+        frontLeftSignalActive = false;
+        frontRightSignalActive = false;
+        rearLeftSignalActive = false;
+        rearRightSignalActive = false;
+        frontParkingLightOneActive = false;
+        frontParkingLightTwoActive = false;
+        lowBeamActive = false;
+        highBeamActive = false;
+        rearLightActive = false;
+        brakeLightActive = false;
+        licenseLightActive = false;
+        rearFogLightActive = false;
+        addDippedLightActive = false;
+        addBrakeLightActive = false;
+        frontLampOneLightActive = false;
+        frontLampTwoLightActive = false;
+        iceWarningActive = false;
+        generalFlashingYellowActive = false;
+        generalShowsYellowActive = false;
+        generalFlashingRedActive = false;
+        generalShowsRedActive = false;
+        oilLowActive = false;
+    }
 }
 

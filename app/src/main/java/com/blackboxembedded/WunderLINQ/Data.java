@@ -89,21 +89,12 @@ public class Data {
     }
 
     // Number of shifts
-    private static Integer numberOfShifts;
+    private static Integer numberOfShifts = 0;
     public static Integer getNumberOfShifts() {
         return numberOfShifts;
     }
     public static void setNumberOfShifts(Integer shifts){
         Data.numberOfShifts = shifts;
-    }
-
-    // Number of brakes
-    private static Integer numberOfBrakes;
-    public static Integer getNumberOfBrakes() {
-        return numberOfBrakes;
-    }
-    public static void setNumberOfBrakes(Integer brakes){
-        Data.numberOfBrakes = brakes;
     }
 
     // Gear
@@ -124,6 +115,33 @@ public class Data {
         Data.voltage = voltage;
     }
 
+    // Throttle Position
+    private static Double throttlePosition;
+    public static Double getThrottlePosition() {
+        return throttlePosition;
+    }
+    public static void setThrottlePosition(Double throttlePosition){
+        Data.throttlePosition = throttlePosition;
+    }
+
+    // Front Brake
+    private static Integer frontBrake = 0;
+    public static Integer getFrontBrake() {
+        return frontBrake;
+    }
+    public static void setFrontBrake(Integer frontBrake){
+        Data.frontBrake = frontBrake;
+    }
+
+    // Rear Brake
+    private static Integer rearBrake = 0;
+    public static Integer getRearBrake() {
+        return rearBrake;
+    }
+    public static void setRearBrake(Integer rearBrake){
+        Data.rearBrake = rearBrake;
+    }
+
     // Utility functions
     public static void clear(){
         Data.lastLocation = null;
@@ -135,9 +153,11 @@ public class Data {
         Data.odometer = null;
         Data.tripOne = null;
         Data.tripTwo = null;
-        Data.numberOfShifts = null;
-        Data.numberOfBrakes = null;
+        Data.numberOfShifts = 0;
         Data.gear = null;
         Data.voltage = null;
+        Data.throttlePosition = null;
+        Data.frontBrake = 0;
+        Data.rearBrake = 0;
     }
 }
