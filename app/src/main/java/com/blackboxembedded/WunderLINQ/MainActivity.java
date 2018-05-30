@@ -37,7 +37,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +48,7 @@ import android.widget.Toast;
 import com.blackboxembedded.WunderLINQ.OTAFirmwareUpdate.OTAFirmwareUpgradeActivity;
 import com.blackboxembedded.WunderLINQ.OTAFirmwareUpdate.UUIDDatabase;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -752,11 +752,11 @@ public class MainActivity extends AppCompatActivity {
                 rdcRear = barTokgf(rdcRear);
             } else if (pressureFormat.contains("3")) {
                 // Psi
-                rdcFront = barToPsi(rdcFront);
-                rdcRear = barToPsi(rdcRear);
+                rdcFront = Double.valueOf(oneDigit.format(barToPsi(rdcFront)));
+                rdcRear = Double.valueOf(oneDigit.format(barToPsi(rdcRear)));
             }
-            textView1.setText((int) Math.round(rdcFront) + " " + pressureUnit);
-            textView5.setText((int) Math.round(rdcRear) + " " + pressureUnit);
+            textView1.setText(rdcFront + " " + pressureUnit);
+            textView5.setText(rdcRear + " " + pressureUnit);
 
         } else {
             textView1.setText(getString(R.string.blank_field));
@@ -802,7 +802,6 @@ public class MainActivity extends AppCompatActivity {
                 for (byte byteChar : Data.getLastMessage())
                     stringBuilder.append(String.format("%02x", byteChar));
                 textView7.setText(stringBuilder.toString());
-                //textView7.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
             }
         }
         if(Data.getTripOne() != null) {
@@ -862,5 +861,8 @@ public class MainActivity extends AppCompatActivity {
     public double celsiusToFahrenheit(double celsius){
         return (celsius * 1.8) + 32.0;
     }
+
+    //format to 1 decimal place
+    DecimalFormat oneDigit = new DecimalFormat("#,##0.0");
 
 }

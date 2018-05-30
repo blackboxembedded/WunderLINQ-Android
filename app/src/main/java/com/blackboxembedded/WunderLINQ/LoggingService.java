@@ -5,16 +5,22 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -24,11 +30,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
-
-public class LoggingService extends Service {
+public class LoggingService extends Service implements LocationListener, GoogleApiClient
+        .ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "WunderLINQ";
+
+    LocationRequest locationRequest;
+    GoogleApiClient googleApiClient;
 
     Handler handler;
     Runnable runnable;
@@ -40,19 +48,16 @@ public class LoggingService extends Service {
 
     @Override
     public IBinder onBind(Intent arg0) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        // TODO Auto-generated method stub
         return START_STICKY;
     }
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
-        // TODO Auto-generated method stub
         Log.d(TAG, "In onTaskRemoved");
         if(outFile != null) {
             outFile.flush();
@@ -78,6 +83,16 @@ public class LoggingService extends Service {
     public void onCreate() {
         Log.d(TAG, "In onCreate");
         super.onCreate();
+
+        createLocationRequest();
+
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+        googleApiClient.connect();
+
         ((MyApplication) this.getApplication()).setTripRecording(true);
     }
 
@@ -100,7 +115,7 @@ public class LoggingService extends Service {
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-HH:mm:ss");
                 String curdatetime = formatter.format(date);
                 String filename = "WunderLINQ-TripLog-";
-                String header = "Time,Latitude,Longitude,Altitude(meters),Speed(meters/second),Gear,Engine Temperature(celcius)," +
+                String header = "Time,Latitude,Longitude,Altitude(meters),Speed(km/h),Gear,Engine Temperature(celcius)," +
                         "Ambient Temperature(celcius),Front Tire Pressure(bar),Rear Tire Pressure(bar),Odometer(kilometers),Voltage(Volts)," +
                         "Throttle Position(%),Front Brakes,Rear Brakes,Shifts\n";
                 File logFile = new File( root, filename + curdatetime + ".csv" );
@@ -114,9 +129,7 @@ public class LoggingService extends Service {
             runnable = new Runnable() {
                 @Override
                 public void run() {
-                    getLastLocation();
-                    //getSpeed();
-                    Data.setLastLocation(lastLocation);
+                    lastLocation = Data.getLastLocation();
                     // Log data
                     Calendar cal = Calendar.getInstance();
                     Date date = cal.getTime();
@@ -130,7 +143,7 @@ public class LoggingService extends Service {
                         lat = Double.toString(lastLocation.getLatitude());
                         lon = Double.toString(lastLocation.getLongitude());
                         alt = Double.toString(lastLocation.getAltitude());
-                        spd = Float.toString(lastLocation.getSpeed());
+                        spd = Double.toString(lastLocation.getSpeed() * 3.6);
                     }
                     outFile.write(curdatetime + "," + lat + "," + lon + "," + alt + "," + spd + ","
                             + Data.getGear() + "," + Data.getEngineTemperature() + "," + Data.getAmbientTemperature()
@@ -157,35 +170,59 @@ public class LoggingService extends Service {
             outFile.close();
         }
         handler.removeCallbacks(runnable);
+
+        stopLocationUpdates();
+        googleApiClient.disconnect();
+
         ((MyApplication) this.getApplication()).setTripRecording(false);
     }
 
-    private void getLastLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            // permission has been granted, continue as usual
-            // Get last known recent location using new Google Play Services SDK (v11+)
-            FusedLocationProviderClient locationClient = getFusedLocationProviderClient(this);
+    protected void createLocationRequest() {
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(5000);
+        locationRequest.setFastestInterval(1000);
+    }
 
-            locationClient.getLastLocation()
-                    .addOnSuccessListener(new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            // GPS location can be null if GPS is switched off
-                            if (location != null) {
-                                lastLocation = location;
-                            }
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d(TAG, "Error trying to get last GPS location");
-                            e.printStackTrace();
-                        }
-                    });
-        } else {
-            Log.d(TAG, "No permissions to obtain location");
+    protected void startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
         }
+        PendingResult<Status> pendingResult = LocationServices.FusedLocationApi
+                .requestLocationUpdates(googleApiClient, locationRequest, this);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Data.setLastLocation(location);
+    }
+
+    protected void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(
+                googleApiClient, this);
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        startLocationUpdates();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }
