@@ -5,40 +5,43 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-
-import de.siegmar.fastcsv.reader.CsvContainer;
-import de.siegmar.fastcsv.reader.CsvReader;
-import de.siegmar.fastcsv.reader.CsvRow;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+
+import de.siegmar.fastcsv.reader.CsvContainer;
+import de.siegmar.fastcsv.reader.CsvReader;
+import de.siegmar.fastcsv.reader.CsvRow;
 
 public class TripViewActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -180,6 +183,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                     }
                 }
 
+                //TODO: Rounding tweaks
                 String distanceUnit = "km";
                 String distanceFormat = sharedPrefs.getString("prefDistance", "0");
                 if (distanceFormat.contains("1")) {
@@ -269,25 +273,42 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
     @Override
-    public void onMapReady(GoogleMap map) {
-        //TODO: Start and Stop markers
-        //TODO: Fix zoom level
+    public void onMapReady(final GoogleMap map) {
         map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         map.setTrafficEnabled(false);
         map.setIndoorEnabled(true);
         map.setBuildingsEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(false);
-        int middle = routePoints.size() / 2;
-        // Add a marker and move the camera
-        LatLng location = routePoints.get(middle);
-        map.addMarker(new MarkerOptions().position(location).title(getString(R.string.waypoint_view_waypoint_label)));
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(location,15));
+        LatLng startLocation = routePoints.get(0);
+        LatLng endLocation = routePoints.get(routePoints.size() - 1);
+        map.addMarker(new MarkerOptions().position(startLocation)
+                .title(getString(R.string.trip_view_waypoint_start_label))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        map.addMarker(new MarkerOptions().position(endLocation)
+                .title(getString(R.string.trip_view_waypoint_end_label))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
         map.addPolyline(new PolylineOptions()
                 .width(10)
                 .color(Color.RED)
                 .geodesic(true)
                 .zIndex(1)
                 .addAll(routePoints));
+
+        // Move Camera
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (LatLng point : routePoints) {
+            builder.include(point);
+        }
+        LatLngBounds bounds = builder.build();
+        int padding = 100; // offset from edges of the map in pixels
+        final CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        //map.moveCamera(cu);
+        map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                map.animateCamera(cu);
+            }
+        });
     }
 
     // Delete button press
