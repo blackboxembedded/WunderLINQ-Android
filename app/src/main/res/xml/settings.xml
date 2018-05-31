@@ -14,6 +14,13 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/ui_title" >
         <ListPreference
+            android:key="prefMotorcycleType"
+            android:title="@string/pref_bike_type"
+            android:entries="@array/bike_type_array"
+            android:entryValues="@array/bike_type_arrayValues"
+            android:defaultValue="0"
+            />
+        <ListPreference
             android:key="prefPressureF"
             android:title="@string/pref_pressuref_name"
             android:entries="@array/pressuref_array"

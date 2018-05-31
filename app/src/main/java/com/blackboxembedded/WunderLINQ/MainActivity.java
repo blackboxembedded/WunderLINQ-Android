@@ -60,21 +60,8 @@ public class MainActivity extends AppCompatActivity {
 
     public final static String TAG = "WunderLINQ";
 
-    private ImageButton backButton;
-    private ImageButton forwardButton;
     private ImageButton faultButton;
-    private ImageButton dataButton;
-    private ImageButton settingsButton;
-    private ImageButton connectButton;
-
-    private TextView textView1;
-    private TextView textView2;
-    private TextView textView3;
-    private TextView textView4;
-    private TextView textView5;
-    private TextView textView6;
-    private TextView textView7;
-    private TextView textView8;
+    private ImageButton btButton;
 
     private SharedPreferences sharedPrefs;
 
@@ -94,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
     List<BluetoothGattCharacteristic> gattCharacteristics;
     private String mDeviceAddress;
     private static final int REQUEST_ENABLE_BT = 1;
+    private static final int SETTINGS_CHECK = 10;
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
 
@@ -110,22 +98,19 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG,"In onCreate");
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        setContentView(R.layout.activity_main);
+
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
+            setContentView(R.layout.activity_main);
+        } else {
+            setContentView(R.layout.activity_main_other);
+        }
+
 
         mContext = this;
 
         showActionBar();
-
-        textView1 = (TextView) findViewById(R.id.textView1);
-        textView2 = (TextView) findViewById(R.id.textView2);
-        textView3 = (TextView) findViewById(R.id.textView3);
-        textView4 = (TextView) findViewById(R.id.textView4);
-        textView5 = (TextView) findViewById(R.id.textView5);
-        textView6 = (TextView) findViewById(R.id.textView6);
-        textView7 = (TextView) findViewById(R.id.textView7);
-        textView8 = (TextView) findViewById(R.id.textView8);
-
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         mHandler = new Handler();
 
@@ -275,7 +260,9 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("LAST_LAUNCH_DATE", currentDate);
             editor.commit();
         }
-        updateDisplay();
+        if (sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
+            updateDisplay();
+        }
     }
 
     private void showActionBar(){
@@ -289,12 +276,12 @@ public class MainActivity extends AppCompatActivity {
 
         actionBar.setCustomView(v);
 
-        backButton = (ImageButton) findViewById(R.id.action_back);
-        forwardButton = (ImageButton) findViewById(R.id.action_forward);
-        settingsButton = (ImageButton) findViewById(R.id.action_settings);
-        dataButton = (ImageButton) findViewById(R.id.action_data);
+        ImageButton backButton = (ImageButton) findViewById(R.id.action_back);
+        ImageButton forwardButton = (ImageButton) findViewById(R.id.action_forward);
+        ImageButton settingsButton = (ImageButton) findViewById(R.id.action_settings);
+        ImageButton dataButton = (ImageButton) findViewById(R.id.action_data);
         faultButton = (ImageButton) findViewById(R.id.action_faults);
-        connectButton = (ImageButton) findViewById(R.id.action_connect);
+        btButton = (ImageButton) findViewById(R.id.action_connect);
 
         TextView navbarTitle;
         navbarTitle = (TextView) findViewById(R.id.action_title);
@@ -328,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.action_settings:
                     Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
-                    startActivity(settingsIntent);
+                    startActivityForResult(settingsIntent, SETTINGS_CHECK);
                     break;
                 case R.id.action_data:
                     Intent dataIntent = new Intent(MainActivity.this, DataActivity.class);
@@ -433,6 +420,12 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_ENABLE_BT && resultCode == Activity.RESULT_CANCELED) {
             finish();
             return;
+        } else if (requestCode == SETTINGS_CHECK) {
+            if (sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
+                setContentView(R.layout.activity_main);
+            } else {
+                setContentView(R.layout.activity_main_other);
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -573,15 +566,19 @@ public class MainActivity extends AppCompatActivity {
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 Log.d(TAG,"GATT_DISCONNECTED");
                 Data.clear();
-                updateDisplay();
-                connectButton.setImageResource(R.drawable.ic_bluetooth_off);
+                if (sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
+                    updateDisplay();
+                }
+                btButton.setImageResource(R.drawable.ic_bluetooth_off);
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 Log.d(TAG,"GATT_SERVICE_DISCOVERED");
                 checkGattServices(mBluetoothLeService.getSupportedGattServices());
-                connectButton.setImageResource(R.drawable.ic_bluetooth_on);
+                btButton.setImageResource(R.drawable.ic_bluetooth_on);
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 Log.d(TAG,"GATT_DATA_AVAILABLE");
-                updateDisplay();
+                if (sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
+                    updateDisplay();
+                }
             }
         }
     };
@@ -706,6 +703,14 @@ public class MainActivity extends AppCompatActivity {
 
     // Update Display
     private void updateDisplay(){
+        TextView textView1 = (TextView) findViewById(R.id.textView1);
+        TextView textView2 = (TextView) findViewById(R.id.textView2);
+        TextView textView3 = (TextView) findViewById(R.id.textView3);
+        TextView textView4 = (TextView) findViewById(R.id.textView4);
+        TextView textView5 = (TextView) findViewById(R.id.textView5);
+        TextView textView6 = (TextView) findViewById(R.id.textView6);
+        TextView textView7 = (TextView) findViewById(R.id.textView7);
+        TextView textView8 = (TextView) findViewById(R.id.textView8);
         //Check for active faults
         FaultStatus faults;
         faults = (new FaultStatus(this));

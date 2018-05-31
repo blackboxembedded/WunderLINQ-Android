@@ -173,6 +173,21 @@
     <string name="pref_homePhone_summary">Format: 11234567890</string>
 
     <string name="ui_title">User Interface</string>
+    <string name="pref_bike_type">Motorcycle Type</string>
+    <string-array name="bike_type_array">
+        <item name="1">BMW R1200GS/A</item>
+        <item name="2">BMW R1200R</item>
+        <item name="3">BMW R1200RS</item>
+        <item name="4">BMW S1000XR</item>
+        <item name="5">Other</item>
+    </string-array>
+    <string-array name="bike_type_arrayValues">
+        <item name="1">0</item>
+        <item name="2">0</item>
+        <item name="3">0</item>
+        <item name="4">0</item>
+        <item name="5">1</item>
+    </string-array>
     <string name="pref_tempf_name">Temperature Unit</string>
     <string-array name="tempf_array">
         <item name="1">Celsius</item>
