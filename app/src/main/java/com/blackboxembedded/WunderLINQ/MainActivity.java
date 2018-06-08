@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Checks if Bluetooth is supported on the device.
         if (mBluetoothAdapter == null) {
-            Toast.makeText(this, R.string.toast_error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_error_bluetooth_not_supported, Toast.LENGTH_LONG).show();
             finish();
             return;
         }
@@ -759,11 +759,11 @@ public class MainActivity extends AppCompatActivity {
                 if (!sharedPrefs.getString("prefMotorcycleType", "1").equals("0")){
                     updateDisplay();
                 }
-                btButton.setImageResource(R.drawable.ic_bluetooth_off);
+                btButton.setColorFilter(getResources().getColor(R.color.motorrad_red));
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 Log.d(TAG,"GATT_SERVICE_DISCOVERED");
                 checkGattServices(mBluetoothLeService.getSupportedGattServices());
-                btButton.setImageResource(R.drawable.ic_bluetooth_on);
+                btButton.setColorFilter(getResources().getColor(R.color.motorrad_blue));
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 Log.d(TAG,"GATT_DATA_AVAILABLE");
                 if (!sharedPrefs.getString("prefMotorcycleType", "1").equals("0")){

@@ -938,7 +938,7 @@ public class OTAFirmwareUpgradeActivity extends AppCompatActivity implements Vie
         mBuilder.setContentTitle(getResources().getString(R.string.ota_notification_title))
                 .setAutoCancel(false)
                 .setContentText(getResources().getString(R.string.ota_notification_ongoing))
-                .setSmallIcon(R.drawable.ic_bluetooth_on);
+                .setSmallIcon(R.mipmap.ic_launcher_round);
     }
 
     public void generatePendingNotification(Context mContext,
