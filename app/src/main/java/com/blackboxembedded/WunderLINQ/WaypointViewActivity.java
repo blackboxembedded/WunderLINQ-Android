@@ -26,6 +26,8 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
     private ImageButton forwardButton;
 
     private TextView tvDate;
+    private TextView tvLatitude;
+    private TextView tvLongitude;
 
     private WaypointDatasource datasource;
     private WaypointRecord record;
@@ -40,6 +42,8 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
 
         showActionBar();
         tvDate = findViewById(R.id.tvDate);
+        tvLatitude = findViewById(R.id.tvLatitude);
+        tvLongitude = findViewById(R.id.tvLongitude);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -53,6 +57,8 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
             String[] latlong = record.getData().split(",");
             lat = Double.parseDouble(latlong[0]);
             lon = Double.parseDouble(latlong[1]);
+            tvLatitude.setText(latlong[0]);
+            tvLongitude.setText(latlong[1]);
 
             FragmentManager myFragmentManager = getSupportFragmentManager();
             SupportMapFragment mapFragment = (SupportMapFragment) myFragmentManager.findFragmentById(R.id.map);

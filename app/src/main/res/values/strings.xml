@@ -87,6 +87,8 @@
     <!-- WaypointViewActivity -->
     <string name="waypoint_view_title">Saved Waypoint</string>
     <string name="waypoint_view_tv_date_label">Date Recorded</string>
+    <string name="waypoint_view_tv_lat_label">Latitude</string>
+    <string name="waypoint_view_tv_lon_label">Longitude</string>
     <string name="waypoint_view_bt_open">Open in Map App</string>
     <string name="waypoint_view_bt_share">Share</string>
     <string name="waypoint_view_bt_delete">Delete</string>

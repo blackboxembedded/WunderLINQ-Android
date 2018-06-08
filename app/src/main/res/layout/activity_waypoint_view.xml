@@ -47,6 +47,60 @@
                 android:textStyle="bold"
                 android:textColor="@color/black"/>
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="top">
+
+            <TextView
+                android:id="@+id/tvLatLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/waypoint_view_tv_lat_label"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/tvLatitude"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text=""
+                android:textAlignment="viewStart"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="top">
+
+            <TextView
+                android:id="@+id/tvLonLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/waypoint_view_tv_lon_label"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/tvLongitude"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text=""
+                android:textAlignment="viewStart"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
