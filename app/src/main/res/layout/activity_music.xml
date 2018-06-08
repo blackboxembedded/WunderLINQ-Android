@@ -4,6 +4,67 @@
     android:layout_height="match_parent" >
 
     <LinearLayout
+        android:id="@+id/album_art_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/metadata_container">
+        <ImageView
+            android:id="@+id/album_art"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="0dp"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_music_note" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/metadata_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:orientation="vertical"
+        android:paddingTop="40sp"
+        android:paddingBottom="40sp"
+        android:layout_above="@id/buttons_container">
+
+        <TextView
+            android:id="@+id/artist_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/album_art"
+            android:gravity="center"
+            android:text="@string/unknown"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/title_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/artist_text"
+            android:gravity="center"
+            android:text="@string/unknown"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/album_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title_text"
+            android:gravity="center"
+            android:text="@string/unknown"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/buttons_container"
         android:layout_width="match_parent"
         android:layout_height="100sp"
@@ -48,60 +109,5 @@
             android:focusable="true"
             android:nextFocusUp="@+id/play_pause_button"
             android:nextFocusDown="@+id/prev_button"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/metadata_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingTop="40sp"
-        android:weightSum="1">
-
-        <ImageView
-            android:id="@+id/album_art"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="0dp"
-            android:padding="40sp"
-            android:scaleType="center"
-            android:src="@drawable/ic_music_note" />
-
-        <TextView
-            android:id="@+id/artist_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/album_art"
-            android:gravity="center"
-            android:paddingTop="40sp"
-            android:text="@string/unknown"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"/>
-
-        <TextView
-            android:id="@+id/title_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/artist_text"
-            android:gravity="center"
-            android:text="@string/unknown"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"/>
-
-        <TextView
-            android:id="@+id/album_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/title_text"
-            android:gravity="center"
-            android:text="@string/unknown"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"/>
-
     </LinearLayout>
 </RelativeLayout>

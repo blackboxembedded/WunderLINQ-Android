@@ -46,7 +46,6 @@
         android:layout_alignParentTop="true"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingTop="40sp"
         android:weightSum="1"
         android:layout_above="@+id/buttons_container">
 
@@ -71,7 +70,8 @@
                 android:paddingTop="40sp"
                 android:text="@string/unknown"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/title_text"
@@ -81,7 +81,8 @@
                 android:gravity="center"
                 android:text="@string/unknown"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/album_text"
@@ -91,7 +92,8 @@
                 android:gravity="center"
                 android:text="@string/unknown"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
         </LinearLayout>
 
     </LinearLayout>
