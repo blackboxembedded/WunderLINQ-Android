@@ -79,7 +79,7 @@ public class WaypointActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch(v.getId()) {
                 case R.id.action_back:
-                    Intent backIntent = new Intent(WaypointActivity.this, DataActivity.class);
+                    Intent backIntent = new Intent(WaypointActivity.this, MainActivity.class);
                     startActivity(backIntent);
                     break;
             }

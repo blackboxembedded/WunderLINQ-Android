@@ -41,10 +41,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -121,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
     private static final int PERMISSION_REQUEST_CAMERA = 100;
     private static final int PERMISSION_REQUEST_WRITE_STORAGE = 112;
+    private PopupMenu mPopupMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -273,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
         }
         // Daily Disclaimer Warning
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        String currentDate = sdf.format(new Date());
+        final String currentDate = sdf.format(new Date());
         if (sharedPrefs.getString("LAST_LAUNCH_DATE","nodate").contains(currentDate)){
             // Date matches. User has already Launched the app once today. So do nothing.
         }
@@ -288,6 +293,10 @@ public class MainActivity extends AppCompatActivity {
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            // Set the last Launched date to today.
+                            SharedPreferences.Editor editor = sharedPrefs.edit();
+                            editor.putString("LAST_LAUNCH_DATE", currentDate);
+                            editor.commit();
                             dialog.cancel();
                         }
                     });
@@ -301,10 +310,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
             builder.show();
-            // Set the last Launched date to today.
-            SharedPreferences.Editor editor = sharedPrefs.edit();
-            editor.putString("LAST_LAUNCH_DATE", currentDate);
-            editor.commit();
+
         }
         if (!sharedPrefs.getString("prefMotorcycleType", "1").equals("0")){
             updateDisplay();
@@ -339,6 +345,27 @@ public class MainActivity extends AppCompatActivity {
         dataButton.setOnClickListener(mClickListener);
 
         faultButton.setVisibility(View.GONE);
+
+        mPopupMenu = new PopupMenu(this, dataButton);
+        MenuInflater menuInflater = mPopupMenu.getMenuInflater();
+        menuInflater.inflate(R.menu.data_menu, mPopupMenu.getMenu());
+        mPopupMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch(item.getItemId()) {
+                    case R.id.action_trip_logs:
+                        Intent tripsIntent = new Intent(MainActivity.this, TripsActivity.class);
+                        startActivity(tripsIntent);
+                        break;
+                    case R.id.action_waypoints:
+                        Intent waypointsIntent = new Intent(MainActivity.this, WaypointActivity.class);
+                        startActivity(waypointsIntent);
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
     private View.OnClickListener mClickListener = new View.OnClickListener() {
@@ -363,8 +390,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivityForResult(settingsIntent, SETTINGS_CHECK);
                     break;
                 case R.id.action_data:
-                    Intent dataIntent = new Intent(MainActivity.this, DataActivity.class);
-                    startActivity(dataIntent);
+                    mPopupMenu.show();
                     break;
             }
         }

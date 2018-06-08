@@ -63,9 +63,6 @@
             android:name=".OTAFirmwareUpdate.OTAFilesListingActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".DataActivity"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".WaypointActivity"
             android:screenOrientation="portrait"/>
         <activity

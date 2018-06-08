@@ -19,8 +19,9 @@
     <string name="negative_camera_alert_body">Since camera access has not been granted, this app will not be able to take photos.</string>
     <string name="disclaimer_alert_title">WARNING!</string>
     <string name="disclaimer_alert_body">
-        Never take your eyes of the road and always use your best judgment.
-        Black Box Embedded, LLC is not responsible for any harm or damages caused by this products use.
+        Do not attempt to enter route information or adjust the WunderLINQ while driving.
+        Failure to pay full attention to the operation of your vehicle could result in death, serious injury, or property damage.
+        You assume total responsibility and risk for using this device.
     </string>
     <string name="disclaimer_ok">I agree</string>
     <string name="disclaimer_quit">Quit</string>
@@ -35,6 +36,9 @@
     <string name="trip1_label">Trip 1</string>
     <string name="trip2_label">Trip 2</string>
     <string name="gear_label">Gear</string>
+    <!-- Data Menu -->
+    <string name="trip_logs_label">Trip Logs</string>
+    <string name="waypoints_label">Waypoints</string>
 
     <!-- FaultActivity -->
     <string name="title_activity_fault">FaultActivity</string>
@@ -75,11 +79,6 @@
     <string name="fault_OILLOW">Engine oil level too low</string>
     <string name="fault_TIREFF">Front Tire Pressure</string>
     <string name="fault_TIRERF">Rear Tire Pressure</string>
-
-    <!-- DataActivity -->
-    <string name="data_title">Your Data</string>
-    <string name="data_trips_label">Trips</string>
-    <string name="data_wpt_label">Waypoints</string>
 
     <!-- WaypointActivity -->
     <string name="waypoint_title">Saved Waypoints</string>
