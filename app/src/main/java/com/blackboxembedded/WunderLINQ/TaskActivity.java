@@ -305,7 +305,7 @@ public class TaskActivity extends AppCompatActivity {
                             goHomeIntent.setData(Uri.parse("google.navigation:q=" + address));
                             startActivity(goHomeIntent);
                         } else {
-                            Toast.makeText(TaskActivity.this, R.string.toast_address_not_set, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TaskActivity.this, R.string.toast_address_not_set, Toast.LENGTH_LONG).show();
                         }
                         break;
                     case 2:
@@ -316,7 +316,7 @@ public class TaskActivity extends AppCompatActivity {
                             callHomeIntent.setData(Uri.parse("tel:" + phonenumber));
                             startActivity(callHomeIntent);
                         } else {
-                            Toast.makeText(TaskActivity.this, R.string.toast_phone_not_set, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TaskActivity.this, R.string.toast_phone_not_set, Toast.LENGTH_LONG).show();
                         }
                         break;
                     case 3:

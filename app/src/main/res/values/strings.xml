@@ -37,6 +37,7 @@
     <string name="gear_label">Gear</string>
 
     <!-- FaultActivity -->
+    <string name="title_activity_fault">FaultActivity</string>
     <string name="fault_title">Active Faults</string>
     <!-- Fault strings -->
     <string name="fault_ABSSLF">ABS self-diagnosis not completed</string>
@@ -234,12 +235,12 @@
     <string name="pref_autoNightMode_summary">Enable Auto Night Mode (Requires light sensor)</string>
     <string name="pref_autoNightModeDelay_name">Auto Night Mode Delay In Seconds</string>
     <string name="pref_autoNightModeDelay_summary">Set Auto Night Mode Delay In Seconds</string>
-    <string name="advanced_settings_title">Advanced Settings</string>
+    <string name="debug_settings_title">Debug Settings</string>
     <string name="pref_dataLogging_name">Raw Message Logging</string>
     <string name="pref_dataLogging_summary">Enable Raw Message Logging To /sdcard/WunderLINQ/</string>
     <string name="pref_showRaw_name">Show raw message</string>
     <string name="pref_showRaw_summary">Show raw message in Odometer Field</string>
-    <string name="title_activity_fault">FaultActivity</string>
+    <string name="advanced_settings_title">Advanced Settings</string>
     <string name="pref_btn_sendlogs_title">Send Logs</string>
     <string name="pref_btn_sendlogs_summary">Send Logs to KCWB</string>
     <string name="pref_sendlogs_email">support@blackboxembedded.com</string>
@@ -252,6 +253,9 @@
     <string name="pref_btn_dfumode_warning_body">You are about to place the WunderLINQ into DFU mode.
         When you select OK the WunderLINQ app will close and the WunderLINQ status LED should be solid green.
         You will be be returned to the main screen and when the app reconnects it should prompt to update.</string>
+    <string name="pref_btn_version_title">WunderLINQ Version</string>
+    <string name="pref_btn_version_summary">Enter WunderLINQ Firmware Update Mode</string>
+    <string name="pref_btn_version_toast">Debug Menu Enabled. Exit, then re-enter Settings.</string>
 
     <!-- OTA -->
     <!-- bluetooth button elements -->

@@ -56,7 +56,7 @@ public class TextProgressBar extends ProgressBar {
                 mProgressPaint.setTextSize(50);
                 break;
         }
-        mProgressPaint.setColor(getResources().getColor(R.color.colorProgressBar));
+        mProgressPaint.setColor(getResources().getColor(R.color.progressBar));
     }
 
 

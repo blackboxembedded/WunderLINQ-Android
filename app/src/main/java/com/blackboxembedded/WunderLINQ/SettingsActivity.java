@@ -4,14 +4,19 @@ import android.app.AlertDialog;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +24,10 @@ import java.io.IOException;
 public class SettingsActivity extends PreferenceActivity {
 
     private final static String TAG = "SettingsActivity";
+    private static SharedPreferences sharedPrefs;
     static AlertDialog alertDialog;
+
+    private static int versionButtonTouches = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +53,14 @@ public class SettingsActivity extends PreferenceActivity {
         {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.settings);
+
+            sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+            if (!(sharedPrefs.getBoolean("DEBUG_ENABLED",false))){
+                PreferenceScreen preferenceScreen = getPreferenceScreen();
+                PreferenceCategory myCategory = (PreferenceCategory) findPreference("prefDebugCategory");
+                preferenceScreen.removePreference(myCategory);
+            }
 
             Preference button = findPreference("prefSendLog");
             button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -125,6 +141,23 @@ public class SettingsActivity extends PreferenceActivity {
             } else {
                 dfuButton.setEnabled(false);
             }
+            //Secret Debug Menu
+            String versionName = BuildConfig.VERSION_NAME;
+            final Preference versionButton = findPreference("prefVersion");
+            versionButton.setSummary(versionName);
+            versionButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    versionButtonTouches = versionButtonTouches + 1;
+                    if (versionButtonTouches == 10) {
+                        Toast.makeText(getActivity(), R.string.pref_btn_version_toast, Toast.LENGTH_LONG).show();
+                        SharedPreferences.Editor editor = sharedPrefs.edit();
+                        editor.putBoolean("DEBUG_ENABLED", true);
+                        editor.commit();
+                    }
+                    return true;
+                }
+            });
         }
     }
 

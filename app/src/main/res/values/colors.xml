@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#0059ff</color>
 
     <color name="translucent_black">#C0000000</color>
 
@@ -10,9 +10,13 @@
     <color name="black">#000000</color>
 
     <!--File Read/Write progress colors-->
-    <color name="file_read_progress">#751abb00</color>
-    <color name="grey">#EFEFF4</color>
-    <color name="green">#701ABB00</color>
-    <color name="colorProgressBar">#FF4081</color>
+    <color name="progressBar">#FFFFFF</color>
+    <color name="progressBarEmpty">#fe0000</color>
+    <color name="progressBarStart">#0059ff</color>
+    <color name="progressBarEnd">#000056</color>
 
+    <!-- Motorrad Colors -->
+    <color name="motorrad_red">#fe0000</color>
+    <color name="motorrad_purple">#000056</color>
+    <color name="motorrad_blue">#0059ff</color>
 </resources>
