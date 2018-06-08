@@ -62,6 +62,21 @@ public class CompassActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         setContentView(R.layout.activity_compass);
+
+        View view = findViewById(R.id.layout_compass);
+        view.setOnTouchListener(new OnSwipeTouchListener(this) {
+            @Override
+            public void onSwipeLeft() {
+                Intent backIntent = new Intent(CompassActivity.this, TaskActivity.class);
+                startActivity(backIntent);
+            }
+            @Override
+            public void onSwipeRight() {
+                Intent backIntent = new Intent(CompassActivity.this, MusicActivity.class);
+                startActivity(backIntent);
+            }
+        });
+
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         showActionBar();

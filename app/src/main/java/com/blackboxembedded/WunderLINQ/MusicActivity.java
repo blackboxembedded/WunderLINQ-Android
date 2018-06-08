@@ -121,10 +121,23 @@ public class MusicActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("Musicacvitity","oncreate");
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_music);
+
+        View view = findViewById(R.id.layout_music);
+        view.setOnTouchListener(new OnSwipeTouchListener(this) {
+            @Override
+            public void onSwipeLeft() {
+                Intent backIntent = new Intent(MusicActivity.this, CompassActivity.class);
+                startActivity(backIntent);
+            }
+            @Override
+            public void onSwipeRight() {
+                Intent backIntent = new Intent(MusicActivity.this, MainActivity.class);
+                startActivity(backIntent);
+            }
+        });
 
         mPrevButton = (ImageButton)findViewById(R.id.prev_button);
         mPlayPauseButton = (ImageButton)findViewById(R.id.play_pause_button);

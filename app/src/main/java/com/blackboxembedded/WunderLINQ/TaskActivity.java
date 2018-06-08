@@ -66,6 +66,20 @@ public class TaskActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_task);
 
+        View view = findViewById(R.id.lv_tasks);
+        view.setOnTouchListener(new OnSwipeTouchListener(this) {
+            @Override
+            public void onSwipeLeft() {
+                Intent backIntent = new Intent(TaskActivity.this, MainActivity.class);
+                startActivity(backIntent);
+            }
+            @Override
+            public void onSwipeRight() {
+                Intent backIntent = new Intent(TaskActivity.this, CompassActivity.class);
+                startActivity(backIntent);
+            }
+        });
+
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         taskList = (ListView) findViewById(R.id.lv_tasks);

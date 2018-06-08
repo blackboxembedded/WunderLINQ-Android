@@ -70,6 +70,15 @@ public class ContactListActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_contact_list);
 
+        View view = findViewById(R.id.lv_contacts);
+        view.setOnTouchListener(new OnSwipeTouchListener(this) {
+            @Override
+            public void onSwipeRight() {
+                Intent backIntent = new Intent(ContactListActivity.this, TaskActivity.class);
+                startActivity(backIntent);
+            }
+        });
+
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         contactList = (ListView) findViewById(R.id.lv_contacts);

@@ -136,7 +136,19 @@ public class MainActivity extends AppCompatActivity {
         } else {
             setContentView(R.layout.activity_main);
         }
-
+        View view = findViewById(R.id.layout_main);
+        view.setOnTouchListener(new OnSwipeTouchListener(this) {
+            @Override
+            public void onSwipeLeft() {
+                Intent backIntent = new Intent(MainActivity.this, MusicActivity.class);
+                startActivity(backIntent);
+            }
+            @Override
+            public void onSwipeRight() {
+                Intent backIntent = new Intent(MainActivity.this, TaskActivity.class);
+                startActivity(backIntent);
+            }
+        });
 
         mContext = this;
 
