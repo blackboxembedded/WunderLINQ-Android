@@ -5,7 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -24,6 +30,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,12 +43,21 @@ public class TaskActivity extends AppCompatActivity {
 
     public final static String TAG = "WunderLINQ";
 
+    private ActionBar actionBar;
     private ImageButton backButton;
     private ImageButton forwardButton;
+    private TextView navbarTitle;
 
     private ListView taskList;
 
     private SharedPreferences sharedPrefs;
+
+    static boolean itsDark = false;
+    private long darkTimer = 0;
+    private long lightTimer = 0;
+
+    SensorManager sensorManager;
+    Sensor lightSensor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +72,149 @@ public class TaskActivity extends AppCompatActivity {
 
         showActionBar();
 
+        if (((MyApplication) this.getApplication()).getitsDark()){
+            itsDark = true;
+        } else {
+            itsDark = false;
+        }
+        updateColors(itsDark);
+
+        displayTasks();
+
+        // Sensor Stuff
+        sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (((MyApplication) this.getApplication()).getitsDark()){
+            updateColors(true);
+        } else {
+            updateColors(false);
+        }
+        sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(sensorEventListener, lightSensor);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        sensorManager.unregisterListener(sensorEventListener, lightSensor);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        sensorManager.unregisterListener(sensorEventListener, lightSensor);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1234) {
+            startService(new Intent(TaskActivity.this,
+                    VideoRecService.class));
+
+        }
+    }
+
+    private void showActionBar(){
+        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflator.inflate(R.layout.actionbar_nav, null);
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setDisplayShowHomeEnabled (false);
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setCustomView(v);
+
+        navbarTitle = (TextView) findViewById(R.id.action_title);
+        navbarTitle.setText(R.string.quicktask_title);
+
+        backButton = (ImageButton) findViewById(R.id.action_back);
+        forwardButton = (ImageButton) findViewById(R.id.action_forward);
+        backButton.setOnClickListener(mClickListener);
+        forwardButton.setOnClickListener(mClickListener);
+    }
+
+    private View.OnClickListener mClickListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            switch(v.getId()) {
+                case R.id.action_back:
+                    Intent backIntent = new Intent(TaskActivity.this, CompassActivity.class);
+                    startActivity(backIntent);
+                    break;
+                case R.id.action_forward:
+                    Intent forwardIntent = new Intent(TaskActivity.this, MainActivity.class);
+                    startActivity(forwardIntent);
+                    break;
+            }
+        }
+    };
+
+    // Listens for light sensor events
+    private final SensorEventListener sensorEventListener
+            = new SensorEventListener(){
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            // Do something
+        }
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            if (sharedPrefs.getBoolean("prefAutoNightMode", false) && (!sharedPrefs.getBoolean("prefNightMode", false))) {
+                int delay = (Integer.parseInt(sharedPrefs.getString("prefAutoNightModeDelay", "30")) * 1000);
+                if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
+                    float currentReading = event.values[0];
+                    double darkThreshold = 20.0;  // Light level to determine darkness
+                    if (currentReading < darkThreshold) {
+                        lightTimer = 0;
+                        if (darkTimer == 0) {
+                            darkTimer = System.currentTimeMillis();
+                        } else {
+                            long currentTime = System.currentTimeMillis();
+                            long duration = (currentTime - darkTimer);
+                            if ((duration >= delay) && (!itsDark)) {
+                                itsDark = true;
+                                // Update colors
+                                updateColors(true);
+                                displayTasks();
+                            }
+                        }
+                    } else {
+                        darkTimer = 0;
+                        if (lightTimer == 0) {
+                            lightTimer = System.currentTimeMillis();
+                        } else {
+                            long currentTime = System.currentTimeMillis();
+                            long duration = (currentTime - lightTimer);
+                            if ((duration >= delay) && (itsDark)) {
+                                itsDark = false;
+                                // Update colors
+                                updateColors(false);
+                                displayTasks();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    public void displayTasks(){
         String videoTaskText = getResources().getString(R.string.task_title_start_record);
         if (((MyApplication) this.getApplication()).getVideoRecording()){
             videoTaskText = getResources().getString(R.string.task_title_stop_record);
@@ -79,20 +238,50 @@ public class TaskActivity extends AppCompatActivity {
                 getResources().getString(R.string.task_title_waypoint),
                 getResources().getString(R.string.task_title_voicecontrol)
         };
-        Drawable[] iconId = {
-                getResources().getDrawable(R.drawable.ic_map,getTheme()),
-                getResources().getDrawable(R.drawable.ic_home,getTheme()),
-                getResources().getDrawable(R.drawable.ic_phone,getTheme()),
-                getResources().getDrawable(R.drawable.ic_address_book,getTheme()),
-                getResources().getDrawable(R.drawable.ic_camera,getTheme()),
-                getResources().getDrawable(R.drawable.ic_video_camera,getTheme()),
-                getResources().getDrawable(R.drawable.ic_road,getTheme()),
-                getResources().getDrawable(R.drawable.ic_map_marker,getTheme()),
-                getResources().getDrawable(R.drawable.ic_microphone,getTheme())
-        };
+
+        Drawable[] iconId = new Drawable[9];
+        if (itsDark) {
+            iconId[0] = getResources().getDrawable(R.drawable.ic_map, getTheme());
+            iconId[0].setTint(Color.WHITE);
+            iconId[1] = getResources().getDrawable(R.drawable.ic_home, getTheme());
+            iconId[1].setTint(Color.WHITE);
+            iconId[2] = getResources().getDrawable(R.drawable.ic_phone, getTheme());
+            iconId[2].setTint(Color.WHITE);
+            iconId[3] = getResources().getDrawable(R.drawable.ic_address_book, getTheme());
+            iconId[3].setTint(Color.WHITE);
+            iconId[4] = getResources().getDrawable(R.drawable.ic_camera, getTheme());
+            iconId[4].setTint(Color.WHITE);
+            iconId[5] = getResources().getDrawable(R.drawable.ic_video_camera, getTheme());
+            iconId[5].setTint(Color.WHITE);
+            iconId[6] = getResources().getDrawable(R.drawable.ic_road, getTheme());
+            iconId[6].setTint(Color.WHITE);
+            iconId[7] = getResources().getDrawable(R.drawable.ic_map_marker, getTheme());
+            iconId[7].setTint(Color.WHITE);
+            iconId[8] = getResources().getDrawable(R.drawable.ic_microphone, getTheme());
+            iconId[8].setTint(Color.WHITE);
+        } else  {
+            iconId[0] = getResources().getDrawable(R.drawable.ic_map, getTheme());
+            iconId[0].setTint(Color.BLACK);
+            iconId[1] = getResources().getDrawable(R.drawable.ic_home, getTheme());
+            iconId[1].setTint(Color.BLACK);
+            iconId[2] = getResources().getDrawable(R.drawable.ic_phone, getTheme());
+            iconId[2].setTint(Color.BLACK);
+            iconId[3] = getResources().getDrawable(R.drawable.ic_address_book, getTheme());
+            iconId[3].setTint(Color.BLACK);
+            iconId[4] = getResources().getDrawable(R.drawable.ic_camera, getTheme());
+            iconId[4].setTint(Color.BLACK);
+            iconId[5] = getResources().getDrawable(R.drawable.ic_video_camera, getTheme());
+            iconId[5].setTint(Color.BLACK);
+            iconId[6] = getResources().getDrawable(R.drawable.ic_road, getTheme());
+            iconId[6].setTint(Color.BLACK);
+            iconId[7] = getResources().getDrawable(R.drawable.ic_map_marker, getTheme());
+            iconId[7].setTint(Color.BLACK);
+            iconId[8] = getResources().getDrawable(R.drawable.ic_microphone, getTheme());
+            iconId[8].setTint(Color.BLACK);
+        }
 
         TaskListView adapter = new
-                TaskListView(this, taskTitles, iconId);
+                TaskListView(this, taskTitles, iconId, itsDark);
         taskList=(ListView)findViewById(R.id.lv_tasks);
         taskList.setAdapter(adapter);
         taskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -137,7 +326,6 @@ public class TaskActivity extends AppCompatActivity {
                         break;
                     case 4:
                         //Take photo
-                        Log.d(TAG,"Take photo");
                         Intent photoIntent = new Intent(TaskActivity.this, PhotoService.class);
                         photoIntent.putExtra("camera",0);
                         startService(photoIntent);
@@ -236,52 +424,23 @@ public class TaskActivity extends AppCompatActivity {
         // End of Tasks
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1234) {
-            startService(new Intent(TaskActivity.this,
-                    VideoRecService.class));
-
+    public void updateColors(boolean itsDark){
+        ((MyApplication) this.getApplication()).setitsDark(itsDark);
+        LinearLayout lLayout = (LinearLayout) findViewById(R.id.layout_task);
+        if (itsDark) {
+            lLayout.setBackgroundColor(getResources().getColor(R.color.black));
+            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
+            navbarTitle.setTextColor(getResources().getColor(R.color.white));
+            backButton.setColorFilter(getResources().getColor(R.color.white));
+            forwardButton.setColorFilter(getResources().getColor(R.color.white));
+        } else {
+            lLayout.setBackgroundColor(getResources().getColor(R.color.white));
+            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
+            navbarTitle.setTextColor(getResources().getColor(R.color.black));
+            backButton.setColorFilter(getResources().getColor(R.color.black));
+            forwardButton.setColorFilter(getResources().getColor(R.color.black));
         }
     }
-
-    private void showActionBar(){
-        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflator.inflate(R.layout.actionbar_nav, null);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setDisplayShowHomeEnabled (false);
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setCustomView(v);
-
-        TextView navbarTitle;
-        navbarTitle = (TextView) findViewById(R.id.action_title);
-        navbarTitle.setText(R.string.quicktask_title);
-
-        backButton = (ImageButton) findViewById(R.id.action_back);
-        forwardButton = (ImageButton) findViewById(R.id.action_forward);
-        backButton.setOnClickListener(mClickListener);
-        forwardButton.setOnClickListener(mClickListener);
-    }
-
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            switch(v.getId()) {
-                case R.id.action_back:
-                    Intent backIntent = new Intent(TaskActivity.this, CompassActivity.class);
-                    startActivity(backIntent);
-                    break;
-                case R.id.action_forward:
-                    Intent forwardIntent = new Intent(TaskActivity.this, MainActivity.class);
-                    startActivity(forwardIntent);
-                    break;
-            }
-        }
-    };
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {

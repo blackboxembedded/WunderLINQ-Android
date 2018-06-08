@@ -5,7 +5,9 @@ package com.blackboxembedded.WunderLINQ;
  */
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +20,14 @@ public class TaskListView extends ArrayAdapter<String>{
     private final Activity context;
     private final String[] label;
     private final Drawable[] icon;
+    private final boolean itsDark;
     public TaskListView(Activity context,
-                      String[] label, Drawable[] icon) {
+                      String[] label, Drawable[] icon, boolean itsDark) {
         super(context, R.layout.list_task, label);
         this.context = context;
         this.label = label;
         this.icon = icon;
+        this.itsDark = itsDark;
 
     }
     @Override
@@ -34,6 +38,13 @@ public class TaskListView extends ArrayAdapter<String>{
         ImageView imageView = (ImageView) rowView.findViewById(R.id.iv_icon);
 
         txtTitle.setText(label[position]);
+        if (itsDark){
+            Log.d("TaskListView", "Setting to white");
+            txtTitle.setTextColor(Color.WHITE);
+        } else {
+            Log.d("TaskListView", "Setting to black");
+            txtTitle.setTextColor(Color.BLACK);
+        }
         imageView.setImageDrawable(icon[position]);
         return rowView;
     }

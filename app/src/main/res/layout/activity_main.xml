@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_main"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,6 +11,7 @@
         android:rowCount="4">
 
         <LinearLayout
+            android:id="@+id/layout_1"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_column="0"
@@ -27,7 +29,8 @@
                 android:text="@string/rdc_front_label"
                 android:textAlignment="center"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/textView1"
@@ -37,10 +40,12 @@
                 android:text="@string/blank_field"
                 android:textAlignment="center"
                 android:textSize="36sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_2"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_column="0"
@@ -58,7 +63,8 @@
                 android:text="@string/engine_temp_label"
                 android:textAlignment="center"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/textView2"
@@ -68,10 +74,12 @@
                 android:text="@string/blank_field"
                 android:textAlignment="center"
                 android:textSize="36sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_3"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_column="0"
@@ -89,7 +97,8 @@
                 android:text="@string/gear_label"
                 android:textAlignment="center"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/textView3"
@@ -100,10 +109,12 @@
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textSize="36sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_4"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_column="0"
@@ -121,7 +132,8 @@
                 android:text="@string/trip1_label"
                 android:textAlignment="center"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/textView4"
@@ -131,9 +143,11 @@
                 android:text="@string/blank_field"
                 android:textAlignment="center"
                 android:textSize="36sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/layout_5"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_column="1"
@@ -151,7 +165,8 @@
                 android:text="@string/rdc_rear_label"
                 android:textAlignment="center"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/textView5"
@@ -161,9 +176,11 @@
                 android:text="@string/blank_field"
                 android:textAlignment="center"
                 android:textSize="36sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/layout_6"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_column="1"
@@ -181,7 +198,8 @@
                 android:text="@string/ambient_temp_label"
                 android:textAlignment="center"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/textView6"
@@ -191,9 +209,11 @@
                 android:text="@string/blank_field"
                 android:textAlignment="center"
                 android:textSize="36sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/layout_7"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_column="1"
@@ -211,7 +231,8 @@
                 android:text="@string/odometer_label"
                 android:textAlignment="center"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/textView7"
@@ -221,9 +242,11 @@
                 android:text="@string/blank_field"
                 android:textAlignment="center"
                 android:textSize="36sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/layout_8"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_column="1"
@@ -241,7 +264,8 @@
                 android:text="@string/trip2_label"
                 android:textAlignment="center"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/textView8"
@@ -251,7 +275,8 @@
                 android:text="@string/blank_field"
                 android:textAlignment="center"
                 android:textSize="36sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
         </LinearLayout>
 
     </GridLayout>

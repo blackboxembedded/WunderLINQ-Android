@@ -46,12 +46,6 @@ public class SettingsActivity extends PreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.settings);
 
-            // Disable auto night mode option when no sensor is found
-            if (!MainActivity.hasSensor){
-                getPreferenceScreen().findPreference("prefAutoNightMode").setEnabled(false);
-                getPreferenceScreen().findPreference("prefAutoNightModeDelay").setEnabled(false);
-            }
-
             Preference button = findPreference("prefSendLog");
             button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override

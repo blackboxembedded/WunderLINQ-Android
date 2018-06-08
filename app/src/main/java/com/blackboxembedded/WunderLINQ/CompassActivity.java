@@ -3,6 +3,7 @@ package com.blackboxembedded.WunderLINQ;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -12,13 +13,13 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class CompassActivity extends AppCompatActivity {
@@ -27,14 +28,22 @@ public class CompassActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPrefs;
 
+    private ActionBar actionBar;
     private ImageButton backButton;
     private ImageButton forwardButton;
+    private TextView navbarTitle;
 
     private TextView compassTextView;
+
+    static boolean itsDark = false;
+    private long darkTimer = 0;
+    private long lightTimer = 0;
 
     SensorManager sensorManager;
     Sensor accelerometer;
     Sensor magnetometer;
+    Sensor lightSensor;
+
     /*
     * time smoothing constant for low-pass filter
     * 0 ≤ alpha ≤ 1 ; a smaller value basically means more smoothing
@@ -53,31 +62,40 @@ public class CompassActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         setContentView(R.layout.activity_compass);
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         showActionBar();
 
         compassTextView = (TextView) findViewById(R.id.compassTextView);
         compassTextView.setGravity(Gravity.CENTER | Gravity.CENTER_VERTICAL);
 
+        if (((MyApplication) this.getApplication()).getitsDark()){
+            updateColors(true);
+        } else {
+            updateColors(false);
+        }
+
         // Sensor Stuff
         sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-
-        // Compass
+        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         sensorManager.registerListener(sensorEventListener, accelerometer, SensorManager.SENSOR_DELAY_UI);
         sensorManager.registerListener(sensorEventListener, magnetometer, SensorManager.SENSOR_DELAY_UI);
-
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        if (((MyApplication) this.getApplication()).getitsDark()){
+            updateColors(true);
+        } else {
+            updateColors(false);
+        }
         sensorManager.registerListener(sensorEventListener, accelerometer, SensorManager.SENSOR_DELAY_UI);
         sensorManager.registerListener(sensorEventListener, magnetometer, SensorManager.SENSOR_DELAY_UI);
-        Log.d(TAG," CompassActivity In onResume");
+        sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
@@ -85,6 +103,7 @@ public class CompassActivity extends AppCompatActivity {
         super.onPause();
         sensorManager.unregisterListener(sensorEventListener, magnetometer);
         sensorManager.unregisterListener(sensorEventListener, accelerometer);
+        sensorManager.unregisterListener(sensorEventListener, lightSensor);
         Log.d(TAG,"CompassActivity In onPause");
     }
 
@@ -93,6 +112,7 @@ public class CompassActivity extends AppCompatActivity {
         super.onStop();
         sensorManager.unregisterListener(sensorEventListener, magnetometer);
         sensorManager.unregisterListener(sensorEventListener, accelerometer);
+        sensorManager.unregisterListener(sensorEventListener, lightSensor);
         Log.d(TAG,"CompassActivity In onStop");
     }
 
@@ -101,20 +121,20 @@ public class CompassActivity extends AppCompatActivity {
         super.onDestroy();
         sensorManager.unregisterListener(sensorEventListener, magnetometer);
         sensorManager.unregisterListener(sensorEventListener, accelerometer);
+        sensorManager.unregisterListener(sensorEventListener, lightSensor);
         Log.d(TAG,"CompassActivity In onDestroy");
     }
 
     private void showActionBar(){
         LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflator.inflate(R.layout.actionbar_nav, null);
-        ActionBar actionBar = getSupportActionBar();
+        actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled (false);
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setCustomView(v);
 
-        TextView navbarTitle;
         navbarTitle = (TextView) findViewById(R.id.action_title);
         navbarTitle.setText(R.string.compass_title);
 
@@ -195,8 +215,64 @@ public class CompassActivity extends AppCompatActivity {
                     }
                 }
             }
+            if (sharedPrefs.getBoolean("prefAutoNightMode", false) && (!sharedPrefs.getBoolean("prefNightMode", false))) {
+                int delay = (Integer.parseInt(sharedPrefs.getString("prefAutoNightModeDelay", "30")) * 1000);
+                if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
+                    float currentReading = event.values[0];
+                    double darkThreshold = 20.0;  // Light level to determine darkness
+                    if (currentReading < darkThreshold) {
+                        lightTimer = 0;
+                        if (darkTimer == 0) {
+                            darkTimer = System.currentTimeMillis();
+                        } else {
+                            long currentTime = System.currentTimeMillis();
+                            long duration = (currentTime - darkTimer);
+                            if ((duration >= delay) && (!itsDark)) {
+                                itsDark = true;
+                                Log.d(TAG, "Its dark");
+                                // Update colors
+                                updateColors(true);
+                            }
+                        }
+                    } else {
+                        darkTimer = 0;
+                        if (lightTimer == 0) {
+                            lightTimer = System.currentTimeMillis();
+                        } else {
+                            long currentTime = System.currentTimeMillis();
+                            long duration = (currentTime - lightTimer);
+                            if ((duration >= delay) && (itsDark)) {
+                                itsDark = false;
+                                Log.d(TAG, "Its light");
+                                // Update colors
+                                updateColors(false);
+                            }
+                        }
+                    }
+                }
+            }
         }
     };
+
+    public void updateColors(boolean itsDark){
+        ((MyApplication) this.getApplication()).setitsDark(itsDark);
+        LinearLayout lLayout = (LinearLayout) findViewById(R.id.layout_compass);
+        if (itsDark) {
+            lLayout.setBackgroundColor(getResources().getColor(R.color.black));
+            compassTextView.setTextColor(getResources().getColor(R.color.white));
+            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
+            navbarTitle.setTextColor(getResources().getColor(R.color.white));
+            backButton.setColorFilter(getResources().getColor(R.color.white));
+            forwardButton.setColorFilter(getResources().getColor(R.color.white));
+        } else {
+            lLayout.setBackgroundColor(getResources().getColor(R.color.white));
+            compassTextView.setTextColor(getResources().getColor(R.color.black));
+            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
+            navbarTitle.setTextColor(getResources().getColor(R.color.black));
+            backButton.setColorFilter(getResources().getColor(R.color.black));
+            forwardButton.setColorFilter(getResources().getColor(R.color.black));
+        }
+    }
 
     //Normalize a degree from 0 to 360 instead of -180 to 180
     private int normalizeDegrees(double rads){

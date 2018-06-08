@@ -4,8 +4,16 @@ import android.app.Application;
 
 public class MyApplication extends Application {
 
+    private boolean itsDark;
     private boolean videoRecording;
     private boolean tripRecording;
+
+    public boolean getitsDark() {
+        return itsDark;
+    }
+    public void setitsDark(boolean itsDark) {
+        this.itsDark = itsDark;
+    }
 
     public boolean getVideoRecording() {
         return videoRecording;

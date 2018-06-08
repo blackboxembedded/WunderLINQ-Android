@@ -5,19 +5,26 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.MediaMetadata;
 import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
 import android.media.session.PlaybackState;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -30,6 +37,7 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +47,8 @@ public class MusicActivity extends AppCompatActivity {
 
     public final static String TAG = "WunderLINQ";
 
+    private ActionBar actionBar;
+    private TextView navbarTitle;
     private ImageButton mPrevButton;
     private ImageButton mPlayPauseButton;
     private ImageButton mNextButton;
@@ -53,6 +63,15 @@ public class MusicActivity extends AppCompatActivity {
     private MediaController.TransportControls controls;
     private MediaController controller;
     private MediaMetadata metaData;
+
+    private SharedPreferences sharedPrefs;
+
+    SensorManager sensorManager;
+    Sensor lightSensor;
+
+    static boolean itsDark = false;
+    private long darkTimer = 0;
+    private long lightTimer = 0;
 
     private Handler mHandler = new Handler();
 
@@ -117,12 +136,19 @@ public class MusicActivity extends AppCompatActivity {
 
         mArtwork = (ImageView)findViewById(R.id.album_art);
 
-
         mPrevButton.setOnClickListener(mClickListener);
         mNextButton.setOnClickListener(mClickListener);
         mPlayPauseButton.setOnClickListener(mClickListener);
 
         showActionBar();
+
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (((MyApplication) this.getApplication()).getitsDark()){
+            updateColors(true);
+        } else {
+            updateColors(false);
+        }
 
         // Check if we have permissions
         if (Settings.Secure.getString(this.getContentResolver(),"enabled_notification_listeners").contains(getApplicationContext().getPackageName()))
@@ -141,11 +167,21 @@ public class MusicActivity extends AppCompatActivity {
             // Need permissions to read notifications
             requestPermissions();
         }
+        // Sensor Stuff
+        sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
+        if (((MyApplication) this.getApplication()).getitsDark()){
+            updateColors(true);
+        } else {
+            updateColors(false);
+        }
         // Need permissions to read notifications
         if (Settings.Secure.getString(this.getContentResolver(),"enabled_notification_listeners").contains(getApplicationContext().getPackageName())) {
             alertDiagUp = false;
@@ -156,6 +192,7 @@ public class MusicActivity extends AppCompatActivity {
                 requestPermissions();
             }
         }
+        sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
@@ -163,31 +200,33 @@ public class MusicActivity extends AppCompatActivity {
         Log.d("Musicacvitity","onpause");
         super.onPause();
         mHandler.removeCallbacks(mUpdateMetaData);
+        sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     @Override
     public void onStop() {
         super.onStop();
         mHandler.removeCallbacks(mUpdateMetaData);
+        sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         mHandler.removeCallbacks(mUpdateMetaData);
+        sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     private void showActionBar(){
         LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflator.inflate(R.layout.actionbar_nav, null);
-        ActionBar actionBar = getSupportActionBar();
+        actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled (false);
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setCustomView(v);
 
-        TextView navbarTitle;
         navbarTitle = (TextView) findViewById(R.id.action_title);
         navbarTitle.setText(R.string.music_title);
 
@@ -276,6 +315,79 @@ public class MusicActivity extends AppCompatActivity {
             Log.d(TAG, "No permissions to control music player");
         }
     }
+    // Listens for light sensor events
+    private final SensorEventListener sensorEventListener
+            = new SensorEventListener(){
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            // Do something
+        }
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            if (sharedPrefs.getBoolean("prefAutoNightMode", false) && (!sharedPrefs.getBoolean("prefNightMode", false))) {
+                int delay = (Integer.parseInt(sharedPrefs.getString("prefAutoNightModeDelay", "30")) * 1000);
+                if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
+                    float currentReading = event.values[0];
+                    double darkThreshold = 20.0;  // Light level to determine darkness
+                    if (currentReading < darkThreshold) {
+                        lightTimer = 0;
+                        if (darkTimer == 0) {
+                            darkTimer = System.currentTimeMillis();
+                        } else {
+                            long currentTime = System.currentTimeMillis();
+                            long duration = (currentTime - darkTimer);
+                            if ((duration >= delay) && (!itsDark)) {
+                                itsDark = true;
+                                Log.d(TAG, "Its dark");
+                                // Update colors
+                                updateColors(true);
+                            }
+                        }
+                    } else {
+                        darkTimer = 0;
+                        if (lightTimer == 0) {
+                            lightTimer = System.currentTimeMillis();
+                        } else {
+                            long currentTime = System.currentTimeMillis();
+                            long duration = (currentTime - lightTimer);
+                            if ((duration >= delay) && (itsDark)) {
+                                itsDark = false;
+                                Log.d(TAG, "Its light");
+                                // Update colors
+                                updateColors(false);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    public void updateColors(boolean itsDark){
+        ((MyApplication) this.getApplication()).setitsDark(itsDark);
+        RelativeLayout lLayout = (RelativeLayout) findViewById(R.id.layout_music);
+        if (itsDark) {
+            lLayout.setBackgroundColor(getResources().getColor(R.color.black));
+            mTitleText.setTextColor(getResources().getColor(R.color.white));
+            mAlbumText.setTextColor(getResources().getColor(R.color.white));
+            mArtistText.setTextColor(getResources().getColor(R.color.white));
+            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
+            navbarTitle.setTextColor(getResources().getColor(R.color.white));
+            backButton.setColorFilter(getResources().getColor(R.color.white));
+            forwardButton.setColorFilter(getResources().getColor(R.color.white));
+        } else {
+            lLayout.setBackgroundColor(getResources().getColor(R.color.white));
+            mTitleText.setTextColor(getResources().getColor(R.color.black));
+            mAlbumText.setTextColor(getResources().getColor(R.color.black));
+            mArtistText.setTextColor(getResources().getColor(R.color.black));
+            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
+            navbarTitle.setTextColor(getResources().getColor(R.color.black));
+            backButton.setColorFilter(getResources().getColor(R.color.black));
+            forwardButton.setColorFilter(getResources().getColor(R.color.black));
+        }
+    }
 
     public static Bitmap scaleBitmap(Bitmap bitmap, int wantedWidth, int wantedHeight) {
         Bitmap output = Bitmap.createBitmap(wantedWidth, wantedHeight, Config.ARGB_8888);
@@ -303,5 +415,4 @@ public class MusicActivity extends AppCompatActivity {
                 return super.onKeyUp(keyCode, event);
         }
     }
-
 }

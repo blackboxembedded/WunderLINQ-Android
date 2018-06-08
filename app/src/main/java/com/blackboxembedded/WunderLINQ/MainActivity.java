@@ -22,6 +22,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -33,6 +34,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -42,6 +44,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,8 +63,32 @@ public class MainActivity extends AppCompatActivity {
 
     public final static String TAG = "WunderLINQ";
 
+    private ActionBar actionBar;
+    private ImageButton backButton;
+    private ImageButton forwardButton;
+    private ImageButton settingsButton;
+    private ImageButton dataButton;
     private ImageButton faultButton;
     private ImageButton btButton;
+    private TextView navbarTitle;
+
+    private TextView textView1;
+    private TextView textView2;
+    private TextView textView3;
+    private TextView textView4;
+    private TextView textView5;
+    private TextView textView6;
+    private TextView textView7;
+    private TextView textView8;
+    private TextView textView1Label;
+    private TextView textView2Label;
+    private TextView textView3Label;
+    private TextView textView4Label;
+    private TextView textView5Label;
+    private TextView textView6Label;
+    private TextView textView7Label;
+    private TextView textView8Label;
+    private TextView textViewAppName;
 
     private SharedPreferences sharedPrefs;
 
@@ -71,6 +98,9 @@ public class MainActivity extends AppCompatActivity {
     private long lightTimer = 0;
 
     private static Context mContext;
+
+    private SensorManager sensorManager;
+    private Sensor lightSensor;
 
     private Intent gattServiceIntent;
     public static BluetoothAdapter mBluetoothAdapter;
@@ -101,10 +131,10 @@ public class MainActivity extends AppCompatActivity {
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        if (sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
-            setContentView(R.layout.activity_main);
-        } else {
+        if (sharedPrefs.getString("prefMotorcycleType", "1").equals("0")){
             setContentView(R.layout.activity_main_other);
+        } else {
+            setContentView(R.layout.activity_main);
         }
 
 
@@ -112,20 +142,24 @@ public class MainActivity extends AppCompatActivity {
 
         showActionBar();
 
+        if (((MyApplication) this.getApplication()).getitsDark()){
+            updateColors(true);
+        } else {
+            updateColors(false);
+        }
+        if (sharedPrefs.getBoolean("prefNightMode", false)){
+            updateColors(true);
+        } else {
+            updateColors(false);
+        }
+
         mHandler = new Handler();
 
         // Sensor Stuff
-        SensorManager sensorManager
-                = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-        Sensor lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 
-        // Light
-        if (lightSensor == null){
-            Log.d(TAG,"Light sensor not found");
-        }else {
-            sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
-            hasSensor = true;
-        }
+        sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         // Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
@@ -260,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("LAST_LAUNCH_DATE", currentDate);
             editor.commit();
         }
-        if (sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
+        if (!sharedPrefs.getString("prefMotorcycleType", "1").equals("0")){
             updateDisplay();
         }
     }
@@ -268,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
     private void showActionBar(){
         LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflator.inflate(R.layout.actionbar_nav_main, null);
-        ActionBar actionBar = getSupportActionBar();
+        actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled (false);
         actionBar.setDisplayShowCustomEnabled(true);
@@ -276,14 +310,13 @@ public class MainActivity extends AppCompatActivity {
 
         actionBar.setCustomView(v);
 
-        ImageButton backButton = (ImageButton) findViewById(R.id.action_back);
-        ImageButton forwardButton = (ImageButton) findViewById(R.id.action_forward);
-        ImageButton settingsButton = (ImageButton) findViewById(R.id.action_settings);
-        ImageButton dataButton = (ImageButton) findViewById(R.id.action_data);
+        backButton = (ImageButton) findViewById(R.id.action_back);
+        forwardButton = (ImageButton) findViewById(R.id.action_forward);
+        settingsButton = (ImageButton) findViewById(R.id.action_settings);
+        dataButton = (ImageButton) findViewById(R.id.action_data);
         faultButton = (ImageButton) findViewById(R.id.action_faults);
         btButton = (ImageButton) findViewById(R.id.action_connect);
 
-        TextView navbarTitle;
         navbarTitle = (TextView) findViewById(R.id.action_title);
         navbarTitle.setText(R.string.main_title);
 
@@ -352,7 +385,7 @@ public class MainActivity extends AppCompatActivity {
                                 itsDark = true;
                                 Log.d(TAG, "Its dark");
                                 // Update colors
-                                updateColors();
+                                updateColors(true);
                             }
                         }
                     } else {
@@ -366,7 +399,7 @@ public class MainActivity extends AppCompatActivity {
                                 itsDark = false;
                                 Log.d(TAG, "Its light");
                                 // Update colors
-                                updateColors();
+                                updateColors(false);
                             }
                         }
                     }
@@ -375,8 +408,128 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    public void updateColors(){
-        //TODO: change colors for night mode
+    public void updateColors(boolean itsDark){
+        Log.d(TAG,"In updateColors");
+        ((MyApplication) this.getApplication()).setitsDark(itsDark);
+        if (!sharedPrefs.getString("prefMotorcycleType", "1").equals("0")){
+            LinearLayout lLayout = (LinearLayout) findViewById(R.id.layout_main);
+            textView1 = (TextView) findViewById(R.id.textView1);
+            textView2 = (TextView) findViewById(R.id.textView2);
+            textView3 = (TextView) findViewById(R.id.textView3);
+            textView4 = (TextView) findViewById(R.id.textView4);
+            textView5 = (TextView) findViewById(R.id.textView5);
+            textView6 = (TextView) findViewById(R.id.textView6);
+            textView7 = (TextView) findViewById(R.id.textView7);
+            textView8 = (TextView) findViewById(R.id.textView8);
+            textView1Label = (TextView) findViewById(R.id.textView1label);
+            textView2Label = (TextView) findViewById(R.id.textView2label);
+            textView3Label = (TextView) findViewById(R.id.textView3label);
+            textView4Label = (TextView) findViewById(R.id.textView4label);
+            textView5Label = (TextView) findViewById(R.id.textView5label);
+            textView6Label = (TextView) findViewById(R.id.textView6label);
+            textView7Label = (TextView) findViewById(R.id.textView7label);
+            textView8Label = (TextView) findViewById(R.id.textView8label);
+            LinearLayout layout1 = (LinearLayout) findViewById(R.id.layout_1);
+            LinearLayout layout2 = (LinearLayout) findViewById(R.id.layout_2);
+            LinearLayout layout3 = (LinearLayout) findViewById(R.id.layout_3);
+            LinearLayout layout4 = (LinearLayout) findViewById(R.id.layout_4);
+            LinearLayout layout5 = (LinearLayout) findViewById(R.id.layout_5);
+            LinearLayout layout6 = (LinearLayout) findViewById(R.id.layout_6);
+            LinearLayout layout7 = (LinearLayout) findViewById(R.id.layout_7);
+            LinearLayout layout8 = (LinearLayout) findViewById(R.id.layout_8);
+            if (itsDark) {
+                Log.d(TAG,"Settings things for dark");
+                lLayout.setBackgroundColor(getResources().getColor(R.color.black));
+                actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
+                navbarTitle.setTextColor(getResources().getColor(R.color.white));
+                backButton.setColorFilter(getResources().getColor(R.color.white));
+                forwardButton.setColorFilter(getResources().getColor(R.color.white));
+                dataButton.setColorFilter(getResources().getColor(R.color.white));
+                settingsButton.setColorFilter(getResources().getColor(R.color.white));
+                textView1.setTextColor(getResources().getColor(R.color.white));
+                textView2.setTextColor(getResources().getColor(R.color.white));
+                textView3.setTextColor(getResources().getColor(R.color.white));
+                textView4.setTextColor(getResources().getColor(R.color.white));
+                textView5.setTextColor(getResources().getColor(R.color.white));
+                textView6.setTextColor(getResources().getColor(R.color.white));
+                textView7.setTextColor(getResources().getColor(R.color.white));
+                textView8.setTextColor(getResources().getColor(R.color.white));
+                textView1Label.setTextColor(getResources().getColor(R.color.white));
+                textView2Label.setTextColor(getResources().getColor(R.color.white));
+                textView3Label.setTextColor(getResources().getColor(R.color.white));
+                textView4Label.setTextColor(getResources().getColor(R.color.white));
+                textView5Label.setTextColor(getResources().getColor(R.color.white));
+                textView6Label.setTextColor(getResources().getColor(R.color.white));
+                textView7Label.setTextColor(getResources().getColor(R.color.white));
+                textView8Label.setTextColor(getResources().getColor(R.color.white));
+                layout1.setBackground(getResources().getDrawable(R.drawable.border_white));
+                layout2.setBackground(getResources().getDrawable(R.drawable.border_white));
+                layout3.setBackground(getResources().getDrawable(R.drawable.border_white));
+                layout4.setBackground(getResources().getDrawable(R.drawable.border_white));
+                layout5.setBackground(getResources().getDrawable(R.drawable.border_white));
+                layout6.setBackground(getResources().getDrawable(R.drawable.border_white));
+                layout7.setBackground(getResources().getDrawable(R.drawable.border_white));
+                layout8.setBackground(getResources().getDrawable(R.drawable.border_white));
+            } else {
+                Log.d(TAG,"Settings things for light");
+                lLayout.setBackgroundColor(getResources().getColor(R.color.white));
+                actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
+                navbarTitle.setTextColor(getResources().getColor(R.color.black));
+                backButton.setColorFilter(getResources().getColor(R.color.black));
+                forwardButton.setColorFilter(getResources().getColor(R.color.black));
+                dataButton.setColorFilter(getResources().getColor(R.color.black));
+                settingsButton.setColorFilter(getResources().getColor(R.color.black));
+                textView1.setTextColor(getResources().getColor(R.color.black));
+                textView2.setTextColor(getResources().getColor(R.color.black));
+                textView3.setTextColor(getResources().getColor(R.color.black));
+                textView4.setTextColor(getResources().getColor(R.color.black));
+                textView5.setTextColor(getResources().getColor(R.color.black));
+                textView6.setTextColor(getResources().getColor(R.color.black));
+                textView7.setTextColor(getResources().getColor(R.color.black));
+                textView8.setTextColor(getResources().getColor(R.color.black));
+                textView1Label.setTextColor(getResources().getColor(R.color.black));
+                textView2Label.setTextColor(getResources().getColor(R.color.black));
+                textView3Label.setTextColor(getResources().getColor(R.color.black));
+                textView4Label.setTextColor(getResources().getColor(R.color.black));
+                textView5Label.setTextColor(getResources().getColor(R.color.black));
+                textView6Label.setTextColor(getResources().getColor(R.color.black));
+                textView7Label.setTextColor(getResources().getColor(R.color.black));
+                textView8Label.setTextColor(getResources().getColor(R.color.black));
+                layout1.setBackground(getResources().getDrawable(R.drawable.border));
+                layout2.setBackground(getResources().getDrawable(R.drawable.border));
+                layout3.setBackground(getResources().getDrawable(R.drawable.border));
+                layout4.setBackground(getResources().getDrawable(R.drawable.border));
+                layout5.setBackground(getResources().getDrawable(R.drawable.border));
+                layout6.setBackground(getResources().getDrawable(R.drawable.border));
+                layout7.setBackground(getResources().getDrawable(R.drawable.border));
+                layout8.setBackground(getResources().getDrawable(R.drawable.border));
+            }
+        } else {
+            ConstraintLayout cLayout = (ConstraintLayout) findViewById(R.id.layout_main_other);
+            if (itsDark) {
+                Log.d(TAG,"Settings things for dark");
+                cLayout.setBackgroundColor(getResources().getColor(R.color.black));
+                actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
+                navbarTitle.setTextColor(getResources().getColor(R.color.white));
+                backButton.setColorFilter(getResources().getColor(R.color.white));
+                forwardButton.setColorFilter(getResources().getColor(R.color.white));
+                dataButton.setColorFilter(getResources().getColor(R.color.white));
+                settingsButton.setColorFilter(getResources().getColor(R.color.white));
+                textViewAppName = (TextView) findViewById(R.id.tvAppName);
+                textViewAppName.setTextColor(getResources().getColor(R.color.white));
+            } else {
+                Log.d(TAG,"Settings things for light");
+                cLayout.setBackgroundColor(getResources().getColor(R.color.white));
+                actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
+                navbarTitle.setTextColor(getResources().getColor(R.color.black));
+                backButton.setColorFilter(getResources().getColor(R.color.black));
+                forwardButton.setColorFilter(getResources().getColor(R.color.black));
+                dataButton.setColorFilter(getResources().getColor(R.color.black));
+                settingsButton.setColorFilter(getResources().getColor(R.color.black));
+                textViewAppName = (TextView) findViewById(R.id.tvAppName);
+                textViewAppName.setTextColor(getResources().getColor(R.color.black));
+            }
+        }
     }
 
     @Override
@@ -393,17 +546,33 @@ public class MainActivity extends AppCompatActivity {
         } else {
             setupBLE();
         }
+        sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        if (((MyApplication) this.getApplication()).getitsDark()){
+            updateColors(true);
+        } else {
+            updateColors(false);
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unregisterReceiver(mGattUpdateReceiver);
+        unregisterReceiver(mBondingBroadcast);
         try {
             unbindService(mServiceConnection);
         } catch (IllegalArgumentException e){
 
         }
         mBluetoothLeService = null;
+        sensorManager.unregisterListener(sensorEventListener, lightSensor);
+    }
+
+    @Override
+    public void onStop() {
+        Log.d(TAG,"In onStop");
+        super.onStop();
+        sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     @Override
@@ -412,6 +581,7 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         unregisterReceiver(mGattUpdateReceiver);
         unregisterReceiver(mBondingBroadcast);
+        sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     @Override
@@ -421,10 +591,18 @@ public class MainActivity extends AppCompatActivity {
             finish();
             return;
         } else if (requestCode == SETTINGS_CHECK) {
-            if (sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
-                setContentView(R.layout.activity_main);
-            } else {
+            if (sharedPrefs.getString("prefMotorcycleType", "1").equals("0")){
                 setContentView(R.layout.activity_main_other);
+            } else {
+                setContentView(R.layout.activity_main);
+            }
+            if (!sharedPrefs.getBoolean("prefAutoNightMode", false)){
+                updateColors(false);
+            }
+            if (sharedPrefs.getBoolean("prefNightMode", false)){
+                updateColors(true);
+            } else {
+                updateColors(false);
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -566,7 +744,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 Log.d(TAG,"GATT_DISCONNECTED");
                 Data.clear();
-                if (sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
+                if (!sharedPrefs.getString("prefMotorcycleType", "1").equals("0")){
                     updateDisplay();
                 }
                 btButton.setImageResource(R.drawable.ic_bluetooth_off);
@@ -576,7 +754,7 @@ public class MainActivity extends AppCompatActivity {
                 btButton.setImageResource(R.drawable.ic_bluetooth_on);
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 Log.d(TAG,"GATT_DATA_AVAILABLE");
-                if (sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
+                if (!sharedPrefs.getString("prefMotorcycleType", "1").equals("0")){
                     updateDisplay();
                 }
             }
@@ -703,14 +881,14 @@ public class MainActivity extends AppCompatActivity {
 
     // Update Display
     private void updateDisplay(){
-        TextView textView1 = (TextView) findViewById(R.id.textView1);
-        TextView textView2 = (TextView) findViewById(R.id.textView2);
-        TextView textView3 = (TextView) findViewById(R.id.textView3);
-        TextView textView4 = (TextView) findViewById(R.id.textView4);
-        TextView textView5 = (TextView) findViewById(R.id.textView5);
-        TextView textView6 = (TextView) findViewById(R.id.textView6);
-        TextView textView7 = (TextView) findViewById(R.id.textView7);
-        TextView textView8 = (TextView) findViewById(R.id.textView8);
+        textView1 = (TextView) findViewById(R.id.textView1);
+        textView2 = (TextView) findViewById(R.id.textView2);
+        textView3 = (TextView) findViewById(R.id.textView3);
+        textView4 = (TextView) findViewById(R.id.textView4);
+        textView5 = (TextView) findViewById(R.id.textView5);
+        textView6 = (TextView) findViewById(R.id.textView6);
+        textView7 = (TextView) findViewById(R.id.textView7);
+        textView8 = (TextView) findViewById(R.id.textView8);
         //Check for active faults
         FaultStatus faults;
         faults = (new FaultStatus(this));

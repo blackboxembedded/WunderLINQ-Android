@@ -10,7 +10,8 @@
         android:scaleType="centerInside"
         android:src="@drawable/ic_chevron_left"
         android:paddingTop="4dp"
-        android:layout_alignParentLeft="true"/>
+        android:layout_alignParentLeft="true"
+        android:focusable="false"/>
 
     <ImageButton
         android:id="@+id/action_forward"
@@ -20,7 +21,8 @@
         android:scaleType="centerInside"
         android:src="@drawable/ic_chevron_right"
         android:paddingTop="4dp"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+        android:focusable="false"/>
 
     <TextView
         android:id="@+id/action_title"
@@ -31,5 +33,6 @@
         android:gravity="center"
         android:text="Title"
         android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@color/black"/>
 </RelativeLayout>

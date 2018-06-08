@@ -47,7 +47,8 @@
                         android:layout_weight="1"
                         android:text="@string/waypoint_view_tv_date_label"
                         android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
 
                     <TextView
                         android:id="@+id/tvDate"
@@ -57,7 +58,8 @@
                         android:text=""
                         android:textAlignment="viewStart"
                         android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -72,7 +74,8 @@
                         android:layout_weight="1"
                         android:text="@string/trip_view_tv_distance"
                         android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
 
                     <TextView
                         android:id="@+id/tvDistance"
@@ -82,7 +85,8 @@
                         android:text=""
                         android:textAlignment="viewStart"
                         android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
 
                 </LinearLayout>
 
@@ -98,7 +102,8 @@
                         android:layout_weight="1"
                         android:text="@string/trip_view_tv_duration"
                         android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
 
 
                     <TextView
@@ -109,7 +114,8 @@
                         android:text=""
                         android:textAlignment="viewStart"
                         android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
 
                 </LinearLayout>
 
@@ -125,7 +131,8 @@
                         android:layout_weight="1"
                         android:text="@string/trip_view_tv_speed"
                         android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
 
                     <TextView
                         android:id="@+id/tvSpeed"
@@ -135,7 +142,8 @@
                         android:text=""
                         android:textAlignment="viewStart"
                         android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -150,7 +158,8 @@
                         android:layout_weight="1"
                         android:text="@string/trip_view_tv_shifts"
                         android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
 
                     <TextView
                         android:id="@+id/tvGearShifts"
@@ -160,7 +169,8 @@
                         android:text=""
                         android:textAlignment="viewStart"
                         android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -175,7 +185,8 @@
                         android:layout_weight="1"
                         android:text="@string/trip_view_tv_brakes"
                         android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
 
                     <TextView
                         android:id="@+id/tvBrakes"
@@ -185,7 +196,8 @@
                         android:text=""
                         android:textAlignment="viewStart"
                         android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -200,7 +212,8 @@
                         android:layout_weight="1"
                         android:text="@string/trip_view_tv_ambient"
                         android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
 
                     <TextView
                         android:id="@+id/tvAmbient"
@@ -210,7 +223,8 @@
                         android:text=""
                         android:textAlignment="viewStart"
                         android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -225,7 +239,8 @@
                         android:layout_weight="1"
                         android:text="@string/trip_view_tv_engine"
                         android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
 
                     <TextView
                         android:id="@+id/tvEngine"
@@ -235,7 +250,8 @@
                         android:text=""
                         android:textAlignment="viewStart"
                         android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
                 </LinearLayout>
 
             </LinearLayout>

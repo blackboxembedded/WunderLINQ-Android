@@ -12,6 +12,7 @@
             android:id="@+id/tv_label"
             android:layout_width="wrap_content"
             android:layout_height="90dp"
+            android:paddingStart="10dp"
             android:gravity="center_vertical"
             android:text="test label"
             android:textAppearance="@android:style/TextAppearance.Material.Large" />
