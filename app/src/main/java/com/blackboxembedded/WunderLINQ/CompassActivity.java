@@ -206,7 +206,7 @@ public class CompassActivity extends AppCompatActivity {
                     int direction = filterChange(normalizeDegrees(Math.toDegrees(orientation[0])));
                     if((int)direction != (int)lastDirection) {
                         lastDirection = (int) direction;
-                        bearing = String.valueOf(lastDirection);
+                        bearing = String.valueOf(lastDirection) + "°";
                         if (sharedPrefs.getString("prefBearing", "0").contains("1")) {
                             if (lastDirection > 331 || lastDirection <= 28) {
                                 bearing = "N";
