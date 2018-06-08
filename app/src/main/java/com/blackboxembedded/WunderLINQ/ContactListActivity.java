@@ -216,7 +216,9 @@ public class ContactListActivity extends AppCompatActivity {
             // Android version is lesser than 6.0 or the permission is already granted.
 
             //TODO: Maybe add preference to sort by last, first or display name
-            Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null,null,
+            Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI.buildUpon()
+                            .appendQueryParameter(ContactsContract.REMOVE_DUPLICATE_ENTRIES, "1")
+                            .build(), null,null,null,
                     ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
 
             int count = phones.getCount();
@@ -231,7 +233,7 @@ public class ContactListActivity extends AppCompatActivity {
                 Integer numberType = phones.getInt(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
                 if ((numberType == 1) || numberType == 2 || numberType == 3) {
                     String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                    String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                    String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));//Log.d("ContactList",name + " (" + typeIDtoString(numberType) + ")" + phoneNumber+ " : "+ phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)));
                     contacts[index] = name + " (" + typeIDtoString(numberType) + ")";
                     phoneNumbers[index] = phoneNumber;
                     Drawable photo;
