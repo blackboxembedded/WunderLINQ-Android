@@ -17,7 +17,8 @@
         android:padding="15dp"
         android:text="@string/ota_file_list"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@color/black"/>
 
     <View
         android:layout_width="match_parent"
@@ -47,7 +48,8 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:visibility="invisible"
-            android:text="@string/ota_upgrade"/>
+            android:text="@string/ota_upgrade"
+            android:textColor="@color/black"/>
 
         <Button
             android:id="@+id/next_button"
@@ -56,7 +58,8 @@
             android:layout_weight="1"
             android:layout_gravity="center"
             android:visibility="gone"
-            android:text="@string/ota_next"/>
+            android:text="@string/ota_next"
+            android:textColor="@color/black"/>
     </LinearLayout>
 
 </LinearLayout>

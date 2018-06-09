@@ -16,7 +16,8 @@
         android:text="@string/ota_list"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="@dimen/find_textsize"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@color/black"/>
 
 
     <Button
@@ -30,7 +31,9 @@
         android:padding="@dimen/padding_child_ten"
         android:text="@string/ota_list_app_download"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="@dimen/textsize_tiny" />
+        android:textSize="@dimen/textsize_tiny"
+        android:textColor="@color/black"
+        />
 
 
     <Button
@@ -45,7 +48,8 @@
         android:text="@string/ota_list_app_stack_down_comb"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="@dimen/textsize_tiny"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:textColor="@color/black"/>
 
 
     <Button
@@ -60,7 +64,8 @@
         android:text="@string/ota_list_app_stack_down_sep"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="@dimen/textsize_tiny"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:textColor="@color/black"/>
 
     <TextView
         android:id="@+id/file_status"
@@ -71,7 +76,8 @@
         android:padding="10dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textSize="@dimen/textsize_tiny"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@color/black"/>
 
     <RelativeLayout
         android:id="@+id/progress_bar_top_rel_lay"
@@ -142,6 +148,7 @@
         android:layout_weight="1"
         android:text="@string/ota_stop"
         android:textSize="@dimen/textsize_very_small"
+        android:textColor="@color/black"
         android:visibility="invisible" />
 
 </LinearLayout>
