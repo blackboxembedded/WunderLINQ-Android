@@ -35,14 +35,14 @@
 package com.blackboxembedded.WunderLINQ.OTAFirmwareUpdate;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -50,24 +50,23 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.os.AsyncTask;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.io.InputStream;
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
+import com.blackboxembedded.WunderLINQ.OTAFirmwareUpdate.FirmwareXMLParser.Entry;
+import com.blackboxembedded.WunderLINQ.R;
 
 import org.xmlpull.v1.XmlPullParserException;
 
-import com.blackboxembedded.WunderLINQ.R;
-import com.blackboxembedded.WunderLINQ.OTAFirmwareUpdate.FirmwareXMLParser.Entry;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -144,11 +143,11 @@ public class OTAFilesListingActivity extends Activity {
                         return;
                     }
 
-                    String firmwareRoot = Environment.getExternalStorageDirectory() + "/WunderLINQ/firmware/";
+                    String cacheDir = OTAFilesListingActivity.this.getCacheDir().getPath();
                     entries = firmwareXMLParser.parse(urlConnection.getInputStream());
                     for (Entry entry : entries) {
                         OTAFileModel fileModel = new OTAFileModel(entry.name,
-                                firmwareRoot + entry.name + ".fw", false, firmwareRoot, entry.file, entry.description );
+                                cacheDir + entry.name + ".fw", false, cacheDir, entry.file, entry.description );
                         mArrayListFiles.add(fileModel);
                         mFirmwareAdapter.addFiles(mArrayListFiles);
                         runOnUiThread(new Runnable() {
@@ -187,8 +186,8 @@ public class OTAFilesListingActivity extends Activity {
 
                 String remoteFile = mArrayListFiles.get(position).getFileRemote();
 
-                File root = new File(mArrayListFiles.get(position).getFilePath());
-                if(!root.exists()){
+                File file = new File(mArrayListFiles.get(position).getFilePath());
+                if(!file.exists()){
                     Log.d(TAG, "Not downloaded yet: " + mArrayListFiles.get(position).getFilePath());
                     new DownloadFileFromURL().execute(remoteFile);
                 } else {
@@ -376,17 +375,9 @@ public class OTAFilesListingActivity extends Activity {
                 InputStream input = new BufferedInputStream(url.openStream(),
                         8192);
 
-                File root = new File(Environment.getExternalStorageDirectory(), "/WunderLINQ/firmware/");
-                if(!root.exists()){
-                    if(!root.mkdirs()){
-                        Log.d(TAG,"Unable to create directory: " + root);
-                    }
-                }
-
                 // Output stream
-                OutputStream output = new FileOutputStream(Environment
-                        .getExternalStorageDirectory().toString()
-                        + "/WunderLINQ/firmware/" + file);
+                OutputStream output = new FileOutputStream(OTAFilesListingActivity.this.getCacheDir().toString()
+                        + file);
 
                 byte data[] = new byte[1024];
 
