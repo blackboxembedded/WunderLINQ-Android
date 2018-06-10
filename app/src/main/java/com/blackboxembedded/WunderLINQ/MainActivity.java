@@ -845,6 +845,7 @@ public class MainActivity extends AppCompatActivity {
                 btButton.setColorFilter(getResources().getColor(R.color.motorrad_blue));
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 //Log.d(TAG,"GATT_DATA_AVAILABLE");
+                btButton.setColorFilter(getResources().getColor(R.color.motorrad_blue));
                 if (!sharedPrefs.getString("prefMotorcycleType", "1").equals("0")){
                     updateDisplay();
                 }
