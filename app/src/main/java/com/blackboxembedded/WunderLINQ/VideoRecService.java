@@ -1,20 +1,19 @@
 package com.blackboxembedded.WunderLINQ;
-import java.io.File;
-import java.util.Date;
-import android.app.Service;
+
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Intent;
-import android.content.Context;
+import android.app.Service;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Build;
-import android.os.IBinder;
 import android.os.Environment;
+import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.v4.app.NotificationCompat;
 import android.text.format.DateFormat;
@@ -25,6 +24,9 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+
+import java.io.File;
+import java.util.Date;
 
 public class VideoRecService extends Service implements SurfaceHolder.Callback {
 
@@ -39,7 +41,6 @@ public class VideoRecService extends Service implements SurfaceHolder.Callback {
 
     @Override
     public void onCreate() {
-        ((MyApplication) this.getApplication()).setVideoRecording(true);
         recordingFile = new File(Environment.getExternalStorageDirectory()+"/WunderLINQ/videos/WunderLINQ-Video-"+
                 DateFormat.format("yyyy-MM-dd_kk-mm-ss", new Date().getTime())+
                 ".mp4");
@@ -111,6 +112,7 @@ public class VideoRecService extends Service implements SurfaceHolder.Callback {
         mediaRecorder = new MediaRecorder();
         camera.unlock();
 
+
         mediaRecorder.setPreviewDisplay(surfaceHolder.getSurface());
         mediaRecorder.setCamera(camera);
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
@@ -129,15 +131,17 @@ public class VideoRecService extends Service implements SurfaceHolder.Callback {
         try { mediaRecorder.prepare(); } catch (Exception e) {}
         mediaRecorder.start();
 
+        ((MyApplication) this.getApplication()).setVideoRecording(true);
     }
 
     // Stop recording and remove SurfaceView
     @Override
     public void onDestroy() {
-
-        mediaRecorder.stop();
-        mediaRecorder.reset();
-        mediaRecorder.release();
+        if (mediaRecorder != null) {
+            mediaRecorder.stop();
+            mediaRecorder.reset();
+            mediaRecorder.release();
+        }
 
         camera.lock();
         camera.release();

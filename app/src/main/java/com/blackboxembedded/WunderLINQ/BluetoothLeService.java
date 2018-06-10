@@ -26,7 +26,6 @@ import com.blackboxembedded.WunderLINQ.OTAFirmwareUpdate.UUIDDatabase;
 import com.blackboxembedded.WunderLINQ.OTAFirmwareUpdate.Utils;
 
 import java.lang.reflect.Method;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -418,7 +417,7 @@ public class BluetoothLeService extends Service {
                             getString(R.string.dl_characteristic_notification_response) +
                     mContext.getResources().getString(R.string.dl_commaseparator) +
                     "[ " + characteristicValue + " ]";
-            Log.d(TAG,dataLog);
+            //Log.d(TAG,dataLog);
             broadcastNotifyUpdate(characteristic);
         }
 
@@ -530,22 +529,22 @@ public class BluetoothLeService extends Service {
                 byte msgID = data[0];
                 switch (msgID) {
                     case 0x00:
-                        Log.d(TAG, "Message ID 0");
+                        //Log.d(TAG, "Message ID 0");
                         break;
                     case 0x01:
-                        Log.d(TAG, "Message ID 1");
+                        //Log.d(TAG, "Message ID 1");
                         break;
                     case 0x02:
-                        Log.d(TAG, "Message ID 2");
+                        //Log.d(TAG, "Message ID 2");
                         break;
                     case 0x03:
-                        Log.d(TAG, "Message ID 3");
+                        //Log.d(TAG, "Message ID 3");
                         break;
                     case 0x04:
-                        Log.d(TAG, "Message ID 4");
+                        //Log.d(TAG, "Message ID 4");
                         break;
                     case 0x05:
-                        Log.d(TAG, "Message ID 5");
+                        //Log.d(TAG, "Message ID 5");
                         // Brakes
                         int brakes = ((data[2] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
                         if(prevBrakeValue == 0){
@@ -667,7 +666,7 @@ public class BluetoothLeService extends Service {
 
                         break;
                     case 0x06:
-                        Log.d(TAG, "Message ID 6");
+                        //Log.d(TAG, "Message ID 6");
                         String gear;
                         int gearValue = ((data[2] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
                         switch (gearValue) {
@@ -828,7 +827,7 @@ public class BluetoothLeService extends Service {
 
                         break;
                     case 0x07:
-                        Log.d(TAG, "Message ID 7");
+                        //Log.d(TAG, "Message ID 7");
                         //Voltage
                         double voltage = (data[4] & 0xFF) / 10;
                         Data.setvoltage(voltage);
@@ -936,7 +935,7 @@ public class BluetoothLeService extends Service {
                         }
                         break;
                     case 0x08:
-                        Log.d(TAG, "Message ID 8");
+                        //Log.d(TAG, "Message ID 8");
                         double ambientTemp = ((data[1] & 0xFF) * 0.50) - 40;
                         Data.setAmbientTemperature(ambientTemp);
                         if(ambientTemp <= 0.0){
@@ -1424,18 +1423,18 @@ public class BluetoothLeService extends Service {
                         }
                         break;
                     case 0x09:
-                        Log.d(TAG, "Message ID 9");
+                        //Log.d(TAG, "Message ID 9");
                         break;
                     case 0x0a:
-                        Log.d(TAG, "Message ID 10");
+                        //Log.d(TAG, "Message ID 10");
                         double odometer = bytesToInt(data[3],data[2],data[1]);
                         Data.setOdometer(odometer);
                         break;
                     case 0x0b:
-                        Log.d(TAG, "Message ID 11");
+                        //Log.d(TAG, "Message ID 11");
                         break;
                     case 0x0c:
-                        Log.d(TAG, "Message ID 12");
+                        //Log.d(TAG, "Message ID 12");
                         double trip1 = bytesToInt(data[3],data[2],data[1]) / 10;
                         double trip2 = bytesToInt(data[6],data[5],data[4]) / 10;
                         Data.setTripOne(trip1);

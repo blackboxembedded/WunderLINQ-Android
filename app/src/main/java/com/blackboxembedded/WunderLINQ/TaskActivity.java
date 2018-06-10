@@ -86,7 +86,7 @@ public class TaskActivity extends AppCompatActivity {
 
         showActionBar();
 
-        if (((MyApplication) this.getApplication()).getitsDark()){
+        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getBoolean("prefNightMode", false)){
             itsDark = true;
         } else {
             itsDark = false;
@@ -98,7 +98,9 @@ public class TaskActivity extends AppCompatActivity {
         // Sensor Stuff
         sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        if (sharedPrefs.getBoolean("prefAutoNightMode", false)) {
+            sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
 
 
     }
@@ -106,12 +108,14 @@ public class TaskActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if (((MyApplication) this.getApplication()).getitsDark()){
+        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getBoolean("prefNightMode", false)){
             updateColors(true);
         } else {
             updateColors(false);
         }
-        sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        if (sharedPrefs.getBoolean("prefAutoNightMode", false)) {
+            sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
 
     @Override
@@ -229,6 +233,7 @@ public class TaskActivity extends AppCompatActivity {
     };
 
     public void displayTasks(){
+        //TODO: Hide options if permissions aren't granted, ie. video, camera, microphone, contacts
         String videoTaskText = getResources().getString(R.string.task_title_start_record);
         if (((MyApplication) this.getApplication()).getVideoRecording()){
             videoTaskText = getResources().getString(R.string.task_title_stop_record);

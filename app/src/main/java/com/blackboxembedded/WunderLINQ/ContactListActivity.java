@@ -1,7 +1,9 @@
 package com.blackboxembedded.WunderLINQ;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -22,6 +24,7 @@ import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -33,7 +36,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -61,7 +63,7 @@ public class ContactListActivity extends AppCompatActivity {
     String[] phoneNumbers;
     private Drawable[] photoId;
 
-    private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
+    private static final int PERMISSION_REQUEST_READ_CONTACTS = 102;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,17 +87,32 @@ public class ContactListActivity extends AppCompatActivity {
 
         showActionBar();
 
-        if (((MyApplication) this.getApplication()).getitsDark()){
+        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getBoolean("prefNightMode", false)){
             itsDark = true;
         } else {
             itsDark = false;
         }
 
-        // Check the SDK version and whether the permission is already granted or not.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
-            //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
-        } else {
+        // Check Read Contacts permissions
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (this.checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(getString(R.string.contacts_alert_title));
+                builder.setMessage(getString(R.string.contacts_alert_body));
+                builder.setPositiveButton(android.R.string.ok, null);
+                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @TargetApi(23)
+                    public void onDismiss(DialogInterface dialog) {
+                        requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
+                    }
+                });
+                builder.show();
+            } else {
+                // Android version is lesser than 6.0 or the permission is already granted.
+                updateList();
+                updateColors(itsDark);
+            }
+        }  else {
             // Android version is lesser than 6.0 or the permission is already granted.
             updateList();
             updateColors(itsDark);
@@ -110,12 +127,14 @@ public class ContactListActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if (((MyApplication) this.getApplication()).getitsDark()){
+        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getBoolean("prefNightMode", false)){
             updateColors(true);
         } else {
             updateColors(false);
         }
-        sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        if (sharedPrefs.getBoolean("prefAutoNightMode", false)) {
+            sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
 
     @Override
@@ -139,12 +158,15 @@ public class ContactListActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
-        if (requestCode == PERMISSIONS_REQUEST_READ_CONTACTS) {
+        if (requestCode == PERMISSION_REQUEST_READ_CONTACTS) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission is granted
                 updateList();
+                updateColors(itsDark);
             } else {
-                Toast.makeText(this, "Until you grant the permission, we canot display the names", Toast.LENGTH_SHORT).show();
+                //GO Back
+                Intent backIntent = new Intent(ContactListActivity.this, TaskActivity.class);
+                startActivity(backIntent);
             }
         }
     }
@@ -219,7 +241,7 @@ public class ContactListActivity extends AppCompatActivity {
     public void updateList(){
         // Check the SDK version and whether the permission is already granted or not.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
+            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
             //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
         } else {
             // Android version is lesser than 6.0 or the permission is already granted.

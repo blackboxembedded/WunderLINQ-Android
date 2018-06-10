@@ -157,7 +157,7 @@ public class MusicActivity extends AppCompatActivity {
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        if (((MyApplication) this.getApplication()).getitsDark()){
+        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getBoolean("prefNightMode", false)){
             updateColors(true);
         } else {
             updateColors(false);
@@ -183,14 +183,16 @@ public class MusicActivity extends AppCompatActivity {
         // Sensor Stuff
         sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        if (sharedPrefs.getBoolean("prefAutoNightMode", false)) {
+            sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        if (((MyApplication) this.getApplication()).getitsDark()){
+        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getBoolean("prefNightMode", false)){
             updateColors(true);
         } else {
             updateColors(false);
@@ -205,12 +207,13 @@ public class MusicActivity extends AppCompatActivity {
                 requestPermissions();
             }
         }
-        sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        if (sharedPrefs.getBoolean("prefAutoNightMode", false)) {
+            sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
 
     @Override
     public void onPause() {
-        Log.d("Musicacvitity","onpause");
         super.onPause();
         mHandler.removeCallbacks(mUpdateMetaData);
         sensorManager.unregisterListener(sensorEventListener, lightSensor);

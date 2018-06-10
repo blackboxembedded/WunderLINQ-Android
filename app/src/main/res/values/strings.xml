@@ -7,6 +7,10 @@
     <!-- Permission Requests -->
     <string name="camera_alert_title">WunderLINQ needs permissions to use your camera</string>
     <string name="camera_alert_body">Please grant camera permissions so this app can take photos</string>
+    <string name="contacts_alert_title">WunderLINQ needs permissions to use read your contacts</string>
+    <string name="contacts_alert_body">Please grant read access to your contacts</string>
+    <string name="record_audio_alert_title">WunderLINQ needs permissions to record audio</string>
+    <string name="record_audio_alert_body">Please grant access to record audio</string>
     <string name="location_alert_title">WunderLINQ needs location permission</string>
     <string name="location_alert_body">Please grant location permission so this app can log your trip</string>
     <string name="write_alert_title">WunderLINQ needs write permission</string>
@@ -253,7 +257,7 @@
     <string name="pref_btn_dfumode_summary">Enter WunderLINQ Firmware Update Mode</string>
     <string name="pref_btn_dfumode_warning_title">Warning</string>
     <string name="pref_btn_dfumode_warning_body">You are about to place the WunderLINQ into DFU mode.
-        When you select OK the WunderLINQ app will close and the WunderLINQ status LED should be solid green.
+        When you select OK the WunderLINQ app will disconnect and the WunderLINQ hardwares status light should be solid green.
         You will be be returned to the main screen and when the app reconnects it should prompt to update.</string>
     <string name="pref_btn_version_title">WunderLINQ Version</string>
     <string name="pref_btn_version_summary">Enter WunderLINQ Firmware Update Mode</string>

@@ -65,7 +65,7 @@ import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
-    public final static String TAG = "WunderLINQ";
+    public final static String TAG = "MainActivity";
 
     private ActionBar actionBar;
     private ImageButton backButton;
@@ -124,7 +124,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
     private static final int PERMISSION_REQUEST_CAMERA = 100;
+    private static final int PERMISSION_REQUEST_READ_CONTACTS = 102;
     private static final int PERMISSION_REQUEST_WRITE_STORAGE = 112;
+    private static final int PERMISSION_REQUEST_RECORD_AUDIO = 122;
     private PopupMenu mPopupMenu;
 
     @Override
@@ -135,13 +137,21 @@ public class MainActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if (!(sharedPrefs.getBoolean("DEBUG_ENABLED",false))){
+            SharedPreferences.Editor editor = sharedPrefs.edit();
+            editor.putBoolean("prefDataLogging", false);
+            editor.putBoolean("prefShowRaw", false);
+            editor.commit();
+        }
 
+        View view;
         if (sharedPrefs.getString("prefMotorcycleType", "1").equals("0")){
             setContentView(R.layout.activity_main_other);
+            view = findViewById(R.id.layout_main_other);
         } else {
             setContentView(R.layout.activity_main);
+            view = findViewById(R.id.layout_main);
         }
-        View view = findViewById(R.id.layout_main);
         view.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
             public void onSwipeLeft() {
@@ -159,17 +169,11 @@ public class MainActivity extends AppCompatActivity {
 
         showActionBar();
 
-        if (((MyApplication) this.getApplication()).getitsDark()){
+        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getBoolean("prefNightMode", false)){
             updateColors(true);
         } else {
             updateColors(false);
         }
-        if (sharedPrefs.getBoolean("prefNightMode", false)){
-            updateColors(true);
-        } else {
-            updateColors(false);
-        }
-
         mHandler = new Handler();
 
         // Sensor Stuff
@@ -202,6 +206,20 @@ public class MainActivity extends AppCompatActivity {
         gattServiceIntent = new Intent(MainActivity.this, BluetoothLeService.class);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // Check Read Contacts permissions
+            if (this.checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED){
+                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(getString(R.string.contacts_alert_title));
+                builder.setMessage(getString(R.string.contacts_alert_body));
+                builder.setPositiveButton(android.R.string.ok, null);
+                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @TargetApi(23)
+                    public void onDismiss(DialogInterface dialog) {
+                        requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
+                    }
+                });
+                builder.show();
+            }
             // Check Camera permissions
             if (this.checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
                 final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -212,6 +230,20 @@ public class MainActivity extends AppCompatActivity {
                     @TargetApi(23)
                     public void onDismiss(DialogInterface dialog) {
                         requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
+                    }
+                });
+                builder.show();
+            }
+            // Check Read Audio permissions
+            if (this.checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
+                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(getString(R.string.record_audio_alert_title));
+                builder.setMessage(getString(R.string.record_audio_alert_body));
+                builder.setPositiveButton(android.R.string.ok, null);
+                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @TargetApi(23)
+                    public void onDismiss(DialogInterface dialog) {
+                        requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSION_REQUEST_RECORD_AUDIO);
                     }
                 });
                 builder.show();
@@ -579,9 +611,11 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
         if (mBluetoothLeService != null) {
             //final boolean result =
+            Log.d(TAG,"mBluetoothLeService is null");
             mBluetoothLeService.connect(mDeviceAddress,getString(R.string.device_name),this);
             //Log.d(TAG, "Connect request result=" + result);
         } else {
+            Log.d(TAG,"mBluetoothLeService is NOT null");
             setupBLE();
         }
         sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
@@ -594,16 +628,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(mGattUpdateReceiver);
-        unregisterReceiver(mBondingBroadcast);
+        Log.d(TAG,"In onDestroy");
+
         try {
+            unregisterReceiver(mGattUpdateReceiver);
+            unregisterReceiver(mBondingBroadcast);
             unbindService(mServiceConnection);
         } catch (IllegalArgumentException e){
 
         }
         mBluetoothLeService = null;
         sensorManager.unregisterListener(sensorEventListener, lightSensor);
+        super.onDestroy();
     }
 
     @Override
@@ -675,6 +711,8 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG,"WunderLINQ previously paired");
                     mDeviceAddress = devices.getAddress();
                     Log.d(TAG,"Address: " + mDeviceAddress);
+
+
                     bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
                     scanLeDevice(false);
                     return;
@@ -791,7 +829,7 @@ public class MainActivity extends AppCompatActivity {
                 checkGattServices(mBluetoothLeService.getSupportedGattServices());
                 btButton.setColorFilter(getResources().getColor(R.color.motorrad_blue));
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-                Log.d(TAG,"GATT_DATA_AVAILABLE");
+                //Log.d(TAG,"GATT_DATA_AVAILABLE");
                 if (!sharedPrefs.getString("prefMotorcycleType", "1").equals("0")){
                     updateDisplay();
                 }
