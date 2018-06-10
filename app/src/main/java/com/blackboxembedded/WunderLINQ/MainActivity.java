@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         View view;
-        if (sharedPrefs.getString("prefMotorcycleType", "1").equals("0")){
+        if (sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
             setContentView(R.layout.activity_main_other);
             view = findViewById(R.id.layout_main_other);
         } else {
@@ -665,11 +665,26 @@ public class MainActivity extends AppCompatActivity {
             finish();
             return;
         } else if (requestCode == SETTINGS_CHECK) {
-            if (sharedPrefs.getString("prefMotorcycleType", "1").equals("0")){
+            View view;
+            if (sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
                 setContentView(R.layout.activity_main_other);
+                view = findViewById(R.id.layout_main_other);
             } else {
                 setContentView(R.layout.activity_main);
+                view = findViewById(R.id.layout_main);
             }
+            view.setOnTouchListener(new OnSwipeTouchListener(this) {
+                @Override
+                public void onSwipeLeft() {
+                    Intent backIntent = new Intent(MainActivity.this, MusicActivity.class);
+                    startActivity(backIntent);
+                }
+                @Override
+                public void onSwipeRight() {
+                    Intent backIntent = new Intent(MainActivity.this, TaskActivity.class);
+                    startActivity(backIntent);
+                }
+            });
             if (!sharedPrefs.getBoolean("prefAutoNightMode", false)){
                 updateColors(false);
             }
