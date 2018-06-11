@@ -645,23 +645,50 @@ public class BluetoothLeService extends Service {
                             Data.setRearTirePressure(rdcRear);
                         }
 
-                        // TODO: Testing
                         // Tire Pressure Faults
-                        // C0=Resting, C9=Front Warning, D1=Front Critical, CA=Rear Warning, D2=Rear Critical, D3=Front/Rear Critical
-                        if ((data[6] & 0xFF) == 0xC9 || (data[6] & 0xFF) == 0xD1){
-                            faults.setfrontTirePressureActive(true);
-                            faults.setrearTirePressureActive(false);
-                        } else if ((data[6] & 0xFF) == 0xCA || (data[6] & 0xFF) == 0xD2){
-                            faults.setfrontTirePressureActive(false);
-                            faults.setrearTirePressureActive(true);
-                        } else if ((data[6] & 0xFF) == 0xD3){
-                            faults.setfrontTirePressureActive(true);
-                            faults.setrearTirePressureActive(true);
-                        } else if ((data[6] & 0xFF) == 0xC0){
-                            faults.setfrontTirePressureActive(false);
-                            faults.setrearTirePressureActive(false);
-                        } else {
-
+                        switch (data[6] & 0xFF) {
+                            case 0xC9:
+                                faults.setfrontTirePressureWarningActive(true);
+                                faults.setrearTirePressureWarningActive(false);
+                                faults.setfrontTirePressureCriticalActive(false);
+                                faults.setrearTirePressureCriticalActive(false);
+                                break;
+                            case 0xCA:
+                                faults.setfrontTirePressureWarningActive(false);
+                                faults.setrearTirePressureWarningActive(true);
+                                faults.setfrontTirePressureCriticalActive(false);
+                                faults.setrearTirePressureCriticalActive(false);
+                                break;
+                            case 0xCB:
+                                faults.setfrontTirePressureWarningActive(true);
+                                faults.setrearTirePressureWarningActive(true);
+                                faults.setfrontTirePressureCriticalActive(false);
+                                faults.setrearTirePressureCriticalActive(false);
+                                break;
+                            case 0xD1:
+                                faults.setfrontTirePressureWarningActive(false);
+                                faults.setrearTirePressureWarningActive(false);
+                                faults.setfrontTirePressureCriticalActive(true);
+                                faults.setrearTirePressureCriticalActive(false);
+                                break;
+                            case 0xD2:
+                                faults.setfrontTirePressureWarningActive(false);
+                                faults.setrearTirePressureWarningActive(false);
+                                faults.setfrontTirePressureCriticalActive(false);
+                                faults.setrearTirePressureCriticalActive(true);
+                                break;
+                            case 0xD3:
+                                faults.setfrontTirePressureWarningActive(false);
+                                faults.setrearTirePressureWarningActive(false);
+                                faults.setfrontTirePressureCriticalActive(true);
+                                faults.setrearTirePressureCriticalActive(true);
+                                break;
+                            default:
+                                faults.setfrontTirePressureWarningActive(false);
+                                faults.setrearTirePressureWarningActive(false);
+                                faults.setfrontTirePressureCriticalActive(false);
+                                faults.setrearTirePressureCriticalActive(false);
+                                break;
                         }
 
                         break;

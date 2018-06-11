@@ -34,11 +34,17 @@ public class FaultStatus extends ContextWrapper {
     private static boolean fuelFaultActive = false;
     private static String fuelFaultDesc = "";
 
-    private static boolean frontTirePressureActive = false;
-    private static String frontTirePressureDesc = "";
+    private static boolean frontTirePressureWarningActive = false;
+    private static String frontTirePressureWarningDesc = "";
 
-    private static boolean rearTirePressureActive = false;
-    private static String rearTirePressureDesc = "";
+    private static boolean rearTirePressureWarningActive = false;
+    private static String rearTirePressureWarningDesc = "";
+
+    private static boolean frontTirePressureCriticalActive = false;
+    private static String frontTirePressureCriticalDesc = "";
+
+    private static boolean rearTirePressureCriticalActive = false;
+    private static String rearTirePressureCriticalDesc = "";
 
     private static boolean addFrontLightOneActive = false;
     private static String addFrontLightOneDesc = "";
@@ -125,8 +131,10 @@ public class FaultStatus extends ContextWrapper {
         ascDeactivatedDesc = MainActivity.getContext().getResources().getString(R.string.fault_ASCDAC);
         ascErrorDesc = MainActivity.getContext().getResources().getString(R.string.fault_ASCERR);
         fuelFaultDesc = MainActivity.getContext().getResources().getString(R.string.fault_FUELF);
-        frontTirePressureDesc = MainActivity.getContext().getResources().getString(R.string.fault_TIREFF);
-        rearTirePressureDesc = MainActivity.getContext().getResources().getString(R.string.fault_TIRERF);
+        frontTirePressureWarningDesc = MainActivity.getContext().getResources().getString(R.string.fault_TIREFWF);
+        rearTirePressureWarningDesc = MainActivity.getContext().getResources().getString(R.string.fault_TIRERWF);
+        frontTirePressureCriticalDesc = MainActivity.getContext().getResources().getString(R.string.fault_TIREFCF);
+        rearTirePressureCriticalDesc = MainActivity.getContext().getResources().getString(R.string.fault_TIRERCF);
         addFrontLightOneDesc = MainActivity.getContext().getResources().getString(R.string.fault_LAMPAFL1);
         addFrontLightTwoDesc = MainActivity.getContext().getResources().getString(R.string.fault_LAMPAFL2);
         daytimeRunningDesc = MainActivity.getContext().getResources().getString(R.string.fault_LAMPDAY);
@@ -181,11 +189,17 @@ public class FaultStatus extends ContextWrapper {
         if(fuelFaultActive){
             allActiveDesc.add(fuelFaultDesc);
         }
-        if(frontTirePressureActive){
-            allActiveDesc.add(frontTirePressureDesc);
+        if(frontTirePressureWarningActive){
+            allActiveDesc.add(frontTirePressureWarningDesc);
         }
-        if(rearTirePressureActive){
-            allActiveDesc.add(rearTirePressureDesc);
+        if(rearTirePressureWarningActive){
+            allActiveDesc.add(rearTirePressureWarningDesc);
+        }
+        if(frontTirePressureCriticalActive){
+            allActiveDesc.add(frontTirePressureCriticalDesc);
+        }
+        if(rearTirePressureCriticalActive){
+            allActiveDesc.add(rearTirePressureCriticalDesc);
         }
         if(addFrontLightOneActive){
             allActiveDesc.add(addFrontLightOneDesc);
@@ -346,24 +360,44 @@ public class FaultStatus extends ContextWrapper {
         return fuelFaultDesc;
     }
 
-    public static void setfrontTirePressureActive(boolean frontTirePressureActive){
-        FaultStatus.frontTirePressureActive = frontTirePressureActive;
+    public static void setfrontTirePressureWarningActive(boolean frontTirePressureWarningActive){
+        FaultStatus.frontTirePressureWarningActive = frontTirePressureWarningActive;
     }
-    public static boolean getfrontTirePressureActive() {
-        return frontTirePressureActive;
+    public static boolean getfrontTirePressureWarningActive() {
+        return frontTirePressureWarningActive;
     }
-    public static String getfrontTirePressureDesc() {
-        return frontTirePressureDesc;
+    public static String getfrontTirePressureWarningDesc() {
+        return frontTirePressureWarningDesc;
     }
 
-    public static void setrearTirePressureActive(boolean rearTirePressureActive){
-        FaultStatus.rearTirePressureActive = rearTirePressureActive;
+    public static void setrearTirePressureWarningActive(boolean rearTirePressureWarningActive){
+        FaultStatus.rearTirePressureWarningActive = rearTirePressureWarningActive;
     }
-    public static boolean getrearTirePressureActive() {
-        return rearTirePressureActive;
+    public static boolean getrearTirePressureWarningActive() {
+        return rearTirePressureWarningActive;
     }
-    public static String getrearTirePressureDesc() {
-        return rearTirePressureDesc;
+    public static String getrearTirePressureWarningDesc() {
+        return rearTirePressureWarningDesc;
+    }
+
+    public static void setfrontTirePressureCriticalActive(boolean frontTirePressureCriticalActive){
+        FaultStatus.frontTirePressureCriticalActive = frontTirePressureCriticalActive;
+    }
+    public static boolean getfrontTirePressureCriticalActive() {
+        return frontTirePressureCriticalActive;
+    }
+    public static String getfrontTirePressureCriticalDesc() {
+        return frontTirePressureCriticalDesc;
+    }
+
+    public static void setrearTirePressureCriticalActive(boolean rearTirePressureCriticalActive){
+        FaultStatus.rearTirePressureCriticalActive = rearTirePressureCriticalActive;
+    }
+    public static boolean getrearTirePressureCriticalActive() {
+        return rearTirePressureCriticalActive;
+    }
+    public static String getrearTirePressureCriticalDesc() {
+        return rearTirePressureCriticalDesc;
     }
 
     public static void setAddFrontLightOneActive(boolean addFrontLightOneActive){
@@ -626,8 +660,10 @@ public class FaultStatus extends ContextWrapper {
         ascDeactivatedActive = false;
         ascErrorActive = false;
         fuelFaultActive = false;
-        frontTirePressureActive = false;
-        rearTirePressureActive = false;
+        frontTirePressureWarningActive = false;
+        rearTirePressureWarningActive = false;
+        frontTirePressureCriticalActive = false;
+        rearTirePressureCriticalActive = false;
         addFrontLightOneActive = false;
         addFrontLightTwoActive = false;
         daytimeRunningActive = false;

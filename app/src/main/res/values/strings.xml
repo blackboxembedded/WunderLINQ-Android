@@ -81,8 +81,10 @@
     <string name="fault_GENWARNFSRED">The general warning light flashes red</string>
     <string name="fault_GENWARNSHRED">The general warning light shows red</string>
     <string name="fault_OILLOW">Engine oil level too low</string>
-    <string name="fault_TIREFF">Front Tire Pressure</string>
-    <string name="fault_TIRERF">Rear Tire Pressure</string>
+    <string name="fault_TIREFWF">Front Tire Pressure Warning</string>
+    <string name="fault_TIRERWF">Rear Tire Pressure Warning</string>
+    <string name="fault_TIREFCF">Front Tire Pressure Critical</string>
+    <string name="fault_TIRERCF">Rear Tire Pressure Critical</string>
 
     <!-- WaypointActivity -->
     <string name="waypoint_title">Saved Waypoints</string>
