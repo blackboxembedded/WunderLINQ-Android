@@ -10,6 +10,18 @@ import java.util.ArrayList;
  */
 
 public class FaultStatus extends ContextWrapper {
+
+    // Debug faults
+    private static boolean uartOverflowActive = false;
+    private static String uartOverflowDesc = "";
+
+    private static boolean uartFrameActive = false;
+    private static String uartFrameDesc = "";
+
+    private static boolean uartLogicActive = false;
+    private static String uartLogicDesc = "";
+
+    // Motorcycle faults
     private static boolean absSelfDiagActive = false;
     private static String absSelfDiagDesc = "";
 
@@ -40,9 +52,11 @@ public class FaultStatus extends ContextWrapper {
     private static boolean rearTirePressureWarningActive = false;
     private static String rearTirePressureWarningDesc = "";
 
+    private static boolean frontTirePressureCriticalNotificationActive = false;
     private static boolean frontTirePressureCriticalActive = false;
     private static String frontTirePressureCriticalDesc = "";
 
+    private static boolean rearTirePressureCriticalNotificationActive = false;
     private static boolean rearTirePressureCriticalActive = false;
     private static String rearTirePressureCriticalDesc = "";
 
@@ -112,9 +126,11 @@ public class FaultStatus extends ContextWrapper {
     private static boolean generalShowsYellowActive = false;
     private static String generalShowsYellowDesc = "";
 
+    private static boolean generalFlashingRedNotificationActive = false;
     private static boolean generalFlashingRedActive = false;
     private static String generalFlashingRedDesc = "";
 
+    private static boolean generalShowsRedNotificationActive = false;
     private static boolean generalShowsRedActive = false;
     private static String generalShowsRedDesc = "";
 
@@ -123,6 +139,12 @@ public class FaultStatus extends ContextWrapper {
 
     public FaultStatus(Context base) {
         super(base);
+        // Debug Faults
+        uartOverflowDesc = MainActivity.getContext().getResources().getString(R.string.fault_UARTOF);
+        uartFrameDesc = MainActivity.getContext().getResources().getString(R.string.fault_UARTFF);
+        uartLogicDesc = MainActivity.getContext().getResources().getString(R.string.fault_UARTLF);
+
+        // Motorcycle faults
         absSelfDiagDesc = MainActivity.getContext().getResources().getString(R.string.fault_ABSSLF);
         absDeactivatedDesc = MainActivity.getContext().getResources().getString(R.string.fault_ABSDAC);
         absErrorDesc = MainActivity.getContext().getResources().getString(R.string.fault_ABSERR);
@@ -165,6 +187,18 @@ public class FaultStatus extends ContextWrapper {
 
     public static ArrayList<String> getallActiveDesc() {
         ArrayList<String> allActiveDesc = new ArrayList<String>();
+        // Debug faults
+        if(uartOverflowActive){
+            allActiveDesc.add(uartOverflowDesc);
+        }
+        if(uartFrameActive){
+            allActiveDesc.add(uartFrameDesc);
+        }
+        if(uartLogicActive){
+            allActiveDesc.add(uartLogicDesc);
+        }
+
+        // Motorcycle faults
         if(absSelfDiagActive){
             allActiveDesc.add(absSelfDiagDesc);
         }
@@ -280,6 +314,39 @@ public class FaultStatus extends ContextWrapper {
         return allActiveDesc;
     }
 
+    // Debug faults
+    public static void setUartOverflowActive(boolean uartOverflowActive){
+        FaultStatus.uartOverflowActive = uartOverflowActive;
+    }
+    public static boolean getUartOverflowActive() {
+        return uartOverflowActive;
+    }
+    public static String getUartOverflowDesc() {
+        return uartOverflowDesc;
+    }
+
+    public static void setUartFrameActive(boolean uartFrameActive){
+        FaultStatus.uartFrameActive = uartFrameActive;
+    }
+    public static boolean getUartFrameActive() {
+        return uartFrameActive;
+    }
+    public static String getUartFrameDesc() {
+        return uartFrameDesc;
+    }
+
+    public static void setUartLogicActive(boolean uartLogicActive){
+        FaultStatus.uartLogicActive = uartLogicActive;
+    }
+    public static boolean getUartLogicActive() {
+        return uartLogicActive;
+    }
+    public static String getUartLogicDesc() {
+        return uartLogicDesc;
+    }
+
+
+    // Motorcycle faults
     public static void setAbsSelfDiagActive(boolean absSelfDiagActive){
         FaultStatus.absSelfDiagActive = absSelfDiagActive;
     }
@@ -389,6 +456,12 @@ public class FaultStatus extends ContextWrapper {
     public static String getfrontTirePressureCriticalDesc() {
         return frontTirePressureCriticalDesc;
     }
+    public static void setfrontTirePressureCriticalNotificationActive(boolean frontTirePressureCriticalNotificationActive){
+        FaultStatus.frontTirePressureCriticalNotificationActive = frontTirePressureCriticalNotificationActive;
+    }
+    public static boolean getfrontTirePressureCriticalNotificationActive() {
+        return frontTirePressureCriticalNotificationActive;
+    }
 
     public static void setrearTirePressureCriticalActive(boolean rearTirePressureCriticalActive){
         FaultStatus.rearTirePressureCriticalActive = rearTirePressureCriticalActive;
@@ -398,6 +471,12 @@ public class FaultStatus extends ContextWrapper {
     }
     public static String getrearTirePressureCriticalDesc() {
         return rearTirePressureCriticalDesc;
+    }
+    public static void setrearTirePressureCriticalNotificationActive(boolean rearTirePressureCriticalNotificationActive){
+        FaultStatus.rearTirePressureCriticalNotificationActive = rearTirePressureCriticalNotificationActive;
+    }
+    public static boolean getrearTirePressureCriticalNotificationActive() {
+        return rearTirePressureCriticalNotificationActive;
     }
 
     public static void setAddFrontLightOneActive(boolean addFrontLightOneActive){
@@ -629,6 +708,12 @@ public class FaultStatus extends ContextWrapper {
     public static String getGeneralFlashingRedDesc() {
         return generalFlashingRedDesc;
     }
+    public static void setGeneralFlashingRedNotificationActive(boolean generalFlashingRedNotificationActive){
+        FaultStatus.generalFlashingRedNotificationActive = generalFlashingRedNotificationActive;
+    }
+    public static boolean getgeneralFlashingRedNotificationActive() {
+        return generalFlashingRedNotificationActive;
+    }
 
     public static void setGeneralShowsRedActive(boolean generalShowsRedActive){
         FaultStatus.generalShowsRedActive = generalShowsRedActive;
@@ -638,6 +723,12 @@ public class FaultStatus extends ContextWrapper {
     }
     public static String getGeneralShowsRedDesc() {
         return generalShowsRedDesc;
+    }
+    public static void setGeneralShowsRedNotificationActive(boolean generalShowsRedNotificationActive){
+        FaultStatus.generalShowsRedNotificationActive = generalShowsRedNotificationActive;
+    }
+    public static boolean getgeneralShowsRedNotificationActive() {
+        return generalShowsRedNotificationActive;
     }
 
     public static void setOilLowActive(boolean oilLowActive){
@@ -652,6 +743,14 @@ public class FaultStatus extends ContextWrapper {
 
     // Utility functions
     public static void clear(){
+        // Debug Faults
+        /*
+        uartOverflowActive = false;
+        uartFrameActive = false;
+        uartLogicActive = false;
+        */
+
+        // Motorcycle Faults
         absSelfDiagActive = false;
         absDeactivatedActive = false;
         absErrorActive = false;

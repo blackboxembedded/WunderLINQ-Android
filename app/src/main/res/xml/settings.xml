@@ -99,5 +99,11 @@
             android:summary="@string/pref_showRaw_summary"
             android:title="@string/pref_showRaw_name" >
         </CheckBoxPreference>
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="prefShowUartFaults"
+            android:summary="@string/pref_showUartFaults_summary"
+            android:title="@string/pref_showUartFaults_name" >
+        </CheckBoxPreference>
     </PreferenceCategory>
 </PreferenceScreen>

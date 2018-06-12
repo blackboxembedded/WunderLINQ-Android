@@ -1,6 +1,11 @@
 package com.blackboxembedded.WunderLINQ;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.app.TaskStackBuilder;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
@@ -18,6 +23,7 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.blackboxembedded.WunderLINQ.OTAFirmwareUpdate.Constants;
@@ -526,7 +532,7 @@ public class BluetoothLeService extends Service {
                     }
                     logger.write(stringBuilder.toString());
                 }
-                byte msgID = data[0];
+                int msgID = (data[0] & 0xFF) ;
                 switch (msgID) {
                     case 0x00:
                         //Log.d(TAG, "Message ID 0");
@@ -652,42 +658,95 @@ public class BluetoothLeService extends Service {
                                 faults.setrearTirePressureWarningActive(false);
                                 faults.setfrontTirePressureCriticalActive(false);
                                 faults.setrearTirePressureCriticalActive(false);
+                                if(faults.getfrontTirePressureCriticalNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setfrontTirePressureCriticalNotificationActive(false);
+                                }
+                                if(faults.getrearTirePressureCriticalNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setrearTirePressureCriticalNotificationActive(false);
+                                }
                                 break;
                             case 0xCA:
                                 faults.setfrontTirePressureWarningActive(false);
                                 faults.setrearTirePressureWarningActive(true);
                                 faults.setfrontTirePressureCriticalActive(false);
                                 faults.setrearTirePressureCriticalActive(false);
+                                if(faults.getfrontTirePressureCriticalNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setfrontTirePressureCriticalNotificationActive(false);
+                                }
+                                if(faults.getrearTirePressureCriticalNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setrearTirePressureCriticalNotificationActive(false);
+                                }
                                 break;
                             case 0xCB:
                                 faults.setfrontTirePressureWarningActive(true);
                                 faults.setrearTirePressureWarningActive(true);
                                 faults.setfrontTirePressureCriticalActive(false);
                                 faults.setrearTirePressureCriticalActive(false);
+                                if(faults.getfrontTirePressureCriticalNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setfrontTirePressureCriticalNotificationActive(false);
+                                }
+                                if(faults.getrearTirePressureCriticalNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setrearTirePressureCriticalNotificationActive(false);
+                                }
                                 break;
                             case 0xD1:
                                 faults.setfrontTirePressureWarningActive(false);
                                 faults.setrearTirePressureWarningActive(false);
                                 faults.setfrontTirePressureCriticalActive(true);
                                 faults.setrearTirePressureCriticalActive(false);
+                                if(!(faults.getfrontTirePressureCriticalNotificationActive())) {
+                                    updateNotification(intent);
+                                    faults.setfrontTirePressureCriticalNotificationActive(true);
+                                }
+                                if(faults.getrearTirePressureCriticalNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setrearTirePressureCriticalNotificationActive(false);
+                                }
                                 break;
                             case 0xD2:
                                 faults.setfrontTirePressureWarningActive(false);
                                 faults.setrearTirePressureWarningActive(false);
                                 faults.setfrontTirePressureCriticalActive(false);
                                 faults.setrearTirePressureCriticalActive(true);
+                                if(faults.getfrontTirePressureCriticalNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setfrontTirePressureCriticalNotificationActive(false);
+                                }
+                                if(!(faults.getrearTirePressureCriticalNotificationActive())) {
+                                    updateNotification(intent);
+                                    faults.setrearTirePressureCriticalNotificationActive(true);
+                                }
                                 break;
                             case 0xD3:
                                 faults.setfrontTirePressureWarningActive(false);
                                 faults.setrearTirePressureWarningActive(false);
                                 faults.setfrontTirePressureCriticalActive(true);
                                 faults.setrearTirePressureCriticalActive(true);
+                                if(!(faults.getfrontTirePressureCriticalNotificationActive()) && !(faults.getrearTirePressureCriticalNotificationActive())) {
+                                    updateNotification(intent);
+                                    faults.setfrontTirePressureCriticalNotificationActive(true);
+                                    faults.setrearTirePressureCriticalNotificationActive(true);
+                                }
                                 break;
                             default:
                                 faults.setfrontTirePressureWarningActive(false);
                                 faults.setrearTirePressureWarningActive(false);
                                 faults.setfrontTirePressureCriticalActive(false);
                                 faults.setrearTirePressureCriticalActive(false);
+                                if(faults.getfrontTirePressureCriticalNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setfrontTirePressureCriticalNotificationActive(false);
+                                }
+                                if(faults.getrearTirePressureCriticalNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setrearTirePressureCriticalNotificationActive(false);
+                                }
                                 break;
                         }
 
@@ -886,78 +945,177 @@ public class BluetoothLeService extends Service {
                                 faults.setGeneralShowsYellowActive(false);
                                 faults.setGeneralFlashingRedActive(false);
                                 faults.setGeneralShowsRedActive(false);
+                                if(faults.getgeneralFlashingRedNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                }
+                                if(faults.getgeneralShowsRedNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                }
                                 break;
                             case 0x2:
                                 faults.setGeneralFlashingYellowActive(false);
                                 faults.setGeneralShowsYellowActive(true);
                                 faults.setGeneralFlashingRedActive(false);
                                 faults.setGeneralShowsRedActive(false);
+                                if(faults.getgeneralFlashingRedNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                }
+                                if(faults.getgeneralShowsRedNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                }
                                 break;
                             case 0x4:
                                 faults.setGeneralFlashingYellowActive(false);
                                 faults.setGeneralShowsYellowActive(false);
                                 faults.setGeneralFlashingRedActive(true);
                                 faults.setGeneralShowsRedActive(false);
+                                if(!(faults.getgeneralFlashingRedNotificationActive())) {
+                                    updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(true);
+                                }
+                                if(faults.getgeneralShowsRedNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                }
                                 break;
                             case 0x5:
                                 faults.setGeneralFlashingYellowActive(true);
                                 faults.setGeneralShowsYellowActive(false);
                                 faults.setGeneralFlashingRedActive(true);
                                 faults.setGeneralShowsRedActive(false);
+                                if(!(faults.getgeneralFlashingRedNotificationActive())) {
+                                    updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(true);
+                                }
+                                if(faults.getgeneralShowsRedNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                }
                                 break;
                             case 0x6:
                                 faults.setGeneralFlashingYellowActive(false);
                                 faults.setGeneralShowsYellowActive(true);
                                 faults.setGeneralFlashingRedActive(true);
                                 faults.setGeneralShowsRedActive(false);
+                                if(!(faults.getgeneralFlashingRedNotificationActive())) {
+                                    updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(true);
+                                }
+                                if(faults.getgeneralShowsRedNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                }
                                 break;
                             case 0x7:
                                 faults.setGeneralFlashingYellowActive(false);
                                 faults.setGeneralShowsYellowActive(false);
                                 faults.setGeneralFlashingRedActive(true);
                                 faults.setGeneralShowsRedActive(false);
+                                if(!(faults.getgeneralFlashingRedNotificationActive())) {
+                                    updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(true);
+                                }
+                                if(faults.getgeneralShowsRedNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                }
                                 break;
                             case 0x8:
                                 faults.setGeneralFlashingYellowActive(false);
                                 faults.setGeneralShowsYellowActive(false);
                                 faults.setGeneralFlashingRedActive(false);
                                 faults.setGeneralShowsRedActive(true);
+                                if(faults.getgeneralFlashingRedNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(true);
+                                }
+                                if(!(faults.getgeneralShowsRedNotificationActive())) {
+                                    updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                }
                                 break;
                             case 0x9:
                                 faults.setGeneralFlashingYellowActive(false);
                                 faults.setGeneralShowsYellowActive(false);
                                 faults.setGeneralFlashingRedActive(true);
                                 faults.setGeneralShowsRedActive(true);
+                                if(faults.getgeneralShowsRedNotificationActive() && faults.getgeneralFlashingRedNotificationActive()) {
+                                    updateNotification(intent);
+                                }
                                 break;
                             case 0xA:
                                 faults.setGeneralFlashingYellowActive(false);
                                 faults.setGeneralShowsYellowActive(true);
                                 faults.setGeneralFlashingRedActive(false);
                                 faults.setGeneralShowsRedActive(true);
+                                if(faults.getgeneralFlashingRedNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(true);
+                                }
+                                if(!(faults.getgeneralShowsRedNotificationActive())) {
+                                    updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                }
                                 break;
                             case 0xB:
                                 faults.setGeneralFlashingYellowActive(false);
                                 faults.setGeneralShowsYellowActive(false);
                                 faults.setGeneralFlashingRedActive(false);
                                 faults.setGeneralShowsRedActive(true);
+                                if(faults.getgeneralFlashingRedNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(true);
+                                }
+                                if(!(faults.getgeneralShowsRedNotificationActive())) {
+                                    updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                }
                                 break;
                             case 0xD:
                                 faults.setGeneralFlashingYellowActive(true);
                                 faults.setGeneralShowsYellowActive(false);
                                 faults.setGeneralFlashingRedActive(false);
                                 faults.setGeneralShowsRedActive(false);
+                                if(faults.getgeneralFlashingRedNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                }
+                                if(faults.getgeneralShowsRedNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                }
                                 break;
                             case 0xE:
                                 faults.setGeneralFlashingYellowActive(false);
                                 faults.setGeneralShowsYellowActive(true);
                                 faults.setGeneralFlashingRedActive(false);
                                 faults.setGeneralShowsRedActive(false);
+                                if(faults.getgeneralFlashingRedNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                }
+                                if(faults.getgeneralShowsRedNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                }
                                 break;
                             default:
                                 faults.setGeneralFlashingYellowActive(false);
                                 faults.setGeneralShowsYellowActive(false);
                                 faults.setGeneralFlashingRedActive(false);
                                 faults.setGeneralShowsRedActive(false);
+                                if(faults.getgeneralFlashingRedNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                }
+                                if(faults.getgeneralShowsRedNotificationActive()) {
+                                    updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                }
                                 break;
                         }
                         break;
@@ -1466,6 +1624,49 @@ public class BluetoothLeService extends Service {
                         double trip2 = bytesToInt(data[6],data[5],data[4]) / 10;
                         Data.setTripOne(trip1);
                         Data.setTripTwo(trip2);
+                        break;
+                    case 0xff:
+                        Log.d(TAG,"Debug Message received: " + stringBuilder.toString());
+                        // 0F=Overflow, 1F=Frame, 2F=Logic, 3F=Overflow & Frame, 4F=Overflow & Logic, 5F=Frame & Logic, 6F=Overflow, Frame & Logic
+                        if (sharedPrefs.getBoolean("prefShowUartFaults",false)) {
+                            switch (data[0] & 0xFF) {
+                                case 0x0F:
+                                    faults.setUartOverflowActive(true);
+                                    faults.setUartFrameActive(false);
+                                    faults.setUartLogicActive(false);
+                                    break;
+                                case 0x1F:
+                                    faults.setUartOverflowActive(false);
+                                    faults.setUartFrameActive(true);
+                                    faults.setUartLogicActive(false);
+                                    break;
+                                case 0x2F:
+                                    faults.setUartOverflowActive(false);
+                                    faults.setUartFrameActive(false);
+                                    faults.setUartLogicActive(true);
+                                    break;
+                                case 0x3F:
+                                    faults.setUartOverflowActive(true);
+                                    faults.setUartFrameActive(true);
+                                    faults.setUartLogicActive(false);
+                                    break;
+                                case 0x4F:
+                                    faults.setUartOverflowActive(true);
+                                    faults.setUartFrameActive(false);
+                                    faults.setUartLogicActive(true);
+                                    break;
+                                case 0x5F:
+                                    faults.setUartOverflowActive(false);
+                                    faults.setUartFrameActive(true);
+                                    faults.setUartLogicActive(true);
+                                    break;
+                                case 0x6F:
+                                    faults.setUartOverflowActive(true);
+                                    faults.setUartFrameActive(true);
+                                    faults.setUartLogicActive(true);
+                                    break;
+                            }
+                        }
                         break;
                     default:
                         Log.d(TAG, "Unknown Message ID: " + String.format("%02x", msgID));
@@ -2162,5 +2363,67 @@ public class BluetoothLeService extends Service {
         return (a & 0xFF) << 16 | (b & 0xFF) << 8 | (c & 0xFF);
     }
 
+    static public void updateNotification(Intent intent){
+        StringBuilder body = new StringBuilder();
+        body.append("");
+        if(faults.getfrontTirePressureCriticalActive()){
+            body.append(mContext.getResources().getString(R.string.fault_TIREFCF) + "\n");
+        }
+        if(faults.getrearTirePressureCriticalActive()){
+            body.append(mContext.getResources().getString(R.string.fault_TIRERCF) + "\n");
+        }
+        if(faults.getgeneralFlashingRedNotificationActive()){
+            body.append(mContext.getResources().getString(R.string.fault_GENWARNFSRED) + "\n");
+        }
+        if(faults.getgeneralShowsRedNotificationActive()){
+            body.append(mContext.getResources().getString(R.string.fault_GENWARNSHRED) + "\n");
+        }
+        if(!body.toString().equals("")){
+            showNotification(mContext,mContext.getResources().getString(R.string.fault_title),body.toString(),intent);
+        } else {
+            Log.d(TAG,"Clearing notification");
+            clearNotifications();
+        }
+    }
+
+    static public void showNotification(Context context, String title, String body, Intent intent) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        int notificationId = 1;
+        String channelId = "critical";
+        String channelName = "Critical Faults";
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel mChannel = new NotificationChannel(
+                    channelId, channelName, importance);
+            notificationManager.createNotificationChannel(mChannel);
+        }
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, channelId)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(title)
+                .setStyle(new NotificationCompat.BigPictureStyle())
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(body))
+                .setContentText(body);
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        stackBuilder.addNextIntent(intent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
+                0,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        Notification notification = mBuilder.build();
+        notification.flags = Notification.FLAG_INSISTENT;
+        notificationManager.notify(notificationId, notification);
+    }
+    static public void clearNotifications(){
+        NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
+        //notificationManager.cancel("myappnotif", i);
+    }
 
 }

@@ -48,6 +48,9 @@
     <string name="title_activity_fault">FaultActivity</string>
     <string name="fault_title">Active Faults</string>
     <!-- Fault strings -->
+    <string name="fault_UARTOF">UART Overflow</string>
+    <string name="fault_UARTFF">UART Frame</string>
+    <string name="fault_UARTLF">UART Logic</string>
     <string name="fault_ABSSLF">ABS self-diagnosis not completed</string>
     <string name="fault_ABSERR">ABS error</string>
     <string name="fault_ABSDAC">ABS deactivated</string>
@@ -247,6 +250,8 @@
     <string name="pref_dataLogging_summary">Enable Raw Message Logging To /sdcard/WunderLINQ/</string>
     <string name="pref_showRaw_name">Show raw message</string>
     <string name="pref_showRaw_summary">Show raw message in Odometer Field</string>
+    <string name="pref_showUartFaults_name">Show UART faults</string>
+    <string name="pref_showUartFaults_summary">Show UART faults in Fault Viewer</string>
     <string name="advanced_settings_title">Advanced Settings</string>
     <string name="pref_btn_sendlogs_title">Send Logs</string>
     <string name="pref_btn_sendlogs_summary">Send Logs to Black Box Embedded Support</string>
