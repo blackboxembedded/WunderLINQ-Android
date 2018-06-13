@@ -2387,6 +2387,10 @@ public class BluetoothLeService extends Service {
     }
 
     static public void showNotification(Context context, String title, String body, Intent intent) {
+
+        Intent faultIntent=new Intent(mContext, FaultActivity.class);
+        faultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         int notificationId = 1;
@@ -2409,7 +2413,7 @@ public class BluetoothLeService extends Service {
                 .setContentText(body);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addNextIntent(intent);
+        stackBuilder.addNextIntent(faultIntent);
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
                 0,
                 PendingIntent.FLAG_UPDATE_CURRENT

@@ -344,7 +344,7 @@ public class MainActivity extends AppCompatActivity {
             builder.show();
 
         }
-        if (!sharedPrefs.getString("prefMotorcycleType", "1").equals("0")){
+        if (!sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
             updateDisplay();
         }
     }
@@ -481,7 +481,8 @@ public class MainActivity extends AppCompatActivity {
     public void updateColors(boolean itsDark){
         Log.d(TAG,"In updateColors");
         ((MyApplication) this.getApplication()).setitsDark(itsDark);
-        if (!sharedPrefs.getString("prefMotorcycleType", "1").equals("0")){
+        Log.d(TAG,"prefMotorcycleType: " + sharedPrefs.getString("prefMotorcycleType", "1"));
+        if (!sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
             LinearLayout lLayout = (LinearLayout) findViewById(R.id.layout_main);
             textView1 = (TextView) findViewById(R.id.textView1);
             textView2 = (TextView) findViewById(R.id.textView2);
@@ -835,7 +836,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 Log.d(TAG,"GATT_DISCONNECTED");
                 Data.clear();
-                if (!sharedPrefs.getString("prefMotorcycleType", "1").equals("0")){
+                if (!sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
                     updateDisplay();
                 }
                 btButton.setColorFilter(getResources().getColor(R.color.motorrad_red));
@@ -846,7 +847,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 //Log.d(TAG,"GATT_DATA_AVAILABLE");
                 btButton.setColorFilter(getResources().getColor(R.color.motorrad_blue));
-                if (!sharedPrefs.getString("prefMotorcycleType", "1").equals("0")){
+                if (!sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
                     updateDisplay();
                 }
             }
