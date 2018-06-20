@@ -47,6 +47,8 @@
     <!-- FaultActivity -->
     <string name="title_activity_fault">FaultActivity</string>
     <string name="fault_title">Active Faults</string>
+    <string name="notification_channel">Active Faults</string>
+
     <!-- Fault strings -->
     <string name="fault_UARTOF">UART Overflow</string>
     <string name="fault_UARTFF">UART Frame</string>

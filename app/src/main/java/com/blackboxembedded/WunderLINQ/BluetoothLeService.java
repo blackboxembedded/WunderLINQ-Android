@@ -2395,21 +2395,25 @@ public class BluetoothLeService extends Service {
 
         int notificationId = 1;
         String channelId = "critical";
-        String channelName = "Critical Faults";
+        String channelName = mContext.getString(R.string.notification_channel);
         int importance = NotificationManager.IMPORTANCE_HIGH;
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel mChannel = new NotificationChannel(
                     channelId, channelName, importance);
+            mChannel.shouldShowLights();
             notificationManager.createNotificationChannel(mChannel);
         }
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, channelId)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_warning)
                 .setContentTitle(title)
                 .setStyle(new NotificationCompat.BigPictureStyle())
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(body))
+                .setAutoCancel(false)
+                .setOngoing(true)
+                .setCategory(Notification.CATEGORY_ALARM)
                 .setContentText(body);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
@@ -2421,7 +2425,7 @@ public class BluetoothLeService extends Service {
         mBuilder.setContentIntent(resultPendingIntent);
 
         Notification notification = mBuilder.build();
-        notification.flags = Notification.FLAG_INSISTENT;
+        notification.flags = Notification.FLAG_INSISTENT|Notification.FLAG_NO_CLEAR;
         notificationManager.notify(notificationId, notification);
     }
     static public void clearNotifications(){
