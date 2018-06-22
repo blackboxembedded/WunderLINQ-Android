@@ -28,10 +28,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.opencsv.CSVReader;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -40,9 +41,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import de.siegmar.fastcsv.reader.CsvContainer;
-import de.siegmar.fastcsv.reader.CsvReader;
-import de.siegmar.fastcsv.reader.CsvRow;
 
 public class TripViewActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -90,7 +88,6 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
             Log.d(TAG,fileName);
 
             file = new File(Environment.getExternalStorageDirectory(), "/WunderLINQ/logs/" + fileName);
-            CsvReader csvReader = new CsvReader();
 
             routePoints = new ArrayList<LatLng>();
             List<Double> speeds = new ArrayList<>();
@@ -112,75 +109,79 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
             Double endRearBrakeCnt = null;
 
             try {
-                CsvContainer csv = csvReader.read(file, StandardCharsets.UTF_8);
-                for (CsvRow row : csv.getRows()) {
-                    //Log.d(TAG,"Read line: " + row);
-                    //Log.d(TAG,"First column of line: " + row.getField(0));
+                CSVReader reader = new CSVReader(new FileReader(file));
+                List<String[]> myEntries = reader.readAll();
+                int lineNumber = 0;
+                for(String[] nextLine : myEntries) {
+                    lineNumber = lineNumber + 1;
+                    Log.d(TAG, nextLine[0] + "," + nextLine[1] + "etc...");
+
                     try {
-                        if (row.getOriginalLineNumber() == 2) {
-                            startTime = df.parse(row.getField(0));
+                        if (lineNumber == 2) {
+                            startTime = df.parse(nextLine[0]);
                         } else {
-                            endTime = df.parse(row.getField(0));
+                            endTime = df.parse(nextLine[0]);
                         }
                     } catch (ParseException e){
 
                     }
-                    if((row.getOriginalLineNumber() > 1) && (!row.getField(1).equals("No Fix") && (!row.getField(2).equals("No Fix")))) {
-                        LatLng location = new LatLng(Double.parseDouble(row.getField(1)), Double.parseDouble(row.getField(2)));
+
+                    if((lineNumber > 1) && (!nextLine[1].equals("No Fix") && (!nextLine[2].equals("No Fix")))) {
+                        LatLng location = new LatLng(Double.parseDouble(nextLine[1]), Double.parseDouble(nextLine[2]));
                         routePoints.add(location);
-                        speeds.add(Double.parseDouble(row.getField(4)));
-                        if (maxSpeed == null || maxSpeed < Double.parseDouble(row.getField(4))){
-                            maxSpeed = Double.parseDouble(row.getField(4));
+                        speeds.add(Double.parseDouble(nextLine[4]));
+                        if (maxSpeed == null || maxSpeed < Double.parseDouble(nextLine[4])){
+                            maxSpeed = Double.parseDouble(nextLine[4]);
                         }
-                        if (minSpeed == null || minSpeed > Double.parseDouble(row.getField(4))){
-                            minSpeed = Double.parseDouble(row.getField(4));
-                        }
-                    }
-                    if (row.getOriginalLineNumber() > 1) {
-                        if (!row.getField(6).equals("null")){
-                            engineTemps.add(Double.parseDouble(row.getField(6)));
-                            if (maxEngineTemp == null || maxEngineTemp < Double.parseDouble(row.getField(6))){
-                                maxEngineTemp = Double.parseDouble(row.getField(6));
-                            }
-                            if (minEngineTemp == null || minEngineTemp > Double.parseDouble(row.getField(6))){
-                                minEngineTemp = Double.parseDouble(row.getField(6));
-                            }
-                        }
-                        if (!row.getField(7).equals("null")){
-                            ambientTemps.add(Double.parseDouble(row.getField(7)));
-                            if (maxAmbientTemp == null || maxAmbientTemp < Double.parseDouble(row.getField(7))){
-                                maxAmbientTemp = Double.parseDouble(row.getField(7));
-                            }
-                            if (minAmbientTemp == null || minAmbientTemp > Double.parseDouble(row.getField(7))){
-                                minAmbientTemp = Double.parseDouble(row.getField(7));
-                            }
-                        }
-                        if (!row.getField(10).equals("null")){
-                            if (endOdometer == null || endOdometer < Double.parseDouble(row.getField(10))){
-                                endOdometer = Double.parseDouble(row.getField(10));
-                            }
-                            if (startOdometer == null || startOdometer > Double.parseDouble(row.getField(10))){
-                                startOdometer = Double.parseDouble(row.getField(10));
-                            }
-                        }
-                        if (!row.getField(13).equals("null")){
-                            if (endFrontBrakeCnt == null || endFrontBrakeCnt < Double.parseDouble(row.getField(13))){
-                                endFrontBrakeCnt = Double.parseDouble(row.getField(13));
-                            }
-                        }
-                        if (!row.getField(14).equals("null")){
-                            if (endRearBrakeCnt == null || endRearBrakeCnt < Double.parseDouble(row.getField(14))){
-                                endRearBrakeCnt = Double.parseDouble(row.getField(14));
-                            }
-                        }
-                        if (!row.getField(15).equals("null")){
-                            if (endShiftCnt == null || endShiftCnt < Double.parseDouble(row.getField(15))){
-                                endShiftCnt = Double.parseDouble(row.getField(15));
-                            }
+                        if (minSpeed == null || minSpeed > Double.parseDouble(nextLine[4])){
+                            minSpeed = Double.parseDouble(nextLine[4]);
                         }
                     }
-                    if(row.getOriginalLineNumber() == 2){
-                        tvDate.setText(row.getField(0));
+                    if (lineNumber > 1) {
+                        if (!nextLine[6].equals("null")){
+                            engineTemps.add(Double.parseDouble(nextLine[6]));
+                            if (maxEngineTemp == null || maxEngineTemp < Double.parseDouble(nextLine[6])){
+                                maxEngineTemp = Double.parseDouble(nextLine[6]);
+                            }
+                            if (minEngineTemp == null || minEngineTemp > Double.parseDouble(nextLine[6])){
+                                minEngineTemp = Double.parseDouble(nextLine[6]);
+                            }
+                        }
+                        if (!nextLine[7].equals("null")){
+                            ambientTemps.add(Double.parseDouble(nextLine[7]));
+                            if (maxAmbientTemp == null || maxAmbientTemp < Double.parseDouble(nextLine[7])){
+                                maxAmbientTemp = Double.parseDouble(nextLine[7]);
+                            }
+                            if (minAmbientTemp == null || minAmbientTemp > Double.parseDouble(nextLine[7])){
+                                minAmbientTemp = Double.parseDouble(nextLine[7]);
+                            }
+                        }
+                        if (!nextLine[10].equals("null")){
+                            if (endOdometer == null || endOdometer < Double.parseDouble(nextLine[10])){
+                                endOdometer = Double.parseDouble(nextLine[10]);
+                            }
+                            if (startOdometer == null || startOdometer > Double.parseDouble(nextLine[10])){
+                                startOdometer = Double.parseDouble(nextLine[10]);
+                            }
+                        }
+                        if (!nextLine[13].equals("null")){
+                            if (endFrontBrakeCnt == null || endFrontBrakeCnt < Double.parseDouble(nextLine[13])){
+                                endFrontBrakeCnt = Double.parseDouble(nextLine[13]);
+                            }
+                        }
+                        if (!nextLine[14].equals("null")){
+                            if (endRearBrakeCnt == null || endRearBrakeCnt < Double.parseDouble(nextLine[14])){
+                                endRearBrakeCnt = Double.parseDouble(nextLine[14]);
+                            }
+                        }
+                        if (!nextLine[15].equals("null")){
+                            if (endShiftCnt == null || endShiftCnt < Double.parseDouble(nextLine[15])){
+                                endShiftCnt = Double.parseDouble(nextLine[15]);
+                            }
+                        }
+                    }
+                    if(lineNumber == 2){
+                        tvDate.setText(nextLine[0]);
                     }
                 }
 
@@ -284,7 +285,6 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
             FragmentManager myFragmentManager = getSupportFragmentManager();
             SupportMapFragment mapFragment = (SupportMapFragment) myFragmentManager.findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
-
         }
 
     }

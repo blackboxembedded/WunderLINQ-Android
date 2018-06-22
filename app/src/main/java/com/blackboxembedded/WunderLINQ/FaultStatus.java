@@ -12,8 +12,9 @@ import java.util.ArrayList;
 public class FaultStatus extends ContextWrapper {
 
     // Debug faults
-    private static boolean uartOverflowActive = false;
-    private static String uartOverflowDesc = "";
+    private static boolean uartErrorActive = false;
+    private static String uartErrorDesc = "";
+    private static String uartErrorCntDesc = "";
 
     private static boolean uartFrameActive = false;
     private static String uartFrameDesc = "";
@@ -140,7 +141,7 @@ public class FaultStatus extends ContextWrapper {
     public FaultStatus(Context base) {
         super(base);
         // Debug Faults
-        uartOverflowDesc = MainActivity.getContext().getResources().getString(R.string.fault_UARTOF);
+        uartErrorDesc = MainActivity.getContext().getResources().getString(R.string.fault_UARTERR);
         uartFrameDesc = MainActivity.getContext().getResources().getString(R.string.fault_UARTFF);
         uartLogicDesc = MainActivity.getContext().getResources().getString(R.string.fault_UARTLF);
 
@@ -188,8 +189,8 @@ public class FaultStatus extends ContextWrapper {
     public static ArrayList<String> getallActiveDesc() {
         ArrayList<String> allActiveDesc = new ArrayList<String>();
         // Debug faults
-        if(uartOverflowActive){
-            allActiveDesc.add(uartOverflowDesc);
+        if(uartErrorActive){
+            allActiveDesc.add(uartErrorDesc);
         }
         if(uartFrameActive){
             allActiveDesc.add(uartFrameDesc);
@@ -315,14 +316,14 @@ public class FaultStatus extends ContextWrapper {
     }
 
     // Debug faults
-    public static void setUartOverflowActive(boolean uartOverflowActive){
-        FaultStatus.uartOverflowActive = uartOverflowActive;
+    public static void setUartErrorActive(boolean uartErrorActive){
+        FaultStatus.uartErrorActive = uartErrorActive;
     }
-    public static boolean getUartOverflowActive() {
-        return uartOverflowActive;
+    public static boolean getUartErrorActive() {
+        return uartErrorActive;
     }
-    public static String getUartOverflowDesc() {
-        return uartOverflowDesc;
+    public static String getUartErrorDesc() {
+        return uartErrorDesc;
     }
 
     public static void setUartFrameActive(boolean uartFrameActive){

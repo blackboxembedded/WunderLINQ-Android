@@ -1627,45 +1627,9 @@ public class BluetoothLeService extends Service {
                         break;
                     case 0xff:
                         Log.d(TAG,"Debug Message received: " + stringBuilder.toString());
-                        // 0F=Overflow, 1F=Frame, 2F=Logic, 3F=Overflow & Frame, 4F=Overflow & Logic, 5F=Frame & Logic, 6F=Overflow, Frame & Logic
+                        //
                         if (sharedPrefs.getBoolean("prefShowUartFaults",false)) {
-                            switch (data[0] & 0xFF) {
-                                case 0x0F:
-                                    faults.setUartOverflowActive(true);
-                                    faults.setUartFrameActive(false);
-                                    faults.setUartLogicActive(false);
-                                    break;
-                                case 0x1F:
-                                    faults.setUartOverflowActive(false);
-                                    faults.setUartFrameActive(true);
-                                    faults.setUartLogicActive(false);
-                                    break;
-                                case 0x2F:
-                                    faults.setUartOverflowActive(false);
-                                    faults.setUartFrameActive(false);
-                                    faults.setUartLogicActive(true);
-                                    break;
-                                case 0x3F:
-                                    faults.setUartOverflowActive(true);
-                                    faults.setUartFrameActive(true);
-                                    faults.setUartLogicActive(false);
-                                    break;
-                                case 0x4F:
-                                    faults.setUartOverflowActive(true);
-                                    faults.setUartFrameActive(false);
-                                    faults.setUartLogicActive(true);
-                                    break;
-                                case 0x5F:
-                                    faults.setUartOverflowActive(false);
-                                    faults.setUartFrameActive(true);
-                                    faults.setUartLogicActive(true);
-                                    break;
-                                case 0x6F:
-                                    faults.setUartOverflowActive(true);
-                                    faults.setUartFrameActive(true);
-                                    faults.setUartLogicActive(true);
-                                    break;
-                            }
+                            faults.setUartErrorActive(true);
                         }
                         break;
                     default:

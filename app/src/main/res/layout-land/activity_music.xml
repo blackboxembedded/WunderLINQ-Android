@@ -18,7 +18,10 @@
             android:src="@drawable/ic_backward"
             android:adjustViewBounds="true"
             android:padding="5dp"
-            android:scaleType="fitCenter" />
+            android:scaleType="fitCenter"
+            android:focusable="true"
+            android:nextFocusUp="@+id/next_button"
+            android:nextFocusDown="@+id/play_pause_button"/>
 
         <ImageButton
             android:id="@+id/play_pause_button"
@@ -27,7 +30,12 @@
             android:src="@drawable/ic_play"
             android:adjustViewBounds="true"
             android:padding="5dp"
-            android:scaleType="fitCenter" />
+            android:scaleType="fitCenter"
+            android:focusable="true"
+            android:nextFocusUp="@+id/prev_button"
+            android:nextFocusDown="@+id/next_button">
+            <requestFocus />
+        </ImageButton>
 
         <ImageButton
             android:id="@+id/next_button"
@@ -36,7 +44,10 @@
             android:src="@drawable/ic_forward"
             android:adjustViewBounds="true"
             android:padding="5dp"
-            android:scaleType="fitCenter" />
+            android:scaleType="fitCenter"
+            android:focusable="true"
+            android:nextFocusUp="@+id/play_pause_button"
+            android:nextFocusDown="@+id/prev_button"/>
     </LinearLayout>
 
     <LinearLayout

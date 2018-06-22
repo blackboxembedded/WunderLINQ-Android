@@ -50,7 +50,7 @@
     <string name="notification_channel">Active Faults</string>
 
     <!-- Fault strings -->
-    <string name="fault_UARTOF">UART Overflow</string>
+    <string name="fault_UARTERR">UART Error</string>
     <string name="fault_UARTFF">UART Frame</string>
     <string name="fault_UARTLF">UART Logic</string>
     <string name="fault_ABSSLF">ABS self-diagnosis not completed</string>
