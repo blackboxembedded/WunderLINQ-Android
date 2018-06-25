@@ -1,6 +1,5 @@
 package com.blackboxembedded.WunderLINQ;
 
-import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -267,10 +266,12 @@ public class MusicActivity extends AppCompatActivity {
         builder.setMessage(getString(R.string.notification_alert_body));
         builder.setPositiveButton(android.R.string.ok, null);
         builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @TargetApi(23)
             public void onDismiss(DialogInterface dialog) {
+                /*
                 getApplicationContext().startActivity(new Intent(
                         "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+                        */
+                startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
             }
         });
         builder.show();
