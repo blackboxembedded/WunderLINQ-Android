@@ -1,7 +1,9 @@
 package com.blackboxembedded.WunderLINQ;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -22,6 +24,7 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -58,6 +61,12 @@ public class TaskActivity extends AppCompatActivity {
 
     SensorManager sensorManager;
     Sensor lightSensor;
+
+    private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
+    private static final int PERMISSION_REQUEST_CAMERA = 100;
+    private static final int PERMISSION_REQUEST_READ_CONTACTS = 102;
+    private static final int PERMISSION_REQUEST_WRITE_STORAGE = 112;
+    private static final int PERMISSION_REQUEST_RECORD_AUDIO = 122;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -249,7 +258,7 @@ public class TaskActivity extends AppCompatActivity {
         final String[] taskTitles = new String[] {
                 getResources().getString(R.string.task_title_navigation),
                 getResources().getString(R.string.task_title_gohome),
-                getResources().getString(R.string.task_title_callhome),
+                getResources().getString(R.string.task_title_favnumber),
                 getResources().getString(R.string.task_title_callcontact),
                 getResources().getString(R.string.task_title_photo),
                 videoTaskText,
@@ -328,7 +337,7 @@ public class TaskActivity extends AppCompatActivity {
                         }
                         break;
                     case 2:
-                        //Call Home
+                        //Call Favorite Number
                         String phonenumber = sharedPrefs.getString("prefHomePhone","");
                         if (phonenumber != "") {
                             Intent callHomeIntent = new Intent(Intent.ACTION_DIAL);
@@ -340,97 +349,318 @@ public class TaskActivity extends AppCompatActivity {
                         break;
                     case 3:
                         //Call Contact
-                        Intent forwardIntent = new Intent(TaskActivity.this, ContactListActivity.class);
-                        startActivity(forwardIntent);
+                        // Check Read Contacts permissions
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            if (getApplication().checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(TaskActivity.this);
+                                builder.setTitle(getString(R.string.contacts_alert_title));
+                                builder.setMessage(getString(R.string.contacts_alert_body));
+                                builder.setPositiveButton(android.R.string.ok, null);
+                                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @TargetApi(23)
+                                    public void onDismiss(DialogInterface dialog) {
+                                        requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
+                                    }
+                                });
+                                builder.show();
+                            } else {
+                                // Android version is lesser than 6.0 or the permission is already granted.
+                                Intent forwardIntent = new Intent(TaskActivity.this, ContactListActivity.class);
+                                startActivity(forwardIntent);
+                            }
+                        }  else {
+                            // Android version is lesser than 6.0 or the permission is already granted.
+                            Intent forwardIntent = new Intent(TaskActivity.this, ContactListActivity.class);
+                            startActivity(forwardIntent);
+                        }
+
+                        //Intent forwardIntent = new Intent(TaskActivity.this, ContactListActivity.class);
+                        //startActivity(forwardIntent);
                         break;
                     case 4:
                         //Take photo
-                        Intent photoIntent = new Intent(TaskActivity.this, PhotoService.class);
-                        photoIntent.putExtra("camera",0);
-                        startService(photoIntent);
+                        boolean cameraPerms = false;
+                        boolean writePerms = false;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            // Check Camera permissions
+                            if (getApplication().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(TaskActivity.this);
+                                builder.setTitle(getString(R.string.camera_alert_title));
+                                builder.setMessage(getString(R.string.camera_alert_body));
+                                builder.setPositiveButton(android.R.string.ok, null);
+                                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @TargetApi(23)
+                                    public void onDismiss(DialogInterface dialog) {
+                                        requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
+                                    }
+                                });
+                                builder.show();
+                                cameraPerms = false;
+                            } else {
+                                cameraPerms = true;
+                            }
+                            // Check Write permissions
+                            if (getApplication().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(TaskActivity.this);
+                                builder.setTitle(getString(R.string.write_alert_title));
+                                builder.setMessage(getString(R.string.write_alert_body));
+                                builder.setPositiveButton(android.R.string.ok, null);
+                                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @TargetApi(23)
+                                    public void onDismiss(DialogInterface dialog) {
+                                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_WRITE_STORAGE);
+                                    }
+                                });
+                                builder.show();
+                                writePerms = false;
+                            } else {
+                                writePerms = true;
+                            }
+
+                            if (cameraPerms == true && writePerms == true){
+                                Intent photoIntent = new Intent(TaskActivity.this, PhotoService.class);
+                                photoIntent.putExtra("camera",0);
+                                startService(photoIntent);
+                            }
+
+                        } else {
+                            Intent photoIntent = new Intent(TaskActivity.this, PhotoService.class);
+                            photoIntent.putExtra("camera", 0);
+                            startService(photoIntent);
+                        }
                         break;
                     case 5:
                         //Record Video
+
                         TextView taskText=(TextView)view.findViewById(R.id.tv_label);
-                        if (taskText.getText().equals(getResources().getString(R.string.task_title_start_record))) {
-                            if (Build.VERSION.SDK_INT >= 23) {
-                                if (!Settings.canDrawOverlays(TaskActivity.this)) {
-                                    Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                            Uri.parse("package:" + getPackageName()));
-                                    startActivityForResult(intent, 1234);
-                                } else {
-                                    startService(new Intent(TaskActivity.this, VideoRecService.class));
-                                }
+
+                        boolean cameraVidPerms = false;
+                        boolean writeVidPerms = false;
+                        boolean audioVidPerms = false;
+                        boolean overlayVidPerms = false;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            // Check Camera permissions
+                            if (getApplication().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(TaskActivity.this);
+                                builder.setTitle(getString(R.string.camera_alert_title));
+                                builder.setMessage(getString(R.string.camera_alert_body));
+                                builder.setPositiveButton(android.R.string.ok, null);
+                                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @TargetApi(23)
+                                    public void onDismiss(DialogInterface dialog) {
+                                        requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
+                                    }
+                                });
+                                builder.show();
+                                cameraVidPerms = false;
                             } else {
-                                startService(new Intent(TaskActivity.this, VideoRecService.class));
+                                cameraVidPerms = true;
                             }
-                            taskText.setText(getResources().getString(R.string.task_title_stop_record));
+                            // Check Read Audio permissions
+                            if (getApplication().checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(TaskActivity.this);
+                                builder.setTitle(getString(R.string.record_audio_alert_title));
+                                builder.setMessage(getString(R.string.record_audio_alert_body));
+                                builder.setPositiveButton(android.R.string.ok, null);
+                                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @TargetApi(23)
+                                    public void onDismiss(DialogInterface dialog) {
+                                        requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSION_REQUEST_RECORD_AUDIO);
+                                    }
+                                });
+                                builder.show();
+                                audioVidPerms = false;
+                            } else {
+                                audioVidPerms = true;
+                            }
+                            // Check Write permissions
+                            if (getApplication().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(TaskActivity.this);
+                                builder.setTitle(getString(R.string.write_alert_title));
+                                builder.setMessage(getString(R.string.write_alert_body));
+                                builder.setPositiveButton(android.R.string.ok, null);
+                                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @TargetApi(23)
+                                    public void onDismiss(DialogInterface dialog) {
+                                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_WRITE_STORAGE);
+                                    }
+                                });
+                                builder.show();
+                                writeVidPerms = false;
+                            } else {
+                                writeVidPerms = true;
+                            }
+                            // Check overlay permissions
+                            if (!Settings.canDrawOverlays(TaskActivity.this)) {
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(TaskActivity.this);
+                                builder.setTitle(getString(R.string.overlay_alert_title));
+                                builder.setMessage(getString(R.string.overlay_alert_body));
+                                builder.setPositiveButton(android.R.string.ok, null);
+                                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @TargetApi(23)
+                                    public void onDismiss(DialogInterface dialog) {
+                                        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                                Uri.parse("package:" + getPackageName()));
+                                        startActivity(intent);
+                                    }
+                                });
+                                builder.show();
+                                overlayVidPerms = false;
+                            } else {
+                                overlayVidPerms = true;
+                            }
+                            if (cameraVidPerms == true && audioVidPerms == true && writeVidPerms == true && overlayVidPerms == true){
+                                if (taskText.getText().equals(getResources().getString(R.string.task_title_start_record))) {
+                                    startService(new Intent(TaskActivity.this, VideoRecService.class));
+                                    taskText.setText(getResources().getString(R.string.task_title_stop_record));
+                                } else {
+                                    stopService(new Intent(TaskActivity.this, VideoRecService.class));
+                                    taskText.setText(getResources().getString(R.string.task_title_start_record));
+                                }
+                            }
                         } else {
-                            stopService(new Intent(TaskActivity.this, VideoRecService.class));
-                            taskText.setText(getResources().getString(R.string.task_title_start_record));
+                            if (taskText.getText().equals(getResources().getString(R.string.task_title_start_record))) {
+                                startService(new Intent(TaskActivity.this, VideoRecService.class));
+                                taskText.setText(getResources().getString(R.string.task_title_stop_record));
+                            } else {
+                                stopService(new Intent(TaskActivity.this, VideoRecService.class));
+                                taskText.setText(getResources().getString(R.string.task_title_start_record));
+                            }
                         }
                         break;
                     case 6:
                         //Trip Log
-                        TextView tripTaskText=(TextView)view.findViewById(R.id.tv_label);
-                        if (tripTaskText.getText().equals(getResources().getString(R.string.task_title_start_trip))) {
-                            startService(new Intent(TaskActivity.this, LoggingService.class));
-                            tripTaskText.setText(getResources().getString(R.string.task_title_stop_trip));
+                        boolean writeLogPerms = false;
+                        boolean locationLogPerms = false;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            // Check Write permissions
+                            if (getApplication().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(TaskActivity.this);
+                                builder.setTitle(getString(R.string.write_alert_title));
+                                builder.setMessage(getString(R.string.write_alert_body));
+                                builder.setPositiveButton(android.R.string.ok, null);
+                                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @TargetApi(23)
+                                    public void onDismiss(DialogInterface dialog) {
+                                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_WRITE_STORAGE);
+                                    }
+                                });
+                                builder.show();
+                                writeLogPerms = false;
+                            } else {
+                                writeLogPerms = true;
+                            }
+                            // Check Location permissions
+                            if (getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(TaskActivity.this);
+                                builder.setTitle(getString(R.string.location_alert_title));
+                                builder.setMessage(getString(R.string.location_alert_body));
+                                builder.setPositiveButton(android.R.string.ok, null);
+                                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @TargetApi(23)
+                                    public void onDismiss(DialogInterface dialog) {
+                                        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_FINE_LOCATION);
+                                    }
+                                });
+                                builder.show();
+                                locationLogPerms = false;
+                            } else {
+                                locationLogPerms = true;
+                            }
+                            if (writeLogPerms == true && locationLogPerms == true){
+                                TextView tripTaskText=(TextView)view.findViewById(R.id.tv_label);
+                                if (tripTaskText.getText().equals(getResources().getString(R.string.task_title_start_trip))) {
+                                    startService(new Intent(TaskActivity.this, LoggingService.class));
+                                    tripTaskText.setText(getResources().getString(R.string.task_title_stop_trip));
+                                } else {
+                                    stopService(new Intent(TaskActivity.this, LoggingService.class));
+                                    tripTaskText.setText(getResources().getString(R.string.task_title_start_trip));
+                                }
+                            }
                         } else {
-                            stopService(new Intent(TaskActivity.this, LoggingService.class));
-                            tripTaskText.setText(getResources().getString(R.string.task_title_start_trip));
+                            TextView tripTaskText = (TextView) view.findViewById(R.id.tv_label);
+                            if (tripTaskText.getText().equals(getResources().getString(R.string.task_title_start_trip))) {
+                                startService(new Intent(TaskActivity.this, LoggingService.class));
+                                tripTaskText.setText(getResources().getString(R.string.task_title_stop_trip));
+                            } else {
+                                stopService(new Intent(TaskActivity.this, LoggingService.class));
+                                tripTaskText.setText(getResources().getString(R.string.task_title_start_trip));
+                            }
                         }
                         break;
                     case 7:
                         //Waypoint
                         // Get location
-                        try {
-                            // Get the location manager
-                            double lat;
-                            double lon;
-                            double speed = 0;
-                            String waypoint = "";
-                            LocationManager locationManager = (LocationManager)
-                                    TaskActivity.this.getSystemService(LOCATION_SERVICE);
-                            Criteria criteria = new Criteria();
-                            String bestProvider = locationManager.getBestProvider(criteria, false);
-                            if (ActivityCompat.checkSelfPermission(TaskActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(TaskActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                                // TODO: Consider calling
-                                //    ActivityCompat#requestPermissions
-                                // here to request the missing permissions, and then overriding
-                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                //                                          int[] grantResults)
-                                // to handle the case where the user grants the permission. See the documentation
-                                // for ActivityCompat#requestPermissions for more details.
-                                return;
+                        boolean locationWPPerms = false;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            // Check Location permissions
+                            if (getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(TaskActivity.this);
+                                builder.setTitle(getString(R.string.location_alert_title));
+                                builder.setMessage(getString(R.string.location_alert_body));
+                                builder.setPositiveButton(android.R.string.ok, null);
+                                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @TargetApi(23)
+                                    public void onDismiss(DialogInterface dialog) {
+                                        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_FINE_LOCATION);
+                                    }
+                                });
+                                builder.show();
+                                locationWPPerms = false;
+                            } else {
+                                locationWPPerms = true;
                             }
-                            Location location = locationManager.getLastKnownLocation(bestProvider);
-                            try {
-                                lat = location.getLatitude();
-                                lon = location.getLongitude();
-                                waypoint = lat + "," + lon;
-                                // Get current date/time
-                                Calendar cal = Calendar.getInstance();
-                                Date date = cal.getTime();
-                                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                                String curdatetime = formatter.format(date);
-                                // Open database
-                                WaypointDatasource datasource = new WaypointDatasource(TaskActivity.this);
-                                datasource.open();
-
-                                WaypointRecord record = new WaypointRecord(curdatetime, waypoint);
-                                datasource.addRecord (record);
-                                datasource.close();
-
-                            } catch (NullPointerException e) {
-                                lat = -1.0;
-                                lon = -1.0;
-                            }
-
-                        }catch (Exception ex){
-                            ex.printStackTrace();
+                        } else {
+                            locationWPPerms = true;
                         }
+                        if (locationWPPerms == true) {
+                            try {
+                                // Get the location manager
+                                double lat;
+                                double lon;
+                                double speed = 0;
+                                String waypoint = "";
+                                LocationManager locationManager = (LocationManager)
+                                        TaskActivity.this.getSystemService(LOCATION_SERVICE);
+                                Criteria criteria = new Criteria();
+                                String bestProvider = locationManager.getBestProvider(criteria, false);
+                                if (ActivityCompat.checkSelfPermission(TaskActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(TaskActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                    // TODO: Consider calling
+                                    //    ActivityCompat#requestPermissions
+                                    // here to request the missing permissions, and then overriding
+                                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                    //                                          int[] grantResults)
+                                    // to handle the case where the user grants the permission. See the documentation
+                                    // for ActivityCompat#requestPermissions for more details.
+                                    return;
+                                }
+                                Location location = locationManager.getLastKnownLocation(bestProvider);
+                                try {
+                                    lat = location.getLatitude();
+                                    lon = location.getLongitude();
+                                    waypoint = lat + "," + lon;
+                                    // Get current date/time
+                                    Calendar cal = Calendar.getInstance();
+                                    Date date = cal.getTime();
+                                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                                    String curdatetime = formatter.format(date);
+                                    // Open database
+                                    WaypointDatasource datasource = new WaypointDatasource(TaskActivity.this);
+                                    datasource.open();
 
+                                    WaypointRecord record = new WaypointRecord(curdatetime, waypoint);
+                                    datasource.addRecord(record);
+                                    datasource.close();
+
+                                } catch (NullPointerException e) {
+                                    lat = -1.0;
+                                    lon = -1.0;
+                                }
+
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        }
                         break;
                     case 8:
                         //Voice Assistant
@@ -441,6 +671,90 @@ public class TaskActivity extends AppCompatActivity {
 
         });
         // End of Tasks
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode)
+        {
+            case PERMISSION_REQUEST_CAMERA: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    Log.d(TAG, "Camera permission granted");
+                    //setupBLE();
+                } else
+                {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.negative_alert_title));
+                    builder.setMessage(getString(R.string.negative_camera_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
+                }
+                break;
+            }
+            case PERMISSION_REQUEST_RECORD_AUDIO: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    Log.d(TAG, "Microphone permission granted");
+                    //setupBLE();
+                } else
+                {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.negative_alert_title));
+                    builder.setMessage(getString(R.string.negative_microphone_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
+                }
+                break;
+            }
+            case PERMISSION_REQUEST_WRITE_STORAGE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    Log.d(TAG, "Write to storage permission granted");
+                    //setupBLE();
+                } else
+                {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.negative_alert_title));
+                    builder.setMessage(getString(R.string.negative_write_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
+                }
+                break;
+            }
+            case PERMISSION_REQUEST_FINE_LOCATION: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "coarse location permission granted");
+                } else {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.negative_alert_title));
+                    builder.setMessage(getString(R.string.negative_location_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
+                }
+                break;
+            }
+        }
     }
 
     public void updateColors(boolean itsDark){

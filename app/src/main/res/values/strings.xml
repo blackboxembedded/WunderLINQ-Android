@@ -6,21 +6,22 @@
     <string name="blank_field">∞</string>
     <!-- Permission Requests -->
     <string name="camera_alert_title">WunderLINQ needs permissions to use your camera</string>
-    <string name="camera_alert_body">Please grant camera permissions so this app can take photos</string>
+    <string name="camera_alert_body">Please grant access to use your camera</string>
     <string name="contacts_alert_title">WunderLINQ needs permissions to use read your contacts</string>
     <string name="contacts_alert_body">Please grant read access to your contacts</string>
     <string name="record_audio_alert_title">WunderLINQ needs permissions to record audio</string>
     <string name="record_audio_alert_body">Please grant access to record audio</string>
     <string name="location_alert_title">WunderLINQ needs location permission</string>
-    <string name="location_alert_body">Please grant location permission so this app can log your trip</string>
+    <string name="location_alert_body">Please grant location permission</string>
     <string name="write_alert_title">WunderLINQ needs write permission</string>
-    <string name="write_alert_body">Please grant write permission so this app can log data from your WunderLINQ</string>
+    <string name="write_alert_body">Please grant write permission</string>
     <string name="overlay_alert_title">WunderLINQ needs overlay permission</string>
     <string name="overlay_alert_body">Please grant overlay permission so this app can record video</string>
     <string name="negative_alert_title">Functionality limited</string>
     <string name="negative_location_alert_body">Since location access has not been granted, this app will not be able to discover your WunderLINQ when in the background.</string>
-    <string name="negative_write_alert_body">Since write access has not been granted, this app will not be able to log data.</string>
-    <string name="negative_camera_alert_body">Since camera access has not been granted, this app will not be able to take photos.</string>
+    <string name="negative_write_alert_body">Since write access has not been granted, this app will not be able to save files.</string>
+    <string name="negative_camera_alert_body">Since camera access has not been granted, this app will not be able to take photos or videos.</string>
+    <string name="negative_microphone_alert_body">Since microphone access has not been granted, this app will not be able to record videos.</string>
     <string name="disclaimer_alert_title">WARNING!</string>
     <string name="disclaimer_alert_body">
         Do not attempt to enter route information or adjust the WunderLINQ while driving.
@@ -137,7 +138,7 @@
     <string name="quicktask_title">Quick Tasks</string>
     <string name="task_title_navigation">Navigation</string>
     <string name="task_title_gohome">Go Home</string>
-    <string name="task_title_callhome">Call Home</string>
+    <string name="task_title_favnumber">Call Favorite Number</string>
     <string name="task_title_callcontact">Call Contact</string>
     <string name="task_title_photo">Take Photo</string>
     <string name="task_title_start_record">Start Recording</string>
@@ -147,7 +148,7 @@
     <string name="task_title_waypoint">Save Waypoint</string>
     <string name="task_title_voicecontrol">Voice Assistant</string>
     <string name="toast_address_not_set">No Go Home address set in Settings</string>
-    <string name="toast_phone_not_set">No Call Home phone number set in Settings</string>
+    <string name="toast_phone_not_set">No Favorite Number set in Settings</string>
 
     <!-- ContactListActivity -->
     <string name="contactlist_title">Contacts</string>
@@ -182,7 +183,7 @@
     <string name="info_title">Personal Information</string>
     <string name="pref_homeAddress_name">Home Address</string>
     <string name="pref_homeAddress_summary">Format: 12345 Street, City, State 12345</string>
-    <string name="pref_homePhone_name">Home Phone Number</string>
+    <string name="pref_homePhone_name">Favorite Phone Number</string>
     <string name="pref_homePhone_summary">Format: 11234567890</string>
 
     <string name="ui_title">User Interface</string>
