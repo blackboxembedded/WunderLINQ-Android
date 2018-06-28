@@ -296,36 +296,40 @@ public class MusicActivity extends AppCompatActivity {
                     }
                 }
 
-                metaData = controller.getMetadata();
+                try {
+                    metaData = controller.getMetadata();
 
-                String metadataArtist = getString(R.string.unknown);
-                if (metaData.getString(MediaMetadata.METADATA_KEY_ARTIST) != null) {
-                    metadataArtist = metaData.getString(MediaMetadata.METADATA_KEY_ARTIST);
-                }
-                mArtistText.setText(metadataArtist);
+                    String metadataArtist = getString(R.string.unknown);
+                    if (metaData.getString(MediaMetadata.METADATA_KEY_ARTIST) != null) {
+                        metadataArtist = metaData.getString(MediaMetadata.METADATA_KEY_ARTIST);
+                    }
+                    mArtistText.setText(metadataArtist);
 
-                String metadataAlbum = getString(R.string.unknown);
-                if (metaData.getString(MediaMetadata.METADATA_KEY_ALBUM) != null) {
-                    metadataAlbum = metaData.getString(MediaMetadata.METADATA_KEY_ALBUM);
-                }
-                mAlbumText.setText(metadataAlbum);
+                    String metadataAlbum = getString(R.string.unknown);
+                    if (metaData.getString(MediaMetadata.METADATA_KEY_ALBUM) != null) {
+                        metadataAlbum = metaData.getString(MediaMetadata.METADATA_KEY_ALBUM);
+                    }
+                    mAlbumText.setText(metadataAlbum);
 
-                String metadataTitle = getString(R.string.unknown);
-                if (metaData.getString(MediaMetadata.METADATA_KEY_TITLE) != null) {
-                    metadataTitle = metaData.getString(MediaMetadata.METADATA_KEY_TITLE);
-                }
-                mTitleText.setText(metadataTitle);
+                    String metadataTitle = getString(R.string.unknown);
+                    if (metaData.getString(MediaMetadata.METADATA_KEY_TITLE) != null) {
+                        metadataTitle = metaData.getString(MediaMetadata.METADATA_KEY_TITLE);
+                    }
+                    mTitleText.setText(metadataTitle);
 
-                if (metaData.getBitmap(MediaMetadata.METADATA_KEY_ART) != null) {
-                    mArtwork.setImageBitmap(scaleBitmap(metaData.getBitmap(MediaMetadata.METADATA_KEY_ART), 800, 800));
-                } else if (metaData.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART) != null) {
-                    mArtwork.setImageBitmap(scaleBitmap(metaData.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART), 800, 800));
-                } else {
-                    // Read your drawable from somewhere
-                    Drawable dr = getResources().getDrawable(R.drawable.ic_music_note);
-                    Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
-                    mArtwork.setImageBitmap(scaleBitmap(bitmap, 800, 800));
-                    //mArtwork.setImageResource(R.drawable.ic_music_note);
+                    if (metaData.getBitmap(MediaMetadata.METADATA_KEY_ART) != null) {
+                        mArtwork.setImageBitmap(scaleBitmap(metaData.getBitmap(MediaMetadata.METADATA_KEY_ART), 800, 800));
+                    } else if (metaData.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART) != null) {
+                        mArtwork.setImageBitmap(scaleBitmap(metaData.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART), 800, 800));
+                    } else {
+                        // Read your drawable from somewhere
+                        Drawable dr = getResources().getDrawable(R.drawable.ic_music_note);
+                        Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
+                        mArtwork.setImageBitmap(scaleBitmap(bitmap, 800, 800));
+                        //mArtwork.setImageResource(R.drawable.ic_music_note);
+                    }
+                } catch (NullPointerException e){
+                    Log.d(TAG,"Error: " + e.toString());
                 }
             } else {
                 Log.d(TAG, "No music player running");

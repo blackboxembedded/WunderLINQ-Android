@@ -5,9 +5,11 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
@@ -21,13 +23,22 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener{
 
     private final static String TAG = "SettingsActivity";
     private static SharedPreferences sharedPrefs;
     static AlertDialog alertDialog;
 
     private static int versionButtonTouches = 0;
+
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+        EditTextPreference addressPref = (EditTextPreference) findPreference("prefHomeAddress");
+        addressPref.setSummary(sharedPreferences.getString("prefHomeAddress",getString(R.string.pref_homeAddress_summary)));
+
+        EditTextPreference favNumberPref = (EditTextPreference) findPreference("prefHomePhone");
+        favNumberPref.setSummary(sharedPreferences.getString("prefHomePhone",getString(R.string.pref_homeAddress_summary)));
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,6 +66,12 @@ public class SettingsActivity extends PreferenceActivity {
             addPreferencesFromResource(R.xml.settings);
 
             sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+            EditTextPreference addressPref = (EditTextPreference) findPreference("prefHomeAddress");
+            addressPref.setSummary(sharedPrefs.getString("prefHomeAddress",getString(R.string.pref_homeAddress_summary)));
+
+            EditTextPreference favNumberPref = (EditTextPreference) findPreference("prefHomePhone");
+            favNumberPref.setSummary(sharedPrefs.getString("prefHomePhone",getString(R.string.pref_homeAddress_summary)));
 
             if (!(sharedPrefs.getBoolean("DEBUG_ENABLED",false))){
                 PreferenceScreen preferenceScreen = getPreferenceScreen();

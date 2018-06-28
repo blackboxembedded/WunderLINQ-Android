@@ -16,6 +16,7 @@
         <ListPreference
             android:key="prefMotorcycleType"
             android:title="@string/pref_bike_type"
+            android:summary="%s"
             android:entries="@array/bike_type_array"
             android:entryValues="@array/bike_type_arrayValues"
             android:defaultValue="0"
@@ -23,6 +24,7 @@
         <ListPreference
             android:key="prefPressureF"
             android:title="@string/pref_pressuref_name"
+            android:summary="%s"
             android:entries="@array/pressuref_array"
             android:entryValues="@array/pressuref_arrayValues"
             android:defaultValue="0"
@@ -30,6 +32,7 @@
         <ListPreference
             android:key="prefTempF"
             android:title="@string/pref_tempf_name"
+            android:summary="%s"
             android:entries="@array/tempf_array"
             android:entryValues="@array/tempf_arrayValues"
             android:defaultValue="0"
@@ -37,6 +40,7 @@
         <ListPreference
             android:key="prefDistance"
             android:title="@string/pref_distance_name"
+            android:summary="%s"
             android:entries="@array/distance_array"
             android:entryValues="@array/distance_arrayValues"
             android:defaultValue="0"
@@ -44,6 +48,7 @@
         <ListPreference
             android:key="prefBearing"
             android:title="@string/pref_bearing_name"
+            android:summary="%s"
             android:entries="@array/bearing_array"
             android:entryValues="@array/bearing_arrayValues"
             android:defaultValue="0"

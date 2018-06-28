@@ -25,6 +25,16 @@ public class Data {
         Data.lastLocation = location;
     }
 
+    // VIN
+    // Last Location
+    private static String vin;
+    public static String getVin() {
+        return vin;
+    }
+    public static void setVin(String vin){
+        Data.vin = vin;
+    }
+
     // Front Tire Pressure in bar
     private static Double frontTirePressure;
     public static Double getFrontTirePressure() {
@@ -146,6 +156,7 @@ public class Data {
     public static void clear(){
         Data.lastLocation = null;
         Data.lastMessage = null;
+        Data.vin = null;
         Data.frontTirePressure = null;
         Data.rearTirePressure = null;
         Data.ambientTemperature = null;

@@ -24,6 +24,7 @@ import android.util.Log;
 import android.util.Size;
 import android.view.Surface;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -203,6 +204,7 @@ public class PhotoService extends Service {
                             Log.i("ExternalStorage", "-> uri=" + uri);
                         }
                     });
+            Toast.makeText(this, R.string.toast_photo_taken, Toast.LENGTH_LONG).show();
         } catch (final IOException e) {
             Log.e(TAG, "Exception occurred while saving picture to external storage ", e);
         }

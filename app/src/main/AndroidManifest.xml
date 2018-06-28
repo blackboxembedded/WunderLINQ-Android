@@ -57,7 +57,8 @@
         <activity
             android:name=".OTAFirmwareUpdate.OTAFirmwareUpgradeActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"/>
         <activity
             android:name=".OTAFirmwareUpdate.OTAFilesListingActivity"
             android:screenOrientation="portrait"/>

@@ -536,6 +536,13 @@ public class BluetoothLeService extends Service {
                 switch (msgID) {
                     case 0x00:
                         //Log.d(TAG, "Message ID 0");
+                        byte[] vinValue = new byte[7];
+                        for (int x = 1; x <= 7; x++){
+                            vinValue[x - 1] = data[x];
+                        }
+                        String vin = new String(vinValue);
+                        Data.setVin(vin);
+
                         break;
                     case 0x01:
                         //Log.d(TAG, "Message ID 1");
@@ -1630,6 +1637,9 @@ public class BluetoothLeService extends Service {
                         //
                         if (sharedPrefs.getBoolean("prefShowUartFaults",false)) {
                             faults.setUartErrorActive(true);
+                            if (data[7] == 0xf0){
+                                faults.setUartCommTimeoutActive(true);
+                            }
                         }
                         break;
                     default:

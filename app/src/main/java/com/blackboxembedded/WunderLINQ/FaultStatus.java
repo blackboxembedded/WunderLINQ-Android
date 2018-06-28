@@ -16,8 +16,8 @@ public class FaultStatus extends ContextWrapper {
     private static String uartErrorDesc = "";
     private static String uartErrorCntDesc = "";
 
-    private static boolean uartFrameActive = false;
-    private static String uartFrameDesc = "";
+    private static boolean uartCommTimeoutActive = false;
+    private static String uartCommTimeoutDesc = "";
 
     private static boolean uartLogicActive = false;
     private static String uartLogicDesc = "";
@@ -142,7 +142,7 @@ public class FaultStatus extends ContextWrapper {
         super(base);
         // Debug Faults
         uartErrorDesc = MainActivity.getContext().getResources().getString(R.string.fault_UARTERR);
-        uartFrameDesc = MainActivity.getContext().getResources().getString(R.string.fault_UARTFF);
+        uartCommTimeoutDesc = MainActivity.getContext().getResources().getString(R.string.fault_UARTCTF);
         uartLogicDesc = MainActivity.getContext().getResources().getString(R.string.fault_UARTLF);
 
         // Motorcycle faults
@@ -192,8 +192,8 @@ public class FaultStatus extends ContextWrapper {
         if(uartErrorActive){
             allActiveDesc.add(uartErrorDesc);
         }
-        if(uartFrameActive){
-            allActiveDesc.add(uartFrameDesc);
+        if(uartCommTimeoutActive){
+            allActiveDesc.add(uartCommTimeoutDesc);
         }
         if(uartLogicActive){
             allActiveDesc.add(uartLogicDesc);
@@ -326,14 +326,14 @@ public class FaultStatus extends ContextWrapper {
         return uartErrorDesc;
     }
 
-    public static void setUartFrameActive(boolean uartFrameActive){
-        FaultStatus.uartFrameActive = uartFrameActive;
+    public static void setUartCommTimeoutActive(boolean uartCommTimeoutActive){
+        FaultStatus.uartCommTimeoutActive = uartCommTimeoutActive;
     }
-    public static boolean getUartFrameActive() {
-        return uartFrameActive;
+    public static boolean getUartCommTimeoutActive() {
+        return uartCommTimeoutActive;
     }
-    public static String getUartFrameDesc() {
-        return uartFrameDesc;
+    public static String getUartCommTimeoutDesc() {
+        return uartCommTimeoutDesc;
     }
 
     public static void setUartLogicActive(boolean uartLogicActive){

@@ -144,9 +144,13 @@ public class VideoRecService extends Service implements SurfaceHolder.Callback {
     @Override
     public void onDestroy() {
         if (mediaRecorder != null) {
-            mediaRecorder.stop();
-            mediaRecorder.reset();
-            mediaRecorder.release();
+            try {
+                mediaRecorder.stop();
+                mediaRecorder.reset();
+                mediaRecorder.release();
+            } catch (RuntimeException e) {
+
+            }
         }
 
         camera.lock();

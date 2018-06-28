@@ -91,7 +91,6 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
 
             routePoints = new ArrayList<LatLng>();
             List<Double> speeds = new ArrayList<>();
-            Double minSpeed = null;
             Double maxSpeed = null;
             List<Double> ambientTemps = new ArrayList<>();
             Double minAmbientTemp = null;
@@ -132,9 +131,6 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                         speeds.add(Double.parseDouble(nextLine[4]));
                         if (maxSpeed == null || maxSpeed < Double.parseDouble(nextLine[4])){
                             maxSpeed = Double.parseDouble(nextLine[4]);
-                        }
-                        if (minSpeed == null || minSpeed > Double.parseDouble(nextLine[4])){
-                            minSpeed = Double.parseDouble(nextLine[4]);
                         }
                     }
                     if (lineNumber > 1) {
@@ -206,11 +202,10 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                     }
                     avgSpeed = avgSpeed / speeds.size();
                     if (distanceFormat.contains("1")) {
-                        minSpeed = kmToMiles(minSpeed);
                         avgSpeed = kmToMiles(avgSpeed);
                         maxSpeed = kmToMiles(maxSpeed);
                     }
-                    tvSpeed.setText("(" + oneDigit.format(minSpeed) + "/" + oneDigit.format(avgSpeed) + "/" + oneDigit.format(maxSpeed) + ")" + speedUnit);
+                    tvSpeed.setText("(" + oneDigit.format(avgSpeed) + "/" + oneDigit.format(maxSpeed) + ")" + speedUnit);
                 }
 
                 if(endShiftCnt != null){
