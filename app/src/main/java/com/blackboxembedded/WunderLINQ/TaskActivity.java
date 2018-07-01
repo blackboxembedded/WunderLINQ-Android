@@ -22,7 +22,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -624,16 +623,7 @@ public class TaskActivity extends AppCompatActivity {
                                         TaskActivity.this.getSystemService(LOCATION_SERVICE);
                                 Criteria criteria = new Criteria();
                                 String bestProvider = locationManager.getBestProvider(criteria, false);
-                                if (ActivityCompat.checkSelfPermission(TaskActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(TaskActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                                    // TODO: Consider calling
-                                    //    ActivityCompat#requestPermissions
-                                    // here to request the missing permissions, and then overriding
-                                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                    //                                          int[] grantResults)
-                                    // to handle the case where the user grants the permission. See the documentation
-                                    // for ActivityCompat#requestPermissions for more details.
-                                    return;
-                                }
+                                Log.d(TAG,"trying bestprovider: " + bestProvider);
                                 Location location = locationManager.getLastKnownLocation(bestProvider);
                                 try {
                                     lat = location.getLatitude();
@@ -644,6 +634,7 @@ public class TaskActivity extends AppCompatActivity {
                                     Date date = cal.getTime();
                                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                                     String curdatetime = formatter.format(date);
+
                                     // Open database
                                     WaypointDatasource datasource = new WaypointDatasource(TaskActivity.this);
                                     datasource.open();
@@ -651,6 +642,7 @@ public class TaskActivity extends AppCompatActivity {
                                     WaypointRecord record = new WaypointRecord(curdatetime, waypoint);
                                     datasource.addRecord(record);
                                     datasource.close();
+
 
                                 } catch (NullPointerException e) {
                                     lat = -1.0;

@@ -181,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
         // selectively disable BLE-related features.
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
             Toast.makeText(this, R.string.toast_ble_not_supported, Toast.LENGTH_SHORT).show();
+            //Reenable after 5.0 testing
             finish();
         }
 
@@ -193,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
         // Checks if Bluetooth is supported on the device.
         if (mBluetoothAdapter == null) {
             Toast.makeText(this, R.string.toast_error_bluetooth_not_supported, Toast.LENGTH_LONG).show();
+            //Reenable after 5.0 testing
             finish();
             return;
         }
@@ -509,6 +511,7 @@ public class MainActivity extends AppCompatActivity {
             //Log.d(TAG, "Connect request result=" + result);
         } else {
             Log.d(TAG,"mBluetoothLeService is NOT null");
+            //Reenable after 5.0 testing
             setupBLE();
         }
         sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
