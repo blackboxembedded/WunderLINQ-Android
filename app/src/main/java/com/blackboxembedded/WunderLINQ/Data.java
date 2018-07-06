@@ -98,6 +98,15 @@ public class Data {
         Data.tripTwo = distance;
     }
 
+    // Trip Auto Distance in km
+    private static Double tripAuto;
+    public static Double getTripAuto() {
+        return tripAuto;
+    }
+    public static void setTripAuto(Double distance){
+        Data.tripAuto = distance;
+    }
+
     // Number of shifts
     private static Integer numberOfShifts = 0;
     public static Integer getNumberOfShifts() {
@@ -150,6 +159,15 @@ public class Data {
     }
     public static void setRearBrake(Integer rearBrake){
         Data.rearBrake = rearBrake;
+    }
+
+    // Ambient Light
+    private static Integer ambientLight = 0;
+    public static Integer getAmbientLight() {
+        return ambientLight;
+    }
+    public static void setAmbientLight(Integer ambientLight){
+        Data.ambientLight = ambientLight;
     }
 
     // Utility functions

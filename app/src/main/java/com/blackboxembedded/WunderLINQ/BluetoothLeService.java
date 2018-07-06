@@ -546,6 +546,9 @@ public class BluetoothLeService extends Service {
                         break;
                     case 0x01:
                         //Log.d(TAG, "Message ID 1");
+                        // Ambient Light
+                        int ambientLightValue = (data[6] & 0xFF) & 0x0f; // the lowest 4 bits
+                        Data.setAmbientLight(ambientLightValue);
                         break;
                     case 0x02:
                         //Log.d(TAG, "Message ID 2");
@@ -1622,7 +1625,9 @@ public class BluetoothLeService extends Service {
                     case 0x0a:
                         //Log.d(TAG, "Message ID 10");
                         double odometer = bytesToInt(data[3],data[2],data[1]);
+                        double tripAuto = bytesToInt(data[6],data[5],data[4]) / 10;
                         Data.setOdometer(odometer);
+                        Data.setTripAuto(tripAuto);
                         break;
                     case 0x0b:
                         //Log.d(TAG, "Message ID 11");
@@ -1639,7 +1644,7 @@ public class BluetoothLeService extends Service {
                         //
                         if (sharedPrefs.getBoolean("prefShowUartFaults",false)) {
                             faults.setUartErrorActive(true);
-                            if (data[7] == 0xf0){
+                            if ((data[7] & 0xFF) == 0xf0){
                                 faults.setUartCommTimeoutActive(true);
                             }
                         }

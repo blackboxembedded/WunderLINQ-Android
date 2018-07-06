@@ -117,7 +117,7 @@ public class LoggingService extends Service implements LocationListener, GoogleA
                 String filename = "WunderLINQ-TripLog-";
                 String header = "Time,Latitude,Longitude,Altitude(meters),Speed(km/h),Gear,Engine Temperature(celcius)," +
                         "Ambient Temperature(celcius),Front Tire Pressure(bar),Rear Tire Pressure(bar),Odometer(kilometers),Voltage(Volts)," +
-                        "Throttle Position(%),Front Brakes,Rear Brakes,Shifts,VIN\n";
+                        "Throttle Position(%),Front Brakes,Rear Brakes,Shifts,VIN,Ambient Light,Trip1(kilometers),Trip2(kilometers),Trip Auto(kilometers)";
                 File logFile = new File( root, filename + curdatetime + ".csv" );
                 FileWriter logWriter = new FileWriter( logFile );
                 outFile = new PrintWriter( logWriter );
@@ -149,7 +149,9 @@ public class LoggingService extends Service implements LocationListener, GoogleA
                             + Data.getGear() + "," + Data.getEngineTemperature() + "," + Data.getAmbientTemperature()
                             + "," + Data.getFrontTirePressure() + "," + Data.getRearTirePressure() + ","
                             + Data.getOdometer() + "," + Data.getvoltage() + "," + Data.getThrottlePosition() + ","
-                            + Data.getFrontBrake() + "," + Data.getRearBrake() + "," + Data.getNumberOfShifts() + "," + Data.getVin() +"\n");
+                            + Data.getFrontBrake() + "," + Data.getRearBrake() + "," + Data.getNumberOfShifts() + ","
+                            + Data.getVin()  + "," + Data.getAmbientLight() + "," + Data.getTripOne() + ","
+                            + Data.getTripTwo() + "," + Data.getTripAuto() + "\n");
                     outFile.flush();
                     handler.postDelayed(runnable, loggingInterval);
                 }

@@ -2,6 +2,7 @@ package com.blackboxembedded.WunderLINQ;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -64,6 +65,15 @@ public class ContactListActivity extends AppCompatActivity {
     private Drawable[] photoId;
 
     private static final int PERMISSION_REQUEST_READ_CONTACTS = 102;
+
+    private static final String[] PROJECTION = new String[] {
+            ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
+            ContactsContract.Contacts.DISPLAY_NAME,
+            ContactsContract.CommonDataKinds.Phone.TYPE,
+            ContactsContract.CommonDataKinds.Phone.NUMBER,
+            ContactsContract.CommonDataKinds.Phone.PHOTO_URI
+
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -246,61 +256,76 @@ public class ContactListActivity extends AppCompatActivity {
         } else {
             // Android version is lesser than 6.0 or the permission is already granted.
 
-            //TODO: Maybe add preference to sort by last, first or display name
-            Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI.buildUpon()
-                            .appendQueryParameter(ContactsContract.REMOVE_DUPLICATE_ENTRIES, "1")
-                            .build(), null,null,null,
-                    ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
 
-            int count = phones.getCount();
-            contacts = new String[count];
-            phoneNumbers = new String[count];
-            photoId = new Drawable[count];
-            String contactId = null;
-            int index = 0;
 
-            while (phones.moveToNext())
-            {
-                Integer numberType = phones.getInt(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
-                if ((numberType == 1) || numberType == 2 || numberType == 3) {
-                    String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                    String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));//Log.d("ContactList",name + " (" + typeIDtoString(numberType) + ")" + phoneNumber+ " : "+ phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)));
-                    contacts[index] = name + " (" + typeIDtoString(numberType) + ")";
-                    phoneNumbers[index] = phoneNumber;
-                    Drawable photo;
-                    if (itsDark) {
-                        photo = getResources().getDrawable(R.drawable.ic_default_contact, getTheme());
-                        photo.setTint(Color.WHITE);
-                    } else {
-                        photo = getResources().getDrawable(R.drawable.ic_default_contact, getTheme());
-                        photo.setTint(Color.BLACK);
-                    }
+            ContentResolver cr = getContentResolver();
+            Cursor cursor = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI.buildUpon()
+                    .appendQueryParameter(ContactsContract.REMOVE_DUPLICATE_ENTRIES, "1")
+                    .build(), PROJECTION, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
+            if (cursor != null) {
+                try {
+                    final int contactIdIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID);
+                    final int displayNameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+                    final int phoneTypeIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE);
+                    final int phoneNumIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                    final int phtoURIIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI);
+                    final int count = cursor.getCount();
+                    contacts = new String[count];
+                    phoneNumbers = new String[count];
+                    photoId = new Drawable[count];
+                    long contactId;
+                    String displayName, phoneType, phoneNumber,photoURI;
+                    int index = 0;
+                    while (cursor.moveToNext()) {
+                        contactId = cursor.getLong(contactIdIndex);
+                        displayName = cursor.getString(displayNameIndex);
+                        phoneType = cursor.getString(phoneTypeIndex);
+                        phoneNumber = cursor.getString(phoneNumIndex);
+                        photoURI = cursor.getString(phtoURIIndex);
 
-                    String image_uri = phones.getString(phones.getColumnIndex(
-                            ContactsContract.CommonDataKinds.Phone.PHOTO_URI));
+                        Log.d(TAG, "Phone Number: " + phoneNumber);
+                        if (phoneType != null) {
+                            if((phoneType.equals("1")) || phoneType.equals("2") || phoneType.equals("3")) {
 
-                    if (image_uri != null) {
 
-                        try {
-                            Bitmap photoBitmap = MediaStore.Images.Media
-                                    .getBitmap(getContentResolver(),
-                                            Uri.parse(image_uri));
-                            photo = new BitmapDrawable(getResources(), photoBitmap);
+                                contacts[index] = displayName + " (" + typeIDtoString(Integer.parseInt(phoneType)) + ")";
+                                phoneNumbers[index] = phoneNumber;
+                                Drawable photo;
+                                if (itsDark) {
+                                    photo = getResources().getDrawable(R.drawable.ic_default_contact, getTheme());
+                                    photo.setTint(Color.WHITE);
+                                } else {
+                                    photo = getResources().getDrawable(R.drawable.ic_default_contact, getTheme());
+                                    photo.setTint(Color.BLACK);
+                                }
 
-                        } catch (FileNotFoundException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
+                                if (photoURI != null) {
+
+                                    try {
+                                        Bitmap photoBitmap = MediaStore.Images.Media
+                                                .getBitmap(getContentResolver(),
+                                                        Uri.parse(photoURI));
+                                        photo = new BitmapDrawable(getResources(), photoBitmap);
+
+                                    } catch (FileNotFoundException e) {
+                                        // TODO Auto-generated catch block
+                                        e.printStackTrace();
+                                    } catch (IOException e) {
+                                        // TODO Auto-generated catch block
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                photoId[index] = photo;
+                                index++;
+                            }
                         }
-                    }
 
-                    photoId[index] = photo;
-                    index++;
+                    }
+                } finally {
+                    cursor.close();
                 }
             }
-            phones.close();
 
             TaskListView adapter = new
                     TaskListView(this, contacts, photoId, itsDark);
@@ -314,7 +339,6 @@ public class ContactListActivity extends AppCompatActivity {
                     final String item = (String) parent.getItemAtPosition(position);
 
                     // Call Number
-                    Log.d(TAG,"Call number: " + phoneNumbers[position]);
                     Intent callHomeIntent = new Intent(Intent.ACTION_DIAL);
                     callHomeIntent.setData(Uri.parse("tel:" + phoneNumbers[position]));
                     startActivity(callHomeIntent);
