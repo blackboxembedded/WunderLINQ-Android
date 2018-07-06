@@ -25,6 +25,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -181,8 +182,14 @@ public class MainActivity extends AppCompatActivity {
         // selectively disable BLE-related features.
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
             Toast.makeText(this, R.string.toast_ble_not_supported, Toast.LENGTH_SHORT).show();
-            //Reenable after 5.0 testing
-            finish();
+            Log.d(TAG, "Brand: " + Build.BRAND);
+            Log.d(TAG, "Device: " + Build.DEVICE);
+            //Only quit on real device
+            if(!(Build.BRAND.startsWith("Android") && Build.DEVICE.startsWith("generic"))) {
+                finish();
+            } else {
+                Log.d(TAG,"Running in the emulator");
+            }
         }
 
         // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
@@ -194,8 +201,16 @@ public class MainActivity extends AppCompatActivity {
         // Checks if Bluetooth is supported on the device.
         if (mBluetoothAdapter == null) {
             Toast.makeText(this, R.string.toast_error_bluetooth_not_supported, Toast.LENGTH_LONG).show();
-            //Reenable after 5.0 testing
-            finish();
+
+            Log.d(TAG, "Brand: " + Build.BRAND);
+            Log.d(TAG, "Device: " + Build.DEVICE);
+            //Only quit if on a real device
+            if(!(Build.BRAND.startsWith("Android") && Build.DEVICE.startsWith("generic"))){
+                finish();
+            } else {
+                Log.d(TAG,"Running in the emulator");
+            }
+
             return;
         }
 
@@ -373,9 +388,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     public void updateColors(boolean itsDark){
-        Log.d(TAG,"In updateColors");
         ((MyApplication) this.getApplication()).setitsDark(itsDark);
-        Log.d(TAG,"prefMotorcycleType: " + sharedPrefs.getString("prefMotorcycleType", "1"));
         if (!sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
             LinearLayout lLayout = (LinearLayout) findViewById(R.id.layout_main);
             textView1 = (TextView) findViewById(R.id.textView1);
@@ -511,8 +524,12 @@ public class MainActivity extends AppCompatActivity {
             //Log.d(TAG, "Connect request result=" + result);
         } else {
             Log.d(TAG,"mBluetoothLeService is NOT null");
-            //Reenable after 5.0 testing
-            setupBLE();
+            //Only use BLE if on a real device
+            if(!(Build.BRAND.startsWith("Android") && Build.DEVICE.startsWith("generic"))) {
+                setupBLE();
+            } else {
+                Log.d(TAG,"Running in the emulator");
+            }
         }
         sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         if (((MyApplication) this.getApplication()).getitsDark()){

@@ -10,7 +10,6 @@ import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
@@ -25,6 +24,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -41,6 +41,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Set;
 
 public class MusicActivity extends AppCompatActivity {
 
@@ -163,7 +164,8 @@ public class MusicActivity extends AppCompatActivity {
         }
 
         // Check if we have permissions
-        if (Settings.Secure.getString(this.getContentResolver(),"enabled_notification_listeners").contains(getApplicationContext().getPackageName()))
+        Set<String> packageNames = NotificationManagerCompat.getEnabledListenerPackages (this);
+        if (packageNames.contains(getApplicationContext().getPackageName()))
         {
             alertDiagUp = false;
             MediaSessionManager mm = (MediaSessionManager) this.getSystemService(
@@ -197,7 +199,8 @@ public class MusicActivity extends AppCompatActivity {
             updateColors(false);
         }
         // Need permissions to read notifications
-        if (Settings.Secure.getString(this.getContentResolver(),"enabled_notification_listeners").contains(getApplicationContext().getPackageName())) {
+        Set<String> packageNames = NotificationManagerCompat.getEnabledListenerPackages (this);
+        if (packageNames.contains(getApplicationContext().getPackageName())) {
             alertDiagUp = false;
             mHandler.post(mUpdateMetaData);
         } else {
@@ -323,10 +326,34 @@ public class MusicActivity extends AppCompatActivity {
                         mArtwork.setImageBitmap(scaleBitmap(metaData.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART), 800, 800));
                     } else {
                         // Read your drawable from somewhere
+                        /*
                         Drawable dr = getResources().getDrawable(R.drawable.ic_music_note);
                         Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
                         mArtwork.setImageBitmap(scaleBitmap(bitmap, 800, 800));
+                        */
                         //mArtwork.setImageResource(R.drawable.ic_music_note);
+
+                        Log.d(TAG,"No art");
+                        Drawable drawable = getResources().getDrawable(R.drawable.ic_music_note);
+                        try {
+                            Bitmap bitmap;
+
+                            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.RGB_565);
+
+                            Canvas canvas = new Canvas(bitmap);
+                            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+                            drawable.draw(canvas);
+
+                            mArtwork.setImageBitmap(scaleBitmap(bitmap, 800, 800));
+                            if (itsDark) {
+                                mArtwork.setColorFilter(getResources().getColor(R.color.white));
+                            } else {
+                                mArtwork.setColorFilter(getResources().getColor(R.color.black));
+                            }
+                        } catch (OutOfMemoryError e) {
+                            // Handle the error
+                            Log.d(TAG,"Error converting drawable to bitmap");
+                        }
                     }
                 } catch (NullPointerException e){
                     Log.d(TAG,"Error: " + e.toString());
