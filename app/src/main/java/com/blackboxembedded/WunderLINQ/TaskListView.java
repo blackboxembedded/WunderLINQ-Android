@@ -39,10 +39,8 @@ public class TaskListView extends ArrayAdapter<String>{
 
         txtTitle.setText(label[position]);
         if (itsDark){
-            Log.d("TaskListView", "Setting to white");
             txtTitle.setTextColor(Color.WHITE);
         } else {
-            Log.d("TaskListView", "Setting to black");
             txtTitle.setTextColor(Color.BLACK);
         }
         imageView.setImageDrawable(icon[position]);
