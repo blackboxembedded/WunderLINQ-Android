@@ -136,7 +136,7 @@ public class LoggingService extends Service implements LocationListener, GoogleA
                 // Get current time in UTC
                 Calendar cal = Calendar.getInstance();
                 Date date = cal.getTime();
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-HH:mm:ss");
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-HH-mm-ss");
                 String curdatetime = formatter.format(date);
                 String filename = "WunderLINQ-TripLog-";
                 String header = "Time,Latitude,Longitude,Altitude(meters),Speed(km/h),Gear,Engine Temperature(celcius)," +
