@@ -255,9 +255,6 @@ public class ContactListActivity extends AppCompatActivity {
             //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
         } else {
             // Android version is lesser than 6.0 or the permission is already granted.
-
-
-
             ContentResolver cr = getContentResolver();
             Cursor cursor = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI.buildUpon()
                     .appendQueryParameter(ContactsContract.REMOVE_DUPLICATE_ENTRIES, "1")
@@ -283,7 +280,6 @@ public class ContactListActivity extends AppCompatActivity {
                         phoneNumber = cursor.getString(phoneNumIndex);
                         photoURI = cursor.getString(phtoURIIndex);
 
-                        Log.d(TAG, "Phone Number: " + phoneNumber);
                         if (phoneType != null) {
                             if((phoneType.equals("1")) || phoneType.equals("2") || phoneType.equals("3")) {
 

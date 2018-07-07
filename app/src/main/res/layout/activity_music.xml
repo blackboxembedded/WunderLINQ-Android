@@ -80,9 +80,7 @@
             android:adjustViewBounds="true"
             android:padding="5dp"
             android:scaleType="fitCenter"
-            android:focusable="true"
-            android:nextFocusUp="@+id/next_button"
-            android:nextFocusDown="@+id/play_pause_button"/>
+            android:focusable="false"/>
 
         <ImageButton
             android:id="@+id/play_pause_button"
@@ -92,9 +90,7 @@
             android:adjustViewBounds="true"
             android:padding="5dp"
             android:scaleType="fitCenter"
-            android:focusable="true"
-            android:nextFocusUp="@+id/prev_button"
-            android:nextFocusDown="@+id/next_button">
+            android:focusable="true">
             <requestFocus />
         </ImageButton>
 
@@ -106,8 +102,6 @@
             android:adjustViewBounds="true"
             android:padding="5dp"
             android:scaleType="fitCenter"
-            android:focusable="true"
-            android:nextFocusUp="@+id/play_pause_button"
-            android:nextFocusDown="@+id/prev_button"/>
+            android:focusable="false"/>
     </LinearLayout>
 </RelativeLayout>

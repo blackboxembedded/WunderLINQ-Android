@@ -453,6 +453,22 @@ public class MusicActivity extends AppCompatActivity {
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         Log.d(TAG, "Keycode: " + keyCode);
         switch (keyCode) {
+            case KeyEvent.KEYCODE_DPAD_UP:
+                if (controller != null) {
+                    controls.skipToNext();
+                    refreshMetaData();
+                }
+                mPlayPauseButton.setFocusable(true);
+                mPlayPauseButton.requestFocus();
+                return true;
+            case KeyEvent.KEYCODE_DPAD_DOWN:
+                if (controller != null) {
+                    controls.skipToPrevious();
+                    refreshMetaData();
+                }
+                mPlayPauseButton.setFocusable(true);
+                mPlayPauseButton.requestFocus();
+                return true;
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 Intent backIntent = new Intent(MusicActivity.this, MainActivity.class);
                 startActivity(backIntent);
