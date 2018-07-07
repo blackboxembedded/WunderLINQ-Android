@@ -1,10 +1,14 @@
 package com.blackboxembedded.WunderLINQ;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -12,6 +16,7 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -83,6 +88,25 @@ public class LoggingService extends Service implements LocationListener, GoogleA
     public void onCreate() {
         Log.d(TAG, "In onCreate");
         super.onCreate();
+
+        // Start foreground service to avoid unexpected kill
+        String CHANNEL_ID = "WunderLINQ";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, this.getString(R.string.title_logging_notification),
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setShowBadge(false);
+            channel.setSound(null, null);
+            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            manager.createNotificationChannel(channel);
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                .setChannelId(CHANNEL_ID)
+                .setContentTitle(getResources().getString(R.string.title_logging_notification))
+                .setContentText("")
+                .setSmallIcon(R.drawable.ic_road);
+        Notification notification = builder.build();
+        startForeground(1234, notification);
 
         createLocationRequest();
 
