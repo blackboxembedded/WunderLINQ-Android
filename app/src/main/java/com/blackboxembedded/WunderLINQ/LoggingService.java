@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -89,6 +90,13 @@ public class LoggingService extends Service implements LocationListener, GoogleA
         Log.d(TAG, "In onCreate");
         super.onCreate();
 
+        Intent showTaskIntent = new Intent(getApplicationContext(), TaskActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(
+                getApplicationContext(),
+                0,
+                showTaskIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
         // Start foreground service to avoid unexpected kill
         String CHANNEL_ID = "WunderLINQ";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -104,6 +112,7 @@ public class LoggingService extends Service implements LocationListener, GoogleA
                 .setChannelId(CHANNEL_ID)
                 .setContentTitle(getResources().getString(R.string.title_logging_notification))
                 .setContentText("")
+                .setContentIntent(contentIntent)
                 .setSmallIcon(R.drawable.ic_road);
         Notification notification = builder.build();
         startForeground(1234, notification);
