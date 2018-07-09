@@ -148,9 +148,9 @@ public class LoggingService extends Service implements LocationListener, GoogleA
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-HH-mm-ss");
                 String curdatetime = formatter.format(date);
                 String filename = "WunderLINQ-TripLog-";
-                String header = "Time,Latitude,Longitude,Altitude(meters),Speed(km/h),Gear,Engine Temperature(celcius)," +
-                        "Ambient Temperature(celcius),Front Tire Pressure(bar),Rear Tire Pressure(bar),Odometer(kilometers),Voltage(Volts)," +
-                        "Throttle Position(%),Front Brakes,Rear Brakes,Shifts,VIN,Ambient Light,Trip1(kilometers),Trip2(kilometers),Trip Auto(kilometers)";
+                String header = "Time,Latitude,Longitude,Altitude (m),Speed (kmh),Gear,Engine Temperature (C)," +
+                        "Ambient Temperature (C),Front Tire Pressure (bar),Rear Tire Pressure (bar),Odometer (km),Voltage (V)," +
+                        "Throttle Position (%),Front Brakes,Rear Brakes,Shifts,VIN,Ambient Light,Trip1 (km),Trip2 (km),Trip Auto (km)";
                 File logFile = new File( root, filename + curdatetime + ".csv" );
                 FileWriter logWriter = new FileWriter( logFile );
                 outFile = new PrintWriter( logWriter );
