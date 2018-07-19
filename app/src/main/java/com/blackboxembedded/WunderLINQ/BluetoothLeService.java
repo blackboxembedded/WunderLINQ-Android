@@ -1217,10 +1217,12 @@ public class BluetoothLeService extends Service {
                                     faults.setDaytimeRunningActive(false);
                                     faults.setfrontLeftSignalActive(true);
                                     faults.setfrontRightSignalActive(true);
+                                    break;
                                 case 0x7:
                                     faults.setDaytimeRunningActive(true);
                                     faults.setfrontLeftSignalActive(true);
                                     faults.setfrontRightSignalActive(true);
+                                    break;
                                 case 0x9:
                                     faults.setDaytimeRunningActive(true);
                                     faults.setfrontLeftSignalActive(false);
@@ -1250,10 +1252,12 @@ public class BluetoothLeService extends Service {
                                     faults.setDaytimeRunningActive(false);
                                     faults.setfrontLeftSignalActive(true);
                                     faults.setfrontRightSignalActive(true);
+                                    break;
                                 case 0xF:
                                     faults.setDaytimeRunningActive(true);
                                     faults.setfrontLeftSignalActive(true);
                                     faults.setfrontRightSignalActive(true);
+                                    break;
                                 default:
                                     faults.setDaytimeRunningActive(false);
                                     faults.setfrontLeftSignalActive(false);
