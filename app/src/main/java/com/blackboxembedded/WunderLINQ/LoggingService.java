@@ -71,6 +71,9 @@ public class LoggingService extends Service implements LocationListener, GoogleA
         }
         handler.removeCallbacks(runnable);
         ((MyApplication) this.getApplication()).setTripRecording(false);
+        Data.setNumberOfShifts(0);
+        Data.setFrontBrake(0);
+        Data.setRearBrake(0);
         /*
         Intent restartService = new Intent(getApplicationContext(),
                 this.getClass());
@@ -215,7 +218,7 @@ public class LoggingService extends Service implements LocationListener, GoogleA
     protected void createLocationRequest() {
         locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(5000);
+        locationRequest.setInterval(1000);
         locationRequest.setFastestInterval(1000);
     }
 

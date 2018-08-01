@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="main_title">Motorrad</string>
+
+    <string name="camera_alert_title">WunderLINQ benötigt Zugriff auf Ihre Kamera</string>
+    <string name="camera_alert_body">Bitte erlauben Sie den Zugriff auf die Kamera</string>
+    <string name="contacts_alert_title">WunderLINQ benötigt Zugriff auf Ihre Kontakte</string>
+    <string name="contacts_alert_body">Bitte erlauben Sie den Lesezugriff auf die Kontakte</string>
+    <string name="record_audio_alert_title">WunderLINQ benötigt Zugriff auf Ihr Mikrofon</string>
+    <string name="record_audio_alert_body">Bitte erlauben Sie den Zugriff auf das Mikrofon</string>
+    <string name="location_alert_title">WunderLINQ benötigt Zugriff auf Ihren Standort</string>
+    <string name="location_alert_body">Bitte erlauben Sie den Zugriff auf Standortdaten</string>
+    <string name="write_alert_title">WunderLINQ benötigt Schreibzugriff</string>
+    <string name="write_alert_body">Bitte erlauben Sie Schreibzugriff</string>
+    <string name="overlay_alert_title">WunderLINQ benötigt Überlagerungsrecht</string>
+    <string name="overlay_alert_body">Bitte erlauben Sie Überlagerungsrecht für Videoaufzeichnung</string>
+    <string name="negative_alert_title">Funktionalität eingeschränkt</string>
+    <string name="negative_location_alert_body">Weil Standortdaten nicht gewährt wurden, kann diese App Ihren WunderLINQ nicht finden wenn sie im Hintergrund läuft.</string>
+    <string name="negative_write_alert_body">Weil Schreibzugriff nicht gewährt wurde, kann diese App keine Dateien abspeichern.</string>
+    <string name="negative_camera_alert_body">Weil Kamerazugriff nicht gewährt wurde, kann diese App keine Fotos oder Videos aufnehmen.</string>
+    <string name="negative_microphone_alert_body">Weil Mikrofonzugriff nicht gewährt wurde, kann diese App keine Videos aufnehmen.</string>
+    <string name="disclaimer_alert_title">WARNUNG!</string>
+    <string name="disclaimer_alert_body">
+        Bitte bedienen Sie das WunderLINQ Gerät nicht während der Fahrt.
+        Verhindern Sie Unfälle und/oder Sachschäden indem Sie Ihre Aufmerksamkeit während der Fahrt auf die Bedienung Ihres Fahrzeuges richten.
+        Sie übernehmen das Risiko und die Verantwortung wenn Sie dieses Gerät benutzen.
+    </string>
+    <string name="disclaimer_ok">Ich stimme zu</string>
+    <string name="disclaimer_quit">Beenden</string>
+
+    <string name="toast_ble_not_supported">BLE wird nicht unterstützt</string>
+    <string name="toast_error_bluetooth_not_supported">Bluetooth ist nicht unterstützt.</string>
+    <string name="rdc_front_label">Vorderreifen</string>
+    <string name="rdc_rear_label">Hinterreifen</string>
+    <string name="engine_temp_label">Motortemperatur</string>
+    <string name="ambient_temp_label">Aussentemperatur</string>
+    <string name="odometer_label">Kilometerzähler</string>
+    <string name="trip1_label">KM-Zähler 1</string>
+    <string name="trip2_label">KM-Zähler 2</string>
+    <string name="gear_label">Gang</string>
+
+    <string name="trip_logs_label">Fahrtaufzeichnungen</string>
+    <string name="waypoints_label">Wegpunkte</string>
+
+
+    <string name="title_activity_fault">Fehleraufzeichnungen</string>
+    <string name="fault_title">Aktive Fehler</string>
+    <string name="notification_channel">Aktive Fehler</string>
+
+    <string name="fault_UARTERR">UART Fehler</string>
+    <string name="fault_UARTCTF">UART Komm. Timeout</string>
+    <string name="fault_UARTLF">UART Logic</string>
+    <string name="fault_ABSSLF">ABS Eigendiagnose nicht beendet</string>
+    <string name="fault_ABSERR">ABS Fehler</string>
+    <string name="fault_ABSDAC">ABS deaktiviert</string>
+    <string name="fault_ASCSLF">ASC Eigendiagnose nicht beendet</string>
+    <string name="fault_ASCINT">ASC Eingriff</string>
+    <string name="fault_ASCERR">ASC Fehler</string>
+    <string name="fault_ASCDAC">ASC deaktiviert</string>
+    <string name="fault_FUELF">Benzinstand niedrig</string>
+    <string name="fault_LAMPAFL1">Zusatzscheinwerfer 1</string>
+    <string name="fault_LAMPAFL2">Zusatzscheinwerfer 2</string>
+    <string name="fault_LAMPDAY">Tagfahrlicht</string>
+    <string name="fault_LAMPFLI">Blinker Vorne Links</string>
+    <string name="fault_LAMPFRI">Blinker Vorne Rechts</string>
+    <string name="fault_LAMPRLI">Blinker Hinten Links </string>
+    <string name="fault_LAMPRRI">Blinker Hinten Rechts</string>
+    <string name="fault_LAMPFPK1">Parklicht 1</string>
+    <string name="fault_LAMPFPK2">Parklicht 2</string>
+    <string name="fault_LAMPLOW">Abblendlicht</string>
+    <string name="fault_LAMPHI">Fernlicht</string>
+    <string name="fault_LAMPREAR">Rücklicht</string>
+    <string name="fault_LAMPBRK">Bremslicht</string>
+    <string name="fault_LAMPLIC">Nummernschildbeleuchtung</string>
+    <string name="fault_LAMPRFOG">Nebellicht Hinten</string>
+    <string name="fault_LAMPADDD">Abblend-/Fernlicht Zusatz</string>
+    <string name="fault_LAMPADDB">Bremslicht Zusatz</string>
+    <string name="fault_LAMPFL1">Frontlicht 1</string>
+    <string name="fault_LAMPFL2">Frontlicht 2</string>
+    <string name="fault_ICEWARN">Frostwarnung</string>
+    <string name="fault_GENWARNFSYLW">Die allgemeine Warnleuchte blinkt Gelb</string>
+    <string name="fault_GENWARNSHYLW">Die allgemeine Warnleuchte leuchtet Gelb</string>
+    <string name="fault_GENWARNFSRED">Die allgemeine Warnleuchte blinkt Rot</string>
+    <string name="fault_GENWARNSHRED">Die allgemeine Warnleuchte leuchtet Rot</string>
+    <string name="fault_OILLOW">Ölstand Motor zu niedrig</string>
+    <string name="fault_TIREFWF">Vorderreifen-Druck Warnung</string>
+    <string name="fault_TIRERWF">Hinterreifen-Druck Warnung</string>
+    <string name="fault_TIREFCF">Vorderreifen-Druck Kritisch</string>
+    <string name="fault_TIRERCF">Hinterreifen-Druck Kritisch</string>
+
+    <string name="waypoint_title">Gespeicherte Wegpunkte</string>
+
+    <string name="waypoint_view_title">Gespeicherter Wegpunkt</string>
+    <string name="waypoint_view_tv_date_label">Aufzeichnungsdatum</string>
+    <string name="waypoint_view_tv_lat_label">Breitengrad</string>
+    <string name="waypoint_view_tv_lon_label">Längengrad</string>
+    <string name="waypoint_view_bt_open">In Karten-App öffnen</string>
+    <string name="waypoint_view_bt_share">Teilen</string>
+    <string name="waypoint_view_bt_delete">Löschen</string>
+    <string name="waypoint_view_waypoint_label">Wegpunkt</string>
+    <string name="waypoint_view_share_label">Teilen via</string>
+
+    <string name="trips_title">Gespeicherte Fahrten</string>
+
+    <string name="trip_view_title">Fahrt</string>
+    <string name="trip_view_trip_label">WunderLINQ Fahrtaufzeichnung</string>
+    <string name="trip_view_waypoint_start_label">Start</string>
+    <string name="trip_view_waypoint_end_label">Ende</string>
+    <string name="trip_view_share_label">Teilen via</string>
+    <string name="trip_view_tv_distance">Distanz</string>
+    <string name="trip_view_tv_duration">Dauer</string>
+    <string name="trip_view_tv_speed">Geschwindigkeit (Avg/Max)</string>
+    <string name="trip_view_tv_shifts">Gangwechsel</string>
+    <string name="trip_view_tv_brakes">Bremsen (Vorne/Hinten)</string>
+    <string name="trip_view_tv_ambient">Aussentemp. (Min/Avg/Max)</string>
+    <string name="trip_view_tv_engine">Motortemp. (Min/Avg/Max)</string>
+
+
+    <string name="compass_title">Kompass</string>
+
+
+    <string name="music_title">Musik</string>
+    <string name="title_activity_music">Media-Player</string>
+    <string name="start_media_player">Starten Sie Ihren bevorzugten Media-Player für Steuerung</string>
+    <string name="unknown">Unbekannt</string>
+    <string name="notification_alert_title">WunderLINQ benötigt Zugriff auf Benachrichtigungen</string>
+    <string name="notification_alert_body">Bitte erlauben Sie den Zugriff auf Benachrichtigungen damit diese App Ihren Media-Player steuern kann</string>
+
+
+    <string name="quicktask_title">Schnellzugriff</string>
+    <string name="task_title_navigation">Navigation</string>
+    <string name="task_title_gohome">Nach Hause</string>
+    <string name="task_title_favnumber">Bevorzugte Nummer anrufen</string>
+    <string name="task_title_callcontact">Kontakt anrufen</string>
+    <string name="task_title_photo">Foto aufnehmen</string>
+    <string name="task_title_start_record">Video starten</string>
+    <string name="task_title_stop_record">Video beenden</string>
+    <string name="task_title_start_trip">Fahrtaufzeichnung starten</string>
+    <string name="task_title_stop_trip">Fahrtaufzeichnung beenden</string>
+    <string name="title_logging_notification">WunderLINQ Fahrtaufzeichnung aktiv</string>
+    <string name="task_title_waypoint">Wegpunkt speichern</string>
+    <string name="task_title_voicecontrol">Sprachassistent</string>
+    <string name="toast_address_not_set">Keine Nach Hause Adresse gesetzt in den Einstellungen</string>
+    <string name="toast_phone_not_set">Keine Bevorzugte Nummer gesetzt in den Einstellungen</string>
+    <string name="toast_photo_taken">Foto aufgenommen!</string>
+
+    <string name="contactlist_title">Kontakte</string>
+    <string name="contact_type_0">Spezial</string>
+    <string name="contact_type_1">Zuhause</string>
+    <string name="contact_type_2">Mobil</string>
+    <string name="contact_type_3">Arbeit</string>
+    <string name="contact_type_4">Arbeit Fax</string>
+    <string name="contact_type_5">Zuhause Fax</string>
+    <string name="contact_type_6">Pager</string>
+    <string name="contact_type_7">Andere</string>
+    <string name="contact_type_8">Rückruf</string>
+    <string name="contact_type_9">Auto</string>
+    <string name="contact_type_10">Geschäft</string>
+    <string name="contact_type_11">ISDN</string>
+    <string name="contact_type_12">Main</string>
+    <string name="contact_type_13">Andere Fax</string>
+    <string name="contact_type_14">Radio</string>
+    <string name="contact_type_15">Telex</string>
+    <string name="contact_type_16">TTY TDD</string>
+    <string name="contact_type_17">Arbeit Mobil</string>
+    <string name="contact_type_18">Arbeit Pager</string>
+    <string name="contact_type_19">Assistent</string>
+    <string name="contact_type_20">MMS</string>
+
+
+    <string name="title_video_notification">WunderLINQ Videoaufnahme</string>
+
+
+    <string name="title_activity_settings">Einstellungen</string>
+
+    <string name="info_title">Persönliche Angaben</string>
+    <string name="pref_homeAddress_name">Adresse (Nach Hause)</string>
+    <string name="pref_homeAddress_summary">Format: Strasse 123, 12345 Ort, Staat</string>
+    <string name="pref_homePhone_name">Bevorzugte Nummer</string>
+    <string name="pref_homePhone_summary">Format: 1234567890</string>
+
+    <string name="ui_title">Bedienoberfläche</string>
+    <string name="pref_bike_type">Motorrad Typ</string>
+    <string-array name="bike_type_array">
+        <item name="1">BMW R1200GS/A</item>
+        <item name="2">BMW R1200R</item>
+        <item name="3">BMW R1200RS</item>
+        <item name="4">BMW S1000XR</item>
+        <item name="5">Anderes</item>
+    </string-array>
+
+    <string name="pref_tempf_name">Einheit Temperatur</string>
+    <string-array name="tempf_array">
+        <item name="1">Celsius</item>
+        <item name="2">Fahrenheit</item>
+    </string-array>
+
+    <string name="pref_distance_name">Einheit Länge</string>
+    <string-array name="distance_array">
+        <item name="1">Metrisch</item>
+        <item name="2">Imperial</item>
+    </string-array>
+
+    <string name="pref_bearing_name">Einheit Richtung</string>
+    <string-array name="bearing_array">
+        <item name="1">Grad</item>
+        <item name="2">Kardinal (Himmelsrichtung)</item>
+    </string-array>
+
+    <string name="pref_pressuref_name">Einheit Druck</string>
+
+    <string name="pref_nightMode_name">Nachtmodus</string>
+    <string name="pref_nightMode_summary">Nachtmodus Ein, deaktiviert Auto-Nachtmodus</string>
+    <string name="pref_autoNightMode_name">Auto-Nachtmodus</string>
+    <string name="pref_autoNightMode_summary">Auto-Nachtmodus Ein (benötigt Dämmersungssensor)</string>
+    <string name="pref_autoNightModeDelay_name">Auto-Nachtmodus, Verzögerung</string>
+    <string name="pref_autoNightModeDelay_summary">Auto-Nachtmodus, Verzögerung in Sekunden setzen</string>
+
+    <string name="advanced_settings_title">Erweiterte Einstellungen</string>
+    <string name="pref_btn_sendlogs_title">Logdaten schicken</string>
+    <string name="pref_btn_sendlogs_summary">Logdaten zu Black Box Embedded Support schicken</string>
+    <string name="pref_sendlogs_email">support@blackboxembedded.com</string>
+    <string name="pref_sendlogs_subject">WunderLINQ Programmfehler-Daten</string>
+    <string name="pref_sendlogs_body">Bitte beschreiben Sie Ihr Problem:</string>
+    <string name="pref_sendlogs_intent_title">Logdaten schicken...</string>
+    <string name="hw_settings_title">WunderLINQ Hardware Einstellungen</string>
+    <string name="pref_btn_dfumode_title">WunderLINQ Update</string>
+    <string name="pref_btn_dfumode_summary">WunderLINQ Firmware Update Modus starten</string>
+    <string name="pref_btn_dfumode_warning_title">Warnung</string>
+    <string name="pref_btn_dfumode_warning_body">Sie sind im Begriff den WunderLINQ in den DFU-Modus zu setzen.
+        Wenn Sie OK wählen, wird die Verbindung der WunderLINQ App zum Gerät getrennt und die Info-LED der WunderLINQ Box sollte Grün leuchten.
+        Sie werden zum Hauptbildschirm zurückgeführt, wenn die App sich wieder mit der WunderLINQ Box verbindet sollte eine Update-Meldung angezeigt werden.</string>
+    <string name="pref_btn_version_title">WunderLINQ Version</string>
+    <string name="pref_btn_version_summary">WunderLINQ Firmware Update Modus starten</string>
+</resources>

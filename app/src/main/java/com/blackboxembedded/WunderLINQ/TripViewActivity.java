@@ -113,8 +113,6 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 int lineNumber = 0;
                 for(String[] nextLine : myEntries) {
                     lineNumber = lineNumber + 1;
-                    Log.d(TAG, nextLine[0] + "," + nextLine[1] + "etc...");
-
                     try {
                         if (lineNumber == 2) {
                             startTime = df.parse(nextLine[0]);
