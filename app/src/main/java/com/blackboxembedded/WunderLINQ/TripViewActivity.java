@@ -98,7 +98,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
             List<Double> engineTemps = new ArrayList<>();
             Double minEngineTemp = null;
             Double maxEngineTemp = null;
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ");
             Date startTime = null;
             Date endTime = null;
             Double startOdometer = null;
