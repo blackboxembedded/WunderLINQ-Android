@@ -955,7 +955,7 @@ public class BluetoothLeService extends Service {
                                 }
                                 if(faults.getgeneralShowsRedNotificationActive()) {
                                     updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                    faults.setGeneralShowsRedNotificationActive(false);
                                 }
                                 break;
                             case 0x2:
@@ -969,7 +969,7 @@ public class BluetoothLeService extends Service {
                                 }
                                 if(faults.getgeneralShowsRedNotificationActive()) {
                                     updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                    faults.setGeneralShowsRedNotificationActive(false);
                                 }
                                 break;
                             case 0x4:
@@ -983,7 +983,7 @@ public class BluetoothLeService extends Service {
                                 }
                                 if(faults.getgeneralShowsRedNotificationActive()) {
                                     updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                    faults.setGeneralShowsRedNotificationActive(false);
                                 }
                                 break;
                             case 0x5:
@@ -997,7 +997,7 @@ public class BluetoothLeService extends Service {
                                 }
                                 if(faults.getgeneralShowsRedNotificationActive()) {
                                     updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                    faults.setGeneralShowsRedNotificationActive(false);
                                 }
                                 break;
                             case 0x6:
@@ -1011,7 +1011,7 @@ public class BluetoothLeService extends Service {
                                 }
                                 if(faults.getgeneralShowsRedNotificationActive()) {
                                     updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                    faults.setGeneralShowsRedNotificationActive(false);
                                 }
                                 break;
                             case 0x7:
@@ -1025,7 +1025,7 @@ public class BluetoothLeService extends Service {
                                 }
                                 if(faults.getgeneralShowsRedNotificationActive()) {
                                     updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                    faults.setGeneralShowsRedNotificationActive(false);
                                 }
                                 break;
                             case 0x8:
@@ -1035,11 +1035,11 @@ public class BluetoothLeService extends Service {
                                 faults.setGeneralShowsRedActive(true);
                                 if(faults.getgeneralFlashingRedNotificationActive()) {
                                     updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(true);
+                                    faults.setGeneralFlashingRedNotificationActive(false);
                                 }
                                 if(!(faults.getgeneralShowsRedNotificationActive())) {
                                     updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                    faults.setGeneralShowsRedNotificationActive(true);
                                 }
                                 break;
                             case 0x9:
@@ -1047,8 +1047,10 @@ public class BluetoothLeService extends Service {
                                 faults.setGeneralShowsYellowActive(false);
                                 faults.setGeneralFlashingRedActive(true);
                                 faults.setGeneralShowsRedActive(true);
-                                if(faults.getgeneralShowsRedNotificationActive() && faults.getgeneralFlashingRedNotificationActive()) {
+                                if(!faults.getgeneralShowsRedNotificationActive() && !faults.getgeneralFlashingRedNotificationActive()) {
                                     updateNotification(intent);
+                                    faults.setGeneralFlashingRedNotificationActive(true);
+                                    faults.setGeneralShowsRedNotificationActive(true);
                                 }
                                 break;
                             case 0xA:
@@ -1058,11 +1060,11 @@ public class BluetoothLeService extends Service {
                                 faults.setGeneralShowsRedActive(true);
                                 if(faults.getgeneralFlashingRedNotificationActive()) {
                                     updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(true);
+                                    faults.setGeneralFlashingRedNotificationActive(false);
                                 }
                                 if(!(faults.getgeneralShowsRedNotificationActive())) {
                                     updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                    faults.setGeneralShowsRedNotificationActive(true);
                                 }
                                 break;
                             case 0xB:
@@ -1072,11 +1074,11 @@ public class BluetoothLeService extends Service {
                                 faults.setGeneralShowsRedActive(true);
                                 if(faults.getgeneralFlashingRedNotificationActive()) {
                                     updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(true);
+                                    faults.setGeneralFlashingRedNotificationActive(false);
                                 }
                                 if(!(faults.getgeneralShowsRedNotificationActive())) {
                                     updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                    faults.setGeneralShowsRedNotificationActive(true);
                                 }
                                 break;
                             case 0xD:
@@ -1090,7 +1092,7 @@ public class BluetoothLeService extends Service {
                                 }
                                 if(faults.getgeneralShowsRedNotificationActive()) {
                                     updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                    faults.setGeneralShowsRedNotificationActive(false);
                                 }
                                 break;
                             case 0xE:
@@ -1104,7 +1106,7 @@ public class BluetoothLeService extends Service {
                                 }
                                 if(faults.getgeneralShowsRedNotificationActive()) {
                                     updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                    faults.setGeneralShowsRedNotificationActive(false);
                                 }
                                 break;
                             default:
@@ -1118,7 +1120,7 @@ public class BluetoothLeService extends Service {
                                 }
                                 if(faults.getgeneralShowsRedNotificationActive()) {
                                     updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(false);
+                                    faults.setGeneralShowsRedNotificationActive(false);
                                 }
                                 break;
                         }
@@ -2357,10 +2359,10 @@ public class BluetoothLeService extends Service {
         if(faults.getrearTirePressureCriticalActive()){
             body.append(mContext.getResources().getString(R.string.fault_TIRERCF) + "\n");
         }
-        if(faults.getgeneralFlashingRedNotificationActive()){
+        if(faults.getgeneralFlashingRedActive()){
             body.append(mContext.getResources().getString(R.string.fault_GENWARNFSRED) + "\n");
         }
-        if(faults.getgeneralShowsRedNotificationActive()){
+        if(faults.getgeneralShowsRedActive()){
             body.append(mContext.getResources().getString(R.string.fault_GENWARNSHRED) + "\n");
         }
         if(!body.toString().equals("")){
