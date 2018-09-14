@@ -49,26 +49,26 @@ public class TripsActivity extends AppCompatActivity {
             }
         }
         File list[] = root.listFiles();
-        Arrays.sort(list, Collections.reverseOrder());
+        if (list != null ) {
+            Arrays.sort(list, Collections.reverseOrder());
 
-        for( int i=0; i< list.length; i++)
-        {
-            myList.add( list[i].getName() );
-        }
-
-        ArrayAdapter<WaypointRecord> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, myList);
-        tripList.setAdapter(adapter);
-
-        tripList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick (AdapterView < ? > adapter, View view, int position, long arg){
-                Intent tripViewIntent = new Intent(TripsActivity.this, TripViewActivity.class);
-                tripViewIntent.putExtra("FILE", myList.get(position).toString());
-                startActivity(tripViewIntent);
+            for (int i = 0; i < list.length; i++) {
+                myList.add(list[i].getName());
             }
-        });
 
+            ArrayAdapter<WaypointRecord> adapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_list_item_1, myList);
+            tripList.setAdapter(adapter);
+
+            tripList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
+                    Intent tripViewIntent = new Intent(TripsActivity.this, TripViewActivity.class);
+                    tripViewIntent.putExtra("FILE", myList.get(position).toString());
+                    startActivity(tripViewIntent);
+                }
+            });
+        }
     }
 
     private void showActionBar(){

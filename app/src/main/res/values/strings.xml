@@ -33,6 +33,7 @@
     <!-- BLE Stuff Below -->
     <string name="toast_ble_not_supported">BLE is not supported</string>
     <string name="toast_error_bluetooth_not_supported">Bluetooth not supported.</string>
+
     <string name="rdc_front_label">Front Tire</string>
     <string name="rdc_rear_label">Rear Tire</string>
     <string name="engine_temp_label">Engine Temp</string>
@@ -114,7 +115,7 @@
     <string name="trip_view_trip_label">WunderLINQ Trip Log</string>
     <string name="trip_view_waypoint_start_label">Start</string>
     <string name="trip_view_waypoint_end_label">End</string>
-    <string name="trip_view_share_label">Share via</string>
+    <string name="trip_view_share_label">Share</string>
     <string name="trip_view_tv_distance">Distance</string>
     <string name="trip_view_tv_duration">Duration</string>
     <string name="trip_view_tv_speed">Speed (Avg/Max)</string>

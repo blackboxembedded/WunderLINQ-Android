@@ -97,12 +97,17 @@ public class MusicActivity extends AppCompatActivity {
                 case R.id.play_pause_button:
                     if (controller != null) {
                         PlaybackState playbackState = controller.getPlaybackState();
-                        if (playbackState.getState() != PlaybackState.STATE_PLAYING) {
-                            controls.play();
-                            refreshMetaData();
-                        } else {
-                            controls.pause();
-                            refreshMetaData();
+                        try {
+                            if (playbackState.getState() != PlaybackState.STATE_PLAYING) {
+                                controls.play();
+                                refreshMetaData();
+                            } else {
+                                controls.pause();
+                                refreshMetaData();
+                            }
+                        } catch (NullPointerException e) {
+                            // Testing
+                            Log.d(TAG,"NullPointerException: " + e.toString());
                         }
                     }
                     break;

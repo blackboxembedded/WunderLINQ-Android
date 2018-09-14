@@ -690,7 +690,12 @@ public class MainActivity extends AppCompatActivity {
             ScanSettings scanSettings =
                     new ScanSettings.Builder().build();
 
-            bluetoothLeScanner.startScan(scanFilters, scanSettings, mLeScanCallback);
+            try {
+                bluetoothLeScanner.startScan(scanFilters, scanSettings, mLeScanCallback);
+            } catch (NullPointerException e){
+                //Testing
+                Log.d(TAG,"NullPointerException: " + e.toString());
+            }
 
         } else {
             Log.d(TAG,"In scanLeDevice() Scanning Off");

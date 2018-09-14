@@ -160,6 +160,8 @@ public class PhotoService extends Service {
             session.abortCaptures();
         } catch (CameraAccessException e){
             Log.e(TAG, e.getMessage());
+        } catch (IllegalStateException e){
+            Log.e(TAG, e.getMessage());
         }
         session.close();
         cameraDevice.close();
