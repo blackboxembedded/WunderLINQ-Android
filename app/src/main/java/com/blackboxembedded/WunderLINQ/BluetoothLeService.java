@@ -1631,19 +1631,26 @@ public class BluetoothLeService extends Service {
                     case 0x0a:
                         //Log.d(TAG, "Message ID 10");
                         double odometer = bytesToInt(data[3],data[2],data[1]);
-                        double tripAuto = bytesToInt(data[6],data[5],data[4]) / 10;
                         Data.setOdometer(odometer);
-                        Data.setTripAuto(tripAuto);
+
+                        if ((data[6] & 0xFF) != 0xFF && (data[5] & 0xFF) != 0xFF && (data[4] & 0xFF) != 0xFF) {
+                            double tripAuto = bytesToInt(data[6], data[5], data[4]) / 10;
+                            Data.setTripAuto(tripAuto);
+                        }
                         break;
                     case 0x0b:
                         //Log.d(TAG, "Message ID 11");
                         break;
                     case 0x0c:
                         //Log.d(TAG, "Message ID 12");
-                        double trip1 = bytesToInt(data[3],data[2],data[1]) / 10;
-                        double trip2 = bytesToInt(data[6],data[5],data[4]) / 10;
-                        Data.setTripOne(trip1);
-                        Data.setTripTwo(trip2);
+                        if ((data[3] & 0xFF) != 0xFF && (data[2] & 0xFF) != 0xFF && (data[1] & 0xFF) != 0xFF) {
+                            double trip1 = bytesToInt(data[3], data[2], data[1]) / 10;
+                            Data.setTripOne(trip1);
+                        }
+                        if ((data[6] & 0xFF) != 0xFF && (data[5] & 0xFF) != 0xFF && (data[4] & 0xFF) != 0xFF) {
+                            double trip2 = bytesToInt(data[6], data[5], data[4]) / 10;
+                            Data.setTripTwo(trip2);
+                        }
                         break;
                     case 0xff:
                         Log.d(TAG,"Debug Message received: " + stringBuilder.toString());

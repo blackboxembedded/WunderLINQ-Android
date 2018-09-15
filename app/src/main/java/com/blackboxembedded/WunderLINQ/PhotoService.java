@@ -130,7 +130,7 @@ public class PhotoService extends Service {
                     return cameraId;
                 }
             }
-        } catch (CameraAccessException e){
+        } catch (CameraAccessException | IllegalArgumentException e){
             e.printStackTrace();
         }
         return null;
