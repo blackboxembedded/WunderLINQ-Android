@@ -275,9 +275,11 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
 
             }
 
-            FragmentManager myFragmentManager = getSupportFragmentManager();
-            SupportMapFragment mapFragment = (SupportMapFragment) myFragmentManager.findFragmentById(R.id.map);
-            mapFragment.getMapAsync(this);
+            if (routePoints.size() > 0) {
+                FragmentManager myFragmentManager = getSupportFragmentManager();
+                SupportMapFragment mapFragment = (SupportMapFragment) myFragmentManager.findFragmentById(R.id.map);
+                mapFragment.getMapAsync(this);
+            }
         }
 
     }
