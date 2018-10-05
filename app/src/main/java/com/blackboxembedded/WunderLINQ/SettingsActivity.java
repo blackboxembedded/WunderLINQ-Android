@@ -1,8 +1,6 @@
 package com.blackboxembedded.WunderLINQ;
 
 import android.app.AlertDialog;
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -37,7 +35,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         addressPref.setSummary(sharedPreferences.getString("prefHomeAddress",getString(R.string.pref_homeAddress_summary)));
 
         EditTextPreference favNumberPref = (EditTextPreference) findPreference("prefHomePhone");
-        favNumberPref.setSummary(sharedPreferences.getString("prefHomePhone",getString(R.string.pref_homeAddress_summary)));
+        favNumberPref.setSummary(sharedPreferences.getString("prefHomePhone",getString(R.string.pref_homePhone_summary)));
     }
 
     @Override
@@ -117,47 +115,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
                     return true;
                 }
             });
-            Preference dfuButton = findPreference("prefDfuMode");
-            if (MainActivity.gattDFUCharacteristic != null) {
-                dfuButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        try {
-                            // Display dialog text here......
-                            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                            builder.setTitle(R.string.pref_btn_dfumode_warning_title);
-                            builder.setMessage(R.string.pref_btn_dfumode_warning_body);
-                            builder.setPositiveButton(R.string.alert_message_exit_ok,
-                                    new DialogInterface.OnClickListener() {
 
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            byte[] valueByte = {01};
-                                            BluetoothGattCharacteristic characteristic = MainActivity.gattDFUCharacteristic;
-                                            characteristic.setValue(valueByte);
-                                            if (BluetoothLeService.writeCharacteristic(characteristic)) {
-                                                if (alertDialog != null && alertDialog.isShowing()) {
-                                                    alertDialog.dismiss();
-                                                }
-                                                Intent i = new Intent(getActivity(), MainActivity.class);
-                                                startActivity(i);
-                                            }
-
-                                        }
-                                    });
-                            alertDialog = builder.create();
-                            alertDialog.show();
-
-
-                        } catch (NullPointerException e){
-                            return false;
-                        }
-                        return true;
-                    }
-                });
-            } else {
-                dfuButton.setEnabled(false);
-            }
             //Secret Debug Menu
             String versionName = BuildConfig.VERSION_NAME;
             final Preference versionButton = findPreference("prefVersion");

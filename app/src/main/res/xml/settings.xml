@@ -82,12 +82,7 @@
 
         <Preference android:title="@string/pref_btn_version_title"
             android:key="prefVersion"
-            android:summary="@string/pref_btn_version_summary"/>
-    </PreferenceCategory>
-    <PreferenceCategory android:title="@string/hw_settings_title" >
-        <Preference android:title="@string/pref_btn_dfumode_title"
-            android:key="prefDfuMode"
-            android:summary="@string/pref_btn_dfumode_summary"/>
+            android:summary=""/>
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/debug_settings_title"

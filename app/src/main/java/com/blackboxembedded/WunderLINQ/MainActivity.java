@@ -48,9 +48,6 @@ import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.blackboxembedded.WunderLINQ.OTAFirmwareUpdate.OTAFirmwareUpgradeActivity;
-import com.blackboxembedded.WunderLINQ.OTAFirmwareUpdate.UUIDDatabase;
-
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -106,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
     public static BluetoothAdapter mBluetoothAdapter;
     private Handler mHandler;
     private BluetoothLeService mBluetoothLeService;
-    public static BluetoothGattCharacteristic gattDFUCharacteristic;
     private BluetoothGattCharacteristic mNotifyCharacteristic;
     List<BluetoothGattCharacteristic> gattCharacteristics;
     private String mDeviceAddress;
@@ -828,16 +824,8 @@ public class MainActivity extends AppCompatActivity {
                             mBluetoothLeService.setCharacteristicNotification(
                                     gattCharacteristic, true);
                         }
-                    } else if (UUID.fromString(GattAttributes.DFU_CHARACTERISTIC).equals(gattCharacteristic.getUuid())){
-                        gattDFUCharacteristic = gattCharacteristic;
                     }
                 }
-            } else if (UUIDDatabase.UUID_OTA_UPDATE_SERVICE.equals(gattService.getUuid())){
-                Log.d(TAG,"OTA Service Found");
-                //mBluetoothLeService.disconnect();
-                Intent oTAIntent = new Intent(MainActivity.this, OTAFirmwareUpgradeActivity.class);
-                oTAIntent.putExtra("device", mDeviceAddress);
-                startActivity(oTAIntent);
             }
         }
     }
