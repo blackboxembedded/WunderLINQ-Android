@@ -938,7 +938,7 @@ public class MainActivity extends AppCompatActivity {
                 textView7.setText(stringBuilder.toString());
             }
         }
-        if(Data.getTripOne() != null) {
+        if(Data.getTripOne() != null && Data.getTripTwo() != null) {
             Double trip1 = Data.getTripOne();
             Double trip2 = Data.getTripTwo();
             if (distanceFormat.contains("1")) {

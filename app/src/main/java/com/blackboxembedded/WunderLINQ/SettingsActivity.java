@@ -69,7 +69,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
             addressPref.setSummary(sharedPrefs.getString("prefHomeAddress",getString(R.string.pref_homeAddress_summary)));
 
             EditTextPreference favNumberPref = (EditTextPreference) findPreference("prefHomePhone");
-            favNumberPref.setSummary(sharedPrefs.getString("prefHomePhone",getString(R.string.pref_homeAddress_summary)));
+            favNumberPref.setSummary(sharedPrefs.getString("prefHomePhone",getString(R.string.pref_homePhone_summary)));
 
             if (!(sharedPrefs.getBoolean("DEBUG_ENABLED",false))){
                 PreferenceScreen preferenceScreen = getPreferenceScreen();
