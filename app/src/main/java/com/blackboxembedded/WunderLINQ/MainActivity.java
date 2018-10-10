@@ -20,6 +20,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -34,6 +35,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -47,6 +49,9 @@ import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
+;
+
+import com.blackboxembedded.WunderLINQ.OTAFirmwareUpdate.Utils;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -141,8 +146,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG,"In onCreate");
+
+        AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
+
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+
+
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (!(sharedPrefs.getBoolean("DEBUG_ENABLED",false))){
@@ -160,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
             setContentView(R.layout.activity_main);
             view = findViewById(R.id.layout_main);
         }
+
         view.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
             public void onSwipeLeft() {
@@ -429,6 +441,11 @@ public class MainActivity extends AppCompatActivity {
             LinearLayout layout8 = (LinearLayout) findViewById(R.id.layout_8);
             if (itsDark) {
                 Log.d(TAG,"Settings things for dark");
+                //Set Brightness to defaults
+                WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+                layoutParams.screenBrightness = -1;
+                getWindow().setAttributes(layoutParams);
+
                 lLayout.setBackgroundColor(getResources().getColor(R.color.black));
                 actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
                 navbarTitle.setTextColor(getResources().getColor(R.color.white));
@@ -462,6 +479,13 @@ public class MainActivity extends AppCompatActivity {
                 layout8.setBackground(getResources().getDrawable(R.drawable.border_white));
             } else {
                 Log.d(TAG,"Settings things for light");
+                if (sharedPrefs.getBoolean("prefBrightnessOverride", false)) {
+                    //Set Brightness to 100%
+                    WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+                    layoutParams.screenBrightness = 1;
+                    getWindow().setAttributes(layoutParams);
+                }
+
                 lLayout.setBackgroundColor(getResources().getColor(R.color.white));
                 actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
                 navbarTitle.setTextColor(getResources().getColor(R.color.black));
@@ -544,6 +568,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+
+        updateDisplay();
         if (((MyApplication) this.getApplication()).getitsDark()){
             updateColors(true);
         } else {
@@ -581,6 +607,31 @@ public class MainActivity extends AppCompatActivity {
         unregisterReceiver(mGattUpdateReceiver);
         unregisterReceiver(mBondingBroadcast);
         sensorManager.unregisterListener(sensorEventListener, lightSensor);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Log.d(TAG,"In onConfigChange");
+
+        /*
+        Log.d(TAG, newConfig.densityDpi + "<= densityDpi");
+
+        Configuration configuration = new Configuration(newConfig);
+        configuration = getResources().getConfiguration();
+        configuration.fontScale = (float) 1.0; //0.85 small size, 1 normal size, 1,15 big etc
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        metrics.scaledDensity = configuration.fontScale * metrics.density;
+        configuration.densityDpi = (int) getResources().getDisplayMetrics().xdpi;
+        getResources().updateConfiguration(configuration, metrics);
+        if(metrics.xdpi != metrics.densityDpi){
+            Log.d(TAG,"Real scale " +  (metrics.xdpi / metrics.densityDpi)*metrics.density);
+            Log.d(TAG, metrics.xdpi + "<= xdpiDpi");
+            Log.d(TAG, metrics.densityDpi + "<= densityDpi");
+
+        }
+        */
     }
 
     @Override

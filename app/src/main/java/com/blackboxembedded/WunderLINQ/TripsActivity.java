@@ -34,6 +34,7 @@ public class TripsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
         setContentView(R.layout.activity_trips);
 
         tripList = findViewById(R.id.lv_trips);

@@ -29,6 +29,7 @@ public class FaultActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
         setContentView(R.layout.activity_fault);
 
         showActionBar();

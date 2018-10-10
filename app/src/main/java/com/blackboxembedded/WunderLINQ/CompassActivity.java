@@ -68,6 +68,7 @@ public class CompassActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -287,6 +288,11 @@ public class CompassActivity extends AppCompatActivity {
         ((MyApplication) this.getApplication()).setitsDark(itsDark);
         LinearLayout lLayout = (LinearLayout) findViewById(R.id.layout_compass);
         if (itsDark) {
+            //Set Brightness to default
+            WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+            layoutParams.screenBrightness = -1;
+            getWindow().setAttributes(layoutParams);
+
             lLayout.setBackgroundColor(getResources().getColor(R.color.black));
             compassTextView.setTextColor(getResources().getColor(R.color.white));
             actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
@@ -294,6 +300,13 @@ public class CompassActivity extends AppCompatActivity {
             backButton.setColorFilter(getResources().getColor(R.color.white));
             forwardButton.setColorFilter(getResources().getColor(R.color.white));
         } else {
+            if (sharedPrefs.getBoolean("prefBrightnessOverride", false)) {
+                //Set Brightness to 100%
+                WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+                layoutParams.screenBrightness = 1;
+                getWindow().setAttributes(layoutParams);
+            }
+
             lLayout.setBackgroundColor(getResources().getColor(R.color.white));
             compassTextView.setTextColor(getResources().getColor(R.color.black));
             actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));

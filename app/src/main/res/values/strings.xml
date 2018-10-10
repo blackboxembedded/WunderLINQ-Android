@@ -148,6 +148,7 @@
     <string name="task_title_stop_trip">Stop Trip Log</string>
     <string name="title_logging_notification">WunderLINQ Trip Recording Active</string>
     <string name="task_title_waypoint">Save Waypoint</string>
+    <string name="task_title_waypoint_nav">Navigate to Waypoint</string>
     <string name="task_title_voicecontrol">Voice Assistant</string>
     <string name="toast_address_not_set">No Go Home address set in Settings</string>
     <string name="toast_phone_not_set">No Favorite Number set in Settings</string>
@@ -245,6 +246,8 @@
         <item name="3">2</item>
         <item name="4">3</item>
     </string-array>
+    <string name="pref_brightness_name">Display Brightness</string>
+    <string name="pref_brightness_summary">Sets the devices brightness to the max.</string>
     <string name="pref_nightMode_name">Night Mode</string>
     <string name="pref_nightMode_summary">Enable Night Mode, Disables Auto Night Mode</string>
     <string name="pref_autoNightMode_name">Auto Night Mode</string>

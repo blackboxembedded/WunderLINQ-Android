@@ -51,6 +51,7 @@ public class LoggingService extends Service implements LocationListener, GoogleA
     private PrintWriter outFile = null;
 
     private int loggingInterval = 1000;
+    private String CHANNEL_ID = "WunderLINQ";
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -74,6 +75,14 @@ public class LoggingService extends Service implements LocationListener, GoogleA
         Data.setNumberOfShifts(0);
         Data.setFrontBrake(0);
         Data.setRearBrake(0);
+
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mNotificationManager.deleteNotificationChannel(CHANNEL_ID);
+        } else {
+            mNotificationManager.cancel(1234);
+        }
         /*
         Intent restartService = new Intent(getApplicationContext(),
                 this.getClass());
@@ -101,7 +110,7 @@ public class LoggingService extends Service implements LocationListener, GoogleA
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Start foreground service to avoid unexpected kill
-        String CHANNEL_ID = "WunderLINQ";
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, this.getString(R.string.title_logging_notification),
                     NotificationManager.IMPORTANCE_DEFAULT);

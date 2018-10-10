@@ -55,6 +55,13 @@
             />
         <CheckBoxPreference
             android:defaultValue="false"
+            android:dependency="prefNightMode"
+            android:key="prefBrightnessOverride"
+            android:summary="@string/pref_brightness_summary"
+            android:title="@string/pref_brightness_name" >
+        </CheckBoxPreference>
+        <CheckBoxPreference
+            android:defaultValue="false"
             android:disableDependentsState="true"
             android:key="prefNightMode"
             android:summary="@string/pref_nightMode_summary"

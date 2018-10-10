@@ -136,6 +136,9 @@ public class MusicActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
+
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_music);
@@ -434,6 +437,11 @@ public class MusicActivity extends AppCompatActivity {
         ((MyApplication) this.getApplication()).setitsDark(itsDark);
         RelativeLayout lLayout = (RelativeLayout) findViewById(R.id.layout_music);
         if (itsDark) {
+            //Set Brightness back to defaults
+            WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+            layoutParams.screenBrightness = -1;
+            getWindow().setAttributes(layoutParams);
+
             lLayout.setBackgroundColor(getResources().getColor(R.color.black));
             mTitleText.setTextColor(getResources().getColor(R.color.white));
             mAlbumText.setTextColor(getResources().getColor(R.color.white));
@@ -443,6 +451,13 @@ public class MusicActivity extends AppCompatActivity {
             backButton.setColorFilter(getResources().getColor(R.color.white));
             forwardButton.setColorFilter(getResources().getColor(R.color.white));
         } else {
+            if (sharedPrefs.getBoolean("prefBrightnessOverride", false)) {
+                //Set Brightness to 100%
+                WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+                layoutParams.screenBrightness = 1;
+                getWindow().setAttributes(layoutParams);
+            }
+
             lLayout.setBackgroundColor(getResources().getColor(R.color.white));
             mTitleText.setTextColor(getResources().getColor(R.color.black));
             mAlbumText.setTextColor(getResources().getColor(R.color.black));

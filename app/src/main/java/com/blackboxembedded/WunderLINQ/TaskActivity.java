@@ -80,6 +80,7 @@ public class TaskActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_task);
@@ -273,10 +274,11 @@ public class TaskActivity extends AppCompatActivity {
                 videoTaskText,
                 tripTaskText,
                 getResources().getString(R.string.task_title_waypoint),
+                getResources().getString(R.string.task_title_waypoint_nav),
                 getResources().getString(R.string.task_title_voicecontrol)
         };
 
-        Drawable[] iconId = new Drawable[9];
+        Drawable[] iconId = new Drawable[10];
         if (itsDark) {
             iconId[0] = getResources().getDrawable(R.drawable.ic_map, getTheme());
             iconId[0].setTint(Color.WHITE);
@@ -294,8 +296,10 @@ public class TaskActivity extends AppCompatActivity {
             iconId[6].setTint(Color.WHITE);
             iconId[7] = getResources().getDrawable(R.drawable.ic_map_marker, getTheme());
             iconId[7].setTint(Color.WHITE);
-            iconId[8] = getResources().getDrawable(R.drawable.ic_microphone, getTheme());
+            iconId[8] = getResources().getDrawable(R.drawable.ic_map, getTheme());
             iconId[8].setTint(Color.WHITE);
+            iconId[9] = getResources().getDrawable(R.drawable.ic_microphone, getTheme());
+            iconId[9].setTint(Color.WHITE);
         } else  {
             iconId[0] = getResources().getDrawable(R.drawable.ic_map, getTheme());
             iconId[0].setTint(Color.BLACK);
@@ -313,8 +317,10 @@ public class TaskActivity extends AppCompatActivity {
             iconId[6].setTint(Color.BLACK);
             iconId[7] = getResources().getDrawable(R.drawable.ic_map_marker, getTheme());
             iconId[7].setTint(Color.BLACK);
-            iconId[8] = getResources().getDrawable(R.drawable.ic_microphone, getTheme());
+            iconId[8] = getResources().getDrawable(R.drawable.ic_map, getTheme());
             iconId[8].setTint(Color.BLACK);
+            iconId[9] = getResources().getDrawable(R.drawable.ic_microphone, getTheme());
+            iconId[9].setTint(Color.BLACK);
         }
 
         TaskListView adapter = new
@@ -665,6 +671,11 @@ public class TaskActivity extends AppCompatActivity {
                         }
                         break;
                     case 8:
+                        //Navigate to Waypoint
+                        Intent forwardIntent = new Intent(TaskActivity.this, WaypointNavActivity.class);
+                        startActivity(forwardIntent);
+                        break;
+                    case 9:
                         //Voice Assistant
                         startActivity(new Intent(Intent.ACTION_VOICE_COMMAND).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         break;
@@ -763,12 +774,24 @@ public class TaskActivity extends AppCompatActivity {
         ((MyApplication) this.getApplication()).setitsDark(itsDark);
         LinearLayout lLayout = (LinearLayout) findViewById(R.id.layout_task);
         if (itsDark) {
+            //Set Brightness to defaults
+            WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+            layoutParams.screenBrightness = -1;
+            getWindow().setAttributes(layoutParams);
+
             lLayout.setBackgroundColor(getResources().getColor(R.color.black));
             actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
             navbarTitle.setTextColor(getResources().getColor(R.color.white));
             backButton.setColorFilter(getResources().getColor(R.color.white));
             forwardButton.setColorFilter(getResources().getColor(R.color.white));
         } else {
+            if (sharedPrefs.getBoolean("prefBrightnessOverride", false)) {
+                //Set Brightness to 100%
+                WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+                layoutParams.screenBrightness = 1;
+                getWindow().setAttributes(layoutParams);
+            }
+
             lLayout.setBackgroundColor(getResources().getColor(R.color.white));
             actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
             navbarTitle.setTextColor(getResources().getColor(R.color.black));

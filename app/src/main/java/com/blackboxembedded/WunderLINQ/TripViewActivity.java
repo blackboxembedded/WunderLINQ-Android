@@ -67,6 +67,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
         setContentView(R.layout.activity_trip_view);
 
         tvDate = findViewById(R.id.tvDate);
