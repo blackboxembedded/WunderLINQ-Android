@@ -53,6 +53,14 @@
             android:entryValues="@array/bearing_arrayValues"
             android:defaultValue="0"
             />
+        <ListPreference
+            android:key="prefContactSorting"
+            android:title="@string/pref_contact_name"
+            android:summary="%s"
+            android:entries="@array/contact_sort_array"
+            android:entryValues="@array/contact_sort_arrayValues"
+            android:defaultValue="0"
+            />
         <CheckBoxPreference
             android:defaultValue="false"
             android:dependency="prefNightMode"

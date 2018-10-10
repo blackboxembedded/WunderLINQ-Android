@@ -278,10 +278,14 @@ public class ContactListActivity extends AppCompatActivity {
             //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
         } else {
             // Android version is lesser than 6.0 or the permission is already granted.
+            String sortOrder = ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME + " COLLATE LOCALIZED ASC";
+            if (sharedPrefs.getInt("prefContactSorting", 0) != 0) {
+                sortOrder = ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME + " COLLATE LOCALIZED ASC";
+            }
             ContentResolver cr = getContentResolver();
             Cursor cursor = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI.buildUpon()
                     .appendQueryParameter(ContactsContract.REMOVE_DUPLICATE_ENTRIES, "1")
-                    .build(), PROJECTION, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
+                    .build(), PROJECTION, null, null, sortOrder);
             if (cursor != null) {
                 try {
                     final int contactIdIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID);
