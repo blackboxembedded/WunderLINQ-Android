@@ -35,7 +35,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -49,9 +48,6 @@ import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
-;
-
-import com.blackboxembedded.WunderLINQ.OTAFirmwareUpdate.Utils;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -569,7 +565,7 @@ public class MainActivity extends AppCompatActivity {
         }
         sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
-        updateDisplay();
+        //updateDisplay();
         if (((MyApplication) this.getApplication()).getitsDark()){
             updateColors(true);
         } else {
