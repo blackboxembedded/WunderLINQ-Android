@@ -655,7 +655,7 @@ public class TaskActivity extends AppCompatActivity {
                                     WaypointDatasource datasource = new WaypointDatasource(TaskActivity.this);
                                     datasource.open();
 
-                                    WaypointRecord record = new WaypointRecord(curdatetime, waypoint);
+                                    WaypointRecord record = new WaypointRecord(curdatetime, waypoint, "");
                                     datasource.addRecord(record);
                                     datasource.close();
 

@@ -31,7 +31,7 @@ public class WaypointDatasource {
     public List<WaypointRecord> getAllRecords() {
         List<WaypointRecord> pageList = new ArrayList<>();
 
-        Cursor c = db.query(sqlTable, new String[] {"_id", "date", "data"}, null, null, null, null,  "date DESC");
+        Cursor c = db.query(sqlTable, new String[] {"_id", "date", "data", "label"}, null, null, null, null,  "date DESC");
 
         if (c != null) {
             c.moveToFirst();
@@ -48,7 +48,7 @@ public class WaypointDatasource {
     public Cursor getAllRecordsCursor() {
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor c = db.query(sqlTable, new String[] {"date", "data"}, null, null, null, null,  "date DESC");
+        Cursor c = db.query(sqlTable, new String[] {"date", "data", "label"}, null, null, null, null,  "date DESC");
         if (c != null) {
             c.moveToFirst();
         }
@@ -62,9 +62,18 @@ public class WaypointDatasource {
         ContentValues values = new ContentValues();
         values.put("date", record.getDate());
         values.put("data", record.getData());
+        values.put("label", record.getLabel());
 
         // Inserting Row
         db.insert(sqlTable, null, values);
+        db.close();
+    }
+    // Add label to record
+    void addLabel(long record, String label) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("label",label);
+        db.update(sqlTable, cv, "_id = ?", new String[]{String.valueOf(record)});
         db.close();
     }
     // Remove record from database
@@ -77,7 +86,7 @@ public class WaypointDatasource {
     WaypointRecord returnRecord(String id) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        Cursor c = db.query(sqlTable, new String[] {"_id", "date", "data"}, "_id=?", new String[] {id}, null, null, null);
+        Cursor c = db.query(sqlTable, new String[] {"_id", "date", "data", "label"}, "_id=?", new String[] {id}, null, null, null);
         if (c != null) {
             c.moveToFirst();
         }
@@ -91,6 +100,7 @@ public class WaypointDatasource {
         record.setID(cursor.getLong(0));
         record.setDate(cursor.getString(cursor.getColumnIndex("date")));
         record.setData(cursor.getString(cursor.getColumnIndex("data")));
+        record.setLabel(cursor.getString(cursor.getColumnIndex("label")));
         return record;
     }
 

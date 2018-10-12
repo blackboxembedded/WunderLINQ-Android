@@ -5,16 +5,17 @@ public class WaypointRecord {
     long _id;
     String _date;
     String _data;
+    String _label;
 
     // Empty constructor
     public WaypointRecord(){
 
     }
     // Constructor
-    public WaypointRecord(String date, String data) {
+    public WaypointRecord(String date, String data, String label) {
         this._date = date;
         this._data = data;
-
+        this._label = label;
     }
 
     public long getID(){
@@ -38,6 +39,13 @@ public class WaypointRecord {
     }
     public String getData(){
         return this._data;
+    }
+
+    public void setLabel(String label){
+        this._label = label;
+    }
+    public String getLabel(){
+        return this._label;
     }
 
     // Will be used by the ArrayAdapter in the ListView

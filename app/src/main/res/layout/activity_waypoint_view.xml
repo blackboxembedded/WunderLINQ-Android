@@ -101,6 +101,37 @@
                 android:textStyle="bold"
                 android:textColor="@color/black"/>
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="top">
+
+            <TextView
+                android:id="@+id/tvLabelLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/waypoint_view_tv_label_label"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
+
+            <EditText
+                android:id="@+id/tvLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text=""
+                android:textAlignment="viewStart"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:hint="@string/waypoint_view_label_hint"
+                android:imeOptions="actionDone"/>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout

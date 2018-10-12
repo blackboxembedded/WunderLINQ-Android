@@ -3,12 +3,16 @@ package com.blackboxembedded.WunderLINQ;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -28,6 +32,7 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
     private TextView tvDate;
     private TextView tvLatitude;
     private TextView tvLongitude;
+    private EditText etLabel;
 
     private WaypointDatasource datasource;
     private WaypointRecord record;
@@ -45,6 +50,26 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
         tvDate = findViewById(R.id.tvDate);
         tvLatitude = findViewById(R.id.tvLatitude);
         tvLongitude = findViewById(R.id.tvLongitude);
+        etLabel = (EditText) findViewById(R.id.tvLabel);
+        etLabel.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    // do something, e.g. set your TextView here via .setText()
+                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    String label = etLabel.getText().toString();
+                    // Open database
+                    WaypointDatasource datasource = new WaypointDatasource(WaypointViewActivity.this);
+                    datasource.open();
+                    datasource.addLabel(record.getID(), etLabel.getText().toString());
+                    datasource.close();
+                    return true;
+                }
+                return false;
+            }
+        });
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -54,12 +79,14 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
             datasource = new WaypointDatasource(this);
             datasource.open();
             record = datasource.returnRecord(recordID);
+            datasource.close();
             tvDate.setText(record.getDate());
             String[] latlong = record.getData().split(",");
             lat = Double.parseDouble(latlong[0]);
             lon = Double.parseDouble(latlong[1]);
             tvLatitude.setText(latlong[0]);
             tvLongitude.setText(latlong[1]);
+            etLabel.setText(record.getLabel());
 
             FragmentManager myFragmentManager = getSupportFragmentManager();
             SupportMapFragment mapFragment = (SupportMapFragment) myFragmentManager.findFragmentById(R.id.map);
