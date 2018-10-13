@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -107,6 +108,15 @@ public class ContactListActivity extends AppCompatActivity {
         });
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String orientation = sharedPrefs.getString("prefOrientation", "0");
+        if (!orientation.equals("0")){
+            if(orientation.equals("1")){
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            } else {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            }
+        }
 
         contactList = (ListView) findViewById(R.id.lv_contacts);
 
@@ -294,6 +304,7 @@ public class ContactListActivity extends AppCompatActivity {
                     .appendQueryParameter(ContactsContract.REMOVE_DUPLICATE_ENTRIES, "1")
                     .build(), PROJECTION, null, null, sortOrder);
             if (cursor != null) {
+
 
                 try {
                     HashSet<String> normalizedNumbersAlreadyFound = new HashSet<>();

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -174,6 +175,15 @@ public class MusicActivity extends AppCompatActivity {
         showActionBar();
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String orientation = sharedPrefs.getString("prefOrientation", "0");
+        if (!orientation.equals("0")){
+            if(orientation.equals("1")){
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            } else {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            }
+        }
 
         if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getBoolean("prefNightMode", false)){
             updateColors(true);

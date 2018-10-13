@@ -63,6 +63,14 @@
             android:defaultValue="0"
             />
             -->
+        <ListPreference
+            android:key="prefOrientation"
+            android:title="@string/pref_orientation_name"
+            android:summary="%s"
+            android:entries="@array/orientation_array"
+            android:entryValues="@array/orientation_arrayValues"
+            android:defaultValue="0"
+            />
         <CheckBoxPreference
             android:defaultValue="false"
             android:dependency="prefNightMode"

@@ -3,6 +3,7 @@ package com.blackboxembedded.WunderLINQ;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.drawable.ColorDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -89,6 +90,14 @@ public class CompassActivity extends AppCompatActivity {
         });
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String orientation = sharedPrefs.getString("prefOrientation", "0");
+        if (!orientation.equals("0")){
+            if(orientation.equals("1")){
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            } else {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            }
+        }
 
         showActionBar();
 
@@ -215,30 +224,36 @@ public class CompassActivity extends AppCompatActivity {
                 boolean success = SensorManager.getRotationMatrix(R, I, gravity, geomagnetic);
                 if (success) {
                     float orientation[] = new float[3];
-                    String bearing = "-";
+                    String bearing = "";
+                    String cardinal = "";
                     SensorManager.remapCoordinateSystem(R, SensorManager.AXIS_X, SensorManager.AXIS_Z, remappedR);
                     SensorManager.getOrientation(remappedR, orientation);
                     int direction = filterChange(normalizeDegrees(Math.toDegrees(orientation[0])));
                     if((int)direction != (int)lastDirection) {
                         lastDirection = (int) direction;
                         bearing = String.valueOf(lastDirection) + "°";
-                        if (sharedPrefs.getString("prefBearing", "0").contains("1")) {
+                        if (!sharedPrefs.getString("prefBearing", "0").contains("0")) {
                             if (lastDirection > 331 || lastDirection <= 28) {
-                                bearing = "N";
+                                cardinal = "N";
                             } else if (lastDirection > 28 && lastDirection <= 73) {
-                                bearing = "NE";
+                                cardinal = "NE";
                             } else if (lastDirection > 73 && lastDirection <= 118) {
-                                bearing = "E";
+                                cardinal = "E";
                             } else if (lastDirection > 118 && lastDirection <= 163) {
-                                bearing = "SE";
+                                cardinal = "SE";
                             } else if (lastDirection > 163 && lastDirection <= 208) {
-                                bearing = "S";
+                                cardinal = "S";
                             } else if (lastDirection > 208 && lastDirection <= 253) {
-                                bearing = "SW";
+                                cardinal = "SW";
                             } else if (lastDirection > 253 && lastDirection <= 298) {
-                                bearing = "W";
+                                cardinal = "W";
                             } else if (lastDirection > 298 && lastDirection <= 331) {
-                                bearing = "NW";
+                                cardinal = "NW";
+                            }
+                            if (sharedPrefs.getString("prefBearing", "0").contains("1")) {
+                                bearing = cardinal;
+                            } else {
+                                bearing = cardinal + "(" + bearing + ")";
                             }
                         }
                         compassTextView.setText(bearing);
@@ -360,6 +375,40 @@ public class CompassActivity extends AppCompatActivity {
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 Intent forwardIntent = new Intent(CompassActivity.this, TaskActivity.class);
                 startActivity(forwardIntent);
+                return true;
+            case KeyEvent.KEYCODE_DPAD_UP:
+                Log.d(TAG,"Key up");
+                String currentDisplay = sharedPrefs.getString("prefBearing", "0");
+                SharedPreferences.Editor editor = sharedPrefs.edit();
+                switch (currentDisplay) {
+                    case "0":
+                        editor.putString("prefBearing", "1");
+                        break;
+                    case "1":
+                        editor.putString("prefBearing", "2");
+                        break;
+                    case "2":
+                        editor.putString("prefBearing", "0");
+                        break;
+                }
+                editor.commit();
+                return true;
+            case KeyEvent.KEYCODE_DPAD_DOWN:
+                Log.d(TAG,"Key down");
+                String currentDisplayDn = sharedPrefs.getString("prefBearing", "0");
+                SharedPreferences.Editor editorDn = sharedPrefs.edit();
+                switch (currentDisplayDn) {
+                    case "0":
+                        editorDn.putString("prefBearing", "2");
+                        break;
+                    case "1":
+                        editorDn.putString("prefBearing", "0");
+                        break;
+                    case "2":
+                        editorDn.putString("prefBearing", "1");
+                        break;
+                }
+                editorDn.commit();
                 return true;
             default:
                 return super.onKeyUp(keyCode, event);

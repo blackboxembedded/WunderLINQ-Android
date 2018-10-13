@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
@@ -148,15 +149,21 @@ public class MainActivity extends AppCompatActivity {
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-
-
-
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (!(sharedPrefs.getBoolean("DEBUG_ENABLED",false))){
             SharedPreferences.Editor editor = sharedPrefs.edit();
             editor.putBoolean("prefDataLogging", false);
             editor.putBoolean("prefShowRaw", false);
             editor.commit();
+        }
+
+        String orientation = sharedPrefs.getString("prefOrientation", "0");
+        if (!orientation.equals("0")){
+            if(orientation.equals("1")){
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            } else {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            }
         }
 
         View view;
@@ -610,24 +617,14 @@ public class MainActivity extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
         Log.d(TAG,"In onConfigChange");
 
-        /*
-        Log.d(TAG, newConfig.densityDpi + "<= densityDpi");
-
-        Configuration configuration = new Configuration(newConfig);
-        configuration = getResources().getConfiguration();
-        configuration.fontScale = (float) 1.0; //0.85 small size, 1 normal size, 1,15 big etc
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        metrics.scaledDensity = configuration.fontScale * metrics.density;
-        configuration.densityDpi = (int) getResources().getDisplayMetrics().xdpi;
-        getResources().updateConfiguration(configuration, metrics);
-        if(metrics.xdpi != metrics.densityDpi){
-            Log.d(TAG,"Real scale " +  (metrics.xdpi / metrics.densityDpi)*metrics.density);
-            Log.d(TAG, metrics.xdpi + "<= xdpiDpi");
-            Log.d(TAG, metrics.densityDpi + "<= densityDpi");
-
+        String orientation = sharedPrefs.getString("prefOrientation", "0");
+        if (!orientation.equals("0")){
+            if(orientation.equals("1")){
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            } else {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            }
         }
-        */
     }
 
     @Override
