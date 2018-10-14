@@ -52,6 +52,8 @@ public class TaskActivity extends AppCompatActivity {
     private TextView navbarTitle;
 
     private ListView taskList;
+    private int lastPosition = 0;
+    private int numTasks = 10;
 
     private SharedPreferences sharedPrefs;
 
@@ -288,7 +290,7 @@ public class TaskActivity extends AppCompatActivity {
                 getResources().getString(R.string.task_title_voicecontrol)
         };
 
-        Drawable[] iconId = new Drawable[10];
+        Drawable[] iconId = new Drawable[numTasks];
         if (itsDark) {
             iconId[0] = getResources().getDrawable(R.drawable.ic_map, getTheme());
             iconId[0].setTint(Color.WHITE);
@@ -342,6 +344,7 @@ public class TaskActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
+                lastPosition = position;
                 final String item = (String) parent.getItemAtPosition(position);
                 switch (position){
                     case 0:
@@ -821,6 +824,18 @@ public class TaskActivity extends AppCompatActivity {
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 Intent forwardIntent = new Intent(TaskActivity.this, MainActivity.class);
                 startActivity(forwardIntent);
+                return true;
+            case KeyEvent.KEYCODE_DPAD_DOWN:
+                if ((taskList.getSelectedItemPosition() == (numTasks - 1)) && lastPosition == (numTasks - 1) ){
+                    taskList.setSelection(0);
+                }
+                lastPosition = taskList.getSelectedItemPosition();
+                return true;
+            case KeyEvent.KEYCODE_DPAD_UP:
+                if (taskList.getSelectedItemPosition() == 0 && lastPosition == 0){
+                    taskList.setSelection(numTasks - 1);
+                }
+                lastPosition = taskList.getSelectedItemPosition();
                 return true;
             default:
                 return super.onKeyUp(keyCode, event);

@@ -15,6 +15,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -39,7 +40,10 @@ public class WaypointNavActivity extends AppCompatActivity {
     private ListView waypointList;
     private WaypointDatasource datasource;
     private WaypointRecord record;
+    List<WaypointRecord> listValues;
     ArrayAdapter<WaypointRecord> adapter;
+
+    private int lastPosition = 0;
 
     private SharedPreferences sharedPrefs;
 
@@ -106,7 +110,7 @@ public class WaypointNavActivity extends AppCompatActivity {
 
 
 
-        List<WaypointRecord> listValues = datasource.getAllRecords();
+        listValues = datasource.getAllRecords();
         adapter = new
                 WaypointListView(this, listValues, itsDark);
 
@@ -115,6 +119,7 @@ public class WaypointNavActivity extends AppCompatActivity {
         waypointList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick (AdapterView < ? > adapter, View view, int position, long arg){
+                lastPosition = position;
                 WaypointRecord record = (WaypointRecord) waypointList.getItemAtPosition(position);
                 Intent forwardIntent = new Intent(android.content.Intent.ACTION_VIEW);
                 forwardIntent.setData(Uri.parse("google.navigation:q=" + record.getData()));
@@ -270,5 +275,30 @@ public class WaypointNavActivity extends AppCompatActivity {
             backButton.setColorFilter(getResources().getColor(R.color.black));
         }
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        Log.d(TAG, "Keycode: " + keyCode);
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_DPAD_LEFT:
+                Intent backIntent = new Intent(WaypointNavActivity.this, TaskActivity.class);
+                startActivity(backIntent);
+                return true;
+            case KeyEvent.KEYCODE_DPAD_DOWN:
+                if ((waypointList.getSelectedItemPosition() == (listValues.size() - 1)) && lastPosition == (listValues.size() - 1) ){
+                    waypointList.setSelection(0);
+                }
+                lastPosition = waypointList.getSelectedItemPosition();
+                return true;
+            case KeyEvent.KEYCODE_DPAD_UP:
+                if (waypointList.getSelectedItemPosition() == 0 && lastPosition == 0){
+                    waypointList.setSelection(listValues.size() - 1);
+                }
+                lastPosition = waypointList.getSelectedItemPosition();
+                return true;
+            default:
+                return super.onKeyUp(keyCode, event);
+        }
     }
 }

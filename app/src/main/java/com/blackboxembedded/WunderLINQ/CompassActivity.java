@@ -377,7 +377,6 @@ public class CompassActivity extends AppCompatActivity {
                 startActivity(forwardIntent);
                 return true;
             case KeyEvent.KEYCODE_DPAD_UP:
-                Log.d(TAG,"Key up");
                 String currentDisplay = sharedPrefs.getString("prefBearing", "0");
                 SharedPreferences.Editor editor = sharedPrefs.edit();
                 switch (currentDisplay) {
@@ -394,7 +393,6 @@ public class CompassActivity extends AppCompatActivity {
                 editor.commit();
                 return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
-                Log.d(TAG,"Key down");
                 String currentDisplayDn = sharedPrefs.getString("prefBearing", "0");
                 SharedPreferences.Editor editorDn = sharedPrefs.edit();
                 switch (currentDisplayDn) {

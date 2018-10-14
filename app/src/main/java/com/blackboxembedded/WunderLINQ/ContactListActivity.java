@@ -54,6 +54,8 @@ public class ContactListActivity extends AppCompatActivity {
     private ImageButton backButton;
     private TextView navbarTitle;
 
+    private ContactListView adapter;
+
     private SharedPreferences sharedPrefs;
 
     static boolean itsDark = false;
@@ -66,6 +68,8 @@ public class ContactListActivity extends AppCompatActivity {
     private ArrayList<String> contacts;
     private ArrayList<String> phoneNumbers;
     private ArrayList<Drawable> photoId;
+
+    private int lastPosition = 0;
 
     private static final int PERMISSION_REQUEST_READ_CONTACTS = 102;
 
@@ -397,6 +401,8 @@ public class ContactListActivity extends AppCompatActivity {
                                         int position, long id) {
                     final String item = (String) parent.getItemAtPosition(position);
 
+                    lastPosition = position;
+
                     // Call Number
                     Intent callHomeIntent = new Intent(Intent.ACTION_DIAL);
                     callHomeIntent.setData(Uri.parse("tel:" + phoneNumbers.get(position)));
@@ -517,6 +523,18 @@ public class ContactListActivity extends AppCompatActivity {
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 Intent backIntent = new Intent(ContactListActivity.this, TaskActivity.class);
                 startActivity(backIntent);
+                return true;
+            case KeyEvent.KEYCODE_DPAD_DOWN:
+                if ((contactList.getSelectedItemPosition() == (contacts.size() - 1)) && lastPosition == (contacts.size() - 1) ){
+                    contactList.setSelection(0);
+                }
+                lastPosition = contactList.getSelectedItemPosition();
+                return true;
+            case KeyEvent.KEYCODE_DPAD_UP:
+                if (contactList.getSelectedItemPosition() == 0 && lastPosition == 0){
+                    contactList.setSelection(contacts.size() - 1);
+                }
+                lastPosition = contactList.getSelectedItemPosition();
                 return true;
             default:
                 return super.onKeyUp(keyCode, event);
