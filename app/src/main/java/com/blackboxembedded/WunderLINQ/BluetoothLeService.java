@@ -49,6 +49,8 @@ public class BluetoothLeService extends Service {
     private static Logger logger = null;
     static FaultStatus faults = null;
 
+    private static boolean fuelAlertSent = false;
+
     private static int prevBrakeValue = 0;
 
     /**
@@ -927,18 +929,23 @@ public class BluetoothLeService extends Service {
                         switch (fuelValue){
                             case 0x2:
                                 faults.setfuelFaultActive(true);
+                                fuelAlert();
                                 break;
                             case 0x6:
                                 faults.setfuelFaultActive(true);
+                                fuelAlert();
                                 break;
                             case 0xA:
                                 faults.setfuelFaultActive(true);
+                                fuelAlert();
                                 break;
                             case 0xE:
                                 faults.setfuelFaultActive(true);
+                                fuelAlert();
                                 break;
                             default:
                                 faults.setfuelFaultActive(false);
+                                fuelAlertSent = false;
                                 break;
                         }
                         // General Fault
@@ -2422,10 +2429,27 @@ public class BluetoothLeService extends Service {
         notification.flags = Notification.FLAG_INSISTENT|Notification.FLAG_NO_CLEAR;
         notificationManager.notify(notificationId, notification);
     }
+
     static public void clearNotifications(){
         NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
         //notificationManager.cancel("myappnotif", i);
     }
 
+    static private void fuelAlert(){
+        final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+
+        if (sharedPrefs.getBoolean("prefFuelAlert", false)) {
+            if (!fuelAlertSent) {
+                fuelAlertSent = true;
+                Intent alertIntent = new Intent(mContext, AlertActivity.class);
+                alertIntent.putExtra("TITLE", mContext.getResources().getString(R.string.alertLowFuelTitle));
+                alertIntent.putExtra("BODY", mContext.getResources().getString(R.string.alertLowFuelBody));
+                mContext.startActivity(alertIntent);
+            }
+
+        } else {
+            fuelAlertSent = false;
+        }
+    }
 }

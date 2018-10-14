@@ -100,6 +100,14 @@
             android:inputType="number"
             android:key="prefAutoNightModeDelay" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="@string/alerting_title" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="prefFuelAlert"
+            android:summary="@string/pref_fuelAlert_summary"
+            android:title="@string/pref_fuelAlert_name" >
+        </CheckBoxPreference>
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/advanced_settings_title" >
         <Preference android:title="@string/pref_btn_sendlogs_title"
             android:key="prefSendLog"

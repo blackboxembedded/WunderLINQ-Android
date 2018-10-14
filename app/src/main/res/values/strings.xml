@@ -180,6 +180,12 @@
     <string name="contact_type_19">Assistant</string>
     <string name="contact_type_20">MMS</string>
 
+    <!-- AlertActivity -->
+    <string name="alertActivityBtnOK">OK</string>
+    <string name="alertActivityBtnClose">Close</string>
+    <string name="alertLowFuelTitle">Low Fuel</string>
+    <string name="alertLowFuelBody">Route to the nearest fuel station?"</string>
+
     <!-- VideoRecService -->
     <string name="title_video_notification">WunderLINQ recording video</string>
 
@@ -278,6 +284,9 @@
     <string name="pref_autoNightMode_summary">Enable Auto Night Mode (Requires light sensor)</string>
     <string name="pref_autoNightModeDelay_name">Auto Night Mode Delay In Seconds</string>
     <string name="pref_autoNightModeDelay_summary">Set Auto Night Mode Delay In Seconds</string>
+    <string name="alerting_title">Alert Settings</string>
+    <string name="pref_fuelAlert_name">Fuel Routing</string>
+    <string name="pref_fuelAlert_summary">Prompt to route to nearest fuel station when low fuel fault is present</string>
     <string name="debug_settings_title">Debug Settings</string>
     <string name="pref_dataLogging_name">Raw Message Logging</string>
     <string name="pref_dataLogging_summary">Enable Raw Message Logging To /sdcard/WunderLINQ/</string>

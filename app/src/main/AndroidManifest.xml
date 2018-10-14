@@ -124,7 +124,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".WaypointNavActivity"></activity>
+        <activity android:name=".WaypointNavActivity" />
+        <activity android:name=".AlertActivity"></activity>
     </application>
 
 </manifest>
