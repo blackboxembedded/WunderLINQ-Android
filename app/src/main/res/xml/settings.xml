@@ -93,7 +93,7 @@
             android:title="@string/pref_autoNightMode_name" >
         </CheckBoxPreference>
         <EditTextPreference
-            android:dependency="prefNightMode"
+            android:dependency="prefAutoNightMode"
             android:title="@string/pref_autoNightModeDelay_name"
             android:summary="@string/pref_autoNightModeDelay_summary"
             android:defaultValue="30"
@@ -101,6 +101,19 @@
             android:key="prefAutoNightModeDelay" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/alerting_title" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="prefTPMSAlert"
+            android:summary="@string/pref_tpmsAlert_summary"
+            android:title="@string/pref_tpmsAlert_name" >
+        </CheckBoxPreference>
+        <EditTextPreference
+            android:dependency="prefTPMSAlert"
+            android:title="@string/pref_tpmsAlertThreshold_name"
+            android:summary="@string/pref_tpmsAlertThreshold_summary"
+            android:defaultValue="30"
+            android:inputType="number"
+            android:key="prefTPMSAlertThreshold" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="prefFuelAlert"
@@ -112,7 +125,6 @@
         <Preference android:title="@string/pref_btn_sendlogs_title"
             android:key="prefSendLog"
             android:summary="@string/pref_btn_sendlogs_summary"/>
-
         <Preference android:title="@string/pref_btn_version_title"
             android:key="prefVersion"
             android:summary=""/>

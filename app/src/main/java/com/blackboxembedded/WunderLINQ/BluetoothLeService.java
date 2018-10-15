@@ -53,6 +53,9 @@ public class BluetoothLeService extends Service {
 
     private static int prevBrakeValue = 0;
 
+    private static SharedPreferences sharedPrefs;
+
+
     /**
      * GATT Status constants
      */
@@ -657,111 +660,162 @@ public class BluetoothLeService extends Service {
                         if ((data[4] & 0xFF) != 0xFF){
                             double rdcFront = (data[4] & 0xFF) / 50.0;
                             Data.setFrontTirePressure(rdcFront);
+                            if (sharedPrefs.getBoolean("prefTPMSAlert",false)) {
+                                int pressureThreshold = Integer.parseInt(sharedPrefs.getString("prefTPMSAlertThreshold","-1"));
+                                if (pressureThreshold >= 0) {
+                                    String pressureFormat = sharedPrefs.getString("prefPressureF", "0");
+                                    if (pressureFormat.contains("1")) {
+                                        // KPa
+                                        if (pressureThreshold >= (rdcFront * 100)){
+                                            faults.setfrontTirePressureCriticalActive(true);
+                                            updateNotification(intent);
+                                        }
+                                    } else if (pressureFormat.contains("2")) {
+                                        // Kg-f
+                                        if (pressureThreshold >= (rdcFront * 1.0197162129779)){
+                                            faults.setfrontTirePressureCriticalActive(true);
+                                            updateNotification(intent);
+                                        }
+                                    } else if (pressureFormat.contains("3")) {
+                                        // Psi
+                                        if (pressureThreshold >= (rdcFront * 14.5037738)){
+                                            faults.setfrontTirePressureCriticalActive(true);
+                                            updateNotification(intent);
+                                        }
+                                    }
+                                }
+                            }
                         }
                         if ((data[5] & 0xFF) != 0xFF){
                             double rdcRear = (data[5] & 0xFF) / 50.0;
                             Data.setRearTirePressure(rdcRear);
+                            if (sharedPrefs.getBoolean("prefTPMSAlert",false)) {
+                                int pressureThreshold = Integer.parseInt(sharedPrefs.getString("prefTPMSAlertThreshold","-1"));
+                                if (pressureThreshold >= 0) {
+                                    String pressureFormat = sharedPrefs.getString("prefPressureF", "0");
+                                    if (pressureFormat.contains("1")) {
+                                        // KPa
+                                        if (pressureThreshold >= (rdcRear * 100)){
+                                            faults.setrearTirePressureCriticalActive(true);
+                                            updateNotification(intent);
+                                        }
+                                    } else if (pressureFormat.contains("2")) {
+                                        // Kg-f
+                                        if (pressureThreshold >= (rdcRear * 1.0197162129779)){
+                                            faults.setrearTirePressureCriticalActive(true);
+                                            updateNotification(intent);
+                                        }
+                                    } else if (pressureFormat.contains("3")) {
+                                        // Psi
+                                        if (pressureThreshold >= (rdcRear * 14.5037738)){
+                                            faults.setrearTirePressureCriticalActive(true);
+                                            updateNotification(intent);
+                                        }
+                                    }
+                                }
+                            }
                         }
 
-                        // Tire Pressure Faults
-                        switch (data[6] & 0xFF) {
-                            case 0xC9:
-                                faults.setfrontTirePressureWarningActive(true);
-                                faults.setrearTirePressureWarningActive(false);
-                                faults.setfrontTirePressureCriticalActive(false);
-                                faults.setrearTirePressureCriticalActive(false);
-                                if(faults.getfrontTirePressureCriticalNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setfrontTirePressureCriticalNotificationActive(false);
-                                }
-                                if(faults.getrearTirePressureCriticalNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setrearTirePressureCriticalNotificationActive(false);
-                                }
-                                break;
-                            case 0xCA:
-                                faults.setfrontTirePressureWarningActive(false);
-                                faults.setrearTirePressureWarningActive(true);
-                                faults.setfrontTirePressureCriticalActive(false);
-                                faults.setrearTirePressureCriticalActive(false);
-                                if(faults.getfrontTirePressureCriticalNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setfrontTirePressureCriticalNotificationActive(false);
-                                }
-                                if(faults.getrearTirePressureCriticalNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setrearTirePressureCriticalNotificationActive(false);
-                                }
-                                break;
-                            case 0xCB:
-                                faults.setfrontTirePressureWarningActive(true);
-                                faults.setrearTirePressureWarningActive(true);
-                                faults.setfrontTirePressureCriticalActive(false);
-                                faults.setrearTirePressureCriticalActive(false);
-                                if(faults.getfrontTirePressureCriticalNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setfrontTirePressureCriticalNotificationActive(false);
-                                }
-                                if(faults.getrearTirePressureCriticalNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setrearTirePressureCriticalNotificationActive(false);
-                                }
-                                break;
-                            case 0xD1:
-                                faults.setfrontTirePressureWarningActive(false);
-                                faults.setrearTirePressureWarningActive(false);
-                                faults.setfrontTirePressureCriticalActive(true);
-                                faults.setrearTirePressureCriticalActive(false);
-                                if(!(faults.getfrontTirePressureCriticalNotificationActive())) {
-                                    updateNotification(intent);
-                                    faults.setfrontTirePressureCriticalNotificationActive(true);
-                                }
-                                if(faults.getrearTirePressureCriticalNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setrearTirePressureCriticalNotificationActive(false);
-                                }
-                                break;
-                            case 0xD2:
-                                faults.setfrontTirePressureWarningActive(false);
-                                faults.setrearTirePressureWarningActive(false);
-                                faults.setfrontTirePressureCriticalActive(false);
-                                faults.setrearTirePressureCriticalActive(true);
-                                if(faults.getfrontTirePressureCriticalNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setfrontTirePressureCriticalNotificationActive(false);
-                                }
-                                if(!(faults.getrearTirePressureCriticalNotificationActive())) {
-                                    updateNotification(intent);
-                                    faults.setrearTirePressureCriticalNotificationActive(true);
-                                }
-                                break;
-                            case 0xD3:
-                                faults.setfrontTirePressureWarningActive(false);
-                                faults.setrearTirePressureWarningActive(false);
-                                faults.setfrontTirePressureCriticalActive(true);
-                                faults.setrearTirePressureCriticalActive(true);
-                                if(!(faults.getfrontTirePressureCriticalNotificationActive()) && !(faults.getrearTirePressureCriticalNotificationActive())) {
-                                    updateNotification(intent);
-                                    faults.setfrontTirePressureCriticalNotificationActive(true);
-                                    faults.setrearTirePressureCriticalNotificationActive(true);
-                                }
-                                break;
-                            default:
-                                faults.setfrontTirePressureWarningActive(false);
-                                faults.setrearTirePressureWarningActive(false);
-                                faults.setfrontTirePressureCriticalActive(false);
-                                faults.setrearTirePressureCriticalActive(false);
-                                if(faults.getfrontTirePressureCriticalNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setfrontTirePressureCriticalNotificationActive(false);
-                                }
-                                if(faults.getrearTirePressureCriticalNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setrearTirePressureCriticalNotificationActive(false);
-                                }
-                                break;
+                        if (!sharedPrefs.getBoolean("prefTPMSAlert",false)) {
+                            // Tire Pressure Faults
+                            switch (data[6] & 0xFF) {
+                                case 0xC9:
+                                    faults.setfrontTirePressureWarningActive(true);
+                                    faults.setrearTirePressureWarningActive(false);
+                                    faults.setfrontTirePressureCriticalActive(false);
+                                    faults.setrearTirePressureCriticalActive(false);
+                                    if (faults.getfrontTirePressureCriticalNotificationActive()) {
+                                        updateNotification(intent);
+                                        faults.setfrontTirePressureCriticalNotificationActive(false);
+                                    }
+                                    if (faults.getrearTirePressureCriticalNotificationActive()) {
+                                        updateNotification(intent);
+                                        faults.setrearTirePressureCriticalNotificationActive(false);
+                                    }
+                                    break;
+                                case 0xCA:
+                                    faults.setfrontTirePressureWarningActive(false);
+                                    faults.setrearTirePressureWarningActive(true);
+                                    faults.setfrontTirePressureCriticalActive(false);
+                                    faults.setrearTirePressureCriticalActive(false);
+                                    if (faults.getfrontTirePressureCriticalNotificationActive()) {
+                                        updateNotification(intent);
+                                        faults.setfrontTirePressureCriticalNotificationActive(false);
+                                    }
+                                    if (faults.getrearTirePressureCriticalNotificationActive()) {
+                                        updateNotification(intent);
+                                        faults.setrearTirePressureCriticalNotificationActive(false);
+                                    }
+                                    break;
+                                case 0xCB:
+                                    faults.setfrontTirePressureWarningActive(true);
+                                    faults.setrearTirePressureWarningActive(true);
+                                    faults.setfrontTirePressureCriticalActive(false);
+                                    faults.setrearTirePressureCriticalActive(false);
+                                    if (faults.getfrontTirePressureCriticalNotificationActive()) {
+                                        updateNotification(intent);
+                                        faults.setfrontTirePressureCriticalNotificationActive(false);
+                                    }
+                                    if (faults.getrearTirePressureCriticalNotificationActive()) {
+                                        updateNotification(intent);
+                                        faults.setrearTirePressureCriticalNotificationActive(false);
+                                    }
+                                    break;
+                                case 0xD1:
+                                    faults.setfrontTirePressureWarningActive(false);
+                                    faults.setrearTirePressureWarningActive(false);
+                                    faults.setfrontTirePressureCriticalActive(true);
+                                    faults.setrearTirePressureCriticalActive(false);
+                                    if (!(faults.getfrontTirePressureCriticalNotificationActive())) {
+                                        updateNotification(intent);
+                                        faults.setfrontTirePressureCriticalNotificationActive(true);
+                                    }
+                                    if (faults.getrearTirePressureCriticalNotificationActive()) {
+                                        updateNotification(intent);
+                                        faults.setrearTirePressureCriticalNotificationActive(false);
+                                    }
+                                    break;
+                                case 0xD2:
+                                    faults.setfrontTirePressureWarningActive(false);
+                                    faults.setrearTirePressureWarningActive(false);
+                                    faults.setfrontTirePressureCriticalActive(false);
+                                    faults.setrearTirePressureCriticalActive(true);
+                                    if (faults.getfrontTirePressureCriticalNotificationActive()) {
+                                        updateNotification(intent);
+                                        faults.setfrontTirePressureCriticalNotificationActive(false);
+                                    }
+                                    if (!(faults.getrearTirePressureCriticalNotificationActive())) {
+                                        updateNotification(intent);
+                                        faults.setrearTirePressureCriticalNotificationActive(true);
+                                    }
+                                    break;
+                                case 0xD3:
+                                    faults.setfrontTirePressureWarningActive(false);
+                                    faults.setrearTirePressureWarningActive(false);
+                                    faults.setfrontTirePressureCriticalActive(true);
+                                    faults.setrearTirePressureCriticalActive(true);
+                                    if (!(faults.getfrontTirePressureCriticalNotificationActive()) && !(faults.getrearTirePressureCriticalNotificationActive())) {
+                                        updateNotification(intent);
+                                        faults.setfrontTirePressureCriticalNotificationActive(true);
+                                        faults.setrearTirePressureCriticalNotificationActive(true);
+                                    }
+                                    break;
+                                default:
+                                    faults.setfrontTirePressureWarningActive(false);
+                                    faults.setrearTirePressureWarningActive(false);
+                                    faults.setfrontTirePressureCriticalActive(false);
+                                    faults.setrearTirePressureCriticalActive(false);
+                                    if (faults.getfrontTirePressureCriticalNotificationActive()) {
+                                        updateNotification(intent);
+                                        faults.setfrontTirePressureCriticalNotificationActive(false);
+                                    }
+                                    if (faults.getrearTirePressureCriticalNotificationActive()) {
+                                        updateNotification(intent);
+                                        faults.setrearTirePressureCriticalNotificationActive(false);
+                                    }
+                                    break;
+                            }
                         }
-
                         break;
                     case 0x06:
                         //Log.d(TAG, "Message ID 6");
@@ -1763,6 +1817,8 @@ public class BluetoothLeService extends Service {
         if (device == null) {
             return;
         }
+
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
         // We want to directly connect to the device, so we are setting the
         // autoConnect
         // parameter to false.
@@ -2437,7 +2493,7 @@ public class BluetoothLeService extends Service {
     }
 
     static private void fuelAlert(){
-        final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        //sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
 
         if (sharedPrefs.getBoolean("prefFuelAlert", false)) {
             if (!fuelAlertSent) {
