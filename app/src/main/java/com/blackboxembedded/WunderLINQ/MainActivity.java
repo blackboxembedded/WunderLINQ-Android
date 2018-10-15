@@ -919,25 +919,34 @@ public class MainActivity extends AppCompatActivity {
         }
         if(Data.getFrontTirePressure() != null){
             Double rdcFront = Data.getFrontTirePressure();
-            Double rdcRear = Data.getRearTirePressure();
             if (pressureFormat.contains("1")) {
                 // KPa
                 rdcFront = barTokPa(rdcFront);
-                rdcRear = barTokPa(rdcRear);
             } else if (pressureFormat.contains("2")) {
                 // Kg-f
                 rdcFront = barTokgf(rdcFront);
-                rdcRear = barTokgf(rdcRear);
             } else if (pressureFormat.contains("3")) {
                 // Psi
                 rdcFront = Double.valueOf(oneDigit.format(barToPsi(rdcFront)));
-                rdcRear = Double.valueOf(oneDigit.format(barToPsi(rdcRear)));
             }
             textView1.setText(rdcFront + " " + pressureUnit);
-            textView5.setText(rdcRear + " " + pressureUnit);
-
         } else {
             textView1.setText(getString(R.string.blank_field));
+        }
+        if(Data.getRearTirePressure() != null){
+            Double rdcRear = Data.getRearTirePressure();
+            if (pressureFormat.contains("1")) {
+                // KPa
+                rdcRear = barTokPa(rdcRear);
+            } else if (pressureFormat.contains("2")) {
+                // Kg-f
+                rdcRear = barTokgf(rdcRear);
+            } else if (pressureFormat.contains("3")) {
+                // Psi
+                rdcRear = Double.valueOf(oneDigit.format(barToPsi(rdcRear)));
+            }
+            textView5.setText(rdcRear + " " + pressureUnit);
+        } else {
             textView5.setText(getString(R.string.blank_field));
         }
         if(Data.getGear() != null){

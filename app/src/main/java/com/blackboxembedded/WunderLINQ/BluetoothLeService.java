@@ -683,6 +683,15 @@ public class BluetoothLeService extends Service {
                                             updateNotification(intent);
                                         }
                                     }
+                                    if (!(faults.getfrontTirePressureCriticalNotificationActive())) {
+                                        updateNotification(intent);
+                                        faults.setfrontTirePressureCriticalNotificationActive(true);
+                                    }
+                                } else {
+                                    if (faults.getfrontTirePressureCriticalNotificationActive()) {
+                                        updateNotification(intent);
+                                        faults.setfrontTirePressureCriticalNotificationActive(false);
+                                    }
                                 }
                             }
                         }
@@ -697,20 +706,26 @@ public class BluetoothLeService extends Service {
                                         // KPa
                                         if (pressureThreshold >= (rdcRear * 100)){
                                             faults.setrearTirePressureCriticalActive(true);
-                                            updateNotification(intent);
                                         }
                                     } else if (pressureFormat.contains("2")) {
                                         // Kg-f
                                         if (pressureThreshold >= (rdcRear * 1.0197162129779)){
                                             faults.setrearTirePressureCriticalActive(true);
-                                            updateNotification(intent);
                                         }
                                     } else if (pressureFormat.contains("3")) {
                                         // Psi
                                         if (pressureThreshold >= (rdcRear * 14.5037738)){
                                             faults.setrearTirePressureCriticalActive(true);
-                                            updateNotification(intent);
                                         }
+                                    }
+                                    if (!(faults.getrearTirePressureCriticalNotificationActive())) {
+                                        updateNotification(intent);
+                                        faults.setrearTirePressureCriticalNotificationActive(true);
+                                    }
+                                } else {
+                                    if (faults.getrearTirePressureCriticalNotificationActive()) {
+                                        updateNotification(intent);
+                                        faults.setrearTirePressureCriticalNotificationActive(false);
                                     }
                                 }
                             }
