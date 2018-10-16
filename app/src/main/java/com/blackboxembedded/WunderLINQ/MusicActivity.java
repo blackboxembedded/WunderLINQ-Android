@@ -39,7 +39,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 import java.util.Set;
@@ -138,6 +137,21 @@ public class MusicActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String orientation = sharedPrefs.getString("prefOrientation", "0");
+        if (!orientation.equals("0")){
+            if(orientation.equals("1")){
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            } else if (orientation.equals("2")){
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+            } else {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            }
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
+        }
+
         AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
 
         // Keep screen on
@@ -174,17 +188,6 @@ public class MusicActivity extends AppCompatActivity {
 
         showActionBar();
 
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        String orientation = sharedPrefs.getString("prefOrientation", "0");
-        if (!orientation.equals("0")){
-            if(orientation.equals("1")){
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            } else {
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            }
-        }
-
         if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getBoolean("prefNightMode", false)){
             updateColors(true);
         } else {
@@ -203,7 +206,9 @@ public class MusicActivity extends AppCompatActivity {
             if (controllers.size() != 0 ) {
                 mHandler.post(mUpdateMetaData);
             } else {
-                Toast.makeText(this, R.string.start_media_player, Toast.LENGTH_SHORT).show();
+                mTitleText.setText(R.string.not_found_media_player);
+                mAlbumText.setText("");
+                mArtistText.setText(R.string.start_media_player);
             }
         } else {
             // Need permissions to read notifications
@@ -388,6 +393,9 @@ public class MusicActivity extends AppCompatActivity {
                 }
             } else {
                 Log.d(TAG, "No music player running");
+                mArtistText.setText(R.string.not_found_media_player);
+                mTitleText.setText("");
+                mAlbumText.setText(R.string.start_media_player);
             }
         } else {
             Log.d(TAG, "No permissions to control music player");

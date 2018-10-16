@@ -15,6 +15,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.hardware.camera2.CameraCharacteristics;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -53,7 +54,7 @@ public class TaskActivity extends AppCompatActivity {
 
     private ListView taskList;
     private int lastPosition = 0;
-    private int numTasks = 10;
+    private int numTasks = 11;
 
     private SharedPreferences sharedPrefs;
 
@@ -108,9 +109,13 @@ public class TaskActivity extends AppCompatActivity {
         if (!orientation.equals("0")){
             if(orientation.equals("1")){
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            } else if (orientation.equals("2")){
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
             } else {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             }
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
         }
 
         taskList = (ListView) findViewById(R.id.lv_tasks);
@@ -283,6 +288,7 @@ public class TaskActivity extends AppCompatActivity {
                 getResources().getString(R.string.task_title_favnumber),
                 getResources().getString(R.string.task_title_callcontact),
                 getResources().getString(R.string.task_title_photo),
+                getResources().getString(R.string.task_title_selfie),
                 videoTaskText,
                 tripTaskText,
                 getResources().getString(R.string.task_title_waypoint),
@@ -302,16 +308,18 @@ public class TaskActivity extends AppCompatActivity {
             iconId[3].setTint(Color.WHITE);
             iconId[4] = getResources().getDrawable(R.drawable.ic_camera, getTheme());
             iconId[4].setTint(Color.WHITE);
-            iconId[5] = getResources().getDrawable(R.drawable.ic_video_camera, getTheme());
+            iconId[5] = getResources().getDrawable(R.drawable.ic_camera, getTheme());
             iconId[5].setTint(Color.WHITE);
-            iconId[6] = getResources().getDrawable(R.drawable.ic_road, getTheme());
+            iconId[6] = getResources().getDrawable(R.drawable.ic_video_camera, getTheme());
             iconId[6].setTint(Color.WHITE);
-            iconId[7] = getResources().getDrawable(R.drawable.ic_map_marker, getTheme());
+            iconId[7] = getResources().getDrawable(R.drawable.ic_road, getTheme());
             iconId[7].setTint(Color.WHITE);
-            iconId[8] = getResources().getDrawable(R.drawable.ic_map, getTheme());
+            iconId[8] = getResources().getDrawable(R.drawable.ic_map_marker, getTheme());
             iconId[8].setTint(Color.WHITE);
-            iconId[9] = getResources().getDrawable(R.drawable.ic_microphone, getTheme());
+            iconId[9] = getResources().getDrawable(R.drawable.ic_map, getTheme());
             iconId[9].setTint(Color.WHITE);
+            iconId[10] = getResources().getDrawable(R.drawable.ic_microphone, getTheme());
+            iconId[10].setTint(Color.WHITE);
         } else  {
             iconId[0] = getResources().getDrawable(R.drawable.ic_map, getTheme());
             iconId[0].setTint(Color.BLACK);
@@ -323,16 +331,18 @@ public class TaskActivity extends AppCompatActivity {
             iconId[3].setTint(Color.BLACK);
             iconId[4] = getResources().getDrawable(R.drawable.ic_camera, getTheme());
             iconId[4].setTint(Color.BLACK);
-            iconId[5] = getResources().getDrawable(R.drawable.ic_video_camera, getTheme());
+            iconId[5] = getResources().getDrawable(R.drawable.ic_camera, getTheme());
             iconId[5].setTint(Color.BLACK);
-            iconId[6] = getResources().getDrawable(R.drawable.ic_road, getTheme());
+            iconId[6] = getResources().getDrawable(R.drawable.ic_video_camera, getTheme());
             iconId[6].setTint(Color.BLACK);
-            iconId[7] = getResources().getDrawable(R.drawable.ic_map_marker, getTheme());
+            iconId[7] = getResources().getDrawable(R.drawable.ic_road, getTheme());
             iconId[7].setTint(Color.BLACK);
-            iconId[8] = getResources().getDrawable(R.drawable.ic_map, getTheme());
+            iconId[8] = getResources().getDrawable(R.drawable.ic_map_marker, getTheme());
             iconId[8].setTint(Color.BLACK);
-            iconId[9] = getResources().getDrawable(R.drawable.ic_microphone, getTheme());
+            iconId[9] = getResources().getDrawable(R.drawable.ic_map, getTheme());
             iconId[9].setTint(Color.BLACK);
+            iconId[10] = getResources().getDrawable(R.drawable.ic_microphone, getTheme());
+            iconId[10].setTint(Color.BLACK);
         }
 
         TaskListView adapter = new
@@ -447,17 +457,69 @@ public class TaskActivity extends AppCompatActivity {
 
                             if (cameraPerms == true && writePerms == true){
                                 Intent photoIntent = new Intent(TaskActivity.this, PhotoService.class);
-                                photoIntent.putExtra("camera",0);
+                                photoIntent.putExtra("camera",CameraCharacteristics.LENS_FACING_BACK);
                                 startService(photoIntent);
                             }
 
                         } else {
                             Intent photoIntent = new Intent(TaskActivity.this, PhotoService.class);
-                            photoIntent.putExtra("camera", 0);
+                            photoIntent.putExtra("camera", CameraCharacteristics.LENS_FACING_BACK);
                             startService(photoIntent);
                         }
                         break;
                     case 5:
+                        //Take photo
+                        boolean selfieCameraPerms = false;
+                        boolean selfieWritePerms = false;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            // Check Camera permissions
+                            if (getApplication().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(TaskActivity.this);
+                                builder.setTitle(getString(R.string.camera_alert_title));
+                                builder.setMessage(getString(R.string.camera_alert_body));
+                                builder.setPositiveButton(android.R.string.ok, null);
+                                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @TargetApi(23)
+                                    public void onDismiss(DialogInterface dialog) {
+                                        requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
+                                    }
+                                });
+                                builder.show();
+                                selfieCameraPerms = false;
+                            } else {
+                                selfieCameraPerms = true;
+                            }
+                            // Check Write permissions
+                            if (getApplication().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(TaskActivity.this);
+                                builder.setTitle(getString(R.string.write_alert_title));
+                                builder.setMessage(getString(R.string.write_alert_body));
+                                builder.setPositiveButton(android.R.string.ok, null);
+                                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @TargetApi(23)
+                                    public void onDismiss(DialogInterface dialog) {
+                                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_WRITE_STORAGE);
+                                    }
+                                });
+                                builder.show();
+                                selfieWritePerms = false;
+                            } else {
+                                selfieWritePerms = true;
+                            }
+
+                            if (selfieCameraPerms == true && selfieWritePerms == true){
+                                Intent photoIntent = new Intent(TaskActivity.this, PhotoService.class);
+                                photoIntent.putExtra("camera",CameraCharacteristics.LENS_FACING_FRONT);
+                                startService(photoIntent);
+                            }
+
+                        } else {
+                            Intent photoIntent = new Intent(TaskActivity.this, PhotoService.class);
+                            photoIntent.putExtra("camera", CameraCharacteristics.LENS_FACING_FRONT);
+                            startService(photoIntent);
+                        }
+                        break;
+                    case 6:
                         //Record Video
 
                         TextView taskText=(TextView)view.findViewById(R.id.tv_label);
@@ -556,7 +618,7 @@ public class TaskActivity extends AppCompatActivity {
                             }
                         }
                         break;
-                    case 6:
+                    case 7:
                         //Trip Log
                         boolean writeLogPerms = false;
                         boolean locationLogPerms = false;
@@ -616,7 +678,7 @@ public class TaskActivity extends AppCompatActivity {
                             }
                         }
                         break;
-                    case 7:
+                    case 8:
                         //Waypoint
                         // Get location
                         boolean locationWPPerms = false;
@@ -683,12 +745,12 @@ public class TaskActivity extends AppCompatActivity {
                             }
                         }
                         break;
-                    case 8:
+                    case 9:
                         //Navigate to Waypoint
                         Intent forwardIntent = new Intent(TaskActivity.this, WaypointNavActivity.class);
                         startActivity(forwardIntent);
                         break;
-                    case 9:
+                    case 10:
                         //Voice Assistant
                         startActivity(new Intent(Intent.ACTION_VOICE_COMMAND).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         break;

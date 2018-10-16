@@ -161,9 +161,13 @@ public class MainActivity extends AppCompatActivity {
         if (!orientation.equals("0")){
             if(orientation.equals("1")){
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            } else if (orientation.equals("2")){
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
             } else {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             }
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
         }
 
         View view;
@@ -616,15 +620,6 @@ public class MainActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Log.d(TAG,"In onConfigChange");
-
-        String orientation = sharedPrefs.getString("prefOrientation", "0");
-        if (!orientation.equals("0")){
-            if(orientation.equals("1")){
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            } else {
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            }
-        }
     }
 
     @Override
@@ -634,6 +629,8 @@ public class MainActivity extends AppCompatActivity {
             finish();
             return;
         } else if (requestCode == SETTINGS_CHECK) {
+            Log.d(TAG,"onActivityResult");
+            this.recreate();
             View view;
             if (sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
                 setContentView(R.layout.activity_main_other);

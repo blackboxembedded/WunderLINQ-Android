@@ -79,9 +79,13 @@ public class WaypointNavActivity extends AppCompatActivity {
         if (!orientation.equals("0")){
             if(orientation.equals("1")){
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            } else if (orientation.equals("2")){
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
             } else {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             }
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
         }
 
         showActionBar();
@@ -106,9 +110,6 @@ public class WaypointNavActivity extends AppCompatActivity {
         // Open database
         datasource = new WaypointDatasource(this);
         datasource.open();
-
-
-
 
         listValues = datasource.getAllRecords();
         adapter = new

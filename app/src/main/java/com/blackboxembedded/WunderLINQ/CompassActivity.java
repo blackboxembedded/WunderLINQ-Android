@@ -94,9 +94,13 @@ public class CompassActivity extends AppCompatActivity {
         if (!orientation.equals("0")){
             if(orientation.equals("1")){
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            } else if (orientation.equals("2")){
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
             } else {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             }
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
         }
 
         showActionBar();
@@ -253,7 +257,7 @@ public class CompassActivity extends AppCompatActivity {
                             if (sharedPrefs.getString("prefBearing", "0").contains("1")) {
                                 bearing = cardinal;
                             } else {
-                                bearing = cardinal + "(" + bearing + ")";
+                                bearing = cardinal + "\n" + bearing;
                             }
                         }
                         compassTextView.setText(bearing);

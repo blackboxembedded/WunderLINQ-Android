@@ -92,6 +92,7 @@
             android:summary="@string/pref_autoNightMode_summary"
             android:title="@string/pref_autoNightMode_name" >
         </CheckBoxPreference>
+
         <EditTextPreference
             android:dependency="prefAutoNightMode"
             android:title="@string/pref_autoNightModeDelay_name"

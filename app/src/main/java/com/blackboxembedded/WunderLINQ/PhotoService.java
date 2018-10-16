@@ -16,6 +16,7 @@ import android.media.Image;
 import android.media.ImageReader;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -42,7 +43,7 @@ Problem
  */
 public class PhotoService extends Service {
     protected static final String TAG = "WunderLINQ";
-    protected static final int CAMERACHOICE = CameraCharacteristics.LENS_FACING_BACK;
+    protected static int CAMERACHOICE = CameraCharacteristics.LENS_FACING_BACK;
     protected CameraDevice cameraDevice;
     protected CameraCaptureSession session;
     protected ImageReader imageReader;
@@ -125,6 +126,7 @@ public class PhotoService extends Service {
         try {
             for (String cameraId : manager.getCameraIdList()) {
                 CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
+                Log.i(TAG,"Camera: " + characteristics.toString());
                 int cOrientation = characteristics.get(CameraCharacteristics.LENS_FACING);
                 if (cOrientation == CAMERACHOICE) {
                     return cameraId;
@@ -139,6 +141,12 @@ public class PhotoService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "onStartCommand flags " + flags + " startId " + startId);
+
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            Log.d(TAG,"Camera: " + extras.getInt("camera"));
+            CAMERACHOICE = extras.getInt("camera");
+        }
 
         readyCamera();
 

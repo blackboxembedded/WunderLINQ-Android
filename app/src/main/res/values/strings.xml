@@ -132,6 +132,7 @@
     <!-- MusicActivity -->
     <string name="music_title">Music</string>
     <string name="title_activity_music">MusicActivity</string>
+    <string name="not_found_media_player">No compatible running media player found</string>
     <string name="start_media_player">Start your favorite media player for controls</string>
     <string name="unknown">Unknown</string>
     <string name="notification_alert_title">WunderLINQ needs notification access</string>
@@ -144,6 +145,7 @@
     <string name="task_title_favnumber">Call Favorite Number</string>
     <string name="task_title_callcontact">Call Contact</string>
     <string name="task_title_photo">Take Photo</string>
+    <string name="task_title_selfie">Take Selfie</string>
     <string name="task_title_start_record">Start Recording</string>
     <string name="task_title_stop_record">Stop Recording</string>
     <string name="task_title_start_trip">Start Trip Log</string>
@@ -269,12 +271,14 @@
     <string-array name="orientation_array">
         <item name="1">Off</item>
         <item name="2">Landscape</item>
-        <item name="3">Portrait</item>
+        <item name="3">Reverse Landscape</item>
+        <item name="4">Portrait</item>
     </string-array>
     <string-array name="orientation_arrayValues">
         <item name="1">0</item>
         <item name="2">1</item>
         <item name="3">2</item>
+        <item name="3">3</item>
     </string-array>
     <string name="pref_brightness_name">Display Brightness</string>
     <string name="pref_brightness_summary">Sets the devices brightness to the max.</string>
