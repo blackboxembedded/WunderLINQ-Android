@@ -23,6 +23,7 @@ import android.support.annotation.NonNull;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.util.Size;
+import android.util.SparseIntArray;
 import android.view.Surface;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -40,13 +41,27 @@ Reference: http://stackoverflow.com/questions/28003186/capture-picture-without-p
 
 Problem
    1.  BufferQueue has been abandoned  from ImageCapture
- */
+
+*/
 public class PhotoService extends Service {
     protected static final String TAG = "WunderLINQ";
     protected static int CAMERACHOICE = CameraCharacteristics.LENS_FACING_BACK;
     protected CameraDevice cameraDevice;
     protected CameraCaptureSession session;
     protected ImageReader imageReader;
+
+    private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
+    static {
+        ORIENTATIONS.append(Surface.ROTATION_0, 90);
+        ORIENTATIONS.append(Surface.ROTATION_90, 0);
+        ORIENTATIONS.append(Surface.ROTATION_180, 270);
+        ORIENTATIONS.append(Surface.ROTATION_270, 180);
+    }
+
+    /**
+     * Orientation of the camera sensor
+     */
+    private int mSensorOrientation;
 
     protected CameraDevice.StateCallback cameraStateCallback = new CameraDevice.StateCallback() {
         @Override
@@ -97,11 +112,12 @@ public class PhotoService extends Service {
 
     public void readyCamera()
     {
-        CameraManager manager = (CameraManager) getSystemService(CAMERA_SERVICE);
-        try {
-            String pickedCamera = getCamera(manager);
+        final CameraManager manager = (CameraManager) getSystemService(CAMERA_SERVICE);
+        final String pickedCamera = getCamera(manager);
+        try{
             manager.openCamera(pickedCamera, cameraStateCallback, null);
             final CameraCharacteristics characteristics = manager.getCameraCharacteristics(pickedCamera);
+            mSensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
             Size[] jpegSizes = null;
             StreamConfigurationMap streamConfigurationMap = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             if (streamConfigurationMap != null) {
@@ -113,16 +129,16 @@ public class PhotoService extends Service {
             imageReader = ImageReader.newInstance(width, height, ImageFormat.JPEG, 1 /* images buffered */);
             imageReader.setOnImageAvailableListener(onImageAvailableListener, null);
             Log.i(TAG, "imageReader created");
-        } catch (CameraAccessException|SecurityException e){
-            Log.e(TAG, e.getMessage());
+        } catch (final CameraAccessException | SecurityException e) {
+            Log.e(TAG, " exception occurred while taking picture from ");
         }
     }
-
 
     /**
      *  Return the Camera Id which matches the field CAMERACHOICE.
      */
     public String getCamera(CameraManager manager){
+        Log.i(TAG,"In getCamera: ");
         try {
             for (String cameraId : manager.getCameraIdList()) {
                 CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
@@ -222,7 +238,7 @@ public class PhotoService extends Service {
 
     protected CaptureRequest createCaptureRequest() {
         try {
-            CaptureRequest.Builder builder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_RECORD);
+            CaptureRequest.Builder builder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
             builder.addTarget(imageReader.getSurface());
             builder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
             builder.set(CaptureRequest.JPEG_ORIENTATION, getOrientation());
@@ -243,25 +259,8 @@ public class PhotoService extends Service {
      */
     int getOrientation() {
         WindowManager windowService = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        int rotation = 0;
-        switch (windowService.getDefaultDisplay().getRotation()) {
-            case Surface.ROTATION_0:
-                Log.d(TAG,"Rotation 0");
-                rotation = 90;
-                break;
-            case Surface.ROTATION_90:
-                Log.d(TAG,"Rotation 90");
-                rotation = 0;
-                break;
-            case Surface.ROTATION_180:
-                Log.d(TAG,"Rotation 180");
-                rotation = 270;
-                break;
-            case Surface.ROTATION_270:
-                Log.d(TAG,"Rotation 270");
-                rotation = 270;
-                break;
-        }
-        return rotation;
+        int rotation = windowService.getDefaultDisplay().getRotation();
+
+        return (ORIENTATIONS.get(rotation) + mSensorOrientation + 270) % 360;
     }
 }
