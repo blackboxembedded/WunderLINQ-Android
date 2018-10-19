@@ -468,7 +468,7 @@ public class TaskActivity extends AppCompatActivity {
                         }
                         break;
                     case 5:
-                        //Take photo
+                        //Take selfie
                         boolean selfieCameraPerms = false;
                         boolean selfieWritePerms = false;
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
