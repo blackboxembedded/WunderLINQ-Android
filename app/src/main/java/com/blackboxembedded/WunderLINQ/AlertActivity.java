@@ -149,7 +149,7 @@ public class AlertActivity extends AppCompatActivity {
                     finish();
                     break;
                 case R.id.btnOK:
-                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("google.navigation:q=gas+station"));
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("google.navigation:q=fuel+station"));
                     mapIntent.setPackage("com.google.android.apps.maps");
                     startActivity(mapIntent);
                     break;

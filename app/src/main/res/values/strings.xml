@@ -216,6 +216,17 @@
         <item name="4">4</item>
         <item name="5">0</item>
     </string-array>
+    <string name="pref_nav_app">Motorcycle Type</string>
+    <string-array name="nav_apps_array">
+        <item name="1">Google Maps</item>
+        <item name="2">Locus</item>
+        <item name="3">Waze</item>
+    </string-array>
+    <string-array name="nav_apps_arrayValues">
+        <item name="1">1</item>
+        <item name="2">2</item>
+        <item name="3">3</item>
+    </string-array>
     <string name="pref_tempf_name">Temperature Unit</string>
     <string-array name="tempf_array">
         <item name="1">Celsius</item>

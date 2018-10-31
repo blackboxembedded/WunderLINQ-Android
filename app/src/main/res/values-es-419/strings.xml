@@ -1,0 +1,440 @@
+<resources>
+    <string name="app_name">WunderLINQ</string>
+    <string name="device_name">WunderLINQ</string>
+    <!-- MainActivity -->
+    <string name="main_title">Motocicleta</string>
+    <string name="blank_field">∞</string>
+    <!-- Permission Requests -->
+    <string name="camera_alert_title">WunderLINQ necesita permisos para usar tu cámara</string>
+    <string name="camera_alert_body">Por favor, conceda permisos para usar su cámara</string>
+    <string name="contacts_alert_title">WunderLINQ necesita permisos para leer tus contactos</string>
+    <string name="contacts_alert_body">Por favor, conceda permisos de lectura a sus contactos</string>
+    <string name="record_audio_alert_title">WunderLINQ necesita permisos para grabar audio</string>
+    <string name="record_audio_alert_body">Por favor, conceda permisos para grabar audio</string>
+    <string name="location_alert_title">WunderLINQ necesita permisos para acceder a su ubicación</string>
+    <string name="location_alert_body">Por favor conceda permiso a su ubicación</string>
+    <string name="write_alert_title">WunderLINQ necesita permiso de escritura</string>
+    <string name="write_alert_body">Por favor conceda permiso de escritura</string>
+    <string name="overlay_alert_title">WunderLINQ necesita permiso para superposición</string>
+    <string name="overlay_alert_body">Por favor otorgue permiso de superposición para que esta aplicación pueda grabar video</string>
+    <string name="negative_alert_title">Funcionalidad limitada</string>
+    <string name="negative_location_alert_body">Dado que no se ha otorgado acceso a la ubicación, esta aplicación no podrá descubrir su WunderLINQ cuando esté en segundo plano.</string>
+    <string name="negative_write_alert_body">Dado que no se ha otorgado acceso de escritura, esta aplicación no podrá guardar archivos.</string>
+    <string name="negative_camera_alert_body">Dado que no se ha otorgado acceso a la cámara, esta aplicación no podrá tomar fotos ni videos.</string>
+    <string name="negative_microphone_alert_body">Como no se ha otorgado acceso al micrófono, esta aplicación no podrá grabar videos.</string>
+    <string name="disclaimer_alert_title">¡ADVERTENCIA!</string>
+    <string name="disclaimer_alert_body">
+        No intente ingresar información de ruta ni ajustar el WunderLINQ mientras conduce.
+        Si no presta toda su atención a la operación de su vehículo, podría provocar la muerte, lesiones graves o daños materiales.
+        Usted asume total responsabilidad y riesgo por el uso de este dispositivo.
+    </string>
+    <string name="disclaimer_ok">Estoy de acuerdo</string>
+    <string name="disclaimer_quit">Salir</string>
+
+    <!-- BLE Stuff Below -->
+    <string name="toast_ble_not_supported">Sin soporte de Bluetooth Baja Energía.</string>
+    <string name="toast_error_bluetooth_not_supported">Sin soporte de Bluetooth.</string>
+    <string name="rdc_front_label">Neumático Del.</string>
+    <string name="rdc_rear_label">Neumático Tras.</string>
+    <string name="engine_temp_label">Temp. Motor</string>
+    <string name="ambient_temp_label">Temp. Ambiental</string>
+    <string name="odometer_label">Odómetro</string>
+    <string name="trip1_label">Parcial 1</string>
+    <string name="trip2_label">Parcial 2</string>
+    <string name="gear_label">Marcha</string>
+    <!-- Data Menu -->
+    <string name="trip_logs_label">Registros de Viaje</string>
+    <string name="waypoints_label">Waypoints</string>
+
+    <!-- FaultActivity -->
+    <string name="title_activity_fault">Actividad de fallas</string>
+    <string name="fault_title">Fallas Activas</string>
+    <string name="notification_channel">Fallas Activas</string>
+
+    <!-- Fault strings -->
+    <string name="fault_UARTERR">Error UART</string>
+    <string name="fault_UARTCTF">UART Comm Timeout</string>
+    <string name="fault_UARTLF">Lógica UART</string>
+    <string name="fault_ABSSLF">Autodiagnóstico del ABS no completado</string>
+    <string name="fault_ABSERR">Error del ABS</string>
+    <string name="fault_ABSDAC">ABS desactivado</string>
+    <string name="fault_ASCSLF">Auto diagnóstico del ASC incompleto</string>
+    <string name="fault_ASCINT">Intervención de ASC</string>
+    <string name="fault_ASCERR">Error del ASC</string>
+    <string name="fault_ASCDAC">ASC desactivado</string>
+    <string name="fault_FUELF">Poco combustible</string>
+    <string name="fault_LAMPAFL1">Faro auxiliar frontal 1</string>
+    <string name="fault_LAMPAFL2">Faro auxiliar frontal 2</string>
+    <string name="fault_LAMPDAY">Luz de circulación diurna</string>
+    <string name="fault_LAMPFLI">Indicador delantero izq.</string>
+    <string name="fault_LAMPFRI">Indicador delantero der.</string>
+    <string name="fault_LAMPRLI">Indicador trasero izq.</string>
+    <string name="fault_LAMPRRI">Indicador trasero der.</string>
+    <string name="fault_LAMPFPK1">Luz de estac. del. 1</string>
+    <string name="fault_LAMPFPK2">Luz de estac. del. 2</string>
+    <string name="fault_LAMPLOW">Luz baja</string>
+    <string name="fault_LAMPHI">Luz alta</string>
+    <string name="fault_LAMPREAR">Luz trasera</string>
+    <string name="fault_LAMPBRK">Luz de freno</string>
+    <string name="fault_LAMPLIC">Luz de Placa</string>
+    <string name="fault_LAMPRFOG">Antiniebla Tras.</string>
+    <string name="fault_LAMPADDD">Luz alta sumergida adicional</string>
+    <string name="fault_LAMPADDB">Luz de freno adicional</string>
+    <string name="fault_LAMPFL1">Lámpara del. 1</string>
+    <string name="fault_LAMPFL2">Lámpara del. 2</string>
+    <string name="fault_ICEWARN">Advertencia de hielo</string>
+    <string name="fault_GENWARNFSYLW">Luz de advertencia general destella en amarillo</string>
+    <string name="fault_GENWARNSHYLW">Luz de advertencia general encendida en amarillo</string>
+    <string name="fault_GENWARNFSRED">Luz de advertencia general destella en rojo</string>
+    <string name="fault_GENWARNSHRED">Luz de advertencia general encendida en rojo</string>
+    <string name="fault_OILLOW">Nivel de aceite muy bajo</string>
+    <string name="fault_TIREFWF">Advertencia de Presión de neumático delantero</string>
+    <string name="fault_TIRERWF">Advertencia de Presión de neumático trasero</string>
+    <string name="fault_TIREFCF">Presión crítica en neumático delantero</string>
+    <string name="fault_TIRERCF">Presión crítica en neumático trasero</string>
+
+    <!-- WaypointActivity -->
+    <string name="waypoint_title">Waypoints guardados</string>
+
+    <!-- WaypointViewActivity -->
+    <string name="waypoint_view_title">Waypoint guardado</string>
+    <string name="waypoint_view_tv_date_label">Fecha Grabación</string>
+    <string name="waypoint_view_tv_lat_label">Latitud</string>
+    <string name="waypoint_view_tv_lon_label">Longitud</string>
+    <string name="waypoint_view_tv_label_label">Etiqueta</string>
+    <string name="waypoint_view_label_hint">Etiqueta del Waypoint</string>
+    <string name="waypoint_view_bt_open">Abrir en App de mapas</string>
+    <string name="waypoint_view_bt_share">Compartir</string>
+    <string name="waypoint_view_bt_delete">Eliminar</string>
+    <string name="waypoint_view_waypoint_label">Waypoint</string>
+    <string name="waypoint_view_share_label">Compartir via</string>
+
+    <!-- TripsActivity -->
+    <string name="trips_title">Recorded Trips</string>
+
+    <!-- TripViewActivity -->
+    <string name="trip_view_title">Viaje</string>
+    <string name="trip_view_trip_label">Bitácora de Viajes WunderLINQ</string>
+    <string name="trip_view_waypoint_start_label">Inicio</string>
+    <string name="trip_view_waypoint_end_label">Fin</string>
+    <string name="trip_view_share_label">Compartir</string>
+    <string name="trip_view_tv_distance">Distancia</string>
+    <string name="trip_view_tv_duration">Duración</string>
+    <string name="trip_view_tv_speed">Velocidad (Prom/Máx)</string>
+    <string name="trip_view_tv_shifts">Cambios de marcha</string>
+    <string name="trip_view_tv_brakes">Frenos (Del/Tras)</string>
+    <string name="trip_view_tv_ambient">Temp ambiente(Min/Prom/Máx)</string>
+    <string name="trip_view_tv_engine">Temp Motor(Min/Prom/Máx)</string>
+
+    <!-- CompassActivity -->
+    <string name="compass_title">Compás</string>
+
+    <!-- MusicActivity -->
+    <string name="music_title">Música</string>
+    <string name="title_activity_music">Actividad Musical</string>
+    <string name="not_found_media_player">No se ha encontrado ningún reproductor multimedia compatible.</string>
+    <string name="start_media_player">Inicie su reproductor multimedia favorito para controlar</string>
+    <string name="unknown">Desconocido</string>
+    <string name="notification_alert_title">WunderLINQ necesita acceso a las notificaciones</string>
+    <string name="notification_alert_body">Por favor, otorgue acceso de notificación para que esta aplicación pueda controlar su reproductor de música.</string>
+
+    <!-- TaskActivity -->
+    <string name="quicktask_title">Tareas Rápidas</string>
+    <string name="task_title_navigation">Navegación</string>
+    <string name="task_title_gohome">Ir a Casa</string>
+    <string name="task_title_favnumber">Llamar núm. favorito</string>
+    <string name="task_title_callcontact">Llamar a Contacto</string>
+    <string name="task_title_photo">Tomar fotografía</string>
+    <string name="task_title_selfie">Tomar selfie</string>
+    <string name="task_title_start_record">Iniciar grabación</string>
+    <string name="task_title_stop_record">Detener grabación</string>
+    <string name="task_title_start_trip">Iniciar bitácora</string>
+    <string name="task_title_stop_trip">Detener bitácora</string>
+    <string name="title_logging_notification">WunderLINQ Trip Recording Active</string>
+    <string name="task_title_waypoint">Save Waypoint</string>
+    <string name="task_title_waypoint_nav">Navigate to Waypoint</string>
+    <string name="task_title_voicecontrol">Voice Assistant</string>
+    <string name="toast_address_not_set">Domicilio de 'Ir a Casa' no informado en Configuración</string>
+    <string name="toast_phone_not_set">Núm. de Teléfono favorito no informado en Configuración</string>
+    <string name="toast_photo_taken">Fotografía tomada!</string>
+
+    <!-- ContactListActivity -->
+    <string name="contactlist_title">Contactos</string>
+    <string name="contact_type_0">Personalizado</string>
+    <string name="contact_type_1">Casa</string>
+    <string name="contact_type_2">Móvil</string>
+    <string name="contact_type_3">Trabajo</string>
+    <string name="contact_type_4">Fax Trabajo</string>
+    <string name="contact_type_5">Fax Casa</string>
+    <string name="contact_type_6">Buscaper.</string>
+    <string name="contact_type_7">Otro</string>
+    <string name="contact_type_8">Devolver llamada</string>
+    <string name="contact_type_9">Auto</string>
+    <string name="contact_type_10">Principal Cía.</string>
+    <string name="contact_type_11">ISDN</string>
+    <string name="contact_type_12">Principal</string>
+    <string name="contact_type_13">Otro Fax</string>
+    <string name="contact_type_14">Radio</string>
+    <string name="contact_type_15">Telex</string>
+    <string name="contact_type_16">TTY TDD</string>
+    <string name="contact_type_17">Móvil trabajo</string>
+    <string name="contact_type_18">Buscaper. trabajo</string>
+    <string name="contact_type_19">Asistente</string>
+    <string name="contact_type_20">MMS</string>
+
+    <!-- AlertActivity -->
+    <string name="alertActivityBtnOK">OK</string>
+    <string name="alertActivityBtnClose">Cerrar</string>
+    <string name="alertLowFuelTitle">Poco Combutible</string>
+    <string name="alertLowFuelBody">Desea direcciones hacia la gasolinera mas cercana?"</string>
+
+    <!-- VideoRecService -->
+    <string name="title_video_notification">WunderLINQ grabando video</string>
+
+    <!-- SettingsActivity -->
+    <string name="title_activity_settings">Configuraciones</string>
+    <!-- Preference strings -->
+    <string name="info_title">Información personal</string>
+    <string name="pref_homeAddress_name">Domicilio casa</string>
+    <string name="pref_homeAddress_summary">Formato: 12345 Calle, Ciudad, Estado/Dpto/Pcia CP</string>
+    <string name="pref_homePhone_name">Núm. tel. favorito</string>
+    <string name="pref_homePhone_summary">Formato: 11234567890</string>
+
+    <string name="ui_title">Interfaz de Usuario</string>
+    <string name="pref_bike_type">Tipo de Motocicleta</string>
+    <string-array name="bike_type_array">
+        <item name="1">BMW R1200GS/A</item>
+        <item name="2">BMW R1200R</item>
+        <item name="3">BMW R1200RS</item>
+        <item name="4">BMW S1000XR</item>
+        <item name="5">Otra</item>
+    </string-array>
+    <string-array name="bike_type_arrayValues">
+        <item name="1">1</item>
+        <item name="2">2</item>
+        <item name="3">3</item>
+        <item name="4">4</item>
+        <item name="5">0</item>
+    </string-array>
+    <string name="pref_tempf_name">Unidad Temperatura</string>
+    <string-array name="tempf_array">
+        <item name="1">Celsius</item>
+        <item name="2">Fahrenheit</item>
+    </string-array>
+    <string-array name="tempf_arrayValues">
+        <item name="1">0</item>
+        <item name="2">1</item>
+    </string-array>
+    <string name="pref_distance_name">Unidad de Distancia</string>
+    <string-array name="distance_array">
+        <item name="1">Métrico</item>
+        <item name="2">Imperial</item>
+    </string-array>
+    <string-array name="distance_arrayValues">
+        <item name="1">0</item>
+        <item name="2">1</item>
+    </string-array>
+    <string name="pref_bearing_name">Unidad de Rumbo</string>
+    <string-array name="bearing_array">
+        <item name="1">Grados</item>
+        <item name="2">Cardinal</item>
+        <item name="3">Both</item>
+    </string-array>
+    <string-array name="bearing_arrayValues">
+        <item name="1">0</item>
+        <item name="2">1</item>
+        <item name="3">2</item>
+    </string-array>
+    <string name="pref_pressuref_name">Unidad de Presión</string>
+    <string-array name="pressuref_array">
+        <item name="1">Bar</item>
+        <item name="2">kPa</item>
+        <item name="3">Kg-f</item>
+        <item name="4">psi</item>
+    </string-array>
+    <string-array name="pressuref_arrayValues">
+        <item name="1">0</item>
+        <item name="2">1</item>
+        <item name="3">2</item>
+        <item name="4">3</item>
+    </string-array>
+    <string name="pref_contact_name">Orden de Contactos</string>
+    <string-array name="contact_sort_array">
+        <item name="1">Apellido</item>
+        <item name="2">Nombre</item>
+    </string-array>
+    <string-array name="contact_sort_arrayValues">
+        <item name="1">0</item>
+        <item name="2">1</item>
+    </string-array>
+    <string name="pref_orientation_name">Fijar Orientación</string>
+    <string-array name="orientation_array">
+        <item name="1">Off</item>
+        <item name="2">Horizontal</item>
+        <item name="3">Horizontal invertido</item>
+        <item name="4">Vertical</item>
+    </string-array>
+    <string-array name="orientation_arrayValues">
+        <item name="1">0</item>
+        <item name="2">1</item>
+        <item name="3">2</item>
+        <item name="3">3</item>
+    </string-array>
+    <string name="pref_brightness_name">Brillo de la pantalla</string>
+    <string name="pref_brightness_summary">Ajusta el brillo de los dispositivos al máximo.</string>
+    <string name="pref_nightMode_name">Modo nocturno</string>
+    <string name="pref_nightMode_summary">Habilitar/Deshabilitar el modo nocturno</string>
+    <string name="pref_autoNightMode_name">Modo nocturno automático</string>
+    <string name="pref_autoNightMode_summary">Habilitar modo nocturno automático (requiere sensor de luz)</string>
+    <string name="pref_autoNightModeDelay_name">Demora en segundos del Modo nocturno automático</string>
+    <string name="pref_autoNightModeDelay_summary">Establecer demora en segundos del Modo nocturno automático</string>
+    <string name="alerting_title">Configuración de Alertas</string>
+    <string name="pref_tpmsAlert_name">Umbral personalizado de presión de neumático</string>
+    <string name="pref_tpmsAlert_summary">Utilice un umbral personalizado para alertas de baja presión de los neumáticos</string>
+    <string name="pref_tpmsAlertThreshold_name">Umbral de presión de neumáticos bajo</string>
+    <string name="pref_tpmsAlertThreshold_summary">Especifique un número en la unidad de medida elegida</string>
+    <string name="pref_fuelAlert_name">Direcciones hacia gasolinera</string>
+    <string name="pref_fuelAlert_summary">Consultar si desea direcciones hacia la gasolinera más cercana cuando hay se detecte poco combustible</string>
+    <string name="debug_settings_title">Configuracion de Depuración</string>
+    <string name="pref_dataLogging_name">Registrar mensajes en bruto</string>
+    <string name="pref_dataLogging_summary">Habilitar el registro de mensajes en bruto en / sdcard / WunderLINQ /</string>
+    <string name="pref_showRaw_name">Mostrar mensaje en bruto</string>
+    <string name="pref_showRaw_summary">Mostrar mensaje en bruto en el campo de odómetro</string>
+    <string name="pref_showUartFaults_name">Mostrar fallas UART</string>
+    <string name="pref_showUartFaults_summary">Mostrar fallas UART en el Visor de fallas</string>
+    <string name="advanced_settings_title">Ajustes avanzados</string>
+    <string name="pref_btn_sendlogs_title">Enviar registros</string>
+    <string name="pref_btn_sendlogs_summary">Enviar registros a Black Box Embedded Support</string>
+    <string name="pref_sendlogs_email">support@blackboxembedded.com</string>
+    <string name="pref_sendlogs_subject">WunderLINQ Debug Logs</string>
+    <string name="pref_sendlogs_body">Por favor describa su problema a continuación:</string>
+    <string name="pref_sendlogs_intent_title">Enviar registros...</string>
+    <string name="hw_settings_title">Configuración de hardware de WunderLINQ</string>
+    <string name="pref_btn_dfumode_title">Actualización de WunderLINQ</string>
+    <string name="pref_btn_dfumode_summary">Entrar al modo de actualización de firmware WunderLINQ</string>
+    <string name="pref_btn_dfumode_warning_title">Advertencia</string>
+    <string name="pref_btn_dfumode_warning_body">Está a punto de colocar el WunderLINQ en modo DFU.
+        Cuando selecciona Aceptar, la aplicación WunderLINQ se desconectará y la luz de estado de los equipos de WunderLINQ debería estar verde fija.
+        Será devuelto a la pantalla principal y cuando la aplicación se vuelva a conectar, deberá solicitar su actualización.</string>
+    <string name="pref_btn_version_title">Versión WunderLINQ</string>
+    <string name="pref_btn_version_summary">Entrar en el modo de actualización de firmware WunderLINQ</string>
+    <string name="pref_btn_version_toast">Menú de depuración habilitado. Salga y luego vuelva a entrar en Configuración.</string>
+
+    <!-- OTA -->
+    <!-- bluetooth button elements -->
+    <string name="bluetooth_pair_start">Pairing started…\nPlease wait…</string>
+    <string name="bluetooth_pair">Paired</string>
+    <string name="bluetooth_unpair">Not Paired</string>
+    <string name="bluetooth_pair_unpair_failed">Pair/Unpair failed</string>
+    <!--Data Logger file-->
+    <string name="dl_directory">WunderLINQ</string>
+    <string name="dl_file_extension">.txt</string>
+    <string name="dl_commaseparator">" , "</string>
+    <!--Connection logs-->
+    <string name="dl_connection_request"> Connection request sent </string>
+    <string name="dl_connection_established"> Connection established </string>
+    <string name="dl_connection_establishing"> Connection establishing </string>
+    <string name="dl_connection_pairing_request"> Pairing request sent </string>
+    <string name="dl_connection_pairing_request_received"> Pairing request received </string>
+    <string name="dl_connection_paired"> Paired </string>
+    <string name="dl_connection_unpaired"> Unpaired </string>
+    <string name="dl_connection_pairing_unsupported"> Unable to pair. Check whether the device is advertising and supports pairing. </string>
+    <string name="dl_connection_disconnected"> Disconnected </string>
+    <string name="dl_disconnection_request"> Disconnection request sent </string>
+    <!--Service logs-->
+    <string name="dl_service_discovery_request"> Service discovery request sent </string>
+    <string name="dl_service_discovery_status"> Service discovery status </string>
+    <!--Characteristics logs-->
+    <string name="dl_characteristic_write_request"> Write request sent with value </string>
+    <string name="dl_characteristic_write_request_status"> Write request status </string>
+    <string name="dl_characteristic_start_notification"> Start notification request sent </string>
+    <string name="dl_characteristic_start_indication"> Start indication request sent </string>
+    <string name="dl_characteristic_notification_response"> Notification received with value </string>
+    <string name="dl_characteristic_indication_response"> Indication received with value </string>
+    <string name="dl_characteristic_stop_notification"> Stop notification request sent </string>
+    <string name="dl_characteristic_stop_indication"> Stop indication request sent </string>
+    <string name="dl_characteristic_read_request"> Read request sent </string>
+    <string name="dl_characteristic_read_request_status"> Read request status </string>
+    <string name="dl_characteristic_read_response"> Read response received with value </string>
+    <!--Common logs-->
+    <string name="dl_status_success">" - Success"</string>
+    <string name="dl_status_failure">" - Failed with error code : "</string>
+    <!-- Descriptor parser  -->
+    <string name="descriptor_notification_enabled">Notifications enabled</string>
+    <string name="descriptor_notification_disabled">Notifications disabled</string>
+    <string name="descriptor_indication_enabled">Indication enabled</string>
+    <string name="descriptor_indication_disabled">Indication disabled</string>
+    <string name="descriptor_reliablewrite_enabled">Reliable Write enabled</string>
+    <string name="descriptor_reliablewrite_disabled">Reliable Write disabled</string>
+    <string name="descriptor_writableauxillary_enabled">Writable Auxiliaries enabled</string>
+    <string name="descriptor_writableauxillary_disabled">Writable Auxiliaries disabled</string>
+    <string name="descriptor_broadcast_enabled">Broadcast enabled</string>
+    <string name="descriptor_broadcast_disabled">Broadcast disabled</string>
+    <string name="descriptor_bluetoothSIGAssignedNo">Bluetooth SIG Assigned Numbers</string>
+    <string name="descriptor_reservedforFutureUse">Reserved for future use</string>
+    <string name="descriptor_format">Format</string>
+    <string name="exponent">Exponent</string>
+    <string name="unit">Unit</string>
+    <string name="namespace">Namespace</string>
+    <string name="description">Description</string>
+    <string name="exchange_mtu">"Exchange GATT MTU"</string>
+    <string name="exchange_mtu_request">"[%1$s | %2$s] %3$s request, MTU: %4$d, Status: %5$d"</string>
+    <string name="exchange_mtu_rsp">"[%1$s | %2$s] %3$s request completed, MTU: %4$d, Status: %5$d"</string>
+    <string name="alert_message_exit_ok">OK</string>
+    <string name="alert_message_bluetooth_connect">The BLE device is connected</string>
+    <string name="alert_message_bluetooth_disconnect">The BLE device is disconnected</string>
+    <string name="alert_message_bluetooth_reconnect">Please turn Bluetooth ON</string>
+    <string name="alert_message_bonding_title">Bonding</string>
+    <string name="alert_message_bonding_message">Bonding is in process \nPlease wait..</string>
+    <string name="alert_message_yes">Yes</string>
+    <string name="alert_message_no">No</string>
+    <string name="alert_message_ota_cancel">Do you want to cancel the OTA update?</string>
+    <string name="alert_message_ota_resume">Do you want to resume the OTA Update?</string>
+    <string name="alert_message_ota_pending">You have firmware upgrade in progress. Going back will stop the firmware upgrade and disconnect from the device. Do you want to continue?</string>
+    <string name="alert_message_ota_user_warning">While firmware upgrade is in progress don\'t press back button or home button. Please stay in the page till the upgrade is complete</string>
+    <string name="alert_message_ota_error">Firmware update canceled\nError: </string>
+    <string name="alert_message_silicon_id_error">Error: The SiliconID or SiliconRev does not match</string>
+    <string name="alert_message_checksum_error">Error: The checksum do not match</string>
+    <string name="alert_message_row_out_of_bounds_error">Error: The row number exceeds the bounds</string>
+    <string name="alert_message_write_error_code">Error code:</string>
+    <string name="toast_selection_cancelled">Selection cancelled</string>
+    <!-- OTA profile elements -->
+    <string name="ota_url">https://storage.googleapis.com/wunderlinq/firmware.xml</string>
+    <string name="ota_list">Upgrade your WunderLINQ</string>
+    <string name="ota_file_list">Select Firmware Upgrade File</string>
+    <string name="ota_list_app_download">Select Firmware</string>
+    <string name="ota_list_app_stack_down_comb">Application and Stack Upgrade (Combined Files)</string>
+    <string name="ota_list_app_stack_down_sep">Application and Stack Upgrade (Separate Files)</string>
+    <string name="ota_upgrade">UPGRADE</string>
+    <string name="ota_next">NEXT</string>
+    <string name="ota_stop">STOP</string>
+    <string name="ota_file_read">Reading file, Please wait..</string>
+    <string name="ota_file_read_complete">File Read Completed</string>
+    <string name="ota_file_writ">Writing file, Please wait..</string>
+    <string name="ota_enter_bootloader">Executing Enter Bootloader Command…</string>
+    <string name="ota_get_flash_size">Executing Get Flash Size Command…</string>
+    <string name="ota_program_row">Firmware Upgrade in progress…</string>
+    <string name="ota_verify_row">Firmware Upgrade in progress…</string>
+    <string name="ota_verify_checksum">Executing Verify Checksum Command…</string>
+    <string name="ota_end_bootloader">Executing Exit Bootloader Command…</string>
+    <string name="ota_end_success">Firmware upgrade completed successfully.</string>
+    <string name="toast_ota_dev_address">Different devices....!!</string>
+    <string name="toast_ota_no_update">No update found</string>
+    <string name="toast_ota_pending">You have a Second file to Upgrade.</string>
+    <string name="toast_ota_completed">OTA successfully Completed</string>
+    <string name="toast_ota_one_completion">Stack successfully Updated. Please select the same profile to Upgrade the Application</string>
+    <string name="ota_title">OTA Firmware Upgrade</string>
+    <string name="ota_stack_file">Select the Stack Upgrade file</string>
+    <string name="ota_app_file">Select the Application Upgrade file</string>
+    <string name="ota_toast_stack_file_selected">Stack file selected</string>
+    <string name="ota_toast_pair">Please PAIR the device before starting the Upgrade</string>
+    <string name="ota_notification_title">WunderLINQ</string>
+    <string name="ota_notification_ongoing">OTA Upgrade in progress</string>
+    <string name="ota_notification_stack_file">Stack upgrade completed successfully. Application upgrade pending.</string>
+    <string name="ota_notification_both_file">OTA Firmware Upgrade</string>
+    <string name="ota_alert_invalid_file">Invalid or corrupted file</string>
+    <string name="ota_alert_file_application">Select a file for application upgrade!</string>
+    <string name="ota_alert_file_applicationstackcomb">Select a file for both stack and application upgrade with combined file!</string>
+    <string name="ota_alert_file_applicationstacksep_app_sel">Select the application upgrade file to proceed!</string>
+    <string name="ota_alert_file_applicationstacksep_stack_sel">Select the stack upgrade file to proceed!</string>
+</resources>

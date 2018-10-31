@@ -1,7 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">WunderLINQ</string>
+    <string name="device_name">WunderLINQ</string>
+    <!-- MainActivity -->
     <string name="main_title">Motorrad</string>
-
+    <string name="blank_field">∞</string>
+    <!-- Permission Requests -->
     <string name="camera_alert_title">WunderLINQ benötigt Zugriff auf Ihre Kamera</string>
     <string name="camera_alert_body">Bitte erlauben Sie den Zugriff auf die Kamera</string>
     <string name="contacts_alert_title">WunderLINQ benötigt Zugriff auf Ihre Kontakte</string>
