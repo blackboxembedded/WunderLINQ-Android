@@ -2,12 +2,10 @@ package com.blackboxembedded.WunderLINQ;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -31,7 +29,11 @@ public class WaypointListView extends ArrayAdapter {
         TextView txtTitle = (TextView) rowView.findViewById(R.id.tv_label);
 
         WaypointRecord record = label.get(position);
-        txtTitle.setText(record.getDate());
+        if (!record.getLabel().equals("")){
+            txtTitle.setText(record.getLabel());
+        } else {
+            txtTitle.setText(record.getDate());
+        }
         if (itsDark){
             txtTitle.setTextColor(Color.WHITE);
         } else {

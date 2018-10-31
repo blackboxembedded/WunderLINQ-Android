@@ -2,17 +2,16 @@ package com.blackboxembedded.WunderLINQ;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 
 import java.util.List;
 
@@ -39,8 +38,9 @@ public class WaypointActivity extends AppCompatActivity {
         datasource.open();
 
         List<WaypointRecord> listValues = datasource.getAllRecords();
-        ArrayAdapter<WaypointRecord> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, listValues);
+        ArrayAdapter<WaypointRecord> adapter = new
+                WaypointListView(this, listValues, false);
+
         waypointList.setAdapter(adapter);
 
         waypointList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
