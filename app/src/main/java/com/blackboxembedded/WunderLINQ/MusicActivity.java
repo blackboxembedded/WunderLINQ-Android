@@ -188,7 +188,7 @@ public class MusicActivity extends AppCompatActivity {
 
         showActionBar();
 
-        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getBoolean("prefNightMode", false)){
+        if (((MyApplication) this.getApplication()).getitsDark() ||  sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
             updateColors(true);
         } else {
             updateColors(false);
@@ -226,7 +226,7 @@ public class MusicActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getBoolean("prefNightMode", false)){
+        if (((MyApplication) this.getApplication()).getitsDark() ||  sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
             updateColors(true);
         } else {
             updateColors(false);
@@ -401,6 +401,7 @@ public class MusicActivity extends AppCompatActivity {
             Log.d(TAG, "No permissions to control music player");
         }
     }
+
     // Listens for light sensor events
     private final SensorEventListener sensorEventListener
             = new SensorEventListener(){
@@ -412,7 +413,7 @@ public class MusicActivity extends AppCompatActivity {
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-            if (sharedPrefs.getBoolean("prefAutoNightMode", false) && (!sharedPrefs.getBoolean("prefNightMode", false))) {
+            if (sharedPrefs.getString("prefNightModeCombo", "0").equals("2")) {
                 int delay = (Integer.parseInt(sharedPrefs.getString("prefAutoNightModeDelay", "30")) * 1000);
                 if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
                     float currentReading = event.values[0];

@@ -122,7 +122,7 @@ public class TaskActivity extends AppCompatActivity {
 
         showActionBar();
 
-        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getBoolean("prefNightMode", false)){
+        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
             itsDark = true;
         } else {
             itsDark = false;
@@ -144,7 +144,7 @@ public class TaskActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getBoolean("prefNightMode", false)){
+        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
             updateColors(true);
         } else {
             updateColors(false);
@@ -229,7 +229,7 @@ public class TaskActivity extends AppCompatActivity {
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-            if (sharedPrefs.getBoolean("prefAutoNightMode", false) && (!sharedPrefs.getBoolean("prefNightMode", false))) {
+            if (sharedPrefs.getString("prefNightModeCombo", "0").equals("2")) {
                 int delay = (Integer.parseInt(sharedPrefs.getString("prefAutoNightModeDelay", "30")) * 1000);
                 if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
                     float currentReading = event.values[0];
@@ -356,9 +356,33 @@ public class TaskActivity extends AppCompatActivity {
                                     int position, long id) {
                 lastPosition = position;
                 final String item = (String) parent.getItemAtPosition(position);
+                //Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
                 switch (position){
                     case 0:
                         //Navigation
+                        /*
+                        String url = "google.navigation:/?free=1&mode=d&entry=fnls";
+                        String navApp = sharedPrefs.getString("prefMotorcycleType", "0");
+                        if (navApp.equals("0")){
+                            url = "google.navigation:/?free=1&mode=d&entry=fnls";
+                        } else if (navApp.equals("1")){
+                            url = "com.here.intent.action.DRIVE_ASSISTANCE";
+                            Intent hereIntent = new Intent("com.here.app.maps");
+                            //hereIntent.setPackage("com.here.app.maps");
+                            hereIntent.setData(Uri.parse(url));
+                            startActivity(hereIntent);
+
+                        } else if (navApp.equals("2")){
+                            url = "https://waze.com/ul";
+                        }
+                        try {
+                            //Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                            //navIntent.setData(Uri.parse(url));
+                            //startActivity(navIntent);
+                        } catch ( ActivityNotFoundException ex  ) {
+                            //TODO Add Alert
+                        }
+                        */
                         Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
                         navIntent.setData(Uri.parse("google.navigation:/?free=1&mode=d&entry=fnls"));
                         startActivity(navIntent);
@@ -696,14 +720,13 @@ public class TaskActivity extends AppCompatActivity {
                                     }
                                 });
                                 builder.show();
-                                locationWPPerms = false;
                             } else {
                                 locationWPPerms = true;
                             }
                         } else {
                             locationWPPerms = true;
                         }
-                        if (locationWPPerms == true) {
+                        if (locationWPPerms) {
                             try {
                                 // Get the location manager
                                 double lat;
@@ -713,10 +736,10 @@ public class TaskActivity extends AppCompatActivity {
                                 LocationManager locationManager = (LocationManager)
                                         TaskActivity.this.getSystemService(LOCATION_SERVICE);
                                 Criteria criteria = new Criteria();
-                                String bestProvider = locationManager.getBestProvider(criteria, false);
-                                Log.d(TAG,"trying bestprovider: " + bestProvider);
-                                Location location = locationManager.getLastKnownLocation(bestProvider);
                                 try {
+                                    String bestProvider = locationManager.getBestProvider(criteria, false);
+                                    Log.d(TAG,"Trying Best Provider: " + bestProvider);
+                                    Location location = locationManager.getLastKnownLocation(bestProvider);
                                     lat = location.getLatitude();
                                     lon = location.getLongitude();
                                     waypoint = lat + "," + lon;
@@ -733,7 +756,6 @@ public class TaskActivity extends AppCompatActivity {
                                     WaypointRecord record = new WaypointRecord(curdatetime, waypoint, "");
                                     datasource.addRecord(record);
                                     datasource.close();
-
 
                                 } catch (NullPointerException e) {
                                     lat = -1.0;

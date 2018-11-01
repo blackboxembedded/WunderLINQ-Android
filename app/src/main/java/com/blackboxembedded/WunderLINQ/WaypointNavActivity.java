@@ -90,7 +90,7 @@ public class WaypointNavActivity extends AppCompatActivity {
 
         showActionBar();
 
-        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getBoolean("prefNightMode", false)){
+        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
             itsDark = true;
         } else {
             itsDark = false;
@@ -139,7 +139,7 @@ public class WaypointNavActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getBoolean("prefNightMode", false)){
+        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
             updateColors(true);
         } else {
             updateColors(false);
@@ -210,7 +210,7 @@ public class WaypointNavActivity extends AppCompatActivity {
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-            if (sharedPrefs.getBoolean("prefAutoNightMode", false) && (!sharedPrefs.getBoolean("prefNightMode", false))) {
+            if (sharedPrefs.getString("prefNightModeCombo", "0").equals("2")) {
                 int delay = (Integer.parseInt(sharedPrefs.getString("prefAutoNightModeDelay", "30")) * 1000);
                 if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
                     float currentReading = event.values[0];

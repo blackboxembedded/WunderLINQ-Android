@@ -208,14 +208,22 @@
     <string-array name="bearing_array">
         <item name="1">Grad</item>
         <item name="2">Kardinal (Himmelsrichtung)</item>
+        <item name="3">Both</item> <!-- Needs Translation -->
     </string-array>
 
     <string name="pref_pressuref_name">Einheit Druck</string>
 
     <string name="pref_nightMode_name">Nachtmodus</string>
-    <string name="pref_nightMode_summary">Nachtmodus Ein, deaktiviert Auto-Nachtmodus</string>
-    <string name="pref_autoNightMode_name">Auto-Nachtmodus</string>
-    <string name="pref_autoNightMode_summary">Auto-Nachtmodus Ein (benötigt Dämmersungssensor)</string>
+    <string-array name="night_mode_array">
+        <item name="1">Off</item>
+        <item name="2">On</item>
+        <item name="3">Auto</item>
+    </string-array>
+    <string-array name="night_mode_arrayValues">
+        <item name="1">0</item>
+        <item name="2">1</item>
+        <item name="3">2</item>
+    </string-array>
     <string name="pref_autoNightModeDelay_name">Auto-Nachtmodus, Verzögerung</string>
     <string name="pref_autoNightModeDelay_summary">Auto-Nachtmodus, Verzögerung in Sekunden setzen</string>
 

@@ -21,6 +21,16 @@
             android:entryValues="@array/bike_type_arrayValues"
             android:defaultValue="0"
             />
+        <!--
+        <ListPreference
+            android:key="prefNavApp"
+            android:title="@string/pref_nav_app"
+            android:summary="%s"
+            android:entries="@array/nav_apps_array"
+            android:entryValues="@array/nav_apps_arrayValues"
+            android:defaultValue="0"
+            />
+            -->
         <ListPreference
             android:key="prefPressureF"
             android:title="@string/pref_pressuref_name"
@@ -73,28 +83,19 @@
             />
         <CheckBoxPreference
             android:defaultValue="false"
-            android:dependency="prefNightMode"
             android:key="prefBrightnessOverride"
             android:summary="@string/pref_brightness_summary"
             android:title="@string/pref_brightness_name" >
         </CheckBoxPreference>
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:disableDependentsState="true"
-            android:key="prefNightMode"
-            android:summary="@string/pref_nightMode_summary"
-            android:title="@string/pref_nightMode_name" >
-        </CheckBoxPreference>
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:dependency="prefNightMode"
-            android:key="prefAutoNightMode"
-            android:summary="@string/pref_autoNightMode_summary"
-            android:title="@string/pref_autoNightMode_name" >
-        </CheckBoxPreference>
-
+        <ListPreference
+            android:key="prefNightModeCombo"
+            android:title="@string/pref_nightMode_name"
+            android:summary="%s"
+            android:entries="@array/night_mode_array"
+            android:entryValues="@array/night_mode_arrayValues"
+            android:defaultValue="0"
+            />
         <EditTextPreference
-            android:dependency="prefAutoNightMode"
             android:title="@string/pref_autoNightModeDelay_name"
             android:summary="@string/pref_autoNightModeDelay_summary"
             android:defaultValue="30"

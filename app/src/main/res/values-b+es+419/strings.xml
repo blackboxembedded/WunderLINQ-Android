@@ -283,9 +283,6 @@
     <string name="pref_brightness_name">Brillo de la pantalla</string>
     <string name="pref_brightness_summary">Ajusta el brillo de los dispositivos al máximo.</string>
     <string name="pref_nightMode_name">Modo nocturno</string>
-    <string name="pref_nightMode_summary">Habilitar/Deshabilitar el modo nocturno</string>
-    <string name="pref_autoNightMode_name">Modo nocturno automático</string>
-    <string name="pref_autoNightMode_summary">Habilitar modo nocturno automático (requiere sensor de luz)</string>
     <string name="pref_autoNightModeDelay_name">Demora en segundos del Modo nocturno automático</string>
     <string name="pref_autoNightModeDelay_summary">Establecer demora en segundos del Modo nocturno automático</string>
     <string name="alerting_title">Configuración de Alertas</string>
