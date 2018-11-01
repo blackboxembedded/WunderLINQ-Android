@@ -1,8 +1,10 @@
 package com.blackboxembedded.WunderLINQ;
 
+import android.Manifest;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
@@ -15,10 +17,15 @@ import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.CaptureResult;
 import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
+import android.media.ExifInterface;
 import android.media.Image;
 import android.media.ImageReader;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -43,6 +50,8 @@ import java.util.Date;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
+import static java.lang.Math.abs;
+
 /*
 Reference: http://stackoverflow.com/questions/28003186/capture-picture-without-preview-using-camera2-api
 
@@ -52,6 +61,10 @@ Problem
 */
 public class PhotoService extends Service {
     protected static final String TAG = "PhotoService";
+
+    private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
+
+    private static Location location;
 
     protected static int CAMERACHOICE = CameraCharacteristics.LENS_FACING_BACK;
 
@@ -551,15 +564,14 @@ public class PhotoService extends Service {
                                                @NonNull CaptureRequest request,
                                                @NonNull TotalCaptureResult result) {
                     Log.d(TAG,"Saved file: " + mFile);
-                    Log.d(TAG, mFile.toString());
+
                     unlockFocus();
+
                     MediaScannerConnection.scanFile(PhotoService.this,
                             new String[] { mFile.toString() }, null,
                             new MediaScannerConnection.OnScanCompletedListener() {
                                 public void onScanCompleted(String path, Uri uri) {
                                     Log.i(TAG, "Scanned file: " + path + ":");
-                                    Log.i(TAG, "URI: " + uri);
-
                                     stopSelf();
                                 }
                             });
@@ -654,6 +666,11 @@ public class PhotoService extends Service {
                 if (null != output) {
                     try {
                         output.close();
+                        if (location != null) {
+                            Log.d(TAG,"Location: " + location.toString());
+                            storeGeoCoordsToImage(mFile, location);
+                        }
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -661,6 +678,46 @@ public class PhotoService extends Service {
             }
         }
 
+    }
+
+    public static String getLatGeoCoordinates(Location location) {
+
+        if (location == null) return "0/1,0/1,0/1000";
+        String[] degMinSec = Location.convert(abs(location.getLatitude()), Location.FORMAT_SECONDS).split(":");
+        return degMinSec[0] + "/1," + degMinSec[1] + "/1," + degMinSec[2] + "/1000";
+    }
+
+    public static String getLonGeoCoordinates(Location location) {
+
+        if (location == null) return "0/1,0/1,0/1000";
+        String[] degMinSec = Location.convert(abs(location.getLongitude()), Location.FORMAT_SECONDS).split(":");
+        return degMinSec[0] + "/1," + degMinSec[1] + "/1," + degMinSec[2] + "/1000";
+    }
+
+    public static boolean storeGeoCoordsToImage(File imagePath, Location location) {
+
+        // Avoid NullPointer
+        if (imagePath == null || location == null) return false;
+
+        // If we use Location.convert(), we do not have to worry about absolute values.
+
+        try {
+            // c&p and adapted from @Fabyen (sorry for being lazy)
+            ExifInterface exif = new ExifInterface(imagePath.getAbsolutePath());
+            exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE,  getLatGeoCoordinates(location));
+            exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, location.getLatitude() < 0 ? "S" : "N");
+            exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, getLonGeoCoordinates(location));
+            exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF, location.getLongitude() < 0 ? "W" : "E");
+            Log.d(TAG,exif.toString());
+            exif.saveAttributes();
+        } catch (IOException e) {
+            // do something
+            e.printStackTrace();
+            return false;
+        }
+
+        // Data was likely written. For sure no NullPointer.
+        return true;
     }
 
     /**
@@ -698,6 +755,23 @@ public class PhotoService extends Service {
         }
         mFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + "/WunderLINQ/"
                 + "IMG_" + DateFormat.format("yyyyMMdd_kkmmss", new Date().getTime()) + ".jpg");
+
+        boolean locationWPPerms = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // Check Location permissions
+            if (getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                locationWPPerms = true;
+            }
+        } else {
+            locationWPPerms = true;
+        }
+        if (locationWPPerms) {
+            LocationManager locationManager = (LocationManager)
+                    this.getSystemService(LOCATION_SERVICE);
+            Criteria criteria = new Criteria();
+            String bestProvider = locationManager.getBestProvider(criteria, false);
+            location = locationManager.getLastKnownLocation(bestProvider);
+        }
 
 
         final Handler handler = new Handler();
