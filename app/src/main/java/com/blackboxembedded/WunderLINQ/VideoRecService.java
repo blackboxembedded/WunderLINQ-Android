@@ -1,5 +1,6 @@
 package com.blackboxembedded.WunderLINQ;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -7,8 +8,12 @@ import android.app.Service;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Build;
@@ -38,6 +43,8 @@ public class VideoRecService extends Service implements SurfaceHolder.Callback {
     private MediaRecorder mediaRecorder = null;
 
     private File recordingFile;
+
+    private Location location;
 
     @Override
     public void onCreate() {
@@ -82,6 +89,23 @@ public class VideoRecService extends Service implements SurfaceHolder.Callback {
         layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
         windowManager.addView(surfaceView, layoutParams);
         surfaceView.getHolder().addCallback(this);
+
+        boolean locationWPPerms = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // Check Location permissions
+            if (getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                locationWPPerms = true;
+            }
+        } else {
+            locationWPPerms = true;
+        }
+        if (locationWPPerms) {
+            LocationManager locationManager = (LocationManager)
+                    this.getSystemService(LOCATION_SERVICE);
+            Criteria criteria = new Criteria();
+            String bestProvider = locationManager.getBestProvider(criteria, false);
+            location = locationManager.getLastKnownLocation(bestProvider);
+        }
 
     }
 
@@ -160,9 +184,11 @@ public class VideoRecService extends Service implements SurfaceHolder.Callback {
 
         windowManager.removeView(surfaceView);
 
-        ContentValues values = new ContentValues(3);
+        ContentValues values = new ContentValues(5);
         values.put(MediaStore.Video.Media.TITLE, "WunderLINQ Video");
         values.put(MediaStore.Video.Media.MIME_TYPE, "video/mp4");
+        values.put(MediaStore.Video.Media.LATITUDE, String.valueOf(location.getLatitude()));
+        values.put(MediaStore.Video.Media.LONGITUDE, String.valueOf(location.getLongitude()));
         values.put(MediaStore.Video.Media.DATA, recordingFile.getAbsolutePath());
         getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
 
