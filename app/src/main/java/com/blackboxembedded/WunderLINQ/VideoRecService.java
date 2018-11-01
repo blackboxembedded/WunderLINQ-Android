@@ -41,8 +41,9 @@ public class VideoRecService extends Service implements SurfaceHolder.Callback {
 
     @Override
     public void onCreate() {
-        recordingFile = new File(Environment.getExternalStorageDirectory()+"/WunderLINQ/videos/WunderLINQ-Video-"+
-                DateFormat.format("yyyy-MM-dd_kk-mm-ss", new Date().getTime())+
+        recordingFile = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DCIM)+"/WunderLINQ/VID_"+
+                DateFormat.format("yyyyMMdd_kkmmss", new Date().getTime())+
                 ".mp4");
         // Start foreground service to avoid unexpected kill
         String CHANNEL_ID = "WunderLINQ";
@@ -126,7 +127,8 @@ public class VideoRecService extends Service implements SurfaceHolder.Callback {
         mediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
         mediaRecorder.setOrientationHint(rotation);
 
-        File root = new File(Environment.getExternalStorageDirectory(), "/WunderLINQ/videos/");
+        File root = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DCIM), "/WunderLINQ/");
         if(!root.exists()){
             if(!root.mkdirs()){
                 Log.d(TAG,"Unable to create directory: " + root);

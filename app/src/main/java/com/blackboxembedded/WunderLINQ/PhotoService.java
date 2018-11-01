@@ -689,8 +689,16 @@ public class PhotoService extends Service {
         if (extras != null) {
             CAMERACHOICE = extras.getInt("camera");
         }
-        mFile = new File(Environment.getExternalStorageDirectory() + "/WunderLINQ/photos/"
-                + "WunderLINQ-Photo-" + DateFormat.format("yyyy-MM-dd_kk-mm-ss", new Date().getTime()) + ".jpg");
+        File root = new File( Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DCIM), "/WunderLINQ/");
+        if(!root.exists()){
+            if(!root.mkdirs()){
+                Log.d(TAG,"Unable to create directory: " + root);
+            }
+        }
+        mFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + "/WunderLINQ/"
+                + "IMG_" + DateFormat.format("yyyyMMdd_kkmmss", new Date().getTime()) + ".jpg");
+
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
