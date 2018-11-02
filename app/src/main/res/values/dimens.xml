@@ -38,4 +38,5 @@
     <dimen name="sensor_hub_margin">10dp</dimen>
 
     <dimen name="battery_level_textsize">35sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

@@ -50,6 +50,9 @@
     <string name="info_label">About</string>
     <string name="close_label">Close</string>
 
+    <!-- AboutActivity -->
+    <string name="about_title">About</string>
+
     <!-- FaultActivity -->
     <string name="title_activity_fault">FaultActivity</string>
     <string name="fault_title">Active Faults</string>
@@ -460,4 +463,5 @@
     <string name="ota_alert_file_applicationstackcomb">Select a file for both stack and application upgrade with combined file!</string>
     <string name="ota_alert_file_applicationstacksep_app_sel">Select the application upgrade file to proceed!</string>
     <string name="ota_alert_file_applicationstacksep_stack_sel">Select the stack upgrade file to proceed!</string>
+    <string name="title_activity_about">AboutActivity</string>
 </resources>

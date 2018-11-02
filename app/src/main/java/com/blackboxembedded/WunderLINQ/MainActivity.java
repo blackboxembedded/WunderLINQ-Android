@@ -353,8 +353,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivityForResult(settingsIntent, SETTINGS_CHECK);
                         break;
                     case R.id.action_about:
-                        // TODO Add about activity
-                        Intent aboutIntent = new Intent(MainActivity.this, WaypointActivity.class);
+                        Intent aboutIntent = new Intent(MainActivity.this, AboutActivity.class);
                         startActivity(aboutIntent);
                         break;
                     case R.id.action_exit:
