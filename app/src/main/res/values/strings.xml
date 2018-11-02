@@ -45,6 +45,10 @@
     <!-- Data Menu -->
     <string name="trip_logs_label">Trip Logs</string>
     <string name="waypoints_label">Waypoints</string>
+    <!-- Other Menu -->
+    <string name="settings_label">Settings</string>
+    <string name="info_label">About</string>
+    <string name="close_label">Close</string>
 
     <!-- FaultActivity -->
     <string name="title_activity_fault">FaultActivity</string>

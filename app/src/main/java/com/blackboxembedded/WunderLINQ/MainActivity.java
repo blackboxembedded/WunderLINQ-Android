@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     private ActionBar actionBar;
     private ImageButton backButton;
     private ImageButton forwardButton;
-    private ImageButton settingsButton;
+    private ImageButton otherButton;
     private ImageButton dataButton;
     private ImageButton faultButton;
     private ImageButton btButton;
@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_WRITE_STORAGE = 112;
     private static final int PERMISSION_REQUEST_RECORD_AUDIO = 122;
     private PopupMenu mPopupMenu;
+    private PopupMenu mOtherMenu;
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -302,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
 
         backButton = (ImageButton) findViewById(R.id.action_back);
         forwardButton = (ImageButton) findViewById(R.id.action_forward);
-        settingsButton = (ImageButton) findViewById(R.id.action_settings);
+        otherButton = (ImageButton) findViewById(R.id.action_other);
         dataButton = (ImageButton) findViewById(R.id.action_data);
         faultButton = (ImageButton) findViewById(R.id.action_faults);
         btButton = (ImageButton) findViewById(R.id.action_connect);
@@ -313,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
         backButton.setOnClickListener(mClickListener);
         forwardButton.setOnClickListener(mClickListener);
         faultButton.setOnClickListener(mClickListener);
-        settingsButton.setOnClickListener(mClickListener);
+        otherButton.setOnClickListener(mClickListener);
         dataButton.setOnClickListener(mClickListener);
 
         faultButton.setVisibility(View.GONE);
@@ -338,6 +339,31 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        mOtherMenu = new PopupMenu(this, otherButton);
+        MenuInflater menuOtherInflater = mOtherMenu.getMenuInflater();
+        menuOtherInflater.inflate(R.menu.other_menu, mOtherMenu.getMenu());
+        mOtherMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch(item.getItemId()) {
+                    case R.id.action_settings:
+                        Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                        startActivityForResult(settingsIntent, SETTINGS_CHECK);
+                        break;
+                    case R.id.action_about:
+                        // TODO Add about activity
+                        Intent aboutIntent = new Intent(MainActivity.this, WaypointActivity.class);
+                        startActivity(aboutIntent);
+                        break;
+                    case R.id.action_exit:
+                        finish();
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
     private View.OnClickListener mClickListener = new View.OnClickListener() {
@@ -357,12 +383,11 @@ public class MainActivity extends AppCompatActivity {
                     Intent faultIntent = new Intent(MainActivity.this, FaultActivity.class);
                     startActivity(faultIntent);
                     break;
-                case R.id.action_settings:
-                    Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
-                    startActivityForResult(settingsIntent, SETTINGS_CHECK);
-                    break;
                 case R.id.action_data:
                     mPopupMenu.show();
+                    break;
+                case R.id.action_other:
+                    mOtherMenu.show();
                     break;
             }
         }
@@ -459,7 +484,7 @@ public class MainActivity extends AppCompatActivity {
                 backButton.setColorFilter(getResources().getColor(R.color.white));
                 forwardButton.setColorFilter(getResources().getColor(R.color.white));
                 dataButton.setColorFilter(getResources().getColor(R.color.white));
-                settingsButton.setColorFilter(getResources().getColor(R.color.white));
+                otherButton.setColorFilter(getResources().getColor(R.color.white));
                 textView1.setTextColor(getResources().getColor(R.color.white));
                 textView2.setTextColor(getResources().getColor(R.color.white));
                 textView3.setTextColor(getResources().getColor(R.color.white));
@@ -499,7 +524,7 @@ public class MainActivity extends AppCompatActivity {
                 backButton.setColorFilter(getResources().getColor(R.color.black));
                 forwardButton.setColorFilter(getResources().getColor(R.color.black));
                 dataButton.setColorFilter(getResources().getColor(R.color.black));
-                settingsButton.setColorFilter(getResources().getColor(R.color.black));
+                otherButton.setColorFilter(getResources().getColor(R.color.black));
                 textView1.setTextColor(getResources().getColor(R.color.black));
                 textView2.setTextColor(getResources().getColor(R.color.black));
                 textView3.setTextColor(getResources().getColor(R.color.black));
@@ -535,7 +560,7 @@ public class MainActivity extends AppCompatActivity {
                 backButton.setColorFilter(getResources().getColor(R.color.white));
                 forwardButton.setColorFilter(getResources().getColor(R.color.white));
                 dataButton.setColorFilter(getResources().getColor(R.color.white));
-                settingsButton.setColorFilter(getResources().getColor(R.color.white));
+                otherButton.setColorFilter(getResources().getColor(R.color.white));
                 textViewAppName = (TextView) findViewById(R.id.tvAppName);
                 textViewAppName.setTextColor(getResources().getColor(R.color.white));
             } else {
@@ -546,7 +571,7 @@ public class MainActivity extends AppCompatActivity {
                 backButton.setColorFilter(getResources().getColor(R.color.black));
                 forwardButton.setColorFilter(getResources().getColor(R.color.black));
                 dataButton.setColorFilter(getResources().getColor(R.color.black));
-                settingsButton.setColorFilter(getResources().getColor(R.color.black));
+                otherButton.setColorFilter(getResources().getColor(R.color.black));
                 textViewAppName = (TextView) findViewById(R.id.tvAppName);
                 textViewAppName.setTextColor(getResources().getColor(R.color.black));
             }
