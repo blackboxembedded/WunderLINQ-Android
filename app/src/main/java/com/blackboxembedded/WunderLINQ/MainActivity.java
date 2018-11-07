@@ -733,7 +733,9 @@ public class MainActivity extends AppCompatActivity {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    bluetoothLeScanner.stopScan(mLeScanCallback);
+                    if (bluetoothLeScanner != null) {
+                        bluetoothLeScanner.stopScan(mLeScanCallback);
+                    }
                 }
             }, SCAN_PERIOD);
 

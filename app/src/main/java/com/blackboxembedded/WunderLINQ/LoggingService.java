@@ -282,8 +282,10 @@ public class LoggingService extends Service implements LocationListener, GoogleA
     }
 
     protected void stopLocationUpdates() {
-        LocationServices.FusedLocationApi.removeLocationUpdates(
-                googleApiClient, this);
+        if (googleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(
+                    googleApiClient, this);
+        }
     }
 
     @Override

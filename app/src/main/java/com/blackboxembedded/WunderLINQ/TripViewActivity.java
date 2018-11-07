@@ -270,7 +270,9 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 tvDistance.setText(oneDigit.format(distance) + distanceUnit);
 
                 // Calculate Duration
-                printDifference(startTime,endTime);
+                if (startTime != null && endTime != null) {
+                    printDifference(startTime, endTime);
+                }
 
             } catch (IOException e){
 
