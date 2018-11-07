@@ -162,12 +162,66 @@ public class Data {
     }
 
     // Ambient Light
-    private static Integer ambientLight = 0;
+    private static Integer ambientLight;
     public static Integer getAmbientLight() {
         return ambientLight;
     }
     public static void setAmbientLight(Integer ambientLight){
         Data.ambientLight = ambientLight;
+    }
+
+    // Speed
+    private static Integer speed;
+    public static Integer getSpeed() {
+        return speed;
+    }
+    public static void setSpeed(Integer speed){
+        Data.speed = speed;
+    }
+
+    // Average Speed
+    private static Double avgSpeed;
+    public static Double getAvgSpeed() {
+        return avgSpeed;
+    }
+    public static void setAvgSpeed(Double avgSpeed){
+        Data.avgSpeed = avgSpeed;
+    }
+
+    // Current Consumption
+    private static Double currentConsumption;
+    public static Double getCurrentConsumption() {
+        return currentConsumption;
+    }
+    public static void setCurrentConsumption(Double currentConsumption){
+        Data.currentConsumption = currentConsumption;
+    }
+
+    // Fuel Economy 1
+    private static Double fuelEconomyOne;
+    public static Double getFuelEconomyOne() {
+        return fuelEconomyOne;
+    }
+    public static void setFuelEconomyOne(Double fuelEconomyOne){
+        Data.fuelEconomyOne = fuelEconomyOne;
+    }
+
+    // Fuel Economy 2
+    private static Double fuelEconomyTwo;
+    public static Double getFuelEconomyTwo() {
+        return fuelEconomyTwo;
+    }
+    public static void setFuelEconomyTwo(Double fuelEconomyTwo){
+        Data.fuelEconomyTwo = fuelEconomyTwo;
+    }
+
+    // Fuel Range
+    private static Double fuelRange;
+    public static Double getFuelRange() {
+        return fuelRange;
+    }
+    public static void setFuelRange(Double fuelRange){
+        Data.fuelRange = fuelRange;
     }
 
     // Utility functions
@@ -188,5 +242,11 @@ public class Data {
         Data.throttlePosition = null;
         Data.frontBrake = 0;
         Data.rearBrake = 0;
+        Data.speed = null;
+        Data.avgSpeed = null;
+        Data.currentConsumption = null;
+        Data.fuelEconomyOne = null;
+        Data.fuelEconomyTwo = null;
+        Data.fuelRange = null;
     }
 }

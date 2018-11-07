@@ -1,12 +1,25 @@
 package com.blackboxembedded.WunderLINQ;
 
 import android.app.Application;
+import android.content.Context;
 
 public class MyApplication extends Application {
+
+    private static Context mContext;
 
     private boolean itsDark;
     private boolean videoRecording;
     private boolean tripRecording;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mContext = this;
+    }
+
+    public static Context getContext(){
+        return mContext;
+    }
 
     public boolean getitsDark() {
         return itsDark;

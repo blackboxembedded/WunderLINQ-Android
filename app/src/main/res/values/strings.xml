@@ -195,6 +195,35 @@
     <string name="alertLowFuelTitle">Low Fuel</string>
     <string name="alertLowFuelBody">Route to the nearest fuel station?"</string>
 
+    <!-- LoggingService -->
+    <string name="time_header">Time</string>
+    <string name="latitude_header">Latitude</string>
+    <string name="longitude_header">Longitude</string>
+    <string name="altitude_header">Altitude (m)</string>
+    <string name="gpsspeed_header">GPS Speed (kmh)</string>
+    <string name="gear_header">Gear</string>
+    <string name="enginetemp_header">Engine Temperature (C)</string>
+    <string name="ambienttemp_header">Ambient Temperature (C)</string>
+    <string name="frontpressure_header">Front Tire Pressure (bar)</string>
+    <string name="rearpressure_header">Rear Tire Pressure (bar)</string>
+    <string name="odometer_header">Odometer (km)</string>
+    <string name="voltage_header">Voltage (V)</string>
+    <string name="throttle_header">Throttle Position (%)</string>
+    <string name="frontbrakes_header">Front Brakes</string>
+    <string name="rearbrakes_header">Rear Brakes</string>
+    <string name="shifts_header">Shifts</string>
+    <string name="vin_header">VIN</string>
+    <string name="ambientlight_header">Ambient Light</string>
+    <string name="tripone_header">Trip1 (km)</string>
+    <string name="triptwo_header">Trip2 (km)</string>
+    <string name="tripauto_header">Trip Auto (km)</string>
+    <string name="speed_header">Speed (kmh)</string>
+    <string name="avgspeed_header">Average Speed (kmh)</string>
+    <string name="cconsumption_header">Current Consumption (L/100)</string>
+    <string name="fueleconomyone_header">Fuel Economy 1 (L/100)</string>
+    <string name="fueleconomytwo_header">Fuel Economy 2 (L/100)</string>
+    <string name="fuelrange_header">Fuel Range (km)</string>
+
     <!-- VideoRecService -->
     <string name="title_video_notification">WunderLINQ recording video</string>
 

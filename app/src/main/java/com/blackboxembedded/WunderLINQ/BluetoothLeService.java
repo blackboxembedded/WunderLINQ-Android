@@ -551,6 +551,11 @@ public class BluetoothLeService extends Service {
                         break;
                     case 0x01:
                         //Log.d(TAG, "Message ID 1");
+                        //Fuel Range
+                        if ((data[4] & 0xFF) != 0xFF && (data[5] & 0xFF) != 0xFF) {
+                            double fuelRange = (((data[4] & 0xFF) >> 4) & 0x0f) + (((data[5] & 0xFF) & 0x0f) * 16) + ((((data[5] & 0xFF) >> 4) & 0x0f) * 256);
+                            Data.setFuelRange(fuelRange);
+                        }
                         // Ambient Light
                         int ambientLightValue = (data[6] & 0xFF) & 0x0f; // the lowest 4 bits
                         Data.setAmbientLight(ambientLightValue);
@@ -989,6 +994,18 @@ public class BluetoothLeService extends Service {
                         break;
                     case 0x07:
                         //Log.d(TAG, "Message ID 7");
+                        //Average Speed
+                        if ((data[1] & 0xFF) != 0xFF && (data[2] & 0xFF) != 0xFF) {
+                            double avgSpeed = ((((data[1] & 0xFF) >> 4) & 0x0f) * 2) + (((data[1] & 0xFF) & 0x0f) * 0.125) + (((data[2] & 0xFF) & 0x0f) * 32);
+                            Data.setAvgSpeed(avgSpeed);
+                        }
+
+                        //Speed
+                        if ((data[3] & 0xFF) != 0xFF) {
+                            int speed = (data[3] & 0xFF) * 2;
+                            Data.setSpeed(speed);
+                        }
+
                         //Voltage
                         double voltage = (data[4] & 0xFF) / 10;
                         Data.setvoltage(voltage);
@@ -1703,6 +1720,21 @@ public class BluetoothLeService extends Service {
                         break;
                     case 0x09:
                         //Log.d(TAG, "Message ID 9");
+                        //Fuel Economy 1
+                        if ((data[2] & 0xFF) != 0xFF) {
+                            double fuelEconomyOne = ((((data[2] & 0xFF) >> 4) & 0x0f) * 1.6) + (((data[2] & 0xFF) & 0x0f) * 0.1);
+                            Data.setFuelEconomyOne(fuelEconomyOne);
+                        }
+                        //Fuel Economy 2
+                        if ((data[3] & 0xFF) != 0xFF) {
+                            double fuelEconomyTwo = ((((data[3] & 0xFF) >> 4) & 0x0f) * 1.6) + (((data[3] & 0xFF) & 0x0f) * 0.1);
+                            Data.setFuelEconomyTwo(fuelEconomyTwo);
+                        }
+                        //Current Consumption
+                        if ((data[4] & 0xFF) != 0xFF) {
+                            double cConsumption = ((((data[4] & 0xFF) >> 4) & 0x0f) * 1.6) + (((data[4] & 0xFF) & 0x0f) * 0.1);
+                            Data.setCurrentConsumption(cConsumption);
+                        }
                         break;
                     case 0x0a:
                         //Log.d(TAG, "Message ID 10");

@@ -160,9 +160,35 @@ public class LoggingService extends Service implements LocationListener, GoogleA
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-HH-mm-ss");
                 String curdatetime = formatter.format(date);
                 String filename = "WunderLINQ-TripLog-";
-                String header = "Time,Latitude,Longitude,Altitude (m),Speed (kmh),Gear,Engine Temperature (C)," +
-                        "Ambient Temperature (C),Front Tire Pressure (bar),Rear Tire Pressure (bar),Odometer (km),Voltage (V)," +
-                        "Throttle Position (%),Front Brakes,Rear Brakes,Shifts,VIN,Ambient Light,Trip1 (km),Trip2 (km),Trip Auto (km)\n";
+
+                String header = MyApplication.getContext().getResources().getString(R.string.time_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.latitude_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.longitude_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.altitude_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.gpsspeed_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.gear_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.enginetemp_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.ambienttemp_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.frontpressure_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.rearpressure_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.odometer_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.voltage_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.throttle_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.frontbrakes_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.rearbrakes_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.shifts_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.vin_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.ambientlight_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.tripone_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.triptwo_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.tripauto_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.speed_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.avgspeed_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.cconsumption_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.fueleconomyone_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.fueleconomytwo_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.fuelrange_header) + "\n";
+
                 File logFile = new File( root, filename + curdatetime + ".csv" );
                 FileWriter logWriter = new FileWriter( logFile );
                 outFile = new PrintWriter( logWriter );
@@ -196,7 +222,9 @@ public class LoggingService extends Service implements LocationListener, GoogleA
                             + Data.getOdometer() + "," + Data.getvoltage() + "," + Data.getThrottlePosition() + ","
                             + Data.getFrontBrake() + "," + Data.getRearBrake() + "," + Data.getNumberOfShifts() + ","
                             + Data.getVin()  + "," + Data.getAmbientLight() + "," + Data.getTripOne() + ","
-                            + Data.getTripTwo() + "," + Data.getTripAuto() + "\n");
+                            + Data.getTripTwo() + "," + Data.getTripAuto() + "," + Data.getSpeed() + ","
+                            + Data.getAvgSpeed() + "," + Data.getCurrentConsumption() + "," + Data.getFuelEconomyOne() + ","
+                            + Data.getFuelEconomyTwo() + "," + Data.getFuelRange() + "\n");
                     outFile.flush();
                     handler.postDelayed(runnable, loggingInterval);
                 }
