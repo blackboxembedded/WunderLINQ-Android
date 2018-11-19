@@ -746,7 +746,7 @@ public class TaskActivity extends AppCompatActivity {
                                     // Get current date/time
                                     Calendar cal = Calendar.getInstance();
                                     Date date = cal.getTime();
-                                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ");
                                     String curdatetime = formatter.format(date);
 
                                     // Open database

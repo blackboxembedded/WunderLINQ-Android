@@ -33,7 +33,6 @@ public class CompassActivity extends AppCompatActivity {
     private ImageButton backButton;
     private ImageButton forwardButton;
     private TextView navbarTitle;
-
     private TextView compassTextView;
 
     static boolean itsDark = false;
@@ -44,6 +43,15 @@ public class CompassActivity extends AppCompatActivity {
     Sensor accelerometer;
     Sensor magnetometer;
     Sensor lightSensor;
+
+    String north;
+    String northWest;
+    String northEast;
+    String south;
+    String southWest;
+    String southEast;
+    String west;
+    String east;
 
     /*
     * time smoothing constant for low-pass filter
@@ -74,6 +82,15 @@ public class CompassActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         setContentView(R.layout.activity_compass);
+
+        north = getString(R.string.north);
+        northWest = getString(R.string.north_west);
+        northEast = getString(R.string.north_east);
+        south = getString(R.string.south);
+        southWest = getString(R.string.south_west);
+        southEast = getString(R.string.south_east);
+        west = getString(R.string.west);
+        east = getString(R.string.east);
 
         View view = findViewById(R.id.layout_compass);
         view.setOnTouchListener(new OnSwipeTouchListener(this) {
@@ -238,21 +255,21 @@ public class CompassActivity extends AppCompatActivity {
                         bearing = String.valueOf(lastDirection) + "°";
                         if (!sharedPrefs.getString("prefBearing", "0").contains("0")) {
                             if (lastDirection > 331 || lastDirection <= 28) {
-                                cardinal = "N";
+                                cardinal =  north;
                             } else if (lastDirection > 28 && lastDirection <= 73) {
-                                cardinal = "NE";
+                                cardinal = northEast;
                             } else if (lastDirection > 73 && lastDirection <= 118) {
-                                cardinal = "E";
+                                cardinal = east;
                             } else if (lastDirection > 118 && lastDirection <= 163) {
-                                cardinal = "SE";
+                                cardinal = southEast;
                             } else if (lastDirection > 163 && lastDirection <= 208) {
-                                cardinal = "S";
+                                cardinal = south;
                             } else if (lastDirection > 208 && lastDirection <= 253) {
-                                cardinal = "SW";
+                                cardinal = southWest;
                             } else if (lastDirection > 253 && lastDirection <= 298) {
-                                cardinal = "W";
+                                cardinal = west;
                             } else if (lastDirection > 298 && lastDirection <= 331) {
-                                cardinal = "NW";
+                                cardinal = northWest;
                             }
                             if (sharedPrefs.getString("prefBearing", "0").contains("1")) {
                                 bearing = cardinal;
