@@ -104,9 +104,9 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
             Date endTime = null;
             Double startOdometer = null;
             Double endOdometer = null;
-            Double endShiftCnt = null;
-            Double endFrontBrakeCnt = null;
-            Double endRearBrakeCnt = null;
+            Integer endShiftCnt = null;
+            Integer endFrontBrakeCnt = null;
+            Integer endRearBrakeCnt = null;
 
             try {
                 CSVReader reader = new CSVReader(new FileReader(file));
@@ -161,17 +161,17 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                         }
                         if (!nextLine[13].equals("null")){
                             if (endFrontBrakeCnt == null || endFrontBrakeCnt < Double.parseDouble(nextLine[13])){
-                                endFrontBrakeCnt = Double.parseDouble(nextLine[13]);
+                                endFrontBrakeCnt = Integer.parseInt(nextLine[13]);
                             }
                         }
                         if (!nextLine[14].equals("null")){
                             if (endRearBrakeCnt == null || endRearBrakeCnt < Double.parseDouble(nextLine[14])){
-                                endRearBrakeCnt = Double.parseDouble(nextLine[14]);
+                                endRearBrakeCnt = Integer.parseInt(nextLine[14]);
                             }
                         }
                         if (!nextLine[15].equals("null")){
                             if (endShiftCnt == null || endShiftCnt < Double.parseDouble(nextLine[15])){
-                                endShiftCnt = Double.parseDouble(nextLine[15]);
+                                endShiftCnt = Integer.parseInt(nextLine[15]);
                             }
                         }
                     }
@@ -208,16 +208,16 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 }
 
                 if(endShiftCnt != null){
-                    tvGearShifts.setText(Double.toString(endShiftCnt));
+                    tvGearShifts.setText(Integer.toString(endShiftCnt));
                 }
 
                 String frontBrakeText = "0";
                 String rearBrakeText = "0";
                 if(endFrontBrakeCnt != null){
-                    frontBrakeText = Double.toString(endFrontBrakeCnt);
+                    frontBrakeText = Integer.toString(endFrontBrakeCnt);
                 }
                 if(endRearBrakeCnt != null){
-                    rearBrakeText = Double.toString(endRearBrakeCnt);
+                    rearBrakeText = Integer.toString(endRearBrakeCnt);
                 }
                 tvBrakes.setText("(" + frontBrakeText + "/" + rearBrakeText + ")");
 
