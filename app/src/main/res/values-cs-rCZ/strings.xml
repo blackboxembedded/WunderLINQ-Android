@@ -5,14 +5,14 @@
     <string name="main_title">Motocykl</string>
     <string name="blank_field">∞</string>
     <!-- Permission Requests -->
-    <string name="camera_alert_title">WunderLINQ vyžaduje oprávnění k použití kamery</string>
-    <string name="camera_alert_body">Udělte prosím oprávnění k použití kamery</string>
+    <string name="camera_alert_title">WunderLINQ vyžaduje oprávnění k pořizování fotografií a nahrávání videa</string>
+    <string name="camera_alert_body">Udělte prosím oprávnění k pořizování fotografií a nahrávání videa</string>
     <string name="contacts_alert_title">WunderLINQ vyžaduje oprávnění pro přístup ke kontaktům</string>
     <string name="contacts_alert_body">Udělte prosím oprávnění pro přístup ke kontaktům</string>
     <string name="record_audio_alert_title">WunderLINQ vyžaduje oprávnění pro nahrávání zvuku</string>
     <string name="record_audio_alert_body">Udělte prosím oprávnění pro nahrávání zvuku</string>
-    <string name="location_alert_title">WunderLINQ vyžaduje oprávnění pro přístup k vaší poloze</string>
-    <string name="location_alert_body">Udělte prosím oprávnění pro přístup k vaší poloze</string>
+    <string name="location_alert_title">WunderLINQ vyžaduje oprávnění pro přístup k poloze tohoto zařízení</string>
+    <string name="location_alert_body">Udělte prosím oprávnění pro přístup k poloze tohoto zařízení</string>
     <string name="write_alert_title">WunderLINQ vyžaduje oprávnění k zápisu dat</string>
     <string name="write_alert_body">Udělte prosím oprávnění k zápisu dat</string>
     <string name="overlay_alert_title">WunderLINQ vyžaduje oprávnění pro zobrazení přes jiné aplikace</string>
@@ -51,7 +51,7 @@
     <string name="close_label">Zavřít</string>
 
     <!-- AboutActivity -->
-    <string name="about_title">About</string>
+    <string name="about_title">O aplikaci</string>
 
     <!-- FaultActivity -->
     <string name="title_activity_fault">Chybové kódy</string>
@@ -59,46 +59,46 @@
     <string name="notification_channel">Aktivní chyby</string>
 
     <!-- Fault strings -->
-    <string name="fault_UARTERR">UART Error</string>
+    <string name="fault_UARTERR">Chyba UART </string>
     <string name="fault_UARTCTF">UART Comm Timeout</string>
     <string name="fault_UARTLF">UART Logic</string>
-    <string name="fault_ABSSLF">ABS self-diagnosis not completed</string>
-    <string name="fault_ABSERR">ABS error</string>
-    <string name="fault_ABSDAC">ABS deactivated</string>
-    <string name="fault_ASCSLF">ASC self-diagnosis not completed</string>
-    <string name="fault_ASCINT">ASC intervention</string>
-    <string name="fault_ASCERR">ASC error</string>
-    <string name="fault_ASCDAC">ASC deactivated</string>
-    <string name="fault_FUELF">Low Fuel</string>
-    <string name="fault_LAMPAFL1">Additional front light 1</string>
-    <string name="fault_LAMPAFL2">Additional front light 2</string>
-    <string name="fault_LAMPDAY">Daytime running light</string>
-    <string name="fault_LAMPFLI">Front left indicator</string>
-    <string name="fault_LAMPFRI">Front right indicator</string>
-    <string name="fault_LAMPRLI">Rear left indicator</string>
-    <string name="fault_LAMPRRI">Rear right indicator</string>
-    <string name="fault_LAMPFPK1">Front parking light 1</string>
-    <string name="fault_LAMPFPK2">Front parking light 2</string>
-    <string name="fault_LAMPLOW">Low-beam</string>
-    <string name="fault_LAMPHI">High-beam</string>
-    <string name="fault_LAMPREAR">Rear Light</string>
-    <string name="fault_LAMPBRK">Brake Light</string>
-    <string name="fault_LAMPLIC">License plate Light</string>
-    <string name="fault_LAMPRFOG">Rear Fog Light</string>
-    <string name="fault_LAMPADDD">Additional dipped/high-beam</string>
-    <string name="fault_LAMPADDB">Additional brake light</string>
-    <string name="fault_LAMPFL1">Front lamp 1</string>
-    <string name="fault_LAMPFL2">Front lamp 2</string>
-    <string name="fault_ICEWARN">Ice Warning</string>
-    <string name="fault_GENWARNFSYLW">The general warning light flashes yellow</string>
-    <string name="fault_GENWARNSHYLW">The general warning light shows yellow</string>
-    <string name="fault_GENWARNFSRED">The general warning light flashes red</string>
-    <string name="fault_GENWARNSHRED">The general warning light shows red</string>
-    <string name="fault_OILLOW">Engine oil level too low</string>
-    <string name="fault_TIREFWF">Front Tire Pressure Warning</string>
-    <string name="fault_TIRERWF">Rear Tire Pressure Warning</string>
-    <string name="fault_TIREFCF">Front Tire Pressure Critical</string>
-    <string name="fault_TIRERCF">Rear Tire Pressure Critical</string>
+    <string name="fault_ABSSLF">Diagnotiska ABS nebyla dokončena</string>
+    <string name="fault_ABSERR">Chyba ABS</string>
+    <string name="fault_ABSDAC">ABS vypnuto</string>
+    <string name="fault_ASCSLF">Diagnotiska ASC nebyla dokončena</string>
+    <string name="fault_ASCINT">Zásah ASC</string>
+    <string name="fault_ASCERR">Chyba ASC</string>
+    <string name="fault_ASCDAC">ASC vypnuto</string>
+    <string name="fault_FUELF">Nízký stav paliva</string>
+    <string name="fault_LAMPAFL1">Přídavné přední světlo 1</string>
+    <string name="fault_LAMPAFL2">Přídavné přední světlo 2</string>
+    <string name="fault_LAMPDAY">Světlo pro denní svícení</string>
+    <string name="fault_LAMPFLI">Levý přední blinkr</string>
+    <string name="fault_LAMPFRI">Pravý přední blinkr</string>
+    <string name="fault_LAMPRLI">Levý zadní blinkr</string>
+    <string name="fault_LAMPRRI">Pravý zadní blinkr</string>
+    <string name="fault_LAMPFPK1">Přední parkovací světlo 1</string>
+    <string name="fault_LAMPFPK2">Přední parkovací světlo 2</string>
+    <string name="fault_LAMPLOW">Potkávací světlo</string>
+    <string name="fault_LAMPHI">Dálkové světlo</string>
+    <string name="fault_LAMPREAR">Koncové světlo</string>
+    <string name="fault_LAMPBRK">Brzdové světlo</string>
+    <string name="fault_LAMPLIC">Osvětlení značky</string>
+    <string name="fault_LAMPRFOG">Zadní mlhové světlo</string>
+    <string name="fault_LAMPADDD">Přídavné potkávací/dálkové světlo</string>
+    <string name="fault_LAMPADDB">Přídavné brzdové světlo</string>
+    <string name="fault_LAMPFL1">Přední světlo 1</string>
+    <string name="fault_LAMPFL2">Zadní světlo 2</string>
+    <string name="fault_ICEWARN">Pozor, náledi</string>
+    <string name="fault_GENWARNFSYLW">Kontrolka bliká žlutě</string>
+    <string name="fault_GENWARNSHYLW">Kontrolka svítí žlutě</string>
+    <string name="fault_GENWARNFSRED">Kontrolka bliká červeně</string>
+    <string name="fault_GENWARNSHRED">Kontrolka svítí červeně</string>
+    <string name="fault_OILLOW">Nízký stav motorového oleje</string>
+    <string name="fault_TIREFWF">Nízký tlak v přední pneu</string>
+    <string name="fault_TIRERWF">Nízký tlak v zadní pneu</string>
+    <string name="fault_TIREFCF">Velmi nízký tlak v přední pneu</string>
+    <string name="fault_TIRERCF">Nízký nízký tlak v zadní pneu</string>
 
     <!-- WaypointActivity -->
     <string name="waypoint_title">Uložená místa</string>
@@ -148,13 +148,13 @@
     <!-- TaskActivity -->
     <string name="quicktask_title">Rychlé Akce</string>
     <string name="task_title_navigation">Navigace</string>
-    <string name="task_title_gohome">Jed domů</string>
+    <string name="task_title_gohome">Naviguj domů</string>
     <string name="task_title_favnumber">Volej oblíbené číslo</string>
     <string name="task_title_callcontact">Volej kontakt</string>
     <string name="task_title_photo">Pořiď fotku</string>
     <string name="task_title_selfie">Pořiď selfie</string>
     <string name="task_title_start_record">Nahrávej video</string>
-    <string name="task_title_stop_record">Ukončí nahrávání videa</string>
+    <string name="task_title_stop_record">Ukonči nahrávání videa</string>
     <string name="task_title_start_trip">Pořiď záznam jízdy</string>
     <string name="task_title_stop_trip">Ukonči záznam jízdy</string>
     <string name="title_logging_notification">WunderLINQ nahrává záznam jízdy</string>
@@ -193,7 +193,7 @@
     <string name="alertActivityBtnOK">OK</string>
     <string name="alertActivityBtnClose">Zavřít</string>
     <string name="alertLowFuelTitle">Nízký stav paliva</string>
-    <string name="alertLowFuelBody">Navigovat k nejbližší pumpě?</string>
+    <string name="alertLowFuelBody">Navigovat k nejbližší čerpací stanici?</string>
 
     <!-- LoggingService -->
     <string name="time_header">Čas</string>
@@ -203,7 +203,7 @@
     <string name="gpsspeed_header">GPS Rychlost (km/h)</string>
     <string name="gear_header">Převodový stupeň</string>
     <string name="enginetemp_header">Teplota motoru (C)</string>
-    <string name="ambienttemp_header">Venkovni teplota (C)</string>
+    <string name="ambienttemp_header">Venkovní teplota (C)</string>
     <string name="frontpressure_header">Tlak v přední pneu (bar)</string>
     <string name="rearpressure_header">Tlak v zadní pneu (bar)</string>
     <string name="odometer_header">Celkem najeto (km)</string>
@@ -211,7 +211,7 @@
     <string name="throttle_header">Poloha plynu (%)</string>
     <string name="frontbrakes_header">Přední brzda</string>
     <string name="rearbrakes_header">Zadní brzda</string>
-    <string name="shifts_header">Řazení rychlosti</string>
+    <string name="shifts_header">Změny rychlosti</string>
     <string name="vin_header">VIN</string>
     <string name="ambientlight_header">Venkovní světlo</string>
     <string name="tripone_header">Trip1 (km)</string>
@@ -274,18 +274,18 @@
     </string-array>
     <string name="pref_distance_name">Jednotky vzdálenosti</string>
     <string-array name="distance_array">
-        <item name="1">KM/m</item>
+        <item name="1">Kilometry/metry</item>
         <item name="2">Míle/stopy</item>
     </string-array>
     <string-array name="distance_arrayValues">
         <item name="1">0</item>
         <item name="2">1</item>
     </string-array>
-    <string name="pref_bearing_name">Zobrazení směru</string>
+    <string name="pref_bearing_name">Zobrazení směru kompasu</string>
     <string-array name="bearing_array">
         <item name="1">Stupně</item>
         <item name="2">Směr</item>
-        <item name="3">Oboje</item>
+        <item name="3">Stupně a směr</item>
     </string-array>
     <string-array name="bearing_arrayValues">
         <item name="1">0</item>
@@ -316,7 +316,7 @@
     </string-array>
     <string name="pref_orientation_name">Zámek orientace obrazovky</string>
     <string-array name="orientation_array">
-        <item name="1">Vyp</item>
+        <item name="1">Vypnuto</item>
         <item name="2">Na šířku</item>
         <item name="3">Na šířku opačně</item>
         <item name="4">Na výšku</item>
@@ -328,13 +328,13 @@
         <item name="3">3</item>
     </string-array>
     <string name="pref_brightness_name">Jas obrazovky</string>
-    <string name="pref_brightness_summary">Nastaví jas obrazovky na maximum.</string>
+    <string name="pref_brightness_summary">Nastaví jas obrazovky na maximum</string>
     <string name="pref_nightMode_name">Noční režim</string>
     <string name="pref_nightMode_summary">Tmavé barevné schéma</string>
     <string-array name="night_mode_array">
-        <item name="1">Vyp</item>
-        <item name="2">Zap</item>
-        <item name="3">Auto</item>
+        <item name="1">Vypnuto</item>
+        <item name="2">Zapnuto</item>
+        <item name="3">Automaticky</item>
     </string-array>
     <string-array name="night_mode_arrayValues">
         <item name="1">0</item>
@@ -344,12 +344,12 @@
     <string name="pref_autoNightModeDelay_name">Prodleva automatického nočního režimu</string>
     <string name="pref_autoNightModeDelay_summary">Nastavit hodnotu prodlevy ve vteřinách</string>
     <string name="alerting_title">Nastavení výstrahy</string>
-    <string name="pref_tpmsAlert_name">Vlastní hodnota výstrahy tlaku pneu</string>
+    <string name="pref_tpmsAlert_name">Vlastní hodnota pro upozornění na nízký tlak pneu</string>
     <string name="pref_tpmsAlert_summary">Nastavení vlastní hodnoty pro upozornění na nízký tlak pneu</string>
     <string name="pref_tpmsAlertThreshold_name">Hodnota pro upozornění na nízký tlak pneu</string>
     <string name="pref_tpmsAlertThreshold_summary">Zadejte hodnotu ve vámi zvolených jednotkách tlaku</string>
     <string name="pref_fuelAlert_name">Navigace k čerpací stanici</string>
-    <string name="pref_fuelAlert_summary">Nabídnout navigaci k nejbližší čepací stanici při nízkém stavu paliva</string>
+    <string name="pref_fuelAlert_summary">Nabídnout navigaci k nejbližší čerpací stanici při nízkém stavu paliva</string>
     <string name="debug_settings_title">Nastaveni debuggingu</string>
     <string name="pref_dataLogging_name">Logovat raw zprávy</string>
     <string name="pref_dataLogging_summary">Zapnout ukládání raw zpráv do /sdcard/WunderLINQ/</string>
@@ -372,125 +372,6 @@
         When you select OK the WunderLINQ app will disconnect and the WunderLINQ hardwares status light should be solid green.
         You will be be returned to the main screen and when the app reconnects it should prompt to update.</string>
     <string name="pref_btn_version_title">WunderLINQ Version</string>
-    <string name="pref_btn_version_summary">Enter WunderLINQ Firmware Update Mode</string>
-    <string name="pref_btn_version_toast">Debug Menu Enabled. Exit, then re-enter Settings.</string>
-
-    <!-- OTA -->
-    <!-- bluetooth button elements -->
-    <string name="bluetooth_pair_start">Pairing started…\nPlease wait…</string>
-    <string name="bluetooth_pair">Paired</string>
-    <string name="bluetooth_unpair">Not Paired</string>
-    <string name="bluetooth_pair_unpair_failed">Pair/Unpair failed</string>
-    <!--Data Logger file-->
-    <string name="dl_directory">WunderLINQ</string>
-    <string name="dl_file_extension">.txt</string>
-    <string name="dl_commaseparator">" , "</string>
-    <!--Connection logs-->
-    <string name="dl_connection_request"> Connection request sent </string>
-    <string name="dl_connection_established"> Connection established </string>
-    <string name="dl_connection_establishing"> Connection establishing </string>
-    <string name="dl_connection_pairing_request"> Pairing request sent </string>
-    <string name="dl_connection_pairing_request_received"> Pairing request received </string>
-    <string name="dl_connection_paired"> Paired </string>
-    <string name="dl_connection_unpaired"> Unpaired </string>
-    <string name="dl_connection_pairing_unsupported"> Unable to pair. Check whether the device is advertising and supports pairing. </string>
-    <string name="dl_connection_disconnected"> Disconnected </string>
-    <string name="dl_disconnection_request"> Disconnection request sent </string>
-    <!--Service logs-->
-    <string name="dl_service_discovery_request"> Service discovery request sent </string>
-    <string name="dl_service_discovery_status"> Service discovery status </string>
-    <!--Characteristics logs-->
-    <string name="dl_characteristic_write_request"> Write request sent with value </string>
-    <string name="dl_characteristic_write_request_status"> Write request status </string>
-    <string name="dl_characteristic_start_notification"> Start notification request sent </string>
-    <string name="dl_characteristic_start_indication"> Start indication request sent </string>
-    <string name="dl_characteristic_notification_response"> Notification received with value </string>
-    <string name="dl_characteristic_indication_response"> Indication received with value </string>
-    <string name="dl_characteristic_stop_notification"> Stop notification request sent </string>
-    <string name="dl_characteristic_stop_indication"> Stop indication request sent </string>
-    <string name="dl_characteristic_read_request"> Read request sent </string>
-    <string name="dl_characteristic_read_request_status"> Read request status </string>
-    <string name="dl_characteristic_read_response"> Read response received with value </string>
-    <!--Common logs-->
-    <string name="dl_status_success">" - Success"</string>
-    <string name="dl_status_failure">" - Failed with error code : "</string>
-    <!-- Descriptor parser  -->
-    <string name="descriptor_notification_enabled">Notifications enabled</string>
-    <string name="descriptor_notification_disabled">Notifications disabled</string>
-    <string name="descriptor_indication_enabled">Indication enabled</string>
-    <string name="descriptor_indication_disabled">Indication disabled</string>
-    <string name="descriptor_reliablewrite_enabled">Reliable Write enabled</string>
-    <string name="descriptor_reliablewrite_disabled">Reliable Write disabled</string>
-    <string name="descriptor_writableauxillary_enabled">Writable Auxiliaries enabled</string>
-    <string name="descriptor_writableauxillary_disabled">Writable Auxiliaries disabled</string>
-    <string name="descriptor_broadcast_enabled">Broadcast enabled</string>
-    <string name="descriptor_broadcast_disabled">Broadcast disabled</string>
-    <string name="descriptor_bluetoothSIGAssignedNo">Bluetooth SIG Assigned Numbers</string>
-    <string name="descriptor_reservedforFutureUse">Reserved for future use</string>
-    <string name="descriptor_format">Format</string>
-    <string name="exponent">Exponent</string>
-    <string name="unit">Unit</string>
-    <string name="namespace">Namespace</string>
-    <string name="description">Description</string>
-    <string name="exchange_mtu">"Exchange GATT MTU"</string>
-    <string name="exchange_mtu_request">"[%1$s | %2$s] %3$s request, MTU: %4$d, Status: %5$d"</string>
-    <string name="exchange_mtu_rsp">"[%1$s | %2$s] %3$s request completed, MTU: %4$d, Status: %5$d"</string>
-    <string name="alert_message_exit_ok">OK</string>
-    <string name="alert_message_bluetooth_connect">The BLE device is connected</string>
-    <string name="alert_message_bluetooth_disconnect">The BLE device is disconnected</string>
-    <string name="alert_message_bluetooth_reconnect">Please turn Bluetooth ON</string>
-    <string name="alert_message_bonding_title">Bonding</string>
-    <string name="alert_message_bonding_message">Bonding is in process \nPlease wait..</string>
-    <string name="alert_message_yes">Yes</string>
-    <string name="alert_message_no">No</string>
-    <string name="alert_message_ota_cancel">Do you want to cancel the OTA update?</string>
-    <string name="alert_message_ota_resume">Do you want to resume the OTA Update?</string>
-    <string name="alert_message_ota_pending">You have firmware upgrade in progress. Going back will stop the firmware upgrade and disconnect from the device. Do you want to continue?</string>
-    <string name="alert_message_ota_user_warning">While firmware upgrade is in progress don\'t press back button or home button. Please stay in the page till the upgrade is complete</string>
-    <string name="alert_message_ota_error">Firmware update canceled\nError: </string>
-    <string name="alert_message_silicon_id_error">Error: The SiliconID or SiliconRev does not match</string>
-    <string name="alert_message_checksum_error">Error: The checksum do not match</string>
-    <string name="alert_message_row_out_of_bounds_error">Error: The row number exceeds the bounds</string>
-    <string name="alert_message_write_error_code">Error code:</string>
-    <string name="toast_selection_cancelled">Selection cancelled</string>
-    <!-- OTA profile elements -->
-    <string name="ota_url">https://storage.googleapis.com/wunderlinq/firmware.xml</string>
-    <string name="ota_list">Upgrade your WunderLINQ</string>
-    <string name="ota_file_list">Select Firmware Upgrade File</string>
-    <string name="ota_list_app_download">Select Firmware</string>
-    <string name="ota_list_app_stack_down_comb">Application and Stack Upgrade (Combined Files)</string>
-    <string name="ota_list_app_stack_down_sep">Application and Stack Upgrade (Separate Files)</string>
-    <string name="ota_upgrade">UPGRADE</string>
-    <string name="ota_next">NEXT</string>
-    <string name="ota_stop">STOP</string>
-    <string name="ota_file_read">Reading file, Please wait..</string>
-    <string name="ota_file_read_complete">File Read Completed</string>
-    <string name="ota_file_writ">Writing file, Please wait..</string>
-    <string name="ota_enter_bootloader">Executing Enter Bootloader Command…</string>
-    <string name="ota_get_flash_size">Executing Get Flash Size Command…</string>
-    <string name="ota_program_row">Firmware Upgrade in progress…</string>
-    <string name="ota_verify_row">Firmware Upgrade in progress…</string>
-    <string name="ota_verify_checksum">Executing Verify Checksum Command…</string>
-    <string name="ota_end_bootloader">Executing Exit Bootloader Command…</string>
-    <string name="ota_end_success">Firmware upgrade completed successfully.</string>
-    <string name="toast_ota_dev_address">Different devices....!!</string>
-    <string name="toast_ota_no_update">No update found</string>
-    <string name="toast_ota_pending">You have a Second file to Upgrade.</string>
-    <string name="toast_ota_completed">OTA successfully Completed</string>
-    <string name="toast_ota_one_completion">Stack successfully Updated. Please select the same profile to Upgrade the Application</string>
-    <string name="ota_title">OTA Firmware Upgrade</string>
-    <string name="ota_stack_file">Select the Stack Upgrade file</string>
-    <string name="ota_app_file">Select the Application Upgrade file</string>
-    <string name="ota_toast_stack_file_selected">Stack file selected</string>
-    <string name="ota_toast_pair">Please PAIR the device before starting the Upgrade</string>
-    <string name="ota_notification_title">WunderLINQ</string>
-    <string name="ota_notification_ongoing">OTA Upgrade in progress</string>
-    <string name="ota_notification_stack_file">Stack upgrade completed successfully. Application upgrade pending.</string>
-    <string name="ota_notification_both_file">OTA Firmware Upgrade</string>
-    <string name="ota_alert_invalid_file">Invalid or corrupted file</string>
-    <string name="ota_alert_file_application">Select a file for application upgrade!</string>
-    <string name="ota_alert_file_applicationstackcomb">Select a file for both stack and application upgrade with combined file!</string>
-    <string name="ota_alert_file_applicationstacksep_app_sel">Select the application upgrade file to proceed!</string>
-    <string name="ota_alert_file_applicationstacksep_stack_sel">Select the stack upgrade file to proceed!</string>
-    <string name="title_activity_about">AboutActivity</string>
+    <string name="pref_btn_version_summary">Vstoupit do režimu WunderLINQ Firmware Update</string>
+    <string name="pref_btn_version_toast">Debug Menu aktivováno. Zavřete a znovu otevřete nastavení</string>
 </resources>

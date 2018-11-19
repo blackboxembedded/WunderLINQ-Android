@@ -18,7 +18,7 @@
     <string name="overlay_alert_title">WunderLINQ needs overlay permission</string>
     <string name="overlay_alert_body">Please grant overlay permission so this app can record video</string>
     <string name="negative_alert_title">Functionality limited</string>
-    <string name="negative_location_alert_body">Since location access has not been granted, this app will not be able to discover your WunderLINQ when in the background.</string>
+    <string name="negative_location_alert_body">Since location access has not been granted, this app will not be able to save waypoints or log your location.</string>
     <string name="negative_write_alert_body">Since write access has not been granted, this app will not be able to save files.</string>
     <string name="negative_camera_alert_body">Since camera access has not been granted, this app will not be able to take photos or videos.</string>
     <string name="negative_microphone_alert_body">Since microphone access has not been granted, this app will not be able to record videos.</string>
@@ -132,9 +132,20 @@
     <string name="trip_view_tv_brakes">Brakes (Front/Rear)</string>
     <string name="trip_view_tv_ambient">Ambient Temp (Min/Avg/Max)</string>
     <string name="trip_view_tv_engine">Engine Temp (Min/Avg/Max)</string>
+    <string name="hours">Hours</string>
+    <string name="minutes">Minutes</string>
+    <string name="seconds">Seconds</string>
 
     <!-- CompassActivity -->
     <string name="compass_title">Compass</string>
+    <string name="north">N</string>
+    <string name="north_west">NW</string>
+    <string name="north_east">NE</string>
+    <string name="south">S</string>
+    <string name="south_west">SW</string>
+    <string name="south_east">SE</string>
+    <string name="west">W</string>
+    <string name="east">E</string>
 
     <!-- MusicActivity -->
     <string name="music_title">Music</string>
