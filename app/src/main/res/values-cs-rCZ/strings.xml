@@ -59,7 +59,7 @@
     <string name="notification_channel">Aktivní chyby</string>
 
     <!-- Fault strings -->
-    <string name="fault_UARTERR">Chyba UART </string>
+    <string name="fault_UARTERR">Chyba UART</string>
     <string name="fault_UARTCTF">UART Comm Timeout</string>
     <string name="fault_UARTLF">UART Logic</string>
     <string name="fault_ABSSLF">Diagnotiska ABS nebyla dokončena</string>
@@ -120,7 +120,7 @@
     <string name="trips_title">Záznamy jízd</string>
 
     <!-- TripViewActivity -->
-    <string name="trip_view_title">Jízda</string>
+    <string name="trip_view_title">Záznam jízdy</string>
     <string name="trip_view_trip_label">Záznam jízdy WunderLINQ</string>
     <string name="trip_view_waypoint_start_label">Začátek</string>
     <string name="trip_view_waypoint_end_label">Konec</string>
@@ -132,9 +132,20 @@
     <string name="trip_view_tv_brakes">Brždění (Přední/Zadní)</string>
     <string name="trip_view_tv_ambient">Venkovní teplota (Min/Prům/Max)</string>
     <string name="trip_view_tv_engine">Teplota motoru (Min/Prům/Max)</string>
+    <string name="hours">hod</string>
+    <string name="minutes">min</string>
+    <string name="seconds">sek</string>
 
     <!-- CompassActivity -->
     <string name="compass_title">Kompas</string>
+    <string name="north">S</string>
+    <string name="north_west">SZ</string>
+    <string name="north_east">SV</string>
+    <string name="south">J</string>
+    <string name="south_west">JZ</string>
+    <string name="south_east">JV</string>
+    <string name="west">Z</string>
+    <string name="east">V</string>
 
     <!-- MusicActivity -->
     <string name="music_title">Hudba</string>
@@ -155,7 +166,7 @@
     <string name="task_title_selfie">Pořiď selfie</string>
     <string name="task_title_start_record">Nahrávej video</string>
     <string name="task_title_stop_record">Ukonči nahrávání videa</string>
-    <string name="task_title_start_trip">Pořiď záznam jízdy</string>
+    <string name="task_title_start_trip">Nahraj záznam jízdy</string>
     <string name="task_title_stop_trip">Ukonči záznam jízdy</string>
     <string name="title_logging_notification">WunderLINQ nahrává záznam jízdy</string>
     <string name="task_title_waypoint">Ulož místo</string>
