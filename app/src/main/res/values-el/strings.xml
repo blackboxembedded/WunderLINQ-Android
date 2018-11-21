@@ -359,7 +359,7 @@
     <string name="dl_characteristic_write_request"> Έγινε αποστολή αιτήματος εγγραφής με τιμή </string>
     <string name="dl_characteristic_write_request_status"> Κατάσταση αιτήματος εγγραφής </string>
     <string name="dl_characteristic_start_notification"> Έγινε αποστολή αιτήματος ειδοποποίησης </string>
-    <string name="dl_characteristic_start_indication"> 'Εγινε αποστολή αιτήματος έναρξης ένδειξης </string>
+    <string name="dl_characteristic_start_indication"> Εγινε αποστολή αιτήματος έναρξης ένδειξης </string>
     <string name="dl_characteristic_notification_response"> Έγινε λήψη ειδοποίησης με τιμή </string>
     <string name="dl_characteristic_indication_response"> Έγινε λήψη ένδειξης με τιμή </string>
     <string name="dl_characteristic_stop_notification"> Ακύρωση αποστολής αιτήματος ειδοποίησης </string>
