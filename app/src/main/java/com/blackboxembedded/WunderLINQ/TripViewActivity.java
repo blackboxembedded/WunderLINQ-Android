@@ -397,7 +397,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
 
         long elapsedSeconds = different / secondsInMilli;
         tvDuration.setText(elapsedHours + " " + getString(R.string.hours) + ", " + elapsedMinutes +
-                " " + getString(R.string.minutes) + ", " + elapsedSeconds + " " + getString(R.string.hours));
+                " " + getString(R.string.minutes) + ", " + elapsedSeconds + " " + getString(R.string.seconds));
     }
     // kilometers to miles
     public double kmToMiles(double kilometers){
