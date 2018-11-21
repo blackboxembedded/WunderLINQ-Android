@@ -22,6 +22,8 @@
     <string name="negative_write_alert_body">Since write access has not been granted, this app will not be able to save files.</string>
     <string name="negative_camera_alert_body">Since camera access has not been granted, this app will not be able to take photos or videos.</string>
     <string name="negative_microphone_alert_body">Since microphone access has not been granted, this app will not be able to record videos.</string>
+    <string name="usagestats_alert_title">WunderLINQ needs usage stat access</string>
+    <string name="usagestats_alert_body">Please grant usage stat access, this will allow for auto launch of the App when the WunderLINQ device is connected.</string>
     <string name="disclaimer_alert_title">WARNING!</string>
     <string name="disclaimer_alert_body">
         Do not attempt to enter route information or adjust the WunderLINQ while driving.
