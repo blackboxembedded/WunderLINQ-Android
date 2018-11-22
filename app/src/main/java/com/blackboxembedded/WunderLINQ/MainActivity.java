@@ -1063,13 +1063,13 @@ public class MainActivity extends AppCompatActivity {
             Double rdcFront = Data.getFrontTirePressure();
             if (pressureFormat.contains("1")) {
                 // KPa
-                rdcFront = barTokPa(rdcFront);
+                rdcFront = Utils.barTokPa(rdcFront);
             } else if (pressureFormat.contains("2")) {
                 // Kg-f
-                rdcFront = barTokgf(rdcFront);
+                rdcFront = Utils.barTokgf(rdcFront);
             } else if (pressureFormat.contains("3")) {
                 // Psi
-                rdcFront = Double.valueOf(oneDigit.format(barToPsi(rdcFront)));
+                rdcFront = Double.valueOf(oneDigit.format(Utils.barToPsi(rdcFront)));
             }
             textView1.setText(rdcFront + " " + pressureUnit);
         } else {
@@ -1079,13 +1079,13 @@ public class MainActivity extends AppCompatActivity {
             Double rdcRear = Data.getRearTirePressure();
             if (pressureFormat.contains("1")) {
                 // KPa
-                rdcRear = barTokPa(rdcRear);
+                rdcRear = Utils.barTokPa(rdcRear);
             } else if (pressureFormat.contains("2")) {
                 // Kg-f
-                rdcRear = barTokgf(rdcRear);
+                rdcRear = Utils.barTokgf(rdcRear);
             } else if (pressureFormat.contains("3")) {
                 // Psi
-                rdcRear = Double.valueOf(oneDigit.format(barToPsi(rdcRear)));
+                rdcRear = Double.valueOf(oneDigit.format(Utils.barToPsi(rdcRear)));
             }
             textView5.setText(rdcRear + " " + pressureUnit);
         } else {
@@ -1100,7 +1100,7 @@ public class MainActivity extends AppCompatActivity {
             Double engineTemp = Data.getEngineTemperature();
             if (temperatureFormat.contains("1")) {
                 // F
-                engineTemp = celsiusToFahrenheit(engineTemp);
+                engineTemp = Utils.celsiusToFahrenheit(engineTemp);
             }
             textView2.setText((int) Math.round(engineTemp) + " " + temperatureUnit);
         } else {
@@ -1110,7 +1110,7 @@ public class MainActivity extends AppCompatActivity {
             Double ambientTemp = Data.getAmbientTemperature();
             if (temperatureFormat.contains("1")) {
                 // F
-                ambientTemp = celsiusToFahrenheit(ambientTemp);
+                ambientTemp = Utils.celsiusToFahrenheit(ambientTemp);
             }
             textView6.setText((int) Math.round(ambientTemp) + " " + temperatureUnit);
         } else {
@@ -1119,7 +1119,7 @@ public class MainActivity extends AppCompatActivity {
         if(Data.getOdometer() != null){
             Double odometer = Data.getOdometer();
             if (distanceFormat.contains("1")) {
-                odometer = kmToMiles(odometer);
+                odometer = Utils.kmToMiles(odometer);
             }
             textView7.setText(Math.round(odometer) + " " + distanceUnit);
         } else {
@@ -1137,8 +1137,8 @@ public class MainActivity extends AppCompatActivity {
             Double trip1 = Data.getTripOne();
             Double trip2 = Data.getTripTwo();
             if (distanceFormat.contains("1")) {
-                trip1 = kmToMiles(trip1);
-                trip2 = kmToMiles(trip2);
+                trip1 = Utils.kmToMiles(trip1);
+                trip2 = Utils.kmToMiles(trip2);
             }
             textView4.setText(Math.round(trip1) + " " + distanceUnit);
             textView8.setText(Math.round(trip2) + " " + distanceUnit);
@@ -1230,28 +1230,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static Context getContext(){
         return mContext;
-    }
-
-    // Unit Conversion Functions
-    // bar to psi
-    public double barToPsi(double bar){
-        return bar * 14.5037738;
-    }
-    // bar to kpa
-    public double barTokPa(double bar){
-        return bar * 100;
-    }
-    // bar to kg-f
-    public double barTokgf(double bar){
-        return bar * 1.0197162129779;
-    }
-    // kilometers to miles
-    public double kmToMiles(double kilometers){
-        return kilometers * 0.6214;
-    }
-    // Celsius to Fahrenheit
-    public double celsiusToFahrenheit(double celsius){
-        return (celsius * 1.8) + 32.0;
     }
 
     //format to 1 decimal place

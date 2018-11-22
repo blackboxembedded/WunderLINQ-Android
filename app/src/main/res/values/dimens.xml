@@ -21,8 +21,6 @@
 
 
     <!-- Text Sizes -->
-
-
     <dimen name="textsize_medium">30sp</dimen>
     <dimen name="textsize_small">25sp</dimen>
     <dimen name="textsize_very_small">20sp</dimen>

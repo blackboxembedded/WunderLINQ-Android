@@ -201,8 +201,8 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                     }
                     avgSpeed = avgSpeed / speeds.size();
                     if (distanceFormat.contains("1")) {
-                        avgSpeed = kmToMiles(avgSpeed);
-                        maxSpeed = kmToMiles(maxSpeed);
+                        avgSpeed = Utils.kmToMiles(avgSpeed);
+                        maxSpeed = Utils.kmToMiles(maxSpeed);
                     }
                     tvSpeed.setText("(" + oneDigit.format(avgSpeed) + "/" + oneDigit.format(maxSpeed) + ")" + speedUnit);
                 }
@@ -229,9 +229,9 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                     avgEngineTemp = avgEngineTemp / ambientTemps.size();
                     if (temperatureFormat.contains("1")) {
                         // F
-                        minEngineTemp = celsiusToFahrenheit(minEngineTemp);
-                        avgEngineTemp = celsiusToFahrenheit(avgEngineTemp);
-                        maxEngineTemp = celsiusToFahrenheit(maxEngineTemp);
+                        minEngineTemp = Utils.celsiusToFahrenheit(minEngineTemp);
+                        avgEngineTemp = Utils.celsiusToFahrenheit(avgEngineTemp);
+                        maxEngineTemp = Utils.celsiusToFahrenheit(maxEngineTemp);
                     }
                 }
                 if(minEngineTemp == null || maxEngineTemp == null){
@@ -248,9 +248,9 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                     avgAmbientTemp = avgAmbientTemp / ambientTemps.size();
                     if (temperatureFormat.contains("1")) {
                         // F
-                        minAmbientTemp = celsiusToFahrenheit(minAmbientTemp);
-                        avgAmbientTemp = celsiusToFahrenheit(avgAmbientTemp);
-                        maxAmbientTemp = celsiusToFahrenheit(maxAmbientTemp);
+                        minAmbientTemp = Utils.celsiusToFahrenheit(minAmbientTemp);
+                        avgAmbientTemp = Utils.celsiusToFahrenheit(avgAmbientTemp);
+                        maxAmbientTemp = Utils.celsiusToFahrenheit(maxAmbientTemp);
                     }
                 }
                 if(minAmbientTemp == null || maxAmbientTemp == null){
@@ -264,14 +264,14 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 if (endOdometer != null && startOdometer != null) {
                     distance = endOdometer - startOdometer;
                     if (distanceFormat.contains("1")) {
-                        distance = kmToMiles(distance);
+                        distance = Utils.kmToMiles(distance);
                     }
                 }
                 tvDistance.setText(oneDigit.format(distance) + distanceUnit);
 
                 // Calculate Duration
                 if (startTime != null && endTime != null) {
-                    printDifference(startTime, endTime);
+                    tvDuration.setText(calculateDuration(startTime, endTime));
                 }
 
             } catch (IOException e){
@@ -376,7 +376,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
             }
         }
     };
-    public void printDifference(Date startDate, Date endDate){
+    public String calculateDuration(Date startDate, Date endDate){
 
         //milliseconds
         long different = endDate.getTime() - startDate.getTime();
@@ -396,16 +396,8 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
         different = different % minutesInMilli;
 
         long elapsedSeconds = different / secondsInMilli;
-        tvDuration.setText(elapsedHours + " " + getString(R.string.hours) + ", " + elapsedMinutes +
-                " " + getString(R.string.minutes) + ", " + elapsedSeconds + " " + getString(R.string.seconds));
-    }
-    // kilometers to miles
-    public double kmToMiles(double kilometers){
-        return kilometers * 0.6214;
-    }
-    // Celsius to Fahrenheit
-    public double celsiusToFahrenheit(double celsius){
-        return (celsius * 1.8) + 32.0;
+        return elapsedHours + " " + getString(R.string.hours) + ", " + elapsedMinutes +
+                " " + getString(R.string.minutes) + ", " + elapsedSeconds + " " + getString(R.string.seconds);
     }
     //format to 1 decimal place
     DecimalFormat oneDigit = new DecimalFormat("#,##0.0");
