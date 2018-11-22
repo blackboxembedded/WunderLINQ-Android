@@ -4,8 +4,6 @@ package com.blackboxembedded.WunderLINQ;
  * Created by keithconger on 7/22/17.
  */
 
-import com.blackboxembedded.WunderLINQ.OTAFirmwareUpdate.UUIDDatabase;
-
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -14,7 +12,6 @@ import java.util.UUID;
  */
 public class GattAttributes {
     private static HashMap<String, String> attributes = new HashMap();
-
     private static HashMap<UUID, String> attributesUUID = new HashMap<UUID, String>();
 
     /**
@@ -23,12 +20,6 @@ public class GattAttributes {
     public static final String MOTORCYCLE_SERVICE = "02997340-015f-11e5-8c2b-0002a5d5c51b";
     public static final String LIN_MESSAGE_CHARACTERISTIC = "00000003-0000-1000-8000-00805f9b34fb";
     public static final String DFU_CHARACTERISTIC = "00000005-0010-0080-0000-805f9b34fb00";
-
-    /**
-     * OTA Characteristic
-     */
-    public static final String OTA_UPDATE_SERVICE = "00060000-f8ce-11e4-abf4-0002a5d5c51b";
-    public static final String OTA_UPDATE_CHARACTERISTIC = "00060001-f8ce-11e4-abf4-0002a5d5c51b";
 
     /**
      * Descriptor UUID's
@@ -61,10 +52,6 @@ public class GattAttributes {
         attributes.put(LIN_MESSAGE_CHARACTERISTIC, "LIN Message");
     }
     static {
-        //OTA Characteristics
-        attributesUUID.put(UUIDDatabase.UUID_OTA_UPDATE_SERVICE, "Bootloader Service");
-        attributesUUID.put(UUIDDatabase.UUID_OTA_UPDATE_CHARACTERISTIC, "Bootloader Data Characteristic");
-
         // Descriptors
         attributesUUID.put(UUIDDatabase.UUID_CHARACTERISTIC_EXTENDED_PROPERTIES, "Characteristic Extended Properties");
         attributesUUID.put(UUIDDatabase.UUID_CHARACTERISTIC_USER_DESCRIPTION, "Characteristic User Description");

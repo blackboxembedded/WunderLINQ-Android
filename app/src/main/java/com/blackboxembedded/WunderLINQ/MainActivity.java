@@ -137,12 +137,6 @@ public class MainActivity extends AppCompatActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
-            /*
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-                            */
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
@@ -717,7 +711,7 @@ public class MainActivity extends AppCompatActivity {
         if (mBluetoothLeService != null) {
             //final boolean result =
             Log.d(TAG,"mBluetoothLeService is null");
-            mBluetoothLeService.connect(mDeviceAddress,getString(R.string.device_name),this);
+            mBluetoothLeService.connect(mDeviceAddress,getString(R.string.device_name));
             //Log.d(TAG, "Connect request result=" + result);
         } else {
             Log.d(TAG,"mBluetoothLeService is NOT null");
@@ -825,7 +819,7 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
             // Automatically connects to the device upon successful start-up initialization.
-            mBluetoothLeService.connect(mDeviceAddress,getString(R.string.device_name),MainActivity.this);
+            mBluetoothLeService.connect(mDeviceAddress,getString(R.string.device_name));
         }
 
         @Override

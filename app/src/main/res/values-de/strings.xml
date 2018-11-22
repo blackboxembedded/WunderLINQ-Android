@@ -243,4 +243,6 @@
         Sie werden zum Hauptbildschirm zurückgeführt, wenn die App sich wieder mit der WunderLINQ Box verbindet sollte eine Update-Meldung angezeigt werden.</string>
     <string name="pref_btn_version_title">WunderLINQ Version</string>
     <string name="pref_btn_version_summary">WunderLINQ Firmware Update Modus starten</string>
+
+    <!-- AboutActivity -->
 </resources>

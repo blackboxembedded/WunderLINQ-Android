@@ -385,4 +385,6 @@
     <string name="pref_btn_version_title">WunderLINQ Version</string>
     <string name="pref_btn_version_summary">Vstoupit do režimu WunderLINQ Firmware Update</string>
     <string name="pref_btn_version_toast">Debug Menu aktivováno. Zavřete a znovu otevřete nastavení</string>
+
+    <!-- AboutActivity -->
 </resources>

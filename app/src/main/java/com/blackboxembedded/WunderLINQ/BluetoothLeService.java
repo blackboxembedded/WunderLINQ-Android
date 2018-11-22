@@ -18,7 +18,6 @@ import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -26,16 +25,9 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.blackboxembedded.WunderLINQ.OTAFirmwareUpdate.Constants;
-import com.blackboxembedded.WunderLINQ.OTAFirmwareUpdate.DescriptorParser;
-import com.blackboxembedded.WunderLINQ.OTAFirmwareUpdate.UUIDDatabase;
-import com.blackboxembedded.WunderLINQ.OTAFirmwareUpdate.Utils;
-
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -47,10 +39,8 @@ public class BluetoothLeService extends Service {
     private final static String TAG = "BluetoothLeService";
 
     private static Logger logger = null;
-    static FaultStatus faults = null;
 
     private static boolean fuelAlertSent = false;
-
     private static int prevBrakeValue = 0;
 
     private static SharedPreferences sharedPrefs;
@@ -65,20 +55,10 @@ public class BluetoothLeService extends Service {
             "com.example.bluetooth.le.ACTION_GATT_CONNECTING";
     public final static String ACTION_GATT_DISCONNECTED =
             "com.example.bluetooth.le.ACTION_GATT_DISCONNECTED";
-    public final static String ACTION_GATT_DISCONNECTED_CAROUSEL =
-            "com.example.bluetooth.le.ACTION_GATT_DISCONNECTED_CAROUSEL";
     public final static String ACTION_GATT_SERVICES_DISCOVERED =
             "com.example.bluetooth.le.ACTION_GATT_SERVICES_DISCOVERED";
     public final static String ACTION_DATA_AVAILABLE =
             "com.example.bluetooth.le.ACTION_DATA_AVAILABLE";
-    public final static String ACTION_OTA_DATA_AVAILABLE =
-            "com.blackboxembedded.wunderlinq.bluetooth.le.ACTION_OTA_DATA_AVAILABLE";
-    public final static String ACTION_GATT_DISCONNECTED_OTA =
-            "com.example.bluetooth.le.ACTION_GATT_DISCONNECTED_OTA";
-    public final static String ACTION_GATT_CONNECT_OTA =
-            "com.example.bluetooth.le.ACTION_GATT_CONNECT_OTA";
-    public final static String ACTION_GATT_SERVICES_DISCOVERED_OTA =
-            "com.example.bluetooth.le.ACTION_GATT_SERVICES_DISCOVERED_OTA";
     public final static String ACTION_GATT_CHARACTERISTIC_ERROR =
             "com.example.bluetooth.le.ACTION_GATT_CHARACTERISTIC_ERROR";
     public final static String ACTION_GATT_SERVICE_DISCOVERY_UNSUCCESSFUL =
@@ -91,6 +71,12 @@ public class BluetoothLeService extends Service {
             "android.bluetooth.device.action.ACTION_WRITE_FAILED";
     public final static String ACTION_WRITE_SUCCESS =
             "android.bluetooth.device.action.ACTION_WRITE_SUCCESS";
+
+    public static final String EXTRA_BYTE_VALUE = "com.blackboxembedded.wunderlinq.backgroundservices." +
+            "EXTRA_BYTE_VALUE";
+    public static final String EXTRA_BYTE_UUID_VALUE = "com.blackboxembedded.wunderlinq.backgroundservices." +
+            "EXTRA_BYTE_UUID_VALUE";
+
     /**
      * Connection status Constants
      */
@@ -103,22 +89,22 @@ public class BluetoothLeService extends Service {
     private final static String ACTION_PAIRING_REQUEST =
             "com.example.bluetooth.le.PAIRING_REQUEST";
     private static final int STATE_BONDED = 5;
+
     /**
      * BluetoothAdapter for handling connections
      */
     public static BluetoothAdapter mBluetoothAdapter;
     public static BluetoothGatt mBluetoothGatt;
+
     /**
-     * Disable?enable notification
+     * Disable/enable notification
      */
     public static ArrayList<BluetoothGattCharacteristic> mEnabledCharacteristics =
             new ArrayList<BluetoothGattCharacteristic>();
 
     public static boolean mDisableNotificationFlag = false;
 
-
     private static int mConnectionState = STATE_DISCONNECTED;
-    private static boolean mOtaExitBootloaderCmdInProgress = false;
     /**
      * Device address
      */
@@ -145,7 +131,7 @@ public class BluetoothLeService extends Service {
                 }
                 broadcastConnectionUpdate(intentAction);
                 String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
-                        mContext.getResources().getString(R.string.dl_connection_established);
+                        "Connection established";
                 Log.d(TAG,dataLog);
             }
             // GATT Server disconnected
@@ -156,10 +142,10 @@ public class BluetoothLeService extends Service {
                 }
                 broadcastConnectionUpdate(intentAction);
                 String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
-                        mContext.getResources().getString(R.string.dl_connection_disconnected);
+                        "Disconnected";
                 Log.d(TAG,dataLog);
                 Data.clear();
-                faults.clear();
+                FaultStatus.clear();
             }
             // GATT Server Connecting
             if (newState == BluetoothProfile.STATE_CONNECTING) {
@@ -169,7 +155,7 @@ public class BluetoothLeService extends Service {
                 }
                 broadcastConnectionUpdate(intentAction);
                 String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
-                        mContext.getResources().getString(R.string.dl_connection_establishing);
+                        "Connection establishing";
                 Log.d(TAG,dataLog);
             }
             // GATT Server disconnected
@@ -186,20 +172,12 @@ public class BluetoothLeService extends Service {
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             // GATT Services discovered
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                String dataLog2 = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
-                        mContext.getResources().getString(R.string.dl_service_discovery_status) +
-                        mContext.getResources().getString(R.string.dl_status_success);
-                Log.d(TAG,dataLog2);
                 broadcastConnectionUpdate(ACTION_GATT_SERVICES_DISCOVERED);
             } else if (status == BluetoothGatt.GATT_INSUFFICIENT_AUTHENTICATION ||
                     status == BluetoothGatt.GATT_INSUFFICIENT_ENCRYPTION) {
                 bondDevice();
                 broadcastConnectionUpdate(ACTION_GATT_SERVICE_DISCOVERY_UNSUCCESSFUL);
             } else {
-                String dataLog2 = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
-                        mContext.getResources().getString(R.string.dl_service_discovery_status) +
-                        mContext.getResources().getString(R.string.dl_status_failure) + status;
-                Log.d(TAG,dataLog2);
                 broadcastConnectionUpdate(ACTION_GATT_SERVICE_DISCOVERY_UNSUCCESSFUL);
             }
         }
@@ -221,11 +199,11 @@ public class BluetoothLeService extends Service {
 
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 String dataLog = "[" + serviceName + "|" + characteristicName + "|" + descriptorName + "] " +
-                        mContext.getResources().getString(R.string.dl_characteristic_write_request_status)
-                        + mContext.getResources().getString(R.string.dl_commaseparator) +
+                        "Write request status"
+                        + "," +
                         "[00]";
                 Intent intent = new Intent(ACTION_WRITE_SUCCESS);
-                mContext.sendBroadcast(intent);
+                MyApplication.getContext().sendBroadcast(intent);
                 Log.d(TAG,dataLog);
                 if (descriptor.getValue() != null)
                     addRemoveData(descriptor);
@@ -236,16 +214,15 @@ public class BluetoothLeService extends Service {
                     || status == BluetoothGatt.GATT_INSUFFICIENT_ENCRYPTION) {
                 bondDevice();
                 Intent intent = new Intent(ACTION_WRITE_FAILED);
-                mContext.sendBroadcast(intent);
+                MyApplication.getContext().sendBroadcast(intent);
             } else {
                 String dataLog = "[" + serviceName + "|" + characteristicName + "|" + descriptorName + "] " +
-                        mContext.getResources().getString(R.string.dl_characteristic_write_request_status)
-                        + mContext.getResources().getString(R.string.dl_status_failure) +
+                        "Write request status failed with error code: " +
                         +status;
                 Log.d(TAG,dataLog);
                 mDisableNotificationFlag = false;
                 Intent intent = new Intent(ACTION_WRITE_FAILED);
-                mContext.sendBroadcast(intent);
+                MyApplication.getContext().sendBroadcast(intent);
             }
         }
 
@@ -263,59 +240,11 @@ public class BluetoothLeService extends Service {
             String descriptorName = GattAttributes.lookupUUID(descriptor.getUuid(), descriptorUUIDText);
 
             String descriptorValue = " " + Utils.ByteArraytoHex(descriptor.getValue()) + " ";
-            if (status == BluetoothGatt.GATT_SUCCESS) {
-                UUID descriptorUUID = descriptor.getUuid();
-                final Intent intent = new Intent(ACTION_DATA_AVAILABLE);
-                Bundle mBundle = new Bundle();
-                // Putting the byte value read for GATT Db
-                mBundle.putByteArray(Constants.EXTRA_DESCRIPTOR_BYTE_VALUE,
-                        descriptor.getValue());
-                mBundle.putInt(Constants.EXTRA_BYTE_DESCRIPTOR_INSTANCE_VALUE,
-                        descriptor.getCharacteristic().getInstanceId());
-                String dataLog = "[" + serviceName + "|" + characteristicName + "|" + descriptorName + "] " +
-                        mContext.getResources().getString(R.string.dl_characteristic_read_response) +
-                        mContext.getResources().getString(R.string.dl_commaseparator) +
-                        "[" + descriptorValue + "]";
-                Log.d(TAG,dataLog);
-                mBundle.putString(Constants.EXTRA_DESCRIPTOR_BYTE_VALUE_UUID,
-                        descriptor.getUuid().toString());
-                mBundle.putString(Constants.EXTRA_DESCRIPTOR_BYTE_VALUE_CHARACTERISTIC_UUID,
-                        descriptor.getCharacteristic().getUuid().toString());
-                if (descriptorUUID.equals(UUIDDatabase.UUID_CLIENT_CHARACTERISTIC_CONFIG)) {
-                    String valueReceived = DescriptorParser
-                            .getClientCharacteristicConfiguration(descriptor, mContext);
-                    mBundle.putString(Constants.EXTRA_DESCRIPTOR_VALUE, valueReceived);
-                } else if (descriptorUUID.equals(UUIDDatabase.UUID_CHARACTERISTIC_EXTENDED_PROPERTIES)) {
-                    HashMap<String, String> receivedValuesMap = DescriptorParser
-                            .getCharacteristicExtendedProperties(descriptor, mContext);
-                    String reliableWriteStatus = receivedValuesMap.get(Constants.FIRST_BIT_KEY_VALUE);
-                    String writeAuxillaryStatus = receivedValuesMap.get(Constants.SECOND_BIT_KEY_VALUE);
-                    mBundle.putString(Constants.EXTRA_DESCRIPTOR_VALUE, reliableWriteStatus + "\n"
-                            + writeAuxillaryStatus);
-                } else if (descriptorUUID.equals(UUIDDatabase.UUID_CHARACTERISTIC_USER_DESCRIPTION)) {
-                    String description = DescriptorParser
-                            .getCharacteristicUserDescription(descriptor);
-                    mBundle.putString(Constants.EXTRA_DESCRIPTOR_VALUE, description);
-                } else if (descriptorUUID.equals(UUIDDatabase.UUID_SERVER_CHARACTERISTIC_CONFIGURATION)) {
-                    String broadcastStatus = DescriptorParser.
-                            getServerCharacteristicConfiguration(descriptor, mContext);
-                    mBundle.putString(Constants.EXTRA_DESCRIPTOR_VALUE, broadcastStatus);
-                }
-                intent.putExtras(mBundle);
-                /**
-                 * Sending the broad cast so that it can be received on
-                 * registered receivers
-                 */
 
-                mContext.sendBroadcast(intent);
-            } else {
-                String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
-                        mContext.getResources().getString(R.string.dl_characteristic_read_request_status) +
-                        mContext.getResources().
-                                getString(R.string.dl_status_failure) + status;
-                Log.d(TAG,dataLog);
-            }
-
+            String dataLog = "[" + serviceName + "|" + characteristicName + "|" + descriptorName + "] " +
+                    "Read response recieved with value ," +
+                    "[" + descriptorValue + "]";
+            Log.d(TAG,dataLog);
         }
 
         @Override
@@ -330,56 +259,16 @@ public class BluetoothLeService extends Service {
             String dataLog = "";
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 dataLog = "[" + serviceName + "|" + characteristicName + "] " +
-                        mContext.getResources().getString(R.string.dl_characteristic_write_request_status)
-                        + mContext.getResources().getString(R.string.dl_status_success);
-                if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_DFU_CHARACTERISTIC)){
-                    Log.d(TAG,"DFU Write Success");
-                    Set<BluetoothDevice> pairedDevices = MainActivity.mBluetoothAdapter.getBondedDevices();
-                    if (!pairedDevices.isEmpty()) {
-                        for (BluetoothDevice devices : pairedDevices) {
-                            if (devices.getName().equals("WunderLINQ")) {
-                                Log.d(TAG, "WunderLINQ previously paired");
-                                //TODO: KEC playing around
-                                /*
-                                try {
-                                    Log.d("unpairDevice()", "Start Un-Pairing...");
-                                    Method m = devices.getClass().getMethod("removeBond", (Class[]) null);
-                                    m.invoke(devices, (Object[]) null);
-                                    Log.d("unpairDevice()", "Un-Pairing finished.");
-                                } catch (Exception e) {
-                                    Log.e(TAG, e.getMessage());
-                                }
-                                */
-                                //TODO: KEC playing around end
-                            }
-                        }
-                    }
-                }
-
-                //timeStamp("OTA WRITE RESPONSE TIMESTAMP ");
-
+                        "write request status  - Success";
                 Log.d(TAG,dataLog);
             } else {
                 dataLog = "[" + serviceName + "|" + characteristicName + "] " +
-                        mContext.getResources().getString(R.string.dl_characteristic_write_request_status) +
-                        mContext.getResources().
-                                getString(R.string.dl_status_failure) + status;
+                        "Write request status - Failed with error code: " + status;
                 Intent intent = new Intent(ACTION_GATT_CHARACTERISTIC_ERROR);
-                intent.putExtra(Constants.EXTRA_CHARACTERISTIC_ERROR_MESSAGE, "" + status);
-                mContext.sendBroadcast(intent);
+                intent.putExtra("EXTRA_CHARACTERISTIC_ERROR_MESSAGE", "" + status);
+                MyApplication.getContext().sendBroadcast(intent);
                 Log.d(TAG,dataLog);
             }
-
-            Log.d(TAG, dataLog);
-            boolean isExitBootloaderCmd = false;
-            synchronized (mGattCallback) {
-                isExitBootloaderCmd = mOtaExitBootloaderCmdInProgress;
-                if (mOtaExitBootloaderCmdInProgress)
-                    mOtaExitBootloaderCmdInProgress = false;
-            }
-
-            if (isExitBootloaderCmd)
-                onOtaExitBootloaderComplete(status);
         }
 
         @Override
@@ -395,16 +284,13 @@ public class BluetoothLeService extends Service {
             // GATT Characteristic read
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 String dataLog = "[" + serviceName + "|" + characteristicName + "] " +
-                        mContext.getResources().getString(R.string.dl_characteristic_read_response) +
-                        mContext.getResources().getString(R.string.dl_commaseparator) +
+                        "Read response received with value , " +
                         "[" + characteristicValue + "]";
                 Log.d(TAG,dataLog);
                 broadcastNotifyUpdate(characteristic);
             } else {
                 String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
-                        mContext.getResources().getString(R.string.dl_characteristic_read_request_status) +
-                        mContext.getResources().
-                                getString(R.string.dl_status_failure) + status;
+                        "Read request status - failed with error code: " + status;
                 Log.d(TAG,dataLog);
                 if (status == BluetoothGatt.GATT_INSUFFICIENT_AUTHENTICATION
                         || status == BluetoothGatt.GATT_INSUFFICIENT_ENCRYPTION) {
@@ -423,50 +309,9 @@ public class BluetoothLeService extends Service {
             String characteristicName = GattAttributes.lookupUUID(characteristic.getUuid(), characteristicUUID);
 
             String characteristicValue = Utils.ByteArraytoHex(characteristic.getValue());
-            String dataLog = "[" + serviceName + "|" + characteristicName + "] " +
-                    mContext.getResources().
-                            getString(R.string.dl_characteristic_notification_response) +
-                    mContext.getResources().getString(R.string.dl_commaseparator) +
-                    "[ " + characteristicValue + " ]";
-            //Log.d(TAG,dataLog);
             broadcastNotifyUpdate(characteristic);
         }
-
-        @Override
-        public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
-            Resources res = mContext.getResources();
-            String dataLog = String.format(
-                    res.getString(R.string.exchange_mtu_rsp),
-                    mBluetoothDeviceName,
-                    mBluetoothDeviceAddress,
-                    res.getString(R.string.exchange_mtu),
-                    mtu,
-                    status);
-
-            Log.d(TAG,dataLog);
-        }
     };
-
-    public static void exchangeGattMtu(int mtu) {
-
-        int retry = 5;
-        boolean status = false;
-        while (!status && retry > 0) {
-            status = mBluetoothGatt.requestMtu(mtu);
-            retry--;
-        }
-
-        Resources res = mContext.getResources();
-        String dataLog = String.format(
-                res.getString(R.string.exchange_mtu_request),
-                mBluetoothDeviceName,
-                mBluetoothDeviceAddress,
-                res.getString(R.string.exchange_mtu),
-                mtu,
-                status ? 0x00 : 0x01);
-
-        Log.d(TAG,dataLog);
-    }
 
     private final IBinder mBinder = new LocalBinder();
     /**
@@ -478,1383 +323,54 @@ public class BluetoothLeService extends Service {
      */
     private BluetoothManager mBluetoothManager;
 
-    public static String getmBluetoothDeviceAddress() {
-        return mBluetoothDeviceAddress;
-    }
-
-    public static String getmBluetoothDeviceName() {
-        return mBluetoothDeviceName;
-    }
-
     private static void broadcastConnectionUpdate(final String action) {
         Log.d(TAG,"Action: " + action);
         final Intent intent = new Intent(action);
-        mContext.sendBroadcast(intent);
-    }
-
-    private static void broadcastWritwStatusUpdate(final String action) {
-        final Intent intent = new Intent((action));
-        mContext.sendBroadcast(intent);
+        MyApplication.getContext().sendBroadcast(intent);
     }
 
     private static void broadcastNotifyUpdate(final BluetoothGattCharacteristic characteristic) {
         final Intent intent = new Intent(BluetoothLeService.ACTION_DATA_AVAILABLE);
         Bundle mBundle = new Bundle();
         // Putting the byte value read for GATT Db
-        mBundle.putByteArray(Constants.EXTRA_BYTE_VALUE,
+        mBundle.putByteArray(EXTRA_BYTE_VALUE,
                 characteristic.getValue());
-        mBundle.putString(Constants.EXTRA_BYTE_UUID_VALUE,
+        mBundle.putString(EXTRA_BYTE_UUID_VALUE,
                 characteristic.getUuid().toString());
-        mBundle.putInt(Constants.EXTRA_BYTE_INSTANCE_VALUE,
-                characteristic.getInstanceId());
-        mBundle.putString(Constants.EXTRA_BYTE_SERVICE_UUID_VALUE,
-                characteristic.getService().getUuid().toString());
-        mBundle.putInt(Constants.EXTRA_BYTE_SERVICE_INSTANCE_VALUE,
-                characteristic.getService().getInstanceId());
 
-
-        //case for OTA characteristic received
-        if (characteristic.getUuid().equals(UUIDDatabase.UUID_OTA_UPDATE_CHARACTERISTIC)) {
-            Intent mIntentOTA = new Intent(BluetoothLeService.ACTION_OTA_DATA_AVAILABLE);
-            mIntentOTA.putExtras(mBundle);
-            mContext.sendBroadcast(mIntentOTA);
-        }
-        else if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_MESSAGE_CHARACTERISTIC)) {
+        if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_MESSAGE_CHARACTERISTIC)) {
             // For all other profiles, writes the data formatted in HEX.
             final byte[] data = characteristic.getValue();
-            Data.setLastMessage(data);
             if (data != null) {
-                //intent.putExtra(EXTRA_DATA, data);
-                final StringBuilder stringBuilder = new StringBuilder(data.length);
-                for (byte byteChar : data)
-                    stringBuilder.append(String.format("%02x", byteChar));
-
-                SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+                sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
                 if (sharedPrefs.getBoolean("prefDataLogging", false)) {
                     // Log data
                     if (logger == null) {
                         logger = new Logger();
                     }
-                    logger.write(stringBuilder.toString());
+                    logger.write(Utils.ByteArraytoHex(data));
                 }
-                int msgID = (data[0] & 0xFF) ;
-                switch (msgID) {
-                    case 0x00:
-                        //Log.d(TAG, "Message ID 0");
-                        byte[] vinValue = new byte[7];
-                        for (int x = 1; x <= 7; x++){
-                            vinValue[x - 1] = data[x];
-                        }
-                        String vin = new String(vinValue);
-                        Data.setVin(vin);
-
-                        break;
-                    case 0x01:
-                        //Log.d(TAG, "Message ID 1");
-                        //Fuel Range
-                        if ((data[4] & 0xFF) != 0xFF && (data[5] & 0xFF) != 0xFF) {
-                            double fuelRange = (((data[4] & 0xFF) >> 4) & 0x0f) + (((data[5] & 0xFF) & 0x0f) * 16) + ((((data[5] & 0xFF) >> 4) & 0x0f) * 256);
-                            Data.setFuelRange(fuelRange);
-                        }
-                        // Ambient Light
-                        int ambientLightValue = (data[6] & 0xFF) & 0x0f; // the lowest 4 bits
-                        Data.setAmbientLight(ambientLightValue);
-                        break;
-                    case 0x02:
-                        //Log.d(TAG, "Message ID 2");
-                        break;
-                    case 0x03:
-                        //Log.d(TAG, "Message ID 3");
-                        break;
-                    case 0x04:
-                        //Log.d(TAG, "Message ID 4");
-                        break;
-                    case 0x05:
-                        //Log.d(TAG, "Message ID 5");
-                        // Brakes
-                        int brakes = ((data[2] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
-                        if(prevBrakeValue == 0){
-                            prevBrakeValue = brakes;
-                        }
-                        if (prevBrakeValue != brakes) {
-                            prevBrakeValue = brakes;
-                            switch (brakes) {
-                                case 0x6:
-                                    //Front
-                                    Data.setFrontBrake(Data.getFrontBrake() + 1);
-                                    break;
-                                case 0x9:
-                                    //Back
-                                    Data.setRearBrake(Data.getRearBrake() + 1);
-                                    break;
-                                case 0xA:
-                                    //Both
-                                    Data.setFrontBrake(Data.getFrontBrake() + 1);
-                                    Data.setRearBrake(Data.getRearBrake() + 1);
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                        // ABS Fault
-                        int absValue = (data[3] & 0xFF) & 0x0f; // the lowest 4 bits
-                        switch (absValue){
-                            case 0x2:
-                                faults.setAbsSelfDiagActive(false);
-                                faults.setAbsDeactivatedActive(false);
-                                faults.setabsErrorActive(true);
-                                break;
-                            case 0x3:
-                                faults.setAbsSelfDiagActive(true);
-                                faults.setAbsDeactivatedActive(false);
-                                faults.setabsErrorActive(false);
-                                break;
-                            case 0x5:
-                                faults.setAbsSelfDiagActive(false);
-                                faults.setAbsDeactivatedActive(false);
-                                faults.setabsErrorActive(true);
-                                break;
-                            case 0x6:
-                                faults.setAbsSelfDiagActive(false);
-                                faults.setAbsDeactivatedActive(false);
-                                faults.setabsErrorActive(true);
-                                break;
-                            case 0x7:
-                                faults.setAbsSelfDiagActive(false);
-                                faults.setAbsDeactivatedActive(false);
-                                faults.setabsErrorActive(true);
-                                break;
-                            case 0x8:
-                                faults.setAbsSelfDiagActive(false);
-                                faults.setAbsDeactivatedActive(true);
-                                faults.setabsErrorActive(false);
-                                break;
-                            case 0xA:
-                                faults.setAbsSelfDiagActive(false);
-                                faults.setAbsDeactivatedActive(false);
-                                faults.setabsErrorActive(true);
-                                break;
-                            case 0xB:
-                                faults.setAbsSelfDiagActive(true);
-                                faults.setAbsDeactivatedActive(false);
-                                faults.setabsErrorActive(false);
-                                break;
-                            case 0xD:
-                                faults.setAbsSelfDiagActive(false);
-                                faults.setAbsDeactivatedActive(false);
-                                faults.setabsErrorActive(true);
-                                break;
-                            case 0xE:
-                                faults.setAbsSelfDiagActive(false);
-                                faults.setAbsDeactivatedActive(false);
-                                faults.setabsErrorActive(true);
-                                break;
-                            case 0xF:
-                                faults.setAbsSelfDiagActive(false);
-                                faults.setAbsDeactivatedActive(false);
-                                faults.setabsErrorActive(false);
-                                break;
-                            default:
-                                faults.setAbsSelfDiagActive(false);
-                                faults.setAbsDeactivatedActive(false);
-                                faults.setabsErrorActive(false);
-                                break;
-                        }
-
-                        // Tire Pressure
-                        if ((data[4] & 0xFF) != 0xFF){
-                            double rdcFront = (data[4] & 0xFF) / 50.0;
-                            Data.setFrontTirePressure(rdcFront);
-                            if (sharedPrefs.getBoolean("prefTPMSAlert",false)) {
-                                int pressureThreshold = Integer.parseInt(sharedPrefs.getString("prefTPMSAlertThreshold","-1"));
-                                if (pressureThreshold >= 0) {
-                                    String pressureFormat = sharedPrefs.getString("prefPressureF", "0");
-                                    if (pressureFormat.contains("1")) {
-                                        // KPa
-                                        if (pressureThreshold >= (rdcFront * 100)){
-                                            faults.setfrontTirePressureCriticalActive(true);
-                                            updateNotification(intent);
-                                        }
-                                    } else if (pressureFormat.contains("2")) {
-                                        // Kg-f
-                                        if (pressureThreshold >= (rdcFront * 1.0197162129779)){
-                                            faults.setfrontTirePressureCriticalActive(true);
-                                            updateNotification(intent);
-                                        }
-                                    } else if (pressureFormat.contains("3")) {
-                                        // Psi
-                                        if (pressureThreshold >= (rdcFront * 14.5037738)){
-                                            faults.setfrontTirePressureCriticalActive(true);
-                                            updateNotification(intent);
-                                        }
-                                    }
-                                    if (!(faults.getfrontTirePressureCriticalNotificationActive())) {
-                                        updateNotification(intent);
-                                        faults.setfrontTirePressureCriticalNotificationActive(true);
-                                    }
-                                } else {
-                                    if (faults.getfrontTirePressureCriticalNotificationActive()) {
-                                        updateNotification(intent);
-                                        faults.setfrontTirePressureCriticalNotificationActive(false);
-                                    }
-                                }
-                            }
-                        }
-                        if ((data[5] & 0xFF) != 0xFF){
-                            double rdcRear = (data[5] & 0xFF) / 50.0;
-                            Data.setRearTirePressure(rdcRear);
-                            if (sharedPrefs.getBoolean("prefTPMSAlert",false)) {
-                                int pressureThreshold = Integer.parseInt(sharedPrefs.getString("prefTPMSAlertThreshold","-1"));
-                                if (pressureThreshold >= 0) {
-                                    String pressureFormat = sharedPrefs.getString("prefPressureF", "0");
-                                    if (pressureFormat.contains("1")) {
-                                        // KPa
-                                        if (pressureThreshold >= (rdcRear * 100)){
-                                            faults.setrearTirePressureCriticalActive(true);
-                                        }
-                                    } else if (pressureFormat.contains("2")) {
-                                        // Kg-f
-                                        if (pressureThreshold >= (rdcRear * 1.0197162129779)){
-                                            faults.setrearTirePressureCriticalActive(true);
-                                        }
-                                    } else if (pressureFormat.contains("3")) {
-                                        // Psi
-                                        if (pressureThreshold >= (rdcRear * 14.5037738)){
-                                            faults.setrearTirePressureCriticalActive(true);
-                                        }
-                                    }
-                                    if (!(faults.getrearTirePressureCriticalNotificationActive())) {
-                                        updateNotification(intent);
-                                        faults.setrearTirePressureCriticalNotificationActive(true);
-                                    }
-                                } else {
-                                    if (faults.getrearTirePressureCriticalNotificationActive()) {
-                                        updateNotification(intent);
-                                        faults.setrearTirePressureCriticalNotificationActive(false);
-                                    }
-                                }
-                            }
-                        }
-
-                        if (!sharedPrefs.getBoolean("prefTPMSAlert",false)) {
-                            // Tire Pressure Faults
-                            switch (data[6] & 0xFF) {
-                                case 0xC9:
-                                    faults.setfrontTirePressureWarningActive(true);
-                                    faults.setrearTirePressureWarningActive(false);
-                                    faults.setfrontTirePressureCriticalActive(false);
-                                    faults.setrearTirePressureCriticalActive(false);
-                                    if (faults.getfrontTirePressureCriticalNotificationActive()) {
-                                        updateNotification(intent);
-                                        faults.setfrontTirePressureCriticalNotificationActive(false);
-                                    }
-                                    if (faults.getrearTirePressureCriticalNotificationActive()) {
-                                        updateNotification(intent);
-                                        faults.setrearTirePressureCriticalNotificationActive(false);
-                                    }
-                                    break;
-                                case 0xCA:
-                                    faults.setfrontTirePressureWarningActive(false);
-                                    faults.setrearTirePressureWarningActive(true);
-                                    faults.setfrontTirePressureCriticalActive(false);
-                                    faults.setrearTirePressureCriticalActive(false);
-                                    if (faults.getfrontTirePressureCriticalNotificationActive()) {
-                                        updateNotification(intent);
-                                        faults.setfrontTirePressureCriticalNotificationActive(false);
-                                    }
-                                    if (faults.getrearTirePressureCriticalNotificationActive()) {
-                                        updateNotification(intent);
-                                        faults.setrearTirePressureCriticalNotificationActive(false);
-                                    }
-                                    break;
-                                case 0xCB:
-                                    faults.setfrontTirePressureWarningActive(true);
-                                    faults.setrearTirePressureWarningActive(true);
-                                    faults.setfrontTirePressureCriticalActive(false);
-                                    faults.setrearTirePressureCriticalActive(false);
-                                    if (faults.getfrontTirePressureCriticalNotificationActive()) {
-                                        updateNotification(intent);
-                                        faults.setfrontTirePressureCriticalNotificationActive(false);
-                                    }
-                                    if (faults.getrearTirePressureCriticalNotificationActive()) {
-                                        updateNotification(intent);
-                                        faults.setrearTirePressureCriticalNotificationActive(false);
-                                    }
-                                    break;
-                                case 0xD1:
-                                    faults.setfrontTirePressureWarningActive(false);
-                                    faults.setrearTirePressureWarningActive(false);
-                                    faults.setfrontTirePressureCriticalActive(true);
-                                    faults.setrearTirePressureCriticalActive(false);
-                                    if (!(faults.getfrontTirePressureCriticalNotificationActive())) {
-                                        updateNotification(intent);
-                                        faults.setfrontTirePressureCriticalNotificationActive(true);
-                                    }
-                                    if (faults.getrearTirePressureCriticalNotificationActive()) {
-                                        updateNotification(intent);
-                                        faults.setrearTirePressureCriticalNotificationActive(false);
-                                    }
-                                    break;
-                                case 0xD2:
-                                    faults.setfrontTirePressureWarningActive(false);
-                                    faults.setrearTirePressureWarningActive(false);
-                                    faults.setfrontTirePressureCriticalActive(false);
-                                    faults.setrearTirePressureCriticalActive(true);
-                                    if (faults.getfrontTirePressureCriticalNotificationActive()) {
-                                        updateNotification(intent);
-                                        faults.setfrontTirePressureCriticalNotificationActive(false);
-                                    }
-                                    if (!(faults.getrearTirePressureCriticalNotificationActive())) {
-                                        updateNotification(intent);
-                                        faults.setrearTirePressureCriticalNotificationActive(true);
-                                    }
-                                    break;
-                                case 0xD3:
-                                    faults.setfrontTirePressureWarningActive(false);
-                                    faults.setrearTirePressureWarningActive(false);
-                                    faults.setfrontTirePressureCriticalActive(true);
-                                    faults.setrearTirePressureCriticalActive(true);
-                                    if (!(faults.getfrontTirePressureCriticalNotificationActive()) && !(faults.getrearTirePressureCriticalNotificationActive())) {
-                                        updateNotification(intent);
-                                        faults.setfrontTirePressureCriticalNotificationActive(true);
-                                        faults.setrearTirePressureCriticalNotificationActive(true);
-                                    }
-                                    break;
-                                default:
-                                    faults.setfrontTirePressureWarningActive(false);
-                                    faults.setrearTirePressureWarningActive(false);
-                                    faults.setfrontTirePressureCriticalActive(false);
-                                    faults.setrearTirePressureCriticalActive(false);
-                                    if (faults.getfrontTirePressureCriticalNotificationActive()) {
-                                        updateNotification(intent);
-                                        faults.setfrontTirePressureCriticalNotificationActive(false);
-                                    }
-                                    if (faults.getrearTirePressureCriticalNotificationActive()) {
-                                        updateNotification(intent);
-                                        faults.setrearTirePressureCriticalNotificationActive(false);
-                                    }
-                                    break;
-                            }
-                        }
-                        break;
-                    case 0x06:
-                        //Log.d(TAG, "Message ID 6");
-                        String gear;
-                        int gearValue = ((data[2] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
-                        switch (gearValue) {
-                            case 0x1:
-                                gear = "1";
-                                break;
-                            case 0x2:
-                                gear = "N";
-                                break;
-                            case 0x4:
-                                gear = "2";
-                                break;
-                            case 0x7:
-                                gear = "3";
-                                break;
-                            case 0x8:
-                                gear = "4";
-                                break;
-                            case 0xB:
-                                gear = "5";
-                                break;
-                            case 0xD:
-                                gear = "6";
-                                break;
-                            case 0xF:
-                                // Inbetween Gears
-                                gear = "-";
-                                break;
-                            default:
-                                gear = "-";
-                                Log.d(TAG, "Unknown gear value");
-                        }
-                        if(Data.getGear() != null) {
-                            if (!Data.getGear().equals(gear) && !gear.equals("-")) {
-                                Data.setNumberOfShifts(Data.getNumberOfShifts() + 1);
-                            }
-                        }
-                        Data.setGear(gear);
-
-                        // Throttle Position
-                        int minPosition = 36;
-                        int maxPosition = 236;
-                        double throttlePosition = (((data[3] & 0xFF) - minPosition) * 100) / (maxPosition - minPosition);
-                        Data.setThrottlePosition(throttlePosition);
-
-                        // Engine Temperature
-                        double engineTemp = ((data[4] & 0xFF) * 0.75) - 25;
-                        Data.setEngineTemperature(engineTemp);
-
-                        // ASC Fault
-                        int ascValue = ((data[5] & 0xFF)  >> 4) & 0x0f; // the highest 4 bits.
-                        switch (ascValue){
-                            case 0x1:
-                                faults.setAscSelfDiagActive(false);
-                                faults.setAscInterventionActive(true);
-                                faults.setAscDeactivatedActive(false);
-                                faults.setascErrorActive(false);
-                                break;
-                            case 0x2:
-                                faults.setAscSelfDiagActive(false);
-                                faults.setAscInterventionActive(false);
-                                faults.setAscDeactivatedActive(false);
-                                faults.setascErrorActive(true);
-                                break;
-                            case 0x3:
-                                faults.setAscSelfDiagActive(true);
-                                faults.setAscInterventionActive(false);
-                                faults.setAscDeactivatedActive(false);
-                                faults.setascErrorActive(false);
-                                break;
-                            case 0x5:
-                                faults.setAscSelfDiagActive(false);
-                                faults.setAscInterventionActive(false);
-                                faults.setAscDeactivatedActive(false);
-                                faults.setascErrorActive(true);
-                                break;
-                            case 0x6:
-                                faults.setAscSelfDiagActive(false);
-                                faults.setAscInterventionActive(false);
-                                faults.setAscDeactivatedActive(false);
-                                faults.setascErrorActive(true);
-                                break;
-                            case 0x7:
-                                faults.setAscSelfDiagActive(false);
-                                faults.setAscInterventionActive(false);
-                                faults.setAscDeactivatedActive(false);
-                                faults.setascErrorActive(true);
-                                break;
-                            case 0x8:
-                                faults.setAscSelfDiagActive(false);
-                                faults.setAscInterventionActive(false);
-                                faults.setAscDeactivatedActive(true);
-                                faults.setascErrorActive(false);
-                                break;
-                            case 0x9:
-                                faults.setAscSelfDiagActive(false);
-                                faults.setAscInterventionActive(true);
-                                faults.setAscDeactivatedActive(false);
-                                faults.setascErrorActive(false);
-                                break;
-                            case 0xA:
-                                faults.setAscSelfDiagActive(false);
-                                faults.setAscInterventionActive(false);
-                                faults.setAscDeactivatedActive(false);
-                                faults.setascErrorActive(true);
-                                break;
-                            case 0xB:
-                                faults.setAscSelfDiagActive(true);
-                                faults.setAscInterventionActive(false);
-                                faults.setAscDeactivatedActive(false);
-                                faults.setascErrorActive(false);
-                                break;
-                            case 0xD:
-                                faults.setAscSelfDiagActive(false);
-                                faults.setAscInterventionActive(false);
-                                faults.setAscDeactivatedActive(false);
-                                faults.setascErrorActive(true);
-                                break;
-                            case 0xE:
-                                faults.setAscSelfDiagActive(false);
-                                faults.setAscInterventionActive(false);
-                                faults.setAscDeactivatedActive(false);
-                                faults.setascErrorActive(true);
-                                break;
-                            default:
-                                faults.setAscSelfDiagActive(false);
-                                faults.setAscInterventionActive(false);
-                                faults.setAscDeactivatedActive(false);
-                                faults.setascErrorActive(false);
-                                break;
-                        }
-
-                        //Oil Fault
-                        int oilValue = (data[5] & 0xFF) & 0x0f; // the lowest 4 bits
-                        switch (oilValue){
-                            case 0x2:
-                                faults.setOilLowActive(true);
-                                break;
-                            case 0x6:
-                                faults.setOilLowActive(true);
-                                break;
-                            case 0xA:
-                                faults.setOilLowActive(true);
-                                break;
-                            case 0xE:
-                                faults.setOilLowActive(true);
-                                break;
-                            default:
-                                faults.setOilLowActive(false);
-                                break;
-                        }
-
-                        break;
-                    case 0x07:
-                        //Log.d(TAG, "Message ID 7");
-                        //Average Speed
-                        if ((data[1] & 0xFF) != 0xFF && (data[2] & 0xFF) != 0xFF) {
-                            double avgSpeed = ((((data[1] & 0xFF) >> 4) & 0x0f) * 2) + (((data[1] & 0xFF) & 0x0f) * 0.125) + (((data[2] & 0xFF) & 0x0f) * 32);
-                            Data.setAvgSpeed(avgSpeed);
-                        }
-
-                        //Speed
-                        if ((data[3] & 0xFF) != 0xFF) {
-                            int speed = (data[3] & 0xFF) * 2;
-                            Data.setSpeed(speed);
-                        }
-
-                        //Voltage
-                        double voltage = (data[4] & 0xFF) / 10;
-                        Data.setvoltage(voltage);
-
-                        // Fuel Fault
-                        int fuelValue = ((data[5] & 0xFF)  >> 4) & 0x0f; // the highest 4 bits.
-                        switch (fuelValue){
-                            case 0x2:
-                                faults.setfuelFaultActive(true);
-                                fuelAlert();
-                                break;
-                            case 0x6:
-                                faults.setfuelFaultActive(true);
-                                fuelAlert();
-                                break;
-                            case 0xA:
-                                faults.setfuelFaultActive(true);
-                                fuelAlert();
-                                break;
-                            case 0xE:
-                                faults.setfuelFaultActive(true);
-                                fuelAlert();
-                                break;
-                            default:
-                                faults.setfuelFaultActive(false);
-                                fuelAlertSent = false;
-                                break;
-                        }
-                        // General Fault
-                        int generalFault = (data[5] & 0xFF) & 0x0f; // the lowest 4 bits
-                        switch (generalFault){
-                            case 0x1:
-                                faults.setGeneralFlashingYellowActive(true);
-                                faults.setGeneralShowsYellowActive(false);
-                                faults.setGeneralFlashingRedActive(false);
-                                faults.setGeneralShowsRedActive(false);
-                                if(faults.getgeneralFlashingRedNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(false);
-                                }
-                                if(faults.getgeneralShowsRedNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setGeneralShowsRedNotificationActive(false);
-                                }
-                                break;
-                            case 0x2:
-                                faults.setGeneralFlashingYellowActive(false);
-                                faults.setGeneralShowsYellowActive(true);
-                                faults.setGeneralFlashingRedActive(false);
-                                faults.setGeneralShowsRedActive(false);
-                                if(faults.getgeneralFlashingRedNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(false);
-                                }
-                                if(faults.getgeneralShowsRedNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setGeneralShowsRedNotificationActive(false);
-                                }
-                                break;
-                            case 0x4:
-                                faults.setGeneralFlashingYellowActive(false);
-                                faults.setGeneralShowsYellowActive(false);
-                                faults.setGeneralFlashingRedActive(true);
-                                faults.setGeneralShowsRedActive(false);
-                                if(!(faults.getgeneralFlashingRedNotificationActive())) {
-                                    updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(true);
-                                }
-                                if(faults.getgeneralShowsRedNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setGeneralShowsRedNotificationActive(false);
-                                }
-                                break;
-                            case 0x5:
-                                faults.setGeneralFlashingYellowActive(true);
-                                faults.setGeneralShowsYellowActive(false);
-                                faults.setGeneralFlashingRedActive(true);
-                                faults.setGeneralShowsRedActive(false);
-                                if(!(faults.getgeneralFlashingRedNotificationActive())) {
-                                    updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(true);
-                                }
-                                if(faults.getgeneralShowsRedNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setGeneralShowsRedNotificationActive(false);
-                                }
-                                break;
-                            case 0x6:
-                                faults.setGeneralFlashingYellowActive(false);
-                                faults.setGeneralShowsYellowActive(true);
-                                faults.setGeneralFlashingRedActive(true);
-                                faults.setGeneralShowsRedActive(false);
-                                if(!(faults.getgeneralFlashingRedNotificationActive())) {
-                                    updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(true);
-                                }
-                                if(faults.getgeneralShowsRedNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setGeneralShowsRedNotificationActive(false);
-                                }
-                                break;
-                            case 0x7:
-                                faults.setGeneralFlashingYellowActive(false);
-                                faults.setGeneralShowsYellowActive(false);
-                                faults.setGeneralFlashingRedActive(true);
-                                faults.setGeneralShowsRedActive(false);
-                                if(!(faults.getgeneralFlashingRedNotificationActive())) {
-                                    updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(true);
-                                }
-                                if(faults.getgeneralShowsRedNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setGeneralShowsRedNotificationActive(false);
-                                }
-                                break;
-                            case 0x8:
-                                faults.setGeneralFlashingYellowActive(false);
-                                faults.setGeneralShowsYellowActive(false);
-                                faults.setGeneralFlashingRedActive(false);
-                                faults.setGeneralShowsRedActive(true);
-                                if(faults.getgeneralFlashingRedNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(false);
-                                }
-                                if(!(faults.getgeneralShowsRedNotificationActive())) {
-                                    updateNotification(intent);
-                                    faults.setGeneralShowsRedNotificationActive(true);
-                                }
-                                break;
-                            case 0x9:
-                                faults.setGeneralFlashingYellowActive(false);
-                                faults.setGeneralShowsYellowActive(false);
-                                faults.setGeneralFlashingRedActive(true);
-                                faults.setGeneralShowsRedActive(true);
-                                if(!faults.getgeneralShowsRedNotificationActive() && !faults.getgeneralFlashingRedNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(true);
-                                    faults.setGeneralShowsRedNotificationActive(true);
-                                }
-                                break;
-                            case 0xA:
-                                faults.setGeneralFlashingYellowActive(false);
-                                faults.setGeneralShowsYellowActive(true);
-                                faults.setGeneralFlashingRedActive(false);
-                                faults.setGeneralShowsRedActive(true);
-                                if(faults.getgeneralFlashingRedNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(false);
-                                }
-                                if(!(faults.getgeneralShowsRedNotificationActive())) {
-                                    updateNotification(intent);
-                                    faults.setGeneralShowsRedNotificationActive(true);
-                                }
-                                break;
-                            case 0xB:
-                                faults.setGeneralFlashingYellowActive(false);
-                                faults.setGeneralShowsYellowActive(false);
-                                faults.setGeneralFlashingRedActive(false);
-                                faults.setGeneralShowsRedActive(true);
-                                if(faults.getgeneralFlashingRedNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(false);
-                                }
-                                if(!(faults.getgeneralShowsRedNotificationActive())) {
-                                    updateNotification(intent);
-                                    faults.setGeneralShowsRedNotificationActive(true);
-                                }
-                                break;
-                            case 0xD:
-                                faults.setGeneralFlashingYellowActive(true);
-                                faults.setGeneralShowsYellowActive(false);
-                                faults.setGeneralFlashingRedActive(false);
-                                faults.setGeneralShowsRedActive(false);
-                                if(faults.getgeneralFlashingRedNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(false);
-                                }
-                                if(faults.getgeneralShowsRedNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setGeneralShowsRedNotificationActive(false);
-                                }
-                                break;
-                            case 0xE:
-                                faults.setGeneralFlashingYellowActive(false);
-                                faults.setGeneralShowsYellowActive(true);
-                                faults.setGeneralFlashingRedActive(false);
-                                faults.setGeneralShowsRedActive(false);
-                                if(faults.getgeneralFlashingRedNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(false);
-                                }
-                                if(faults.getgeneralShowsRedNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setGeneralShowsRedNotificationActive(false);
-                                }
-                                break;
-                            default:
-                                faults.setGeneralFlashingYellowActive(false);
-                                faults.setGeneralShowsYellowActive(false);
-                                faults.setGeneralFlashingRedActive(false);
-                                faults.setGeneralShowsRedActive(false);
-                                if(faults.getgeneralFlashingRedNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setGeneralFlashingRedNotificationActive(false);
-                                }
-                                if(faults.getgeneralShowsRedNotificationActive()) {
-                                    updateNotification(intent);
-                                    faults.setGeneralShowsRedNotificationActive(false);
-                                }
-                                break;
-                        }
-                        break;
-                    case 0x08:
-                        //Log.d(TAG, "Message ID 8");
-                        double ambientTemp = ((data[1] & 0xFF) * 0.50) - 40;
-                        Data.setAmbientTemperature(ambientTemp);
-                        if(ambientTemp <= 0.0){
-                            faults.seticeWarnActive(true);
-                        } else {
-                            faults.seticeWarnActive(false);
-                        }
-
-                        // LAMP Faults
-                        if (((data[3] & 0xFF) != 0xFF) ) {
-                            // LAMPF 1
-                            int lampfOneValue = ((data[3] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
-                            switch (lampfOneValue) {
-                                case 0x1:
-                                    faults.setAddFrontLightOneActive(true);
-                                    faults.setAddFrontLightTwoActive(false);
-                                    break;
-                                case 0x2:
-                                    faults.setAddFrontLightOneActive(false);
-                                    faults.setAddFrontLightTwoActive(true);
-                                    break;
-                                case 0x3:
-                                    faults.setAddFrontLightOneActive(true);
-                                    faults.setAddFrontLightTwoActive(true);
-                                    break;
-                                case 0x5:
-                                    faults.setAddFrontLightOneActive(true);
-                                    faults.setAddFrontLightTwoActive(false);
-                                    break;
-                                case 0x6:
-                                    faults.setAddFrontLightOneActive(false);
-                                    faults.setAddFrontLightTwoActive(true);
-                                    break;
-                                case 0x9:
-                                    faults.setAddFrontLightOneActive(true);
-                                    faults.setAddFrontLightTwoActive(false);
-                                    break;
-                                case 0xA:
-                                    faults.setAddFrontLightOneActive(false);
-                                    faults.setAddFrontLightTwoActive(true);
-                                    break;
-                                case 0xB:
-                                    faults.setAddFrontLightOneActive(true);
-                                    faults.setAddFrontLightTwoActive(true);
-                                    break;
-                                case 0xD:
-                                    faults.setAddFrontLightOneActive(true);
-                                    faults.setAddFrontLightTwoActive(false);
-                                    break;
-                                case 0xE:
-                                    faults.setAddFrontLightOneActive(false);
-                                    faults.setAddFrontLightTwoActive(true);
-                                    break;
-                                default:
-                                    faults.setAddFrontLightOneActive(false);
-                                    faults.setAddFrontLightTwoActive(false);
-                                    break;
-                            }
-                        }
-                        // LAMPF 2
-                        if (((data[4] & 0xFF) != 0xFF) ) {
-                            int lampfTwoHighValue = ((data[4] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
-                            switch (lampfTwoHighValue) {
-                                case 0x1:
-                                    faults.setDaytimeRunningActive(true);
-                                    faults.setfrontLeftSignalActive(false);
-                                    faults.setfrontRightSignalActive(false);
-                                    break;
-                                case 0x2:
-                                    faults.setDaytimeRunningActive(false);
-                                    faults.setfrontLeftSignalActive(true);
-                                    faults.setfrontRightSignalActive(false);
-                                    break;
-                                case 0x3:
-                                    faults.setDaytimeRunningActive(true);
-                                    faults.setfrontLeftSignalActive(true);
-                                    faults.setfrontRightSignalActive(false);
-                                    break;
-                                case 0x4:
-                                    faults.setDaytimeRunningActive(false);
-                                    faults.setfrontLeftSignalActive(false);
-                                    faults.setfrontRightSignalActive(true);
-                                    break;
-                                case 0x5:
-                                    faults.setDaytimeRunningActive(true);
-                                    faults.setfrontLeftSignalActive(false);
-                                    faults.setfrontRightSignalActive(true);
-                                    break;
-                                case 0x6:
-                                    faults.setDaytimeRunningActive(false);
-                                    faults.setfrontLeftSignalActive(true);
-                                    faults.setfrontRightSignalActive(true);
-                                    break;
-                                case 0x7:
-                                    faults.setDaytimeRunningActive(true);
-                                    faults.setfrontLeftSignalActive(true);
-                                    faults.setfrontRightSignalActive(true);
-                                    break;
-                                case 0x9:
-                                    faults.setDaytimeRunningActive(true);
-                                    faults.setfrontLeftSignalActive(false);
-                                    faults.setfrontRightSignalActive(false);
-                                    break;
-                                case 0xA:
-                                    faults.setDaytimeRunningActive(false);
-                                    faults.setfrontLeftSignalActive(true);
-                                    faults.setfrontRightSignalActive(false);
-                                    break;
-                                case 0xB:
-                                    faults.setDaytimeRunningActive(true);
-                                    faults.setfrontLeftSignalActive(true);
-                                    faults.setfrontRightSignalActive(false);
-                                    break;
-                                case 0xC:
-                                    faults.setDaytimeRunningActive(false);
-                                    faults.setfrontLeftSignalActive(false);
-                                    faults.setfrontRightSignalActive(true);
-                                    break;
-                                case 0xD:
-                                    faults.setDaytimeRunningActive(true);
-                                    faults.setfrontLeftSignalActive(false);
-                                    faults.setfrontRightSignalActive(true);
-                                    break;
-                                case 0xE:
-                                    faults.setDaytimeRunningActive(false);
-                                    faults.setfrontLeftSignalActive(true);
-                                    faults.setfrontRightSignalActive(true);
-                                    break;
-                                case 0xF:
-                                    faults.setDaytimeRunningActive(true);
-                                    faults.setfrontLeftSignalActive(true);
-                                    faults.setfrontRightSignalActive(true);
-                                    break;
-                                default:
-                                    faults.setDaytimeRunningActive(false);
-                                    faults.setfrontLeftSignalActive(false);
-                                    faults.setfrontRightSignalActive(false);
-                                    break;
-                            }
-                            int lampfTwoLowValue = (data[4] & 0xFF) & 0x0f; // the lowest 4 bits
-                            switch (lampfTwoLowValue) {
-                                case 0x1:
-                                    faults.setFrontParkingLightOneActive(true);
-                                    faults.setFrontParkingLightTwoActive(false);
-                                    faults.setLowBeamActive(false);
-                                    faults.setHighBeamActive(false);
-                                    break;
-                                case 0x2:
-                                    faults.setFrontParkingLightOneActive(false);
-                                    faults.setFrontParkingLightTwoActive(true);
-                                    faults.setLowBeamActive(false);
-                                    faults.setHighBeamActive(false);
-                                    break;
-                                case 0x3:
-                                    faults.setFrontParkingLightOneActive(true);
-                                    faults.setFrontParkingLightTwoActive(true);
-                                    faults.setLowBeamActive(false);
-                                    faults.setHighBeamActive(false);
-                                    break;
-                                case 0x4:
-                                    faults.setFrontParkingLightOneActive(false);
-                                    faults.setFrontParkingLightTwoActive(false);
-                                    faults.setLowBeamActive(true);
-                                    faults.setHighBeamActive(false);
-                                    break;
-                                case 0x5:
-                                    faults.setFrontParkingLightOneActive(true);
-                                    faults.setFrontParkingLightTwoActive(false);
-                                    faults.setLowBeamActive(true);
-                                    faults.setHighBeamActive(false);
-                                    break;
-                                case 0x6:
-                                    faults.setFrontParkingLightOneActive(false);
-                                    faults.setFrontParkingLightTwoActive(true);
-                                    faults.setLowBeamActive(true);
-                                    faults.setHighBeamActive(false);
-                                    break;
-                                case 0x7:
-                                    faults.setFrontParkingLightOneActive(true);
-                                    faults.setFrontParkingLightTwoActive(true);
-                                    faults.setLowBeamActive(true);
-                                    faults.setHighBeamActive(false);
-                                    break;
-                                case 0x8:
-                                    faults.setFrontParkingLightOneActive(false);
-                                    faults.setFrontParkingLightTwoActive(false);
-                                    faults.setLowBeamActive(false);
-                                    faults.setHighBeamActive(true);
-                                    break;
-                                case 0x9:
-                                    faults.setFrontParkingLightOneActive(true);
-                                    faults.setFrontParkingLightTwoActive(false);
-                                    faults.setLowBeamActive(false);
-                                    faults.setHighBeamActive(true);
-                                    break;
-                                case 0xA:
-                                    faults.setFrontParkingLightOneActive(false);
-                                    faults.setFrontParkingLightTwoActive(true);
-                                    faults.setLowBeamActive(false);
-                                    faults.setHighBeamActive(true);
-                                    break;
-                                case 0xB:
-                                    faults.setFrontParkingLightOneActive(true);
-                                    faults.setFrontParkingLightTwoActive(true);
-                                    faults.setLowBeamActive(false);
-                                    faults.setHighBeamActive(true);
-                                    break;
-                                case 0xC:
-                                    faults.setFrontParkingLightOneActive(false);
-                                    faults.setFrontParkingLightTwoActive(false);
-                                    faults.setLowBeamActive(true);
-                                    faults.setHighBeamActive(true);
-                                    break;
-                                case 0xD:
-                                    faults.setFrontParkingLightOneActive(true);
-                                    faults.setFrontParkingLightTwoActive(false);
-                                    faults.setLowBeamActive(true);
-                                    faults.setHighBeamActive(true);
-                                    break;
-                                case 0xE:
-                                    faults.setFrontParkingLightOneActive(false);
-                                    faults.setFrontParkingLightTwoActive(true);
-                                    faults.setLowBeamActive(true);
-                                    faults.setHighBeamActive(true);
-                                    break;
-                                case 0xF:
-                                    faults.setFrontParkingLightOneActive(true);
-                                    faults.setFrontParkingLightTwoActive(true);
-                                    faults.setLowBeamActive(true);
-                                    faults.setHighBeamActive(true);
-                                    break;
-                                default:
-                                    faults.setFrontParkingLightOneActive(false);
-                                    faults.setFrontParkingLightTwoActive(false);
-                                    faults.setLowBeamActive(false);
-                                    faults.setHighBeamActive(false);
-                                    break;
-                            }
-                        }
-
-                        // LAMPF 3
-                        if (((data[5] & 0xFF) != 0xFF) ) {
-                            int lampfThreeHighValue = ((data[5] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
-                            switch (lampfThreeHighValue) {
-                                case 0x1:
-                                    faults.setrearRightSignalActive(true);
-                                    break;
-                                case 0x3:
-                                    faults.setrearRightSignalActive(true);
-                                    break;
-                                case 0x5:
-                                    faults.setrearRightSignalActive(true);
-                                    break;
-                                case 0x7:
-                                    faults.setrearRightSignalActive(true);
-                                    break;
-                                case 0x9:
-                                    faults.setrearRightSignalActive(true);
-                                    break;
-                                case 0xB:
-                                    faults.setrearRightSignalActive(true);
-                                    break;
-                                case 0xD:
-                                    faults.setrearRightSignalActive(true);
-                                    break;
-                                case 0xF:
-                                    faults.setrearRightSignalActive(true);
-                                default:
-                                    faults.setrearRightSignalActive(false);
-                                    break;
-                            }
-                            int lampfThreeLowValue = (data[5] & 0xFF) & 0x0f; // the lowest 4 bits
-                            switch (lampfThreeLowValue) {
-                                case 0x1:
-                                    faults.setrearLeftSignalActive(false);
-                                    faults.setRearLightActive(true);
-                                    faults.setBrakeLightActive(false);
-                                    faults.setLicenseLightActive(false);
-                                    break;
-                                case 0x2:
-                                    faults.setrearLeftSignalActive(false);
-                                    faults.setRearLightActive(false);
-                                    faults.setBrakeLightActive(true);
-                                    faults.setLicenseLightActive(false);
-                                    break;
-                                case 0x3:
-                                    faults.setrearLeftSignalActive(false);
-                                    faults.setRearLightActive(true);
-                                    faults.setBrakeLightActive(true);
-                                    faults.setLicenseLightActive(false);
-                                    break;
-                                case 0x4:
-                                    faults.setrearLeftSignalActive(false);
-                                    faults.setRearLightActive(false);
-                                    faults.setBrakeLightActive(false);
-                                    faults.setLicenseLightActive(true);
-                                    break;
-                                case 0x5:
-                                    faults.setrearLeftSignalActive(true);
-                                    faults.setRearLightActive(false);
-                                    faults.setBrakeLightActive(false);
-                                    faults.setLicenseLightActive(true);
-                                    break;
-                                case 0x6:
-                                    faults.setrearLeftSignalActive(false);
-                                    faults.setRearLightActive(false);
-                                    faults.setBrakeLightActive(true);
-                                    faults.setLicenseLightActive(true);
-                                    break;
-                                case 0x7:
-                                    faults.setrearLeftSignalActive(false);
-                                    faults.setRearLightActive(true);
-                                    faults.setBrakeLightActive(true);
-                                    faults.setLicenseLightActive(true);
-                                    break;
-                                case 0x8:
-                                    faults.setrearLeftSignalActive(true);
-                                    faults.setRearLightActive(false);
-                                    faults.setBrakeLightActive(false);
-                                    faults.setLicenseLightActive(false);
-                                    break;
-                                case 0x9:
-                                    faults.setrearLeftSignalActive(true);
-                                    faults.setRearLightActive(true);
-                                    faults.setBrakeLightActive(false);
-                                    faults.setLicenseLightActive(false);
-                                    break;
-                                case 0xA:
-                                    faults.setrearLeftSignalActive(true);
-                                    faults.setRearLightActive(false);
-                                    faults.setBrakeLightActive(true);
-                                    faults.setLicenseLightActive(false);
-                                    break;
-                                case 0xC:
-                                    faults.setrearLeftSignalActive(true);
-                                    faults.setRearLightActive(false);
-                                    faults.setBrakeLightActive(false);
-                                    faults.setLicenseLightActive(true);
-                                    break;
-                                case 0xD:
-                                    faults.setrearLeftSignalActive(true);
-                                    faults.setRearLightActive(true);
-                                    faults.setBrakeLightActive(true);
-                                    faults.setLicenseLightActive(false);
-                                    break;
-                                case 0xE:
-                                    faults.setrearLeftSignalActive(true);
-                                    faults.setRearLightActive(false);
-                                    faults.setBrakeLightActive(true);
-                                    faults.setLicenseLightActive(true);
-                                    break;
-                                case 0xF:
-                                    faults.setrearLeftSignalActive(true);
-                                    faults.setRearLightActive(true);
-                                    faults.setBrakeLightActive(true);
-                                    faults.setLicenseLightActive(true);
-                                    break;
-                                default:
-                                    faults.setrearLeftSignalActive(false);
-                                    faults.setRearLightActive(false);
-                                    faults.setBrakeLightActive(false);
-                                    faults.setLicenseLightActive(false);
-                                    break;
-                            }
-                        }
-
-                        // LAMPF 4
-                        if (((data[6] & 0xFF) != 0xFF) ) {
-                            int lampfFourHighValue = ((data[6] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
-                            switch (lampfFourHighValue) {
-                                case 0x1:
-                                    faults.setRearFogLightActive(true);
-                                    break;
-                                case 0x3:
-                                    faults.setRearFogLightActive(true);
-                                    break;
-                                case 0x5:
-                                    faults.setRearFogLightActive(true);
-                                    break;
-                                case 0x7:
-                                    faults.setRearFogLightActive(true);
-                                    break;
-                                case 0x9:
-                                    faults.setRearFogLightActive(true);
-                                    break;
-                                case 0xB:
-                                    faults.setRearFogLightActive(true);
-                                    break;
-                                case 0xD:
-                                    faults.setRearFogLightActive(true);
-                                    break;
-                                case 0xF:
-                                    faults.setRearFogLightActive(true);
-                                default:
-                                    faults.setRearFogLightActive(false);
-                                    break;
-                            }
-                            int lampfFourLowValue = (data[6] & 0xFF) & 0x0f; // the lowest 4 bits
-                            switch (lampfFourLowValue) {
-                                case 0x1:
-                                    faults.setAddDippedLightActive(true);
-                                    faults.setAddBrakeLightActive(false);
-                                    faults.setFrontLampOneLightActive(false);
-                                    faults.setFrontLampTwoLightActive(false);
-                                    break;
-                                case 0x2:
-                                    faults.setAddDippedLightActive(false);
-                                    faults.setAddBrakeLightActive(true);
-                                    faults.setFrontLampOneLightActive(false);
-                                    faults.setFrontLampTwoLightActive(false);
-                                    break;
-                                case 0x3:
-                                    faults.setAddDippedLightActive(true);
-                                    faults.setAddBrakeLightActive(true);
-                                    faults.setFrontLampOneLightActive(false);
-                                    faults.setFrontLampTwoLightActive(false);
-                                    break;
-                                case 0x4:
-                                    faults.setAddDippedLightActive(false);
-                                    faults.setAddBrakeLightActive(false);
-                                    faults.setFrontLampOneLightActive(true);
-                                    faults.setFrontLampTwoLightActive(false);
-                                    break;
-                                case 0x5:
-                                    faults.setAddDippedLightActive(true);
-                                    faults.setAddBrakeLightActive(false);
-                                    faults.setFrontLampOneLightActive(true);
-                                    faults.setFrontLampTwoLightActive(false);
-                                    break;
-                                case 0x6:
-                                    faults.setAddDippedLightActive(false);
-                                    faults.setAddBrakeLightActive(true);
-                                    faults.setFrontLampOneLightActive(true);
-                                    faults.setFrontLampTwoLightActive(false);
-                                    break;
-                                case 0x7:
-                                    faults.setAddDippedLightActive(true);
-                                    faults.setAddBrakeLightActive(true);
-                                    faults.setFrontLampOneLightActive(true);
-                                    faults.setFrontLampTwoLightActive(false);
-                                    break;
-                                case 0x8:
-                                    faults.setAddDippedLightActive(false);
-                                    faults.setAddBrakeLightActive(false);
-                                    faults.setFrontLampOneLightActive(false);
-                                    faults.setFrontLampTwoLightActive(true);
-                                    break;
-                                case 0x9:
-                                    faults.setAddDippedLightActive(true);
-                                    faults.setAddBrakeLightActive(false);
-                                    faults.setFrontLampOneLightActive(false);
-                                    faults.setFrontLampTwoLightActive(true);
-                                    break;
-                                case 0xA:
-                                    faults.setAddDippedLightActive(false);
-                                    faults.setAddBrakeLightActive(true);
-                                    faults.setFrontLampOneLightActive(false);
-                                    faults.setFrontLampTwoLightActive(true);
-                                    break;
-                                case 0xB:
-                                    faults.setAddDippedLightActive(true);
-                                    faults.setAddBrakeLightActive(true);
-                                    faults.setFrontLampOneLightActive(false);
-                                    faults.setFrontLampTwoLightActive(true);
-                                    break;
-                                case 0xC:
-                                    faults.setAddDippedLightActive(false);
-                                    faults.setAddBrakeLightActive(false);
-                                    faults.setFrontLampOneLightActive(true);
-                                    faults.setFrontLampTwoLightActive(true);
-                                    break;
-                                case 0xD:
-                                    faults.setAddDippedLightActive(true);
-                                    faults.setAddBrakeLightActive(false);
-                                    faults.setFrontLampOneLightActive(true);
-                                    faults.setFrontLampTwoLightActive(true);
-                                    break;
-                                case 0xE:
-                                    faults.setAddDippedLightActive(false);
-                                    faults.setAddBrakeLightActive(true);
-                                    faults.setFrontLampOneLightActive(true);
-                                    faults.setFrontLampTwoLightActive(true);
-                                    break;
-                                case 0xF:
-                                    faults.setAddDippedLightActive(true);
-                                    faults.setAddBrakeLightActive(true);
-                                    faults.setFrontLampOneLightActive(true);
-                                    faults.setFrontLampTwoLightActive(true);
-                                    break;
-                                default:
-                                    faults.setAddDippedLightActive(false);
-                                    faults.setAddBrakeLightActive(false);
-                                    faults.setFrontLampOneLightActive(false);
-                                    faults.setFrontLampTwoLightActive(false);
-                                    break;
-                            }
-                        }
-                        break;
-                    case 0x09:
-                        //Log.d(TAG, "Message ID 9");
-                        //Fuel Economy 1
-                        if ((data[2] & 0xFF) != 0xFF) {
-                            double fuelEconomyOne = ((((data[2] & 0xFF) >> 4) & 0x0f) * 1.6) + (((data[2] & 0xFF) & 0x0f) * 0.1);
-                            Data.setFuelEconomyOne(fuelEconomyOne);
-                        }
-                        //Fuel Economy 2
-                        if ((data[3] & 0xFF) != 0xFF) {
-                            double fuelEconomyTwo = ((((data[3] & 0xFF) >> 4) & 0x0f) * 1.6) + (((data[3] & 0xFF) & 0x0f) * 0.1);
-                            Data.setFuelEconomyTwo(fuelEconomyTwo);
-                        }
-                        //Current Consumption
-                        if ((data[4] & 0xFF) != 0xFF) {
-                            double cConsumption = ((((data[4] & 0xFF) >> 4) & 0x0f) * 1.6) + (((data[4] & 0xFF) & 0x0f) * 0.1);
-                            Data.setCurrentConsumption(cConsumption);
-                        }
-                        break;
-                    case 0x0a:
-                        //Log.d(TAG, "Message ID 10");
-                        double odometer = bytesToInt(data[3],data[2],data[1]);
-                        Data.setOdometer(odometer);
-
-                        if ((data[6] & 0xFF) != 0xFF && (data[5] & 0xFF) != 0xFF && (data[4] & 0xFF) != 0xFF) {
-                            double tripAuto = bytesToInt(data[6], data[5], data[4]) / 10;
-                            Data.setTripAuto(tripAuto);
-                        }
-                        break;
-                    case 0x0b:
-                        //Log.d(TAG, "Message ID 11");
-                        break;
-                    case 0x0c:
-                        //Log.d(TAG, "Message ID 12");
-                        if ((data[3] & 0xFF) != 0xFF && (data[2] & 0xFF) != 0xFF && (data[1] & 0xFF) != 0xFF) {
-                            double trip1 = bytesToInt(data[3], data[2], data[1]) / 10;
-                            Data.setTripOne(trip1);
-                        }
-                        if ((data[6] & 0xFF) != 0xFF && (data[5] & 0xFF) != 0xFF && (data[4] & 0xFF) != 0xFF) {
-                            double trip2 = bytesToInt(data[6], data[5], data[4]) / 10;
-                            Data.setTripTwo(trip2);
-                        }
-                        break;
-                    case 0xff:
-                        Log.d(TAG,"Debug Message received: " + stringBuilder.toString());
-                        //
-                        if (sharedPrefs.getBoolean("prefShowUartFaults",false)) {
-                            faults.setUartErrorActive(true);
-                            if ((data[7] & 0xFF) == 0xf0){
-                                faults.setUartCommTimeoutActive(true);
-                            }
-                        }
-                        break;
-                    default:
-                        Log.d(TAG, "Unknown Message ID: " + String.format("%02x", msgID));
-                }
+                parseMessage(data);
             }
         }
-        // Manufacture name read value
-        else if (characteristic.getUuid()
-                .equals(UUIDDatabase.UUID_MANUFACTURE_NAME_STRING)) {
-            mBundle.putString(Constants.EXTRA_MNS_VALUE,
-                    Utils.getManufacturerNameString(characteristic));
-        }
-        // Model number read value
-        else if (characteristic.getUuid().equals(UUIDDatabase.UUID_MODEL_NUMBER_STRING)) {
-            mBundle.putString(Constants.EXTRA_MONS_VALUE,
-                    Utils.getModelNumberString(characteristic));
-        }
-        // Serial number read value
-        else if (characteristic.getUuid()
-                .equals(UUIDDatabase.UUID_SERIAL_NUMBER_STRING)) {
-            mBundle.putString(Constants.EXTRA_SNS_VALUE,
-                    Utils.getSerialNumberString(characteristic));
-        }
-        // Hardware revision read value
-        else if (characteristic.getUuid()
-                .equals(UUIDDatabase.UUID_HARDWARE_REVISION_STRING)) {
-            mBundle.putString(Constants.EXTRA_HRS_VALUE,
-                    Utils.getHardwareRevisionString(characteristic));
-        }
-        // Firmware revision read value
-        else if (characteristic.getUuid()
-                .equals(UUIDDatabase.UUID_FIRMWARE_REVISION_STRING)) {
-            mBundle.putString(Constants.EXTRA_FRS_VALUE,
-                    Utils.getFirmwareRevisionString(characteristic));
-        }
-        // Software revision read value
-        else if (characteristic.getUuid()
-                .equals(UUIDDatabase.UUID_SOFTWARE_REVISION_STRING)) {
-            mBundle.putString(Constants.EXTRA_SRS_VALUE,
-                    Utils.getSoftwareRevisionString(characteristic));
-        }
-        // PNP ID read value
-        else if (characteristic.getUuid().equals(UUIDDatabase.UUID_PNP_ID)) {
-            mBundle.putString(Constants.EXTRA_PNP_VALUE,
-                    Utils.getPNPID(characteristic));
-        }
-        // System ID read value
-        else if (characteristic.getUuid().equals(UUIDDatabase.UUID_SYSTEM_ID)) {
-            mBundle.putString(Constants.EXTRA_SID_VALUE,
-                    Utils.getSYSID(characteristic));
-        }
-        // Regulatory data read value
-        else if (characteristic.getUuid().equals(UUIDDatabase.UUID_IEEE)) {
-            mBundle.putString(Constants.EXTRA_RCDL_VALUE,
-                    Utils.ByteArraytoHex(characteristic.getValue()));
-        }
 
-        intent.putExtras(mBundle);
-        /**
+        /*
          * Sending the broad cast so that it can be received on registered
          * receivers
          */
-
-        mContext.sendBroadcast(intent);
-    }
-
-    private static void onOtaExitBootloaderComplete(int status) {
-        Bundle bundle = new Bundle();
-        bundle.putByteArray(Constants.EXTRA_BYTE_VALUE, new byte[]{(byte) status});
-        Intent intentOTA = new Intent(BluetoothLeService.ACTION_OTA_DATA_AVAILABLE);
-        intentOTA.putExtras(bundle);
-        mContext.sendBroadcast(intentOTA);
+        intent.putExtras(mBundle);
+        MyApplication.getContext().sendBroadcast(intent);
     }
 
     /**
      * Connects to the GATT server hosted on the BlueTooth LE device.
      *
      * @param address The device address of the destination device.
-     * @return Return true if the connection is initiated successfully. The
      * connection result is reported asynchronously through the
      * {@code BluetoothGattCallback#onConnectionStateChange(android.bluetooth.BluetoothGatt, int, int)}
      * callback.
      */
-    public static void connect(final String address, final String devicename, Context context) {
-        faults = new FaultStatus(mContext);
-        mContext = context;
+    public static void connect(final String address, final String devicename) {
         if (mBluetoothAdapter == null || address == null) {
             return;
         }
@@ -1865,71 +381,17 @@ public class BluetoothLeService extends Service {
             return;
         }
 
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
         // We want to directly connect to the device, so we are setting the
         // autoConnect
         // parameter to false.
-        mBluetoothGatt = device.connectGatt(context, false, mGattCallback);
-        //Clearing Bluetooth cache before disconnecting to the device
-        if (Utils.getBooleanSharedPreference(mContext, Constants.PREF_PAIR_CACHE_STATUS)) {
-            Log.d(TAG,"Cache cleared on disconnect!");
-            BluetoothLeService.refreshDeviceCache(BluetoothLeService.mBluetoothGatt);
-        }
-        //TODO: KEC playing around
-        BluetoothLeService.refreshDeviceCache(mBluetoothGatt);
-        //TODO: KEC playing around end
+        mBluetoothGatt = device.connectGatt(MyApplication.getContext(), false, mGattCallback);
         mBluetoothDeviceAddress = address;
         mBluetoothDeviceName = devicename;
-        /**
+        /*
          * Adding data to the data logger
          */
         String dataLog = "[" + devicename + "|" + address + "] " +
-                mContext.getResources().getString(R.string.dl_connection_request);
-        Log.d(TAG,dataLog);
-    }
-
-    /**
-     * Reconnect method to connect to already connected device
-     */
-    public static void reconnect() {
-        Log.d(TAG,"<--Reconnecting device-->");
-        BluetoothDevice device = mBluetoothAdapter
-                .getRemoteDevice(mBluetoothDeviceAddress);
-        if (device == null) {
-            return;
-        }
-        mBluetoothGatt = null;//Creating a new instance of GATT before connect
-        mBluetoothGatt = device.connectGatt(mContext, false, mGattCallback);
-        /**
-         * Adding data to the data logger
-         */
-        String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
-                mContext.getResources().getString(R.string.dl_connection_request);
-        Log.d(TAG,dataLog);
-    }
-
-    /**
-     * Reconnect method to connect to already connected device
-     */
-    public static void reDiscoverServices() {
-        Log.d(TAG,"<--Rediscovering services-->");
-        BluetoothDevice device = mBluetoothAdapter
-                .getRemoteDevice(mBluetoothDeviceAddress);
-        if (device == null) {
-            return;
-        }
-        /**
-         * Disconnecting the device
-         */
-        if (mBluetoothGatt != null)
-            mBluetoothGatt.disconnect();
-
-        mBluetoothGatt = device.connectGatt(mContext, false, mGattCallback);
-        /**
-         * Adding data to the data logger
-         */
-        String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
-                mContext.getResources().getString(R.string.dl_connection_request);
+                "Connection request sent";
         Log.d(TAG,dataLog);
     }
 
@@ -1941,11 +403,10 @@ public class BluetoothLeService extends Service {
      */
     public static boolean refreshDeviceCache(BluetoothGatt gatt) {
         try {
-            BluetoothGatt localBluetoothGatt = gatt;
-            Method localMethod = localBluetoothGatt.getClass().getMethod("refresh");
+            Method localMethod = gatt.getClass().getMethod("refresh");
             if (localMethod != null) {
                 Log.d(TAG,"In refreshDeviceCache");
-                return (Boolean) localMethod.invoke(localBluetoothGatt);
+                return (Boolean) localMethod.invoke(gatt);
             }
         } catch (Exception localException) {
             Log.d(TAG,"An exception occured while refreshing device");
@@ -1961,38 +422,25 @@ public class BluetoothLeService extends Service {
      */
     public static void disconnect() {
         Log.d(TAG,"disconnect called");
-        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            return;
-        } else {
-            //Clearing Bluetooth cache before disconnecting to the device
-            if (Utils.getBooleanSharedPreference(mContext, Constants.PREF_PAIR_CACHE_STATUS)) {
-                Log.d(TAG, "Cache cleared on disconnect!");
-                BluetoothLeService.refreshDeviceCache(BluetoothLeService.mBluetoothGatt);
-            }
+        if (mBluetoothAdapter != null || mBluetoothGatt != null) {
             BluetoothLeService.refreshDeviceCache(BluetoothLeService.mBluetoothGatt);
             mBluetoothGatt.disconnect();
-            String dataLog = mContext.getResources().getString(R.string.dl_commaseparator)
-                    + "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
-                    mContext.getResources().getString(R.string.dl_disconnection_request);
+            String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
+                    "Disconnection request sent";
             Log.d(TAG,dataLog);
             Data.clear();
-            faults.clear();
+            FaultStatus.clear();
             close();
         }
-
     }
 
     public static void discoverServices() {
-        // Logger.datalog(mContext.getResources().getString(R.string.dl_service_discover_request));
-        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            return;
-        } else {
+        if (mBluetoothAdapter != null || mBluetoothGatt != null) {
             mBluetoothGatt.discoverServices();
             String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
-                    mContext.getResources().getString(R.string.dl_service_discovery_request);
+                    "Service discovery request sent";
             Log.d(TAG,dataLog);
         }
-
     }
 
     /**
@@ -2015,7 +463,7 @@ public class BluetoothLeService extends Service {
         }
         mBluetoothGatt.readCharacteristic(characteristic);
         String dataLog = "[" + serviceName + "|" + characteristicName + "] " +
-                mContext.getResources().getString(R.string.dl_characteristic_read_request);
+                "Read Request Sent";
         Log.d(TAG,dataLog);
     }
 
@@ -2034,10 +482,9 @@ public class BluetoothLeService extends Service {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
             return;
         }
-        //Logger.datalog(mContext.getResources().getString(R.string.dl_descriptor_read_request));
         mBluetoothGatt.readDescriptor(descriptor);
         String dataLog = "[" + serviceName + "|" + characteristicName + "] " +
-                mContext.getResources().getString(R.string.dl_characteristic_read_request);
+                "Read Request Sent";
         Log.d(TAG,dataLog);
     }
 
@@ -2057,85 +504,14 @@ public class BluetoothLeService extends Service {
         String characteristicName = GattAttributes.lookupUUID(characteristic.getUuid(), characteristicUUID);
 
         String characteristicValue = Utils.ByteArraytoHex(byteArray);
-        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            return;
-        } else {
-            byte[] valueByte = byteArray;
-            characteristic.setValue(valueByte);
+        if (mBluetoothAdapter != null || mBluetoothGatt != null) {
+            characteristic.setValue(byteArray);
             mBluetoothGatt.writeCharacteristic(characteristic);
             String dataLog = "[" + serviceName + "|" + characteristicName + "] " +
-                    mContext.getResources().getString(R.string.dl_characteristic_write_request) +
-                    mContext.getResources().getString(R.string.dl_commaseparator) +
+                    "Write Request Sent With Value , " +
                     "[ " + characteristicValue + " ]";
             Log.d(TAG,dataLog);
-
         }
-    }
-
-    public static void writeOTABootLoaderCommand(
-            BluetoothGattCharacteristic characteristic,
-            byte[] value,
-            boolean isExitBootloaderCmd) {
-        synchronized (mGattCallback) {
-            writeOTABootLoaderCommand(characteristic, value);
-            if (isExitBootloaderCmd)
-                mOtaExitBootloaderCmdInProgress = true;
-        }
-    }
-
-    public static void writeOTABootLoaderCommand(
-            BluetoothGattCharacteristic characteristic, byte[] value) {
-        String serviceUUID = characteristic.getService().getUuid().toString();
-        String serviceName = GattAttributes.lookupUUID(characteristic.getService().getUuid(), serviceUUID);
-
-        String characteristicUUID = characteristic.getUuid().toString();
-        String characteristicName = GattAttributes.lookupUUID(characteristic.getUuid(), characteristicUUID);
-
-        String characteristicValue = Utils.ByteArraytoHex(value);
-        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            return;
-        } else {
-            byte[] valueByte = value;
-            characteristic.setValue(valueByte);
-            int counter = 20;
-            boolean status;
-            do {
-                int i = 0;
-                characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
-                status = mBluetoothGatt.writeCharacteristic(characteristic);
-                if (!status) {
-                    Log.d(TAG, "writeCharacteristic() status: False");
-                    try {
-                        Log.d(TAG, "" + i);
-                        i++;
-                        Thread.sleep(100, 0);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } while (!status && (counter-- > 0));
-
-
-            if (status) {
-                String dataLog = "[" + serviceName + "|" + characteristicName + "] " +
-                        mContext.getResources().getString(R.string.dl_characteristic_write_request) +
-                        mContext.getResources().getString(R.string.dl_commaseparator) +
-                        "[ " + characteristicValue + " ]";
-                Log.d(TAG, dataLog);
-
-            } else {
-                Log.d(TAG, "writeOTABootLoaderCommand failed!");
-            }
-        }
-
-    }
-
-    private static String getHexValue(byte[] array) {
-        StringBuffer sb = new StringBuffer();
-        for (byte byteChar : array) {
-            sb.append(String.format("%02x", byteChar));
-        }
-        return "" + sb;
     }
 
     /**
@@ -2144,7 +520,6 @@ public class BluetoothLeService extends Service {
      * @param characteristic
      * @param byteArray
      */
-
     public static void writeCharacteristicGattDb(
             BluetoothGattCharacteristic characteristic, byte[] byteArray) {
         String serviceUUID = characteristic.getService().getUuid().toString();
@@ -2154,19 +529,14 @@ public class BluetoothLeService extends Service {
         String characteristicName = GattAttributes.lookupUUID(characteristic.getUuid(), characteristicUUID);
 
         String characteristicValue = Utils.ByteArraytoHex(byteArray);
-        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            return;
-        } else {
-            byte[] valueByte = byteArray;
-            characteristic.setValue(valueByte);
+        if (mBluetoothAdapter != null || mBluetoothGatt != null) {
+            characteristic.setValue(byteArray);
             mBluetoothGatt.writeCharacteristic(characteristic);
             String dataLog = "[" + serviceName + "|" + characteristicName + "] " +
-                    mContext.getResources().getString(R.string.dl_characteristic_write_request) +
-                    mContext.getResources().getString(R.string.dl_commaseparator) +
+                    "Write Request Sent With Value , " +
                     "[ " + characteristicValue + " ]";
             Log.d(TAG,dataLog);
         }
-
     }
 
     /**
@@ -2212,7 +582,7 @@ public class BluetoothLeService extends Service {
         }
         if (characteristic.getDescriptor(UUID
                 .fromString(GattAttributes.CLIENT_CHARACTERISTIC_CONFIG)) != null) {
-            if (enabled == true) {
+            if (enabled) {
                 BluetoothGattDescriptor descriptor = characteristic
                         .getDescriptor(UUID
                                 .fromString(GattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
@@ -2220,8 +590,7 @@ public class BluetoothLeService extends Service {
                         .setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
                 mBluetoothGatt.writeDescriptor(descriptor);
                 String dataLog = "[" + serviceName + "|" + characteristicName + "|" + descriptorName + "] " +
-                        mContext.getResources().getString(R.string.dl_characteristic_write_request)
-                        + mContext.getResources().getString(R.string.dl_commaseparator) +
+                        "Write Request Sent With Value , " +
                         "[" + Utils.ByteArraytoHex(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE) + "]";
                 Log.d(TAG,dataLog);
 
@@ -2233,8 +602,7 @@ public class BluetoothLeService extends Service {
                         .setValue(BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
                 mBluetoothGatt.writeDescriptor(descriptor);
                 String dataLog = "[" + serviceName + "|" + characteristicName + "|" + descriptorName + "] " +
-                        mContext.getResources().getString(R.string.dl_characteristic_write_request)
-                        + mContext.getResources().getString(R.string.dl_commaseparator) +
+                        "Write Request Sent With Value , " +
                         "[" + Utils.ByteArraytoHex(BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE) + "]";
                 Log.d(TAG,dataLog);
             }
@@ -2242,80 +610,14 @@ public class BluetoothLeService extends Service {
         mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
         if (enabled) {
             String dataLog = "[" + serviceName + "|" + characteristicName + "] " +
-                    mContext.getResources().getString(R.string.dl_characteristic_start_notification);
+                    "Start notification request sent";
             Log.d(TAG,dataLog);
         } else {
             String dataLog = "[" + serviceName + "|" + characteristicName + "] " +
-                    mContext.getResources().getString(R.string.dl_characteristic_stop_notification);
+                    "Stop notification request sent";
             Log.d(TAG,dataLog);
         }
 
-    }
-
-    /**
-     * Enables or disables indications on a give characteristic.
-     *
-     * @param characteristic Characteristic to act on.
-     * @param enabled        If true, enable indications. False otherwise.
-     */
-    public static void setCharacteristicIndication(
-            BluetoothGattCharacteristic characteristic, boolean enabled) {
-        String serviceUUID = characteristic.getService().getUuid().toString();
-        String serviceName = GattAttributes.lookupUUID(characteristic.getService().getUuid(),
-                serviceUUID);
-
-        String characteristicUUID = characteristic.getUuid().toString();
-        String characteristicName = GattAttributes.lookupUUID(characteristic.getUuid(),
-                characteristicUUID);
-
-        String descriptorUUID = GattAttributes.CLIENT_CHARACTERISTIC_CONFIG;
-        String descriptorName = GattAttributes.lookupUUID(UUIDDatabase.
-                UUID_CLIENT_CHARACTERISTIC_CONFIG, descriptorUUID);
-        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            return;
-        }
-
-        if (characteristic.getDescriptor(UUID
-                .fromString(GattAttributes.CLIENT_CHARACTERISTIC_CONFIG)) != null) {
-            if (enabled == true) {
-                BluetoothGattDescriptor descriptor = characteristic
-                        .getDescriptor(UUID
-                                .fromString(GattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
-                descriptor
-                        .setValue(BluetoothGattDescriptor.ENABLE_INDICATION_VALUE);
-                mBluetoothGatt.writeDescriptor(descriptor);
-                String dataLog = "[" + serviceName + "|" + characteristicName + "|" +
-                        descriptorName + "] " +
-                        mContext.getResources().getString(R.string.dl_characteristic_write_request)
-                        + mContext.getResources().getString(R.string.dl_commaseparator) +
-                        "[" + Utils.ByteArraytoHex(BluetoothGattDescriptor.
-                        ENABLE_INDICATION_VALUE) + "]";
-                Log.d(TAG,dataLog);
-            } else {
-                BluetoothGattDescriptor descriptor = characteristic
-                        .getDescriptor(UUID
-                                .fromString(GattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
-                descriptor
-                        .setValue(BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
-                mBluetoothGatt.writeDescriptor(descriptor);
-                String dataLog = "[" + serviceName + "|" + characteristicName + "|" + descriptorName + "] " +
-                        mContext.getResources().getString(R.string.dl_characteristic_write_request)
-                        + mContext.getResources().getString(R.string.dl_commaseparator) +
-                        "[" + Utils.ByteArraytoHex(BluetoothGattDescriptor.
-                        DISABLE_NOTIFICATION_VALUE) + "]";
-                Log.d(TAG,dataLog);
-            }
-        }
-        mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
-        if (enabled) {
-            String dataLog = "[" + serviceName + "|" + characteristicName + "] " +
-                    mContext.getResources().getString(R.string.dl_characteristic_start_indication);
-            Log.d(TAG,dataLog);
-        } else {
-            String dataLog = "[" + serviceName + "|" + characteristicName + "] " +
-                    mContext.getResources().getString(R.string.dl_characteristic_stop_indication);
-            Log.d(TAG,dataLog);
-        }
     }
 
     /**
@@ -2332,20 +634,6 @@ public class BluetoothLeService extends Service {
         return mBluetoothGatt.getServices();
     }
 
-    public static int getConnectionState() {
-        synchronized (mGattCallback) {
-            return mConnectionState;
-        }
-    }
-
-    public static boolean getBondedState() {
-        Boolean bonded;
-        BluetoothDevice device = mBluetoothAdapter
-                .getRemoteDevice(mBluetoothDeviceAddress);
-        bonded = device.getBondState() == BluetoothDevice.BOND_BONDED;
-        return bonded;
-    }
-
     public static void bondDevice() {
         try {
             Class class1 = Class.forName("android.bluetooth.BluetoothDevice");
@@ -2355,7 +643,6 @@ public class BluetoothLeService extends Service {
         } catch (Exception e) {
             Log.d(TAG,"Exception Pair" + e.getMessage());
         }
-
     }
 
     public static void addRemoveData(BluetoothGattDescriptor descriptor) {
@@ -2395,12 +682,11 @@ public class BluetoothLeService extends Service {
             mDisableNotificationFlag = true;
             BluetoothGattCharacteristic bluetoothGattCharacteristic = mEnabledCharacteristics.
                     get(0);
-            Log.d(TAG,"Disabling characteristic--" + bluetoothGattCharacteristic.getUuid());
+            Log.d(TAG,"Disabling characteristic" + bluetoothGattCharacteristic.getUuid());
             setCharacteristicNotification(bluetoothGattCharacteristic, false);
         } else {
             mDisableNotificationFlag = false;
         }
-
     }
 
     /**
@@ -2443,7 +729,6 @@ public class BluetoothLeService extends Service {
 
         mBluetoothAdapter = mBluetoothManager.getAdapter();
         return mBluetoothAdapter != null;
-
     }
 
     @Override
@@ -2463,50 +748,50 @@ public class BluetoothLeService extends Service {
         }
     }
 
-    private static int bytesToInt(byte a, byte b, byte c) {
-        return (a & 0xFF) << 16 | (b & 0xFF) << 8 | (c & 0xFF);
-    }
-
-    static public void updateNotification(Intent intent){
+    static public void updateNotification(){
         StringBuilder body = new StringBuilder();
         body.append("");
-        if(faults.getfrontTirePressureCriticalActive()){
-            body.append(mContext.getResources().getString(R.string.fault_TIREFCF) + "\n");
+        if(FaultStatus.getfrontTirePressureCriticalActive()){
+            body.append(MyApplication.getContext().getResources().getString(R.string.fault_TIREFCF)).append("\n");
         }
-        if(faults.getrearTirePressureCriticalActive()){
-            body.append(mContext.getResources().getString(R.string.fault_TIRERCF) + "\n");
+        if(FaultStatus.getrearTirePressureCriticalActive()){
+            body.append(MyApplication.getContext().getResources().getString(R.string.fault_TIRERCF)).append("\n");
         }
-        if(faults.getgeneralFlashingRedActive()){
-            body.append(mContext.getResources().getString(R.string.fault_GENWARNFSRED) + "\n");
+        if(FaultStatus.getgeneralFlashingRedActive()){
+            body.append(MyApplication.getContext().getResources().getString(R.string.fault_GENWARNFSRED)).append("\n");
         }
-        if(faults.getgeneralShowsRedActive()){
-            body.append(mContext.getResources().getString(R.string.fault_GENWARNSHRED) + "\n");
+        if(FaultStatus.getgeneralShowsRedActive()){
+            body.append(MyApplication.getContext().getResources().getString(R.string.fault_GENWARNSHRED)).append("\n");
         }
         if(!body.toString().equals("")){
-            showNotification(mContext,mContext.getResources().getString(R.string.fault_title),body.toString(),intent);
+            showNotification(MyApplication.getContext(),MyApplication.getContext().getResources().getString(R.string.fault_title),body.toString());
         } else {
             Log.d(TAG,"Clearing notification");
             clearNotifications();
         }
     }
 
-    static public void showNotification(Context context, String title, String body, Intent intent) {
+    static public void showNotification(Context context, String title, String body) {
 
-        Intent faultIntent=new Intent(mContext, FaultActivity.class);
+        Intent faultIntent=new Intent(MyApplication.getContext(), FaultActivity.class);
         faultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         int notificationId = 1;
         String channelId = "critical";
-        String channelName = mContext.getString(R.string.notification_channel);
-        int importance = NotificationManager.IMPORTANCE_HIGH;
+        String channelName = MyApplication.getContext().getString(R.string.notification_channel);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel mChannel = new NotificationChannel(
                     channelId, channelName, importance);
             mChannel.shouldShowLights();
-            notificationManager.createNotificationChannel(mChannel);
+            try {
+                notificationManager.createNotificationChannel(mChannel);
+            } catch (NullPointerException e){
+                Log.d(TAG, "Error creating notification channel: " + e.toString());
+            }
         }
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, channelId)
@@ -2534,25 +819,1262 @@ public class BluetoothLeService extends Service {
     }
 
     static public void clearNotifications(){
-        NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) MyApplication.getContext().getSystemService(NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
-        //notificationManager.cancel("myappnotif", i);
     }
 
     static private void fuelAlert(){
-        //sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-
         if (sharedPrefs.getBoolean("prefFuelAlert", false)) {
             if (!fuelAlertSent) {
                 fuelAlertSent = true;
-                Intent alertIntent = new Intent(mContext, AlertActivity.class);
-                alertIntent.putExtra("TITLE", mContext.getResources().getString(R.string.alertLowFuelTitle));
-                alertIntent.putExtra("BODY", mContext.getResources().getString(R.string.alertLowFuelBody));
-                mContext.startActivity(alertIntent);
+                Intent alertIntent = new Intent(MyApplication.getContext(), AlertActivity.class);
+                alertIntent.putExtra("TITLE", MyApplication.getContext().getResources().getString(R.string.alertLowFuelTitle));
+                alertIntent.putExtra("BODY", MyApplication.getContext().getResources().getString(R.string.alertLowFuelBody));
+                MyApplication.getContext().startActivity(alertIntent);
             }
 
         } else {
             fuelAlertSent = false;
+        }
+    }
+
+    private static void parseMessage(byte[] data){
+        Data.setLastMessage(data);
+        int msgID = (data[0] & 0xFF) ;
+        switch (msgID) {
+            case 0x00:
+                //Log.d(TAG, "Message ID 0");
+                byte[] vinValue = new byte[7];
+                for (int x = 1; x <= 7; x++){
+                    vinValue[x - 1] = data[x];
+                }
+                String vin = new String(vinValue);
+                Data.setVin(vin);
+
+                break;
+            case 0x01:
+                //Log.d(TAG, "Message ID 1");
+                //Fuel Range
+                if ((data[4] & 0xFF) != 0xFF && (data[5] & 0xFF) != 0xFF) {
+                    double fuelRange = (((data[4] & 0xFF) >> 4) & 0x0f) + (((data[5] & 0xFF) & 0x0f) * 16) + ((((data[5] & 0xFF) >> 4) & 0x0f) * 256);
+                    Data.setFuelRange(fuelRange);
+                }
+                // Ambient Light
+                int ambientLightValue = (data[6] & 0xFF) & 0x0f; // the lowest 4 bits
+                Data.setAmbientLight(ambientLightValue);
+                break;
+            case 0x02:
+                //Log.d(TAG, "Message ID 2");
+                break;
+            case 0x03:
+                //Log.d(TAG, "Message ID 3");
+                break;
+            case 0x04:
+                //Log.d(TAG, "Message ID 4");
+                break;
+            case 0x05:
+                //Log.d(TAG, "Message ID 5");
+                // Brakes
+                int brakes = ((data[2] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
+                if(prevBrakeValue == 0){
+                    prevBrakeValue = brakes;
+                }
+                if (prevBrakeValue != brakes) {
+                    prevBrakeValue = brakes;
+                    switch (brakes) {
+                        case 0x6:
+                            //Front
+                            Data.setFrontBrake(Data.getFrontBrake() + 1);
+                            break;
+                        case 0x9:
+                            //Back
+                            Data.setRearBrake(Data.getRearBrake() + 1);
+                            break;
+                        case 0xA:
+                            //Both
+                            Data.setFrontBrake(Data.getFrontBrake() + 1);
+                            Data.setRearBrake(Data.getRearBrake() + 1);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                // ABS Fault
+                int absValue = (data[3] & 0xFF) & 0x0f; // the lowest 4 bits
+                switch (absValue){
+                    case 0x2:
+                        FaultStatus.setAbsSelfDiagActive(false);
+                        FaultStatus.setAbsDeactivatedActive(false);
+                        FaultStatus.setabsErrorActive(true);
+                        break;
+                    case 0x3:
+                        FaultStatus.setAbsSelfDiagActive(true);
+                        FaultStatus.setAbsDeactivatedActive(false);
+                        FaultStatus.setabsErrorActive(false);
+                        break;
+                    case 0x5:
+                        FaultStatus.setAbsSelfDiagActive(false);
+                        FaultStatus.setAbsDeactivatedActive(false);
+                        FaultStatus.setabsErrorActive(true);
+                        break;
+                    case 0x6:
+                        FaultStatus.setAbsSelfDiagActive(false);
+                        FaultStatus.setAbsDeactivatedActive(false);
+                        FaultStatus.setabsErrorActive(true);
+                        break;
+                    case 0x7:
+                        FaultStatus.setAbsSelfDiagActive(false);
+                        FaultStatus.setAbsDeactivatedActive(false);
+                        FaultStatus.setabsErrorActive(true);
+                        break;
+                    case 0x8:
+                        FaultStatus.setAbsSelfDiagActive(false);
+                        FaultStatus.setAbsDeactivatedActive(true);
+                        FaultStatus.setabsErrorActive(false);
+                        break;
+                    case 0xA:
+                        FaultStatus.setAbsSelfDiagActive(false);
+                        FaultStatus.setAbsDeactivatedActive(false);
+                        FaultStatus.setabsErrorActive(true);
+                        break;
+                    case 0xB:
+                        FaultStatus.setAbsSelfDiagActive(true);
+                        FaultStatus.setAbsDeactivatedActive(false);
+                        FaultStatus.setabsErrorActive(false);
+                        break;
+                    case 0xD:
+                        FaultStatus.setAbsSelfDiagActive(false);
+                        FaultStatus.setAbsDeactivatedActive(false);
+                        FaultStatus.setabsErrorActive(true);
+                        break;
+                    case 0xE:
+                        FaultStatus.setAbsSelfDiagActive(false);
+                        FaultStatus.setAbsDeactivatedActive(false);
+                        FaultStatus.setabsErrorActive(true);
+                        break;
+                    case 0xF:
+                        FaultStatus.setAbsSelfDiagActive(false);
+                        FaultStatus.setAbsDeactivatedActive(false);
+                        FaultStatus.setabsErrorActive(false);
+                        break;
+                    default:
+                        FaultStatus.setAbsSelfDiagActive(false);
+                        FaultStatus.setAbsDeactivatedActive(false);
+                        FaultStatus.setabsErrorActive(false);
+                        break;
+                }
+
+                // Tire Pressure
+                if ((data[4] & 0xFF) != 0xFF){
+                    double rdcFront = (data[4] & 0xFF) / 50.0;
+                    Data.setFrontTirePressure(rdcFront);
+                    if (sharedPrefs.getBoolean("prefTPMSAlert",false)) {
+                        int pressureThreshold = Integer.parseInt(sharedPrefs.getString("prefTPMSAlertThreshold","-1"));
+                        if (pressureThreshold >= 0) {
+                            String pressureFormat = sharedPrefs.getString("prefPressureF", "0");
+                            if (pressureFormat.contains("1")) {
+                                // KPa
+                                if (pressureThreshold >= (rdcFront * 100)){
+                                    FaultStatus.setfrontTirePressureCriticalActive(true);
+                                    updateNotification();
+                                }
+                            } else if (pressureFormat.contains("2")) {
+                                // Kg-f
+                                if (pressureThreshold >= (rdcFront * 1.0197162129779)){
+                                    FaultStatus.setfrontTirePressureCriticalActive(true);
+                                    updateNotification();
+                                }
+                            } else if (pressureFormat.contains("3")) {
+                                // Psi
+                                if (pressureThreshold >= (rdcFront * 14.5037738)){
+                                    FaultStatus.setfrontTirePressureCriticalActive(true);
+                                    updateNotification();
+                                }
+                            }
+                            if (!(FaultStatus.getfrontTirePressureCriticalNotificationActive())) {
+                                updateNotification();
+                                FaultStatus.setfrontTirePressureCriticalNotificationActive(true);
+                            }
+                        } else {
+                            if (FaultStatus.getfrontTirePressureCriticalNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setfrontTirePressureCriticalNotificationActive(false);
+                            }
+                        }
+                    }
+                }
+                if ((data[5] & 0xFF) != 0xFF){
+                    double rdcRear = (data[5] & 0xFF) / 50.0;
+                    Data.setRearTirePressure(rdcRear);
+                    if (sharedPrefs.getBoolean("prefTPMSAlert",false)) {
+                        int pressureThreshold = Integer.parseInt(sharedPrefs.getString("prefTPMSAlertThreshold","-1"));
+                        if (pressureThreshold >= 0) {
+                            String pressureFormat = sharedPrefs.getString("prefPressureF", "0");
+                            if (pressureFormat.contains("1")) {
+                                // KPa
+                                if (pressureThreshold >= (rdcRear * 100)){
+                                    FaultStatus.setrearTirePressureCriticalActive(true);
+                                }
+                            } else if (pressureFormat.contains("2")) {
+                                // Kg-f
+                                if (pressureThreshold >= (rdcRear * 1.0197162129779)){
+                                    FaultStatus.setrearTirePressureCriticalActive(true);
+                                }
+                            } else if (pressureFormat.contains("3")) {
+                                // Psi
+                                if (pressureThreshold >= (rdcRear * 14.5037738)){
+                                    FaultStatus.setrearTirePressureCriticalActive(true);
+                                }
+                            }
+                            if (!(FaultStatus.getrearTirePressureCriticalNotificationActive())) {
+                                updateNotification();
+                                FaultStatus.setrearTirePressureCriticalNotificationActive(true);
+                            }
+                        } else {
+                            if (FaultStatus.getrearTirePressureCriticalNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setrearTirePressureCriticalNotificationActive(false);
+                            }
+                        }
+                    }
+                }
+
+                if (!sharedPrefs.getBoolean("prefTPMSAlert",false)) {
+                    // Tire Pressure Faults
+                    switch (data[6] & 0xFF) {
+                        case 0xC9:
+                            FaultStatus.setfrontTirePressureWarningActive(true);
+                            FaultStatus.setrearTirePressureWarningActive(false);
+                            FaultStatus.setfrontTirePressureCriticalActive(false);
+                            FaultStatus.setrearTirePressureCriticalActive(false);
+                            if (FaultStatus.getfrontTirePressureCriticalNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setfrontTirePressureCriticalNotificationActive(false);
+                            }
+                            if (FaultStatus.getrearTirePressureCriticalNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setrearTirePressureCriticalNotificationActive(false);
+                            }
+                            break;
+                        case 0xCA:
+                            FaultStatus.setfrontTirePressureWarningActive(false);
+                            FaultStatus.setrearTirePressureWarningActive(true);
+                            FaultStatus.setfrontTirePressureCriticalActive(false);
+                            FaultStatus.setrearTirePressureCriticalActive(false);
+                            if (FaultStatus.getfrontTirePressureCriticalNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setfrontTirePressureCriticalNotificationActive(false);
+                            }
+                            if (FaultStatus.getrearTirePressureCriticalNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setrearTirePressureCriticalNotificationActive(false);
+                            }
+                            break;
+                        case 0xCB:
+                            FaultStatus.setfrontTirePressureWarningActive(true);
+                            FaultStatus.setrearTirePressureWarningActive(true);
+                            FaultStatus.setfrontTirePressureCriticalActive(false);
+                            FaultStatus.setrearTirePressureCriticalActive(false);
+                            if (FaultStatus.getfrontTirePressureCriticalNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setfrontTirePressureCriticalNotificationActive(false);
+                            }
+                            if (FaultStatus.getrearTirePressureCriticalNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setrearTirePressureCriticalNotificationActive(false);
+                            }
+                            break;
+                        case 0xD1:
+                            FaultStatus.setfrontTirePressureWarningActive(false);
+                            FaultStatus.setrearTirePressureWarningActive(false);
+                            FaultStatus.setfrontTirePressureCriticalActive(true);
+                            FaultStatus.setrearTirePressureCriticalActive(false);
+                            if (!(FaultStatus.getfrontTirePressureCriticalNotificationActive())) {
+                                updateNotification();
+                                FaultStatus.setfrontTirePressureCriticalNotificationActive(true);
+                            }
+                            if (FaultStatus.getrearTirePressureCriticalNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setrearTirePressureCriticalNotificationActive(false);
+                            }
+                            break;
+                        case 0xD2:
+                            FaultStatus.setfrontTirePressureWarningActive(false);
+                            FaultStatus.setrearTirePressureWarningActive(false);
+                            FaultStatus.setfrontTirePressureCriticalActive(false);
+                            FaultStatus.setrearTirePressureCriticalActive(true);
+                            if (FaultStatus.getfrontTirePressureCriticalNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setfrontTirePressureCriticalNotificationActive(false);
+                            }
+                            if (!(FaultStatus.getrearTirePressureCriticalNotificationActive())) {
+                                updateNotification();
+                                FaultStatus.setrearTirePressureCriticalNotificationActive(true);
+                            }
+                            break;
+                        case 0xD3:
+                            FaultStatus.setfrontTirePressureWarningActive(false);
+                            FaultStatus.setrearTirePressureWarningActive(false);
+                            FaultStatus.setfrontTirePressureCriticalActive(true);
+                            FaultStatus.setrearTirePressureCriticalActive(true);
+                            if (!(FaultStatus.getfrontTirePressureCriticalNotificationActive()) && !(FaultStatus.getrearTirePressureCriticalNotificationActive())) {
+                                updateNotification();
+                                FaultStatus.setfrontTirePressureCriticalNotificationActive(true);
+                                FaultStatus.setrearTirePressureCriticalNotificationActive(true);
+                            }
+                            break;
+                        default:
+                            FaultStatus.setfrontTirePressureWarningActive(false);
+                            FaultStatus.setrearTirePressureWarningActive(false);
+                            FaultStatus.setfrontTirePressureCriticalActive(false);
+                            FaultStatus.setrearTirePressureCriticalActive(false);
+                            if (FaultStatus.getfrontTirePressureCriticalNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setfrontTirePressureCriticalNotificationActive(false);
+                            }
+                            if (FaultStatus.getrearTirePressureCriticalNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setrearTirePressureCriticalNotificationActive(false);
+                            }
+                            break;
+                    }
+                }
+                break;
+            case 0x06:
+                //Log.d(TAG, "Message ID 6");
+                String gear;
+                int gearValue = ((data[2] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
+                switch (gearValue) {
+                    case 0x1:
+                        gear = "1";
+                        break;
+                    case 0x2:
+                        gear = "N";
+                        break;
+                    case 0x4:
+                        gear = "2";
+                        break;
+                    case 0x7:
+                        gear = "3";
+                        break;
+                    case 0x8:
+                        gear = "4";
+                        break;
+                    case 0xB:
+                        gear = "5";
+                        break;
+                    case 0xD:
+                        gear = "6";
+                        break;
+                    case 0xF:
+                        // Inbetween Gears
+                        gear = "-";
+                        break;
+                    default:
+                        gear = "-";
+                        Log.d(TAG, "Unknown gear value");
+                }
+                if(Data.getGear() != null) {
+                    if (!Data.getGear().equals(gear) && !gear.equals("-")) {
+                        Data.setNumberOfShifts(Data.getNumberOfShifts() + 1);
+                    }
+                }
+                Data.setGear(gear);
+
+                // Throttle Position
+                int minPosition = 36;
+                int maxPosition = 236;
+                double throttlePosition = (((data[3] & 0xFF) - minPosition) * 100) / (maxPosition - minPosition);
+                Data.setThrottlePosition(throttlePosition);
+
+                // Engine Temperature
+                double engineTemp = ((data[4] & 0xFF) * 0.75) - 25;
+                Data.setEngineTemperature(engineTemp);
+
+                // ASC Fault
+                int ascValue = ((data[5] & 0xFF)  >> 4) & 0x0f; // the highest 4 bits.
+                switch (ascValue){
+                    case 0x1:
+                        FaultStatus.setAscSelfDiagActive(false);
+                        FaultStatus.setAscInterventionActive(true);
+                        FaultStatus.setAscDeactivatedActive(false);
+                        FaultStatus.setascErrorActive(false);
+                        break;
+                    case 0x2:
+                        FaultStatus.setAscSelfDiagActive(false);
+                        FaultStatus.setAscInterventionActive(false);
+                        FaultStatus.setAscDeactivatedActive(false);
+                        FaultStatus.setascErrorActive(true);
+                        break;
+                    case 0x3:
+                        FaultStatus.setAscSelfDiagActive(true);
+                        FaultStatus.setAscInterventionActive(false);
+                        FaultStatus.setAscDeactivatedActive(false);
+                        FaultStatus.setascErrorActive(false);
+                        break;
+                    case 0x5:
+                        FaultStatus.setAscSelfDiagActive(false);
+                        FaultStatus.setAscInterventionActive(false);
+                        FaultStatus.setAscDeactivatedActive(false);
+                        FaultStatus.setascErrorActive(true);
+                        break;
+                    case 0x6:
+                        FaultStatus.setAscSelfDiagActive(false);
+                        FaultStatus.setAscInterventionActive(false);
+                        FaultStatus.setAscDeactivatedActive(false);
+                        FaultStatus.setascErrorActive(true);
+                        break;
+                    case 0x7:
+                        FaultStatus.setAscSelfDiagActive(false);
+                        FaultStatus.setAscInterventionActive(false);
+                        FaultStatus.setAscDeactivatedActive(false);
+                        FaultStatus.setascErrorActive(true);
+                        break;
+                    case 0x8:
+                        FaultStatus.setAscSelfDiagActive(false);
+                        FaultStatus.setAscInterventionActive(false);
+                        FaultStatus.setAscDeactivatedActive(true);
+                        FaultStatus.setascErrorActive(false);
+                        break;
+                    case 0x9:
+                        FaultStatus.setAscSelfDiagActive(false);
+                        FaultStatus.setAscInterventionActive(true);
+                        FaultStatus.setAscDeactivatedActive(false);
+                        FaultStatus.setascErrorActive(false);
+                        break;
+                    case 0xA:
+                        FaultStatus.setAscSelfDiagActive(false);
+                        FaultStatus.setAscInterventionActive(false);
+                        FaultStatus.setAscDeactivatedActive(false);
+                        FaultStatus.setascErrorActive(true);
+                        break;
+                    case 0xB:
+                        FaultStatus.setAscSelfDiagActive(true);
+                        FaultStatus.setAscInterventionActive(false);
+                        FaultStatus.setAscDeactivatedActive(false);
+                        FaultStatus.setascErrorActive(false);
+                        break;
+                    case 0xD:
+                        FaultStatus.setAscSelfDiagActive(false);
+                        FaultStatus.setAscInterventionActive(false);
+                        FaultStatus.setAscDeactivatedActive(false);
+                        FaultStatus.setascErrorActive(true);
+                        break;
+                    case 0xE:
+                        FaultStatus.setAscSelfDiagActive(false);
+                        FaultStatus.setAscInterventionActive(false);
+                        FaultStatus.setAscDeactivatedActive(false);
+                        FaultStatus.setascErrorActive(true);
+                        break;
+                    default:
+                        FaultStatus.setAscSelfDiagActive(false);
+                        FaultStatus.setAscInterventionActive(false);
+                        FaultStatus.setAscDeactivatedActive(false);
+                        FaultStatus.setascErrorActive(false);
+                        break;
+                }
+
+                //Oil Fault
+                int oilValue = (data[5] & 0xFF) & 0x0f; // the lowest 4 bits
+                switch (oilValue){
+                    case 0x2:
+                        FaultStatus.setOilLowActive(true);
+                        break;
+                    case 0x6:
+                        FaultStatus.setOilLowActive(true);
+                        break;
+                    case 0xA:
+                        FaultStatus.setOilLowActive(true);
+                        break;
+                    case 0xE:
+                        FaultStatus.setOilLowActive(true);
+                        break;
+                    default:
+                        FaultStatus.setOilLowActive(false);
+                        break;
+                }
+
+                break;
+            case 0x07:
+                //Log.d(TAG, "Message ID 7");
+                //Average Speed
+                if ((data[1] & 0xFF) != 0xFF && (data[2] & 0xFF) != 0xFF) {
+                    double avgSpeed = ((((data[1] & 0xFF) >> 4) & 0x0f) * 2) + (((data[1] & 0xFF) & 0x0f) * 0.125) + (((data[2] & 0xFF) & 0x0f) * 32);
+                    Data.setAvgSpeed(avgSpeed);
+                }
+
+                //Speed
+                if ((data[3] & 0xFF) != 0xFF) {
+                    int speed = (data[3] & 0xFF) * 2;
+                    Data.setSpeed(speed);
+                }
+
+                //Voltage
+                double voltage = (data[4] & 0xFF) / 10;
+                Data.setvoltage(voltage);
+
+                // Fuel Fault
+                int fuelValue = ((data[5] & 0xFF)  >> 4) & 0x0f; // the highest 4 bits.
+                switch (fuelValue){
+                    case 0x2:
+                        FaultStatus.setfuelFaultActive(true);
+                        fuelAlert();
+                        break;
+                    case 0x6:
+                        FaultStatus.setfuelFaultActive(true);
+                        fuelAlert();
+                        break;
+                    case 0xA:
+                        FaultStatus.setfuelFaultActive(true);
+                        fuelAlert();
+                        break;
+                    case 0xE:
+                        FaultStatus.setfuelFaultActive(true);
+                        fuelAlert();
+                        break;
+                    default:
+                        FaultStatus.setfuelFaultActive(false);
+                        fuelAlertSent = false;
+                        break;
+                }
+                // General Fault
+                int generalFault = (data[5] & 0xFF) & 0x0f; // the lowest 4 bits
+                switch (generalFault){
+                    case 0x1:
+                        FaultStatus.setGeneralFlashingYellowActive(true);
+                        FaultStatus.setGeneralShowsYellowActive(false);
+                        FaultStatus.setGeneralFlashingRedActive(false);
+                        FaultStatus.setGeneralShowsRedActive(false);
+                        if(FaultStatus.getgeneralFlashingRedNotificationActive()) {
+                            updateNotification();
+                            FaultStatus.setGeneralFlashingRedNotificationActive(false);
+                        }
+                        if(FaultStatus.getgeneralShowsRedNotificationActive()) {
+                            updateNotification();
+                            FaultStatus.setGeneralShowsRedNotificationActive(false);
+                        }
+                        break;
+                    case 0x2:
+                        FaultStatus.setGeneralFlashingYellowActive(false);
+                        FaultStatus.setGeneralShowsYellowActive(true);
+                        FaultStatus.setGeneralFlashingRedActive(false);
+                        FaultStatus.setGeneralShowsRedActive(false);
+                        if(FaultStatus.getgeneralFlashingRedNotificationActive()) {
+                            updateNotification();
+                            FaultStatus.setGeneralFlashingRedNotificationActive(false);
+                        }
+                        if(FaultStatus.getgeneralShowsRedNotificationActive()) {
+                            updateNotification();
+                            FaultStatus.setGeneralShowsRedNotificationActive(false);
+                        }
+                        break;
+                    case 0x4:
+                        FaultStatus.setGeneralFlashingYellowActive(false);
+                        FaultStatus.setGeneralShowsYellowActive(false);
+                        FaultStatus.setGeneralFlashingRedActive(true);
+                        FaultStatus.setGeneralShowsRedActive(false);
+                        if(!(FaultStatus.getgeneralFlashingRedNotificationActive())) {
+                            updateNotification();
+                            FaultStatus.setGeneralFlashingRedNotificationActive(true);
+                        }
+                        if(FaultStatus.getgeneralShowsRedNotificationActive()) {
+                            updateNotification();
+                            FaultStatus.setGeneralShowsRedNotificationActive(false);
+                        }
+                        break;
+                    case 0x5:
+                        FaultStatus.setGeneralFlashingYellowActive(true);
+                        FaultStatus.setGeneralShowsYellowActive(false);
+                        FaultStatus.setGeneralFlashingRedActive(true);
+                        FaultStatus.setGeneralShowsRedActive(false);
+                        if(!(FaultStatus.getgeneralFlashingRedNotificationActive())) {
+                            updateNotification();
+                            FaultStatus.setGeneralFlashingRedNotificationActive(true);
+                        }
+                        if(FaultStatus.getgeneralShowsRedNotificationActive()) {
+                            updateNotification();
+                            FaultStatus.setGeneralShowsRedNotificationActive(false);
+                        }
+                        break;
+                    case 0x6:
+                        FaultStatus.setGeneralFlashingYellowActive(false);
+                        FaultStatus.setGeneralShowsYellowActive(true);
+                        FaultStatus.setGeneralFlashingRedActive(true);
+                        FaultStatus.setGeneralShowsRedActive(false);
+                        if(!(FaultStatus.getgeneralFlashingRedNotificationActive())) {
+                            updateNotification();
+                            FaultStatus.setGeneralFlashingRedNotificationActive(true);
+                        }
+                        if(FaultStatus.getgeneralShowsRedNotificationActive()) {
+                            updateNotification();
+                            FaultStatus.setGeneralShowsRedNotificationActive(false);
+                        }
+                        break;
+                    case 0x7:
+                        FaultStatus.setGeneralFlashingYellowActive(false);
+                        FaultStatus.setGeneralShowsYellowActive(false);
+                        FaultStatus.setGeneralFlashingRedActive(true);
+                        FaultStatus.setGeneralShowsRedActive(false);
+                        if(!(FaultStatus.getgeneralFlashingRedNotificationActive())) {
+                            updateNotification();
+                            FaultStatus.setGeneralFlashingRedNotificationActive(true);
+                        }
+                        if(FaultStatus.getgeneralShowsRedNotificationActive()) {
+                            updateNotification();
+                            FaultStatus.setGeneralShowsRedNotificationActive(false);
+                        }
+                        break;
+                    case 0x8:
+                        FaultStatus.setGeneralFlashingYellowActive(false);
+                        FaultStatus.setGeneralShowsYellowActive(false);
+                        FaultStatus.setGeneralFlashingRedActive(false);
+                        FaultStatus.setGeneralShowsRedActive(true);
+                        if(FaultStatus.getgeneralFlashingRedNotificationActive()) {
+                            updateNotification();
+                            FaultStatus.setGeneralFlashingRedNotificationActive(false);
+                        }
+                        if(!(FaultStatus.getgeneralShowsRedNotificationActive())) {
+                            updateNotification();
+                            FaultStatus.setGeneralShowsRedNotificationActive(true);
+                        }
+                        break;
+                    case 0x9:
+                        FaultStatus.setGeneralFlashingYellowActive(false);
+                        FaultStatus.setGeneralShowsYellowActive(false);
+                        FaultStatus.setGeneralFlashingRedActive(true);
+                        FaultStatus.setGeneralShowsRedActive(true);
+                        if(!FaultStatus.getgeneralShowsRedNotificationActive() && !FaultStatus.getgeneralFlashingRedNotificationActive()) {
+                            updateNotification();
+                            FaultStatus.setGeneralFlashingRedNotificationActive(true);
+                            FaultStatus.setGeneralShowsRedNotificationActive(true);
+                        }
+                        break;
+                    case 0xA:
+                        FaultStatus.setGeneralFlashingYellowActive(false);
+                        FaultStatus.setGeneralShowsYellowActive(true);
+                        FaultStatus.setGeneralFlashingRedActive(false);
+                        FaultStatus.setGeneralShowsRedActive(true);
+                        if(FaultStatus.getgeneralFlashingRedNotificationActive()) {
+                            updateNotification();
+                            FaultStatus.setGeneralFlashingRedNotificationActive(false);
+                        }
+                        if(!(FaultStatus.getgeneralShowsRedNotificationActive())) {
+                            updateNotification();
+                            FaultStatus.setGeneralShowsRedNotificationActive(true);
+                        }
+                        break;
+                    case 0xB:
+                        FaultStatus.setGeneralFlashingYellowActive(false);
+                        FaultStatus.setGeneralShowsYellowActive(false);
+                        FaultStatus.setGeneralFlashingRedActive(false);
+                        FaultStatus.setGeneralShowsRedActive(true);
+                        if(FaultStatus.getgeneralFlashingRedNotificationActive()) {
+                            updateNotification();
+                            FaultStatus.setGeneralFlashingRedNotificationActive(false);
+                        }
+                        if(!(FaultStatus.getgeneralShowsRedNotificationActive())) {
+                            updateNotification();
+                            FaultStatus.setGeneralShowsRedNotificationActive(true);
+                        }
+                        break;
+                    case 0xD:
+                        FaultStatus.setGeneralFlashingYellowActive(true);
+                        FaultStatus.setGeneralShowsYellowActive(false);
+                        FaultStatus.setGeneralFlashingRedActive(false);
+                        FaultStatus.setGeneralShowsRedActive(false);
+                        if(FaultStatus.getgeneralFlashingRedNotificationActive()) {
+                            updateNotification();
+                            FaultStatus.setGeneralFlashingRedNotificationActive(false);
+                        }
+                        if(FaultStatus.getgeneralShowsRedNotificationActive()) {
+                            updateNotification();
+                            FaultStatus.setGeneralShowsRedNotificationActive(false);
+                        }
+                        break;
+                    case 0xE:
+                        FaultStatus.setGeneralFlashingYellowActive(false);
+                        FaultStatus.setGeneralShowsYellowActive(true);
+                        FaultStatus.setGeneralFlashingRedActive(false);
+                        FaultStatus.setGeneralShowsRedActive(false);
+                        if(FaultStatus.getgeneralFlashingRedNotificationActive()) {
+                            updateNotification();
+                            FaultStatus.setGeneralFlashingRedNotificationActive(false);
+                        }
+                        if(FaultStatus.getgeneralShowsRedNotificationActive()) {
+                            updateNotification();
+                            FaultStatus.setGeneralShowsRedNotificationActive(false);
+                        }
+                        break;
+                    default:
+                        FaultStatus.setGeneralFlashingYellowActive(false);
+                        FaultStatus.setGeneralShowsYellowActive(false);
+                        FaultStatus.setGeneralFlashingRedActive(false);
+                        FaultStatus.setGeneralShowsRedActive(false);
+                        if(FaultStatus.getgeneralFlashingRedNotificationActive()) {
+                            updateNotification();
+                            FaultStatus.setGeneralFlashingRedNotificationActive(false);
+                        }
+                        if(FaultStatus.getgeneralShowsRedNotificationActive()) {
+                            updateNotification();
+                            FaultStatus.setGeneralShowsRedNotificationActive(false);
+                        }
+                        break;
+                }
+                break;
+            case 0x08:
+                //Log.d(TAG, "Message ID 8");
+                double ambientTemp = ((data[1] & 0xFF) * 0.50) - 40;
+                Data.setAmbientTemperature(ambientTemp);
+                if(ambientTemp <= 0.0){
+                    FaultStatus.seticeWarnActive(true);
+                } else {
+                    FaultStatus.seticeWarnActive(false);
+                }
+
+                // LAMP Faults
+                if (((data[3] & 0xFF) != 0xFF) ) {
+                    // LAMPF 1
+                    int lampfOneValue = ((data[3] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
+                    switch (lampfOneValue) {
+                        case 0x1:
+                            FaultStatus.setAddFrontLightOneActive(true);
+                            FaultStatus.setAddFrontLightTwoActive(false);
+                            break;
+                        case 0x2:
+                            FaultStatus.setAddFrontLightOneActive(false);
+                            FaultStatus.setAddFrontLightTwoActive(true);
+                            break;
+                        case 0x3:
+                            FaultStatus.setAddFrontLightOneActive(true);
+                            FaultStatus.setAddFrontLightTwoActive(true);
+                            break;
+                        case 0x5:
+                            FaultStatus.setAddFrontLightOneActive(true);
+                            FaultStatus.setAddFrontLightTwoActive(false);
+                            break;
+                        case 0x6:
+                            FaultStatus.setAddFrontLightOneActive(false);
+                            FaultStatus.setAddFrontLightTwoActive(true);
+                            break;
+                        case 0x9:
+                            FaultStatus.setAddFrontLightOneActive(true);
+                            FaultStatus.setAddFrontLightTwoActive(false);
+                            break;
+                        case 0xA:
+                            FaultStatus.setAddFrontLightOneActive(false);
+                            FaultStatus.setAddFrontLightTwoActive(true);
+                            break;
+                        case 0xB:
+                            FaultStatus.setAddFrontLightOneActive(true);
+                            FaultStatus.setAddFrontLightTwoActive(true);
+                            break;
+                        case 0xD:
+                            FaultStatus.setAddFrontLightOneActive(true);
+                            FaultStatus.setAddFrontLightTwoActive(false);
+                            break;
+                        case 0xE:
+                            FaultStatus.setAddFrontLightOneActive(false);
+                            FaultStatus.setAddFrontLightTwoActive(true);
+                            break;
+                        default:
+                            FaultStatus.setAddFrontLightOneActive(false);
+                            FaultStatus.setAddFrontLightTwoActive(false);
+                            break;
+                    }
+                }
+                // LAMPF 2
+                if (((data[4] & 0xFF) != 0xFF) ) {
+                    int lampfTwoHighValue = ((data[4] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
+                    switch (lampfTwoHighValue) {
+                        case 0x1:
+                            FaultStatus.setDaytimeRunningActive(true);
+                            FaultStatus.setfrontLeftSignalActive(false);
+                            FaultStatus.setfrontRightSignalActive(false);
+                            break;
+                        case 0x2:
+                            FaultStatus.setDaytimeRunningActive(false);
+                            FaultStatus.setfrontLeftSignalActive(true);
+                            FaultStatus.setfrontRightSignalActive(false);
+                            break;
+                        case 0x3:
+                            FaultStatus.setDaytimeRunningActive(true);
+                            FaultStatus.setfrontLeftSignalActive(true);
+                            FaultStatus.setfrontRightSignalActive(false);
+                            break;
+                        case 0x4:
+                            FaultStatus.setDaytimeRunningActive(false);
+                            FaultStatus.setfrontLeftSignalActive(false);
+                            FaultStatus.setfrontRightSignalActive(true);
+                            break;
+                        case 0x5:
+                            FaultStatus.setDaytimeRunningActive(true);
+                            FaultStatus.setfrontLeftSignalActive(false);
+                            FaultStatus.setfrontRightSignalActive(true);
+                            break;
+                        case 0x6:
+                            FaultStatus.setDaytimeRunningActive(false);
+                            FaultStatus.setfrontLeftSignalActive(true);
+                            FaultStatus.setfrontRightSignalActive(true);
+                            break;
+                        case 0x7:
+                            FaultStatus.setDaytimeRunningActive(true);
+                            FaultStatus.setfrontLeftSignalActive(true);
+                            FaultStatus.setfrontRightSignalActive(true);
+                            break;
+                        case 0x9:
+                            FaultStatus.setDaytimeRunningActive(true);
+                            FaultStatus.setfrontLeftSignalActive(false);
+                            FaultStatus.setfrontRightSignalActive(false);
+                            break;
+                        case 0xA:
+                            FaultStatus.setDaytimeRunningActive(false);
+                            FaultStatus.setfrontLeftSignalActive(true);
+                            FaultStatus.setfrontRightSignalActive(false);
+                            break;
+                        case 0xB:
+                            FaultStatus.setDaytimeRunningActive(true);
+                            FaultStatus.setfrontLeftSignalActive(true);
+                            FaultStatus.setfrontRightSignalActive(false);
+                            break;
+                        case 0xC:
+                            FaultStatus.setDaytimeRunningActive(false);
+                            FaultStatus.setfrontLeftSignalActive(false);
+                            FaultStatus.setfrontRightSignalActive(true);
+                            break;
+                        case 0xD:
+                            FaultStatus.setDaytimeRunningActive(true);
+                            FaultStatus.setfrontLeftSignalActive(false);
+                            FaultStatus.setfrontRightSignalActive(true);
+                            break;
+                        case 0xE:
+                            FaultStatus.setDaytimeRunningActive(false);
+                            FaultStatus.setfrontLeftSignalActive(true);
+                            FaultStatus.setfrontRightSignalActive(true);
+                            break;
+                        case 0xF:
+                            FaultStatus.setDaytimeRunningActive(true);
+                            FaultStatus.setfrontLeftSignalActive(true);
+                            FaultStatus.setfrontRightSignalActive(true);
+                            break;
+                        default:
+                            FaultStatus.setDaytimeRunningActive(false);
+                            FaultStatus.setfrontLeftSignalActive(false);
+                            FaultStatus.setfrontRightSignalActive(false);
+                            break;
+                    }
+                    int lampfTwoLowValue = (data[4] & 0xFF) & 0x0f; // the lowest 4 bits
+                    switch (lampfTwoLowValue) {
+                        case 0x1:
+                            FaultStatus.setFrontParkingLightOneActive(true);
+                            FaultStatus.setFrontParkingLightTwoActive(false);
+                            FaultStatus.setLowBeamActive(false);
+                            FaultStatus.setHighBeamActive(false);
+                            break;
+                        case 0x2:
+                            FaultStatus.setFrontParkingLightOneActive(false);
+                            FaultStatus.setFrontParkingLightTwoActive(true);
+                            FaultStatus.setLowBeamActive(false);
+                            FaultStatus.setHighBeamActive(false);
+                            break;
+                        case 0x3:
+                            FaultStatus.setFrontParkingLightOneActive(true);
+                            FaultStatus.setFrontParkingLightTwoActive(true);
+                            FaultStatus.setLowBeamActive(false);
+                            FaultStatus.setHighBeamActive(false);
+                            break;
+                        case 0x4:
+                            FaultStatus.setFrontParkingLightOneActive(false);
+                            FaultStatus.setFrontParkingLightTwoActive(false);
+                            FaultStatus.setLowBeamActive(true);
+                            FaultStatus.setHighBeamActive(false);
+                            break;
+                        case 0x5:
+                            FaultStatus.setFrontParkingLightOneActive(true);
+                            FaultStatus.setFrontParkingLightTwoActive(false);
+                            FaultStatus.setLowBeamActive(true);
+                            FaultStatus.setHighBeamActive(false);
+                            break;
+                        case 0x6:
+                            FaultStatus.setFrontParkingLightOneActive(false);
+                            FaultStatus.setFrontParkingLightTwoActive(true);
+                            FaultStatus.setLowBeamActive(true);
+                            FaultStatus.setHighBeamActive(false);
+                            break;
+                        case 0x7:
+                            FaultStatus.setFrontParkingLightOneActive(true);
+                            FaultStatus.setFrontParkingLightTwoActive(true);
+                            FaultStatus.setLowBeamActive(true);
+                            FaultStatus.setHighBeamActive(false);
+                            break;
+                        case 0x8:
+                            FaultStatus.setFrontParkingLightOneActive(false);
+                            FaultStatus.setFrontParkingLightTwoActive(false);
+                            FaultStatus.setLowBeamActive(false);
+                            FaultStatus.setHighBeamActive(true);
+                            break;
+                        case 0x9:
+                            FaultStatus.setFrontParkingLightOneActive(true);
+                            FaultStatus.setFrontParkingLightTwoActive(false);
+                            FaultStatus.setLowBeamActive(false);
+                            FaultStatus.setHighBeamActive(true);
+                            break;
+                        case 0xA:
+                            FaultStatus.setFrontParkingLightOneActive(false);
+                            FaultStatus.setFrontParkingLightTwoActive(true);
+                            FaultStatus.setLowBeamActive(false);
+                            FaultStatus.setHighBeamActive(true);
+                            break;
+                        case 0xB:
+                            FaultStatus.setFrontParkingLightOneActive(true);
+                            FaultStatus.setFrontParkingLightTwoActive(true);
+                            FaultStatus.setLowBeamActive(false);
+                            FaultStatus.setHighBeamActive(true);
+                            break;
+                        case 0xC:
+                            FaultStatus.setFrontParkingLightOneActive(false);
+                            FaultStatus.setFrontParkingLightTwoActive(false);
+                            FaultStatus.setLowBeamActive(true);
+                            FaultStatus.setHighBeamActive(true);
+                            break;
+                        case 0xD:
+                            FaultStatus.setFrontParkingLightOneActive(true);
+                            FaultStatus.setFrontParkingLightTwoActive(false);
+                            FaultStatus.setLowBeamActive(true);
+                            FaultStatus.setHighBeamActive(true);
+                            break;
+                        case 0xE:
+                            FaultStatus.setFrontParkingLightOneActive(false);
+                            FaultStatus.setFrontParkingLightTwoActive(true);
+                            FaultStatus.setLowBeamActive(true);
+                            FaultStatus.setHighBeamActive(true);
+                            break;
+                        case 0xF:
+                            FaultStatus.setFrontParkingLightOneActive(true);
+                            FaultStatus.setFrontParkingLightTwoActive(true);
+                            FaultStatus.setLowBeamActive(true);
+                            FaultStatus.setHighBeamActive(true);
+                            break;
+                        default:
+                            FaultStatus.setFrontParkingLightOneActive(false);
+                            FaultStatus.setFrontParkingLightTwoActive(false);
+                            FaultStatus.setLowBeamActive(false);
+                            FaultStatus.setHighBeamActive(false);
+                            break;
+                    }
+                }
+
+                // LAMPF 3
+                if (((data[5] & 0xFF) != 0xFF) ) {
+                    int lampfThreeHighValue = ((data[5] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
+                    switch (lampfThreeHighValue) {
+                        case 0x1:
+                            FaultStatus.setrearRightSignalActive(true);
+                            break;
+                        case 0x3:
+                            FaultStatus.setrearRightSignalActive(true);
+                            break;
+                        case 0x5:
+                            FaultStatus.setrearRightSignalActive(true);
+                            break;
+                        case 0x7:
+                            FaultStatus.setrearRightSignalActive(true);
+                            break;
+                        case 0x9:
+                            FaultStatus.setrearRightSignalActive(true);
+                            break;
+                        case 0xB:
+                            FaultStatus.setrearRightSignalActive(true);
+                            break;
+                        case 0xD:
+                            FaultStatus.setrearRightSignalActive(true);
+                            break;
+                        case 0xF:
+                            FaultStatus.setrearRightSignalActive(true);
+                        default:
+                            FaultStatus.setrearRightSignalActive(false);
+                            break;
+                    }
+                    int lampfThreeLowValue = (data[5] & 0xFF) & 0x0f; // the lowest 4 bits
+                    switch (lampfThreeLowValue) {
+                        case 0x1:
+                            FaultStatus.setrearLeftSignalActive(false);
+                            FaultStatus.setRearLightActive(true);
+                            FaultStatus.setBrakeLightActive(false);
+                            FaultStatus.setLicenseLightActive(false);
+                            break;
+                        case 0x2:
+                            FaultStatus.setrearLeftSignalActive(false);
+                            FaultStatus.setRearLightActive(false);
+                            FaultStatus.setBrakeLightActive(true);
+                            FaultStatus.setLicenseLightActive(false);
+                            break;
+                        case 0x3:
+                            FaultStatus.setrearLeftSignalActive(false);
+                            FaultStatus.setRearLightActive(true);
+                            FaultStatus.setBrakeLightActive(true);
+                            FaultStatus.setLicenseLightActive(false);
+                            break;
+                        case 0x4:
+                            FaultStatus.setrearLeftSignalActive(false);
+                            FaultStatus.setRearLightActive(false);
+                            FaultStatus.setBrakeLightActive(false);
+                            FaultStatus.setLicenseLightActive(true);
+                            break;
+                        case 0x5:
+                            FaultStatus.setrearLeftSignalActive(true);
+                            FaultStatus.setRearLightActive(false);
+                            FaultStatus.setBrakeLightActive(false);
+                            FaultStatus.setLicenseLightActive(true);
+                            break;
+                        case 0x6:
+                            FaultStatus.setrearLeftSignalActive(false);
+                            FaultStatus.setRearLightActive(false);
+                            FaultStatus.setBrakeLightActive(true);
+                            FaultStatus.setLicenseLightActive(true);
+                            break;
+                        case 0x7:
+                            FaultStatus.setrearLeftSignalActive(false);
+                            FaultStatus.setRearLightActive(true);
+                            FaultStatus.setBrakeLightActive(true);
+                            FaultStatus.setLicenseLightActive(true);
+                            break;
+                        case 0x8:
+                            FaultStatus.setrearLeftSignalActive(true);
+                            FaultStatus.setRearLightActive(false);
+                            FaultStatus.setBrakeLightActive(false);
+                            FaultStatus.setLicenseLightActive(false);
+                            break;
+                        case 0x9:
+                            FaultStatus.setrearLeftSignalActive(true);
+                            FaultStatus.setRearLightActive(true);
+                            FaultStatus.setBrakeLightActive(false);
+                            FaultStatus.setLicenseLightActive(false);
+                            break;
+                        case 0xA:
+                            FaultStatus.setrearLeftSignalActive(true);
+                            FaultStatus.setRearLightActive(false);
+                            FaultStatus.setBrakeLightActive(true);
+                            FaultStatus.setLicenseLightActive(false);
+                            break;
+                        case 0xC:
+                            FaultStatus.setrearLeftSignalActive(true);
+                            FaultStatus.setRearLightActive(false);
+                            FaultStatus.setBrakeLightActive(false);
+                            FaultStatus.setLicenseLightActive(true);
+                            break;
+                        case 0xD:
+                            FaultStatus.setrearLeftSignalActive(true);
+                            FaultStatus.setRearLightActive(true);
+                            FaultStatus.setBrakeLightActive(true);
+                            FaultStatus.setLicenseLightActive(false);
+                            break;
+                        case 0xE:
+                            FaultStatus.setrearLeftSignalActive(true);
+                            FaultStatus.setRearLightActive(false);
+                            FaultStatus.setBrakeLightActive(true);
+                            FaultStatus.setLicenseLightActive(true);
+                            break;
+                        case 0xF:
+                            FaultStatus.setrearLeftSignalActive(true);
+                            FaultStatus.setRearLightActive(true);
+                            FaultStatus.setBrakeLightActive(true);
+                            FaultStatus.setLicenseLightActive(true);
+                            break;
+                        default:
+                            FaultStatus.setrearLeftSignalActive(false);
+                            FaultStatus.setRearLightActive(false);
+                            FaultStatus.setBrakeLightActive(false);
+                            FaultStatus.setLicenseLightActive(false);
+                            break;
+                    }
+                }
+
+                // LAMPF 4
+                if (((data[6] & 0xFF) != 0xFF) ) {
+                    int lampfFourHighValue = ((data[6] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
+                    switch (lampfFourHighValue) {
+                        case 0x1:
+                            FaultStatus.setRearFogLightActive(true);
+                            break;
+                        case 0x3:
+                            FaultStatus.setRearFogLightActive(true);
+                            break;
+                        case 0x5:
+                            FaultStatus.setRearFogLightActive(true);
+                            break;
+                        case 0x7:
+                            FaultStatus.setRearFogLightActive(true);
+                            break;
+                        case 0x9:
+                            FaultStatus.setRearFogLightActive(true);
+                            break;
+                        case 0xB:
+                            FaultStatus.setRearFogLightActive(true);
+                            break;
+                        case 0xD:
+                            FaultStatus.setRearFogLightActive(true);
+                            break;
+                        case 0xF:
+                            FaultStatus.setRearFogLightActive(true);
+                        default:
+                            FaultStatus.setRearFogLightActive(false);
+                            break;
+                    }
+                    int lampfFourLowValue = (data[6] & 0xFF) & 0x0f; // the lowest 4 bits
+                    switch (lampfFourLowValue) {
+                        case 0x1:
+                            FaultStatus.setAddDippedLightActive(true);
+                            FaultStatus.setAddBrakeLightActive(false);
+                            FaultStatus.setFrontLampOneLightActive(false);
+                            FaultStatus.setFrontLampTwoLightActive(false);
+                            break;
+                        case 0x2:
+                            FaultStatus.setAddDippedLightActive(false);
+                            FaultStatus.setAddBrakeLightActive(true);
+                            FaultStatus.setFrontLampOneLightActive(false);
+                            FaultStatus.setFrontLampTwoLightActive(false);
+                            break;
+                        case 0x3:
+                            FaultStatus.setAddDippedLightActive(true);
+                            FaultStatus.setAddBrakeLightActive(true);
+                            FaultStatus.setFrontLampOneLightActive(false);
+                            FaultStatus.setFrontLampTwoLightActive(false);
+                            break;
+                        case 0x4:
+                            FaultStatus.setAddDippedLightActive(false);
+                            FaultStatus.setAddBrakeLightActive(false);
+                            FaultStatus.setFrontLampOneLightActive(true);
+                            FaultStatus.setFrontLampTwoLightActive(false);
+                            break;
+                        case 0x5:
+                            FaultStatus.setAddDippedLightActive(true);
+                            FaultStatus.setAddBrakeLightActive(false);
+                            FaultStatus.setFrontLampOneLightActive(true);
+                            FaultStatus.setFrontLampTwoLightActive(false);
+                            break;
+                        case 0x6:
+                            FaultStatus.setAddDippedLightActive(false);
+                            FaultStatus.setAddBrakeLightActive(true);
+                            FaultStatus.setFrontLampOneLightActive(true);
+                            FaultStatus.setFrontLampTwoLightActive(false);
+                            break;
+                        case 0x7:
+                            FaultStatus.setAddDippedLightActive(true);
+                            FaultStatus.setAddBrakeLightActive(true);
+                            FaultStatus.setFrontLampOneLightActive(true);
+                            FaultStatus.setFrontLampTwoLightActive(false);
+                            break;
+                        case 0x8:
+                            FaultStatus.setAddDippedLightActive(false);
+                            FaultStatus.setAddBrakeLightActive(false);
+                            FaultStatus.setFrontLampOneLightActive(false);
+                            FaultStatus.setFrontLampTwoLightActive(true);
+                            break;
+                        case 0x9:
+                            FaultStatus.setAddDippedLightActive(true);
+                            FaultStatus.setAddBrakeLightActive(false);
+                            FaultStatus.setFrontLampOneLightActive(false);
+                            FaultStatus.setFrontLampTwoLightActive(true);
+                            break;
+                        case 0xA:
+                            FaultStatus.setAddDippedLightActive(false);
+                            FaultStatus.setAddBrakeLightActive(true);
+                            FaultStatus.setFrontLampOneLightActive(false);
+                            FaultStatus.setFrontLampTwoLightActive(true);
+                            break;
+                        case 0xB:
+                            FaultStatus.setAddDippedLightActive(true);
+                            FaultStatus.setAddBrakeLightActive(true);
+                            FaultStatus.setFrontLampOneLightActive(false);
+                            FaultStatus.setFrontLampTwoLightActive(true);
+                            break;
+                        case 0xC:
+                            FaultStatus.setAddDippedLightActive(false);
+                            FaultStatus.setAddBrakeLightActive(false);
+                            FaultStatus.setFrontLampOneLightActive(true);
+                            FaultStatus.setFrontLampTwoLightActive(true);
+                            break;
+                        case 0xD:
+                            FaultStatus.setAddDippedLightActive(true);
+                            FaultStatus.setAddBrakeLightActive(false);
+                            FaultStatus.setFrontLampOneLightActive(true);
+                            FaultStatus.setFrontLampTwoLightActive(true);
+                            break;
+                        case 0xE:
+                            FaultStatus.setAddDippedLightActive(false);
+                            FaultStatus.setAddBrakeLightActive(true);
+                            FaultStatus.setFrontLampOneLightActive(true);
+                            FaultStatus.setFrontLampTwoLightActive(true);
+                            break;
+                        case 0xF:
+                            FaultStatus.setAddDippedLightActive(true);
+                            FaultStatus.setAddBrakeLightActive(true);
+                            FaultStatus.setFrontLampOneLightActive(true);
+                            FaultStatus.setFrontLampTwoLightActive(true);
+                            break;
+                        default:
+                            FaultStatus.setAddDippedLightActive(false);
+                            FaultStatus.setAddBrakeLightActive(false);
+                            FaultStatus.setFrontLampOneLightActive(false);
+                            FaultStatus.setFrontLampTwoLightActive(false);
+                            break;
+                    }
+                }
+                break;
+            case 0x09:
+                //Log.d(TAG, "Message ID 9");
+                //Fuel Economy 1
+                if ((data[2] & 0xFF) != 0xFF) {
+                    double fuelEconomyOne = ((((data[2] & 0xFF) >> 4) & 0x0f) * 1.6) + (((data[2] & 0xFF) & 0x0f) * 0.1);
+                    Data.setFuelEconomyOne(fuelEconomyOne);
+                }
+                //Fuel Economy 2
+                if ((data[3] & 0xFF) != 0xFF) {
+                    double fuelEconomyTwo = ((((data[3] & 0xFF) >> 4) & 0x0f) * 1.6) + (((data[3] & 0xFF) & 0x0f) * 0.1);
+                    Data.setFuelEconomyTwo(fuelEconomyTwo);
+                }
+                //Current Consumption
+                if ((data[4] & 0xFF) != 0xFF) {
+                    double cConsumption = ((((data[4] & 0xFF) >> 4) & 0x0f) * 1.6) + (((data[4] & 0xFF) & 0x0f) * 0.1);
+                    Data.setCurrentConsumption(cConsumption);
+                }
+                break;
+            case 0x0a:
+                //Log.d(TAG, "Message ID 10");
+                double odometer = Utils.bytesToInt(data[3],data[2],data[1]);
+                Data.setOdometer(odometer);
+
+                if ((data[6] & 0xFF) != 0xFF && (data[5] & 0xFF) != 0xFF && (data[4] & 0xFF) != 0xFF) {
+                    double tripAuto = Utils.bytesToInt(data[6], data[5], data[4]) / 10;
+                    Data.setTripAuto(tripAuto);
+                }
+                break;
+            case 0x0b:
+                //Log.d(TAG, "Message ID 11");
+                break;
+            case 0x0c:
+                //Log.d(TAG, "Message ID 12");
+                if ((data[3] & 0xFF) != 0xFF && (data[2] & 0xFF) != 0xFF && (data[1] & 0xFF) != 0xFF) {
+                    double trip1 = Utils.bytesToInt(data[3], data[2], data[1]) / 10;
+                    Data.setTripOne(trip1);
+                }
+                if ((data[6] & 0xFF) != 0xFF && (data[5] & 0xFF) != 0xFF && (data[4] & 0xFF) != 0xFF) {
+                    double trip2 = Utils.bytesToInt(data[6], data[5], data[4]) / 10;
+                    Data.setTripTwo(trip2);
+                }
+                break;
+            case 0xff:
+                Log.d(TAG,"Debug Message received: " + Utils.ByteArraytoHex(data));
+                //
+                if (sharedPrefs.getBoolean("prefShowUartFaults",false)) {
+                    FaultStatus.setUartErrorActive(true);
+                    if ((data[7] & 0xFF) == 0xf0){
+                        FaultStatus.setUartCommTimeoutActive(true);
+                    }
+                }
+                break;
+            default:
+                Log.d(TAG, "Unknown Message ID: " + String.format("%02x", msgID));
         }
     }
 }

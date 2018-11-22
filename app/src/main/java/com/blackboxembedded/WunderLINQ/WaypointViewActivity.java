@@ -56,10 +56,8 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    // do something, e.g. set your TextView here via .setText()
                     InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                    String label = etLabel.getText().toString();
                     // Open database
                     WaypointDatasource datasource = new WaypointDatasource(WaypointViewActivity.this);
                     datasource.open();

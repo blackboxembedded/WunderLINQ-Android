@@ -49,8 +49,12 @@
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "wunderlinq://” -->
+                <data android:scheme="wunderlinq" />
             </intent-filter>
         </activity>
         <activity android:name=".MusicActivity" />
@@ -58,19 +62,9 @@
             android:name=".TaskActivity"
             android:launchMode="singleTop" />
         <activity android:name=".CompassActivity" />
-        <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings" />
+        <activity android:name=".SettingsActivity" />
         <activity android:name=".ContactListActivity" />
         <activity android:name=".FaultActivity" />
-        <activity
-            android:name=".OTAFirmwareUpdate.OTAFirmwareUpgradeActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".OTAFirmwareUpdate.OTAFilesListingActivity"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".WaypointActivity"
             android:screenOrientation="portrait" />
@@ -83,16 +77,9 @@
         <activity
             android:name=".TripViewActivity"
             android:screenOrientation="portrait" />
-
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.blackboxembedded.wunderlinq.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
-        </provider>
+        <activity android:name=".WaypointNavActivity" />
+        <activity android:name=".AlertActivity" />
+        <activity android:name=".AboutActivity" />
 
         <service
             android:name=".NotificationListener"
@@ -120,16 +107,22 @@
             android:enabled="true"
             android:exported="true" />
 
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.blackboxembedded.wunderlinq.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
         <receiver android:name=".BTConnectReceiver">
             <intent-filter>
                 <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
             </intent-filter>
         </receiver>
-
-        <activity android:name=".WaypointNavActivity" />
-        <activity android:name=".AlertActivity" />
-        <activity
-            android:name=".AboutActivity" />
     </application>
 
 </manifest>
