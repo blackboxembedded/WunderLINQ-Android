@@ -708,19 +708,17 @@ public class MainActivity extends AppCompatActivity {
 
         registerReceiver(mBondingBroadcast,new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-        if (mBluetoothLeService != null) {
-            //final boolean result =
+        if (mBluetoothLeService == null) {
             Log.d(TAG,"mBluetoothLeService is null");
-            mBluetoothLeService.connect(mDeviceAddress,getString(R.string.device_name));
-            //Log.d(TAG, "Connect request result=" + result);
-        } else {
-            Log.d(TAG,"mBluetoothLeService is NOT null");
             //Only use BLE if on a real device
             if(!(Build.BRAND.startsWith("Android") && Build.DEVICE.startsWith("generic"))) {
                 setupBLE();
             } else {
                 Log.d(TAG,"Running in the emulator");
             }
+        } else {
+            Log.d(TAG,"mBluetoothLeService is NOT null");
+            //mBluetoothLeService.connect(mDeviceAddress,getString(R.string.device_name));
         }
         sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
