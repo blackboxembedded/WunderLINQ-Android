@@ -1,107 +1,113 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_music"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/album_art_container"
-        android:layout_width="match_parent"
+
+    <ImageView
+        android:id="@+id/album_art"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_above="@id/metadata_container">
-        <ImageView
-            android:id="@+id/album_art"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="0dp"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"
-            android:src="@drawable/ic_music_note" />
-    </LinearLayout>
+        android:adjustViewBounds="true"
+        android:minHeight="0dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_music_note"
+        app:layout_constraintBottom_toTopOf="@+id/artist_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/metadata_container"
-        android:layout_width="match_parent"
+
+    <TextView
+        android:id="@+id/artist_text"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="end"
-        android:orientation="vertical"
-        android:paddingTop="40sp"
-        android:paddingBottom="40sp"
-        android:layout_above="@id/buttons_container">
-
-        <TextView
-            android:id="@+id/artist_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/album_art"
-            android:gravity="center"
-            android:text="@string/unknown"
-            android:textColor="@color/black"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/title_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/artist_text"
-            android:gravity="center"
-            android:text="@string/unknown"
-            android:textColor="@color/black"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/album_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/title_text"
-            android:gravity="center"
-            android:text="@string/unknown"
-            android:textColor="@color/black"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/buttons_container"
-        android:layout_width="match_parent"
-        android:layout_height="100sp"
-        android:layout_alignParentBottom="true"
         android:gravity="center"
-        android:orientation="horizontal" >
+        android:text="@string/unknown"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/title_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/album_art" />
 
-        <ImageButton
-            android:id="@+id/prev_button"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_backward"
-            android:adjustViewBounds="true"
-            android:padding="5dp"
-            android:scaleType="fitCenter"
-            android:focusable="false"/>
+    <TextView
+        android:id="@+id/title_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/unknown"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/album_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/artist_text" />
 
-        <ImageButton
-            android:id="@+id/play_pause_button"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_play"
-            android:adjustViewBounds="true"
-            android:padding="5dp"
-            android:scaleType="fitCenter"
-            android:focusable="true">
-            <requestFocus />
-        </ImageButton>
+    <TextView
+        android:id="@+id/album_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/unknown"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/prev_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_text" />
 
-        <ImageButton
-            android:id="@+id/next_button"
+
+    <ImageButton
+        android:id="@+id/prev_button"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:focusable="false"
+        android:padding="5dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_backward"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/play_pause_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/album_text" />
+
+    <ImageButton
+        android:id="@+id/play_pause_button"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:focusable="true"
+        android:padding="5dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_play"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/next_button"
+        app:layout_constraintStart_toEndOf="@+id/prev_button"
+        app:layout_constraintTop_toBottomOf="@+id/album_text">
+
+        <requestFocus
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_forward"
-            android:adjustViewBounds="true"
-            android:padding="5dp"
-            android:scaleType="fitCenter"
-            android:focusable="false"/>
-    </LinearLayout>
-</RelativeLayout>
+            android:layout_height="wrap_content" />
+    </ImageButton>
+
+    <ImageButton
+        android:id="@+id/next_button"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:focusable="false"
+        android:padding="5dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_forward"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/play_pause_button"
+        app:layout_constraintTop_toBottomOf="@+id/album_text" />
+
+</android.support.constraint.ConstraintLayout>

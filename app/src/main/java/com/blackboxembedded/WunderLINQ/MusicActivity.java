@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -37,7 +38,6 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -454,7 +454,7 @@ public class MusicActivity extends AppCompatActivity {
 
     public void updateColors(boolean itsDark){
         ((MyApplication) this.getApplication()).setitsDark(itsDark);
-        RelativeLayout lLayout = (RelativeLayout) findViewById(R.id.layout_music);
+        ConstraintLayout lLayout = (ConstraintLayout) findViewById(R.id.layout_music);
         if (itsDark) {
             //Set Brightness back to defaults
             WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
