@@ -1,6 +1,5 @@
 package com.blackboxembedded.WunderLINQ;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -21,42 +20,26 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 
-public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener{
+public class SettingsActivity extends PreferenceActivity{
 
     private final static String TAG = "SettingsActivity";
     private static SharedPreferences sharedPrefs;
-    static AlertDialog alertDialog;
 
     private static int versionButtonTouches = 0;
-
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
-        EditTextPreference addressPref = (EditTextPreference) findPreference("prefHomeAddress");
-        addressPref.setSummary(sharedPreferences.getString("prefHomeAddress",getString(R.string.pref_homeAddress_summary)));
-
-        EditTextPreference favNumberPref = (EditTextPreference) findPreference("prefHomePhone");
-        favNumberPref.setSummary(sharedPreferences.getString("prefHomePhone",getString(R.string.pref_homePhone_summary)));
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getFragmentManager().beginTransaction().replace(android.R.id.content, new UserSettingActivityFragment()).commit();
-
     }
 
-    public static class UserSettingActivityFragment extends PreferenceFragment
+    public static class UserSettingActivityFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener
     {
-
         @Override
         public void onStop() {
             super.onStop();
-            if (alertDialog != null) {
-                alertDialog.dismiss();
-                Log.d(TAG,"In onStop alertdialog.dismiss");
-                alertDialog = null;
-            }
         }
+
         @Override
         public void onCreate(final Bundle savedInstanceState)
         {
@@ -133,6 +116,29 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
                     return true;
                 }
             });
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+
+        }
+
+        @Override
+        public void onPause() {
+            getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+            super.onPause();
+        }
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
+        {
+            EditTextPreference addressPref = (EditTextPreference) findPreference("prefHomeAddress");
+            addressPref.setSummary(sharedPreferences.getString("prefHomeAddress",getString(R.string.pref_homeAddress_summary)));
+
+            EditTextPreference favNumberPref = (EditTextPreference) findPreference("prefHomePhone");
+            favNumberPref.setSummary(sharedPreferences.getString("prefHomePhone",getString(R.string.pref_homePhone_summary)));
         }
     }
 
