@@ -301,7 +301,6 @@
         android:id="@+id/buttonDelete"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="16dp"
         android:onClick="onClickDelete"
         android:text="@string/waypoint_view_bt_delete"
         android:textSize="18sp"
