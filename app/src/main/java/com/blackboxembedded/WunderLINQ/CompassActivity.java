@@ -11,6 +11,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -20,7 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class CompassActivity extends AppCompatActivity {
@@ -322,7 +322,7 @@ public class CompassActivity extends AppCompatActivity {
 
     public void updateColors(boolean itsDark){
         ((MyApplication) this.getApplication()).setitsDark(itsDark);
-        LinearLayout lLayout = (LinearLayout) findViewById(R.id.layout_compass);
+        ConstraintLayout lLayout = (ConstraintLayout) findViewById(R.id.layout_compass);
         if (itsDark) {
             //Set Brightness to default
             WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
