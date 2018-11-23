@@ -21,6 +21,8 @@ public class WaypointActivity extends AppCompatActivity {
     private ImageButton forwardButton;
 
     private ListView waypointList;
+    List<WaypointRecord> listValues;
+    ArrayAdapter<WaypointRecord> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +38,10 @@ public class WaypointActivity extends AppCompatActivity {
         WaypointDatasource datasource;
         datasource = new WaypointDatasource(this);
         datasource.open();
+        listValues = datasource.getAllRecords();
+        datasource.close();
 
-        List<WaypointRecord> listValues = datasource.getAllRecords();
-        ArrayAdapter<WaypointRecord> adapter = new
+        adapter = new
                 WaypointListView(this, listValues, false);
 
         waypointList.setAdapter(adapter);
@@ -53,6 +56,18 @@ public class WaypointActivity extends AppCompatActivity {
                 startActivity(waypointViewIntent);
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        WaypointDatasource datasource;
+        datasource = new WaypointDatasource(this);
+        datasource.open();
+        listValues = datasource.getAllRecords();
+        datasource.close();
+        adapter.addAll(listValues);
+        adapter.notifyDataSetChanged();
     }
 
     private void showActionBar(){

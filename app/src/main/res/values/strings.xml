@@ -134,9 +134,9 @@
     <string name="trip_view_tv_brakes">Brakes (Front/Rear)</string>
     <string name="trip_view_tv_ambient">Ambient Temp (Min/Avg/Max)</string>
     <string name="trip_view_tv_engine">Engine Temp (Min/Avg/Max)</string>
-    <string name="hours">Hours</string>
-    <string name="minutes">Minutes</string>
-    <string name="seconds">Seconds</string>
+    <string name="hours">h</string>
+    <string name="minutes">m</string>
+    <string name="seconds">s</string>
 
     <!-- CompassActivity -->
     <string name="compass_title">Compass</string>
