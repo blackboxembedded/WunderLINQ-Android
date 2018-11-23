@@ -34,7 +34,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -204,7 +203,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                         avgSpeed = Utils.kmToMiles(avgSpeed);
                         maxSpeed = Utils.kmToMiles(maxSpeed);
                     }
-                    tvSpeed.setText("(" + oneDigit.format(avgSpeed) + "/" + oneDigit.format(maxSpeed) + ")" + speedUnit);
+                    tvSpeed.setText("(" + Utils.oneDigit.format(avgSpeed) + "/" + Utils.oneDigit.format(maxSpeed) + ")" + speedUnit);
                 }
 
                 if(endShiftCnt != null){
@@ -238,7 +237,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                     minEngineTemp = 0.0;
                     maxEngineTemp = 0.0;
                 }
-                tvEngine.setText("(" + oneDigit.format(minEngineTemp) + "/" + oneDigit.format(avgEngineTemp) + "/" + oneDigit.format(maxEngineTemp) + ")" + temperatureUnit);
+                tvEngine.setText("(" + Utils.oneDigit.format(minEngineTemp) + "/" + Utils.oneDigit.format(avgEngineTemp) + "/" + Utils.oneDigit.format(maxEngineTemp) + ")" + temperatureUnit);
 
                 Double avgAmbientTemp = 0.0;
                 if (ambientTemps.size() > 0) {
@@ -257,7 +256,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                     minAmbientTemp = 0.0;
                     maxAmbientTemp = 0.0;
                 }
-                tvAmbient.setText("(" + oneDigit.format(minAmbientTemp) + "/" + oneDigit.format(avgAmbientTemp) + "/" + oneDigit.format(maxAmbientTemp) + ")" + temperatureUnit);
+                tvAmbient.setText("(" + Utils.oneDigit.format(minAmbientTemp) + "/" + Utils.oneDigit.format(avgAmbientTemp) + "/" + Utils.oneDigit.format(maxAmbientTemp) + ")" + temperatureUnit);
 
                 // Calculate Distance
                 double distance = 0;
@@ -267,11 +266,12 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                         distance = Utils.kmToMiles(distance);
                     }
                 }
-                tvDistance.setText(oneDigit.format(distance) + distanceUnit);
+                tvDistance.setText(Utils.oneDigit.format(distance) + distanceUnit);
 
                 // Calculate Duration
                 if (startTime != null && endTime != null) {
-                    tvDuration.setText(calculateDuration(startTime, endTime));
+                    long[] duration = Utils.calculateDuration(startTime, endTime);
+                    tvDuration.setText( String.valueOf(String.valueOf(duration[2])) + " " + getString(R.string.hours) + ", " + String.valueOf(duration[1]) + " " + getString(R.string.minutes) + ", " + String.valueOf(duration[0]) + " " + getString(R.string.seconds));
                 }
 
             } catch (IOException e){
@@ -376,29 +376,4 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
             }
         }
     };
-    public String calculateDuration(Date startDate, Date endDate){
-
-        //milliseconds
-        long different = endDate.getTime() - startDate.getTime();
-
-        long secondsInMilli = 1000;
-        long minutesInMilli = secondsInMilli * 60;
-        long hoursInMilli = minutesInMilli * 60;
-        long daysInMilli = hoursInMilli * 24;
-
-        //long elapsedDays = different / daysInMilli;
-        //different = different % daysInMilli;
-
-        long elapsedHours = different / hoursInMilli;
-        different = different % hoursInMilli;
-
-        long elapsedMinutes = different / minutesInMilli;
-        different = different % minutesInMilli;
-
-        long elapsedSeconds = different / secondsInMilli;
-        return elapsedHours + " " + getString(R.string.hours) + ", " + elapsedMinutes +
-                " " + getString(R.string.minutes) + ", " + elapsedSeconds + " " + getString(R.string.seconds);
-    }
-    //format to 1 decimal place
-    DecimalFormat oneDigit = new DecimalFormat("#,##0.0");
 }

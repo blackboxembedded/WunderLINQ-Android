@@ -55,7 +55,6 @@ import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -1069,7 +1068,7 @@ public class MainActivity extends AppCompatActivity {
                 rdcFront = Utils.barTokgf(rdcFront);
             } else if (pressureFormat.contains("3")) {
                 // Psi
-                rdcFront = Double.valueOf(oneDigit.format(Utils.barToPsi(rdcFront)));
+                rdcFront = Double.valueOf(Utils.oneDigit.format(Utils.barToPsi(rdcFront)));
             }
             textView1.setText(rdcFront + " " + pressureUnit);
         } else {
@@ -1085,7 +1084,7 @@ public class MainActivity extends AppCompatActivity {
                 rdcRear = Utils.barTokgf(rdcRear);
             } else if (pressureFormat.contains("3")) {
                 // Psi
-                rdcRear = Double.valueOf(oneDigit.format(Utils.barToPsi(rdcRear)));
+                rdcRear = Double.valueOf(Utils.oneDigit.format(Utils.barToPsi(rdcRear)));
             }
             textView5.setText(rdcRear + " " + pressureUnit);
         } else {
@@ -1231,8 +1230,5 @@ public class MainActivity extends AppCompatActivity {
     public static Context getContext(){
         return mContext;
     }
-
-    //format to 1 decimal place
-    DecimalFormat oneDigit = new DecimalFormat("#,##0.0");
 
 }

@@ -13,8 +13,6 @@ public class WaypointDatabase extends SQLiteAssetHelper {
     public WaypointDatabase(Context context) {
 
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        //SQLiteDatabase db = getWritableDatabase();
-        //db.close();
         setForcedUpgrade();
 
     }

@@ -20,7 +20,6 @@ public class WaypointListView extends ArrayAdapter {
         this.context = context;
         this.label = label;
         this.itsDark = itsDark;
-
     }
     @Override
     public View getView(int position, View view, ViewGroup parent) {

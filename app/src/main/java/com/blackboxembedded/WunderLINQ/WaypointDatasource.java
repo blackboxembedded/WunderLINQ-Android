@@ -45,16 +45,6 @@ public class WaypointDatasource {
         c.close();
         return pageList;
     }
-    public Cursor getAllRecordsCursor() {
-
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor c = db.query(sqlTable, new String[] {"date", "data", "label"}, null, null, null, null,  "date DESC");
-        if (c != null) {
-            c.moveToFirst();
-        }
-
-        return c;
-    }
     // Add record to database
     void addRecord(WaypointRecord record) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -94,7 +84,16 @@ public class WaypointDatasource {
         db.close();
         return record;
     }
+    public Cursor getAllRecordsCursor() {
 
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor c = db.query(sqlTable, new String[] {"date", "data", "label"}, null, null, null, null,  "date DESC");
+        if (c != null) {
+            c.moveToFirst();
+        }
+
+        return c;
+    }
     private WaypointRecord cursorToRecord(Cursor cursor) {
         WaypointRecord record = new WaypointRecord();
         record.setID(cursor.getLong(0));
@@ -103,5 +102,4 @@ public class WaypointDatasource {
         record.setLabel(cursor.getString(cursor.getColumnIndex("label")));
         return record;
     }
-
 }

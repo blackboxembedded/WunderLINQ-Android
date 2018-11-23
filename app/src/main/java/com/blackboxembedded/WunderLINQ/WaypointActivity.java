@@ -29,23 +29,14 @@ public class WaypointActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
         setContentView(R.layout.activity_waypoint);
-
+        waypointList = (ListView) findViewById(R.id.lv_waypoints);
         showActionBar();
 
-        waypointList = (ListView) findViewById(R.id.lv_waypoints);
-
-        // Open database
-        WaypointDatasource datasource;
-        datasource = new WaypointDatasource(this);
-        datasource.open();
-        listValues = datasource.getAllRecords();
-        datasource.close();
+        updateListing();
 
         adapter = new
                 WaypointListView(this, listValues, false);
-
         waypointList.setAdapter(adapter);
-
         waypointList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick (AdapterView < ? > adapter, View view, int position, long arg){
@@ -61,11 +52,7 @@ public class WaypointActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        WaypointDatasource datasource;
-        datasource = new WaypointDatasource(this);
-        datasource.open();
-        listValues = datasource.getAllRecords();
-        datasource.close();
+        updateListing();
         adapter.addAll(listValues);
         adapter.notifyDataSetChanged();
     }
@@ -102,4 +89,12 @@ public class WaypointActivity extends AppCompatActivity {
             }
         }
     };
+
+    private void updateListing(){
+        WaypointDatasource datasource;
+        datasource = new WaypointDatasource(this);
+        datasource.open();
+        listValues = datasource.getAllRecords();
+        datasource.close();
+    }
 }
