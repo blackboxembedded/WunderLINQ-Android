@@ -249,7 +249,7 @@ public class CompassActivity extends AppCompatActivity {
                     String cardinal = "";
                     SensorManager.remapCoordinateSystem(R, SensorManager.AXIS_X, SensorManager.AXIS_Z, remappedR);
                     SensorManager.getOrientation(remappedR, orientation);
-                    int direction = filterChange(normalizeDegrees(Math.toDegrees(orientation[0])));
+                    int direction = filterChange(Utils.normalizeDegrees(Math.toDegrees(orientation[0])));
                     if((int)direction != (int)lastDirection) {
                         lastDirection = (int) direction;
                         bearing = String.valueOf(lastDirection) + "°";
@@ -351,12 +351,6 @@ public class CompassActivity extends AppCompatActivity {
             forwardButton.setColorFilter(getResources().getColor(R.color.black));
         }
     }
-
-    //Normalize a degree from 0 to 360 instead of -180 to 180
-    private int normalizeDegrees(double rads){
-        return (int)((rads+360)%360);
-    }
-
 
     private int filterChange(int newDir){
         int change = newDir - lastDirection;

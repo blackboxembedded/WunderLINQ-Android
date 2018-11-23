@@ -43,6 +43,11 @@ public class Utils {
         return duration;
     }
 
+    //Normalize a degree from 0 to 360 instead of -180 to 180
+    public static int normalizeDegrees(double rads){
+        return (int)((rads+360)%360);
+    }
+
     // Unit Conversion Functions
     // bar to psi
     public static double barToPsi(double bar){
