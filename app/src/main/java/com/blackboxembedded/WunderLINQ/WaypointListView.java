@@ -16,7 +16,7 @@ public class WaypointListView extends ArrayAdapter {
     private final boolean itsDark;
     public WaypointListView(Activity context,
                             List<WaypointRecord> label, boolean itsDark) {
-        super(context, R.layout.list_task, label);
+        super(context, R.layout.list_waypoint, label);
         this.context = context;
         this.label = label;
         this.itsDark = itsDark;

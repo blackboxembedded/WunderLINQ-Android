@@ -207,8 +207,8 @@ public class MusicActivity extends AppCompatActivity {
                 mHandler.post(mUpdateMetaData);
             } else {
                 mTitleText.setText(R.string.not_found_media_player);
-                mAlbumText.setText("");
-                mArtistText.setText(R.string.start_media_player);
+                mAlbumText.setText(R.string.start_media_player);
+                mArtistText.setText("");
             }
         } else {
             // Need permissions to read notifications
@@ -394,8 +394,8 @@ public class MusicActivity extends AppCompatActivity {
             } else {
                 Log.d(TAG, "No music player running");
                 mArtistText.setText(R.string.not_found_media_player);
-                mTitleText.setText("");
-                mAlbumText.setText(R.string.start_media_player);
+                mTitleText.setText(R.string.start_media_player);
+                mAlbumText.setText("");
             }
         } else {
             Log.d(TAG, "No permissions to control music player");

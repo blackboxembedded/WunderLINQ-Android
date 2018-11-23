@@ -31,6 +31,8 @@ public class TripsActivity extends AppCompatActivity {
     private ListView tripList;
 
     private ArrayList myList;
+    ArrayAdapter<String> adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,23 +44,11 @@ public class TripsActivity extends AppCompatActivity {
         showActionBar();
 
         myList = new ArrayList<String>();
+        updateListing();
+        if (myList.size() > 0 ) {
+            adapter = new
+                    TripListView(this, myList);
 
-        File root = new File(Environment.getExternalStorageDirectory(), "/WunderLINQ/logs/");
-        if(!root.exists()){
-            if(!root.mkdirs()){
-                Log.d(TAG,"Unable to create directory: " + root);
-            }
-        }
-        File list[] = root.listFiles();
-        if (list != null ) {
-            Arrays.sort(list, Collections.reverseOrder());
-
-            for (int i = 0; i < list.length; i++) {
-                myList.add(list[i].getName());
-            }
-
-            ArrayAdapter<WaypointRecord> adapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_list_item_1, myList);
             tripList.setAdapter(adapter);
 
             tripList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -70,6 +60,14 @@ public class TripsActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateListing();
+        adapter.addAll(myList);
+        adapter.notifyDataSetChanged();
     }
 
     private void showActionBar(){
@@ -104,4 +102,21 @@ public class TripsActivity extends AppCompatActivity {
             }
         }
     };
+
+    private void updateListing(){
+        File root = new File(Environment.getExternalStorageDirectory(), "/WunderLINQ/logs/");
+        if(!root.exists()){
+            if(!root.mkdirs()){
+                Log.d(TAG,"Unable to create directory: " + root);
+            }
+        }
+        File list[] = root.listFiles();
+        if (list != null ) {
+            Arrays.sort(list, Collections.reverseOrder());
+
+            for (int i = 0; i < list.length; i++) {
+                myList.add(list[i].getName());
+            }
+        }
+    }
 }
