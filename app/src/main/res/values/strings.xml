@@ -174,6 +174,7 @@
     <string name="task_title_waypoint">Save Waypoint</string>
     <string name="task_title_waypoint_nav">Navigate to Waypoint</string>
     <string name="task_title_voicecontrol">Voice Assistant</string>
+    <string name="task_title_empty">Empty</string>
     <string name="toast_address_not_set">No Go Home address set in Settings</string>
     <string name="toast_phone_not_set">No Favorite Number set in Settings</string>
     <string name="toast_photo_taken">Photo Taken!</string>
@@ -265,7 +266,48 @@
         <item name="4">4</item>
         <item name="5">0</item>
     </string-array>
-    <string name="pref_nav_app">Motorcycle Type</string>
+    <string name="pref_tasks_settings_title">Quick Task Settings</string>
+    <string name="pref_tasks_settings_summary">Quick Task List Order</string>
+    <string name="pref_task_one">First</string>
+    <string name="pref_task_two">Second</string>
+    <string name="pref_task_three">Third</string>
+    <string name="pref_task_four">Fourth</string>
+    <string name="pref_task_five">Fith</string>
+    <string name="pref_task_six">Sixth</string>
+    <string name="pref_task_seven">Seventh</string>
+    <string name="pref_task_eight">Eigth</string>
+    <string name="pref_task_nine">Ninth</string>
+    <string name="pref_task_ten">Tenth</string>
+    <string name="pref_task_eleven">Eleventh</string>
+    <string-array name="tasks_array">
+        <item name="1">@string/task_title_navigation</item>
+        <item name="2">@string/task_title_gohome</item>
+        <item name="3">@string/task_title_favnumber</item>
+        <item name="4">@string/task_title_callcontact</item>
+        <item name="5">@string/task_title_photo</item>
+        <item name="6">@string/task_title_selfie</item>
+        <item name="7">@string/task_title_start_record</item>
+        <item name="8">@string/task_title_start_trip</item>
+        <item name="9">@string/task_title_waypoint</item>
+        <item name="10">@string/task_title_waypoint_nav</item>
+        <item name="11">@string/task_title_voicecontrol</item>
+        <item name="12">@string/task_title_empty</item>
+    </string-array>
+    <string-array name="tasks_arrayValues">
+        <item name="1">0</item>
+        <item name="2">1</item>
+        <item name="3">2</item>
+        <item name="4">3</item>
+        <item name="5">4</item>
+        <item name="6">5</item>
+        <item name="7">6</item>
+        <item name="8">7</item>
+        <item name="9">8</item>
+        <item name="10">9</item>
+        <item name="11">10</item>
+        <item name="12">11</item>
+    </string-array>
+    <string name="pref_nav_app">Navigation App</string>
     <string-array name="nav_apps_array">
         <item name="1">Google Maps</item>
         <item name="2">Locus</item>

@@ -14,14 +14,16 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class TaskListView extends ArrayAdapter<String>{
 
     private final Activity context;
-    private final String[] label;
-    private final Drawable[] icon;
+    private final List<String> label;
+    private final List<Drawable> icon;
     private final boolean itsDark;
     public TaskListView(Activity context,
-                      String[] label, Drawable[] icon, boolean itsDark) {
+                        List<String> label, List<Drawable> icon, boolean itsDark) {
         super(context, R.layout.list_task, label);
         this.context = context;
         this.label = label;
@@ -36,13 +38,13 @@ public class TaskListView extends ArrayAdapter<String>{
         TextView txtTitle = (TextView) rowView.findViewById(R.id.tv_label);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.iv_icon);
 
-        txtTitle.setText(label[position]);
+        txtTitle.setText(label.get(position));
         if (itsDark){
             txtTitle.setTextColor(Color.WHITE);
         } else {
             txtTitle.setTextColor(Color.BLACK);
         }
-        imageView.setImageDrawable(icon[position]);
+        imageView.setImageDrawable(icon.get(position));
         return rowView;
     }
 }
