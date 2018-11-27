@@ -25,7 +25,7 @@
     <string name="disclaimer_alert_title">ΠΡΟΣΟΧΗ!</string>
     <string name="disclaimer_alert_body">
 		Μην επιχειρήτε να εισάγετε πληροφορίες διαδρομής ή να ρυθμίσετε το WunderLINQ ενώ οδειγείτε.
-		Η έλλειψη πλήρους προσοχής στο χειρισμό του οχήματός σας, μπορεί να έχει ως αποτέλεσμα το θάνατο, σοβαρό τραυματισμό, ή φθορά της περιοσίας σας.
+		Η έλλειψη πλήρους προσοχής στο χειρισμό του οχήματός σας, μπορεί να έχει ως αποτέλεσμα το θάνατο, σοβαρό τραυματισμό, ή φθορά της περιουσίας σας.
 		Χρησιμοποιώντας αυτή τη συσκευή αναλαμβάνετε την πλήρη ευθύνη και κίνδυνο.
     </string>
     <string name="disclaimer_ok">Συμφωνώ</string>
@@ -36,8 +36,8 @@
 
     <string name="rdc_front_label">Εμπρός ελαστικό</string>
     <string name="rdc_rear_label">Πίσω ελαστικό</string>
-    <string name="engine_temp_label">Θερμοκρασία κινητήρα</string>
-    <string name="ambient_temp_label">Θερμοκρασία περιβάλλοντος</string>
+    <string name="engine_temp_label">Θερμ. κινητήρα</string>
+    <string name="ambient_temp_label">Θερμ. περιβάλλοντος</string>
     <string name="odometer_label">Χιλιομετρητής</string>
     <string name="trip1_label">Διαδρομή 1</string>
     <string name="trip2_label">Διαδρομή 2</string>
@@ -141,20 +141,20 @@
     <!-- TaskActivity -->
     <string name="quicktask_title">Γρήγορα εργαλεία</string>
     <string name="task_title_navigation">Πλοήγηση</string>
-    <string name="task_title_gohome">Μετάβαση στην αρχική</string>
+    <string name="task_title_gohome">Πλοήγηση σε προτιμ. διεύθυνση</string>
     <string name="task_title_favnumber">Κλήση προτιμώμενου αριθμού</string>
     <string name="task_title_callcontact">Κλήση επαφής</string>
     <string name="task_title_photo">Λήψη φωτογραφίας</string>
     <string name="task_title_selfie">Λήψη Selfie</string>
-    <string name="task_title_start_record">Έναρξη καταγραφής βίντεο</string>
-    <string name="task_title_stop_record">Παύση καταγραφής βίντεο</string>
-    <string name="task_title_start_trip">Εναρξη καταγραφής διαδρομής</string>
-    <string name="task_title_stop_trip">Παύση καταγραφής διαδρομής</string>
+    <string name="task_title_start_record">Έναρξη καταγρ. βίντεο</string>
+    <string name="task_title_stop_record">Παύση καταγρ. βίντεο</string>
+    <string name="task_title_start_trip">Εναρξη καταγρ. διαδρομής</string>
+    <string name="task_title_stop_trip">Παύση καταγρ. διαδρομής</string>
     <string name="title_logging_notification">Καταγραφή διαδρομής WunderLINQ ενεργή</string>
-    <string name="task_title_waypoint">Αποθήκευση προορισμού</string>
-    <string name="task_title_waypoint_nav">Πλοήγηση στον προορισμό</string>
+    <string name="task_title_waypoint">Αποθ. προορισμού</string>
+    <string name="task_title_waypoint_nav">Πλοήγ. στον προορισμό</string>
     <string name="task_title_voicecontrol">Φωνητικές οδηγίες</string>
-    <string name="toast_address_not_set">Δεν βρέθηκε αποθηκευμένη διεύθυνση οικίας στις ρυθμίσεις</string>
+    <string name="toast_address_not_set">Δεν βρέθηκε αποθηκευμένη προτιμώμενη διεύθυνση στις ρυθμίσεις</string>
     <string name="toast_phone_not_set">Δεν βρέθηκε αποθηκευμένος προτιμώμενος αριθμός στις ρυθμίσεις</string>
     <string name="toast_photo_taken">Επιτυχής λήψη φωτογραφίας!</string>
 
@@ -328,6 +328,62 @@
     <string name="pref_btn_version_title">Έκδοση WunderLINQ</string>
     <string name="pref_btn_version_summary">Είσοδος στη λειτουργία ενημέρωσης firmware του WunderLINQ</string>
     <string name="pref_btn_version_toast">Το μενού αποσφαλμάτωσης ενεργοποιήθηκε. Πραγματοποιείστε έξοδο και στη συνέχεια εισέλθετε εκ νέου στις Ρυθμίσεις.</string>
-
-    <!-- AboutActivity -->
+    <string name="settings_label">Settings</string>
+    <string name="info_label">About</string>
+    <string name="close_label">Close</string>
+    <string name="about_title">About</string>
+    <string name="time_header">Time</string>
+    <string name="latitude_header">Latitude</string>
+    <string name="longitude_header">Longitude</string>
+    <string name="altitude_header">Altitude (m)</string>
+    <string name="gpsspeed_header">GPS Speed (kmh)</string>
+    <string name="gear_header">Gear</string>
+    <string name="enginetemp_header">Engine Temperature (C)</string>
+    <string name="ambienttemp_header">Ambient Temperature (C)</string>
+    <string name="frontpressure_header">Front Tire Pressure (bar)</string>
+    <string name="rearpressure_header">Rear Tire Pressure (bar)</string>
+    <string name="odometer_header">Odometer (km)</string>
+    <string name="voltage_header">Voltage (V)</string>
+    <string name="throttle_header">Throttle Position (%)</string>
+    <string name="frontbrakes_header">Front Brakes</string>
+    <string name="rearbrakes_header">Rear Brakes</string>
+    <string name="shifts_header">Shifts</string>
+    <string name="vin_header">VIN</string>
+    <string name="ambientlight_header">Ambient Light</string>
+    <string name="tripone_header">Trip1 (km)</string>
+    <string name="triptwo_header">Trip2 (km)</string>
+    <string name="tripauto_header">Trip Auto (km)</string>
+    <string name="speed_header">Speed (kmh)</string>
+    <string name="avgspeed_header">Average Speed (kmh)</string>
+    <string name="cconsumption_header">Current Consumption (L/100)</string>
+    <string name="fueleconomyone_header">Fuel Economy 1 (L/100)</string>
+    <string name="fueleconomytwo_header">Fuel Economy 2 (L/100)</string>
+    <string name="fuelrange_header">Fuel Range (km)</string>
+    <string name="hours">h</string>
+    <string name="minutes">m</string>
+    <string name="seconds">s</string>
+    <string name="north">N</string>
+    <string name="north_west">NW</string>
+    <string name="north_east">NE</string>
+    <string name="south">S</string>
+    <string name="south_west">SW</string>
+    <string name="south_east">SE</string>
+    <string name="west">W</string>
+    <string name="east">E</string>
+    <string name="usagestats_alert_title">WunderLINQ needs usage stat access</string>
+    <string name="usagestats_alert_body">Please grant usage stat access, this will allow for auto launch of the App when the WunderLINQ device is connected.</string>
+    <string name="task_title_empty">Empty</string>
+    <string name="pref_tasks_settings_title">Quick Task Customization</string>
+    <string name="pref_tasks_settings_summary">Customize which tasks to display and in which order</string>
+    <string name="pref_task_one">First</string>
+    <string name="pref_task_two">Second</string>
+    <string name="pref_task_three">Third</string>
+    <string name="pref_task_four">Fourth</string>
+    <string name="pref_task_five">Fith</string>
+    <string name="pref_task_six">Sixth</string>
+    <string name="pref_task_seven">Seventh</string>
+    <string name="pref_task_eight">Eighth</string>
+    <string name="pref_task_nine">Ninth</string>
+    <string name="pref_task_ten">Tenth</string>
+    <string name="pref_task_eleven">Eleventh</string>
 </resources>

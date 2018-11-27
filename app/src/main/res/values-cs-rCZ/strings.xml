@@ -37,7 +37,7 @@
     <string name="rdc_front_label">Přední pneu</string>
     <string name="rdc_rear_label">Zadní pneu</string>
     <string name="engine_temp_label">Teplota motoru</string>
-    <string name="ambient_temp_label">Venkovní teplota</string>
+    <string name="ambient_temp_label">Okolní teplota</string>
     <string name="odometer_label">Ujetá vzdálenost</string>
     <string name="trip1_label">Trip 1</string>
     <string name="trip2_label">Trip 2</string>
@@ -130,7 +130,7 @@
     <string name="trip_view_tv_speed">Rychlost (Průměr/Max)</string>
     <string name="trip_view_tv_shifts">Počet řazení rychlosti</string>
     <string name="trip_view_tv_brakes">Brždění (Přední/Zadní)</string>
-    <string name="trip_view_tv_ambient">Venkovní teplota (Min/Prům/Max)</string>
+    <string name="trip_view_tv_ambient">Okolní teplota (Min/Prům/Max)</string>
     <string name="trip_view_tv_engine">Teplota motoru (Min/Prům/Max)</string>
     <string name="hours">hod</string>
     <string name="minutes">min</string>
@@ -214,7 +214,7 @@
     <string name="gpsspeed_header">GPS Rychlost (km/h)</string>
     <string name="gear_header">Převodový stupeň</string>
     <string name="enginetemp_header">Teplota motoru (C)</string>
-    <string name="ambienttemp_header">Venkovní teplota (C)</string>
+    <string name="ambienttemp_header">Okolní teplota (C)</string>
     <string name="frontpressure_header">Tlak v přední pneu (bar)</string>
     <string name="rearpressure_header">Tlak v zadní pneu (bar)</string>
     <string name="odometer_header">Celkem najeto (km)</string>
@@ -382,9 +382,24 @@
     <string name="pref_btn_dfumode_warning_body">You are about to place the WunderLINQ into DFU mode.
         When you select OK the WunderLINQ app will disconnect and the WunderLINQ hardwares status light should be solid green.
         You will be be returned to the main screen and when the app reconnects it should prompt to update.</string>
-    <string name="pref_btn_version_title">WunderLINQ Version</string>
+    <string name="pref_btn_version_title">Verze WunderLINQ</string>
     <string name="pref_btn_version_summary">Vstoupit do režimu WunderLINQ Firmware Update</string>
     <string name="pref_btn_version_toast">Debug Menu aktivováno. Zavřete a znovu otevřete nastavení</string>
-
-    <!-- AboutActivity -->
+    <string name="usagestats_alert_title">WunderLINQ vyžaduje oprávnění pro přístup k údajům o využití</string>
+    <string name="usagestats_alert_body">Udělte prosím oprávnění pro přístup k údajům o využití tak, aby bylo možné automaticky spustit aplikaci po připojení k zařízení WunderLINQ</string>
+    <string name="negative_usagestats_alert_body">Chybí oprávnění k přístupu k údajům o využití, nebude možné automaticky spustit aplikaci po připojení k zařízení WunderLINQ</string> <!-- New -->
+    <string name="task_title_empty">Prázdná</string>
+    <string name="pref_tasks_settings_title">Pořadí rychlých akcí</string>
+    <string name="pref_tasks_settings_summary">Upravte pořadí a výběr rychlých akcí</string>
+    <string name="pref_task_one">První</string>
+    <string name="pref_task_two">Druhá</string>
+    <string name="pref_task_three">Třetí</string>
+    <string name="pref_task_four">Čtvrtá</string>
+    <string name="pref_task_five">Pátá</string>
+    <string name="pref_task_six">Šestá</string>
+    <string name="pref_task_seven">Sedmá</string>
+    <string name="pref_task_eight">Osmá</string>
+    <string name="pref_task_nine">Devátá</string>
+    <string name="pref_task_ten">Desátá</string>
+    <string name="pref_task_eleven">Jedenáctá</string>
 </resources>

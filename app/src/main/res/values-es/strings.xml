@@ -397,6 +397,33 @@
     <string name="pref_btn_version_title">Versión de WunderLINQ</string>
     <string name="pref_btn_version_summary">Comenzar Modo de Actualización de Firmware WunderLINQ</string>
     <string name="pref_btn_version_toast">Menú de Depuración activo. Salir y, después, volver a entrar en Ajustes.</string>
+    <string name="hours">h</string>
+    <string name="minutes">m</string>
+    <string name="seconds">s</string>
+    <string name="north">N</string>
+    <string name="north_west">NW</string>
+    <string name="north_east">NE</string>
+    <string name="south">S</string>
+    <string name="south_west">SW</string>
+    <string name="south_east">SE</string>
+    <string name="west">W</string>
+    <string name="east">E</string>
+    <string name="usagestats_alert_title">WunderLINQ needs usage stat access</string>
+    <string name="usagestats_alert_body">Please grant usage stat access, this will allow for auto launch of the App when the WunderLINQ device is connected.</string>
+    <string name="task_title_empty">Empty</string>
+    <string name="pref_tasks_settings_title">Quick Task Customization</string>
+    <string name="pref_tasks_settings_summary">Customize which tasks to display and in which order</string>
+    <string name="pref_task_one">First</string>
+    <string name="pref_task_two">Second</string>
+    <string name="pref_task_three">Third</string>
+    <string name="pref_task_four">Fourth</string>
+    <string name="pref_task_five">Fith</string>
+    <string name="pref_task_six">Sixth</string>
+    <string name="pref_task_seven">Seventh</string>
+    <string name="pref_task_eight">Eighth</string>
+    <string name="pref_task_nine">Ninth</string>
+    <string name="pref_task_ten">Tenth</string>
+    <string name="pref_task_eleven">Eleventh</string>
 
     <!-- AboutActivity -->
 </resources>

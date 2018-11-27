@@ -249,7 +249,6 @@
     <string name="pref_homeAddress_summary">Format: 12345 Street, City, State 12345</string>
     <string name="pref_homePhone_name">Favorite Phone Number</string>
     <string name="pref_homePhone_summary">Format: 11234567890</string>
-
     <string name="ui_title">User Interface</string>
     <string name="pref_bike_type">Motorcycle Type</string>
     <string-array name="bike_type_array">
@@ -266,8 +265,8 @@
         <item name="4">4</item>
         <item name="5">0</item>
     </string-array>
-    <string name="pref_tasks_settings_title">Quick Task Settings</string>
-    <string name="pref_tasks_settings_summary">Quick Task List Order</string>
+    <string name="pref_tasks_settings_title">Quick Task Customization</string>
+    <string name="pref_tasks_settings_summary">Customize which tasks to display and in which order</string>
     <string name="pref_task_one">First</string>
     <string name="pref_task_two">Second</string>
     <string name="pref_task_three">Third</string>
@@ -275,7 +274,7 @@
     <string name="pref_task_five">Fith</string>
     <string name="pref_task_six">Sixth</string>
     <string name="pref_task_seven">Seventh</string>
-    <string name="pref_task_eight">Eigth</string>
+    <string name="pref_task_eight">Eighth</string>
     <string name="pref_task_nine">Ninth</string>
     <string name="pref_task_ten">Tenth</string>
     <string name="pref_task_eleven">Eleventh</string>

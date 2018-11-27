@@ -362,4 +362,18 @@
     <string name="pref_nightMode_summary">User Interface Color Scheme</string>
     <string name="usagestats_alert_title">WunderLINQ needs usage stat access</string>
     <string name="usagestats_alert_body">Please grant usage stat access, this will allow for auto launch of the App when the WunderLINQ device is connected.</string>
+    <string name="task_title_empty">Empty</string>
+    <string name="pref_tasks_settings_title">Quick Task Customization</string>
+    <string name="pref_tasks_settings_summary">Customize which tasks to display and in which order</string>
+    <string name="pref_task_one">First</string>
+    <string name="pref_task_two">Second</string>
+    <string name="pref_task_three">Third</string>
+    <string name="pref_task_four">Fourth</string>
+    <string name="pref_task_five">Fith</string>
+    <string name="pref_task_six">Sixth</string>
+    <string name="pref_task_seven">Seventh</string>
+    <string name="pref_task_eight">Eighth</string>
+    <string name="pref_task_nine">Ninth</string>
+    <string name="pref_task_ten">Tenth</string>
+    <string name="pref_task_eleven">Eleventh</string>
 </resources>
