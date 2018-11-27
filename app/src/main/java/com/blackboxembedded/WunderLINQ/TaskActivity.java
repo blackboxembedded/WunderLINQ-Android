@@ -47,7 +47,7 @@ import java.util.List;
 
 public class TaskActivity extends AppCompatActivity {
 
-    public final static String TAG = "WunderLINQ";
+    public final static String TAG = "TaskActivity";
 
     private ActionBar actionBar;
     private ImageButton backButton;
@@ -320,7 +320,7 @@ public class TaskActivity extends AppCompatActivity {
             iconId[7].setTint(Color.WHITE);
             iconId[8] = getResources().getDrawable(R.drawable.ic_map_marker, getTheme());
             iconId[8].setTint(Color.WHITE);
-            iconId[9] = getResources().getDrawable(R.drawable.ic_map, getTheme());
+            iconId[9] = getResources().getDrawable(R.drawable.ic_route, getTheme());
             iconId[9].setTint(Color.WHITE);
             iconId[10] = getResources().getDrawable(R.drawable.ic_microphone, getTheme());
             iconId[10].setTint(Color.WHITE);
@@ -343,7 +343,7 @@ public class TaskActivity extends AppCompatActivity {
             iconId[7].setTint(Color.BLACK);
             iconId[8] = getResources().getDrawable(R.drawable.ic_map_marker, getTheme());
             iconId[8].setTint(Color.BLACK);
-            iconId[9] = getResources().getDrawable(R.drawable.ic_map, getTheme());
+            iconId[9] = getResources().getDrawable(R.drawable.ic_route, getTheme());
             iconId[9].setTint(Color.BLACK);
             iconId[10] = getResources().getDrawable(R.drawable.ic_microphone, getTheme());
             iconId[10].setTint(Color.BLACK);
@@ -1011,7 +1011,6 @@ public class TaskActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        Log.d(TAG, "Keycode: " + keyCode);
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 Intent backIntent = new Intent(TaskActivity.this, CompassActivity.class);

@@ -402,4 +402,6 @@
     <string name="pref_task_nine">Devátá</string>
     <string name="pref_task_ten">Desátá</string>
     <string name="pref_task_eleven">Jedenáctá</string>
+    <string name="pref_task_twelve">Twelve</string>
+    <string name="task_title_settings">Settings</string>
 </resources>

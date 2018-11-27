@@ -174,6 +174,7 @@
     <string name="task_title_waypoint">Save Waypoint</string>
     <string name="task_title_waypoint_nav">Navigate to Waypoint</string>
     <string name="task_title_voicecontrol">Voice Assistant</string>
+    <string name="task_title_settings">Settings</string>
     <string name="task_title_empty">Empty</string>
     <string name="toast_address_not_set">No Go Home address set in Settings</string>
     <string name="toast_phone_not_set">No Favorite Number set in Settings</string>
@@ -278,6 +279,7 @@
     <string name="pref_task_nine">Ninth</string>
     <string name="pref_task_ten">Tenth</string>
     <string name="pref_task_eleven">Eleventh</string>
+    <string name="pref_task_twelve">Twelve</string>
     <string-array name="tasks_array">
         <item name="1">@string/task_title_navigation</item>
         <item name="2">@string/task_title_gohome</item>
@@ -290,7 +292,8 @@
         <item name="9">@string/task_title_waypoint</item>
         <item name="10">@string/task_title_waypoint_nav</item>
         <item name="11">@string/task_title_voicecontrol</item>
-        <item name="12">@string/task_title_empty</item>
+        <item name="12">@string/task_title_settings</item>
+        <item name="13">@string/task_title_empty</item>
     </string-array>
     <string-array name="tasks_arrayValues">
         <item name="1">0</item>
@@ -305,6 +308,7 @@
         <item name="10">9</item>
         <item name="11">10</item>
         <item name="12">11</item>
+        <item name="13">12</item>
     </string-array>
     <string name="pref_nav_app">Navigation App</string>
     <string-array name="nav_apps_array">

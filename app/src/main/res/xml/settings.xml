@@ -114,6 +114,14 @@
                 android:entryValues="@array/tasks_arrayValues"
                 android:defaultValue="11"
                 />
+            <ListPreference
+                android:key="prefQuickTaskTwelve"
+                android:title="@string/pref_task_twelve"
+                android:summary="%s"
+                android:entries="@array/tasks_array"
+                android:entryValues="@array/tasks_arrayValues"
+                android:defaultValue="12"
+                />
         </PreferenceScreen>
         <!--
         <ListPreference

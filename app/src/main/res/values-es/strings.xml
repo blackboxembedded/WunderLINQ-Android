@@ -25,7 +25,7 @@
     <string name="device_name">WunderLINQ</string>
     <!-- MainActivity -->
     <string name="main_title">Moto</string>
-    <string name="blank_field">?</string>
+    <string name="blank_field">\?</string>
     <!-- Permission Requests -->
     <string name="camera_alert_title">WunderLINQ necesita permiso para usar su cámara</string>
     <string name="camera_alert_body">Por favor, permita el uso de su cámara</string>
@@ -179,7 +179,7 @@
     <string name="task_title_stop_record">Terminar grabación</string>
     <string name="task_title_start_trip">Comenzar Log de Ruta</string>
     <string name="task_title_stop_trip">Terminar Log de Ruta</string>
-    <string name="title_logging_notification">WunderLINQ Trip Recording Active</string>
+    <string name="title_logging_notification">Almacenamiento de la ruta de WunderLINQ activo</string>
     <string name="task_title_waypoint">Guardar Waypoint</string>
     <string name="task_title_waypoint_nav">NAvegar a Waypoint</string>
     <string name="task_title_voicecontrol">Asistente de voz</string>
@@ -387,7 +387,7 @@
     <string name="pref_sendlogs_subject">Logs de Depuración de WunderLINQ</string>
     <string name="pref_sendlogs_body">Por favor, describa su problema a continuación:</string>
     <string name="pref_sendlogs_intent_title">Enviar Logs...</string>
-    <string name="hw_settings_title">Ajustes hardware WunderLINQ</string>
+    <string name="hw_settings_title">Ajustes de hardware WunderLINQ</string>
     <string name="pref_btn_dfumode_title">Actualización de WunderLINQ</string>
     <string name="pref_btn_dfumode_summary">Comenzar Modo de Actualización de Firmware WunderLINQ</string>
     <string name="pref_btn_dfumode_warning_title">Aviso</string>
@@ -401,29 +401,31 @@
     <string name="minutes">m</string>
     <string name="seconds">s</string>
     <string name="north">N</string>
-    <string name="north_west">NW</string>
+    <string name="north_west">NO</string>
     <string name="north_east">NE</string>
     <string name="south">S</string>
-    <string name="south_west">SW</string>
+    <string name="south_west">SO</string>
     <string name="south_east">SE</string>
-    <string name="west">W</string>
+    <string name="west">O</string>
     <string name="east">E</string>
-    <string name="usagestats_alert_title">WunderLINQ needs usage stat access</string>
-    <string name="usagestats_alert_body">Please grant usage stat access, this will allow for auto launch of the App when the WunderLINQ device is connected.</string>
-    <string name="task_title_empty">Empty</string>
-    <string name="pref_tasks_settings_title">Quick Task Customization</string>
-    <string name="pref_tasks_settings_summary">Customize which tasks to display and in which order</string>
-    <string name="pref_task_one">First</string>
-    <string name="pref_task_two">Second</string>
-    <string name="pref_task_three">Third</string>
-    <string name="pref_task_four">Fourth</string>
-    <string name="pref_task_five">Fith</string>
-    <string name="pref_task_six">Sixth</string>
-    <string name="pref_task_seven">Seventh</string>
-    <string name="pref_task_eight">Eighth</string>
-    <string name="pref_task_nine">Ninth</string>
-    <string name="pref_task_ten">Tenth</string>
-    <string name="pref_task_eleven">Eleventh</string>
+    <string name="usagestats_alert_title">WunderLINQ requiere el uso del acceso a estadísticas</string>
+    <string name="usagestats_alert_body">Por favor, permita el uso de acceso a estadísticas, esto permitirá la ejecución automática de la App cuando el dispositivo WunderLINQ esté conectado.</string>
+    <string name="task_title_empty">Vacío</string>
+    <string name="pref_tasks_settings_title">Configuración rápida de tareas</string>
+    <string name="pref_tasks_settings_summary">Configure qué tareas se pueden visualizar y en qué orden</string>
+    <string name="pref_task_one">Primera</string>
+    <string name="pref_task_two">Segunda</string>
+    <string name="pref_task_three">Tercera</string>
+    <string name="pref_task_four">Cuarta</string>
+    <string name="pref_task_five">Quinta</string>
+    <string name="pref_task_six">Sexta</string>
+    <string name="pref_task_seven">Séptima</string>
+    <string name="pref_task_eight">Octava</string>
+    <string name="pref_task_nine">Novena</string>
+    <string name="pref_task_ten">Décima</string>
+    <string name="pref_task_eleven">Undécima</string>
+    <string name="pref_task_twelve">Twelve</string>
+    <string name="task_title_settings">Settings</string>
 
     <!-- AboutActivity -->
 </resources>

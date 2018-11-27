@@ -386,4 +386,6 @@
     <string name="pref_task_nine">Ninth</string>
     <string name="pref_task_ten">Tenth</string>
     <string name="pref_task_eleven">Eleventh</string>
+    <string name="pref_task_twelve">Twelve</string>
+    <string name="task_title_settings">Settings</string>
 </resources>
