@@ -312,7 +312,7 @@ public class PhotoService extends Service {
 
                 // We don't use a front facing camera in this sample.
                 Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
-                if (facing != null && facing != CAMERACHOICE) {
+                if (facing != null && facing == CAMERACHOICE) {
                     continue;
                 }
 
@@ -571,7 +571,7 @@ public class PhotoService extends Service {
                             new String[] { mFile.toString() }, null,
                             new MediaScannerConnection.OnScanCompletedListener() {
                                 public void onScanCompleted(String path, Uri uri) {
-                                    Log.i(TAG, "Scanned file: " + path + ":");
+                                    Log.i(TAG, "Scanned file: " + path);
                                     stopSelf();
                                 }
                             });
@@ -745,6 +745,7 @@ public class PhotoService extends Service {
         Bundle extras = intent.getExtras();
         if (extras != null) {
             CAMERACHOICE = extras.getInt("camera");
+            Log.d(TAG,"Camera Choice: " + CAMERACHOICE);
         }
         File root = new File( Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_DCIM), "/WunderLINQ/");
