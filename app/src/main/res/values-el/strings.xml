@@ -386,4 +386,7 @@
     <string name="pref_task_nine">Ένατη</string>
     <string name="pref_task_ten">Δέκατη</string>
     <string name="pref_task_eleven">Ενδέκατη</string>
+    <string name="pref_task_twelve">Twelve</string>
+    <string name="task_title_settings">Ρυθμίσεις</string>
+    <string name="waypoint_view_bt_navigate">Navigate</string>
 </resources>

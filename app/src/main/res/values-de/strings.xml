@@ -332,5 +332,7 @@
     <string name="pref_task_ten">Schnellzugriff #10</string>
     <string name="pref_task_eleven">Schnellzugriff #11</string>
     <string name="pref_task_twelve">Schnellzugriff #12</string>
+    <string name="task_title_settings">Einstellungen</string>
+    <string name="waypoint_view_bt_navigate">Navigate</string>
 
 </resources>

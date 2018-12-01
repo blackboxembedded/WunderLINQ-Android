@@ -140,6 +140,14 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
         startActivity(navIntent);
     }
 
+    // Navigate
+    public void onClickNav(View view) {
+        //Navigation
+        Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
+        navIntent.setData(Uri.parse("google.navigation:q=" + record.getData()));
+        startActivity(navIntent);
+    }
+
     // Export button press
     public void onClickShare(View view) {
         String uri = "http://maps.google.com/maps?saddr=" +lat+","+lon;

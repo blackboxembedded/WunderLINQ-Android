@@ -203,7 +203,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                         avgSpeed = Utils.kmToMiles(avgSpeed);
                         maxSpeed = Utils.kmToMiles(maxSpeed);
                     }
-                    tvSpeed.setText("(" + Utils.oneDigit.format(avgSpeed) + "/" + Utils.oneDigit.format(maxSpeed) + ")" + speedUnit);
+                    tvSpeed.setText(Utils.oneDigit.format(avgSpeed) + "/" + Utils.oneDigit.format(maxSpeed) + "(" + speedUnit + ")");
                 }
 
                 if(endShiftCnt != null){
@@ -218,7 +218,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 if(endRearBrakeCnt != null){
                     rearBrakeText = Integer.toString(endRearBrakeCnt);
                 }
-                tvBrakes.setText("(" + frontBrakeText + "/" + rearBrakeText + ")");
+                tvBrakes.setText(frontBrakeText + "/" + rearBrakeText);
 
                 Double avgEngineTemp = 0.0;
                 if (engineTemps.size() > 0) {
@@ -237,7 +237,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                     minEngineTemp = 0.0;
                     maxEngineTemp = 0.0;
                 }
-                tvEngine.setText("(" + Utils.oneDigit.format(minEngineTemp) + "/" + Utils.oneDigit.format(avgEngineTemp) + "/" + Utils.oneDigit.format(maxEngineTemp) + ")" + temperatureUnit);
+                tvEngine.setText(Utils.oneDigit.format(minEngineTemp) + "/" + Utils.oneDigit.format(avgEngineTemp) + "/" + Utils.oneDigit.format(maxEngineTemp) + "(" + temperatureUnit + ")");
 
                 Double avgAmbientTemp = 0.0;
                 if (ambientTemps.size() > 0) {
@@ -256,7 +256,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                     minAmbientTemp = 0.0;
                     maxAmbientTemp = 0.0;
                 }
-                tvAmbient.setText("(" + Utils.oneDigit.format(minAmbientTemp) + "/" + Utils.oneDigit.format(avgAmbientTemp) + "/" + Utils.oneDigit.format(maxAmbientTemp) + ")" + temperatureUnit);
+                tvAmbient.setText(Utils.oneDigit.format(minAmbientTemp) + "/" + Utils.oneDigit.format(avgAmbientTemp) + "/" + Utils.oneDigit.format(maxAmbientTemp) + "(" + temperatureUnit + ")");
 
                 // Calculate Distance
                 double distance = 0;

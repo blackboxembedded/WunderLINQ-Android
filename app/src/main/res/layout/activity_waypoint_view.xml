@@ -168,6 +168,18 @@
         app:layout_constraintTop_toBottomOf="@+id/llLabelLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/buttonNavigate"/>
+
+    <Button
+        android:id="@+id/buttonNavigate"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:onClick="onClickNav"
+        android:text="@string/waypoint_view_bt_navigate"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@+id/buttonShare"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/buttonOpen"/>
 
     <Button
@@ -177,7 +189,7 @@
         android:onClick="onClickOpen"
         android:text="@string/waypoint_view_bt_open"
         android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@+id/buttonShare"
+        app:layout_constraintTop_toBottomOf="@+id/buttonNavigate"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/buttonDelete"/>

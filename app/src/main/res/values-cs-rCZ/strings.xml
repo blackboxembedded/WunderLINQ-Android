@@ -403,5 +403,6 @@
     <string name="pref_task_ten">Desátá</string>
     <string name="pref_task_eleven">Jedenáctá</string>
     <string name="pref_task_twelve">Twelve</string>
-    <string name="task_title_settings">Settings</string>
+    <string name="task_title_settings">Nastavení</string>
+    <string name="waypoint_view_bt_navigate">Navigate</string>
 </resources>

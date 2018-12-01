@@ -425,7 +425,8 @@
     <string name="pref_task_ten">Décima</string>
     <string name="pref_task_eleven">Undécima</string>
     <string name="pref_task_twelve">Twelve</string>
-    <string name="task_title_settings">Settings</string>
+    <string name="task_title_settings">Ajustes</string>
+    <string name="waypoint_view_bt_navigate">Navigate</string>
 
     <!-- AboutActivity -->
 </resources>

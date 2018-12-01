@@ -657,7 +657,6 @@ public class TaskActivity extends AppCompatActivity {
                         break;
                     case 6:
                         //Record Video
-
                         TextView taskText=(TextView)view.findViewById(R.id.tv_label);
 
                         boolean cameraVidPerms = false;
