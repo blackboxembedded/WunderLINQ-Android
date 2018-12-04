@@ -845,7 +845,6 @@ public class TaskActivity extends AppCompatActivity {
                                 // Get the location manager
                                 double lat;
                                 double lon;
-                                double speed = 0;
                                 String waypoint = "";
                                 LocationManager locationManager = (LocationManager)
                                         TaskActivity.this.getSystemService(LOCATION_SERVICE);

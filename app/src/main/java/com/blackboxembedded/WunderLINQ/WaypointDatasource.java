@@ -81,7 +81,7 @@ public class WaypointDatasource {
             c.moveToFirst();
         }
         WaypointRecord record = cursorToRecord(c);
-        db.close();
+        //db.close();
         return record;
     }
     public Cursor getAllRecordsCursor() {
@@ -96,7 +96,7 @@ public class WaypointDatasource {
     }
     private WaypointRecord cursorToRecord(Cursor cursor) {
         WaypointRecord record = new WaypointRecord();
-        record.setID(cursor.getLong(0));
+        record.setID(cursor.getInt(0));
         record.setDate(cursor.getString(cursor.getColumnIndex("date")));
         record.setData(cursor.getString(cursor.getColumnIndex("data")));
         record.setLabel(cursor.getString(cursor.getColumnIndex("label")));

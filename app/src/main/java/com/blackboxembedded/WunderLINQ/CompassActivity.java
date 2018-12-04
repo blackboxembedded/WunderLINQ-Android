@@ -25,7 +25,7 @@ import android.widget.TextView;
 
 public class CompassActivity extends AppCompatActivity {
 
-    public final static String TAG = "WunderLINQ";
+    public final static String TAG = "CompassActivity";
 
     private SharedPreferences sharedPrefs;
 

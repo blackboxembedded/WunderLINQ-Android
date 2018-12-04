@@ -1,8 +1,11 @@
 package com.blackboxembedded.WunderLINQ;
 
 public class WaypointRecord {
+
+    public final static String TAG = "WaypointRecord";
+
     //private variables
-    long _id;
+    int _id;
     String _date;
     String _data;
     String _label;
@@ -18,11 +21,11 @@ public class WaypointRecord {
         this._label = label;
     }
 
-    public long getID(){
+    public int getID(){
         return this._id;
     }
 
-    public void setID(long id) {
+    public void setID(int id) {
         this._id = id;
     }
 
@@ -52,5 +55,19 @@ public class WaypointRecord {
     @Override
     public String toString() {
         return _date + "    " + _data ;
+    }
+
+    @Override
+    public int hashCode() {
+        return _id;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof WaypointRecord)) {
+            return false;
+        }
+        WaypointRecord otherPoint = (WaypointRecord)other;
+        return otherPoint._id == this._id;
     }
 }
