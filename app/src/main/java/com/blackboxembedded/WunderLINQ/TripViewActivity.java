@@ -37,6 +37,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -59,9 +61,11 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
 
     private SharedPreferences sharedPrefs;
 
-    List<LatLng> routePoints;
+    private List<LatLng> routePoints;
 
-    File file;
+    private ArrayList tripFileList = new ArrayList<String>();
+    private File file;
+    private int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,10 +88,31 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
+            updateListing();
             String fileName = extras.getString("FILE");
             Log.d(TAG,fileName);
-
+            index = tripFileList.indexOf(fileName);
             file = new File(Environment.getExternalStorageDirectory(), "/WunderLINQ/logs/" + fileName);
+
+            View view = findViewById(R.id.layout_trip_view);
+            view.setOnTouchListener(new OnSwipeTouchListener(this) {
+                @Override
+                public void onSwipeLeft() {
+                    if (index != (tripFileList.size() - 1)) {
+                        Intent tripViewIntent = new Intent(TripViewActivity.this, TripViewActivity.class);
+                        tripViewIntent.putExtra("FILE", tripFileList.get(index + 1).toString());
+                        startActivity(tripViewIntent);
+                    }
+                }
+                @Override
+                public void onSwipeRight() {
+                    if (index > 0) {
+                        Intent tripViewIntent = new Intent(TripViewActivity.this, TripViewActivity.class);
+                        tripViewIntent.putExtra("FILE", tripFileList.get(index - 1).toString());
+                        startActivity(tripViewIntent);
+                    }
+                }
+            });
 
             routePoints = new ArrayList<LatLng>();
             List<Double> speeds = new ArrayList<>();
@@ -376,4 +401,21 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
             }
         }
     };
+
+    private void updateListing(){
+        File root = new File(Environment.getExternalStorageDirectory(), "/WunderLINQ/logs/");
+        if(!root.exists()){
+            if(!root.mkdirs()){
+                Log.d(TAG,"Unable to create directory: " + root);
+            }
+        }
+        File list[] = root.listFiles();
+        if (list != null ) {
+            Arrays.sort(list, Collections.reverseOrder());
+
+            for (int i = 0; i < list.length; i++) {
+                tripFileList.add(list[i].getName());
+            }
+        }
+    }
 }

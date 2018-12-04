@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,7 +86,30 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
             allWaypoints = datasource.getAllRecords();
             datasource.close();
             index = allWaypoints.indexOf(record);
-            Log.d(TAG,"Index: " + index + " SizeOf: " + allWaypoints.size());
+
+            View view = findViewById(R.id.layout_waypoint_view);
+            view.setOnTouchListener(new OnSwipeTouchListener(this) {
+                @Override
+                public void onSwipeLeft() {
+                    if (index != (allWaypoints.size() - 1)) {
+                        Intent waypointViewIntent = new Intent(MyApplication.getContext(), WaypointViewActivity.class);
+                        WaypointRecord previousRecord = allWaypoints.get(index + 1);
+                        String recordID = Long.toString(previousRecord.getID());
+                        waypointViewIntent.putExtra("RECORD_ID", recordID);
+                        startActivity(waypointViewIntent);
+                    }
+                }
+                @Override
+                public void onSwipeRight() {
+                    if (index > 0) {
+                        Intent waypointViewIntent = new Intent(MyApplication.getContext(), WaypointViewActivity.class);
+                        WaypointRecord previousRecord = allWaypoints.get(index - 1);
+                        String recordID = Long.toString(previousRecord.getID());
+                        waypointViewIntent.putExtra("RECORD_ID", recordID);
+                        startActivity(waypointViewIntent);
+                    }
+                }
+            });
 
             tvDate.setText(record.getDate());
             String[] latlong = record.getData().split(",");
@@ -100,30 +122,6 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
             FragmentManager myFragmentManager = getSupportFragmentManager();
             SupportMapFragment mapFragment = (SupportMapFragment) myFragmentManager.findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
-
-            View view = findViewById(R.id.layout_waypoint_view);
-            view.setOnTouchListener(new OnSwipeTouchListener(this) {
-                @Override
-                public void onSwipeLeft() {
-                    Intent waypointViewIntent = new Intent(MyApplication.getContext(), WaypointViewActivity.class);
-                    if (index != (allWaypoints.size() - 1)) {
-                        WaypointRecord previousRecord = allWaypoints.get(index + 1);
-                        String recordID = Long.toString(previousRecord.getID());
-                        waypointViewIntent.putExtra("RECORD_ID", recordID);
-                        startActivity(waypointViewIntent);
-                    }
-                }
-                @Override
-                public void onSwipeRight() {
-                    Intent waypointViewIntent = new Intent(MyApplication.getContext(), WaypointViewActivity.class);
-                    if (index > 0) {
-                        WaypointRecord previousRecord = allWaypoints.get(index - 1);
-                        String recordID = Long.toString(previousRecord.getID());
-                        waypointViewIntent.putExtra("RECORD_ID", recordID);
-                        startActivity(waypointViewIntent);
-                    }
-                }
-            });
         }
     }
 
