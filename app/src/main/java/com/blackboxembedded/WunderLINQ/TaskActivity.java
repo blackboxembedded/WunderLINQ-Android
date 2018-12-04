@@ -24,6 +24,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -33,9 +34,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
 
 public class TaskActivity extends AppCompatActivity {
 
@@ -54,10 +55,10 @@ public class TaskActivity extends AppCompatActivity {
     private ImageButton forwardButton;
     private TextView navbarTitle;
 
-    private ListView taskList;
-    private int lastPosition = 0;
-    private int numTasks = 11;
-    List<Integer> mapping;
+    GridView gridview;
+    private int lastPosition = -1;
+    private int numTasks = 12;
+    private List<Integer> mapping;
 
     private SharedPreferences sharedPrefs;
 
@@ -67,6 +68,7 @@ public class TaskActivity extends AppCompatActivity {
 
     SensorManager sensorManager;
     Sensor lightSensor;
+    OnSwipeTouchListener detector;
 
     private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
     private static final int PERMISSION_REQUEST_CAMERA = 100;
@@ -87,13 +89,16 @@ public class TaskActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        setContentView(R.layout.activity_task);
 
-        View view = findViewById(R.id.lv_tasks);
-        view.setOnTouchListener(new OnSwipeTouchListener(this) {
+        setContentView(R.layout.activity_task);
+        gridview = (GridView) findViewById(R.id.gridview_tasks);
+
+        ConstraintLayout clTasks = (ConstraintLayout) findViewById(R.id.cl_tasks);
+        gridview.setOnTouchListener(new GridOnSwipeTouchListener(this) {
             @Override
             public void onSwipeLeft() {
                 Intent backIntent = new Intent(TaskActivity.this, MainActivity.class);
@@ -121,8 +126,6 @@ public class TaskActivity extends AppCompatActivity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
         }
 
-        taskList = (ListView) findViewById(R.id.lv_tasks);
-
         showActionBar();
 
         if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
@@ -130,6 +133,7 @@ public class TaskActivity extends AppCompatActivity {
         } else {
             itsDark = false;
         }
+
         updateColors(itsDark);
 
         displayTasks();
@@ -140,7 +144,6 @@ public class TaskActivity extends AppCompatActivity {
         if (sharedPrefs.getBoolean("prefAutoNightMode", false)) {
             sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
-
 
     }
 
@@ -221,7 +224,6 @@ public class TaskActivity extends AppCompatActivity {
             }
         }
     };
-
     // Listens for light sensor events
     private final SensorEventListener sensorEventListener
             = new SensorEventListener(){
@@ -297,7 +299,8 @@ public class TaskActivity extends AppCompatActivity {
                 tripTaskText,
                 getResources().getString(R.string.task_title_waypoint),
                 getResources().getString(R.string.task_title_waypoint_nav),
-                getResources().getString(R.string.task_title_voicecontrol)
+                getResources().getString(R.string.task_title_voicecontrol),
+                getResources().getString(R.string.task_title_settings)
         };
 
         Drawable[] iconId = new Drawable[numTasks];
@@ -324,6 +327,8 @@ public class TaskActivity extends AppCompatActivity {
             iconId[9].setTint(Color.WHITE);
             iconId[10] = getResources().getDrawable(R.drawable.ic_microphone, getTheme());
             iconId[10].setTint(Color.WHITE);
+            iconId[11] = getResources().getDrawable(R.drawable.ic_cog, getTheme());
+            iconId[11].setTint(Color.WHITE);
         } else  {
             iconId[0] = getResources().getDrawable(R.drawable.ic_map, getTheme());
             iconId[0].setTint(Color.BLACK);
@@ -347,6 +352,8 @@ public class TaskActivity extends AppCompatActivity {
             iconId[9].setTint(Color.BLACK);
             iconId[10] = getResources().getDrawable(R.drawable.ic_microphone, getTheme());
             iconId[10].setTint(Color.BLACK);
+            iconId[11] = getResources().getDrawable(R.drawable.ic_cog, getTheme());
+            iconId[11].setTint(Color.BLACK);
         }
 
         mapping = new ArrayList<>();
@@ -372,7 +379,7 @@ public class TaskActivity extends AppCompatActivity {
                     }
                     break;
                 case 2:
-                    int selectionThree = Integer.parseInt(sharedPrefs.getString("prefQuickTaskThree", "1"));
+                    int selectionThree = Integer.parseInt(sharedPrefs.getString("prefQuickTaskThree", "2"));
                     if (!(selectionThree >= numTasks)){
                         mapping.add(selectionThree);
                         taskTitle.add(taskTitles[selectionThree]);
@@ -380,7 +387,7 @@ public class TaskActivity extends AppCompatActivity {
                     }
                     break;
                 case 3:
-                    int selectionFour = Integer.parseInt(sharedPrefs.getString("prefQuickTaskFour", "1"));
+                    int selectionFour = Integer.parseInt(sharedPrefs.getString("prefQuickTaskFour", "3"));
                     if (!(selectionFour >= numTasks)){
                         mapping.add(selectionFour);
                         taskTitle.add(taskTitles[selectionFour]);
@@ -388,7 +395,7 @@ public class TaskActivity extends AppCompatActivity {
                     }
                     break;
                 case 4:
-                    int selectionFive = Integer.parseInt(sharedPrefs.getString("prefQuickTaskFive", "1"));
+                    int selectionFive = Integer.parseInt(sharedPrefs.getString("prefQuickTaskFive", "4"));
                     if (!(selectionFive >= numTasks)){
                         mapping.add(selectionFive);
                         taskTitle.add(taskTitles[selectionFive]);
@@ -396,7 +403,7 @@ public class TaskActivity extends AppCompatActivity {
                     }
                     break;
                 case 5:
-                    int selectionSix = Integer.parseInt(sharedPrefs.getString("prefQuickTaskSix", "1"));
+                    int selectionSix = Integer.parseInt(sharedPrefs.getString("prefQuickTaskSix", "5"));
                     if (!(selectionSix >= numTasks)){
                         mapping.add(selectionSix);
                         taskTitle.add(taskTitles[selectionSix]);
@@ -404,7 +411,7 @@ public class TaskActivity extends AppCompatActivity {
                     }
                     break;
                 case 6:
-                    int selectionSeven = Integer.parseInt(sharedPrefs.getString("prefQuickTaskSeven", "1"));
+                    int selectionSeven = Integer.parseInt(sharedPrefs.getString("prefQuickTaskSeven", "6"));
                     if (!(selectionSeven >= numTasks)){
                         mapping.add(selectionSeven);
                         taskTitle.add(taskTitles[selectionSeven]);
@@ -412,7 +419,7 @@ public class TaskActivity extends AppCompatActivity {
                     }
                     break;
                 case 7:
-                    int selectionEight = Integer.parseInt(sharedPrefs.getString("prefQuickTaskEight", "1"));
+                    int selectionEight = Integer.parseInt(sharedPrefs.getString("prefQuickTaskEight", "7"));
                     if (!(selectionEight >= numTasks)){
                         mapping.add(selectionEight);
                         taskTitle.add(taskTitles[selectionEight]);
@@ -420,7 +427,7 @@ public class TaskActivity extends AppCompatActivity {
                     }
                     break;
                 case 8:
-                    int selectionNine = Integer.parseInt(sharedPrefs.getString("prefQuickTaskNine", "1"));
+                    int selectionNine = Integer.parseInt(sharedPrefs.getString("prefQuickTaskNine", "8"));
                     if (!(selectionNine >= numTasks)){
                         mapping.add(selectionNine);
                         taskTitle.add(taskTitles[selectionNine]);
@@ -428,7 +435,7 @@ public class TaskActivity extends AppCompatActivity {
                     }
                     break;
                 case 9:
-                    int selectionTen = Integer.parseInt(sharedPrefs.getString("prefQuickTaskTen", "1"));
+                    int selectionTen = Integer.parseInt(sharedPrefs.getString("prefQuickTaskTen", "9"));
                     if (!(selectionTen >= numTasks)){
                         mapping.add(selectionTen);
                         taskTitle.add(taskTitles[selectionTen]);
@@ -436,7 +443,7 @@ public class TaskActivity extends AppCompatActivity {
                     }
                     break;
                 case 10:
-                    int selectionEleven = Integer.parseInt(sharedPrefs.getString("prefQuickTaskEleven", "1"));
+                    int selectionEleven = Integer.parseInt(sharedPrefs.getString("prefQuickTaskEleven", "10"));
                     if (!(selectionEleven >= numTasks)){
                         mapping.add(selectionEleven);
                         taskTitle.add(taskTitles[selectionEleven]);
@@ -444,7 +451,7 @@ public class TaskActivity extends AppCompatActivity {
                     }
                     break;
                 case 11:
-                    int selectionTwelve = Integer.parseInt(sharedPrefs.getString("prefQuickTaskTwelve", "1"));
+                    int selectionTwelve = Integer.parseInt(sharedPrefs.getString("prefQuickTaskTwelve", "11"));
                     if (!(selectionTwelve >= numTasks)){
                         mapping.add(selectionTwelve);
                         taskTitle.add(taskTitles[selectionTwelve]);
@@ -457,14 +464,9 @@ public class TaskActivity extends AppCompatActivity {
             x = x + 1 ;
         }
 
-        TaskListView adapter = new
-                TaskListView(this, taskTitle, taskIcon, itsDark);
-        taskList=(ListView)findViewById(R.id.lv_tasks);
-        taskList.setAdapter(adapter);
-        taskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, final View view,
+        gridview.setAdapter(new TaskAdapter(this,taskTitle,taskIcon,itsDark));
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 lastPosition = position;
                 final String item = (String) parent.getItemAtPosition(position);
@@ -492,7 +494,7 @@ public class TaskActivity extends AppCompatActivity {
                             //navIntent.setData(Uri.parse(url));
                             //startActivity(navIntent);
                         } catch ( ActivityNotFoundException ex  ) {
-                            //TODO Add Alert
+                            // Add Alert
                         }
                         */
                         Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
@@ -657,7 +659,8 @@ public class TaskActivity extends AppCompatActivity {
                         break;
                     case 6:
                         //Record Video
-                        TextView taskText=(TextView)view.findViewById(R.id.tv_label);
+
+                        TextView taskText=(TextView)view.findViewById(R.id.gridTextView);
 
                         boolean cameraVidPerms = false;
                         boolean writeVidPerms = false;
@@ -793,7 +796,7 @@ public class TaskActivity extends AppCompatActivity {
                                 locationLogPerms = true;
                             }
                             if (writeLogPerms == true && locationLogPerms == true){
-                                TextView tripTaskText=(TextView)view.findViewById(R.id.tv_label);
+                                TextView tripTaskText=(TextView)view.findViewById(R.id.gridTextView);
                                 if (tripTaskText.getText().equals(getResources().getString(R.string.task_title_start_trip))) {
                                     startService(new Intent(TaskActivity.this, LoggingService.class));
                                     tripTaskText.setText(getResources().getString(R.string.task_title_stop_trip));
@@ -886,6 +889,11 @@ public class TaskActivity extends AppCompatActivity {
                     case 10:
                         //Voice Assistant
                         startActivity(new Intent(Intent.ACTION_VOICE_COMMAND).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        break;
+                    case 11:
+                        //Settings
+                        Intent settingsIntent = new Intent(TaskActivity.this, SettingsActivity.class);
+                        startActivity(settingsIntent);
                         break;
                 }
             }
@@ -980,14 +988,13 @@ public class TaskActivity extends AppCompatActivity {
 
     public void updateColors(boolean itsDark){
         ((MyApplication) this.getApplication()).setitsDark(itsDark);
-        LinearLayout lLayout = (LinearLayout) findViewById(R.id.layout_task);
         if (itsDark) {
             //Set Brightness to defaults
             WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
             layoutParams.screenBrightness = -1;
             getWindow().setAttributes(layoutParams);
 
-            lLayout.setBackgroundColor(getResources().getColor(R.color.black));
+            gridview.setBackgroundColor(getResources().getColor(R.color.black));
             actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
             navbarTitle.setTextColor(getResources().getColor(R.color.white));
             backButton.setColorFilter(getResources().getColor(R.color.white));
@@ -1000,7 +1007,7 @@ public class TaskActivity extends AppCompatActivity {
                 getWindow().setAttributes(layoutParams);
             }
 
-            lLayout.setBackgroundColor(getResources().getColor(R.color.white));
+            gridview.setBackgroundColor(getResources().getColor(R.color.white));
             actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
             navbarTitle.setTextColor(getResources().getColor(R.color.black));
             backButton.setColorFilter(getResources().getColor(R.color.black));
@@ -1020,16 +1027,25 @@ public class TaskActivity extends AppCompatActivity {
                 startActivity(forwardIntent);
                 return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
-                if ((taskList.getSelectedItemPosition() == (numTasks - 1)) && lastPosition == (numTasks - 1) ){
-                    taskList.setSelection(0);
+                if ((gridview.getSelectedItemPosition() == (mapping.size() - 1)) && lastPosition == (mapping.size()  - 1) ){
+                    lastPosition = 0;
+                    gridview.setSelection(lastPosition);
+                } else {
+                    lastPosition = lastPosition + 1;
+                    gridview.setSelection(lastPosition);
                 }
-                lastPosition = taskList.getSelectedItemPosition();
                 return true;
             case KeyEvent.KEYCODE_DPAD_UP:
-                if (taskList.getSelectedItemPosition() == 0 && lastPosition == 0){
-                    taskList.setSelection(numTasks - 1);
+                if (lastPosition == -1){
+                    lastPosition = lastPosition + 1;
+                    gridview.setSelection(lastPosition);
+                } else if (gridview.getSelectedItemPosition() == 0 && lastPosition == 0){
+                    lastPosition = mapping.size() - 1;
+                    gridview.setSelection(lastPosition);
+                } else {
+                    lastPosition = lastPosition - 1;
+                    gridview.setSelection(lastPosition);
                 }
-                lastPosition = taskList.getSelectedItemPosition();
                 return true;
             default:
                 return super.onKeyUp(keyCode, event);
