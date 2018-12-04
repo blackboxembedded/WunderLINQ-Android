@@ -372,9 +372,9 @@
     <string name="east">Α</string>
     <string name="usagestats_alert_title">Το WunderLINQ χρειάζεται την άδειά σας για πρόσβαση στα δεδομένα χρήσης</string>
     <string name="usagestats_alert_body">Παρακαλώ αποδεχτείτε  την πρόσβαση στα δεδομένα χρήσης. Αυτό θα επιτρέψει την αυτόματη εκκίνηση της εφαρμγής όταν η συσκευή WunderLINQ συνδεθεί.</string>
-    <string name="task_title_empty">Άδεια λίστα</string>
+    <string name="task_title_empty">Άδεια</string>
     <string name="pref_tasks_settings_title">Παραμετροποίηση δυνατοτήτων</string>
-    <string name="pref_tasks_settings_summary">Επιλέξτε ποιες δυνατότητες θα εμφανίζονται και σε ποια σειρά</string>
+    <string name="pref_tasks_settings_summary">Επιλέξτε ποιες δυνατότητες θα εμφανίζονται και σε ποια θέση</string>
     <string name="pref_task_one">Πρώτη</string>
     <string name="pref_task_two">Δεύτερη</string>
     <string name="pref_task_three">Τρίτη</string>
@@ -388,5 +388,5 @@
     <string name="pref_task_eleven">Ενδέκατη</string>
     <string name="pref_task_twelve">Twelve</string>
     <string name="task_title_settings">Ρυθμίσεις</string>
-    <string name="waypoint_view_bt_navigate">Navigate</string>
+    <string name="waypoint_view_bt_navigate">Πλοήγηση</string>
 </resources>
