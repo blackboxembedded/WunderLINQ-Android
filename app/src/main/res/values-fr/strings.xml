@@ -5,32 +5,32 @@
     <string name="main_title">Motocyclette</string>
     <string name="blank_field">∞</string>
     <!-- Permission Requests -->
-    <string name="camera_alert_title">WunderLINQ requert la permission d'utilser la caméra</string>
-    <string name="camera_alert_body">Merci d'accorder l'accès à votre caméra</string>
-    <string name="contacts_alert_title">WunderLINQ requiert la permission d'accéder à vos contacts</string>
-    <string name="contacts_alert_body">Merci d'accorder l'accès en lecture à vos contacts</string>
-    <string name="record_audio_alert_title">WunderLINQ requiert la permission d'utiliser votre microphone</string>
-    <string name="record_audio_alert_body">Merci d'accorder l'accès pour enregistrer de l'audio</string>
-    <string name="location_alert_title">WunderLINQ requiert la permission d'obtenir votre position</string>
-    <string name="location_alert_body">Merci d'accorder l'accès à votre position</string>
-    <string name="write_alert_title">WunderLINQ requiert l'accès au stockage</string>
-    <string name="write_alert_body">Merci d'accorder l'accès en écriture au stockage</string>
-    <string name="overlay_alert_title">WunderLINQ requiert la permission de superposition d'écran</string>
-    <string name="overlay_alert_body">Merci d'accorder la permission de superposition afin que cette app puisse enregistrer des vidéos</string>
+    <string name="camera_alert_title">WunderLINQ requert la permission d\'utilser la caméra</string>
+    <string name="camera_alert_body">Merci d\'accorder l\'accès à votre caméra</string>
+    <string name="contacts_alert_title">WunderLINQ requiert la permission d\'accéder à vos contacts</string>
+    <string name="contacts_alert_body">Merci d\'accorder l\'accès en lecture à vos contacts</string>
+    <string name="record_audio_alert_title">WunderLINQ requiert la permission d\'utiliser votre microphone</string>
+    <string name="record_audio_alert_body">Merci d\'accorder l\'accès pour enregistrer de l\'audio</string>
+    <string name="location_alert_title">WunderLINQ requiert la permission d\'obtenir votre position</string>
+    <string name="location_alert_body">Merci d\'accorder l\'accès à votre position</string>
+    <string name="write_alert_title">WunderLINQ requiert l\'accès au stockage</string>
+    <string name="write_alert_body">Merci d\'accorder l\'accès en écriture au stockage</string>
+    <string name="overlay_alert_title">WunderLINQ requiert la permission de superposition d\'écran</string>
+    <string name="overlay_alert_body">Merci d\'accorder la permission de superposition afin que cette app puisse enregistrer des vidéos</string>
     <string name="negative_alert_title">Fonctionnalité limitée</string>
-    <string name="negative_location_alert_body">Sans l'accès à votre position, cette app ne sera pas en mesure d'enregistrer votre itinéraire ni de faire un journal de votre position.</string>
-    <string name="negative_write_alert_body">Sans l'accès au stockage, cette app ne sera pas en mesure d'enregistrer des fichiers.</string>
-    <string name="negative_camera_alert_body">Sans l'accès à votre caméra, cette app ne sera pas en mesure de prendre des photos ou des vidéos.</string>
-    <string name="negative_microphone_alert_body">Sans l'accès au micro, cette app ne sera pas en mesure d'enregistrer des vidéos.</string>
-    <string name="usagestats_alert_title">WunderLINQ requiert l'accès aux données d'utilisation</string>
-    <string name="usagestats_alert_body">Merci d'accorder l'accès aux données d'utilisation, ceci permet le lancement automatique lorque votre WunderLINQ est branché.</string>
+    <string name="negative_location_alert_body">Sans l\'accès à votre position, cette app ne sera pas en mesure d\'enregistrer votre itinéraire ni de faire un journal de votre position.</string>
+    <string name="negative_write_alert_body">Sans l\'accès au stockage, cette app ne sera pas en mesure d\'enregistrer des fichiers.</string>
+    <string name="negative_camera_alert_body">Sans l\'accès à votre caméra, cette app ne sera pas en mesure de prendre des photos ou des vidéos.</string>
+    <string name="negative_microphone_alert_body">Sans l\'accès au micro, cette app ne sera pas en mesure d\'enregistrer des vidéos.</string>
+    <string name="usagestats_alert_title">WunderLINQ requiert l\'accès aux données d\'utilisation</string>
+    <string name="usagestats_alert_body">Merci d\'accorder l\'accès aux données d\'utilisation, ceci permet le lancement automatique lorque votre WunderLINQ est branché.</string>
     <string name="disclaimer_alert_title">AVERTISSEMENT!</string>
     <string name="disclaimer_alert_body">
         Ne tentez pas de saisir votre destination ou de faire des manipulations à votre WunderLINQ en conduisant.
-        La perte d'attention à la conduite de votre véhicule peut mener à la mort, des blessures sérieuses ou des dommages matériels.
-        Vous assumez l'entière responsabilité et les risques inhérents à l'utilisation de cet appareil.    
+        La perte d\'attention à la conduite de votre véhicule peut mener à la mort, des blessures sérieuses ou des dommages matériels.
+        Vous assumez l\'entière responsabilité et les risques inhérents à l\'utilisation de cet appareil.    
     </string>
-    <string name="disclaimer_ok">J'accepte</string>
+    <string name="disclaimer_ok">J\'accepte</string>
     <string name="disclaimer_quit">Quitter</string>
     <!-- BLE Stuff Below -->
     <string name="toast_ble_not_supported">Bluetooth à basse consommation non disponible</string>
@@ -68,7 +68,7 @@
     <string name="fault_ABSERR">Erreur ABS</string>
     <string name="fault_ABSDAC">ABS désactivé</string>
     <string name="fault_ASCSLF">Auto-diagnostic ASC non complété</string>
-    <string name="fault_ASCINT">Intervention de l'ASC</string>
+    <string name="fault_ASCINT">Intervention de l\'ASC</string>
     <string name="fault_ASCERR">Erreur ASC</string>
     <string name="fault_ASCDAC">ASC désactivé</string>
     <string name="fault_FUELF">Niveau carburant bas</string>
@@ -85,18 +85,18 @@
     <string name="fault_LAMPHI">Feux de route</string>
     <string name="fault_LAMPREAR">Feu arrière</string>
     <string name="fault_LAMPBRK">Lumière de frein</string>
-    <string name="fault_LAMPLIC">Lumière de plaque d'immatriculation</string>
+    <string name="fault_LAMPLIC">Lumière de plaque d\'immatriculation</string>
     <string name="fault_LAMPRFOG">Feu brouillard arrière</string>
     <string name="fault_LAMPADDD">Feux de route additionnel</string>
     <string name="fault_LAMPADDB">Lumière de frein additionnelle</string>
     <string name="fault_LAMPFL1">Lumière avant 1</string>
     <string name="fault_LAMPFL2">Lumière avant 2</string>
     <string name="fault_ICEWARN">Avertissement de glace</string>
-    <string name="fault_GENWARNFSYLW">L'indicateur d'avertissement général jaune clignote</string>
-    <string name="fault_GENWARNSHYLW">L'indicateur d'avertissement général jaune est allumé</string>
-    <string name="fault_GENWARNFSRED">L'indicateur d'avertissement général rouge clignote</string>
-    <string name="fault_GENWARNSHRED">L'indicateur d'avertissement général rouge est allumé</string>
-    <string name="fault_OILLOW">Le niveau d'huile moteur est trop bas</string>
+    <string name="fault_GENWARNFSYLW">L\'indicateur d\'avertissement général jaune clignote</string>
+    <string name="fault_GENWARNSHYLW">L\'indicateur d\'avertissement général jaune est allumé</string>
+    <string name="fault_GENWARNFSRED">L\'indicateur d\'avertissement général rouge clignote</string>
+    <string name="fault_GENWARNSHRED">L\'indicateur d\'avertissement général rouge est allumé</string>
+    <string name="fault_OILLOW">Le niveau d\'huile moteur est trop bas</string>
     <string name="fault_TIREFWF">Avertissement de pression pour le pneu avant</string>
     <string name="fault_TIRERWF">Avertissement de pression pour le pneu arrière</string>
     <string name="fault_TIREFCF">Pression du pneu avant critique</string>
@@ -107,12 +107,12 @@
 
     <!-- WaypointViewActivity -->
     <string name="waypoint_view_title">Destination sauvegardée</string>
-    <string name="waypoint_view_tv_date_label">Date d'enregistrement</string>
+    <string name="waypoint_view_tv_date_label">Date d\'enregistrement</string>
     <string name="waypoint_view_tv_lat_label">Latitude</string>
     <string name="waypoint_view_tv_lon_label">Longitude</string>
     <string name="waypoint_view_tv_label_label">Libellé</string>
     <string name="waypoint_view_label_hint">Libellé de destination</string>
-    <string name="waypoint_view_bt_open">Ouvrir dans l'app de carte</string>
+    <string name="waypoint_view_bt_open">Ouvrir dans l\'app de carte</string>
     <string name="waypoint_view_bt_share">Partager</string>
     <string name="waypoint_view_bt_delete">Effacer</string>
     <string name="waypoint_view_waypoint_label">Destination</string>
@@ -155,8 +155,8 @@
     <string name="not_found_media_player">Aucun lecteur média trouvé</string>
     <string name="start_media_player">Démarrer un lecteur média compatible</string>
     <string name="unknown">Inconnu</string>
-    <string name="notification_alert_title">WunderLINQ requiert l'accès aux notifications</string>
-    <string name="notification_alert_body">Merci d'accorder l'accès aux notifications pour que cette app controle le lecteur média</string>
+    <string name="notification_alert_title">WunderLINQ requiert l\'accès aux notifications</string>
+    <string name="notification_alert_body">Merci d\'accorder l\'accès aux notifications pour que cette app controle le lecteur média</string>
 
     <!-- TaskActivity -->
     <string name="quicktask_title">Accès rapide</string>
@@ -185,7 +185,7 @@
     <string name="contact_type_0">Personalisé</string>
     <string name="contact_type_1">Domicile</string>
     <string name="contact_type_2">Mobile</string>
-    <string name="contact_type_3">Travail/string>
+    <string name="contact_type_3">Travail</string>
     <string name="contact_type_4">Travail-Fax</string>
     <string name="contact_type_5">Domicile-Fax</string>
     <string name="contact_type_6">Pagette</string>
@@ -208,7 +208,7 @@
     <string name="alertActivityBtnOK">OK</string>
     <string name="alertActivityBtnClose">Fermer</string>
     <string name="alertLowFuelTitle">Niveau carburant bas</string>
-    <string name="alertLowFuelBody">Itinéraire vers la station d'essence la plus proche?"</string>
+    <string name="alertLowFuelBody">Itinéraire vers la station d\'essence la plus proche?"</string>
 
     <!-- LoggingService -->
     <string name="time_header">Heure</string>
@@ -267,7 +267,7 @@
         <item name="5">0</item>
     </string-array>
     <string name="pref_tasks_settings_title">Personnalisation de tâches rapides</string>
-    <string name="pref_tasks_settings_summary">Personnaliser la sélection et l'ordre des tâches à afficher</string>
+    <string name="pref_tasks_settings_summary">Personnaliser la sélection et l\'ordre des tâches à afficher</string>
     <string name="pref_task_one">Première</string>
     <string name="pref_task_two">Deuxième</string>
     <string name="pref_task_three">Troisième</string>
@@ -372,7 +372,7 @@
         <item name="1">0</item>
         <item name="2">1</item>
     </string-array>
-    <string name="pref_orientation_name">Verrouillage de l'orientation</string>
+    <string name="pref_orientation_name">Verrouillage de l\'orientation</string>
     <string-array name="orientation_array">
         <item name="1">Off</item>
         <item name="2">Paysage</item>
@@ -385,10 +385,10 @@
         <item name="3">2</item>
         <item name="3">3</item>
     </string-array>
-    <string name="pref_brightness_name">Luminosité de l'affichage</string>
+    <string name="pref_brightness_name">Luminosité de l\'affichage</string>
     <string name="pref_brightness_summary">Augmenter la luminosité au max.</string>
     <string name="pref_nightMode_name">Mode de nuit</string>
-    <string name="pref_nightMode_summary">Thème de l'interface utilisateur</string>
+    <string name="pref_nightMode_summary">Thème de l\'interface utilisateur</string>
     <string-array name="night_mode_array">
         <item name="1">Off</item>
         <item name="2">On</item>
@@ -401,20 +401,20 @@
     </string-array>
     <string name="pref_autoNightModeDelay_name">Délais pour le mode de nuit automatique</string>
     <string name="pref_autoNightModeDelay_summary">Définir le délais en secondes pour le mode de nuit</string>
-    <string name="alerting_title">Réglages d'alertes</string>
+    <string name="alerting_title">Réglages d\'alertes</string>
     <string name="pref_tpmsAlert_name">Niveau de pression des pneus personnalisé</string>
     <string name="pref_tpmsAlert_summary">Utiliser un niveau personnalisé pour la basse pression des pneus</string>
     <string name="pref_tpmsAlertThreshold_name">Limite inférieur de pression des pneus</string>
     <string name="pref_tpmsAlertThreshold_summary">Spécifiez un nombre basé sur votre unité de mesure sélectionnée</string>
     <string name="pref_fuelAlert_name">Assistance carburant</string>
-    <string name="pref_fuelAlert_summary">Proposer l'itinéraire vers la station la plus proche en cas de niveau de carburant bas</string>
+    <string name="pref_fuelAlert_summary">Proposer l\'itinéraire vers la station la plus proche en cas de niveau de carburant bas</string>
     <string name="debug_settings_title">Paramètres de débogage</string>
     <string name="pref_dataLogging_name">Journalisation des messages bruts</string>
     <string name="pref_dataLogging_summary">Activer la journalisation des messages bruts vers /sdcard/WunderLINQ/</string>
     <string name="pref_showRaw_name">Afficher les messages bruts</string>
-    <string name="pref_showRaw_summary">Afficher les messages bruts dans la section de l'odomètre</string>
+    <string name="pref_showRaw_summary">Afficher les messages bruts dans la section de l\'odomètre</string>
     <string name="pref_showUartFaults_name">Afficher les erreurs UART</string>
-    <string name="pref_showUartFaults_summary">Afficher les erreurs UART dans le visualiseur d'erreurs</string>
+    <string name="pref_showUartFaults_summary">Afficher les erreurs UART dans le visualiseur d\'erreurs</string>
     <string name="advanced_settings_title">Réglages avancés</string>
     <string name="pref_btn_sendlogs_title">Envoyer les journaux</string>
     <string name="pref_btn_sendlogs_summary">Envoyer les journaux au support de Black Box Embedded</string>
@@ -428,8 +428,8 @@
     <string name="pref_btn_dfumode_summary">WunderLINQ Mode de mise à jour du micrologiciel</string>
     <string name="pref_btn_dfumode_warning_title">Avertissement</string>
     <string name="pref_btn_dfumode_warning_body">Vous allez placer votre WunderLINQ dans le mode DFU.
-        Quand vous sélectionnerez OK, l'app WunderLINQ sera déconnectée et la lumière de statut de votre WunderLINQ doit être verte. 
-        L'écran principal sera affiché et une demande de mise à jour vous sera affichée quand l'app se reconnectera.</string>
+        Quand vous sélectionnerez OK, l\'app WunderLINQ sera déconnectée et la lumière de statut de votre WunderLINQ doit être verte. 
+        L\'écran principal sera affiché et une demande de mise à jour vous sera affichée quand l\'app se reconnectera.</string>
     <string name="pref_btn_version_title">WunderLINQ Version</string>
     <string name="pref_btn_version_summary">Basculer en mode de mise à jour du micrologiciel WunderLINQ</string>
     <string name="pref_btn_version_toast">Menu débogage activé. Sortez et revenez dans les réglages.</string>
