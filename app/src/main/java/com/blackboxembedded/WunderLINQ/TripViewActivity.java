@@ -228,7 +228,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                         avgSpeed = Utils.kmToMiles(avgSpeed);
                         maxSpeed = Utils.kmToMiles(maxSpeed);
                     }
-                    tvSpeed.setText(Utils.oneDigit.format(avgSpeed) + "/" + Utils.oneDigit.format(maxSpeed) + "(" + speedUnit + ")");
+                    tvSpeed.setText(Utils.oneDigit.format(avgSpeed) + "/" + Utils.oneDigit.format(maxSpeed) + " (" + speedUnit + ")");
                 }
 
                 if(endShiftCnt != null){
@@ -262,7 +262,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                     minEngineTemp = 0.0;
                     maxEngineTemp = 0.0;
                 }
-                tvEngine.setText(Utils.oneDigit.format(minEngineTemp) + "/" + Utils.oneDigit.format(avgEngineTemp) + "/" + Utils.oneDigit.format(maxEngineTemp) + "(" + temperatureUnit + ")");
+                tvEngine.setText(Utils.oneDigit.format(minEngineTemp) + "/" + Utils.oneDigit.format(avgEngineTemp) + "/" + Utils.oneDigit.format(maxEngineTemp) + " (" + temperatureUnit + ")");
 
                 Double avgAmbientTemp = 0.0;
                 if (ambientTemps.size() > 0) {
@@ -281,7 +281,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                     minAmbientTemp = 0.0;
                     maxAmbientTemp = 0.0;
                 }
-                tvAmbient.setText(Utils.oneDigit.format(minAmbientTemp) + "/" + Utils.oneDigit.format(avgAmbientTemp) + "/" + Utils.oneDigit.format(maxAmbientTemp) + "(" + temperatureUnit + ")");
+                tvAmbient.setText(Utils.oneDigit.format(minAmbientTemp) + "/" + Utils.oneDigit.format(avgAmbientTemp) + "/" + Utils.oneDigit.format(maxAmbientTemp) + " (" + temperatureUnit + ")");
 
                 // Calculate Distance
                 double distance = 0;
@@ -291,7 +291,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                         distance = Utils.kmToMiles(distance);
                     }
                 }
-                tvDistance.setText(Utils.oneDigit.format(distance) + distanceUnit);
+                tvDistance.setText(Utils.oneDigit.format(distance) + " " + distanceUnit);
 
                 // Calculate Duration
                 if (startTime != null && endTime != null) {
