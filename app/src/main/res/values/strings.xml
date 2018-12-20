@@ -48,9 +48,36 @@
     <string name="trip_logs_label">Trip Logs</string>
     <string name="waypoints_label">Waypoints</string>
     <!-- Other Menu -->
-    <string name="settings_label">Settings</string>
+    <string name="appsettings_label">App Settings</string>
+    <string name="hwsettings_label">HW Settings</string>
+    <string name="hwdebug_label">HW Debug Console</string>
     <string name="info_label">About</string>
     <string name="close_label">Close</string>
+
+    <!-- FWConfigActivity -->
+    <string name="fw_config_title">WunderLINQ Settings</string>
+    <string name="wwtype_label">Wheel Type</string>
+    <string-array name="wwtype_array">
+        <item name="1">Full</item>
+        <item name="2">Partial</item>
+    </string-array>
+    <string name="config_read_label">Read Config</string>
+    <string name="config_write_label">Write Config</string>
+
+    <!-- DebugActivity -->
+    <string name="debug_title">Debug Menu</string>
+    <string name="command_label">Commands</string>
+    <string-array name="debug_commands_array">
+        <item name="1">Read Serial Flash</item>
+        <item name="2">Read Config Flash</item>
+        <item name="3">Read WLQ Flash</item>
+        <item name="4">Reboot into Bootloader</item>
+        <item name="5">Turn off 3V switch</item>
+        <item name="6">Turn on 3V switch</item>
+        <item name="7">Toggle 3V switch</item>
+        <item name="8">Test Garmin UART</item>
+    </string-array>
+    <string name="debug_write_label">Send Command</string>
 
     <!-- AboutActivity -->
     <string name="about_title">About</string>

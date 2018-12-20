@@ -7,11 +7,11 @@
     <!-- Permission Requests -->
     <string name="camera_alert_title">WunderLINQ requert la permission d\'utilser la caméra</string>
     <string name="camera_alert_body">Merci d\'accorder l\'accès à votre caméra</string>
-    <string name="contacts_alert_title">WunderLINQ requiert la permission d\'accéder à vos contacts</string>
+    <string name="contacts_alert_title">WunderLINQ requiert la permission aux contacts</string>
     <string name="contacts_alert_body">Merci d\'accorder l\'accès en lecture à vos contacts</string>
-    <string name="record_audio_alert_title">WunderLINQ requiert la permission d\'utiliser votre microphone</string>
+    <string name="record_audio_alert_title">WunderLINQ requiert l\'accès au microphone</string>
     <string name="record_audio_alert_body">Merci d\'accorder l\'accès pour enregistrer de l\'audio</string>
-    <string name="location_alert_title">WunderLINQ requiert la permission d\'obtenir votre position</string>
+    <string name="location_alert_title">WunderLINQ requiert votre position</string>
     <string name="location_alert_body">Merci d\'accorder l\'accès à votre position</string>
     <string name="write_alert_title">WunderLINQ requiert l\'accès au stockage</string>
     <string name="write_alert_body">Merci d\'accorder l\'accès en écriture au stockage</string>
@@ -46,7 +46,7 @@
     <string name="gear_label">Vitesse</string>
     <!-- Data Menu -->
     <string name="trip_logs_label">Journaux de voyages</string>
-    <string name="waypoints_label">Destinations</string>
+    <string name="waypoints_label">Emplacements</string>
     <!-- Other Menu -->
     <string name="settings_label">Réglages</string>
     <string name="info_label">À propos</string>
@@ -103,19 +103,19 @@
     <string name="fault_TIRERCF">Pression du pneu arrière critique</string>
 
     <!-- WaypointActivity -->
-    <string name="waypoint_title">Destinations sauvegardées</string>
+    <string name="waypoint_title">Emplacements sauvegardés</string>
 
     <!-- WaypointViewActivity -->
-    <string name="waypoint_view_title">Destination sauvegardée</string>
+    <string name="waypoint_view_title">Emplacement sauvegardé</string>
     <string name="waypoint_view_tv_date_label">Date d\'enregistrement</string>
     <string name="waypoint_view_tv_lat_label">Latitude</string>
     <string name="waypoint_view_tv_lon_label">Longitude</string>
     <string name="waypoint_view_tv_label_label">Libellé</string>
-    <string name="waypoint_view_label_hint">Libellé de destination</string>
+    <string name="waypoint_view_label_hint">Libellé d\'emplacement</string>
     <string name="waypoint_view_bt_open">Ouvrir dans l\'app de carte</string>
     <string name="waypoint_view_bt_share">Partager</string>
     <string name="waypoint_view_bt_delete">Effacer</string>
-    <string name="waypoint_view_waypoint_label">Destination</string>
+    <string name="waypoint_view_waypoint_label">Emplacement</string>
     <string name="waypoint_view_share_label">Partager via</string>
 
     <!-- TripsActivity -->
@@ -161,18 +161,18 @@
     <!-- TaskActivity -->
     <string name="quicktask_title">Accès rapide</string>
     <string name="task_title_navigation">Navigation</string>
-    <string name="task_title_gohome">Vers domicile</string>
-    <string name="task_title_favnumber">Appel numéro favori</string>
-    <string name="task_title_callcontact">Appel Contact</string>
-    <string name="task_title_photo">Prendre une photo</string>
-    <string name="task_title_selfie">Prendre un Selfie</string>
+    <string name="task_title_gohome">Domicile</string>
+    <string name="task_title_favnumber">Numéro favori</string>
+    <string name="task_title_callcontact">Contact</string>
+    <string name="task_title_photo">Caméra</string>
+    <string name="task_title_selfie">Égoportrait</string>
     <string name="task_title_start_record">Démarrer enr. vidéo</string>
     <string name="task_title_stop_record">Arrêt enr. vidéo</string>
     <string name="task_title_start_trip">Démarrer enr. voyage</string>
     <string name="task_title_stop_trip">Arrêt enr. voyage</string>
     <string name="title_logging_notification">Enregistrement de voyage WunderLINQ actif</string>
-    <string name="task_title_waypoint">Enregistrer Destination</string>
-    <string name="task_title_waypoint_nav">itinéraire vers la destination</string>
+    <string name="task_title_waypoint">Enregistrer emplacement</string>
+    <string name="task_title_waypoint_nav">itinéraire vers emplacement</string>
     <string name="task_title_voicecontrol">Assistant vocal</string>
     <string name="task_title_settings">Réglages</string>
     <string name="task_title_empty">Vide</string>

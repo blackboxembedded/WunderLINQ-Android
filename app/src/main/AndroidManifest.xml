@@ -120,5 +120,9 @@
                 <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".FWConfigActivity" />
+        <activity android:name=".DebugActivity"></activity>
     </application>
+
 </manifest>

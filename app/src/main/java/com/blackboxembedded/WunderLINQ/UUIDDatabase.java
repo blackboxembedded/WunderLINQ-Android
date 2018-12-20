@@ -10,12 +10,12 @@ public class UUIDDatabase {
     /**
      * WunderLINQ related UUID
      */
-    public final static UUID UUID_WUNDERLINQ_SERVICE = UUID
-            .fromString(GattAttributes.MOTORCYCLE_SERVICE);
-    public final static UUID UUID_WUNDERLINQ_MESSAGE_CHARACTERISTIC = UUID
-            .fromString(GattAttributes.LIN_MESSAGE_CHARACTERISTIC);
-    public final static UUID UUID_WUNDERLINQ_DFU_CHARACTERISTIC = UUID
-            .fromString(GattAttributes.DFU_CHARACTERISTIC);
+    public static final UUID UUID_WUNDERLINQ_SERVICE = UUID
+            .fromString(GattAttributes.WUNDERLINQ_SERVICE);
+    public static final UUID UUID_WUNDERLINQ_MESSAGE_CHARACTERISTIC = UUID
+            .fromString(GattAttributes.WUNDERLINQ_MESSAGE_CHARACTERISTIC);
+    public final static UUID UUID_WUNDERLINQ_COMMAND_CHARACTERISTIC = UUID
+            .fromString(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC);
 
     /**
      * Descriptor UUID

@@ -44,6 +44,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -114,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
     private Handler mHandler;
     private BluetoothLeService mBluetoothLeService;
     private BluetoothGattCharacteristic mNotifyCharacteristic;
+    public static BluetoothGattCharacteristic gattCommandCharacteristic;
     List<BluetoothGattCharacteristic> gattCharacteristics;
     private String mDeviceAddress;
     private static final int REQUEST_ENABLE_BT = 1;
@@ -122,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
     private static final long SCAN_PERIOD = 10000;
 
     public final static UUID UUID_MOTORCYCLE_SERVICE =
-            UUID.fromString(GattAttributes.MOTORCYCLE_SERVICE);
+            UUID.fromString(GattAttributes.WUNDERLINQ_SERVICE);
 
     private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
     private static final int PERMISSION_REQUEST_CAMERA = 100;
@@ -131,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_RECORD_AUDIO = 122;
     private PopupMenu mPopupMenu;
     private PopupMenu mOtherMenu;
+    private Menu otherMenu;
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -466,6 +469,13 @@ public class MainActivity extends AppCompatActivity {
         mOtherMenu = new PopupMenu(this, otherButton);
         MenuInflater menuOtherInflater = mOtherMenu.getMenuInflater();
         menuOtherInflater.inflate(R.menu.other_menu, mOtherMenu.getMenu());
+        otherMenu = mOtherMenu.getMenu();
+        otherMenu.findItem(R.id.action_hwsettings).setVisible(false);
+        if (sharedPrefs.getBoolean("DEBUG_ENABLED",false)){
+            otherMenu.findItem(R.id.action_debug).setVisible(true);
+        } else {
+            otherMenu.findItem(R.id.action_debug).setVisible(false);
+        }
         mOtherMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
             @Override
@@ -474,6 +484,14 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.action_settings:
                         Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
                         startActivityForResult(settingsIntent, SETTINGS_CHECK);
+                        break;
+                    case R.id.action_hwsettings:
+                        Intent hwSettingsIntent = new Intent(MainActivity.this, FWConfigActivity.class);
+                        startActivity(hwSettingsIntent);
+                        break;
+                    case R.id.action_debug:
+                        Intent debugIntent = new Intent(MainActivity.this, DebugActivity.class);
+                        startActivity(debugIntent);
                         break;
                     case R.id.action_about:
                         Intent aboutIntent = new Intent(MainActivity.this, AboutActivity.class);
@@ -954,13 +972,16 @@ public class MainActivity extends AppCompatActivity {
                     updateDisplay();
                 }
                 btButton.setColorFilter(getResources().getColor(R.color.motorrad_red));
+                otherMenu.findItem(R.id.action_hwsettings).setVisible(false);
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 Log.d(TAG,"GATT_SERVICE_DISCOVERED");
                 checkGattServices(mBluetoothLeService.getSupportedGattServices());
                 btButton.setColorFilter(getResources().getColor(R.color.motorrad_blue));
+                otherMenu.findItem(R.id.action_hwsettings).setVisible(true);
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 //Log.d(TAG,"GATT_DATA_AVAILABLE");
                 btButton.setColorFilter(getResources().getColor(R.color.motorrad_blue));
+                otherMenu.findItem(R.id.action_hwsettings).setVisible(true);
                 if (!sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
                     updateDisplay();
                 }
@@ -992,7 +1013,7 @@ public class MainActivity extends AppCompatActivity {
                 for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
                     uuid = gattCharacteristic.getUuid().toString();
                     Log.d(TAG,"Characteristic Found: " + uuid);
-                    if (UUID.fromString(GattAttributes.LIN_MESSAGE_CHARACTERISTIC).equals(gattCharacteristic.getUuid())) {
+                    if (UUID.fromString(GattAttributes.WUNDERLINQ_MESSAGE_CHARACTERISTIC).equals(gattCharacteristic.getUuid())) {
                         int charaProp = gattCharacteristic.getProperties();
                         if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
                             // If there is an active notification on a characteristic, clear
@@ -1009,6 +1030,8 @@ public class MainActivity extends AppCompatActivity {
                             mBluetoothLeService.setCharacteristicNotification(
                                     gattCharacteristic, true);
                         }
+                    } else if (UUID.fromString(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC).equals(gattCharacteristic.getUuid())){
+                        gattCommandCharacteristic = gattCharacteristic;
                     }
                 }
             }

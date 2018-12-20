@@ -260,6 +260,9 @@ public class BluetoothLeService extends Service {
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 dataLog = "[" + serviceName + "|" + characteristicName + "] " +
                         "write request status  - Success";
+                Intent intent = new Intent(ACTION_WRITE_SUCCESS);
+                intent.putExtra("ACTION_WRITE_SUCCESS", "" + status);
+                MyApplication.getContext().sendBroadcast(intent);
                 Log.d(TAG,dataLog);
             } else {
                 dataLog = "[" + serviceName + "|" + characteristicName + "] " +
@@ -2074,7 +2077,8 @@ public class BluetoothLeService extends Service {
                 }
                 break;
             default:
-                Log.d(TAG, "Unknown Message ID: " + String.format("%02x", msgID));
+                //Log.d(TAG, "Unknown Message ID: " + String.format("%02x", msgID));
+                break;
         }
     }
 }

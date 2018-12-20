@@ -15,11 +15,11 @@ public class GattAttributes {
     private static HashMap<UUID, String> attributesUUID = new HashMap<UUID, String>();
 
     /**
-     * WunderLINQ Characteristic
+     * WunderLINQ Service and Characteristics
      */
-    public static final String MOTORCYCLE_SERVICE = "02997340-015f-11e5-8c2b-0002a5d5c51b";
-    public static final String LIN_MESSAGE_CHARACTERISTIC = "00000003-0000-1000-8000-00805f9b34fb";
-    public static final String DFU_CHARACTERISTIC = "00000005-0010-0080-0000-805f9b34fb00";
+    public static final String WUNDERLINQ_SERVICE = "02997340-015f-11e5-8c2b-0002a5d5c51b";
+    public static final String WUNDERLINQ_MESSAGE_CHARACTERISTIC = "00000003-0000-1000-8000-00805f9b34fb";
+    public static final String WUNDERLINQ_COMMAND_CHARACTERISTIC = "00000004-0000-1000-8000-00805f9b34fb";
 
     /**
      * Descriptor UUID's
@@ -46,12 +46,11 @@ public class GattAttributes {
     public static final String DEVICE_INFORMATION_SERVICE = "0000180a-0000-1000-8000-00805f9b34fb";
 
     static {
-        // Services
-        attributes.put(MOTORCYCLE_SERVICE, "Motorcycle Service");
-        // Characteristics
-        attributes.put(LIN_MESSAGE_CHARACTERISTIC, "LIN Message");
-    }
-    static {
+        // WunderLINQ
+        attributesUUID.put(UUIDDatabase.UUID_WUNDERLINQ_SERVICE, "WunderLINQ Service");
+        attributesUUID.put(UUIDDatabase.UUID_WUNDERLINQ_MESSAGE_CHARACTERISTIC, "WunderLINQ Messages");
+        attributesUUID.put(UUIDDatabase.UUID_WUNDERLINQ_COMMAND_CHARACTERISTIC, "WunderLINQ Commands");
+
         // Descriptors
         attributesUUID.put(UUIDDatabase.UUID_CHARACTERISTIC_EXTENDED_PROPERTIES, "Characteristic Extended Properties");
         attributesUUID.put(UUIDDatabase.UUID_CHARACTERISTIC_USER_DESCRIPTION, "Characteristic User Description");
@@ -71,10 +70,6 @@ public class GattAttributes {
         attributesUUID.put(UUIDDatabase.UUID_PNP_ID, "PnP ID");
         attributesUUID.put(UUIDDatabase.UUID_IEEE,
                 "IEEE 11073-20601 Regulatory Certification Data List");
-    }
-    public static String lookup(String uuid, String defaultName) {
-        String name = attributes.get(uuid);
-        return name == null ? defaultName : name;
     }
     public static String lookupUUID(UUID uuid, String defaultName) {
         String name = attributesUUID.get(uuid);
