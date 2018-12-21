@@ -28,7 +28,6 @@ public class FWConfigActivity extends AppCompatActivity {
     private ImageButton backButton;
     private TextView navbarTitle;
     private Spinner wwModeSpinner;
-    private Button readBtn;
     private Button writeBtn;
 
     @Override
@@ -52,15 +51,13 @@ public class FWConfigActivity extends AppCompatActivity {
 
             }
         });
-        readBtn = (Button) findViewById(R.id.readBtn);
-        readBtn.setOnClickListener(mClickListener);
         writeBtn = (Button) findViewById(R.id.writeBtn);
         writeBtn.setOnClickListener(mClickListener);
 
         showActionBar();
 
         characteristic = MainActivity.gattCommandCharacteristic;
-
+        BluetoothLeService.readCharacteristic(characteristic);
     }
 
     @Override
@@ -86,12 +83,6 @@ public class FWConfigActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             switch(v.getId()) {
-                case R.id.readBtn:
-                    // Read config
-                    byte[] readConfigCmd = {0x57,0x52,0x53};
-                    characteristic.setValue(readConfigCmd);
-                    BluetoothLeService.writeCharacteristic(characteristic);
-                    break;
                 case R.id.writeBtn:
                     byte wwMode = 0x00;
                     // Get Selection

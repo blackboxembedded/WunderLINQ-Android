@@ -2067,6 +2067,7 @@ public class BluetoothLeService extends Service {
                 }
                 break;
             case 0xff:
+                /*
                 Log.d(TAG,"Debug Message received: " + Utils.ByteArraytoHex(data));
                 //
                 if (sharedPrefs.getBoolean("prefShowUartFaults",false)) {
@@ -2075,6 +2076,7 @@ public class BluetoothLeService extends Service {
                         FaultStatus.setUartCommTimeoutActive(true);
                     }
                 }
+                */
                 break;
             default:
                 //Log.d(TAG, "Unknown Message ID: " + String.format("%02x", msgID));

@@ -59,10 +59,9 @@
     <string name="wwtype_label">Wheel Type</string>
     <string-array name="wwtype_array">
         <item name="1">Full</item>
-        <item name="2">Partial</item>
+        <item name="2">RT</item>
     </string-array>
-    <string name="config_read_label">Read Config</string>
-    <string name="config_write_label">Write Config</string>
+    <string name="config_write_label">Save Settings</string>
 
     <!-- DebugActivity -->
     <string name="debug_title">Debug Menu</string>

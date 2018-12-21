@@ -78,6 +78,9 @@
         <activity android:name=".WaypointNavActivity" />
         <activity android:name=".AlertActivity" />
         <activity android:name=".AboutActivity" />
+        <activity android:name=".FWConfigActivity"/>
+        <activity android:name=".DebugActivity"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".NotificationListener"
@@ -120,9 +123,6 @@
                 <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
             </intent-filter>
         </receiver>
-
-        <activity android:name=".FWConfigActivity" />
-        <activity android:name=".DebugActivity"></activity>
     </application>
 
 </manifest>

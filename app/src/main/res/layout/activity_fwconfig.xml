@@ -6,32 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".FWConfigActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="568dp"
-        android:text="@string/fw_config_title"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/llModel"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <LinearLayout
         android:id="@+id/llModel"
         android:orientation="horizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/tvDateLabel"
@@ -40,36 +25,18 @@
             android:layout_height="wrap_content"
             android:text="@string/wwtype_label"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="20sp"
             android:textStyle="bold"/>
 
         <Spinner
             android:id="@+id/wwModeSpinner"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:entries="@array/wwtype_array"
-            android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="20sp"
             android:textStyle="bold"/>
     </LinearLayout>
-
-
-
-    <Button
-        android:id="@+id/readBtn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/config_read_label"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/writeBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/writeBtn"
@@ -77,7 +44,7 @@
         android:layout_height="wrap_content"
         android:text="@string/config_write_label"
         android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textSize="25sp"
         android:textStyle="bold"
         android:layout_marginBottom="16dp"
         android:layout_marginStart="16dp"
