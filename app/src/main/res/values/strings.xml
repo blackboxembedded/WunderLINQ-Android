@@ -60,11 +60,13 @@
     <string-array name="wwtype_array">
         <item name="1">Full</item>
         <item name="2">RT</item>
+        <!--<item name="3">Custom</item>-->
     </string-array>
+    <string name="sensitivity_label">Sensitivity</string>
     <string name="config_write_label">Save Settings</string>
 
     <!-- DebugActivity -->
-    <string name="debug_title">Debug Menu</string>
+    <string name="debug_title">Debug Console</string>
     <string name="command_label">Commands</string>
     <string-array name="debug_commands_array">
         <item name="1">Read Serial Flash</item>
@@ -74,7 +76,12 @@
         <item name="5">Turn off 3V switch</item>
         <item name="6">Turn on 3V switch</item>
         <item name="7">Toggle 3V switch</item>
-        <item name="8">Test Garmin UART</item>
+        <item name="8">Turn off Blue LED</item>
+        <item name="9">Turn on Blue LED</item>
+        <item name="10">Flash Blue LED</item>
+        <item name="11">Turn off Green LED</item>
+        <item name="12">Turn on Green LED</item>
+        <item name="13">Flash Green LED</item>
     </string-array>
     <string name="debug_write_label">Send Command</string>
 

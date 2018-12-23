@@ -103,20 +103,40 @@ public class DebugActivity extends AppCompatActivity {
                             characteristic.setValue(rebootBootloaderCmd);
                             break;
                         case 4: //Turn off 3V switch
-                            byte[] off3VswitchCmd = {0x57,0x57,0x48,0x53,0x00};
+                            byte[] off3VswitchCmd = {0x57,0x57,0x48,0x53,0x30};
                             characteristic.setValue(off3VswitchCmd);
                             break;
                         case 5: //Turn on 3V switch
-                            byte[] on3VswitchCmd = {0x57,0x57,0x48,0x53,0x01};
+                            byte[] on3VswitchCmd = {0x57,0x57,0x48,0x53,0x31};
                             characteristic.setValue(on3VswitchCmd);
                             break;
                         case 6: //Toggle 3V switch
                             byte[] toggle3VswitchCmd = {0x57,0x57,0x48,0x53,0x54};
                             characteristic.setValue(toggle3VswitchCmd);
                             break;
-                        case 7: //Test Garmin UART
-                            byte[] testGarminUARTCmd = {0x57,0x57,0x48,0x43};
-                            characteristic.setValue(testGarminUARTCmd);
+                        case 7: //Turn off blue LED
+                            byte[] offBlueLEDCmd = {0x57,0x57,0x48,0x4C,0x42,0x31};
+                            characteristic.setValue(offBlueLEDCmd);
+                            break;
+                        case 8: //Turn on blue LED
+                            byte[] onBlueLEDCmd = {0x57,0x57,0x48,0x4C,0x42,0x30};
+                            characteristic.setValue(onBlueLEDCmd);
+                            break;
+                        case 9: //Flash blue LED
+                            byte[] blinkBlueLEDCmd = {0x57,0x57,0x48,0x4C,0x42,0x42};
+                            characteristic.setValue(blinkBlueLEDCmd);
+                            break;
+                        case 10: //Turn off green LED
+                            byte[] offGreenLEDCmd = {0x57,0x57,0x48,0x4C,0x47,0x31};
+                            characteristic.setValue(offGreenLEDCmd);
+                            break;
+                        case 11: //Turn on green LED
+                            byte[] onGreenLEDCmd = {0x57,0x57,0x48,0x4C,0x47,0x30};
+                            characteristic.setValue(onGreenLEDCmd);
+                            break;
+                        case 12: //Flash green LED
+                            byte[] blinkGreenLEDCmd = {0x57,0x57,0x48,0x4C,0x47,0x42};
+                            characteristic.setValue(blinkGreenLEDCmd);
                             break;
                         default:
                             break;

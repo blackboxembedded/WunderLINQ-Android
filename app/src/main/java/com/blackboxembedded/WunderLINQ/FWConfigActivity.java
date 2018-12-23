@@ -15,6 +15,8 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -28,7 +30,13 @@ public class FWConfigActivity extends AppCompatActivity {
     private ImageButton backButton;
     private TextView navbarTitle;
     private Spinner wwModeSpinner;
+    private LinearLayout sensitivityLLayout;
+    private TextView sensitivityTV;
+    private SeekBar sensitivitySeekBar;
     private Button writeBtn;
+
+    private byte currentConfig;
+    private byte currentSensitivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +50,19 @@ public class FWConfigActivity extends AppCompatActivity {
         wwModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                Log.d(TAG,"Item Selected: " + adapterView.getItemAtPosition(pos).toString());
-                //TODO When custom selected unhide custom widgets
+                Log.d(TAG, "Item Selected: " + adapterView.getItemAtPosition(pos).toString());
+                if ((currentConfig == 0x32) && (pos == 0)) {
+                    sensitivitySeekBar.setMax(20);
+                    sensitivityLLayout.setVisibility(View.VISIBLE);
+                    sensitivitySeekBar.setVisibility(View.VISIBLE);
+                } else if ((currentConfig == 0x34) && (pos == 1)) {
+                    sensitivitySeekBar.setMax(30);
+                    sensitivityLLayout.setVisibility(View.VISIBLE);
+                    sensitivitySeekBar.setVisibility(View.VISIBLE);
+                } else {
+                    sensitivityLLayout.setVisibility(View.INVISIBLE);
+                    sensitivitySeekBar.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
@@ -51,13 +70,34 @@ public class FWConfigActivity extends AppCompatActivity {
 
             }
         });
+
+        sensitivityLLayout = (LinearLayout) findViewById(R.id.llSensitivity);
+        sensitivityTV = (TextView) findViewById(R.id.tvSensitivityValue);
+        sensitivitySeekBar = (SeekBar) findViewById(R.id.sbSensitivity);
+        sensitivitySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                sensitivityTV.setText(String.valueOf(progress));
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+        });
+
         writeBtn = (Button) findViewById(R.id.writeBtn);
         writeBtn.setOnClickListener(mClickListener);
 
         showActionBar();
 
         characteristic = MainActivity.gattCommandCharacteristic;
-        BluetoothLeService.readCharacteristic(characteristic);
+        // Read config
+        byte[] readWLQConfigCmd = {0x57,0x52,0x57};
+        characteristic.setValue(readWLQConfigCmd);
+        BluetoothLeService.writeCharacteristic(characteristic);
     }
 
     @Override
@@ -84,16 +124,35 @@ public class FWConfigActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch(v.getId()) {
                 case R.id.writeBtn:
-                    byte wwMode = 0x00;
+                    byte wwMode = 0x32;
                     // Get Selection
-                    Log.d(TAG,"Position: " + wwModeSpinner.getSelectedItemPosition());
                     if (wwModeSpinner.getSelectedItemPosition() > 0){
-                        wwMode = 0x22;
+                        //K52
+                        wwMode = 0x34;
                     }
-                    // Write config
-                    byte[] writeConfigCmd = {0x57,0x57,0x53,0x53,wwMode};
-                    characteristic.setValue(writeConfigCmd);
-                    BluetoothLeService.writeCharacteristic(characteristic);
+                    if (currentConfig == wwMode){
+                        if(currentSensitivity != sensitivitySeekBar.getProgress()) {
+                            Log.d(TAG, "Setting Sensitivity");
+                            // Write sensitivity
+                            char[] sensitivityChar = String.valueOf(sensitivitySeekBar.getProgress()).toCharArray();
+                            char sensOne = sensitivityChar[0];
+                            if (sensitivityChar.length == 1) {
+                                byte[] writeSensitivityCmd = {0x57, 0x57, 0x43, 0x53, wwMode, 0x45, (byte) sensOne, 0x0D, 0x0A};
+                                characteristic.setValue(writeSensitivityCmd);
+                            } else if (sensitivityChar.length > 1) {
+                                char sensTwo = sensitivityChar[1];
+                                byte[] writeSensitivityCmd = {0x57, 0x57, 0x43, 0x53, wwMode, 0x45, (byte) sensOne, (byte) sensTwo, 0x0D, 0x0A};
+                                characteristic.setValue(writeSensitivityCmd);
+                            }
+                            BluetoothLeService.writeCharacteristic(characteristic);
+                        }
+                    } else {
+                        Log.d(TAG,"Setting Mode");
+                        // Write mode
+                        byte[] writeConfigCmd = {0x57,0x57,0x53,0x53,wwMode};
+                        characteristic.setValue(writeConfigCmd);
+                        BluetoothLeService.writeCharacteristic(characteristic);
+                    }
                     break;
                 case R.id.action_back:
                     // Go back
@@ -135,18 +194,29 @@ public class FWConfigActivity extends AppCompatActivity {
             if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 Bundle bd = intent.getExtras();
                 if(bd != null){
-                    if(bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE).contains(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC)){
-                        byte [] data = bd.getByteArray(BluetoothLeService.EXTRA_BYTE_VALUE);
+                    if(bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE).contains(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC)) {
+                        byte[] data = bd.getByteArray(BluetoothLeService.EXTRA_BYTE_VALUE);
                         String characteristicValue = Utils.ByteArraytoHex(data) + " ";
-                        Log.d(TAG,"UUID: "+ bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE) + " DATA: "+ characteristicValue);
-                        byte mode =  data[24];
-                        if (mode == 0x00){
-                            wwModeSpinner.setSelection(0);
-                        } else {
-                            wwModeSpinner.setSelection(1);
+                        Log.d(TAG, "UUID: " + bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE) + " DATA: " + characteristicValue);
+                        if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x57)) {
+                            byte mode = data[26];
+                            currentConfig = mode;
+                            byte sensitivity = data[34];
+                            currentSensitivity = sensitivity;
+                            if (mode == 0x32) {
+                                wwModeSpinner.setSelection(0);
+                                sensitivitySeekBar.setMax(20);
+                                sensitivityLLayout.setVisibility(View.VISIBLE);
+                                sensitivitySeekBar.setVisibility(View.VISIBLE);
+                            } else {
+                                wwModeSpinner.setSelection(1);
+                                sensitivitySeekBar.setMax(30);
+                                sensitivityLLayout.setVisibility(View.VISIBLE);
+                                sensitivitySeekBar.setVisibility(View.VISIBLE);
+                            }
+                            sensitivitySeekBar.setProgress(sensitivity);
                         }
                     }
-
                 }
             } else if(BluetoothLeService.ACTION_WRITE_SUCCESS.equals(action)){
                 Log.d(TAG,"Write Success Received");
