@@ -55,13 +55,16 @@ public class FWConfigActivity extends AppCompatActivity {
                     sensitivitySeekBar.setMax(20);
                     sensitivityLLayout.setVisibility(View.VISIBLE);
                     sensitivitySeekBar.setVisibility(View.VISIBLE);
+                    writeBtn.setEnabled(false);
                 } else if ((currentConfig == 0x34) && (pos == 1)) {
                     sensitivitySeekBar.setMax(30);
                     sensitivityLLayout.setVisibility(View.VISIBLE);
                     sensitivitySeekBar.setVisibility(View.VISIBLE);
+                    writeBtn.setEnabled(false);
                 } else {
                     sensitivityLLayout.setVisibility(View.INVISIBLE);
                     sensitivitySeekBar.setVisibility(View.INVISIBLE);
+                    writeBtn.setEnabled(true);
                 }
             }
 
@@ -77,6 +80,11 @@ public class FWConfigActivity extends AppCompatActivity {
         sensitivitySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 sensitivityTV.setText(String.valueOf(progress));
+                if (progress == currentSensitivity){
+                    writeBtn.setEnabled(false);
+                } else {
+                    writeBtn.setEnabled(true);
+                }
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -90,6 +98,7 @@ public class FWConfigActivity extends AppCompatActivity {
 
         writeBtn = (Button) findViewById(R.id.writeBtn);
         writeBtn.setOnClickListener(mClickListener);
+        writeBtn.setEnabled(false);
 
         showActionBar();
 
@@ -153,6 +162,7 @@ public class FWConfigActivity extends AppCompatActivity {
                         characteristic.setValue(writeConfigCmd);
                         BluetoothLeService.writeCharacteristic(characteristic);
                     }
+                    finish();
                     break;
                 case R.id.action_back:
                     // Go back
@@ -205,12 +215,12 @@ public class FWConfigActivity extends AppCompatActivity {
                             currentSensitivity = sensitivity;
                             if (mode == 0x32) {
                                 wwModeSpinner.setSelection(0);
-                                sensitivitySeekBar.setMax(20);
+                                sensitivitySeekBar.setMax(30);
                                 sensitivityLLayout.setVisibility(View.VISIBLE);
                                 sensitivitySeekBar.setVisibility(View.VISIBLE);
                             } else {
                                 wwModeSpinner.setSelection(1);
-                                sensitivitySeekBar.setMax(30);
+                                sensitivitySeekBar.setMax(20);
                                 sensitivityLLayout.setVisibility(View.VISIBLE);
                                 sensitivitySeekBar.setVisibility(View.VISIBLE);
                             }

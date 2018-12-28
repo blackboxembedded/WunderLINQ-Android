@@ -968,7 +968,7 @@ public class BluetoothLeService extends Service {
                 }
 
                 // Tire Pressure
-                if ((data[4] & 0xFF) != 0xFF){
+                if (((data[4] & 0xFF) != 0xFF) && ((data[5] & 0xFF) != 0xFF)){
                     double rdcFront = (data[4] & 0xFF) / 50.0;
                     Data.setFrontTirePressure(rdcFront);
                     if (sharedPrefs.getBoolean("prefTPMSAlert",false)) {
@@ -1005,8 +1005,7 @@ public class BluetoothLeService extends Service {
                             }
                         }
                     }
-                }
-                if ((data[5] & 0xFF) != 0xFF){
+
                     double rdcRear = (data[5] & 0xFF) / 50.0;
                     Data.setRearTirePressure(rdcRear);
                     if (sharedPrefs.getBoolean("prefTPMSAlert",false)) {

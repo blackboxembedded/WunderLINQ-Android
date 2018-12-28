@@ -50,7 +50,7 @@
     <!-- Other Menu -->
     <string name="appsettings_label">App Settings</string>
     <string name="hwsettings_label">HW Settings</string>
-    <string name="hwdebug_label">HW Debug Console</string>
+    <string name="hwdebug_label" translatable="false">HW Debug Console</string>
     <string name="info_label">About</string>
     <string name="close_label">Close</string>
 
@@ -62,12 +62,12 @@
         <item name="2">RT</item>
         <!--<item name="3">Custom</item>-->
     </string-array>
-    <string name="sensitivity_label">Sensitivity</string>
+    <string name="sensitivity_label">Hold Sensitivity</string>
     <string name="config_write_label">Save Settings</string>
 
     <!-- DebugActivity -->
-    <string name="debug_title">Debug Console</string>
-    <string name="command_label">Commands</string>
+    <string name="debug_title" translatable="false">Debug Console</string>
+    <string name="command_label" translatable="false">Commands</string>
     <string-array name="debug_commands_array">
         <item name="1">Read Serial Flash</item>
         <item name="2">Read Config Flash</item>
@@ -83,7 +83,7 @@
         <item name="12">Turn on Green LED</item>
         <item name="13">Flash Green LED</item>
     </string-array>
-    <string name="debug_write_label">Send Command</string>
+    <string name="debug_write_label" translatable="false">Send Command</string>
 
     <!-- AboutActivity -->
     <string name="about_title">About</string>
