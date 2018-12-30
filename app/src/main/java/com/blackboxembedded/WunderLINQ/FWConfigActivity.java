@@ -105,10 +105,12 @@ public class FWConfigActivity extends AppCompatActivity {
         showActionBar();
 
         characteristic = MainActivity.gattCommandCharacteristic;
-        // Read config
-        byte[] readWLQConfigCmd = {0x57, 0x52, 0x57, 0x0D, 0x0A};
-        characteristic.setValue(readWLQConfigCmd);
-        BluetoothLeService.writeCharacteristic(characteristic);
+        if (characteristic != null) {
+            // Read config
+            byte[] readWLQConfigCmd = {0x57, 0x52, 0x57, 0x0D, 0x0A};
+            characteristic.setValue(readWLQConfigCmd);
+            BluetoothLeService.writeCharacteristic(characteristic);
+        }
     }
 
     @Override

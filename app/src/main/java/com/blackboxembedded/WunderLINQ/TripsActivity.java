@@ -66,8 +66,10 @@ public class TripsActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         updateListing();
-        adapter.addAll(myList);
-        adapter.notifyDataSetChanged();
+        if (myList.size() > 0 ) {
+            adapter.addAll(myList);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     private void showActionBar(){

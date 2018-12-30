@@ -340,7 +340,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         // Check read notification permissions
-        if (!Settings.Secure.getString(this.getContentResolver(),"enabled_notification_listeners").contains(getApplicationContext().getPackageName())) {
+        if (Settings.Secure.getString(this.getContentResolver(),"enabled_notification_listeners") == null
+                || !Settings.Secure.getString(this.getContentResolver(),"enabled_notification_listeners").contains(getApplicationContext().getPackageName())) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(getString(R.string.notification_alert_title));
             builder.setMessage(getString(R.string.notification_alert_body));
