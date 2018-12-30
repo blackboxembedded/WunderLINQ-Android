@@ -3,10 +3,12 @@ package com.blackboxembedded.WunderLINQ;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -133,36 +135,54 @@ public class FWConfigActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch(v.getId()) {
                 case R.id.writeBtn:
-                    byte wwMode = 0x32;
-                    // Get Selection
-                    if (wwModeSpinner.getSelectedItemPosition() > 0){
-                        //K52
-                        wwMode = 0x34;
-                    }
-                    if (currentConfig == wwMode){
-                        if(currentSensitivity != sensitivitySeekBar.getProgress()) {
-                            Log.d(TAG, "Setting Sensitivity");
-                            // Write sensitivity
-                            char[] sensitivityChar = String.valueOf(sensitivitySeekBar.getProgress()).toCharArray();
-                            char sensOne = sensitivityChar[0];
-                            if (sensitivityChar.length == 1) {
-                                byte[] writeSensitivityCmd = {0x57, 0x57, 0x43, 0x53, wwMode, 0x45, (byte) sensOne, 0x0D, 0x0A};
-                                characteristic.setValue(writeSensitivityCmd);
-                            } else if (sensitivityChar.length > 1) {
-                                char sensTwo = sensitivityChar[1];
-                                byte[] writeSensitivityCmd = {0x57, 0x57, 0x43, 0x53, wwMode, 0x45, (byte) sensOne, (byte) sensTwo, 0x0D, 0x0A};
-                                characteristic.setValue(writeSensitivityCmd);
-                            }
-                            BluetoothLeService.writeCharacteristic(characteristic);
-                        }
-                    } else {
-                        Log.d(TAG,"Setting Mode");
-                        // Write mode
-                        byte[] writeConfigCmd = {0x57,0x57,0x53,0x53,wwMode};
-                        characteristic.setValue(writeConfigCmd);
-                        BluetoothLeService.writeCharacteristic(characteristic);
-                    }
-                    finish();
+                    // Display dialog
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(FWConfigActivity.this);
+                    builder.setTitle(getString(R.string.hwsave_alert_title));
+                    builder.setMessage(getString(R.string.hwsave_alert_body));
+                    builder.setPositiveButton(R.string.hwsave_alert_btn_ok,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    byte wwMode = 0x32;
+                                    // Get Selection
+                                    if (wwModeSpinner.getSelectedItemPosition() > 0){
+                                        //K52
+                                        wwMode = 0x34;
+                                    }
+                                    if (currentConfig == wwMode){
+                                        if(currentSensitivity != sensitivitySeekBar.getProgress()) {
+                                            Log.d(TAG, "Setting Sensitivity");
+                                            // Write sensitivity
+                                            char[] sensitivityChar = String.valueOf(sensitivitySeekBar.getProgress()).toCharArray();
+                                            char sensOne = sensitivityChar[0];
+                                            if (sensitivityChar.length == 1) {
+                                                byte[] writeSensitivityCmd = {0x57, 0x57, 0x43, 0x53, wwMode, 0x45, (byte) sensOne, 0x0D, 0x0A};
+                                                characteristic.setValue(writeSensitivityCmd);
+                                            } else if (sensitivityChar.length > 1) {
+                                                char sensTwo = sensitivityChar[1];
+                                                byte[] writeSensitivityCmd = {0x57, 0x57, 0x43, 0x53, wwMode, 0x45, (byte) sensOne, (byte) sensTwo, 0x0D, 0x0A};
+                                                characteristic.setValue(writeSensitivityCmd);
+                                            }
+                                            BluetoothLeService.writeCharacteristic(characteristic);
+                                        }
+                                    } else {
+                                        Log.d(TAG,"Setting Mode");
+                                        // Write mode
+                                        byte[] writeConfigCmd = {0x57, 0x57, 0x53, 0x53, wwMode, 0x0D, 0x0A};
+                                        characteristic.setValue(writeConfigCmd);
+                                        BluetoothLeService.writeCharacteristic(characteristic);
+                                    }
+                                    finish();
+                                }
+                            });
+                    builder.setNegativeButton(R.string.hwsave_alert_btn_cancel,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            });
+                    builder.show();
                     break;
                 case R.id.action_back:
                     // Go back
