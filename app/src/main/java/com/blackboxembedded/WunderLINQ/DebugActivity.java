@@ -14,9 +14,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.nio.charset.StandardCharsets;
 
 public class DebugActivity extends AppCompatActivity {
 
@@ -29,6 +32,7 @@ public class DebugActivity extends AppCompatActivity {
     private TextView navbarTitle;
     private TextView output;
     private Spinner commandSpinner;
+    private EditText customCommand;
     private Button writeBtn;
 
 
@@ -46,6 +50,11 @@ public class DebugActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
                 Log.d(TAG,"Item Selected: " + adapterView.getItemAtPosition(pos).toString());
+                if (pos == 13){
+                    customCommand.setVisibility(View.VISIBLE);
+                } else {
+                    customCommand.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
@@ -53,6 +62,7 @@ public class DebugActivity extends AppCompatActivity {
 
             }
         });
+        customCommand = (EditText) findViewById(R.id.etCustomCommand);
         writeBtn = (Button) findViewById(R.id.writeBtn);
         writeBtn.setOnClickListener(mClickListener);
 
@@ -137,6 +147,12 @@ public class DebugActivity extends AppCompatActivity {
                         case 12: //Flash green LED
                             byte[] blinkGreenLEDCmd = {0x57,0x57,0x48,0x4C,0x47,0x42};
                             characteristic.setValue(blinkGreenLEDCmd);
+                            break;
+                        case 13: // Custom Command
+                            String customCommandString = customCommand.getText().toString() + "\\r\\n";
+                            char[] customCommandChar = customCommandString.toCharArray();
+                            byte[] customCmd = new String(customCommandChar).getBytes(StandardCharsets.UTF_8);
+                            characteristic.setValue(customCmd);
                             break;
                         default:
                             break;

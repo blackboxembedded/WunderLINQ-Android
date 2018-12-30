@@ -290,31 +290,13 @@
     <string name="pref_tpmsAlertThreshold_summary">Especifique un número en la unidad de medida elegida</string>
     <string name="pref_fuelAlert_name">Direcciones hacia gasolinera</string>
     <string name="pref_fuelAlert_summary">Consultar si desea direcciones hacia la gasolinera más cercana cuando hay se detecte poco combustible</string>
-    <string name="debug_settings_title">Configuracion de Depuración</string>
-    <string name="pref_dataLogging_name">Registrar mensajes en bruto</string>
-    <string name="pref_dataLogging_summary">Habilitar el registro de mensajes en bruto en / sdcard / WunderLINQ /</string>
-    <string name="pref_showRaw_name">Mostrar mensaje en bruto</string>
-    <string name="pref_showRaw_summary">Mostrar mensaje en bruto en el campo de odómetro</string>
-    <string name="pref_showUartFaults_name">Mostrar fallas UART</string>
-    <string name="pref_showUartFaults_summary">Mostrar fallas UART en el Visor de fallas</string>
     <string name="advanced_settings_title">Ajustes avanzados</string>
     <string name="pref_btn_sendlogs_title">Enviar registros</string>
     <string name="pref_btn_sendlogs_summary">Enviar registros a Black Box Embedded Support</string>
-    <string name="pref_sendlogs_email">support@blackboxembedded.com</string>
-    <string name="pref_sendlogs_subject">WunderLINQ Debug Logs</string>
     <string name="pref_sendlogs_body">Por favor describa su problema a continuación:</string>
     <string name="pref_sendlogs_intent_title">Enviar registros...</string>
     <string name="hw_settings_title">Configuración de hardware de WunderLINQ</string>
-    <string name="pref_btn_dfumode_title">Actualización de WunderLINQ</string>
-    <string name="pref_btn_dfumode_summary">Entrar al modo de actualización de firmware WunderLINQ</string>
-    <string name="pref_btn_dfumode_warning_title">Advertencia</string>
-    <string name="pref_btn_dfumode_warning_body">Está a punto de colocar el WunderLINQ en modo DFU.
-        Cuando selecciona Aceptar, la aplicación WunderLINQ se desconectará y la luz de estado de los equipos de WunderLINQ debería estar verde fija.
-        Será devuelto a la pantalla principal y cuando la aplicación se vuelva a conectar, deberá solicitar su actualización.</string>
     <string name="pref_btn_version_title">Versión WunderLINQ</string>
-    <string name="pref_btn_version_summary">Entrar en el modo de actualización de firmware WunderLINQ</string>
-    <string name="pref_btn_version_toast">Menú de depuración habilitado. Salga y luego vuelva a entrar en Configuración.</string>
-    <string name="settings_label">Settings</string>
     <string name="info_label">About</string>
     <string name="close_label">Close</string>
     <string name="about_title">About</string>

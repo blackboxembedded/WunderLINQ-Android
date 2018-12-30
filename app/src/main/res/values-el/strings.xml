@@ -302,31 +302,13 @@
     <string name="pref_tpmsAlertThreshold_summary">Προσδιορίστε έναν αριθμό ανάλογα με την επιλεγμένη μονάδα μέτρησης της επιλογής σας</string>
     <string name="pref_fuelAlert_name">Διαδρομή σε πλησιέστερο πρατήριο υγρών καυσίμων</string>
     <string name="pref_fuelAlert_summary">Ερώτηση για πλοήγηση στο πλησιέστερο πρατήριο υγρών καυσίμων όταν το σφάλμα χαμηλής στάθμης καυσίμου είναι ενεργοποιημένο</string>
-    <string name="debug_settings_title">Ρυθμίσεις αποσφαλμάτωσης</string>
-    <string name="pref_dataLogging_name">Καταγραφή ακατέργαστων μηνυμάτων</string>
-    <string name="pref_dataLogging_summary">Επεξεργασία καταγραφών ακατέργαστων μηνυμάτων σε /sdcard/WunderLINQ/</string>
-    <string name="pref_showRaw_name">Προβολή ακατέργαστων μηνυμάτων</string>
-    <string name="pref_showRaw_summary">Προβολή ακατέργαστων μηνυμάτων στο πεδίο του χιλιομετρητή</string>
-    <string name="pref_showUartFaults_name">Προβολή σφαλμάτων UART</string>
-    <string name="pref_showUartFaults_summary">Προβολή σφαλμάτων UART στη προβολή σφαλμάτων</string>
     <string name="advanced_settings_title">Προηγμένες ρυθμίσεις</string>
     <string name="pref_btn_sendlogs_title">Αποστολή αρχείων καταγραφής</string>
     <string name="pref_btn_sendlogs_summary">Αποστολή αρχείων καταγραφής στην υποστήριξη της Black Box Embedded</string>
-    <string name="pref_sendlogs_email">support@blackboxembedded.com</string>
-    <string name="pref_sendlogs_subject">Αρχεία αποσφαλμάτωσης WunderLINQ</string>
     <string name="pref_sendlogs_body">Παρακαλώ περιγράψτε το πρόβλημα παρακάτω:</string>
     <string name="pref_sendlogs_intent_title">Αποστολή αρχείων καταγραφής...</string>
     <string name="hw_settings_title">Ρυθμίσεις συσκευής WunderLINQ</string>
-    <string name="pref_btn_dfumode_title">Ενημέρωση WunderLINQ</string>
-    <string name="pref_btn_dfumode_summary">Είσοδος στην λειτουργίας ενημέρωσης firmware του WunderLINQ</string>
-    <string name="pref_btn_dfumode_warning_title">Προειδοποίηση</string>
-    <string name="pref_btn_dfumode_warning_body">Αν συνεχίσετε θα θέσετε το WunderLINQ σε λειτουργία DFU.
-        Επιλέγοντας Εντάξει η εφαρμογή WunderLINQ app θα αποσυνδεθεί και η λυχνία κατάστασης της συσκευής WunderLINQ θα πρέπει να είναι πράσινη.
-        Θα επιστρέψετε στην αρχική οθόνη και όταν η εφαμορμογή συνδεθεί εκ νέου θα σας ζητήσει επιβεβαίωση προκειμένου να γίνει ενημέρωση.</string>
     <string name="pref_btn_version_title">Έκδοση WunderLINQ</string>
-    <string name="pref_btn_version_summary">Είσοδος στη λειτουργία ενημέρωσης firmware του WunderLINQ</string>
-    <string name="pref_btn_version_toast">Το μενού αποσφαλμάτωσης ενεργοποιήθηκε. Πραγματοποιείστε έξοδο και στη συνέχεια εισέλθετε εκ νέου στις Ρυθμίσεις.</string>
-    <string name="settings_label">Ρυθμίσεις</string>
     <string name="info_label">Περί..</string>
     <string name="close_label">Κλείσιμο</string>
     <string name="about_title">Περί..</string>

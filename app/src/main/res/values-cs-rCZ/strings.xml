@@ -44,7 +44,6 @@
     <string name="trip_logs_label">Záznamy jízd</string>
     <string name="waypoints_label">Uložená místa</string>
     <!-- Other Menu -->
-    <string name="settings_label">Nastavení</string>
     <string name="info_label">O aplikaci</string>
     <string name="close_label">Zavřít</string>
 
@@ -359,30 +358,13 @@
     <string name="pref_tpmsAlertThreshold_summary">Zadejte hodnotu ve vámi zvolených jednotkách tlaku</string>
     <string name="pref_fuelAlert_name">Navigace k čerpací stanici</string>
     <string name="pref_fuelAlert_summary">Nabídnout navigaci k nejbližší čerpací stanici při nízkém stavu paliva</string>
-    <string name="debug_settings_title">Nastaveni debuggingu</string>
-    <string name="pref_dataLogging_name">Logovat raw zprávy</string>
-    <string name="pref_dataLogging_summary">Zapnout ukládání raw zpráv do /sdcard/WunderLINQ/</string>
-    <string name="pref_showRaw_name">Zobrazit raw zprávy</string>
-    <string name="pref_showRaw_summary">Zobrazit raw zprávy v ukazateli ujeté vzdálenosti</string>
-    <string name="pref_showUartFaults_name">Zobrazit chyby UART</string>
-    <string name="pref_showUartFaults_summary">Zobrazit chyby UART v prohlížeči chyb</string>
     <string name="advanced_settings_title">Rozšířená nastavení</string>
     <string name="pref_btn_sendlogs_title">Odeslat Logy</string>
     <string name="pref_btn_sendlogs_summary">Odeslat logy podpoře Black Box Embedded</string>
-    <string name="pref_sendlogs_email">support@blackboxembedded.com</string>
-    <string name="pref_sendlogs_subject">WunderLINQ Debug Logy</string>
     <string name="pref_sendlogs_body">Prosím popište problém (anglicky):</string>
     <string name="pref_sendlogs_intent_title">Odeslat Logy...</string>
     <string name="hw_settings_title">Nastavení WunderLINQ hardware</string>
-    <string name="pref_btn_dfumode_title">WunderLINQ Update</string>
-    <string name="pref_btn_dfumode_summary">Aktivovat WunderLINQ Firmware Update Mode</string>
-    <string name="pref_btn_dfumode_warning_title">Varování</string>
-    <string name="pref_btn_dfumode_warning_body">You are about to place the WunderLINQ into DFU mode.
-        When you select OK the WunderLINQ app will disconnect and the WunderLINQ hardwares status light should be solid green.
-        You will be be returned to the main screen and when the app reconnects it should prompt to update.</string>
     <string name="pref_btn_version_title">Verze WunderLINQ</string>
-    <string name="pref_btn_version_summary">Vstoupit do režimu WunderLINQ Firmware Update</string>
-    <string name="pref_btn_version_toast">Debug Menu aktivováno. Zavřete a znovu otevřete nastavení</string>
     <string name="usagestats_alert_title">WunderLINQ vyžaduje oprávnění pro přístup k údajům o využití</string>
     <string name="usagestats_alert_body">Udělte prosím oprávnění pro přístup k údajům o využití tak, aby bylo možné automaticky spustit aplikaci po připojení k zařízení WunderLINQ</string>
     <string name="negative_usagestats_alert_body">Chybí oprávnění k přístupu k údajům o využití, nebude možné automaticky spustit aplikaci po připojení k zařízení WunderLINQ</string> <!-- New -->

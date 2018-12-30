@@ -46,7 +46,6 @@
     <string name="trip_logs_label">Journaux de voyages</string>
     <string name="waypoints_label">Emplacements</string>
     <!-- Other Menu -->
-    <string name="settings_label">Réglages</string>
     <string name="info_label">À propos</string>
     <string name="close_label">Fermer</string>
 
@@ -406,31 +405,14 @@
     <string name="pref_tpmsAlertThreshold_summary">Spécifiez un nombre basé sur votre unité de mesure sélectionnée</string>
     <string name="pref_fuelAlert_name">Assistance carburant</string>
     <string name="pref_fuelAlert_summary">Proposer l\'itinéraire vers la station la plus proche en cas de niveau de carburant bas</string>
-    <string name="debug_settings_title">Paramètres de débogage</string>
-    <string name="pref_dataLogging_name">Journalisation des messages bruts</string>
-    <string name="pref_dataLogging_summary">Activer la journalisation des messages bruts vers /sdcard/WunderLINQ/</string>
-    <string name="pref_showRaw_name">Afficher les messages bruts</string>
-    <string name="pref_showRaw_summary">Afficher les messages bruts dans la section de l\'odomètre</string>
-    <string name="pref_showUartFaults_name">Afficher les erreurs UART</string>
-    <string name="pref_showUartFaults_summary">Afficher les erreurs UART dans le visualiseur d\'erreurs</string>
     <string name="advanced_settings_title">Réglages avancés</string>
     <string name="pref_btn_sendlogs_title">Envoyer les journaux</string>
     <string name="pref_btn_sendlogs_summary">Envoyer les journaux au support de Black Box Embedded</string>
-    <string name="pref_sendlogs_email">support@blackboxembedded.com</string>
-    <string name="pref_sendlogs_subject">WunderLINQ Debug Logs</string>
     <!-- <string name="pref_sendlogs_subject">WunderLINQ Journaux de débogage</string> -->
     <string name="pref_sendlogs_body">Entrez une description du problème ci-dessous:</string>
     <string name="pref_sendlogs_intent_title">Envoyer les journaux...</string>
     <string name="hw_settings_title">WunderLINQ réglages matériels</string>
-    <string name="pref_btn_dfumode_title">WunderLINQ Mise à jour</string>
-    <string name="pref_btn_dfumode_summary">WunderLINQ Mode de mise à jour du micrologiciel</string>
-    <string name="pref_btn_dfumode_warning_title">Avertissement</string>
-    <string name="pref_btn_dfumode_warning_body">Vous allez placer votre WunderLINQ dans le mode DFU.
-        Quand vous sélectionnerez OK, l\'app WunderLINQ sera déconnectée et la lumière de statut de votre WunderLINQ doit être verte. 
-        L\'écran principal sera affiché et une demande de mise à jour vous sera affichée quand l\'app se reconnectera.</string>
     <string name="pref_btn_version_title">WunderLINQ Version</string>
-    <string name="pref_btn_version_summary">Basculer en mode de mise à jour du micrologiciel WunderLINQ</string>
-    <string name="pref_btn_version_toast">Menu débogage activé. Sortez et revenez dans les réglages.</string>
     <string name="waypoint_view_bt_navigate">Navigation</string>
     <string name="appsettings_label">App Settings</string>
     <string name="hwsettings_label">HW Settings</string>

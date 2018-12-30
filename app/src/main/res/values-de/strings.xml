@@ -228,20 +228,10 @@
     <string name="advanced_settings_title">Erweiterte Einstellungen</string>
     <string name="pref_btn_sendlogs_title">Logdaten schicken</string>
     <string name="pref_btn_sendlogs_summary">Logdaten zu Black Box Embedded Support schicken</string>
-    <string name="pref_sendlogs_email">support@blackboxembedded.com</string>
-    <string name="pref_sendlogs_subject">WunderLINQ Programmfehler-Daten</string>
     <string name="pref_sendlogs_body">Bitte beschreiben Sie Ihr Problem:</string>
     <string name="pref_sendlogs_intent_title">Logdaten schicken...</string>
     <string name="hw_settings_title">WunderLINQ Hardware Einstellungen</string>
-    <string name="pref_btn_dfumode_title">WunderLINQ Aktualisierung</string>
-    <string name="pref_btn_dfumode_summary">WunderLINQ Firmware Aktualisierungs-Modus starten</string>
-    <string name="pref_btn_dfumode_warning_title">Warnung</string>
-    <string name="pref_btn_dfumode_warning_body">Sie sind im Begriff den WunderLINQ in den DFU-Modus zu setzen.
-        Wenn Sie OK wählen, wird die Verbindung der WunderLINQ App zum Gerät getrennt und die Info-LED der WunderLINQ Box sollte Grün leuchten.
-        Sie werden zum Hauptbildschirm zurückgeführt, wenn die App sich wieder mit der WunderLINQ Box verbindet sollte eine Aktualisierungs-Meldung angezeigt werden.</string>
     <string name="pref_btn_version_title">WunderLINQ Version</string>
-    <string name="pref_btn_version_summary">WunderLINQ Firmware Aktualisierungs-Modus starten</string>
-    <string name="settings_label">Einstellungen</string>
     <string name="info_label">Über</string>
     <string name="close_label">Schliessen</string>
     <string name="about_title">Über</string>
@@ -294,14 +284,6 @@
     <string name="pref_tpmsAlertThreshold_summary">Geben Sie eine Zahl ein relativ zur gewählten Druck-Einheit</string>
     <string name="pref_fuelAlert_name">Zur nächsten Tankstelle navigieren</string>
     <string name="pref_fuelAlert_summary">Fragen ob zur nächsten Tankstelle navigiert werden soll wenn Benzinstand niedrig Meldung vorliegt.</string>
-    <string name="debug_settings_title">Debug Einstellungen</string>
-    <string name="pref_dataLogging_name">Rohdaten Logging</string>
-    <string name="pref_dataLogging_summary">Rohdaten Logging nach /sdcard/WunderLINQ/ einschalten</string>
-    <string name="pref_showRaw_name">Rohdaten anzeigen</string>
-    <string name="pref_showRaw_summary">Rohdaten anzeigen in KM-Zähler Total Feld</string>
-    <string name="pref_showUartFaults_name">UART Fehler anzeigen</string>
-    <string name="pref_showUartFaults_summary">UART Fehler im Fehleranzeiger anzeigen</string>
-    <string name="pref_btn_version_toast">Debug-Menü eingeschaltet. App beenden, starten und dann wieder in Einstellungen gehen.</string>
     <string name="hours">h</string>
     <string name="minutes">m</string>
     <string name="seconds">s</string>

@@ -86,6 +86,7 @@
         <item name="11">Turn off Green LED</item>
         <item name="12">Turn on Green LED</item>
         <item name="13">Flash Green LED</item>
+        <item name="14">Custom Command</item>
     </string-array>
     <string name="debug_write_label" translatable="false">Send Command</string>
 
@@ -445,29 +446,22 @@
     <string name="pref_tpmsAlertThreshold_summary">Specify a number based on your unit selection</string>
     <string name="pref_fuelAlert_name">Fuel Routing</string>
     <string name="pref_fuelAlert_summary">Prompt to route to nearest fuel station when low fuel fault is present</string>
-    <string name="debug_settings_title">Debug Settings</string>
-    <string name="pref_dataLogging_name">Raw Message Logging</string>
-    <string name="pref_dataLogging_summary">Enable Raw Message Logging To /sdcard/WunderLINQ/</string>
-    <string name="pref_showRaw_name">Show raw message</string>
-    <string name="pref_showRaw_summary">Show raw message in Odometer Field</string>
-    <string name="pref_showUartFaults_name">Show UART faults</string>
-    <string name="pref_showUartFaults_summary">Show UART faults in Fault Viewer</string>
+    <string name="debug_settings_title" translatable="false">Debug Settings</string>
+    <string name="pref_dataLogging_name" translatable="false">Raw Message Logging</string>
+    <string name="pref_dataLogging_summary" translatable="false">Enable Raw Message Logging To /sdcard/WunderLINQ/</string>
+    <string name="pref_showRaw_name" translatable="false">Show raw message</string>
+    <string name="pref_showRaw_summary" translatable="false">Show raw message in Odometer Field</string>
+    <string name="pref_showUartFaults_name" translatable="false">Show UART faults</string>
+    <string name="pref_showUartFaults_summary" translatable="false">Show UART faults in Fault Viewer</string>
     <string name="advanced_settings_title">Advanced Settings</string>
     <string name="pref_btn_sendlogs_title">Send Logs</string>
     <string name="pref_btn_sendlogs_summary">Send Logs to Black Box Embedded Support</string>
-    <string name="pref_sendlogs_email">support@blackboxembedded.com</string>
-    <string name="pref_sendlogs_subject">WunderLINQ Debug Logs</string>
+    <string name="pref_sendlogs_email" translatable="false">support@blackboxembedded.com</string>
+    <string name="pref_sendlogs_subject" translatable="false">WunderLINQ Debug Logs</string>
     <string name="pref_sendlogs_body">Please describe your problem below:</string>
     <string name="pref_sendlogs_intent_title">Send Logs...</string>
     <string name="hw_settings_title">WunderLINQ hardware Settings</string>
-    <string name="pref_btn_dfumode_title">WunderLINQ Update</string>
-    <string name="pref_btn_dfumode_summary">Enter WunderLINQ Firmware Update Mode</string>
-    <string name="pref_btn_dfumode_warning_title">Warning</string>
-    <string name="pref_btn_dfumode_warning_body">You are about to place the WunderLINQ into DFU mode.
-        When you select OK the WunderLINQ app will disconnect and the WunderLINQ hardwares status light should be solid green.
-        You will be be returned to the main screen and when the app reconnects it should prompt to update.</string>
     <string name="pref_btn_version_title">WunderLINQ Version</string>
-    <string name="pref_btn_version_summary">Enter WunderLINQ Firmware Update Mode</string>
-    <string name="pref_btn_version_toast">Debug Menu Enabled. Exit, then re-enter Settings.</string>
+    <string name="pref_btn_version_toast" translatable="false">Debug Menu Enabled. Exit, then re-enter Settings.</string>
     <string name="waypoint_view_bt_navigate">Navigate</string>
 </resources>

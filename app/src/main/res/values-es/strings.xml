@@ -66,7 +66,6 @@
     <string name="trip_logs_label">Trip Logs</string>
     <string name="waypoints_label">Puntos de paso</string>
     <!-- Other Menu -->
-    <string name="settings_label">Ajustes</string>
     <string name="info_label">Acerca de</string>
     <string name="close_label">Cerrar</string>
 
@@ -371,30 +370,13 @@
     <string name="pref_tpmsAlertThreshold_summary">Especifique un número en función de la unidad seleccionada</string>
     <string name="pref_fuelAlert_name">Enrutamiento de Combustible</string>
     <string name="pref_fuelAlert_summary">Aviso por ruta a la estación de servicio más cercana cuando se detecta bajo nivel de combustible</string>
-    <string name="debug_settings_title">Ajustes de Depuración</string>
-    <string name="pref_dataLogging_name">Grabación (Log) de Mensajes de sistema</string>
-    <string name="pref_dataLogging_summary">Activar grabación (log) de mensajes de sistema a /sdcard/WunderLINQ/</string>
-    <string name="pref_showRaw_name">Mostrar mensaje de sistema</string>
-    <string name="pref_showRaw_summary">Mostrar mensaje de sistema en el campo del Odómetro</string>
-    <string name="pref_showUartFaults_name">Mostrar errores de UART</string>
-    <string name="pref_showUartFaults_summary">Mostrar errores de UART en el visor de fallos</string>
     <string name="advanced_settings_title">Ajustes Avanzados</string>
     <string name="pref_btn_sendlogs_title">Enviar logs</string>
     <string name="pref_btn_sendlogs_summary">Enviar Logs al soporte de Black Box Embedded</string>
-    <string name="pref_sendlogs_email">support@blackboxembedded.com</string>
-    <string name="pref_sendlogs_subject">Logs de Depuración de WunderLINQ</string>
     <string name="pref_sendlogs_body">Por favor, describa su problema a continuación:</string>
     <string name="pref_sendlogs_intent_title">Enviar Logs...</string>
     <string name="hw_settings_title">Ajustes de hardware WunderLINQ</string>
-    <string name="pref_btn_dfumode_title">Actualización de WunderLINQ</string>
-    <string name="pref_btn_dfumode_summary">Comenzar Modo de Actualización de Firmware WunderLINQ</string>
-    <string name="pref_btn_dfumode_warning_title">Aviso</string>
-    <string name="pref_btn_dfumode_warning_body">Está a punto de poner el dispositivo WunderLINQ en modo DFU.
-        Cuando seleccione OK, la App WunderLINQ se desconectará y la luz de estado de hardware del WunderLINQ se fijará en verde.
-        Volverá a la pantalla inicial y cuando la App se reconecte, debería avisar de la actualización.</string>
     <string name="pref_btn_version_title">Versión de WunderLINQ</string>
-    <string name="pref_btn_version_summary">Comenzar Modo de Actualización de Firmware WunderLINQ</string>
-    <string name="pref_btn_version_toast">Menú de Depuración activo. Salir y, después, volver a entrar en Ajustes.</string>
     <string name="hours">h</string>
     <string name="minutes">m</string>
     <string name="seconds">s</string>
