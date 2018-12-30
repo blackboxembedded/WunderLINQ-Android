@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.LinkMovementMethod;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
@@ -12,10 +14,24 @@ import android.widget.TextView;
 
 public class AboutActivity extends AppCompatActivity {
 
+    private TextView tvAppName;
+    private TextView tvVersion;
+    private TextView tvCompany;
+    private TextView tvCredits;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+
+        tvAppName = (TextView) findViewById(R.id.tvAppName);
+        tvAppName.setMovementMethod(LinkMovementMethod.getInstance());
+        tvVersion = (TextView) findViewById(R.id.tvVersion);
+        tvVersion.setText(getString(R.string.version_label) + " " + BuildConfig.VERSION_NAME);
+        tvCompany = (TextView) findViewById(R.id.tvCompany);
+        tvCompany.setMovementMethod(LinkMovementMethod.getInstance());
+        tvCredits = (TextView) findViewById(R.id.tvCredits);
+        tvCredits.setMovementMethod(new ScrollingMovementMethod());
 
         showActionBar();
     }

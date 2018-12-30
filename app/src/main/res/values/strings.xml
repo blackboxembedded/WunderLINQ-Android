@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">WunderLINQ</string>
+    <string name="company_name" translatable="false">Black Box Embedded, LLC</string>
     <string name="device_name" translatable="false">WunderLINQ</string>
     <!-- MainActivity -->
     <string name="main_title">Motorcycle</string>
@@ -92,6 +93,117 @@
 
     <!-- AboutActivity -->
     <string name="about_title">About</string>
+    <string name="app_name_link" translatable="false"><a href="http://www.wunderlinq.com/">WunderLINQ™</a></string>
+    <string name="version_label">Version:</string>
+    <string name="credits_label">Credits</string>
+    <string name="company_name_link" translatable="false"><a href="https://www.blackboxembedded.com/">Black Box Embedded, LLC</a></string>
+    <string name="thanks" translatable="false">
+        <b>All Star Beta Tester</b>\n
+        \n
+        Martin Dohnal\n
+        \n
+        <b>Translators</b>\n
+        \n
+        Tüscher Martin\n
+        Efren Martin\n
+        Juan Carlos Alonso Lafuente\n
+        Martin Dohnal\n
+        Nikos Papanikolaou\n
+        Frederic Boucher\n
+        \n
+        <b>Kickstarter Backers</b>\n
+        \n
+        Gareth Hadden\n
+        Dennis Beilby\n
+        André\n
+        Guest 1027536916\n
+        Guest 1868214759\n
+        Guest 1239069827\n
+        Guest 237538773\n
+        Sandra H. Minner\n
+        The Creative Fund\n
+        Guest 1333815029\n
+        Anthony Law\n
+        Sarah Berg\n
+        Pam Fisher\n
+        Martin Tuescher\n
+        Guest 680374823\n
+        Guest 695474876\n
+        Guest 1405252041\n
+        Guest 1792224733\n
+        ARND\n
+        Tobias Frank\n
+        Efren\n
+        Sean Peter\n
+        Ulf Behrens\n
+        ue hiro\n
+        Christian Haller\n
+        Werner Ensink\n
+        Holger\n
+        Jeff Alfeld\n
+        Thorsten Meier\n
+        Hairul Effendy\n
+        Patrick W. OBrien\n
+        Dieter Tetzner\n
+        Marc Rajewski\n
+        Kutschmann\n
+        Guest 726087000\n
+        Guest 1955680076\n
+        David J Wade\n
+        Scott Graham\n
+        Sameer Gaffar\n
+        Kevin Dawson\n
+        Jonathan Kubiak\n
+        Alexander\n
+        Guest 1292675875\n
+        Andy Murden\n
+        Chuck Hickey\n
+        Charles Fisher\n
+        Sergio\n
+        Timothy Ide\n
+        chiang jui sheng\n
+        Christopher Beneke\n
+        Christophe\n
+        Ben\n
+        Nikos Papanikolaou\n
+        Cabo\n
+        René Touw\n
+        Benat\n
+        Kaz\n
+        Elvin Chew Km\n
+        Sammy Groover\n
+        Kenneth Tan\n
+        Fynn van Gou\n
+        Jude Tok\n
+        Julian Bale\n
+        Fred\n
+        Gerd\n
+        stevemc52\n
+        Daniel Wratschko\n
+        Craig Kehrer\n
+        Guest 1308539216\n
+        Chew Kee Meng Elvin\n
+        Mark Sweeney\n
+        Taro Mizutani\n
+        Ben\n
+        Mike Civil\n
+        Tina\n
+        Liu Han Sheng David\n
+        Ad Bakker\n
+        Alexander Kienle\n
+        pekabo\n
+        Eric\n
+        Morwinsky\n
+        Scott Kennedy\n
+        Greg Kingston\n
+        Guest 413601162\n
+        Kőhalmi Zoltán\n
+        Eddy Concar\n
+        Backer Name\n
+        \n
+        <b>Icons from fontawesome.com</b>\n
+
+    </string>
 
     <!-- FaultActivity -->
     <string name="title_activity_fault">FaultActivity</string>
