@@ -226,6 +226,9 @@ public class MusicActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
+        mPlayPauseButton.setFocusable(true);
+        mPlayPauseButton.requestFocus();
+
         if (((MyApplication) this.getApplication()).getitsDark() ||  sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
             updateColors(true);
         } else {
@@ -519,10 +522,14 @@ public class MusicActivity extends AppCompatActivity {
                 mPlayPauseButton.requestFocus();
                 return true;
             case KeyEvent.KEYCODE_DPAD_LEFT:
+                mPlayPauseButton.setFocusable(true);
+                mPlayPauseButton.requestFocus();
                 Intent backIntent = new Intent(MusicActivity.this, MainActivity.class);
                 startActivity(backIntent);
                 return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
+                mPlayPauseButton.setFocusable(true);
+                mPlayPauseButton.requestFocus();
                 Intent forwardIntent = new Intent(MusicActivity.this, CompassActivity.class);
                 startActivity(forwardIntent);
                 return true;
