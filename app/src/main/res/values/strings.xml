@@ -93,10 +93,10 @@
 
     <!-- AboutActivity -->
     <string name="about_title">About</string>
-    <string name="app_name_link" translatable="false"><a href="http://www.wunderlinq.com/">WunderLINQ™</a></string>
+    <string name="app_name_link" translatable="false"><a href="http://www.wunderlinq.com">WunderLINQ™</a></string>
     <string name="version_label">Version:</string>
     <string name="credits_label">Credits</string>
-    <string name="company_name_link" translatable="false"><a href="https://www.blackboxembedded.com/">Black Box Embedded, LLC</a></string>
+    <string name="company_name_link" translatable="false"><a href="https://www.blackboxembedded.com">Black Box Embedded, LLC</a></string>
     <string name="thanks" translatable="false">
         <b>All Star Beta Tester</b>\n
         \n
@@ -199,10 +199,9 @@
         Guest 413601162\n
         Kőhalmi Zoltán\n
         Eddy Concar\n
-        Backer Name\n
         \n
         <b>Icons from fontawesome.com</b>\n
-
+        \n
     </string>
 
     <!-- FaultActivity -->

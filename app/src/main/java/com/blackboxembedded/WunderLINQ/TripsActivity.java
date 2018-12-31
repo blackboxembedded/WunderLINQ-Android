@@ -2,10 +2,10 @@ package com.blackboxembedded.WunderLINQ;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +16,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 
@@ -40,36 +40,24 @@ public class TripsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_trips);
 
         tripList = findViewById(R.id.lv_trips);
+        tripList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
+                Intent tripViewIntent = new Intent(TripsActivity.this, TripViewActivity.class);
+                tripViewIntent.putExtra("FILE", myList.get(position).toString());
+                startActivity(tripViewIntent);
+            }
+        });
 
         showActionBar();
 
-        myList = new ArrayList<String>();
         updateListing();
-        if (myList.size() > 0 ) {
-            adapter = new
-                    TripListView(this, myList);
-
-            tripList.setAdapter(adapter);
-
-            tripList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
-                    Intent tripViewIntent = new Intent(TripsActivity.this, TripViewActivity.class);
-                    tripViewIntent.putExtra("FILE", myList.get(position).toString());
-                    startActivity(tripViewIntent);
-                }
-            });
-        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         updateListing();
-        if (myList.size() > 0 ) {
-            adapter.addAll(myList);
-            adapter.notifyDataSetChanged();
-        }
     }
 
     private void showActionBar(){
@@ -113,12 +101,18 @@ public class TripsActivity extends AppCompatActivity {
             }
         }
         File list[] = root.listFiles();
+        myList = new ArrayList<String>();
         if (list != null ) {
             Arrays.sort(list, Collections.reverseOrder());
 
             for (int i = 0; i < list.length; i++) {
                 myList.add(list[i].getName());
             }
+        }
+        if (myList.size() > 0 ) {
+            adapter = new
+                    TripListView(this, myList);
+            tripList.setAdapter(adapter);
         }
     }
 }
