@@ -98,6 +98,10 @@
     <string name="credits_label">Credits</string>
     <string name="company_name_link" translatable="false"><a href="https://www.blackboxembedded.com">Black Box Embedded, LLC</a></string>
     <string name="thanks" translatable="false">
+        <b>Support and Patience</b>\n
+        \n
+        Amy and Yaeko\n
+        \n
         <b>All Star Beta Tester</b>\n
         \n
         Martin Dohnal\n
