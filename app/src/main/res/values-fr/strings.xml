@@ -424,4 +424,6 @@
     <string name="hwsave_alert_body">After saving new hardware settings, the WunderLINQ hardware will become unstable and will need to be removed and reinstalled into the cradle.</string>
     <string name="hwsave_alert_btn_ok">Continue</string>
     <string name="hwsave_alert_btn_cancel">Cancel</string>
+    <string name="version_label">Version:</string>
+    <string name="credits_label">Credits</string>
 </resources>
