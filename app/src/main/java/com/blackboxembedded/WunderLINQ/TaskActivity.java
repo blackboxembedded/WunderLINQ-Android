@@ -1018,10 +1018,12 @@ public class TaskActivity extends AppCompatActivity {
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_LEFT:
+                gridview.setSelection(lastPosition);
                 Intent backIntent = new Intent(TaskActivity.this, CompassActivity.class);
                 startActivity(backIntent);
                 return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
+                gridview.setSelection(lastPosition);
                 Intent forwardIntent = new Intent(TaskActivity.this, MainActivity.class);
                 startActivity(forwardIntent);
                 return true;
