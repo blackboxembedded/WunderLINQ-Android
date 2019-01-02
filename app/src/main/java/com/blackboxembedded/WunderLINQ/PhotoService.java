@@ -68,6 +68,8 @@ public class PhotoService extends Service {
 
     protected static int CAMERACHOICE = CameraCharacteristics.LENS_FACING_BACK;
 
+    private boolean mAutoFocusSupported = false;
+
     /**
      * Conversion from screen rotation to JPEG orientation.
      */
@@ -338,6 +340,15 @@ public class PhotoService extends Service {
                 Boolean available = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
                 mFlashSupported = available == null ? false : available;
 
+                int[] afAvailableModes = characteristics.get(CameraCharacteristics.CONTROL_AF_AVAILABLE_MODES);
+
+                if (afAvailableModes.length == 0 || (afAvailableModes.length == 1
+                        && afAvailableModes[0] == CameraMetadata.CONTROL_AF_MODE_OFF)) {
+                    mAutoFocusSupported = false;
+                } else {
+                    mAutoFocusSupported = true;
+                }
+
                 mCameraId = cameraId;
                 return;
             }
@@ -489,7 +500,11 @@ public class PhotoService extends Service {
      */
     private void takePicture() {
         Log.d(TAG,"takePicture()");
-        lockFocus();
+        if (mAutoFocusSupported) {
+            lockFocus();
+        } else {
+            captureStillPicture();
+        }
     }
 
     /**
