@@ -588,108 +588,110 @@ public class MainActivity extends AppCompatActivity {
         ((MyApplication) this.getApplication()).setitsDark(itsDark);
         if (!sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
             LinearLayout lLayout = (LinearLayout) findViewById(R.id.layout_main);
-            textView1 = (TextView) findViewById(R.id.textView1);
-            textView2 = (TextView) findViewById(R.id.textView2);
-            textView3 = (TextView) findViewById(R.id.textView3);
-            textView4 = (TextView) findViewById(R.id.textView4);
-            textView5 = (TextView) findViewById(R.id.textView5);
-            textView6 = (TextView) findViewById(R.id.textView6);
-            textView7 = (TextView) findViewById(R.id.textView7);
-            textView8 = (TextView) findViewById(R.id.textView8);
-            textView1Label = (TextView) findViewById(R.id.textView1label);
-            textView2Label = (TextView) findViewById(R.id.textView2label);
-            textView3Label = (TextView) findViewById(R.id.textView3label);
-            textView4Label = (TextView) findViewById(R.id.textView4label);
-            textView5Label = (TextView) findViewById(R.id.textView5label);
-            textView6Label = (TextView) findViewById(R.id.textView6label);
-            textView7Label = (TextView) findViewById(R.id.textView7label);
-            textView8Label = (TextView) findViewById(R.id.textView8label);
-            LinearLayout layout1 = (LinearLayout) findViewById(R.id.layout_1);
-            LinearLayout layout2 = (LinearLayout) findViewById(R.id.layout_2);
-            LinearLayout layout3 = (LinearLayout) findViewById(R.id.layout_3);
-            LinearLayout layout4 = (LinearLayout) findViewById(R.id.layout_4);
-            LinearLayout layout5 = (LinearLayout) findViewById(R.id.layout_5);
-            LinearLayout layout6 = (LinearLayout) findViewById(R.id.layout_6);
-            LinearLayout layout7 = (LinearLayout) findViewById(R.id.layout_7);
-            LinearLayout layout8 = (LinearLayout) findViewById(R.id.layout_8);
-            if (itsDark) {
-                Log.d(TAG,"Settings things for dark");
-                //Set Brightness to defaults
-                WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
-                layoutParams.screenBrightness = -1;
-                getWindow().setAttributes(layoutParams);
-
-                lLayout.setBackgroundColor(getResources().getColor(R.color.black));
-                actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
-                navbarTitle.setTextColor(getResources().getColor(R.color.white));
-                backButton.setColorFilter(getResources().getColor(R.color.white));
-                forwardButton.setColorFilter(getResources().getColor(R.color.white));
-                dataButton.setColorFilter(getResources().getColor(R.color.white));
-                otherButton.setColorFilter(getResources().getColor(R.color.white));
-                textView1.setTextColor(getResources().getColor(R.color.white));
-                textView2.setTextColor(getResources().getColor(R.color.white));
-                textView3.setTextColor(getResources().getColor(R.color.white));
-                textView4.setTextColor(getResources().getColor(R.color.white));
-                textView5.setTextColor(getResources().getColor(R.color.white));
-                textView6.setTextColor(getResources().getColor(R.color.white));
-                textView7.setTextColor(getResources().getColor(R.color.white));
-                textView8.setTextColor(getResources().getColor(R.color.white));
-                textView1Label.setTextColor(getResources().getColor(R.color.white));
-                textView2Label.setTextColor(getResources().getColor(R.color.white));
-                textView3Label.setTextColor(getResources().getColor(R.color.white));
-                textView4Label.setTextColor(getResources().getColor(R.color.white));
-                textView5Label.setTextColor(getResources().getColor(R.color.white));
-                textView6Label.setTextColor(getResources().getColor(R.color.white));
-                textView7Label.setTextColor(getResources().getColor(R.color.white));
-                textView8Label.setTextColor(getResources().getColor(R.color.white));
-                layout1.setBackground(getResources().getDrawable(R.drawable.border_white));
-                layout2.setBackground(getResources().getDrawable(R.drawable.border_white));
-                layout3.setBackground(getResources().getDrawable(R.drawable.border_white));
-                layout4.setBackground(getResources().getDrawable(R.drawable.border_white));
-                layout5.setBackground(getResources().getDrawable(R.drawable.border_white));
-                layout6.setBackground(getResources().getDrawable(R.drawable.border_white));
-                layout7.setBackground(getResources().getDrawable(R.drawable.border_white));
-                layout8.setBackground(getResources().getDrawable(R.drawable.border_white));
-            } else {
-                Log.d(TAG,"Settings things for light");
-                if (sharedPrefs.getBoolean("prefBrightnessOverride", false)) {
-                    //Set Brightness to 100%
+            if (lLayout != null){
+                textView1 = (TextView) findViewById(R.id.textView1);
+                textView2 = (TextView) findViewById(R.id.textView2);
+                textView3 = (TextView) findViewById(R.id.textView3);
+                textView4 = (TextView) findViewById(R.id.textView4);
+                textView5 = (TextView) findViewById(R.id.textView5);
+                textView6 = (TextView) findViewById(R.id.textView6);
+                textView7 = (TextView) findViewById(R.id.textView7);
+                textView8 = (TextView) findViewById(R.id.textView8);
+                textView1Label = (TextView) findViewById(R.id.textView1label);
+                textView2Label = (TextView) findViewById(R.id.textView2label);
+                textView3Label = (TextView) findViewById(R.id.textView3label);
+                textView4Label = (TextView) findViewById(R.id.textView4label);
+                textView5Label = (TextView) findViewById(R.id.textView5label);
+                textView6Label = (TextView) findViewById(R.id.textView6label);
+                textView7Label = (TextView) findViewById(R.id.textView7label);
+                textView8Label = (TextView) findViewById(R.id.textView8label);
+                LinearLayout layout1 = (LinearLayout) findViewById(R.id.layout_1);
+                LinearLayout layout2 = (LinearLayout) findViewById(R.id.layout_2);
+                LinearLayout layout3 = (LinearLayout) findViewById(R.id.layout_3);
+                LinearLayout layout4 = (LinearLayout) findViewById(R.id.layout_4);
+                LinearLayout layout5 = (LinearLayout) findViewById(R.id.layout_5);
+                LinearLayout layout6 = (LinearLayout) findViewById(R.id.layout_6);
+                LinearLayout layout7 = (LinearLayout) findViewById(R.id.layout_7);
+                LinearLayout layout8 = (LinearLayout) findViewById(R.id.layout_8);
+                if (itsDark) {
+                    Log.d(TAG,"Settings things for dark");
+                    //Set Brightness to defaults
                     WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
-                    layoutParams.screenBrightness = 1;
+                    layoutParams.screenBrightness = -1;
                     getWindow().setAttributes(layoutParams);
-                }
 
-                lLayout.setBackgroundColor(getResources().getColor(R.color.white));
-                actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
-                navbarTitle.setTextColor(getResources().getColor(R.color.black));
-                backButton.setColorFilter(getResources().getColor(R.color.black));
-                forwardButton.setColorFilter(getResources().getColor(R.color.black));
-                dataButton.setColorFilter(getResources().getColor(R.color.black));
-                otherButton.setColorFilter(getResources().getColor(R.color.black));
-                textView1.setTextColor(getResources().getColor(R.color.black));
-                textView2.setTextColor(getResources().getColor(R.color.black));
-                textView3.setTextColor(getResources().getColor(R.color.black));
-                textView4.setTextColor(getResources().getColor(R.color.black));
-                textView5.setTextColor(getResources().getColor(R.color.black));
-                textView6.setTextColor(getResources().getColor(R.color.black));
-                textView7.setTextColor(getResources().getColor(R.color.black));
-                textView8.setTextColor(getResources().getColor(R.color.black));
-                textView1Label.setTextColor(getResources().getColor(R.color.black));
-                textView2Label.setTextColor(getResources().getColor(R.color.black));
-                textView3Label.setTextColor(getResources().getColor(R.color.black));
-                textView4Label.setTextColor(getResources().getColor(R.color.black));
-                textView5Label.setTextColor(getResources().getColor(R.color.black));
-                textView6Label.setTextColor(getResources().getColor(R.color.black));
-                textView7Label.setTextColor(getResources().getColor(R.color.black));
-                textView8Label.setTextColor(getResources().getColor(R.color.black));
-                layout1.setBackground(getResources().getDrawable(R.drawable.border));
-                layout2.setBackground(getResources().getDrawable(R.drawable.border));
-                layout3.setBackground(getResources().getDrawable(R.drawable.border));
-                layout4.setBackground(getResources().getDrawable(R.drawable.border));
-                layout5.setBackground(getResources().getDrawable(R.drawable.border));
-                layout6.setBackground(getResources().getDrawable(R.drawable.border));
-                layout7.setBackground(getResources().getDrawable(R.drawable.border));
-                layout8.setBackground(getResources().getDrawable(R.drawable.border));
+                    lLayout.setBackgroundColor(getResources().getColor(R.color.black));
+                    actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
+                    navbarTitle.setTextColor(getResources().getColor(R.color.white));
+                    backButton.setColorFilter(getResources().getColor(R.color.white));
+                    forwardButton.setColorFilter(getResources().getColor(R.color.white));
+                    dataButton.setColorFilter(getResources().getColor(R.color.white));
+                    otherButton.setColorFilter(getResources().getColor(R.color.white));
+                    textView1.setTextColor(getResources().getColor(R.color.white));
+                    textView2.setTextColor(getResources().getColor(R.color.white));
+                    textView3.setTextColor(getResources().getColor(R.color.white));
+                    textView4.setTextColor(getResources().getColor(R.color.white));
+                    textView5.setTextColor(getResources().getColor(R.color.white));
+                    textView6.setTextColor(getResources().getColor(R.color.white));
+                    textView7.setTextColor(getResources().getColor(R.color.white));
+                    textView8.setTextColor(getResources().getColor(R.color.white));
+                    textView1Label.setTextColor(getResources().getColor(R.color.white));
+                    textView2Label.setTextColor(getResources().getColor(R.color.white));
+                    textView3Label.setTextColor(getResources().getColor(R.color.white));
+                    textView4Label.setTextColor(getResources().getColor(R.color.white));
+                    textView5Label.setTextColor(getResources().getColor(R.color.white));
+                    textView6Label.setTextColor(getResources().getColor(R.color.white));
+                    textView7Label.setTextColor(getResources().getColor(R.color.white));
+                    textView8Label.setTextColor(getResources().getColor(R.color.white));
+                    layout1.setBackground(getResources().getDrawable(R.drawable.border_white));
+                    layout2.setBackground(getResources().getDrawable(R.drawable.border_white));
+                    layout3.setBackground(getResources().getDrawable(R.drawable.border_white));
+                    layout4.setBackground(getResources().getDrawable(R.drawable.border_white));
+                    layout5.setBackground(getResources().getDrawable(R.drawable.border_white));
+                    layout6.setBackground(getResources().getDrawable(R.drawable.border_white));
+                    layout7.setBackground(getResources().getDrawable(R.drawable.border_white));
+                    layout8.setBackground(getResources().getDrawable(R.drawable.border_white));
+                } else {
+                    Log.d(TAG, "Settings things for light");
+                    if (sharedPrefs.getBoolean("prefBrightnessOverride", false)) {
+                        //Set Brightness to 100%
+                        WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+                        layoutParams.screenBrightness = 1;
+                        getWindow().setAttributes(layoutParams);
+                    }
+
+                    lLayout.setBackgroundColor(getResources().getColor(R.color.white));
+                    actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
+                    navbarTitle.setTextColor(getResources().getColor(R.color.black));
+                    backButton.setColorFilter(getResources().getColor(R.color.black));
+                    forwardButton.setColorFilter(getResources().getColor(R.color.black));
+                    dataButton.setColorFilter(getResources().getColor(R.color.black));
+                    otherButton.setColorFilter(getResources().getColor(R.color.black));
+                    textView1.setTextColor(getResources().getColor(R.color.black));
+                    textView2.setTextColor(getResources().getColor(R.color.black));
+                    textView3.setTextColor(getResources().getColor(R.color.black));
+                    textView4.setTextColor(getResources().getColor(R.color.black));
+                    textView5.setTextColor(getResources().getColor(R.color.black));
+                    textView6.setTextColor(getResources().getColor(R.color.black));
+                    textView7.setTextColor(getResources().getColor(R.color.black));
+                    textView8.setTextColor(getResources().getColor(R.color.black));
+                    textView1Label.setTextColor(getResources().getColor(R.color.black));
+                    textView2Label.setTextColor(getResources().getColor(R.color.black));
+                    textView3Label.setTextColor(getResources().getColor(R.color.black));
+                    textView4Label.setTextColor(getResources().getColor(R.color.black));
+                    textView5Label.setTextColor(getResources().getColor(R.color.black));
+                    textView6Label.setTextColor(getResources().getColor(R.color.black));
+                    textView7Label.setTextColor(getResources().getColor(R.color.black));
+                    textView8Label.setTextColor(getResources().getColor(R.color.black));
+                    layout1.setBackground(getResources().getDrawable(R.drawable.border));
+                    layout2.setBackground(getResources().getDrawable(R.drawable.border));
+                    layout3.setBackground(getResources().getDrawable(R.drawable.border));
+                    layout4.setBackground(getResources().getDrawable(R.drawable.border));
+                    layout5.setBackground(getResources().getDrawable(R.drawable.border));
+                    layout6.setBackground(getResources().getDrawable(R.drawable.border));
+                    layout7.setBackground(getResources().getDrawable(R.drawable.border));
+                    layout8.setBackground(getResources().getDrawable(R.drawable.border));
+                }
             }
         } else {
             ConstraintLayout cLayout = (ConstraintLayout) findViewById(R.id.layout_main_other);
