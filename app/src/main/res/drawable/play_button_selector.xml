@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Image display in background in select state -->
+    <item android:drawable="@android:color/darker_gray" android:state_pressed="true"/>
+
+    <!-- Image display in background in select state -->
+    <item android:drawable="@android:color/darker_gray" android:state_focused="true"/>
+
+    <!-- Default state -->
+    <item android:drawable="@android:color/darker_gray"/>
+
+</selector>
