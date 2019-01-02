@@ -3,7 +3,7 @@
     <string name="main_title">Motocyclette</string>
     <string name="blank_field">∞</string>
     <!-- Permission Requests -->
-    <string name="camera_alert_title">WunderLINQ requert la permission d\'utilser la caméra</string>
+    <string name="camera_alert_title">WunderLINQ requiert la permission d\'utiliser la caméra</string>
     <string name="camera_alert_body">Merci d\'accorder l\'accès à votre caméra</string>
     <string name="contacts_alert_title">WunderLINQ requiert la permission aux contacts</string>
     <string name="contacts_alert_body">Merci d\'accorder l\'accès en lecture à vos contacts</string>
@@ -408,22 +408,21 @@
     <string name="advanced_settings_title">Réglages avancés</string>
     <string name="pref_btn_sendlogs_title">Envoyer les journaux</string>
     <string name="pref_btn_sendlogs_summary">Envoyer les journaux au support de Black Box Embedded</string>
-    <!-- <string name="pref_sendlogs_subject">WunderLINQ Journaux de débogage</string> -->
     <string name="pref_sendlogs_body">Entrez une description du problème ci-dessous:</string>
     <string name="pref_sendlogs_intent_title">Envoyer les journaux...</string>
     <string name="hw_settings_title">WunderLINQ réglages matériels</string>
     <string name="pref_btn_version_title">WunderLINQ Version</string>
     <string name="waypoint_view_bt_navigate">Navigation</string>
-    <string name="appsettings_label">App Settings</string>
-    <string name="hwsettings_label">HW Settings</string>
-    <string name="fw_config_title">WunderLINQ Settings</string>
-    <string name="wwtype_label">Wheel Type</string>
-    <string name="sensitivity_label">Hold Sensitivity</string>
-    <string name="config_write_label">Save Settings</string>
-    <string name="hwsave_alert_title">Warning!</string>
-    <string name="hwsave_alert_body">After saving new hardware settings, the WunderLINQ hardware will become unstable and will need to be removed and reinstalled into the cradle.</string>
-    <string name="hwsave_alert_btn_ok">Continue</string>
-    <string name="hwsave_alert_btn_cancel">Cancel</string>
+    <string name="appsettings_label">Réglages</string>
+    <string name="hwsettings_label">Régl. matériels</string>
+    <string name="fw_config_title">Régl. WunderLINQ</string>
+    <string name="wwtype_label">Type de molette</string>
+    <string name="sensitivity_label">Sensibilité de la molette</string>
+    <string name="config_write_label">Enregistrer réglages</string>
+    <string name="hwsave_alert_title">Attention!</string>
+    <string name="hwsave_alert_body">Après la sauvegarde de vos réglages matériels, le WunderLINQ sera instable et nécessitera d\'être retiré et remis dans son support.</string>
+    <string name="hwsave_alert_btn_ok">Continuer</string>
+    <string name="hwsave_alert_btn_cancel">Annuler</string>
     <string name="version_label">Version:</string>
-    <string name="credits_label">Credits</string>
+    <string name="credits_label">Crédits</string>
 </resources>
