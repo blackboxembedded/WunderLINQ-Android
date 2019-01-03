@@ -491,8 +491,10 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(hwSettingsIntent);
                         break;
                     case R.id.action_debug:
+                        /*
                         Intent debugIntent = new Intent(MainActivity.this, DebugActivity.class);
                         startActivity(debugIntent);
+                        */
                         break;
                     case R.id.action_about:
                         Intent aboutIntent = new Intent(MainActivity.this, AboutActivity.class);

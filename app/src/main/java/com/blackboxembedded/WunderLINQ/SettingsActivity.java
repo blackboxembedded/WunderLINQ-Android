@@ -15,7 +15,6 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -103,6 +102,7 @@ public class SettingsActivity extends PreferenceActivity{
             String versionName = BuildConfig.VERSION_NAME;
             final Preference versionButton = findPreference("prefVersion");
             versionButton.setSummary(versionName);
+            /*
             versionButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -116,6 +116,7 @@ public class SettingsActivity extends PreferenceActivity{
                     return true;
                 }
             });
+            */
         }
 
         @Override
