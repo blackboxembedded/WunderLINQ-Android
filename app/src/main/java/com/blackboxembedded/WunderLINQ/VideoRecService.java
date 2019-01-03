@@ -179,8 +179,10 @@ public class VideoRecService extends Service implements SurfaceHolder.Callback {
             }
         }
 
-        camera.lock();
-        camera.release();
+        if (camera != null) {
+            camera.lock();
+            camera.release();
+        }
 
         windowManager.removeView(surfaceView);
 
