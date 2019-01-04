@@ -326,5 +326,7 @@
     <string name="hwsave_alert_btn_cancel">Cancel</string>
     <string name="version_label">Version:</string>
     <string name="credits_label">Credits</string>
+    <string name="pref_autolaunch_name">Auto Launch App</string>
+    <string name="pref_autolaunch_summary">Auto launch WunderLINQ app when WunderLINQ hardware connects</string>
 
 </resources>

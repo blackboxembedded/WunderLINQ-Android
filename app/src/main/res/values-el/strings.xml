@@ -381,4 +381,6 @@
     <string name="hwsave_alert_btn_cancel">Ακύρωση</string>
     <string name="version_label">Έκδοση:</string>
     <string name="credits_label">Συντελεστές</string>
+    <string name="pref_autolaunch_name">Auto Launch App</string>
+    <string name="pref_autolaunch_summary">Auto launch WunderLINQ app when WunderLINQ hardware connects</string>
 </resources>

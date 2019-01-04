@@ -225,6 +225,12 @@
             android:title="@string/pref_fuelAlert_name" >
         </CheckBoxPreference>
     </PreferenceCategory>
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="prefAutoLaunch"
+        android:summary="@string/pref_autolaunch_summary"
+        android:title="@string/pref_autolaunch_name" >
+    </CheckBoxPreference>
     <PreferenceCategory android:title="@string/advanced_settings_title" >
         <Preference android:title="@string/pref_btn_sendlogs_title"
             android:key="prefSendLog"
