@@ -48,6 +48,9 @@ public class BluetoothLeService extends Service {
 
     private final static String TAG = "BluetoothLeService";
 
+    int mStartMode;       // indicates how to behave if the service is killed
+    boolean mAllowRebind; // indicates whether onRebind should be used
+
     private static Logger debugLogger = null;
 
     private static boolean fuelAlertSent = false;
@@ -113,43 +116,77 @@ public class BluetoothLeService extends Service {
 
     public static boolean mDisableNotificationFlag = false;
 
-    private static int mConnectionState = STATE_DISCONNECTED;
+    public static int mConnectionState = STATE_DISCONNECTED;
     /**
      * Device address
      */
     private static String mBluetoothDeviceAddress;
     private static String mBluetoothDeviceName;
 
-    private final IBinder mBinder = new LocalBinder();
     /**
      * Flag to check the mBound status
      */
     public boolean mBound;
+
     /**
      * BlueTooth manager for handling connections
      */
     private BluetoothManager mBluetoothManager;
 
+    private final IBinder mBinder = new LocalBinder();
+
     /**
-     * After using a given BLE device, the app must call this method to ensure
-     * resources are released properly.
+     * Local binder class
      */
-    public static void close() {
-        mBluetoothGatt.close();
-        mBluetoothGatt = null;
+    public class LocalBinder extends Binder {
+        public BluetoothLeService getService() {
+            return BluetoothLeService.this;
+        }
+    }
+
+    public BluetoothLeService() {
+
     }
 
     @Override
+    public void onCreate() {
+        Log.d(TAG,"In onCreate");
+        // The service is being created
+        // Initializing the service
+        if (!initialize()) {
+            Log.d(TAG,"Service not initialized");
+        }
+    }
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        // The service is starting, due to a call to startService()
+        Log.d(TAG,"onStartCommand");
+        return mStartMode;
+    }
+    @Override
     public IBinder onBind(Intent intent) {
+        Log.d(TAG, "onBind");
+        // A client is binding to the service with bindService()
         mBound = true;
         return mBinder;
     }
-
     @Override
     public boolean onUnbind(Intent intent) {
+        Log.d(TAG, "onUnbind");
+        // All clients have unbound with unbindService()
         mBound = false;
-        close();
-        return super.onUnbind(intent);
+        return mAllowRebind;
+    }
+    @Override
+    public void onRebind(Intent intent) {
+        Log.d(TAG, "onRebind");
+        // A client is binding to the service with bindService(),
+        // after onUnbind() has already been called
+    }
+    @Override
+    public void onDestroy() {
+        Log.d(TAG, "onDestroy");
+        // The service is no longer used and is being destroyed
     }
 
     /**
@@ -170,23 +207,6 @@ public class BluetoothLeService extends Service {
 
         mBluetoothAdapter = mBluetoothManager.getAdapter();
         return mBluetoothAdapter != null;
-    }
-
-    @Override
-    public void onCreate() {
-        // Initializing the service
-        if (!initialize()) {
-            Log.d(TAG,"Service not initialized");
-        }
-    }
-
-    /**
-     * Local binder class
-     */
-    public class LocalBinder extends Binder {
-        public BluetoothLeService getService() {
-            return BluetoothLeService.this;
-        }
     }
 
     /**
@@ -442,6 +462,15 @@ public class BluetoothLeService extends Service {
     }
 
     /**
+     * After using a given BLE device, the app must call this method to ensure
+     * resources are released properly.
+     */
+    public static void close() {
+        mBluetoothGatt.close();
+        mBluetoothGatt = null;
+    }
+
+    /**
      * Request a read on a given {@code BluetoothGattCharacteristic}. The read
      * result is reported asynchronously through the
      * {@code BluetoothGattCallback#onCharacteristicRead(android.bluetooth.BluetoothGatt, android.bluetooth.BluetoothGattCharacteristic, int)}
@@ -676,6 +705,7 @@ public class BluetoothLeService extends Service {
     }
 
     private static void parseMessage(byte[] data){
+        //Log.d(TAG,"MSG");
         Data.setLastMessage(data);
         int msgID = (data[0] & 0xFF) ;
         switch (msgID) {

@@ -229,7 +229,7 @@ public class FWConfigActivity extends AppCompatActivity {
                     if(bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE).contains(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC)) {
                         byte[] data = bd.getByteArray(BluetoothLeService.EXTRA_BYTE_VALUE);
                         String characteristicValue = Utils.ByteArraytoHex(data) + " ";
-                        Log.d(TAG, "UUID: " + bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE) + " DATA: " + characteristicValue);
+                        //Log.d(TAG, "UUID: " + bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE) + " DATA: " + characteristicValue);
                         if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x57)) {
                             byte mode = data[26];
                             currentConfig = mode;

@@ -404,7 +404,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         registerReceiver(mBondingBroadcast,new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
+
         gattServiceIntent = new Intent(MainActivity.this, BluetoothLeService.class);
+        startService(new Intent(MainActivity.this, BluetoothLeService.class));
 
         if (!sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
             updateDisplay();
@@ -428,7 +430,6 @@ public class MainActivity extends AppCompatActivity {
         dataButton = (ImageButton) findViewById(R.id.action_data);
         faultButton = (ImageButton) findViewById(R.id.action_faults);
         btButton = (ImageButton) findViewById(R.id.action_connect);
-        btButton.setEnabled(false);
 
         navbarTitle = (TextView) findViewById(R.id.action_title);
         navbarTitle.setText(R.string.main_title);
@@ -763,6 +764,14 @@ public class MainActivity extends AppCompatActivity {
     public void onStop() {
         Log.d(TAG,"In onStop");
         super.onStop();
+        try {
+            unregisterReceiver(mGattUpdateReceiver);
+            unregisterReceiver(mBondingBroadcast);
+            unbindService(mServiceConnection);
+        } catch (IllegalArgumentException e){
+
+        }
+        mBluetoothLeService = null;
         sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
@@ -770,8 +779,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         Log.d(TAG,"In onPause");
         super.onPause();
-        unregisterReceiver(mGattUpdateReceiver);
-        unregisterReceiver(mBondingBroadcast);
+        try {
+            unregisterReceiver(mGattUpdateReceiver);
+            unregisterReceiver(mBondingBroadcast);
+            unbindService(mServiceConnection);
+        } catch (IllegalArgumentException e){
+
+        }
+        mBluetoothLeService = null;
         sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
@@ -830,7 +845,10 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
             // Automatically connects to the device upon successful start-up initialization.
-            mBluetoothLeService.connect(mDeviceAddress,getString(R.string.device_name));
+            if (mBluetoothLeService.mConnectionState == BluetoothLeService.STATE_DISCONNECTED) {
+                Log.e(TAG, "In onServiceCOnnected Disconnected,reconnected");
+                mBluetoothLeService.connect(mDeviceAddress, getString(R.string.device_name));
+            }
         }
 
         @Override
@@ -848,7 +866,6 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG,"WunderLINQ previously paired");
                     mDeviceAddress = devices.getAddress();
                     Log.d(TAG,"Address: " + mDeviceAddress);
-
                     bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
                     scanLeDevice(false);
                     return;
@@ -1142,14 +1159,6 @@ public class MainActivity extends AppCompatActivity {
                 odometer = Utils.kmToMiles(odometer);
             }
             textView7.setText(Math.round(odometer) + " " + distanceUnit);
-            // TEMP
-            /*
-            final StringBuilder stringBuilder = new StringBuilder(Data.getLastMessage().length);
-            for (byte byteChar : Data.getLastMessage())
-                stringBuilder.append(String.format("%02x", byteChar));
-            textView7.setText(stringBuilder.toString());
-            */
-            // End TEMP
         } else {
             textView7.setText(getString(R.string.blank_field));
         }
