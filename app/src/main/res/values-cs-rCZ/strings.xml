@@ -398,4 +398,10 @@
     <string name="pref_autolaunch_summary">Auto launch WunderLINQ app when WunderLINQ hardware connects</string>
     <string name="pref_debuglogging_name">Enable Debug Logging</string>
     <string name="pref_debuglogging_summary">Only enable if needed by Support, may impact performance if left running.  Please disable when finished.</string>
+    <string name="debug_settings_title">Debug Settings</string>
+    <string name="negative_record_audio_alert_body">Since audio recording access has not been granted, this app will not be able to record videos.</string>
+    <string name="negative_call_alert_body">Since phone access has not been granted, this app will not be able to place phone calls.</string>
+    <string name="negative_contacts_alert_body">Since contact access has not been granted, this app will not be able to display or call your contacts.</string>
+    <string name="call_alert_body">Please grant access to use your phone</string>
+    <string name="call_alert_title">WunderLINQ needs permissions to use your phone to make phone calls</string>
 </resources>

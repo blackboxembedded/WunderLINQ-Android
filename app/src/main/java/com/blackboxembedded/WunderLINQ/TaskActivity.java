@@ -72,6 +72,7 @@ public class TaskActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
     private static final int PERMISSION_REQUEST_CAMERA = 100;
+    private static final int PERMISSION_REQUEST_CALL_PHONE = 101;
     private static final int PERMISSION_REQUEST_READ_CONTACTS = 102;
     private static final int PERMISSION_REQUEST_WRITE_STORAGE = 112;
     private static final int PERMISSION_REQUEST_RECORD_AUDIO = 122;
@@ -514,13 +515,37 @@ public class TaskActivity extends AppCompatActivity {
                         break;
                     case 2:
                         //Call Favorite Number
-                        String phonenumber = sharedPrefs.getString("prefHomePhone","");
-                        if (phonenumber != "") {
-                            Intent callHomeIntent = new Intent(Intent.ACTION_DIAL);
-                            callHomeIntent.setData(Uri.parse("tel:" + phonenumber));
-                            startActivity(callHomeIntent);
-                        } else {
-                            Toast.makeText(TaskActivity.this, R.string.toast_phone_not_set, Toast.LENGTH_LONG).show();
+                        boolean callPerms = false;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            if (getApplication().checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(TaskActivity.this);
+                                builder.setTitle(getString(R.string.call_alert_title));
+                                builder.setMessage(getString(R.string.call_alert_body));
+                                builder.setPositiveButton(android.R.string.ok, null);
+                                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @TargetApi(23)
+                                    public void onDismiss(DialogInterface dialog) {
+                                        requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
+                                    }
+                                });
+                                builder.show();
+                            } else {
+                                // Android version is lesser than 6.0 or the permission is already granted.
+                                callPerms = true;
+                            }
+                        }  else {
+                            // Android version is lesser than 6.0 or the permission is already granted.
+                            callPerms = true;
+                        }
+                        if (callPerms == true) {
+                            String phonenumber = sharedPrefs.getString("prefHomePhone", "");
+                            if (phonenumber != "") {
+                                Intent callHomeIntent = new Intent(Intent.ACTION_CALL);
+                                callHomeIntent.setData(Uri.parse("tel:" + phonenumber));
+                                startActivity(callHomeIntent);
+                            } else {
+                                Toast.makeText(TaskActivity.this, R.string.toast_phone_not_set, Toast.LENGTH_LONG).show();
+                            }
                         }
                         break;
                     case 3:
@@ -549,9 +574,6 @@ public class TaskActivity extends AppCompatActivity {
                             Intent forwardIntent = new Intent(TaskActivity.this, ContactListActivity.class);
                             startActivity(forwardIntent);
                         }
-
-                        //Intent forwardIntent = new Intent(TaskActivity.this, ContactListActivity.class);
-                        //startActivity(forwardIntent);
                         break;
                     case 4:
                         //Take photo
@@ -909,7 +931,6 @@ public class TaskActivity extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 {
                     Log.d(TAG, "Camera permission granted");
-                    //setupBLE();
                 } else
                 {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -923,18 +944,16 @@ public class TaskActivity extends AppCompatActivity {
                     });
                     builder.show();
                 }
-                break;
             }
-            case PERMISSION_REQUEST_RECORD_AUDIO: {
+            case PERMISSION_REQUEST_CALL_PHONE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 {
-                    Log.d(TAG, "Microphone permission granted");
-                    //setupBLE();
+                    Log.d(TAG, "Call Phone permission granted");
                 } else
                 {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle(getString(R.string.negative_alert_title));
-                    builder.setMessage(getString(R.string.negative_microphone_alert_body));
+                    builder.setMessage(getString(R.string.negative_call_alert_body));
                     builder.setPositiveButton(android.R.string.ok, null);
                     builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
@@ -943,13 +962,47 @@ public class TaskActivity extends AppCompatActivity {
                     });
                     builder.show();
                 }
-                break;
+            }
+            case PERMISSION_REQUEST_READ_CONTACTS: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    Log.d(TAG, "Call Phone permission granted");
+                } else
+                {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.negative_alert_title));
+                    builder.setMessage(getString(R.string.negative_contacts_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
+                }
+            }
+            case PERMISSION_REQUEST_RECORD_AUDIO: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    Log.d(TAG, "Record Audio permission granted");
+                } else
+                {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.negative_alert_title));
+                    builder.setMessage(getString(R.string.negative_record_audio_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
+                }
             }
             case PERMISSION_REQUEST_WRITE_STORAGE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 {
                     Log.d(TAG, "Write to storage permission granted");
-                    //setupBLE();
                 } else
                 {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -963,7 +1016,6 @@ public class TaskActivity extends AppCompatActivity {
                     });
                     builder.show();
                 }
-                break;
             }
             case PERMISSION_REQUEST_FINE_LOCATION: {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -980,7 +1032,6 @@ public class TaskActivity extends AppCompatActivity {
                     });
                     builder.show();
                 }
-                break;
             }
         }
     }

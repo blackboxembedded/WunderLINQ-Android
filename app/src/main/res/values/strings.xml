@@ -8,6 +8,8 @@
     <!-- Permission Requests -->
     <string name="camera_alert_title">WunderLINQ needs permissions to use your camera</string>
     <string name="camera_alert_body">Please grant access to use your camera</string>
+    <string name="call_alert_title">WunderLINQ needs permissions to use your phone to make phone calls</string>
+    <string name="call_alert_body">Please grant access to use your phone</string>
     <string name="contacts_alert_title">WunderLINQ needs permissions to use read your contacts</string>
     <string name="contacts_alert_body">Please grant read access to your contacts</string>
     <string name="record_audio_alert_title">WunderLINQ needs permissions to record audio</string>
@@ -22,7 +24,10 @@
     <string name="negative_location_alert_body">Since location access has not been granted, this app will not be able to save waypoints or log your location.</string>
     <string name="negative_write_alert_body">Since write access has not been granted, this app will not be able to save files.</string>
     <string name="negative_camera_alert_body">Since camera access has not been granted, this app will not be able to take photos or videos.</string>
+    <string name="negative_contacts_alert_body">Since contact access has not been granted, this app will not be able to display or call your contacts.</string>
+    <string name="negative_call_alert_body">Since phone access has not been granted, this app will not be able to place phone calls.</string>
     <string name="negative_microphone_alert_body">Since microphone access has not been granted, this app will not be able to record videos.</string>
+    <string name="negative_record_audio_alert_body">Since audio recording access has not been granted, this app will not be able to record videos.</string>
     <string name="usagestats_alert_title">WunderLINQ needs usage stat access</string>
     <string name="usagestats_alert_body">Please grant usage stat access, this will allow for auto launch of the App when the WunderLINQ device is connected.</string>
     <string name="disclaimer_alert_title">WARNING!</string>
@@ -51,7 +56,6 @@
     <!-- Other Menu -->
     <string name="appsettings_label">App Settings</string>
     <string name="hwsettings_label">HW Settings</string>
-    <string name="hwdebug_label" translatable="false">HW Debug Console</string>
     <string name="info_label">About</string>
     <string name="close_label">Close</string>
 
@@ -69,27 +73,6 @@
     <string name="hwsave_alert_body">After saving new hardware settings, the WunderLINQ hardware will become unstable and will need to be removed and reinstalled into the cradle.</string>
     <string name="hwsave_alert_btn_ok">Continue</string>
     <string name="hwsave_alert_btn_cancel">Cancel</string>
-
-    <!-- DebugActivity -->
-    <string name="debug_title" translatable="false">Debug Console</string>
-    <string name="command_label" translatable="false">Commands</string>
-    <string-array name="debug_commands_array">
-        <item name="1">Read Serial Flash</item>
-        <item name="2">Read Config Flash</item>
-        <item name="3">Read WLQ Flash</item>
-        <item name="4">Reboot into Bootloader</item>
-        <item name="5">Turn off 3V switch</item>
-        <item name="6">Turn on 3V switch</item>
-        <item name="7">Toggle 3V switch</item>
-        <item name="8">Turn off Blue LED</item>
-        <item name="9">Turn on Blue LED</item>
-        <item name="10">Flash Blue LED</item>
-        <item name="11">Turn off Green LED</item>
-        <item name="12">Turn on Green LED</item>
-        <item name="13">Flash Green LED</item>
-        <item name="14">Custom Command</item>
-    </string-array>
-    <string name="debug_write_label" translatable="false">Send Command</string>
 
     <!-- AboutActivity -->
     <string name="about_title">About</string>
@@ -559,13 +542,7 @@
     <string name="pref_tpmsAlertThreshold_summary">Specify a number based on your unit selection</string>
     <string name="pref_fuelAlert_name">Fuel Routing</string>
     <string name="pref_fuelAlert_summary">Prompt to route to nearest fuel station when low fuel fault is present</string>
-    <string name="debug_settings_title" translatable="false">Debug Settings</string>
-    <string name="pref_dataLogging_name" translatable="false">Raw Message Logging</string>
-    <string name="pref_dataLogging_summary" translatable="false">Enable Raw Message Logging To /sdcard/WunderLINQ/</string>
-    <string name="pref_showRaw_name" translatable="false">Show raw message</string>
-    <string name="pref_showRaw_summary" translatable="false">Show raw message in Odometer Field</string>
-    <string name="pref_showUartFaults_name" translatable="false">Show UART faults</string>
-    <string name="pref_showUartFaults_summary" translatable="false">Show UART faults in Fault Viewer</string>
+    <string name="debug_settings_title">Debug Settings</string>
     <string name="advanced_settings_title">Advanced Settings</string>
     <string name="pref_btn_sendlogs_title">Send Logs</string>
     <string name="pref_btn_sendlogs_summary">Send Logs to Black Box Embedded Support</string>
@@ -579,6 +556,5 @@
     <string name="pref_sendlogs_intent_title">Send Logs...</string>
     <string name="hw_settings_title">WunderLINQ hardware Settings</string>
     <string name="pref_btn_version_title">WunderLINQ Version</string>
-    <string name="pref_btn_version_toast" translatable="false">Debug Menu Enabled. Exit, then re-enter Settings.</string>
     <string name="waypoint_view_bt_navigate">Navigate</string>
 </resources>

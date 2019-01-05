@@ -408,9 +408,33 @@ public class ContactListActivity extends AppCompatActivity {
                     lastPosition = position;
 
                     // Call Number
-                    Intent callHomeIntent = new Intent(Intent.ACTION_DIAL);
-                    callHomeIntent.setData(Uri.parse("tel:" + phoneNumbers.get(position)));
-                    startActivity(callHomeIntent);
+                    boolean callPerms = false;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (getApplication().checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(ContactListActivity.this);
+                            builder.setTitle(getString(R.string.call_alert_title));
+                            builder.setMessage(getString(R.string.call_alert_body));
+                            builder.setPositiveButton(android.R.string.ok, null);
+                            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                @TargetApi(23)
+                                public void onDismiss(DialogInterface dialog) {
+                                    requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
+                                }
+                            });
+                            builder.show();
+                        } else {
+                            // Android version is lesser than 6.0 or the permission is already granted.
+                            callPerms = true;
+                        }
+                    }  else {
+                        // Android version is lesser than 6.0 or the permission is already granted.
+                        callPerms = true;
+                    }
+                    if (callPerms == true) {
+                        Intent callHomeIntent = new Intent(Intent.ACTION_CALL);
+                        callHomeIntent.setData(Uri.parse("tel:" + phoneNumbers.get(position)));
+                        startActivity(callHomeIntent);
+                    }
                 }
 
             });

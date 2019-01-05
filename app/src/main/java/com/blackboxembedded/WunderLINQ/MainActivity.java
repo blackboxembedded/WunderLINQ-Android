@@ -128,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
     private static final int PERMISSION_REQUEST_CAMERA = 100;
+    private static final int PERMISSION_REQUEST_CALL_PHONE = 101;
     private static final int PERMISSION_REQUEST_READ_CONTACTS = 102;
     private static final int PERMISSION_REQUEST_WRITE_STORAGE = 112;
     private static final int PERMISSION_REQUEST_RECORD_AUDIO = 122;
@@ -270,6 +271,20 @@ public class MainActivity extends AppCompatActivity {
                     @TargetApi(23)
                     public void onDismiss(DialogInterface dialog) {
                         requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
+                    }
+                });
+                builder.show();
+            }
+            // Check Call phone permissions
+            if (this.checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
+                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(getString(R.string.call_alert_title));
+                builder.setMessage(getString(R.string.call_alert_body));
+                builder.setPositiveButton(android.R.string.ok, null);
+                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @TargetApi(23)
+                    public void onDismiss(DialogInterface dialog) {
+                        requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, PERMISSION_REQUEST_CALL_PHONE);
                     }
                 });
                 builder.show();
@@ -1186,7 +1201,6 @@ public class MainActivity extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 {
                     Log.d(TAG, "Camera permission granted");
-                    setupBLE();
                 } else
                 {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -1201,11 +1215,64 @@ public class MainActivity extends AppCompatActivity {
                     builder.show();
                 }
             }
+            case PERMISSION_REQUEST_CALL_PHONE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    Log.d(TAG, "Call Phone permission granted");
+                } else
+                {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.negative_alert_title));
+                    builder.setMessage(getString(R.string.negative_call_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
+                }
+            }
+            case PERMISSION_REQUEST_READ_CONTACTS: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    Log.d(TAG, "Call Phone permission granted");
+                } else
+                {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.negative_alert_title));
+                    builder.setMessage(getString(R.string.negative_contacts_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
+                }
+            }
+            case PERMISSION_REQUEST_RECORD_AUDIO: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    Log.d(TAG, "Record Audio permission granted");
+                } else
+                {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.negative_alert_title));
+                    builder.setMessage(getString(R.string.negative_record_audio_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
+                }
+            }
             case PERMISSION_REQUEST_WRITE_STORAGE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 {
                     Log.d(TAG, "Write to storage permission granted");
-                    setupBLE();
                 } else
                 {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(this);
