@@ -849,7 +849,6 @@ public class MainActivity extends AppCompatActivity {
                     mDeviceAddress = devices.getAddress();
                     Log.d(TAG,"Address: " + mDeviceAddress);
 
-
                     bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
                     scanLeDevice(false);
                     return;
@@ -1144,10 +1143,12 @@ public class MainActivity extends AppCompatActivity {
             }
             textView7.setText(Math.round(odometer) + " " + distanceUnit);
             // TEMP
+            /*
             final StringBuilder stringBuilder = new StringBuilder(Data.getLastMessage().length);
             for (byte byteChar : Data.getLastMessage())
                 stringBuilder.append(String.format("%02x", byteChar));
             textView7.setText(stringBuilder.toString());
+            */
             // End TEMP
         } else {
             textView7.setText(getString(R.string.blank_field));

@@ -119,7 +119,75 @@ public class BluetoothLeService extends Service {
      */
     private static String mBluetoothDeviceAddress;
     private static String mBluetoothDeviceName;
-    private static Context mContext;
+
+    private final IBinder mBinder = new LocalBinder();
+    /**
+     * Flag to check the mBound status
+     */
+    public boolean mBound;
+    /**
+     * BlueTooth manager for handling connections
+     */
+    private BluetoothManager mBluetoothManager;
+
+    /**
+     * After using a given BLE device, the app must call this method to ensure
+     * resources are released properly.
+     */
+    public static void close() {
+        mBluetoothGatt.close();
+        mBluetoothGatt = null;
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        mBound = true;
+        return mBinder;
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        mBound = false;
+        close();
+        return super.onUnbind(intent);
+    }
+
+    /**
+     * Initializes a reference to the local BlueTooth adapter.
+     *
+     * @return Return true if the initialization is successful.
+     */
+    public boolean initialize() {
+        // For API level 18 and above, get a reference to BluetoothAdapter
+        // through
+        // BluetoothManager.
+        if (mBluetoothManager == null) {
+            mBluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+            if (mBluetoothManager == null) {
+                return false;
+            }
+        }
+
+        mBluetoothAdapter = mBluetoothManager.getAdapter();
+        return mBluetoothAdapter != null;
+    }
+
+    @Override
+    public void onCreate() {
+        // Initializing the service
+        if (!initialize()) {
+            Log.d(TAG,"Service not initialized");
+        }
+    }
+
+    /**
+     * Local binder class
+     */
+    public class LocalBinder extends Binder {
+        public BluetoothLeService getService() {
+            return BluetoothLeService.this;
+        }
+    }
 
     /**
      * Implements callback methods for GATT events that the app cares about. For
@@ -129,8 +197,6 @@ public class BluetoothLeService extends Service {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status,
                                             int newState) {
-
-            Log.d(TAG,"onConnectionStateChange");
             String intentAction;
             // GATT Server connected
             if (newState == BluetoothProfile.STATE_CONNECTED) {
@@ -194,26 +260,9 @@ public class BluetoothLeService extends Service {
         @Override
         public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor,
                                       int status) {
-            String serviceUUID = descriptor.getCharacteristic().getService().getUuid().toString();
-            String serviceName = GattAttributes.lookupUUID(descriptor.getCharacteristic().
-                    getService().getUuid(), serviceUUID);
-
-
-            String characteristicUUID = descriptor.getCharacteristic().getUuid().toString();
-            String characteristicName = GattAttributes.lookupUUID(descriptor.getCharacteristic().
-                    getUuid(), characteristicUUID);
-
-            String descriptorUUID = descriptor.getUuid().toString();
-            String descriptorName = GattAttributes.lookupUUID(descriptor.getUuid(), descriptorUUID);
-
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                String dataLog = "[" + serviceName + "|" + characteristicName + "|" + descriptorName + "] " +
-                        "Write request status"
-                        + "," +
-                        "[00]";
                 Intent intent = new Intent(ACTION_WRITE_SUCCESS);
                 MyApplication.getContext().sendBroadcast(intent);
-                Log.d(TAG,dataLog);
                 if (descriptor.getValue() != null)
                     addRemoveData(descriptor);
                 if (mDisableNotificationFlag) {
@@ -225,10 +274,6 @@ public class BluetoothLeService extends Service {
                 Intent intent = new Intent(ACTION_WRITE_FAILED);
                 MyApplication.getContext().sendBroadcast(intent);
             } else {
-                String dataLog = "[" + serviceName + "|" + characteristicName + "|" + descriptorName + "] " +
-                        "Write request status failed with error code: " +
-                        +status;
-                Log.d(TAG,dataLog);
                 mDisableNotificationFlag = false;
                 Intent intent = new Intent(ACTION_WRITE_FAILED);
                 MyApplication.getContext().sendBroadcast(intent);
@@ -239,71 +284,31 @@ public class BluetoothLeService extends Service {
         @Override
         public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor,
                                      int status) {
-            String serviceUUID = descriptor.getCharacteristic().getService().getUuid().toString();
-            String serviceName = GattAttributes.lookupUUID(descriptor.getCharacteristic().getService().getUuid(), serviceUUID);
-
-            String characteristicUUID = descriptor.getCharacteristic().getUuid().toString();
-            String characteristicName = GattAttributes.lookupUUID(descriptor.getCharacteristic().getUuid(), characteristicUUID);
-
-            String descriptorUUIDText = descriptor.getUuid().toString();
-            String descriptorName = GattAttributes.lookupUUID(descriptor.getUuid(), descriptorUUIDText);
-
-            String descriptorValue = " " + Utils.ByteArraytoHex(descriptor.getValue()) + " ";
-
-            String dataLog = "[" + serviceName + "|" + characteristicName + "|" + descriptorName + "] " +
-                    "Read response recieved with value ," +
-                    "[" + descriptorValue + "]";
+            String dataLog = "Read response received";
             Log.d(TAG,dataLog);
         }
 
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic
                 characteristic, int status) {
-            String serviceUUID = characteristic.getService().getUuid().toString();
-            String serviceName = GattAttributes.lookupUUID(characteristic.getService().getUuid(), serviceUUID);
-
-            String characteristicUUID = characteristic.getUuid().toString();
-            String characteristicName = GattAttributes.lookupUUID(characteristic.getUuid(), characteristicUUID);
-
-            String dataLog = "";
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                dataLog = "[" + serviceName + "|" + characteristicName + "] " +
-                        "write request status  - Success";
                 Intent intent = new Intent(ACTION_WRITE_SUCCESS);
                 intent.putExtra("ACTION_WRITE_SUCCESS", "" + status);
                 MyApplication.getContext().sendBroadcast(intent);
-                Log.d(TAG,dataLog);
             } else {
-                dataLog = "[" + serviceName + "|" + characteristicName + "] " +
-                        "Write request status - Failed with error code: " + status;
                 Intent intent = new Intent(ACTION_GATT_CHARACTERISTIC_ERROR);
                 intent.putExtra("EXTRA_CHARACTERISTIC_ERROR_MESSAGE", "" + status);
                 MyApplication.getContext().sendBroadcast(intent);
-                Log.d(TAG,dataLog);
             }
         }
 
         @Override
         public void onCharacteristicRead(BluetoothGatt gatt,
                                          BluetoothGattCharacteristic characteristic, int status) {
-            String serviceUUID = characteristic.getService().getUuid().toString();
-            String serviceName = GattAttributes.lookupUUID(characteristic.getService().getUuid(), serviceUUID);
-
-            String characteristicUUID = characteristic.getUuid().toString();
-            String characteristicName = GattAttributes.lookupUUID(characteristic.getUuid(), characteristicUUID);
-
-            String characteristicValue = " " + Utils.ByteArraytoHex(characteristic.getValue()) + " ";
             // GATT Characteristic read
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                String dataLog = "[" + serviceName + "|" + characteristicName + "] " +
-                        "Read response received with value , " +
-                        "[" + characteristicValue + "]";
-                Log.d(TAG,dataLog);
                 broadcastNotifyUpdate(characteristic);
             } else {
-                String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
-                        "Read request status - failed with error code: " + status;
-                Log.d(TAG,dataLog);
                 if (status == BluetoothGatt.GATT_INSUFFICIENT_AUTHENTICATION
                         || status == BluetoothGatt.GATT_INSUFFICIENT_ENCRYPTION) {
                     bondDevice();
@@ -314,26 +319,9 @@ public class BluetoothLeService extends Service {
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt,
                                             BluetoothGattCharacteristic characteristic) {
-            String serviceUUID = characteristic.getService().getUuid().toString();
-            String serviceName = GattAttributes.lookupUUID(characteristic.getService().getUuid(), serviceUUID);
-
-            String characteristicUUID = characteristic.getUuid().toString();
-            String characteristicName = GattAttributes.lookupUUID(characteristic.getUuid(), characteristicUUID);
-
-            String characteristicValue = Utils.ByteArraytoHex(characteristic.getValue());
             broadcastNotifyUpdate(characteristic);
         }
     };
-
-    private final IBinder mBinder = new LocalBinder();
-    /**
-     * Flag to check the mBound status
-     */
-    public boolean mBound;
-    /**
-     * BlueTooth manager for handling connections
-     */
-    private BluetoothManager mBluetoothManager;
 
     private static void broadcastConnectionUpdate(final String action) {
         Log.d(TAG,"Action: " + action);
@@ -419,31 +407,10 @@ public class BluetoothLeService extends Service {
         mBluetoothGatt = device.connectGatt(MyApplication.getContext(), false, mGattCallback);
         mBluetoothDeviceAddress = address;
         mBluetoothDeviceName = devicename;
-        /*
-         * Adding data to the data logger
-         */
+
         String dataLog = "[" + devicename + "|" + address + "] " +
                 "Connection request sent";
         Log.d(TAG,dataLog);
-    }
-
-    /**
-     * Method to clear the device cache
-     *
-     * @param gatt
-     * @return boolean
-     */
-    public static boolean refreshDeviceCache(BluetoothGatt gatt) {
-        try {
-            Method localMethod = gatt.getClass().getMethod("refresh");
-            if (localMethod != null) {
-                Log.d(TAG,"In refreshDeviceCache");
-                return (Boolean) localMethod.invoke(gatt);
-            }
-        } catch (Exception localException) {
-            Log.d(TAG,"An exception occured while refreshing device");
-        }
-        return false;
     }
 
     /**
@@ -455,7 +422,6 @@ public class BluetoothLeService extends Service {
     public static void disconnect() {
         Log.d(TAG,"disconnect called");
         if (mBluetoothAdapter != null || mBluetoothGatt != null) {
-            BluetoothLeService.refreshDeviceCache(BluetoothLeService.mBluetoothGatt);
             mBluetoothGatt.disconnect();
             String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
                     "Disconnection request sent";
@@ -485,90 +451,10 @@ public class BluetoothLeService extends Service {
      */
     public static void readCharacteristic(
             BluetoothGattCharacteristic characteristic) {
-        String serviceUUID = characteristic.getService().getUuid().toString();
-        String serviceName = GattAttributes.lookupUUID(characteristic.getService().getUuid(), serviceUUID);
-
-        String characteristicUUID = characteristic.getUuid().toString();
-        String characteristicName = GattAttributes.lookupUUID(characteristic.getUuid(), characteristicUUID);
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
             return;
         }
         mBluetoothGatt.readCharacteristic(characteristic);
-        String dataLog = "[" + serviceName + "|" + characteristicName + "] " +
-                "Read Request Sent";
-        Log.d(TAG,dataLog);
-    }
-
-    /**
-     * Request a read on a given {@code BluetoothGattDescriptor }.
-     *
-     * @param descriptor The descriptor to read from.
-     */
-    public static void readDescriptor(
-            BluetoothGattDescriptor descriptor) {
-        String serviceUUID = descriptor.getCharacteristic().getService().getUuid().toString();
-        String serviceName = GattAttributes.lookupUUID(descriptor.getCharacteristic().getService().getUuid(), serviceUUID);
-
-        String characteristicUUID = descriptor.getCharacteristic().getUuid().toString();
-        String characteristicName = GattAttributes.lookupUUID(descriptor.getCharacteristic().getUuid(), characteristicUUID);
-        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            return;
-        }
-        mBluetoothGatt.readDescriptor(descriptor);
-        String dataLog = "[" + serviceName + "|" + characteristicName + "] " +
-                "Read Request Sent";
-        Log.d(TAG,dataLog);
-    }
-
-    /**
-     * Request a write with no response on a given
-     * {@code BluetoothGattCharacteristic}.
-     *
-     * @param characteristic
-     * @param byteArray      to write
-     */
-    public static void writeCharacteristicNoresponse(
-            BluetoothGattCharacteristic characteristic, byte[] byteArray) {
-        String serviceUUID = characteristic.getService().getUuid().toString();
-        String serviceName = GattAttributes.lookupUUID(characteristic.getService().getUuid(), serviceUUID);
-
-        String characteristicUUID = characteristic.getUuid().toString();
-        String characteristicName = GattAttributes.lookupUUID(characteristic.getUuid(), characteristicUUID);
-
-        String characteristicValue = Utils.ByteArraytoHex(byteArray);
-        if (mBluetoothAdapter != null || mBluetoothGatt != null) {
-            characteristic.setValue(byteArray);
-            mBluetoothGatt.writeCharacteristic(characteristic);
-            String dataLog = "[" + serviceName + "|" + characteristicName + "] " +
-                    "Write Request Sent With Value , " +
-                    "[ " + characteristicValue + " ]";
-            Log.d(TAG,dataLog);
-        }
-    }
-
-    /**
-     * Request a write on a given {@code BluetoothGattCharacteristic}.
-     *
-     * @param characteristic
-     * @param byteArray
-     */
-    public static void writeCharacteristicGattDb(
-            BluetoothGattCharacteristic characteristic, byte[] byteArray) {
-        String serviceUUID = characteristic.getService().getUuid().toString();
-        String serviceName = GattAttributes.lookupUUID(characteristic.getService().getUuid(), serviceUUID);
-
-        String characteristicUUID = characteristic.getUuid().toString();
-        String characteristicName = GattAttributes.lookupUUID(characteristic.getUuid(), characteristicUUID);
-
-        String characteristicValue = Utils.ByteArraytoHex(byteArray);
-        if (mBluetoothAdapter != null || mBluetoothGatt != null) {
-            characteristic.setValue(byteArray);
-            mBluetoothGatt.writeCharacteristic(characteristic);
-            String dataLog = "[" + serviceName + "|" + characteristicName + "] " +
-                    "Write Request Sent With Value , " +
-                    "[ " + characteristicValue + " ]";
-            Log.d(TAG,dataLog);
-        }
     }
 
     /**
@@ -587,8 +473,6 @@ public class BluetoothLeService extends Service {
         if ((properties & (BluetoothGattCharacteristic.PROPERTY_WRITE | BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE)) == 0)
             return false;
 
-        Log.d(TAG,"Writing characteristic " + characteristic.getUuid());
-        Log.d(TAG,"gatt.writeCharacteristic(" + characteristic.getUuid() + ")");
         return gatt.writeCharacteristic(characteristic);
     }
 
@@ -600,15 +484,6 @@ public class BluetoothLeService extends Service {
      */
     public static void setCharacteristicNotification(
             BluetoothGattCharacteristic characteristic, boolean enabled) {
-        String serviceUUID = characteristic.getService().getUuid().toString();
-        String serviceName = GattAttributes.lookupUUID(characteristic.getService().getUuid(), serviceUUID);
-
-        String characteristicUUID = characteristic.getUuid().toString();
-        String characteristicName = GattAttributes.lookupUUID(characteristic.getUuid(), characteristicUUID);
-
-        String descriptorUUID = GattAttributes.CLIENT_CHARACTERISTIC_CONFIG;
-        String descriptorName = GattAttributes.lookupUUID(UUIDDatabase.
-                UUID_CLIENT_CHARACTERISTIC_CONFIG, descriptorUUID);
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
             return;
         }
@@ -621,10 +496,6 @@ public class BluetoothLeService extends Service {
                 descriptor
                         .setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
                 mBluetoothGatt.writeDescriptor(descriptor);
-                String dataLog = "[" + serviceName + "|" + characteristicName + "|" + descriptorName + "] " +
-                        "Write Request Sent With Value , " +
-                        "[" + Utils.ByteArraytoHex(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE) + "]";
-                Log.d(TAG,dataLog);
 
             } else {
                 BluetoothGattDescriptor descriptor = characteristic
@@ -633,23 +504,16 @@ public class BluetoothLeService extends Service {
                 descriptor
                         .setValue(BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
                 mBluetoothGatt.writeDescriptor(descriptor);
-                String dataLog = "[" + serviceName + "|" + characteristicName + "|" + descriptorName + "] " +
-                        "Write Request Sent With Value , " +
-                        "[" + Utils.ByteArraytoHex(BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE) + "]";
-                Log.d(TAG,dataLog);
             }
         }
         mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
         if (enabled) {
-            String dataLog = "[" + serviceName + "|" + characteristicName + "] " +
-                    "Start notification request sent";
+            String dataLog = "Start notification request sent";
             Log.d(TAG,dataLog);
         } else {
-            String dataLog = "[" + serviceName + "|" + characteristicName + "] " +
-                    "Stop notification request sent";
+            String dataLog = "Stop notification request sent";
             Log.d(TAG,dataLog);
         }
-
     }
 
     /**
@@ -686,12 +550,12 @@ public class BluetoothLeService extends Service {
                 break;
             case 1:
                 //Enabled notification
-                Log.d(TAG,"added notify characteristic");
+                Log.d(TAG,"Added notify characteristic");
                 addEnabledCharacteristic(descriptor.getCharacteristic());
                 break;
             case 2:
                 //Enabled indication
-                Log.d(TAG,"added indicate characteristic");
+                Log.d(TAG,"Added indicate characteristic");
                 addEnabledCharacteristic(descriptor.getCharacteristic());
                 break;
         }
@@ -718,65 +582,6 @@ public class BluetoothLeService extends Service {
             setCharacteristicNotification(bluetoothGattCharacteristic, false);
         } else {
             mDisableNotificationFlag = false;
-        }
-    }
-
-    /**
-     * After using a given BLE device, the app must call this method to ensure
-     * resources are released properly.
-     */
-    public static void close() {
-        mBluetoothGatt.close();
-        mBluetoothGatt = null;
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        mBound = true;
-        return mBinder;
-    }
-
-    @Override
-    public boolean onUnbind(Intent intent) {
-        mBound = false;
-        close();
-        return super.onUnbind(intent);
-    }
-
-    /**
-     * Initializes a reference to the local BlueTooth adapter.
-     *
-     * @return Return true if the initialization is successful.
-     */
-    public boolean initialize() {
-        // For API level 18 and above, get a reference to BluetoothAdapter
-        // through
-        // BluetoothManager.
-        if (mBluetoothManager == null) {
-            mBluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-            if (mBluetoothManager == null) {
-                return false;
-            }
-        }
-
-        mBluetoothAdapter = mBluetoothManager.getAdapter();
-        return mBluetoothAdapter != null;
-    }
-
-    @Override
-    public void onCreate() {
-        // Initializing the service
-        if (!initialize()) {
-            Log.d(TAG,"Service not initialized");
-        }
-    }
-
-    /**
-     * Local binder class
-     */
-    public class LocalBinder extends Binder {
-        public BluetoothLeService getService() {
-            return BluetoothLeService.this;
         }
     }
 
