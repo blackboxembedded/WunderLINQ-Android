@@ -362,7 +362,7 @@ public class BluetoothLeService extends Service {
                     }
                     try {
                         Cipher cipher = Cipher.getInstance("AES");
-                        byte[] encoded = "TheBestSecretKey".getBytes("UTF-8");
+                        byte[] encoded = "wTKkVwtrBbrZKmYj".getBytes("UTF-8");
                         SecretKey secretKey = new SecretKeySpec(encoded, "AES");
                         cipher.init(Cipher.ENCRYPT_MODE, secretKey);
 

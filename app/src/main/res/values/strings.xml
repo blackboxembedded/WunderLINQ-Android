@@ -575,7 +575,7 @@
     <string name="pref_debuglogging_summary">Only enable if needed by Support, may impact performance if left running.  Please disable when finished.</string>
     <string name="pref_sendlogs_email" translatable="false">support@blackboxembedded.com</string>
     <string name="pref_sendlogs_subject" translatable="false">WunderLINQ Debug Logs</string>
-    <string name="pref_sendlogs_body">Please describe your problem below:</string>
+    <string name="pref_sendlogs_body">Please describe your problem below:\n</string>
     <string name="pref_sendlogs_intent_title">Send Logs...</string>
     <string name="hw_settings_title">WunderLINQ hardware Settings</string>
     <string name="pref_btn_version_title">WunderLINQ Version</string>
