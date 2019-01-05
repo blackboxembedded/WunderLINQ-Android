@@ -16,7 +16,9 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.hardware.camera2.CameraCharacteristics;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -39,6 +41,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -506,8 +511,9 @@ public class TaskActivity extends AppCompatActivity {
                         //Navigate Home
                         String address = sharedPrefs.getString("prefHomeAddress","");
                         if ( address != "" ) {
+                            LatLng location = getLocationFromAddress(TaskActivity.this, address);
                             Intent goHomeIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                            goHomeIntent.setData(Uri.parse("google.navigation:q=" + address));
+                            goHomeIntent.setData(Uri.parse("google.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude)));
                             startActivity(goHomeIntent);
                         } else {
                             Toast.makeText(TaskActivity.this, R.string.toast_address_not_set, Toast.LENGTH_LONG).show();
@@ -921,6 +927,30 @@ public class TaskActivity extends AppCompatActivity {
 
         });
         // End of Tasks
+    }
+
+    public LatLng getLocationFromAddress(Context context, String strAddress) {
+
+        Geocoder coder = new Geocoder(context);
+        List<Address> address;
+        LatLng p1 = null;
+
+        try {
+            // May throw an IOException
+            address = coder.getFromLocationName(strAddress, 5);
+            if (address == null) {
+                return null;
+            }
+
+            Address location = address.get(0);
+            p1 = new LatLng(location.getLatitude(), location.getLongitude() );
+
+        } catch (IOException ex) {
+
+            ex.printStackTrace();
+        }
+
+        return p1;
     }
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
