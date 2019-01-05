@@ -225,40 +225,25 @@
             android:title="@string/pref_fuelAlert_name" >
         </CheckBoxPreference>
     </PreferenceCategory>
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="prefAutoLaunch"
-        android:summary="@string/pref_autolaunch_summary"
-        android:title="@string/pref_autolaunch_name" >
-    </CheckBoxPreference>
     <PreferenceCategory android:title="@string/advanced_settings_title" >
-        <Preference android:title="@string/pref_btn_sendlogs_title"
-            android:key="prefSendLog"
-            android:summary="@string/pref_btn_sendlogs_summary"/>
-        <Preference android:title="@string/pref_btn_version_title"
-            android:key="prefVersion"
-            android:summary=""/>
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="prefAutoLaunch"
+            android:summary="@string/pref_autolaunch_summary"
+            android:title="@string/pref_autolaunch_name" >
+        </CheckBoxPreference>
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/debug_settings_title"
         android:key="prefDebugCategory">
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="prefDataLogging"
-            android:summary="@string/pref_dataLogging_summary"
-            android:title="@string/pref_dataLogging_name" >
+            android:key="prefDebugLogging"
+            android:summary="@string/pref_debuglogging_summary"
+            android:title="@string/pref_debuglogging_name" >
         </CheckBoxPreference>
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="prefShowRaw"
-            android:summary="@string/pref_showRaw_summary"
-            android:title="@string/pref_showRaw_name" >
-        </CheckBoxPreference>
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="prefShowUartFaults"
-            android:summary="@string/pref_showUartFaults_summary"
-            android:title="@string/pref_showUartFaults_name" >
-        </CheckBoxPreference>
+        <Preference android:title="@string/pref_btn_sendlogs_title"
+            android:key="prefSendLog"
+            android:summary="@string/pref_btn_sendlogs_summary"/>
     </PreferenceCategory>
 </PreferenceScreen>

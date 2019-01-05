@@ -56,9 +56,6 @@
     <string name="notification_channel">Aktivní chyby</string>
 
     <!-- Fault strings -->
-    <string name="fault_UARTERR">Chyba UART</string>
-    <string name="fault_UARTCTF">UART Comm Timeout</string>
-    <string name="fault_UARTLF">UART Logic</string>
     <string name="fault_ABSSLF">Diagnotiska ABS nebyla dokončena</string>
     <string name="fault_ABSERR">Chyba ABS</string>
     <string name="fault_ABSDAC">ABS vypnuto</string>
@@ -399,4 +396,6 @@
     <string name="credits_label">Credits</string>
     <string name="pref_autolaunch_name">Auto Launch App</string>
     <string name="pref_autolaunch_summary">Auto launch WunderLINQ app when WunderLINQ hardware connects</string>
+    <string name="pref_debuglogging_name">Enable Debug Logging</string>
+    <string name="pref_debuglogging_summary">Only enable if needed by Support, may impact performance if left running.  Please disable when finished.</string>
 </resources>

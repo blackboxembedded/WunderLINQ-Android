@@ -79,8 +79,6 @@
         <activity android:name=".AlertActivity" />
         <activity android:name=".AboutActivity" />
         <activity android:name=".FWConfigActivity"/>
-        <activity android:name=".DebugActivity"
-            android:screenOrientation="portrait" />
 
         <service
             android:name=".NotificationListener"

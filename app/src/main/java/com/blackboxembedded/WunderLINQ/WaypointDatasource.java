@@ -29,6 +29,7 @@ public class WaypointDatasource {
 
     //Get records in database
     public List<WaypointRecord> getAllRecords() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
         List<WaypointRecord> pageList = new ArrayList<>();
 
         Cursor c = db.query(sqlTable, new String[] {"_id", "date", "data", "label"}, null, null, null, null,  "date DESC");
@@ -43,6 +44,7 @@ public class WaypointDatasource {
         }
 
         c.close();
+        db.close();
         return pageList;
     }
     // Add record to database
@@ -81,7 +83,7 @@ public class WaypointDatasource {
             c.moveToFirst();
         }
         WaypointRecord record = cursorToRecord(c);
-        //db.close();
+        db.close();
         return record;
     }
     public Cursor getAllRecordsCursor() {
@@ -91,7 +93,7 @@ public class WaypointDatasource {
         if (c != null) {
             c.moveToFirst();
         }
-
+        db.close();
         return c;
     }
     private WaypointRecord cursorToRecord(Cursor cursor) {

@@ -58,9 +58,6 @@
     <string name="notification_channel">Aktivne napake</string>
 
     <!-- Fault strings -->
-    <string name="fault_UARTERR">UART napaka</string>
-    <string name="fault_UARTCTF">UART izpad komunikacije</string>
-    <string name="fault_UARTLF">UART Logic</string>
     <string name="fault_ABSSLF">ABS samodiagnoza ni zaključena</string>
     <string name="fault_ABSERR">ABS napaka</string>
     <string name="fault_ABSDAC">ABS izklopljen</string>
@@ -427,4 +424,6 @@
     <string name="credits_label">Sodelujoči</string>
     <string name="pref_autolaunch_name">Auto Launch App</string>
     <string name="pref_autolaunch_summary">Auto launch WunderLINQ app when WunderLINQ hardware connects</string>
+    <string name="pref_debuglogging_name">Enable Debug Logging</string>
+    <string name="pref_debuglogging_summary">Only enable if needed by Support, may impact performance if left running.  Please disable when finished.</string>
 </resources>

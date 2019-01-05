@@ -78,9 +78,6 @@
     <string name="notification_channel">Fallos Activos</string>
 
     <!-- Fault strings -->
-    <string name="fault_UARTERR">Error de UART</string>
-    <string name="fault_UARTCTF">Tiempo de espera agotado de la comunicación con la UART</string>
-    <string name="fault_UARTLF">Lógica UART</string>
     <string name="fault_ABSSLF">El auto-diagnóstico del ABS no se ha completado</string>
     <string name="fault_ABSERR">Error del ABS</string>
     <string name="fault_ABSDAC">ABS desactivado</string>
@@ -421,6 +418,8 @@
     <string name="credits_label">créditos</string>
     <string name="pref_autolaunch_name">Auto Launch App</string>
     <string name="pref_autolaunch_summary">Auto launch WunderLINQ app when WunderLINQ hardware connects</string>
+    <string name="pref_debuglogging_name">Enable Debug Logging</string>
+    <string name="pref_debuglogging_summary">Only enable if needed by Support, may impact performance if left running.  Please disable when finished.</string>
 
     <!-- AboutActivity -->
 </resources>

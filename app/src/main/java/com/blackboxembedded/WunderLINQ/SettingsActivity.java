@@ -9,22 +9,19 @@ import android.os.Environment;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class SettingsActivity extends PreferenceActivity{
 
     private final static String TAG = "SettingsActivity";
     private static SharedPreferences sharedPrefs;
-
-    private static int versionButtonTouches = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,12 +50,6 @@ public class SettingsActivity extends PreferenceActivity{
             EditTextPreference favNumberPref = (EditTextPreference) findPreference("prefHomePhone");
             favNumberPref.setSummary(sharedPrefs.getString("prefHomePhone",getString(R.string.pref_homePhone_summary)));
 
-            if (!(sharedPrefs.getBoolean("DEBUG_ENABLED",false))){
-                PreferenceScreen preferenceScreen = getPreferenceScreen();
-                PreferenceCategory myCategory = (PreferenceCategory) findPreference("prefDebugCategory");
-                preferenceScreen.removePreference(myCategory);
-            }
-
             Preference button = findPreference("prefSendLog");
             button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -79,15 +70,23 @@ public class SettingsActivity extends PreferenceActivity{
                         e.printStackTrace();
                     }
 
+                    File debugFile = new File(MyApplication.getContext().getCacheDir(), "/tmp/dbg");
+
                     //send file using email
-                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                    Intent emailIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
                     // set the type to 'email'
                     emailIntent.setType("text/plain");
                     String to[] = {getString(R.string.pref_sendlogs_email)};
                     emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
                     // the attachment
-                    Uri uri = FileProvider.getUriForFile(getActivity(), "com.blackboxembedded.wunderlinq.fileprovider", outputFile);
-                    emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                    //has to be an ArrayList
+                    ArrayList<Uri> uris = new ArrayList<Uri>();
+                    if(debugFile.exists()){
+                        uris.add(FileProvider.getUriForFile(getActivity(), "com.blackboxembedded.wunderlinq.fileprovider", debugFile));
+                    }
+                    //convert from paths to Android friendly Parcelable Uri's
+                    uris.add(FileProvider.getUriForFile(getActivity(), "com.blackboxembedded.wunderlinq.fileprovider", outputFile));
+                    emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
                     // the mail subject
                     emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.pref_sendlogs_subject));
                     emailIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.pref_sendlogs_body));
@@ -97,26 +96,6 @@ public class SettingsActivity extends PreferenceActivity{
                     return true;
                 }
             });
-
-            //Secret Debug Menu
-            String versionName = BuildConfig.VERSION_NAME;
-            final Preference versionButton = findPreference("prefVersion");
-            versionButton.setSummary(versionName);
-            /*
-            versionButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    versionButtonTouches = versionButtonTouches + 1;
-                    if (versionButtonTouches == 10) {
-                        Toast.makeText(getActivity(), R.string.pref_btn_version_toast, Toast.LENGTH_LONG).show();
-                        SharedPreferences.Editor editor = sharedPrefs.edit();
-                        editor.putBoolean("DEBUG_ENABLED", true);
-                        editor.commit();
-                    }
-                    return true;
-                }
-            });
-            */
         }
 
         @Override

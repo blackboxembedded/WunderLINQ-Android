@@ -9,10 +9,6 @@
         android:icon="@drawable/ic_cog"
         android:title="@string/hwsettings_label"
         app:showAsAction="always|withText"/>
-    <item android:id="@+id/action_debug"
-        android:icon="@drawable/ic_cog"
-        android:title="@string/hwdebug_label"
-        app:showAsAction="always|withText"/>
     <item android:id="@+id/action_about"
         android:icon="@drawable/ic_info_circle"
         android:title="@string/info_label"

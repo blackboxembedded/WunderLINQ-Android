@@ -156,12 +156,6 @@ public class MainActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if (!(sharedPrefs.getBoolean("DEBUG_ENABLED",false))){
-            SharedPreferences.Editor editor = sharedPrefs.edit();
-            editor.putBoolean("prefDataLogging", false);
-            editor.putBoolean("prefShowRaw", false);
-            editor.commit();
-        }
 
         String orientation = sharedPrefs.getString("prefOrientation", "0");
         if (!orientation.equals("0")){
@@ -434,6 +428,7 @@ public class MainActivity extends AppCompatActivity {
         dataButton = (ImageButton) findViewById(R.id.action_data);
         faultButton = (ImageButton) findViewById(R.id.action_faults);
         btButton = (ImageButton) findViewById(R.id.action_connect);
+        btButton.setEnabled(false);
 
         navbarTitle = (TextView) findViewById(R.id.action_title);
         navbarTitle.setText(R.string.main_title);
@@ -443,6 +438,7 @@ public class MainActivity extends AppCompatActivity {
         faultButton.setOnClickListener(mClickListener);
         otherButton.setOnClickListener(mClickListener);
         dataButton.setOnClickListener(mClickListener);
+        btButton.setOnClickListener(mClickListener);
 
         faultButton.setVisibility(View.GONE);
 
@@ -472,16 +468,18 @@ public class MainActivity extends AppCompatActivity {
         menuOtherInflater.inflate(R.menu.other_menu, mOtherMenu.getMenu());
         otherMenu = mOtherMenu.getMenu();
         otherMenu.findItem(R.id.action_hwsettings).setVisible(false);
-        if (sharedPrefs.getBoolean("DEBUG_ENABLED",false)){
-            otherMenu.findItem(R.id.action_debug).setVisible(true);
-        } else {
-            otherMenu.findItem(R.id.action_debug).setVisible(false);
-        }
         mOtherMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch(item.getItemId()) {
+                    case R.id.action_connect:
+                        if(!(Build.BRAND.startsWith("Android") && Build.DEVICE.startsWith("generic"))) {
+                            setupBLE();
+                        } else {
+                            Log.d(TAG,"Running in the emulator");
+                        }
+                        break;
                     case R.id.action_settings:
                         Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
                         startActivityForResult(settingsIntent, SETTINGS_CHECK);
@@ -489,12 +487,6 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.action_hwsettings:
                         Intent hwSettingsIntent = new Intent(MainActivity.this, FWConfigActivity.class);
                         startActivity(hwSettingsIntent);
-                        break;
-                    case R.id.action_debug:
-                        /*
-                        Intent debugIntent = new Intent(MainActivity.this, DebugActivity.class);
-                        startActivity(debugIntent);
-                        */
                         break;
                     case R.id.action_about:
                         Intent aboutIntent = new Intent(MainActivity.this, AboutActivity.class);
@@ -755,7 +747,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         Log.d(TAG,"In onDestroy");
-
+        super.onDestroy();
         try {
             unregisterReceiver(mGattUpdateReceiver);
             unregisterReceiver(mBondingBroadcast);
@@ -765,7 +757,6 @@ public class MainActivity extends AppCompatActivity {
         }
         mBluetoothLeService = null;
         sensorManager.unregisterListener(sensorEventListener, lightSensor);
-        super.onDestroy();
     }
 
     @Override
@@ -977,15 +968,18 @@ public class MainActivity extends AppCompatActivity {
                     updateDisplay();
                 }
                 btButton.setColorFilter(getResources().getColor(R.color.motorrad_red));
+                btButton.setEnabled(true);
                 otherMenu.findItem(R.id.action_hwsettings).setVisible(false);
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 Log.d(TAG,"GATT_SERVICE_DISCOVERED");
                 checkGattServices(mBluetoothLeService.getSupportedGattServices());
                 btButton.setColorFilter(getResources().getColor(R.color.motorrad_blue));
+                btButton.setEnabled(false);
                 otherMenu.findItem(R.id.action_hwsettings).setVisible(true);
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 //Log.d(TAG,"GATT_DATA_AVAILABLE");
                 btButton.setColorFilter(getResources().getColor(R.color.motorrad_blue));
+                btButton.setEnabled(false);
                 otherMenu.findItem(R.id.action_hwsettings).setVisible(true);
                 if (!sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
                     updateDisplay();
@@ -1149,16 +1143,14 @@ public class MainActivity extends AppCompatActivity {
                 odometer = Utils.kmToMiles(odometer);
             }
             textView7.setText(Math.round(odometer) + " " + distanceUnit);
+            // TEMP
+            final StringBuilder stringBuilder = new StringBuilder(Data.getLastMessage().length);
+            for (byte byteChar : Data.getLastMessage())
+                stringBuilder.append(String.format("%02x", byteChar));
+            textView7.setText(stringBuilder.toString());
+            // End TEMP
         } else {
             textView7.setText(getString(R.string.blank_field));
-        }
-        if (sharedPrefs.getBoolean("prefShowRaw", false)) {
-            if(Data.getLastMessage() != null){
-                final StringBuilder stringBuilder = new StringBuilder(Data.getLastMessage().length);
-                for (byte byteChar : Data.getLastMessage())
-                    stringBuilder.append(String.format("%02x", byteChar));
-                textView7.setText(stringBuilder.toString());
-            }
         }
         if(Data.getTripOne() != null && Data.getTripTwo() != null) {
             Double trip1 = Data.getTripOne();

@@ -11,17 +11,6 @@ import java.util.ArrayList;
 
 public class FaultStatus extends ContextWrapper {
 
-    // Debug faults
-    private static boolean uartErrorActive = false;
-    private static String uartErrorDesc = "";
-    private static String uartErrorCntDesc = "";
-
-    private static boolean uartCommTimeoutActive = false;
-    private static String uartCommTimeoutDesc = "";
-
-    private static boolean uartLogicActive = false;
-    private static String uartLogicDesc = "";
-
     // Motorcycle faults
     private static boolean absSelfDiagActive = false;
     private static String absSelfDiagDesc = "";
@@ -140,11 +129,6 @@ public class FaultStatus extends ContextWrapper {
 
     public FaultStatus(Context base) {
         super(base);
-        // Debug Faults
-        uartErrorDesc = MainActivity.getContext().getResources().getString(R.string.fault_UARTERR);
-        uartCommTimeoutDesc = MainActivity.getContext().getResources().getString(R.string.fault_UARTCTF);
-        uartLogicDesc = MainActivity.getContext().getResources().getString(R.string.fault_UARTLF);
-
         // Motorcycle faults
         absSelfDiagDesc = MainActivity.getContext().getResources().getString(R.string.fault_ABSSLF);
         absDeactivatedDesc = MainActivity.getContext().getResources().getString(R.string.fault_ABSDAC);
@@ -188,16 +172,6 @@ public class FaultStatus extends ContextWrapper {
 
     public static ArrayList<String> getallActiveDesc() {
         ArrayList<String> allActiveDesc = new ArrayList<String>();
-        // Debug faults
-        if(uartErrorActive){
-            allActiveDesc.add(uartErrorDesc);
-        }
-        if(uartCommTimeoutActive){
-            allActiveDesc.add(uartCommTimeoutDesc);
-        }
-        if(uartLogicActive){
-            allActiveDesc.add(uartLogicDesc);
-        }
 
         // Motorcycle faults
         if(absSelfDiagActive){
@@ -314,38 +288,6 @@ public class FaultStatus extends ContextWrapper {
 
         return allActiveDesc;
     }
-
-    // Debug faults
-    public static void setUartErrorActive(boolean uartErrorActive){
-        FaultStatus.uartErrorActive = uartErrorActive;
-    }
-    public static boolean getUartErrorActive() {
-        return uartErrorActive;
-    }
-    public static String getUartErrorDesc() {
-        return uartErrorDesc;
-    }
-
-    public static void setUartCommTimeoutActive(boolean uartCommTimeoutActive){
-        FaultStatus.uartCommTimeoutActive = uartCommTimeoutActive;
-    }
-    public static boolean getUartCommTimeoutActive() {
-        return uartCommTimeoutActive;
-    }
-    public static String getUartCommTimeoutDesc() {
-        return uartCommTimeoutDesc;
-    }
-
-    public static void setUartLogicActive(boolean uartLogicActive){
-        FaultStatus.uartLogicActive = uartLogicActive;
-    }
-    public static boolean getUartLogicActive() {
-        return uartLogicActive;
-    }
-    public static String getUartLogicDesc() {
-        return uartLogicDesc;
-    }
-
 
     // Motorcycle faults
     public static void setAbsSelfDiagActive(boolean absSelfDiagActive){

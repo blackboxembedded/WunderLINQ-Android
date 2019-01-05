@@ -25,10 +25,20 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Service for managing connection and data communication with a GATT server
@@ -38,13 +48,12 @@ public class BluetoothLeService extends Service {
 
     private final static String TAG = "BluetoothLeService";
 
-    private static Logger logger = null;
+    private static Logger debugLogger = null;
 
     private static boolean fuelAlertSent = false;
     private static int prevBrakeValue = 0;
 
     private static SharedPreferences sharedPrefs;
-
 
     /**
      * GATT Status constants
@@ -346,13 +355,33 @@ public class BluetoothLeService extends Service {
             final byte[] data = characteristic.getValue();
             if (data != null) {
                 sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
-                if (sharedPrefs.getBoolean("prefDataLogging", false)) {
+                if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
                     // Log data
-                    if (logger == null) {
-                        logger = new Logger();
+                    if (debugLogger == null) {
+                        debugLogger = new Logger();;
                     }
-                    logger.write(Utils.ByteArraytoHex(data));
+                    try {
+                        Cipher cipher = Cipher.getInstance("AES");
+                        byte[] encoded = "TheBestSecretKey".getBytes("UTF-8");
+                        SecretKey secretKey = new SecretKeySpec(encoded, "AES");
+                        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+
+                        debugLogger.write(Utils.ByteArraytoHexNoDelim(cipher.doFinal(data)));
+                    } catch (NoSuchAlgorithmException
+                            | NoSuchPaddingException
+                            | UnsupportedEncodingException
+                            | InvalidKeyException
+                            | BadPaddingException
+                            | IllegalBlockSizeException e){
+
+                    }
+                } else {
+                    if (debugLogger != null) {
+                        debugLogger.shutdown();
+                        debugLogger = null;
+                    }
                 }
+
                 parseMessage(data);
             }
         }
@@ -2064,18 +2093,6 @@ public class BluetoothLeService extends Service {
                     double trip2 = Utils.bytesToInt(data[6], data[5], data[4]) / 10;
                     Data.setTripTwo(trip2);
                 }
-                break;
-            case 0xff:
-                /*
-                Log.d(TAG,"Debug Message received: " + Utils.ByteArraytoHex(data));
-                //
-                if (sharedPrefs.getBoolean("prefShowUartFaults",false)) {
-                    FaultStatus.setUartErrorActive(true);
-                    if ((data[7] & 0xFF) == 0xf0){
-                        FaultStatus.setUartCommTimeoutActive(true);
-                    }
-                }
-                */
                 break;
             default:
                 //Log.d(TAG, "Unknown Message ID: " + String.format("%02x", msgID));

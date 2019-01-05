@@ -215,9 +215,6 @@
     <string name="notification_channel">Active Faults</string>
 
     <!-- Fault strings -->
-    <string name="fault_UARTERR">UART Error</string>
-    <string name="fault_UARTCTF">UART Comm Timeout</string>
-    <string name="fault_UARTLF">UART Logic</string>
     <string name="fault_ABSSLF">ABS self-diagnosis not completed</string>
     <string name="fault_ABSERR">ABS error</string>
     <string name="fault_ABSDAC">ABS deactivated</string>
@@ -574,6 +571,8 @@
     <string name="pref_btn_sendlogs_summary">Send Logs to Black Box Embedded Support</string>
     <string name="pref_autolaunch_name">Auto Launch App</string>
     <string name="pref_autolaunch_summary">Auto launch WunderLINQ app when WunderLINQ hardware connects</string>
+    <string name="pref_debuglogging_name">Enable Debug Logging</string>
+    <string name="pref_debuglogging_summary">Only enable if needed by Support, may impact performance if left running.  Please disable when finished.</string>
     <string name="pref_sendlogs_email" translatable="false">support@blackboxembedded.com</string>
     <string name="pref_sendlogs_subject" translatable="false">WunderLINQ Debug Logs</string>
     <string name="pref_sendlogs_body">Please describe your problem below:</string>

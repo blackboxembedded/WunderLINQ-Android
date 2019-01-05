@@ -1,6 +1,5 @@
 package com.blackboxembedded.WunderLINQ;
 
-import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
@@ -18,26 +17,18 @@ class Logger {
     private static void initialize()
     {
         try {
-            File root = new File(Environment.getExternalStorageDirectory(), "/WunderLINQ/debug/");
+            File root = new File(MyApplication.getContext().getCacheDir(), "/tmp/");
             if(!root.exists()){
                 if(!root.mkdirs()){
                     Log.d(TAG,"Unable to create directory: " + root);
                 }
             }
-
             if(root.canWrite()){
-                Log.d(TAG,"Initialize Raw Message Logging");
-                // Get current time
-                Calendar cal = Calendar.getInstance();
-                Date date = cal.getTime();
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-HH:mm:ss");
-                String curdatetime = formatter.format(date);
-                String filename = "WunderLINQ-raw-";
-                String header = "Time,Message\n";
-                File logFile = new File( root, filename + curdatetime + ".csv" );
+                Log.d(TAG,"Initialize Debug Message Logging");
+                String filename = "dbg";
+                File logFile = new File( root, filename );
                 FileWriter logWriter = new FileWriter( logFile );
                 outFile = new PrintWriter( logWriter );
-                outFile.write(header);
             }
         } catch (IOException e) {
             Log.d(TAG, "Could not write to file: " + e.getMessage());
@@ -46,7 +37,6 @@ class Logger {
 
     public void write(String entry)
     {
-
         if(outFile == null)
             initialize();
 
@@ -55,7 +45,7 @@ class Logger {
             // Get current time in UTC
             Calendar cal = Calendar.getInstance();
             Date date = cal.getTime();
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-HH:mm:ss.SSSZ");
             String curdatetime = formatter.format(date);
             outFile.write(curdatetime + "," + entry + "\n");
             outFile.flush();
