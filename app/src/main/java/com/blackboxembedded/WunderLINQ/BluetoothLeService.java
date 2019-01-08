@@ -1054,8 +1054,10 @@ public class BluetoothLeService extends Service {
                 Data.setThrottlePosition(throttlePosition);
 
                 // Engine Temperature
-                double engineTemp = ((data[4] & 0xFF) * 0.75) - 25;
-                Data.setEngineTemperature(engineTemp);
+                if ((data[4] & 0xFF) != 0xFF) {
+                    double engineTemp = ((data[4] & 0xFF) * 0.75) - 25;
+                    Data.setEngineTemperature(engineTemp);
+                }
 
                 // ASC Fault
                 int ascValue = ((data[5] & 0xFF)  >> 4) & 0x0f; // the highest 4 bits.
