@@ -171,11 +171,11 @@ public class Data {
     }
 
     // Speed
-    private static Integer speed;
-    public static Integer getSpeed() {
+    private static Double speed;
+    public static Double getSpeed() {
         return speed;
     }
-    public static void setSpeed(Integer speed){
+    public static void setSpeed(Double speed){
         Data.speed = speed;
     }
 

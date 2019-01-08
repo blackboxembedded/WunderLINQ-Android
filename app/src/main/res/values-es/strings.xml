@@ -215,29 +215,29 @@
 	    <string name="time_header">Tiempo</string>
 	    <string name="latitude_header">Latitud</string>
 	    <string name="longitude_header">Longitud</string>
-	    <string name="altitude_header">Altitud (m)</string>
-	    <string name="gpsspeed_header">Velocidad GPS (kmh)</string>
+	    <string name="altitude_header">Altitud</string>
+	    <string name="gpsspeed_header">Velocidad GPS</string>
 	    <string name="gear_header">Marcha</string>
-	    <string name="enginetemp_header">Temperatura del Motor (C)</string>
-	    <string name="ambienttemp_header">Temperatura Ambiente (C)</string>
-	    <string name="frontpressure_header">Presión del Neumático Delantero (bar)</string>
-	    <string name="rearpressure_header">Presión del Neumático Trasero (bar)</string>
-	    <string name="odometer_header">Odómetro (km)</string>
-	    <string name="voltage_header">Voltaje (V)</string>
-	    <string name="throttle_header">Posición del Acelerador (%)</string>
+	    <string name="enginetemp_header">Temperatura del Motor</string>
+	    <string name="ambienttemp_header">Temperatura Ambiente</string>
+	    <string name="frontpressure_header">Presión del Neumático Delantero</string>
+	    <string name="rearpressure_header">Presión del Neumático Trasero</string>
+	    <string name="odometer_header">Odómetro</string>
+	    <string name="voltage_header">Voltaje</string>
+	    <string name="throttle_header">Posición del Acelerador</string>
 	    <string name="frontbrakes_header">Frenos Delanteros</string>
 	    <string name="rearbrakes_header">Frenos Traseros</string>
 	    <string name="shifts_header">Cambios de marcha</string>
 	    <string name="vin_header">VIN</string>
 	    <string name="ambientlight_header">Luz ambiental</string>
-	    <string name="tripone_header">Trip1 (km)</string>
-	    <string name="triptwo_header">Trip2 (km)</string>
-	    <string name="tripauto_header">Auto Trip (km)</string>
-	    <string name="speed_header">Velocidad (kmh)</string>
-	    <string name="avgspeed_header">Velocidad Media (kmh)</string>
-	    <string name="cconsumption_header">Consumo actual (L/100)</string>
-	    <string name="fueleconomyone_header">Combustible 1 (L/100)</string>
-	    <string name="fueleconomytwo_header">Combustible 2 (L/100)</string>
+	    <string name="tripone_header">Trip1</string>
+	    <string name="triptwo_header">Trip2</string>
+	    <string name="tripauto_header">Auto Trip</string>
+	    <string name="speed_header">Velocidad</string>
+	    <string name="avgspeed_header">Velocidad Media</string>
+	    <string name="cconsumption_header">Consumo actual</string>
+	    <string name="fueleconomyone_header">Combustible 1</string>
+	    <string name="fueleconomytwo_header">Combustible 2</string>
 	    <string name="fuelrange_header">Rango/Alcance (km)</string>
 
     <!-- VideoRecService -->
@@ -427,5 +427,4 @@
     <string name="call_alert_body">Please grant access to use your phone</string>
     <string name="call_alert_title">WunderLINQ needs permissions to use your phone to make phone calls</string>
 
-    <!-- AboutActivity -->
 </resources>

@@ -1171,7 +1171,7 @@ public class BluetoothLeService extends Service {
 
                 //Speed
                 if ((data[3] & 0xFF) != 0xFF) {
-                    int speed = (data[3] & 0xFF) * 2;
+                    double speed = (data[3] & 0xFF) * 2;
                     Data.setSpeed(speed);
                 }
 

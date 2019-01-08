@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -41,6 +43,8 @@ public class LoggingService extends Service implements LocationListener, GoogleA
 
     private static final String TAG = "WunderLINQ";
 
+    private SharedPreferences sharedPrefs;
+
     LocationRequest locationRequest;
     GoogleApiClient googleApiClient;
 
@@ -52,6 +56,11 @@ public class LoggingService extends Service implements LocationListener, GoogleA
 
     private int loggingInterval = 1000;
     private String CHANNEL_ID = "WunderLINQ";
+
+    String pressureFormat = "";
+    String temperatureFormat = "";
+    String distanceFormat = "";
+
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -161,33 +170,66 @@ public class LoggingService extends Service implements LocationListener, GoogleA
                 String curdatetime = formatter.format(date);
                 String filename = "WunderLINQ-TripLog-";
 
+                sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
+                String pressureUnit = "bar";
+                pressureFormat = sharedPrefs.getString("prefPressureF", "0");
+                if (pressureFormat.contains("1")) {
+                    // KPa
+                    pressureUnit = "KPa";
+                } else if (pressureFormat.contains("2")) {
+                    // Kg-f
+                    pressureUnit = "Kg-f";
+                } else if (pressureFormat.contains("3")) {
+                    // Psi
+                    pressureUnit = "psi";
+                }
+                String temperatureUnit = "C";
+                temperatureFormat = sharedPrefs.getString("prefTempF", "0");
+                if (temperatureFormat.contains("1")) {
+                    // F
+                    temperatureUnit = "F";
+                }
+                String distanceUnit = "km";
+                String heightUnit = "m";
+                String distanceTimeUnit = "kmh";
+                String consumptionUnit = "L/100";
+                distanceFormat = sharedPrefs.getString("prefDistance", "0");
+                if (distanceFormat.contains("1")) {
+                    distanceUnit = "mi";
+                    heightUnit = "ft";
+                    distanceTimeUnit = "mph";
+                    consumptionUnit = "mpg"; // 282.5 / (L/100)
+                }
+                String voltageUnit = "V";
+                String throttleUnit = "%";
+
                 String header = MyApplication.getContext().getResources().getString(R.string.time_header) + "," +
                         MyApplication.getContext().getResources().getString(R.string.latitude_header) + "," +
                         MyApplication.getContext().getResources().getString(R.string.longitude_header) + "," +
-                        MyApplication.getContext().getResources().getString(R.string.altitude_header) + "," +
-                        MyApplication.getContext().getResources().getString(R.string.gpsspeed_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.altitude_header) + "(" + heightUnit + ")," +
+                        MyApplication.getContext().getResources().getString(R.string.gpsspeed_header) + "(" + distanceTimeUnit + ")," +
                         MyApplication.getContext().getResources().getString(R.string.gear_header) + "," +
-                        MyApplication.getContext().getResources().getString(R.string.enginetemp_header) + "," +
-                        MyApplication.getContext().getResources().getString(R.string.ambienttemp_header) + "," +
-                        MyApplication.getContext().getResources().getString(R.string.frontpressure_header) + "," +
-                        MyApplication.getContext().getResources().getString(R.string.rearpressure_header) + "," +
-                        MyApplication.getContext().getResources().getString(R.string.odometer_header) + "," +
-                        MyApplication.getContext().getResources().getString(R.string.voltage_header) + "," +
-                        MyApplication.getContext().getResources().getString(R.string.throttle_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.enginetemp_header) + "(" + temperatureUnit + ")," +
+                        MyApplication.getContext().getResources().getString(R.string.ambienttemp_header) + "(" + temperatureUnit + ")," +
+                        MyApplication.getContext().getResources().getString(R.string.frontpressure_header) + "(" + pressureUnit + ")," +
+                        MyApplication.getContext().getResources().getString(R.string.rearpressure_header) + "(" + pressureUnit + ")," +
+                        MyApplication.getContext().getResources().getString(R.string.odometer_header) + "(" + distanceUnit + ")," +
+                        MyApplication.getContext().getResources().getString(R.string.voltage_header) + "(" + voltageUnit + ")," +
+                        MyApplication.getContext().getResources().getString(R.string.throttle_header) + "(" + throttleUnit + ")," +
                         MyApplication.getContext().getResources().getString(R.string.frontbrakes_header) + "," +
                         MyApplication.getContext().getResources().getString(R.string.rearbrakes_header) + "," +
                         MyApplication.getContext().getResources().getString(R.string.shifts_header) + "," +
                         MyApplication.getContext().getResources().getString(R.string.vin_header) + "," +
                         MyApplication.getContext().getResources().getString(R.string.ambientlight_header) + "," +
-                        MyApplication.getContext().getResources().getString(R.string.tripone_header) + "," +
-                        MyApplication.getContext().getResources().getString(R.string.triptwo_header) + "," +
-                        MyApplication.getContext().getResources().getString(R.string.tripauto_header) + "," +
-                        MyApplication.getContext().getResources().getString(R.string.speed_header) + "," +
-                        MyApplication.getContext().getResources().getString(R.string.avgspeed_header) + "," +
-                        MyApplication.getContext().getResources().getString(R.string.cconsumption_header) + "," +
-                        MyApplication.getContext().getResources().getString(R.string.fueleconomyone_header) + "," +
-                        MyApplication.getContext().getResources().getString(R.string.fueleconomytwo_header) + "," +
-                        MyApplication.getContext().getResources().getString(R.string.fuelrange_header) + "\n";
+                        MyApplication.getContext().getResources().getString(R.string.tripone_header) + "(" + distanceUnit + ")," +
+                        MyApplication.getContext().getResources().getString(R.string.triptwo_header) + "(" + distanceUnit + ")," +
+                        MyApplication.getContext().getResources().getString(R.string.tripauto_header) + "(" + distanceUnit + ")," +
+                        MyApplication.getContext().getResources().getString(R.string.speed_header) + "(" + distanceTimeUnit + ")," +
+                        MyApplication.getContext().getResources().getString(R.string.avgspeed_header) + "(" + distanceTimeUnit + ")," +
+                        MyApplication.getContext().getResources().getString(R.string.cconsumption_header) + "(" + consumptionUnit + ")," +
+                        MyApplication.getContext().getResources().getString(R.string.fueleconomyone_header) + "(" + consumptionUnit + ")," +
+                        MyApplication.getContext().getResources().getString(R.string.fueleconomytwo_header) + "(" + consumptionUnit + ")," +
+                        MyApplication.getContext().getResources().getString(R.string.fuelrange_header) + "(" + distanceUnit + ")\n";
 
                 File logFile = new File( root, filename + curdatetime + ".csv" );
                 FileWriter logWriter = new FileWriter( logFile );
@@ -209,22 +251,127 @@ public class LoggingService extends Service implements LocationListener, GoogleA
                     String lat = "No Fix";
                     String lon = "No Fix";
                     String alt = "No Fix";
-                    String spd = "No Fix";
+                    String gpsSpeed = "No Fix";
                     if (lastLocation != null){
                         lat = Double.toString(lastLocation.getLatitude());
                         lon = Double.toString(lastLocation.getLongitude());
                         alt = Double.toString(lastLocation.getAltitude());
-                        spd = Double.toString(lastLocation.getSpeed() * 3.6);
+                        gpsSpeed = Double.toString(lastLocation.getSpeed() * 3.6);
+                        if (distanceFormat.contains("1")) {
+                            alt = Double.toString(Utils.mToFeet(lastLocation.getAltitude()));
+                            gpsSpeed = Double.toString(Utils.kmToMiles(lastLocation.getSpeed() * 3.6));
+                        }
                     }
-                    outFile.write(curdatetime + "," + lat + "," + lon + "," + alt + "," + spd + ","
-                            + Data.getGear() + "," + Data.getEngineTemperature() + "," + Data.getAmbientTemperature()
-                            + "," + Data.getFrontTirePressure() + "," + Data.getRearTirePressure() + ","
-                            + Data.getOdometer() + "," + Data.getvoltage() + "," + Data.getThrottlePosition() + ","
+                    Double rdcFront = Data.getFrontTirePressure();
+                    if(Data.getFrontTirePressure() != null){
+                        if (pressureFormat.contains("1")) {
+                            // KPa
+                            rdcFront = Utils.barTokPa(rdcFront);
+                        } else if (pressureFormat.contains("2")) {
+                            // Kg-f
+                            rdcFront = Utils.barTokgf(rdcFront);
+                        } else if (pressureFormat.contains("3")) {
+                            // Psi
+                            rdcFront = Double.valueOf(Utils.oneDigit.format(Utils.barToPsi(rdcFront)));
+                        }
+                    }
+                    Double rdcRear = Data.getRearTirePressure();
+                    if(Data.getRearTirePressure() != null){
+                        if (pressureFormat.contains("1")) {
+                            // KPa
+                            rdcRear = Utils.barTokPa(rdcRear);
+                        } else if (pressureFormat.contains("2")) {
+                            // Kg-f
+                            rdcRear = Utils.barTokgf(rdcRear);
+                        } else if (pressureFormat.contains("3")) {
+                            // Psi
+                            rdcRear = Double.valueOf(Utils.oneDigit.format(Utils.barToPsi(rdcRear)));
+                        }
+                    }
+                    Double engineTemp = Data.getEngineTemperature();
+                    if(Data.getEngineTemperature() != null ){
+                        if (temperatureFormat.contains("1")) {
+                            // F
+                            engineTemp = Utils.celsiusToFahrenheit(engineTemp);
+                        }
+                    }
+                    Double ambientTemp = Data.getAmbientTemperature();
+                    if(Data.getAmbientTemperature() != null ){
+                        if (temperatureFormat.contains("1")) {
+                            // F
+                            ambientTemp = Utils.celsiusToFahrenheit(ambientTemp);
+                        }
+                    }
+                    Double odometer = Data.getOdometer();
+                    if(Data.getOdometer() != null){
+                        if (distanceFormat.contains("1")) {
+                            odometer = Utils.kmToMiles(odometer);
+                        }
+                    }
+                    Double trip1 = Data.getTripOne();
+                    if(Data.getTripOne() != null) {
+                        if (distanceFormat.contains("1")) {
+                            trip1 = Utils.kmToMiles(trip1);
+                        }
+                    }
+                    Double trip2 = Data.getTripTwo();
+                    if (Data.getTripTwo() != null){
+                        if (distanceFormat.contains("1")) {
+                            trip2 = Utils.kmToMiles(trip2);
+                        }
+                    }
+                    Double tripAuto = Data.getTripAuto();
+                    if (Data.getTripAuto() != null){
+                        if (distanceFormat.contains("1")) {
+                            tripAuto = Utils.kmToMiles(tripAuto);
+                        }
+                    }
+                    Double speed = Data.getSpeed();
+                    if (Data.getSpeed() != null){
+                        if (distanceFormat.contains("1")) {
+                            speed = Utils.kmToMiles(speed);
+                        }
+                    }
+                    Double avgSpeed = Data.getAvgSpeed();
+                    if (Data.getAvgSpeed() != null){
+                        if (distanceFormat.contains("1")) {
+                            avgSpeed = Utils.kmToMiles(avgSpeed);
+                        }
+                    }
+                    Double currentConsumption = Data.getCurrentConsumption();
+                    if (Data.getCurrentConsumption() != null){
+                        if (distanceFormat.contains("1")) {
+                            currentConsumption = Utils.l100Tompg(currentConsumption);
+                        }
+                    }
+                    Double fuelEconomyOne = Data.getFuelEconomyOne();
+                    if (Data.getFuelEconomyOne() != null){
+                        if (distanceFormat.contains("1")) {
+                            fuelEconomyOne = Utils.l100Tompg(fuelEconomyOne);
+                        }
+                    }
+                    Double fuelEconomyTwo = Data.getFuelEconomyTwo();
+                    if (Data.getFuelEconomyTwo() != null){
+                        if (distanceFormat.contains("1")) {
+                            fuelEconomyTwo = Utils.l100Tompg(fuelEconomyTwo);
+                        }
+                    }
+                    Double fuelRange = Data.getFuelRange();
+                    if (Data.getFuelRange() != null){
+                        if (distanceFormat.contains("1")) {
+                            fuelRange = Utils.kmToMiles(fuelRange);
+                        }
+                    }
+
+                    outFile.write(curdatetime + "," + lat + "," + lon + "," + alt + "," + gpsSpeed + ","
+                            + Data.getGear() + "," + engineTemp + "," + ambientTemp
+                            + "," + rdcFront + "," + rdcRear + ","
+                            + odometer + "," + Data.getvoltage() + "," + Data.getThrottlePosition() + ","
                             + Data.getFrontBrake() + "," + Data.getRearBrake() + "," + Data.getNumberOfShifts() + ","
-                            + Data.getVin()  + "," + Data.getAmbientLight() + "," + Data.getTripOne() + ","
-                            + Data.getTripTwo() + "," + Data.getTripAuto() + "," + Data.getSpeed() + ","
-                            + Data.getAvgSpeed() + "," + Data.getCurrentConsumption() + "," + Data.getFuelEconomyOne() + ","
-                            + Data.getFuelEconomyTwo() + "," + Data.getFuelRange() + "\n");
+                            + Data.getVin()  + "," + Data.getAmbientLight() + "," + trip1 + ","
+                            + trip2 + "," + tripAuto + "," + speed + ","
+                            + avgSpeed + "," + currentConsumption + "," + fuelEconomyOne + ","
+                            + fuelEconomyTwo + "," + fuelRange + "\n");
                     outFile.flush();
                     handler.postDelayed(runnable, loggingInterval);
                 }

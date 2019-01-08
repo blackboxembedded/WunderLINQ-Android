@@ -76,9 +76,17 @@ public class Utils {
     public static double kmToMiles(double kilometers){
         return kilometers * 0.6214;
     }
+    // meters to feet
+    public static double mToFeet(double meters){
+        return meters / 0.3048;
+    }
     // Celsius to Fahrenheit
     public static double celsiusToFahrenheit(double celsius){
         return (celsius * 1.8) + 32.0;
+    }
+    // L/100 to MPG
+    public static double l100Tompg(double l100){
+        return 282.5 / l100;
     }
 
     //format to 1 decimal place

@@ -132,11 +132,20 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
             Integer endFrontBrakeCnt = null;
             Integer endRearBrakeCnt = null;
 
+            String distanceUnit = "km";
+            String temperatureUnit = "C";
+            String speedUnit = "kmh";
+
             try {
                 CSVReader reader = new CSVReader(new FileReader(file));
                 List<String[]> myEntries = reader.readAll();
                 int lineNumber = 0;
                 for(String[] nextLine : myEntries) {
+                    if (lineNumber == 0){
+                        distanceUnit = nextLine[10].substring(nextLine[10].indexOf("(") + 1, nextLine[10].indexOf(")"));
+                        temperatureUnit = nextLine[6].substring(nextLine[6].indexOf("(") + 1, nextLine[6].indexOf(")"));
+                        speedUnit = nextLine[4].substring(nextLine[4].indexOf("(") + 1, nextLine[4].indexOf(")"));
+                    }
                     lineNumber = lineNumber + 1;
                     try {
                         if (lineNumber == 2) {
@@ -204,30 +213,12 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                     }
                 }
 
-                String distanceUnit = "km";
-                String speedUnit = "km/h";
-                String distanceFormat = sharedPrefs.getString("prefDistance", "0");
-                if (distanceFormat.contains("1")) {
-                    distanceUnit = "mi";
-                    speedUnit = "mi/h";
-                }
-                String temperatureUnit = "C";
-                String temperatureFormat = sharedPrefs.getString("prefTempF", "0");
-                if (temperatureFormat.contains("1")) {
-                    // F
-                    temperatureUnit = "F";
-                }
-
                 if (speeds.size() > 0){
                     Double avgSpeed = 0.0;
                     for (Double speed : speeds) {
                         avgSpeed = avgSpeed + speed;
                     }
                     avgSpeed = avgSpeed / speeds.size();
-                    if (distanceFormat.contains("1")) {
-                        avgSpeed = Utils.kmToMiles(avgSpeed);
-                        maxSpeed = Utils.kmToMiles(maxSpeed);
-                    }
                     tvSpeed.setText(Utils.oneDigit.format(avgSpeed) + "/" + Utils.oneDigit.format(maxSpeed) + " (" + speedUnit + ")");
                 }
 
@@ -251,12 +242,6 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                         avgEngineTemp = avgEngineTemp + engineTemp;
                     }
                     avgEngineTemp = avgEngineTemp / ambientTemps.size();
-                    if (temperatureFormat.contains("1")) {
-                        // F
-                        minEngineTemp = Utils.celsiusToFahrenheit(minEngineTemp);
-                        avgEngineTemp = Utils.celsiusToFahrenheit(avgEngineTemp);
-                        maxEngineTemp = Utils.celsiusToFahrenheit(maxEngineTemp);
-                    }
                 }
                 if(minEngineTemp == null || maxEngineTemp == null){
                     minEngineTemp = 0.0;
@@ -270,12 +255,6 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                         avgAmbientTemp = avgAmbientTemp + ambientTemp;
                     }
                     avgAmbientTemp = avgAmbientTemp / ambientTemps.size();
-                    if (temperatureFormat.contains("1")) {
-                        // F
-                        minAmbientTemp = Utils.celsiusToFahrenheit(minAmbientTemp);
-                        avgAmbientTemp = Utils.celsiusToFahrenheit(avgAmbientTemp);
-                        maxAmbientTemp = Utils.celsiusToFahrenheit(maxAmbientTemp);
-                    }
                 }
                 if(minAmbientTemp == null || maxAmbientTemp == null){
                     minAmbientTemp = 0.0;
@@ -287,9 +266,6 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 double distance = 0;
                 if (endOdometer != null && startOdometer != null) {
                     distance = endOdometer - startOdometer;
-                    if (distanceFormat.contains("1")) {
-                        distance = Utils.kmToMiles(distance);
-                    }
                 }
                 tvDistance.setText(Utils.oneDigit.format(distance) + " " + distanceUnit);
 
