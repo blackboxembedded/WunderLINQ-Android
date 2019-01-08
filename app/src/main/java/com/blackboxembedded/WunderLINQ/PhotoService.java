@@ -757,10 +757,13 @@ public class PhotoService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "onStartCommand flags " + flags + " startId " + startId);
-        Bundle extras = intent.getExtras();
-        if (extras != null) {
-            CAMERACHOICE = extras.getInt("camera");
-            Log.d(TAG,"Camera Choice: " + CAMERACHOICE);
+
+        if (intent != null) {
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                CAMERACHOICE = extras.getInt("camera");
+                Log.d(TAG, "Camera Choice: " + CAMERACHOICE);
+            }
         }
         File root = new File( Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_DCIM), "/WunderLINQ/");
@@ -796,7 +799,7 @@ public class PhotoService extends Service {
             public void run() {
                 takePicture();
             }
-        }, 500);
+        }, 1000);
 
         return super.onStartCommand(intent, flags, startId);
     }
