@@ -1177,17 +1177,23 @@ public class MainActivity extends AppCompatActivity {
         } else {
             textView7.setText(getString(R.string.blank_field));
         }
-        if(Data.getTripOne() != null && Data.getTripTwo() != null) {
+        if(Data.getTripOne() != null) {
             Double trip1 = Data.getTripOne();
-            Double trip2 = Data.getTripTwo();
             if (distanceFormat.contains("1")) {
                 trip1 = Utils.kmToMiles(trip1);
-                trip2 = Utils.kmToMiles(trip2);
             }
             textView4.setText(Math.round(trip1) + " " + distanceUnit);
-            textView8.setText(Math.round(trip2) + " " + distanceUnit);
+
         } else {
             textView4.setText(getString(R.string.blank_field));
+        }
+        if(Data.getTripTwo() != null){
+            Double trip2 = Data.getTripTwo();
+            if (distanceFormat.contains("1")) {
+                trip2 = Utils.kmToMiles(trip2);
+            }
+            textView8.setText(Math.round(trip2) + " " + distanceUnit);
+        } else {
             textView8.setText(getString(R.string.blank_field));
         }
     }
