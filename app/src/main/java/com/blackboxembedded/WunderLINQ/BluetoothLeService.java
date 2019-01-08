@@ -1389,12 +1389,14 @@ public class BluetoothLeService extends Service {
                 break;
             case 0x08:
                 //Log.d(TAG, "Message ID 8");
-                double ambientTemp = ((data[1] & 0xFF) * 0.50) - 40;
-                Data.setAmbientTemperature(ambientTemp);
-                if(ambientTemp <= 0.0){
-                    FaultStatus.seticeWarnActive(true);
-                } else {
-                    FaultStatus.seticeWarnActive(false);
+                if ((data[1] & 0xFF) != 0xFF) {
+                    double ambientTemp = ((data[1] & 0xFF) * 0.50) - 40;
+                    Data.setAmbientTemperature(ambientTemp);
+                    if(ambientTemp <= 0.0){
+                        FaultStatus.seticeWarnActive(true);
+                    } else {
+                        FaultStatus.seticeWarnActive(false);
+                    }
                 }
 
                 // LAMP Faults
