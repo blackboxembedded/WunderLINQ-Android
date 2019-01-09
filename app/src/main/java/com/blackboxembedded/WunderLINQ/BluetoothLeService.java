@@ -1178,8 +1178,10 @@ public class BluetoothLeService extends Service {
                 }
 
                 //Voltage
-                double voltage = (data[4] & 0xFF) / 10;
-                Data.setvoltage(voltage);
+                if ((data[4] & 0xFF) != 0xFF) {
+                    double voltage = (data[4] & 0xFF) / 10;
+                    Data.setvoltage(voltage);
+                }
 
                 // Fuel Fault
                 int fuelValue = ((data[5] & 0xFF)  >> 4) & 0x0f; // the highest 4 bits.
