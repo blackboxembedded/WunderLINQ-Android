@@ -242,7 +242,6 @@
     <string name="pref_homePhone_summary">Formát: +420 602 123 456</string>
 
     <string name="ui_title">Uživatelské prostředí</string>
-    <string name="pref_bike_type">Typ motocyklu</string>
     <string-array name="bike_type_array">
         <item name="1">BMW R1200GS/A</item>
         <item name="2">BMW R1200R</item>
@@ -407,4 +406,6 @@
     <string name="pref_debuglogging_name">Enable Debug Logging</string>
     <string name="pref_autolaunch_summary">Auto launch WunderLINQ app when WunderLINQ hardware connects</string>
     <string name="pref_debuglogging_summary">Only enable if needed by Support, may impact performance if left running.  Please disable when finished.</string>
+    <string name="pref_motorcycledata_name">Disable data display</string>
+    <string name="pref_motorcycledata_summary">Enable for bikes that lack performance data.</string>
 </resources>

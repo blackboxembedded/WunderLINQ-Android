@@ -253,7 +253,6 @@
     <string name="pref_homePhone_summary">Formato: 34600000000</string>
 
     <string name="ui_title">Interfaz de usuario</string>
-    <string name="pref_bike_type">Tipo de Motocicleta</string>
     <string-array name="bike_type_array">
         <item name="1">BMW R1200GS/A</item>
         <item name="2">BMW R1200R</item>
@@ -426,5 +425,7 @@
     <string name="negative_contacts_alert_body">Since contact access has not been granted, this app will not be able to display or call your contacts.</string>
     <string name="call_alert_body">Please grant access to use your phone</string>
     <string name="call_alert_title">WunderLINQ needs permissions to use your phone to make phone calls</string>
+    <string name="pref_motorcycledata_name">Disable data display</string>
+    <string name="pref_motorcycledata_summary">Enable for bikes that lack performance data.</string>
 
 </resources>

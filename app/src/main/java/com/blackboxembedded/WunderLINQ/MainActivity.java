@@ -172,12 +172,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         View view;
-        if (sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
-            setContentView(R.layout.activity_main_other);
-            view = findViewById(R.id.layout_main_other);
-        } else {
+        if (!sharedPrefs.getBoolean("prefMotorcycleData", false)){
             setContentView(R.layout.activity_main);
             view = findViewById(R.id.layout_main);
+        } else {
+            setContentView(R.layout.activity_main_other);
+            view = findViewById(R.id.layout_main_other);
         }
 
         view.setOnTouchListener(new OnSwipeTouchListener(this) {
@@ -423,7 +423,7 @@ public class MainActivity extends AppCompatActivity {
         gattServiceIntent = new Intent(MainActivity.this, BluetoothLeService.class);
         startService(new Intent(MainActivity.this, BluetoothLeService.class));
 
-        if (!sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
+        if (!sharedPrefs.getBoolean("prefMotorcycleData", false)){
             updateDisplay();
         }
     }
@@ -596,7 +596,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateColors(boolean itsDark){
         ((MyApplication) this.getApplication()).setitsDark(itsDark);
-        if (!sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
+        if (!sharedPrefs.getBoolean("prefMotorcycleData", false)){
             LinearLayout lLayout = (LinearLayout) findViewById(R.id.layout_main);
             if (lLayout != null){
                 textView1 = (TextView) findViewById(R.id.textView1);
@@ -752,7 +752,6 @@ public class MainActivity extends AppCompatActivity {
         }
         sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
-        //updateDisplay();
         if (((MyApplication) this.getApplication()).getitsDark()){
             updateColors(true);
         } else {
@@ -821,12 +820,13 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG,"onActivityResult");
             this.recreate();
             View view;
-            if (sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
-                setContentView(R.layout.activity_main_other);
-                view = findViewById(R.id.layout_main_other);
-            } else {
+            if (!sharedPrefs.getBoolean("prefMotorcycleData", false)){
                 setContentView(R.layout.activity_main);
                 view = findViewById(R.id.layout_main);
+
+            } else {
+                setContentView(R.layout.activity_main_other);
+                view = findViewById(R.id.layout_main_other);
             }
             view.setOnTouchListener(new OnSwipeTouchListener(this) {
                 @Override
@@ -995,7 +995,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 Log.d(TAG,"GATT_DISCONNECTED");
                 Data.clear();
-                if (!sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
+                if (!sharedPrefs.getBoolean("prefMotorcycleData", false)){
                     updateDisplay();
                 }
                 btButton.setColorFilter(getResources().getColor(R.color.motorrad_red));
@@ -1012,7 +1012,7 @@ public class MainActivity extends AppCompatActivity {
                 btButton.setColorFilter(getResources().getColor(R.color.motorrad_blue));
                 btButton.setEnabled(false);
                 otherMenu.findItem(R.id.action_hwsettings).setVisible(true);
-                if (!sharedPrefs.getString("prefMotorcycleType", "0").equals("0")){
+                if (!sharedPrefs.getBoolean("prefMotorcycleData", false)){
                     updateDisplay();
                 }
             }
