@@ -74,7 +74,7 @@ public class Utils {
     }
     // kilometers to miles
     public static double kmToMiles(double kilometers){
-        return kilometers * 0.6214;
+        return kilometers * 0.62137;
     }
     // meters to feet
     public static double mToFeet(double meters){
