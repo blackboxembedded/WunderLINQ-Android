@@ -189,8 +189,10 @@ public class VideoRecService extends Service implements SurfaceHolder.Callback {
         ContentValues values = new ContentValues(5);
         values.put(MediaStore.Video.Media.TITLE, "WunderLINQ Video");
         values.put(MediaStore.Video.Media.MIME_TYPE, "video/mp4");
-        values.put(MediaStore.Video.Media.LATITUDE, String.valueOf(location.getLatitude()));
-        values.put(MediaStore.Video.Media.LONGITUDE, String.valueOf(location.getLongitude()));
+        if (location != null){
+            values.put(MediaStore.Video.Media.LATITUDE, String.valueOf(location.getLatitude()));
+            values.put(MediaStore.Video.Media.LONGITUDE, String.valueOf(location.getLongitude()));
+        }
         values.put(MediaStore.Video.Media.DATA, recordingFile.getAbsolutePath());
         getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
 

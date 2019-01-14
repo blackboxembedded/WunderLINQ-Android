@@ -512,9 +512,11 @@ public class TaskActivity extends AppCompatActivity {
                         String address = sharedPrefs.getString("prefHomeAddress","");
                         if ( address != "" ) {
                             LatLng location = getLocationFromAddress(TaskActivity.this, address);
-                            Intent goHomeIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                            goHomeIntent.setData(Uri.parse("google.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude)));
-                            startActivity(goHomeIntent);
+                            if (location != null) {
+                                Intent goHomeIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                                goHomeIntent.setData(Uri.parse("google.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude)));
+                                startActivity(goHomeIntent);
+                            }
                         } else {
                             Toast.makeText(TaskActivity.this, R.string.toast_address_not_set, Toast.LENGTH_LONG).show();
                         }
