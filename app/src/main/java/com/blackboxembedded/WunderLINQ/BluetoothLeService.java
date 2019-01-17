@@ -27,6 +27,7 @@ import android.util.Log;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
@@ -369,14 +371,18 @@ public class BluetoothLeService extends Service {
                         debugLogger = new Logger();;
                     }
                     try {
-                        Cipher cipher = Cipher.getInstance("AES");
+                        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+                        byte[] iv = "abcdefghijklmnop".getBytes("UTF-8");
+                        IvParameterSpec ivParameterSpec;
+                        ivParameterSpec = new IvParameterSpec(iv);
                         byte[] encoded = "wTKkVwtrBbrZKmYj".getBytes("UTF-8");
                         SecretKey secretKey = new SecretKeySpec(encoded, "AES");
-                        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+                        cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivParameterSpec);
 
                         debugLogger.write(Utils.ByteArraytoHexNoDelim(cipher.doFinal(data)));
                     } catch (NoSuchAlgorithmException
                             | NoSuchPaddingException
+                            | InvalidAlgorithmParameterException
                             | UnsupportedEncodingException
                             | InvalidKeyException
                             | BadPaddingException
