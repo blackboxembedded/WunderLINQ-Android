@@ -199,7 +199,7 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
     // Navigate
     public void onClickNav(View view) {
         //Navigation
-        String navUrl = "google.navigation:" + record.getData() + "&navigate=yes";
+        String navUrl = "google.navigation:q=" + record.getData() + "&navigate=yes";
         if (navApp.equals("1") || navApp.equals("2")){
             // Android Default or Google Maps
             // Nothing to do

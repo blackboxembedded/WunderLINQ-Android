@@ -506,7 +506,7 @@ public class TaskActivity extends AppCompatActivity {
                         if ( address != "" ) {
                             LatLng location = getLocationFromAddress(TaskActivity.this, address);
                             if (location != null) {
-                                String navUrl = "google.navigation:" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
+                                String navUrl = "google.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
                                 if (navApp.equals("1") || navApp.equals("2")){
                                     // Android Default or Google Maps
                                     // Nothing to do
