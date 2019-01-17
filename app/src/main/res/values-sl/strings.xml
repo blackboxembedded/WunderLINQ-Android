@@ -245,20 +245,6 @@
     <string name="pref_homePhone_name">Tel. številka za hitri klic</string>
     <string name="pref_homePhone_summary">Format: 11234567890</string>
     <string name="ui_title">Uporabniški vmesnik</string>
-    <string-array name="bike_type_array">
-        <item name="1">BMW R1200GS/A</item>
-        <item name="2">BMW R1200R</item>
-        <item name="3">BMW R1200RS</item>
-        <item name="4">BMW S1000XR</item>
-        <item name="5">Drugo</item>
-    </string-array>
-    <string-array name="bike_type_arrayValues">
-        <item name="1">1</item>
-        <item name="2">2</item>
-        <item name="3">3</item>
-        <item name="4">4</item>
-        <item name="5">0</item>
-    </string-array>
     <string name="pref_tasks_settings_title">Prilagoditev hitrih opravil</string>
     <string name="pref_tasks_settings_summary">Izberi katera opravila bodo prikazana in v kakšnem redu</string>
     <string name="pref_task_one">Prvi</string>
@@ -303,16 +289,18 @@
         <item name="12">11</item>
         <item name="13">12</item>
     </string-array>
-    <string name="pref_nav_app">Aplikacija za navigacijo</string>
+    <string name="pref_nav_app_title">Aplikacija za navigacijo</string>
     <string-array name="nav_apps_array">
-        <item name="1">Google Zemljevidi</item>
-        <item name="2">Locus</item>
-        <item name="3">Waze</item>
+        <item name="1">Android Default</item>
+        <item name="2">Google Zemljevidi</item>
+        <item name="3">Locus</item>
+        <item name="4">Waze</item>
     </string-array>
     <string-array name="nav_apps_arrayValues">
         <item name="1">1</item>
         <item name="2">2</item>
         <item name="3">3</item>
+        <item name="4">4</item>
     </string-array>
     <string name="pref_tempf_name">Enota za temperaturo</string>
     <string-array name="tempf_array">

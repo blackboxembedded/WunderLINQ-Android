@@ -196,30 +196,18 @@
     <string name="pref_homePhone_summary">Μορφή: 11234567890</string>
 
     <string name="ui_title">Ρυθμίσεις χρήστη</string>
-    <string-array name="bike_type_array">
-        <item name="1">BMW R1200GS/A</item>
-        <item name="2">BMW R1200R</item>
-        <item name="3">BMW R1200RS</item>
-        <item name="4">BMW S1000XR</item>
-        <item name="5">Άλλη</item>
-    </string-array>
-    <string-array name="bike_type_arrayValues">
-        <item name="1">1</item>
-        <item name="2">2</item>
-        <item name="3">3</item>
-        <item name="4">4</item>
-        <item name="5">0</item>
-    </string-array>
-    <string name="pref_nav_app">Τύπος μοτοσυκλέτας</string>
+    <string name="pref_nav_app_title">Τύπος μοτοσυκλέτας</string>
     <string-array name="nav_apps_array">
-        <item name="1">Google Maps</item>
-        <item name="2">Locus</item>
-        <item name="3">Waze</item>
+        <item name="1">Android Default</item>
+        <item name="2">Google Maps</item>
+        <item name="3">Locus</item>
+        <item name="4">Waze</item>
     </string-array>
     <string-array name="nav_apps_arrayValues">
         <item name="1">1</item>
         <item name="2">2</item>
         <item name="3">3</item>
+        <item name="4">4</item>
     </string-array>
     <string name="pref_tempf_name">Μονάδα μέτρησης θερμοκρασίας</string>
     <string-array name="tempf_array">

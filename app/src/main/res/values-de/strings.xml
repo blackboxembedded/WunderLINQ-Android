@@ -178,14 +178,6 @@
     <string name="pref_homePhone_summary">Format: 1234567890</string>
 
     <string name="ui_title">Bedienoberfläche</string>
-    <string-array name="bike_type_array">
-        <item name="1">BMW R1200GS/A</item>
-        <item name="2">BMW R1200R</item>
-        <item name="3">BMW R1200RS</item>
-        <item name="4">BMW S1000XR</item>
-        <item name="5">Anderes</item>
-    </string-array>
-
     <string name="pref_tempf_name">Einheit Temperatur</string>
     <string-array name="tempf_array">
         <item name="1">Celsius</item>
@@ -267,7 +259,7 @@
     <string name="fueleconomyone_header">Verbrauch 1</string>
     <string name="fueleconomytwo_header">Verbrauch 2</string>
     <string name="fuelrange_header">Reichweite</string>
-    <string name="pref_nav_app">Navigations-App</string>
+    <string name="pref_nav_app_title">Navigations-App</string>
     <string name="pref_contact_name">Kontaktlisten-Sortierung</string>
     <string name="pref_orientation_name">Ausrichtungs-Sperre</string>
     <string name="pref_brightness_name">Anzeigehelligkeit</string>
@@ -334,5 +326,16 @@
     <string name="call_alert_title">WunderLINQ needs permissions to use your phone to make phone calls</string>
     <string name="pref_motorcycledata_name">Disable data display</string>
     <string name="pref_motorcycledata_summary">Enable for bikes that lack performance data.</string>
-
+    <string-array name="nav_apps_array">
+        <item name="1">Android Default</item>
+        <item name="2">Google Maps</item>
+        <item name="3">Locus</item>
+        <item name="4">Waze</item>
+    </string-array>
+    <string-array name="nav_apps_arrayValues">
+        <item name="1">1</item>
+        <item name="2">2</item>
+        <item name="3">3</item>
+        <item name="4">4</item>
+    </string-array>
 </resources>

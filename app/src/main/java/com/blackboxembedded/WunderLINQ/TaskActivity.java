@@ -2,6 +2,7 @@ package com.blackboxembedded.WunderLINQ;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -476,36 +477,28 @@ public class TaskActivity extends AppCompatActivity {
                                     int position, long id) {
                 lastPosition = position;
                 final String item = (String) parent.getItemAtPosition(position);
-                //Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                String navApp = sharedPrefs.getString("prefNavApp", "1");
                 switch (mapping.get(position)){
                     case 0:
                         //Navigation
-                        /*
                         String url = "google.navigation:/?free=1&mode=d&entry=fnls";
-                        String navApp = sharedPrefs.getString("prefMotorcycleType", "0");
-                        if (navApp.equals("0")){
+                        if (navApp.equals("1") || navApp.equals("2")){
+                            // Android Default or Google Maps
                             url = "google.navigation:/?free=1&mode=d&entry=fnls";
-                        } else if (navApp.equals("1")){
-                            url = "com.here.intent.action.DRIVE_ASSISTANCE";
-                            Intent hereIntent = new Intent("com.here.app.maps");
-                            //hereIntent.setPackage("com.here.app.maps");
-                            hereIntent.setData(Uri.parse(url));
-                            startActivity(hereIntent);
+                        } else if (navApp.equals("3")){
+                            //Locus
 
-                        } else if (navApp.equals("2")){
+                        } else if (navApp.equals("4")){
+                            //Waze
                             url = "https://waze.com/ul";
                         }
                         try {
-                            //Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                            //navIntent.setData(Uri.parse(url));
-                            //startActivity(navIntent);
+                            Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                            navIntent.setData(Uri.parse(url));
+                            startActivity(navIntent);
                         } catch ( ActivityNotFoundException ex  ) {
                             // Add Alert
                         }
-                        */
-                        Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                        navIntent.setData(Uri.parse("google.navigation:/?free=1&mode=d&entry=fnls"));
-                        startActivity(navIntent);
                         break;
                     case 1:
                         //Navigate Home
@@ -513,9 +506,24 @@ public class TaskActivity extends AppCompatActivity {
                         if ( address != "" ) {
                             LatLng location = getLocationFromAddress(TaskActivity.this, address);
                             if (location != null) {
-                                Intent goHomeIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                                goHomeIntent.setData(Uri.parse("google.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude)));
-                                startActivity(goHomeIntent);
+                                String navUrl = "google.navigation:" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
+                                if (navApp.equals("1") || navApp.equals("2")){
+                                    // Android Default or Google Maps
+                                    // Nothing to do
+                                } else if (navApp.equals("3")){
+                                    //Locus
+
+                                } else if (navApp.equals("4")){
+                                    //Waze
+                                    navUrl = "https://www.waze.com/ul?ll=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes&zoom=17";
+                                }
+                                try {
+                                    Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                                    navIntent.setData(Uri.parse(navUrl));
+                                    startActivity(navIntent);
+                                } catch ( ActivityNotFoundException ex  ) {
+                                    // Add Alert
+                                }
                             }
                         } else {
                             Toast.makeText(TaskActivity.this, R.string.toast_address_not_set, Toast.LENGTH_LONG).show();

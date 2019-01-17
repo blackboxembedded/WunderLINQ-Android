@@ -1,5 +1,6 @@
 package com.blackboxembedded.WunderLINQ;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -122,9 +123,25 @@ public class WaypointNavActivity extends AppCompatActivity {
             public void onItemClick (AdapterView < ? > adapter, View view, int position, long arg){
                 lastPosition = position;
                 WaypointRecord record = (WaypointRecord) waypointList.getItemAtPosition(position);
-                Intent forwardIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                forwardIntent.setData(Uri.parse("google.navigation:q=" + record.getData()));
-                startActivity(forwardIntent);
+                String navApp = sharedPrefs.getString("prefNavApp", "1");
+                String navUrl = "google.navigation:" + record.getData() + "&navigate=yes";
+                if (navApp.equals("1") || navApp.equals("2")){
+                    // Android Default or Google Maps
+                    // Nothing to do
+                } else if (navApp.equals("3")){
+                    //Locus
+
+                } else if (navApp.equals("4")){
+                    //Waze
+                    navUrl = "https://www.waze.com/ul?ll=" + record.getData() + "&navigate=yes&zoom=17";
+                }
+                try {
+                    Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                    navIntent.setData(Uri.parse(navUrl));
+                    startActivity(navIntent);
+                } catch ( ActivityNotFoundException ex  ) {
+                    // Add Alert
+                }
             }
         });
 

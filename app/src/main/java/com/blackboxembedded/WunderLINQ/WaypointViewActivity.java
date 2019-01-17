@@ -1,9 +1,12 @@
 package com.blackboxembedded.WunderLINQ;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -46,6 +49,8 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
     private Double lat;
     private Double lon;
 
+    private String navApp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +81,8 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
         });
 
         Bundle extras = getIntent().getExtras();
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        navApp = sharedPrefs.getString("prefNavApp", "1");
         if (extras != null) {
             String recordID = extras.getString("RECORD_ID");
 
@@ -168,17 +175,48 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
 
     // Open button press
     public void onClickOpen(View view) {
-        //Navigation
-        Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW,Uri.parse("geo:0,0?q=" + record.getData() + "(" + getString(R.string.waypoint_view_waypoint_label) + " " + record.getDate() + ")"));
-        startActivity(navIntent);
+        //Open waypoint in map app
+        String navUrl = "geo:0,0?q=" + record.getData() + "(" + getString(R.string.waypoint_view_waypoint_label) + " " + record.getDate() + ")";
+        if (navApp.equals("1") || navApp.equals("2")){
+            // Android Default or Google Maps
+            // Nothing to do
+        } else if (navApp.equals("3")){
+            //Locus
+
+        } else if (navApp.equals("4")){
+            //Waze
+            navUrl = "https://www.waze.com/ul?ll=" + record.getData() + "&zoom=10";
+        }
+        try {
+            Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
+            navIntent.setData(Uri.parse(navUrl));
+            startActivity(navIntent);
+        } catch ( ActivityNotFoundException ex  ) {
+            // Add Alert
+        }
     }
 
     // Navigate
     public void onClickNav(View view) {
         //Navigation
-        Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
-        navIntent.setData(Uri.parse("google.navigation:q=" + record.getData()));
-        startActivity(navIntent);
+        String navUrl = "google.navigation:" + record.getData() + "&navigate=yes";
+        if (navApp.equals("1") || navApp.equals("2")){
+            // Android Default or Google Maps
+            // Nothing to do
+        } else if (navApp.equals("3")){
+            //Locus
+
+        } else if (navApp.equals("4")){
+            //Waze
+            navUrl = "https://www.waze.com/ul?ll=" + record.getData() + "&navigate=yes&zoom=17";
+        }
+        try {
+            Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
+            navIntent.setData(Uri.parse(navUrl));
+            startActivity(navIntent);
+        } catch ( ActivityNotFoundException ex  ) {
+            // Add Alert
+        }
     }
 
     // Export button press

@@ -253,31 +253,18 @@
     <string name="pref_homePhone_summary">Formato: 34600000000</string>
 
     <string name="ui_title">Interfaz de usuario</string>
-    <string-array name="bike_type_array">
-        <item name="1">BMW R1200GS/A</item>
-        <item name="2">BMW R1200R</item>
-        <item name="3">BMW R1200RS</item>
-        <item name="4">BMW S1000XR</item>
-        <item name="5">Otra</item>
-    </string-array>
-    <string-array name="bike_type_arrayValues">
-        <item name="1">1</item>
-        <item name="2">2</item>
-        <item name="3">3</item>
-        <item name="4">4</item>
-        <item name="5">0</item>
-    </string-array>
-    <string name="pref_nav_app">App de navegación</string>
+    <string name="pref_nav_app_title">App de navegación</string>
     <string-array name="nav_apps_array">
-        <item name="1">Google Maps</item>
-        <item name="2">Locus</item>
-        <item name="3">Waze</item>
-<!-- If I may add some other... CoPilot, Maps.me, Kurviger, Calimoto :-) -->
+        <item name="1">Android Default</item>
+        <item name="2">Google Maps</item>
+        <item name="3">Locus</item>
+        <item name="4">Waze</item>
     </string-array>
     <string-array name="nav_apps_arrayValues">
         <item name="1">1</item>
         <item name="2">2</item>
         <item name="3">3</item>
+        <item name="4">4</item>
     </string-array>
     <string name="pref_tempf_name">Unidad de Temperatura</string>
     <string-array name="tempf_array">
