@@ -37,10 +37,10 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayout;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -71,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
 
     public final static String TAG = "MainActivity";
 
+    private LayoutInflater layoutInflater;
+
     private ActionBar actionBar;
     private ImageButton backButton;
     private ImageButton forwardButton;
@@ -80,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton btButton;
     private TextView navbarTitle;
 
+    private GridLayout gridLayout;
     private TextView textView1;
     private TextView textView2;
     private TextView textView3;
@@ -88,6 +91,14 @@ public class MainActivity extends AppCompatActivity {
     private TextView textView6;
     private TextView textView7;
     private TextView textView8;
+    private TextView textView9;
+    private TextView textView10;
+    private TextView textView11;
+    private TextView textView12;
+    private TextView textView13;
+    private TextView textView14;
+    private TextView textView15;
+
     private TextView textView1Label;
     private TextView textView2Label;
     private TextView textView3Label;
@@ -96,9 +107,19 @@ public class MainActivity extends AppCompatActivity {
     private TextView textView6Label;
     private TextView textView7Label;
     private TextView textView8Label;
+    private TextView textView9Label;
+    private TextView textView10Label;
+    private TextView textView11Label;
+    private TextView textView12Label;
+    private TextView textView13Label;
+    private TextView textView14Label;
+    private TextView textView15Label;
+
     private TextView textViewAppName;
 
     private SharedPreferences sharedPrefs;
+
+    private boolean gridChange = false;
 
     static boolean hasSensor = false;
     static boolean itsDark = false;
@@ -171,13 +192,97 @@ public class MainActivity extends AppCompatActivity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
         }
 
-        View view;
+        layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        setContentView(R.layout.activity_main);
+        View view = findViewById(R.id.layout_main);
+        gridLayout = findViewById(R.id.gridLayout);
         if (!sharedPrefs.getBoolean("prefMotorcycleData", false)){
-            setContentView(R.layout.activity_main);
-            view = findViewById(R.id.layout_main);
+            int currentCellCount = Integer.parseInt(sharedPrefs.getString("CELL_COUNT","15"));
+            switch(currentCellCount){
+                case 15:
+                    gridLayout.removeAllViews();
+                    gridLayout.setColumnCount(3);
+                    gridLayout.setRowCount(5);
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem2, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem3, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem4, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem5, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem6, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem7, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem8, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem9, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem10, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem11, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem12, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem13, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem14, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem15, gridLayout, false));
+                    break;
+                case 12:
+                    gridLayout.removeAllViews();
+                    gridLayout.setColumnCount(3);
+                    gridLayout.setRowCount(4);
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem2, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem3, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem4, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem5, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem6, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem7, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem8, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem9, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem10, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem11, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem12, gridLayout, false));
+                    break;
+                case 8:
+                    gridLayout.removeAllViews();
+                    gridLayout.setColumnCount(2);
+                    gridLayout.setRowCount(4);
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem2, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem3, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem4, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem5, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem6, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem7, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem8, gridLayout, false));
+                    break;
+                case 4:
+                    gridLayout.removeAllViews();
+                    gridLayout.setColumnCount(2);
+                    gridLayout.setRowCount(2);
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem2, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem3, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem4, gridLayout, false));
+                    break;
+                case 2:
+                    gridLayout.removeAllViews();
+                    gridLayout.setColumnCount(1);
+                    gridLayout.setRowCount(2);
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false));
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem2, gridLayout, false));
+                    break;
+                case 1:
+                    gridLayout.removeAllViews();
+                    gridLayout.setColumnCount(1);
+                    gridLayout.setRowCount(1);
+                    gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false));
+                    break;
+            }
+
         } else {
-            setContentView(R.layout.activity_main_other);
-            view = findViewById(R.id.layout_main_other);
+            gridLayout.removeAllViews();
+            gridLayout.setColumnCount(1);
+            gridLayout.setRowCount(1);
+            gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false));
+            textView1 = (TextView) findViewById(R.id.textView1);
+            textView1Label = (TextView) findViewById(R.id.textView1label);
+            textView1Label.setText("");
+            textView1.setText(getString(R.string.app_name));
         }
 
         view.setOnTouchListener(new OnSwipeTouchListener(this) {
@@ -429,8 +534,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showActionBar(){
-        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflator.inflate(R.layout.actionbar_nav_main, null);
+        View v = layoutInflater.inflate(R.layout.actionbar_nav_main, null);
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled (false);
@@ -596,137 +700,40 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateColors(boolean itsDark){
         ((MyApplication) this.getApplication()).setitsDark(itsDark);
-        if (!sharedPrefs.getBoolean("prefMotorcycleData", false)){
-            LinearLayout lLayout = (LinearLayout) findViewById(R.id.layout_main);
-            if (lLayout != null){
-                textView1 = (TextView) findViewById(R.id.textView1);
-                textView2 = (TextView) findViewById(R.id.textView2);
-                textView3 = (TextView) findViewById(R.id.textView3);
-                textView4 = (TextView) findViewById(R.id.textView4);
-                textView5 = (TextView) findViewById(R.id.textView5);
-                textView6 = (TextView) findViewById(R.id.textView6);
-                textView7 = (TextView) findViewById(R.id.textView7);
-                textView8 = (TextView) findViewById(R.id.textView8);
-                textView1Label = (TextView) findViewById(R.id.textView1label);
-                textView2Label = (TextView) findViewById(R.id.textView2label);
-                textView3Label = (TextView) findViewById(R.id.textView3label);
-                textView4Label = (TextView) findViewById(R.id.textView4label);
-                textView5Label = (TextView) findViewById(R.id.textView5label);
-                textView6Label = (TextView) findViewById(R.id.textView6label);
-                textView7Label = (TextView) findViewById(R.id.textView7label);
-                textView8Label = (TextView) findViewById(R.id.textView8label);
-                LinearLayout layout1 = (LinearLayout) findViewById(R.id.layout_1);
-                LinearLayout layout2 = (LinearLayout) findViewById(R.id.layout_2);
-                LinearLayout layout3 = (LinearLayout) findViewById(R.id.layout_3);
-                LinearLayout layout4 = (LinearLayout) findViewById(R.id.layout_4);
-                LinearLayout layout5 = (LinearLayout) findViewById(R.id.layout_5);
-                LinearLayout layout6 = (LinearLayout) findViewById(R.id.layout_6);
-                LinearLayout layout7 = (LinearLayout) findViewById(R.id.layout_7);
-                LinearLayout layout8 = (LinearLayout) findViewById(R.id.layout_8);
-                if (itsDark) {
-                    Log.d(TAG,"Settings things for dark");
-                    //Set Brightness to defaults
-                    WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
-                    layoutParams.screenBrightness = -1;
-                    getWindow().setAttributes(layoutParams);
-
-                    lLayout.setBackgroundColor(getResources().getColor(R.color.black));
-                    actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
-                    navbarTitle.setTextColor(getResources().getColor(R.color.white));
-                    backButton.setColorFilter(getResources().getColor(R.color.white));
-                    forwardButton.setColorFilter(getResources().getColor(R.color.white));
-                    dataButton.setColorFilter(getResources().getColor(R.color.white));
-                    otherButton.setColorFilter(getResources().getColor(R.color.white));
-                    textView1.setTextColor(getResources().getColor(R.color.white));
-                    textView2.setTextColor(getResources().getColor(R.color.white));
-                    textView3.setTextColor(getResources().getColor(R.color.white));
-                    textView4.setTextColor(getResources().getColor(R.color.white));
-                    textView5.setTextColor(getResources().getColor(R.color.white));
-                    textView6.setTextColor(getResources().getColor(R.color.white));
-                    textView7.setTextColor(getResources().getColor(R.color.white));
-                    textView8.setTextColor(getResources().getColor(R.color.white));
-                    textView1Label.setTextColor(getResources().getColor(R.color.white));
-                    textView2Label.setTextColor(getResources().getColor(R.color.white));
-                    textView3Label.setTextColor(getResources().getColor(R.color.white));
-                    textView4Label.setTextColor(getResources().getColor(R.color.white));
-                    textView5Label.setTextColor(getResources().getColor(R.color.white));
-                    textView6Label.setTextColor(getResources().getColor(R.color.white));
-                    textView7Label.setTextColor(getResources().getColor(R.color.white));
-                    textView8Label.setTextColor(getResources().getColor(R.color.white));
-                    layout1.setBackground(getResources().getDrawable(R.drawable.border_white));
-                    layout2.setBackground(getResources().getDrawable(R.drawable.border_white));
-                    layout3.setBackground(getResources().getDrawable(R.drawable.border_white));
-                    layout4.setBackground(getResources().getDrawable(R.drawable.border_white));
-                    layout5.setBackground(getResources().getDrawable(R.drawable.border_white));
-                    layout6.setBackground(getResources().getDrawable(R.drawable.border_white));
-                    layout7.setBackground(getResources().getDrawable(R.drawable.border_white));
-                    layout8.setBackground(getResources().getDrawable(R.drawable.border_white));
-                } else {
-                    Log.d(TAG, "Settings things for light");
-                    if (sharedPrefs.getBoolean("prefBrightnessOverride", false)) {
-                        //Set Brightness to 100%
-                        WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
-                        layoutParams.screenBrightness = 1;
-                        getWindow().setAttributes(layoutParams);
-                    }
-
-                    lLayout.setBackgroundColor(getResources().getColor(R.color.white));
-                    actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
-                    navbarTitle.setTextColor(getResources().getColor(R.color.black));
-                    backButton.setColorFilter(getResources().getColor(R.color.black));
-                    forwardButton.setColorFilter(getResources().getColor(R.color.black));
-                    dataButton.setColorFilter(getResources().getColor(R.color.black));
-                    otherButton.setColorFilter(getResources().getColor(R.color.black));
-                    textView1.setTextColor(getResources().getColor(R.color.black));
-                    textView2.setTextColor(getResources().getColor(R.color.black));
-                    textView3.setTextColor(getResources().getColor(R.color.black));
-                    textView4.setTextColor(getResources().getColor(R.color.black));
-                    textView5.setTextColor(getResources().getColor(R.color.black));
-                    textView6.setTextColor(getResources().getColor(R.color.black));
-                    textView7.setTextColor(getResources().getColor(R.color.black));
-                    textView8.setTextColor(getResources().getColor(R.color.black));
-                    textView1Label.setTextColor(getResources().getColor(R.color.black));
-                    textView2Label.setTextColor(getResources().getColor(R.color.black));
-                    textView3Label.setTextColor(getResources().getColor(R.color.black));
-                    textView4Label.setTextColor(getResources().getColor(R.color.black));
-                    textView5Label.setTextColor(getResources().getColor(R.color.black));
-                    textView6Label.setTextColor(getResources().getColor(R.color.black));
-                    textView7Label.setTextColor(getResources().getColor(R.color.black));
-                    textView8Label.setTextColor(getResources().getColor(R.color.black));
-                    layout1.setBackground(getResources().getDrawable(R.drawable.border));
-                    layout2.setBackground(getResources().getDrawable(R.drawable.border));
-                    layout3.setBackground(getResources().getDrawable(R.drawable.border));
-                    layout4.setBackground(getResources().getDrawable(R.drawable.border));
-                    layout5.setBackground(getResources().getDrawable(R.drawable.border));
-                    layout6.setBackground(getResources().getDrawable(R.drawable.border));
-                    layout7.setBackground(getResources().getDrawable(R.drawable.border));
-                    layout8.setBackground(getResources().getDrawable(R.drawable.border));
-                }
-            }
-        } else {
-            ConstraintLayout cLayout = (ConstraintLayout) findViewById(R.id.layout_main_other);
+        LinearLayout lLayout = (LinearLayout) findViewById(R.id.layout_main);
+        if (lLayout != null){
             if (itsDark) {
                 Log.d(TAG,"Settings things for dark");
-                cLayout.setBackgroundColor(getResources().getColor(R.color.black));
+                //Set Brightness to defaults
+                WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+                layoutParams.screenBrightness = -1;
+                getWindow().setAttributes(layoutParams);
+
+                lLayout.setBackgroundColor(getResources().getColor(R.color.black));
                 actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
                 navbarTitle.setTextColor(getResources().getColor(R.color.white));
                 backButton.setColorFilter(getResources().getColor(R.color.white));
                 forwardButton.setColorFilter(getResources().getColor(R.color.white));
                 dataButton.setColorFilter(getResources().getColor(R.color.white));
                 otherButton.setColorFilter(getResources().getColor(R.color.white));
-                textViewAppName = (TextView) findViewById(R.id.tvAppName);
-                textViewAppName.setTextColor(getResources().getColor(R.color.white));
+                updateDisplay();
             } else {
-                Log.d(TAG,"Settings things for light");
-                cLayout.setBackgroundColor(getResources().getColor(R.color.white));
+                Log.d(TAG, "Settings things for light");
+                if (sharedPrefs.getBoolean("prefBrightnessOverride", false)) {
+                    //Set Brightness to 100%
+                    WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+                    layoutParams.screenBrightness = 1;
+                    getWindow().setAttributes(layoutParams);
+                }
+
+                lLayout.setBackgroundColor(getResources().getColor(R.color.white));
                 actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
                 navbarTitle.setTextColor(getResources().getColor(R.color.black));
                 backButton.setColorFilter(getResources().getColor(R.color.black));
                 forwardButton.setColorFilter(getResources().getColor(R.color.black));
                 dataButton.setColorFilter(getResources().getColor(R.color.black));
                 otherButton.setColorFilter(getResources().getColor(R.color.black));
-                textViewAppName = (TextView) findViewById(R.id.tvAppName);
-                textViewAppName.setTextColor(getResources().getColor(R.color.black));
+                updateDisplay();
             }
         }
     }
@@ -818,28 +825,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         } else if (requestCode == SETTINGS_CHECK) {
             Log.d(TAG,"onActivityResult");
-            this.recreate();
-            View view;
-            if (!sharedPrefs.getBoolean("prefMotorcycleData", false)){
-                setContentView(R.layout.activity_main);
-                view = findViewById(R.id.layout_main);
-
-            } else {
-                setContentView(R.layout.activity_main_other);
-                view = findViewById(R.id.layout_main_other);
-            }
-            view.setOnTouchListener(new OnSwipeTouchListener(this) {
-                @Override
-                public void onSwipeLeft() {
-                    Intent backIntent = new Intent(MainActivity.this, MusicActivity.class);
-                    startActivity(backIntent);
-                }
-                @Override
-                public void onSwipeRight() {
-                    Intent backIntent = new Intent(MainActivity.this, TaskActivity.class);
-                    startActivity(backIntent);
-                }
-            });
+            gridChange = true;
             if (sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
                 updateColors(true);
             } else {
@@ -1070,24 +1056,207 @@ public class MainActivity extends AppCompatActivity {
 
     // Update Display
     private void updateDisplay(){
-        textView1 = (TextView) findViewById(R.id.textView1);
-        textView2 = (TextView) findViewById(R.id.textView2);
-        textView3 = (TextView) findViewById(R.id.textView3);
-        textView4 = (TextView) findViewById(R.id.textView4);
-        textView5 = (TextView) findViewById(R.id.textView5);
-        textView6 = (TextView) findViewById(R.id.textView6);
-        textView7 = (TextView) findViewById(R.id.textView7);
-        textView8 = (TextView) findViewById(R.id.textView8);
-        //Check for active faults
-        FaultStatus faults;
-        faults = (new FaultStatus(this));
-        ArrayList<String> faultListData = faults.getallActiveDesc();
-        if (!faultListData.isEmpty()){
-            faultButton.setVisibility(View.VISIBLE);
-        } else {
-            faultButton.setVisibility(View.GONE);
-        }
+        gridLayout = (GridLayout) findViewById(R.id.gridLayout);
 
+        if (!sharedPrefs.getBoolean("prefMotorcycleData", false)) {
+            //Check for active faults
+            FaultStatus faults;
+            faults = (new FaultStatus(this));
+            ArrayList<String> faultListData = faults.getallActiveDesc();
+            if (!faultListData.isEmpty()) {
+                faultButton.setVisibility(View.VISIBLE);
+            } else {
+                faultButton.setVisibility(View.GONE);
+            }
+
+            // Cell One
+            Integer cell1Data = Integer.parseInt(sharedPrefs.getString("prefCellOne", "1"));
+            // Cell Two
+            Integer cell2Data = Integer.parseInt(sharedPrefs.getString("prefCellTwo", "2"));
+            // Cell Three
+            Integer cell3Data = Integer.parseInt(sharedPrefs.getString("prefCellThree", "3"));
+            // Cell Four
+            Integer cell4Data = Integer.parseInt(sharedPrefs.getString("prefCellFour", "4"));
+            // Cell Five
+            Integer cell5Data = Integer.parseInt(sharedPrefs.getString("prefCellFive", "5"));
+            // Cell Six
+            Integer cell6Data = Integer.parseInt(sharedPrefs.getString("prefCellSix", "6"));
+            // Cell Seven
+            Integer cell7Data = Integer.parseInt(sharedPrefs.getString("prefCellSeven", "7"));
+            // Cell Eight
+            Integer cell8Data = Integer.parseInt(sharedPrefs.getString("prefCellEight", "8"));
+            // Cell Nine
+            Integer cell9Data = Integer.parseInt(sharedPrefs.getString("prefCellNine", "9"));
+            // Cell Ten
+            Integer cell10Data = Integer.parseInt(sharedPrefs.getString("prefCellTen", "10"));
+            // Cell Eleven
+            Integer cell11Data = Integer.parseInt(sharedPrefs.getString("prefCellEleven", "11"));
+            // Cell Twelve
+            Integer cell12Data = Integer.parseInt(sharedPrefs.getString("prefCellTwelve", "12"));
+            // Cell Thirteen
+            Integer cell13Data = Integer.parseInt(sharedPrefs.getString("prefCellThirteen", "13"));
+            // Cell Fourteen
+            Integer cell14Data = Integer.parseInt(sharedPrefs.getString("prefCellFourteen", "14"));
+            // Cell Fifteen
+            Integer cell15Data = Integer.parseInt(sharedPrefs.getString("prefCellFifteen", "15"));
+
+            int currentCellCount = Integer.parseInt(sharedPrefs.getString("CELL_COUNT", "15"));
+            switch (currentCellCount) {
+                case 15:
+                    if (gridChange) {
+                        gridLayout.removeAllViews();
+                        gridLayout.setColumnCount(3);
+                        gridLayout.setRowCount(5);
+                    }
+
+                    // Cell One
+                    setCellText(1, cell1Data);
+                    // Cell Two
+                    setCellText(2, cell2Data);
+                    // Cell Three
+                    setCellText(3, cell3Data);
+                    // Cell Four
+                    setCellText(4, cell4Data);
+                    // Cell Five
+                    setCellText(5, cell5Data);
+                    // Cell Six
+                    setCellText(6, cell6Data);
+                    // Cell Seven
+                    setCellText(7, cell7Data);
+                    // Cell Eight
+                    setCellText(8, cell8Data);
+                    // Cell Nine
+                    setCellText(9, cell9Data);
+                    // Cell Ten
+                    setCellText(10, cell10Data);
+                    // Cell Eleven
+                    setCellText(11, cell11Data);
+                    // Cell Twelve
+                    setCellText(12, cell12Data);
+                    // Cell Thirteen
+                    setCellText(13, cell13Data);
+                    // Cell Fourteen
+                    setCellText(14, cell14Data);
+                    // Cell Fifteen
+                    setCellText(15, cell15Data);
+                    break;
+                case 12:
+                    if (gridChange) {
+                        gridLayout.removeAllViews();
+                        gridLayout.setColumnCount(3);
+                        gridLayout.setRowCount(4);
+                    }
+                    // Cell One
+                    setCellText(1, cell1Data);
+                    // Cell Two
+                    setCellText(2, cell2Data);
+                    // Cell Three
+                    setCellText(3, cell3Data);
+                    // Cell Four
+                    setCellText(4, cell4Data);
+                    // Cell Five
+                    setCellText(5, cell5Data);
+                    // Cell Six
+                    setCellText(6, cell6Data);
+                    // Cell Seven
+                    setCellText(7, cell7Data);
+                    // Cell Eight
+                    setCellText(8, cell8Data);
+                    // Cell Nine
+                    setCellText(9, cell9Data);
+                    // Cell Ten
+                    setCellText(10, cell10Data);
+                    // Cell Eleven
+                    setCellText(11, cell11Data);
+                    // Cell Twelve
+                    setCellText(12, cell12Data);
+                    break;
+                case 8:
+                    if (gridChange) {
+                        gridLayout.removeAllViews();
+                        gridLayout.setColumnCount(2);
+                        gridLayout.setRowCount(4);
+                    }
+                    // Cell One
+                    setCellText(1, cell1Data);
+                    // Cell Two
+                    setCellText(2, cell2Data);
+                    // Cell Three
+                    setCellText(3, cell3Data);
+                    // Cell Four
+                    setCellText(4, cell4Data);
+                    // Cell Five
+                    setCellText(5, cell5Data);
+                    // Cell Six
+                    setCellText(6, cell6Data);
+                    // Cell Seven
+                    setCellText(7, cell7Data);
+                    // Cell Eight
+                    setCellText(8, cell8Data);
+                    break;
+                case 4:
+                    if (gridChange) {
+                        gridLayout.removeAllViews();
+                        gridLayout.setColumnCount(2);
+                        gridLayout.setRowCount(2);
+                    }
+                    // Cell One
+                    setCellText(1, cell1Data);
+                    // Cell Two
+                    setCellText(2, cell2Data);
+                    // Cell Three
+                    setCellText(3, cell3Data);
+                    // Cell Four
+                    setCellText(4, cell4Data);
+                    break;
+                case 2:
+                    if (gridChange) {
+                        gridLayout.removeAllViews();
+                        gridLayout.setColumnCount(1);
+                        gridLayout.setRowCount(2);
+                    }
+                    // Cell One
+                    setCellText(1, cell1Data);
+                    // Cell Two
+                    setCellText(2, cell2Data);
+                    break;
+                case 1:
+                    if (gridChange) {
+                        gridLayout.removeAllViews();
+                        gridLayout.setColumnCount(1);
+                        gridLayout.setRowCount(1);
+                    }
+                    // Cell One
+                    setCellText(1, cell1Data);
+                    break;
+            }
+        } else {
+            gridLayout.removeAllViews();
+            gridLayout.setColumnCount(1);
+            gridLayout.setRowCount(1);
+            View gridCell1 = layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false);
+            gridLayout.addView(gridCell1);
+            LinearLayout layout1 = (LinearLayout) findViewById(R.id.layout_1);
+            textView1 = (TextView) findViewById(R.id.textView1);
+            textView1Label = (TextView) findViewById(R.id.textView1label);
+            if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
+                textView1.setTextColor(getResources().getColor(R.color.white));
+                textView1Label.setTextColor(getResources().getColor(R.color.white));
+                layout1.setBackgroundColor(getResources().getColor(R.color.black));
+                layout1.setBackground(getResources().getDrawable(R.drawable.border_white));
+            } else {
+                textView1.setTextColor(getResources().getColor(R.color.black));
+                textView1Label.setTextColor(getResources().getColor(R.color.black));
+                layout1.setBackgroundColor(getResources().getColor(R.color.white));
+                layout1.setBackground(getResources().getDrawable(R.drawable.border));
+            }
+            textView1Label.setText("");
+            textView1.setText(getString(R.string.app_name));
+        }
+    }
+
+    // Set Cell Text
+    private void setCellText(Integer cellNumber, Integer dataPoint){
         String pressureUnit = "bar";
         String pressureFormat = sharedPrefs.getString("prefPressureF", "0");
         if (pressureFormat.contains("1")) {
@@ -1107,94 +1276,577 @@ public class MainActivity extends AppCompatActivity {
             temperatureUnit = "F";
         }
         String distanceUnit = "km";
+        String heightUnit = "m";
+        String distanceTimeUnit = "kmh";
+        String consumptionUnit = "L/100";
         String distanceFormat = sharedPrefs.getString("prefDistance", "0");
         if (distanceFormat.contains("1")) {
             distanceUnit = "mi";
+            heightUnit = "ft";
+            distanceTimeUnit = "mph";
+            consumptionUnit = "mpg"; // 282.5 / (L/100)
         }
-        if(Data.getFrontTirePressure() != null){
-            Double rdcFront = Data.getFrontTirePressure();
-            if (pressureFormat.contains("1")) {
-                // KPa
-                rdcFront = Utils.barTokPa(rdcFront);
-            } else if (pressureFormat.contains("2")) {
-                // Kg-f
-                rdcFront = Utils.barTokgf(rdcFront);
-            } else if (pressureFormat.contains("3")) {
-                // Psi
-                rdcFront = Double.valueOf(Utils.oneDigit.format(Utils.barToPsi(rdcFront)));
-            }
-            textView1.setText(rdcFront + " " + pressureUnit);
-        } else {
-            textView1.setText(getString(R.string.blank_field));
-        }
-        if(Data.getRearTirePressure() != null){
-            Double rdcRear = Data.getRearTirePressure();
-            if (pressureFormat.contains("1")) {
-                // KPa
-                rdcRear = Utils.barTokPa(rdcRear);
-            } else if (pressureFormat.contains("2")) {
-                // Kg-f
-                rdcRear = Utils.barTokgf(rdcRear);
-            } else if (pressureFormat.contains("3")) {
-                // Psi
-                rdcRear = Double.valueOf(Utils.oneDigit.format(Utils.barToPsi(rdcRear)));
-            }
-            textView5.setText(rdcRear + " " + pressureUnit);
-        } else {
-            textView5.setText(getString(R.string.blank_field));
-        }
-        if(Data.getGear() != null){
-            textView3.setText(Data.getGear());
-        } else {
-            textView3.setText(getString(R.string.blank_field));
-        }
-        if(Data.getEngineTemperature() != null ){
-            Double engineTemp = Data.getEngineTemperature();
-            if (temperatureFormat.contains("1")) {
-                // F
-                engineTemp = Utils.celsiusToFahrenheit(engineTemp);
-            }
-            textView2.setText((int) Math.round(engineTemp) + " " + temperatureUnit);
-        } else {
-            textView2.setText(getString(R.string.blank_field));
-        }
-        if(Data.getAmbientTemperature() != null ){
-            Double ambientTemp = Data.getAmbientTemperature();
-            if (temperatureFormat.contains("1")) {
-                // F
-                ambientTemp = Utils.celsiusToFahrenheit(ambientTemp);
-            }
-            textView6.setText((int) Math.round(ambientTemp) + " " + temperatureUnit);
-        } else {
-            textView6.setText(getString(R.string.blank_field));
-        }
-        if(Data.getOdometer() != null){
-            Double odometer = Data.getOdometer();
-            if (distanceFormat.contains("1")) {
-                odometer = Utils.kmToMiles(odometer);
-            }
-            textView7.setText(Math.round(odometer) + " " + distanceUnit);
-        } else {
-            textView7.setText(getString(R.string.blank_field));
-        }
-        if(Data.getTripOne() != null) {
-            Double trip1 = Data.getTripOne();
-            if (distanceFormat.contains("1")) {
-                trip1 = Utils.kmToMiles(trip1);
-            }
-            textView4.setText(Math.round(trip1) + " " + distanceUnit);
+        String voltageUnit = "V";
+        String throttleUnit = "%";
 
-        } else {
-            textView4.setText(getString(R.string.blank_field));
+        String label = "";
+        String value = getString(R.string.blank_field);
+        boolean itsDark = ((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1");
+        switch (dataPoint){
+            case 0:
+                //Gear
+                label = getString(R.string.gear_label);
+                if(Data.getGear() != null){
+                    value = Data.getGear();
+                }
+                break;
+            case 1:
+                //Engine
+                label = getString(R.string.engine_temp_label);
+                if(Data.getEngineTemperature() != null ){
+                    Double engineTemp = Data.getEngineTemperature();
+                    if (temperatureFormat.contains("1")) {
+                        // F
+                        engineTemp = Utils.celsiusToFahrenheit(engineTemp);
+                    }
+                    value = (int) Math.round(engineTemp) + " " + temperatureUnit;
+                }
+                break;
+            case 2:
+                //Ambient
+                label = getString(R.string.ambient_temp_label);
+                if(Data.getAmbientTemperature() != null ){
+                    Double ambientTemp = Data.getAmbientTemperature();
+                    if (temperatureFormat.contains("1")) {
+                        // F
+                        ambientTemp = Utils.celsiusToFahrenheit(ambientTemp);
+                    }
+                    value = (int) Math.round(ambientTemp) + " " + temperatureUnit;
+                }
+                break;
+            case 3:
+                //FrontTire
+                label = getString(R.string.frontpressure_header);
+                if(Data.getFrontTirePressure() != null){
+                    Double rdcFront = Data.getFrontTirePressure();
+                    if (pressureFormat.contains("1")) {
+                        // KPa
+                        rdcFront = Utils.barTokPa(rdcFront);
+                    } else if (pressureFormat.contains("2")) {
+                        // Kg-f
+                        rdcFront = Utils.barTokgf(rdcFront);
+                    } else if (pressureFormat.contains("3")) {
+                        // Psi
+                        rdcFront = Double.valueOf(Utils.oneDigit.format(Utils.barToPsi(rdcFront)));
+                    }
+                    value = rdcFront + " " + pressureUnit;
+                }
+                break;
+            case 4:
+                //RearTire
+                label = getString(R.string.rearpressure_header);
+                if(Data.getRearTirePressure() != null){
+                    Double rdcRear = Data.getRearTirePressure();
+                    if (pressureFormat.contains("1")) {
+                        // KPa
+                        rdcRear = Utils.barTokPa(rdcRear);
+                    } else if (pressureFormat.contains("2")) {
+                        // Kg-f
+                        rdcRear = Utils.barTokgf(rdcRear);
+                    } else if (pressureFormat.contains("3")) {
+                        // Psi
+                        rdcRear = Double.valueOf(Utils.oneDigit.format(Utils.barToPsi(rdcRear)));
+                    }
+                    value = rdcRear + " " + pressureUnit;
+                }
+                break;
+            case 5:
+                //Odometer
+                label = getString(R.string.odometer_label);
+                if(Data.getOdometer() != null){
+                    Double odometer = Data.getOdometer();
+                    if (distanceFormat.contains("1")) {
+                        odometer = Utils.kmToMiles(odometer);
+                    }
+                    value = Math.round(odometer) + " " + distanceUnit;
+                }
+                break;
+            case 6:
+                //Voltage
+                label = getString(R.string.voltage_label);
+                if(Data.getvoltage() != null){
+                    Double voltage = Data.getvoltage();
+                    value = String.valueOf(Math.round(voltage)) + " " + voltageUnit;
+                }
+                break;
+            case 7:
+                //Throttle
+                label = getString(R.string.throttle_label);
+                if(Data.getThrottlePosition() != null){
+                    Double throttlePosition = Data.getThrottlePosition();
+                    value = String.valueOf(throttlePosition) + " " + throttleUnit;
+                }
+                break;
+            case 8:
+                //Front Brakes
+                label = getString(R.string.frontbrakes_label);
+                if(Data.getFrontBrake() != null){
+                    Integer frontBrakes = Data.getFrontBrake();
+                    value = String.valueOf(frontBrakes);
+                }
+                break;
+            case 9:
+                //Rear Brakes
+                label = getString(R.string.rearbrakes_label);
+                if(Data.getRearBrake() != null){
+                    Integer rearBrakes = Data.getRearBrake();
+                    value = String.valueOf(rearBrakes);
+                }
+                break;
+            case 10:
+                //Ambient Light
+                label = getString(R.string.ambientlight_label);
+                if(Data.getRearBrake() != null){
+                    Integer rearBrakes = Data.getRearBrake();
+                    value = String.valueOf(rearBrakes);
+                }
+                break;
+            case 11:
+                //Trip 1
+                label = getString(R.string.trip1_label);
+                if(Data.getTripOne() != null) {
+                    Double trip1 = Data.getTripOne();
+                    if (distanceFormat.contains("1")) {
+                        trip1 = Utils.kmToMiles(trip1);
+                    }
+                    value = Math.round(trip1) + " " + distanceUnit;
+                }
+                break;
+            case 12:
+                //Trip 2
+                label = getString(R.string.trip2_label);
+                if(Data.getTripTwo() != null){
+                    Double trip2 = Data.getTripTwo();
+                    if (distanceFormat.contains("1")) {
+                        trip2 = Utils.kmToMiles(trip2);
+                    }
+                    value = Math.round(trip2) + " " + distanceUnit;
+                }
+                break;
+            case 13:
+                //Trip Auto
+                label = getString(R.string.tripauto_label);
+                if(Data.getTripAuto() != null){
+                    Double tripauto = Data.getTripAuto();
+                    if (distanceFormat.contains("1")) {
+                        tripauto = Utils.kmToMiles(tripauto);
+                    }
+                    value = Math.round(tripauto) + " " + distanceUnit;
+                }
+                break;
+            case 14:
+                //Speed
+                label = getString(R.string.speed_label);
+                if(Data.getSpeed() != null){
+                    Double speed = Data.getSpeed();
+                    if (distanceFormat.contains("1")) {
+                        speed = Utils.kmToMiles(speed);
+                    }
+                    value = String.valueOf(Math.round(speed)) + " " + distanceTimeUnit;
+                }
+                break;
+            case 15:
+                //Average Speed
+                label = getString(R.string.avgspeed_label);
+                if(Data.getAvgSpeed() != null){
+                    Double avgspeed = Data.getAvgSpeed();
+                    if (distanceFormat.contains("1")) {
+                        avgspeed = Utils.kmToMiles(avgspeed);
+                    }
+                    value = String.valueOf(Math.round(avgspeed)) + " " + distanceTimeUnit;
+                }
+                break;
+            case 16:
+                //Current Consumption
+                label = getString(R.string.cconsumption_label);
+                if(Data.getCurrentConsumption() != null){
+                    Double currentConsumption = Data.getCurrentConsumption();
+                    if (distanceFormat.contains("1")) {
+                        currentConsumption = Utils.l100Tompg(currentConsumption);
+                    }
+                    value = String.valueOf(currentConsumption) + " " + consumptionUnit;
+                }
+                break;
+            case 17:
+                //Fuel Economy One
+                label = getString(R.string.fueleconomyone_label);
+                if(Data.getFuelEconomyOne() != null){
+                    Double fuelEconomyOne = Data.getFuelEconomyOne();
+                    if (distanceFormat.contains("1")) {
+                        fuelEconomyOne = Utils.l100Tompg(fuelEconomyOne);
+                    }
+                    value = String.valueOf(fuelEconomyOne) + " " + consumptionUnit;
+                }
+                break;
+            case 18:
+                //Fuel Economy Two
+                label = getString(R.string.fueleconomytwo_label);
+                if(Data.getFuelEconomyTwo() != null){
+                    Double fuelEconomyTwo = Data.getFuelEconomyTwo();
+                    if (distanceFormat.contains("1")) {
+                        fuelEconomyTwo = Utils.l100Tompg(fuelEconomyTwo);
+                    }
+                    value = String.valueOf(fuelEconomyTwo) + " " + consumptionUnit;
+                }
+                break;
+            case 19:
+                //Fuel Range
+                label = getString(R.string.fuelrange_label);
+                if(Data.getFuelRange() != null){
+                    Double fuelrange = Data.getFuelRange();
+                    if (distanceFormat.contains("1")) {
+                        fuelrange = Utils.kmToMiles(fuelrange);
+                    }
+                    value = String.valueOf(Math.round(fuelrange)) + " " + distanceUnit;
+                }
+                break;
+            default:
+
+                break;
         }
-        if(Data.getTripTwo() != null){
-            Double trip2 = Data.getTripTwo();
-            if (distanceFormat.contains("1")) {
-                trip2 = Utils.kmToMiles(trip2);
-            }
-            textView8.setText(Math.round(trip2) + " " + distanceUnit);
-        } else {
-            textView8.setText(getString(R.string.blank_field));
+        switch (cellNumber){
+            case 1:
+                if (gridChange) {
+                    View gridCell1 = layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false);
+                    gridLayout.addView(gridCell1);
+                }
+                LinearLayout layout1 = (LinearLayout) findViewById(R.id.layout_1);
+                textView1 = (TextView) findViewById(R.id.textView1);
+                textView1Label = (TextView) findViewById(R.id.textView1label);
+                if (itsDark){
+                    textView1.setTextColor(getResources().getColor(R.color.white));
+                    textView1Label.setTextColor(getResources().getColor(R.color.white));
+                    layout1.setBackgroundColor(getResources().getColor(R.color.black));
+                    layout1.setBackground(getResources().getDrawable(R.drawable.border_white));
+                } else {
+                    textView1.setTextColor(getResources().getColor(R.color.black));
+                    textView1Label.setTextColor(getResources().getColor(R.color.black));
+                    layout1.setBackgroundColor(getResources().getColor(R.color.white));
+                    layout1.setBackground(getResources().getDrawable(R.drawable.border));
+                }
+                textView1Label.setText(label);
+                textView1.setText(value);
+                break;
+            case 2:
+                if (gridChange) {
+                    View gridCell2 = layoutInflater.inflate(R.layout.layout_griditem2, gridLayout, false);
+                    gridLayout.addView(gridCell2);
+                }
+                LinearLayout layout2 = (LinearLayout) findViewById(R.id.layout_2);
+                textView2 = (TextView) findViewById(R.id.textView2);
+                textView2Label = (TextView) findViewById(R.id.textView2label);
+                if (itsDark){
+                    textView2.setTextColor(getResources().getColor(R.color.white));
+                    textView2Label.setTextColor(getResources().getColor(R.color.white));
+                    layout2.setBackgroundColor(getResources().getColor(R.color.black));
+                    layout2.setBackground(getResources().getDrawable(R.drawable.border_white));
+                } else {
+                    textView2.setTextColor(getResources().getColor(R.color.black));
+                    textView2Label.setTextColor(getResources().getColor(R.color.black));
+                    layout2.setBackgroundColor(getResources().getColor(R.color.white));
+                    layout2.setBackground(getResources().getDrawable(R.drawable.border));
+                }
+                textView2Label.setText(label);
+                textView2.setText(value);
+                break;
+            case 3:
+                if (gridChange) {
+                    View gridCell3 = layoutInflater.inflate(R.layout.layout_griditem3, gridLayout, false);
+                    gridLayout.addView(gridCell3);
+                }
+                LinearLayout layout3 = (LinearLayout) findViewById(R.id.layout_3);
+                textView3 = (TextView) findViewById(R.id.textView3);
+                textView3Label = (TextView) findViewById(R.id.textView3label);
+                if (itsDark){
+                    textView3.setTextColor(getResources().getColor(R.color.white));
+                    textView3Label.setTextColor(getResources().getColor(R.color.white));
+                    layout3.setBackgroundColor(getResources().getColor(R.color.black));
+                    layout3.setBackground(getResources().getDrawable(R.drawable.border_white));
+                } else {
+                    textView3.setTextColor(getResources().getColor(R.color.black));
+                    textView3Label.setTextColor(getResources().getColor(R.color.black));
+                    layout3.setBackgroundColor(getResources().getColor(R.color.white));
+                    layout3.setBackground(getResources().getDrawable(R.drawable.border));
+                }
+                textView3Label.setText(label);
+                textView3.setText(value);
+                break;
+            case 4:
+                if (gridChange) {
+                    View gridCell4 = layoutInflater.inflate(R.layout.layout_griditem4, gridLayout, false);
+                    gridLayout.addView(gridCell4);
+                }
+                LinearLayout layout4 = (LinearLayout) findViewById(R.id.layout_4);
+                textView4 = (TextView) findViewById(R.id.textView4);
+                textView4Label = (TextView) findViewById(R.id.textView4label);
+                if (itsDark){
+                    textView4.setTextColor(getResources().getColor(R.color.white));
+                    textView4Label.setTextColor(getResources().getColor(R.color.white));
+                    layout4.setBackgroundColor(getResources().getColor(R.color.black));
+                    layout4.setBackground(getResources().getDrawable(R.drawable.border_white));
+                } else {
+                    textView4.setTextColor(getResources().getColor(R.color.black));
+                    textView4Label.setTextColor(getResources().getColor(R.color.black));
+                    layout4.setBackgroundColor(getResources().getColor(R.color.white));
+                    layout4.setBackground(getResources().getDrawable(R.drawable.border));
+                }
+                textView4Label.setText(label);
+                textView4.setText(value);
+                break;
+            case 5:
+                if (gridChange) {
+                    View gridCell5 = layoutInflater.inflate(R.layout.layout_griditem5, gridLayout, false);
+                    gridLayout.addView(gridCell5);
+                }
+                LinearLayout layout5 = (LinearLayout) findViewById(R.id.layout_5);
+                textView5 = (TextView) findViewById(R.id.textView5);
+                textView5Label = (TextView) findViewById(R.id.textView5label);
+                if (itsDark){
+                    textView5.setTextColor(getResources().getColor(R.color.white));
+                    textView5Label.setTextColor(getResources().getColor(R.color.white));
+                    layout5.setBackgroundColor(getResources().getColor(R.color.black));
+                    layout5.setBackground(getResources().getDrawable(R.drawable.border_white));
+                } else {
+                    textView5.setTextColor(getResources().getColor(R.color.black));
+                    textView5Label.setTextColor(getResources().getColor(R.color.black));
+                    layout5.setBackgroundColor(getResources().getColor(R.color.white));
+                    layout5.setBackground(getResources().getDrawable(R.drawable.border));
+                }
+                textView5Label.setText(label);
+                textView5.setText(value);
+                break;
+            case 6:
+                if (gridChange) {
+                    View gridCell6 = layoutInflater.inflate(R.layout.layout_griditem6, gridLayout, false);
+                    gridLayout.addView(gridCell6);
+                }
+                LinearLayout layout6 = (LinearLayout) findViewById(R.id.layout_6);
+                textView6 = (TextView) findViewById(R.id.textView6);
+                textView6Label = (TextView) findViewById(R.id.textView6label);
+                if (itsDark){
+                    textView6.setTextColor(getResources().getColor(R.color.white));
+                    textView6Label.setTextColor(getResources().getColor(R.color.white));
+                    layout6.setBackgroundColor(getResources().getColor(R.color.black));
+                    layout6.setBackground(getResources().getDrawable(R.drawable.border_white));
+                } else {
+                    textView6.setTextColor(getResources().getColor(R.color.black));
+                    textView6Label.setTextColor(getResources().getColor(R.color.black));
+                    layout6.setBackgroundColor(getResources().getColor(R.color.white));
+                    layout6.setBackground(getResources().getDrawable(R.drawable.border));
+                }
+                textView6Label.setText(label);
+                textView6.setText(value);
+                break;
+            case 7:
+                if (gridChange) {
+                    View gridCell7 = layoutInflater.inflate(R.layout.layout_griditem7, gridLayout, false);
+                    gridLayout.addView(gridCell7);
+                }
+                LinearLayout layout7 = (LinearLayout) findViewById(R.id.layout_7);
+                textView7 = (TextView) findViewById(R.id.textView7);
+                textView7Label = (TextView) findViewById(R.id.textView7label);
+                if (itsDark){
+                    textView7.setTextColor(getResources().getColor(R.color.white));
+                    textView7Label.setTextColor(getResources().getColor(R.color.white));
+                    layout7.setBackgroundColor(getResources().getColor(R.color.black));
+                    layout7.setBackground(getResources().getDrawable(R.drawable.border_white));
+                } else {
+                    textView7.setTextColor(getResources().getColor(R.color.black));
+                    textView7Label.setTextColor(getResources().getColor(R.color.black));
+                    layout7.setBackgroundColor(getResources().getColor(R.color.white));
+                    layout7.setBackground(getResources().getDrawable(R.drawable.border));
+                }
+                textView7Label.setText(label);
+                textView7.setText(value);
+                break;
+            case 8:
+                if (gridChange) {
+                    View gridCell8 = layoutInflater.inflate(R.layout.layout_griditem8, gridLayout, false);
+                    gridLayout.addView(gridCell8);
+                }
+                LinearLayout layout8 = (LinearLayout) findViewById(R.id.layout_8);
+                textView8 = (TextView) findViewById(R.id.textView8);
+                textView8Label = (TextView) findViewById(R.id.textView8label);
+                if (itsDark){
+                    textView8.setTextColor(getResources().getColor(R.color.white));
+                    textView8Label.setTextColor(getResources().getColor(R.color.white));
+                    layout8.setBackgroundColor(getResources().getColor(R.color.black));
+                    layout8.setBackground(getResources().getDrawable(R.drawable.border_white));
+                } else {
+                    textView8.setTextColor(getResources().getColor(R.color.black));
+                    textView8Label.setTextColor(getResources().getColor(R.color.black));
+                    layout8.setBackgroundColor(getResources().getColor(R.color.white));
+                    layout8.setBackground(getResources().getDrawable(R.drawable.border));
+                }
+                textView8Label.setText(label);
+                textView8.setText(value);
+                break;
+            case 9:
+                if (gridChange) {
+                    View gridCell9 = layoutInflater.inflate(R.layout.layout_griditem9, gridLayout, false);
+                    gridLayout.addView(gridCell9);
+                }
+                LinearLayout layout9 = (LinearLayout) findViewById(R.id.layout_9);
+                textView9 = (TextView) findViewById(R.id.textView9);
+                textView9Label = (TextView) findViewById(R.id.textView9label);
+                if (itsDark){
+                    textView9.setTextColor(getResources().getColor(R.color.white));
+                    textView9Label.setTextColor(getResources().getColor(R.color.white));
+                    layout9.setBackgroundColor(getResources().getColor(R.color.black));
+                    layout9.setBackground(getResources().getDrawable(R.drawable.border_white));
+                } else {
+                    textView9.setTextColor(getResources().getColor(R.color.black));
+                    textView9Label.setTextColor(getResources().getColor(R.color.black));
+                    layout9.setBackgroundColor(getResources().getColor(R.color.black));
+                    layout9.setBackground(getResources().getDrawable(R.drawable.border));
+                }
+                textView9Label.setText(label);
+                textView9.setText(value);
+                break;
+            case 10:
+                if (gridChange) {
+                    View gridCell10 = layoutInflater.inflate(R.layout.layout_griditem10, gridLayout, false);
+                    gridLayout.addView(gridCell10);
+                }
+                LinearLayout layout10 = (LinearLayout) findViewById(R.id.layout_10);
+                textView10 = (TextView) findViewById(R.id.textView10);
+                textView10Label = (TextView) findViewById(R.id.textView10label);
+                if (itsDark){
+                    textView10.setTextColor(getResources().getColor(R.color.white));
+                    textView10Label.setTextColor(getResources().getColor(R.color.white));
+                    layout10.setBackgroundColor(getResources().getColor(R.color.black));
+                    layout10.setBackground(getResources().getDrawable(R.drawable.border_white));
+                } else {
+                    textView10.setTextColor(getResources().getColor(R.color.black));
+                    textView10Label.setTextColor(getResources().getColor(R.color.black));
+                    layout10.setBackgroundColor(getResources().getColor(R.color.white));
+                    layout10.setBackground(getResources().getDrawable(R.drawable.border));
+                }
+                textView10Label.setText(label);
+                textView10.setText(value);
+                break;
+            case 11:
+                if (gridChange) {
+                    View gridCell11 = layoutInflater.inflate(R.layout.layout_griditem11, gridLayout, false);
+                    gridLayout.addView(gridCell11);
+                }
+                LinearLayout layout11 = (LinearLayout) findViewById(R.id.layout_11);
+                textView11 = (TextView) findViewById(R.id.textView11);
+                textView11Label = (TextView) findViewById(R.id.textView11label);
+                if (itsDark){
+                    textView11.setTextColor(getResources().getColor(R.color.white));
+                    textView11Label.setTextColor(getResources().getColor(R.color.white));
+                    layout11.setBackgroundColor(getResources().getColor(R.color.black));
+                    layout11.setBackground(getResources().getDrawable(R.drawable.border_white));
+                } else {
+                    textView11.setTextColor(getResources().getColor(R.color.black));
+                    textView11Label.setTextColor(getResources().getColor(R.color.black));
+                    layout11.setBackgroundColor(getResources().getColor(R.color.white));
+                    layout11.setBackground(getResources().getDrawable(R.drawable.border));
+                }
+                textView11Label.setText(label);
+                textView11.setText(value);
+                break;
+            case 12:
+                if (gridChange) {
+                    View gridCell12 = layoutInflater.inflate(R.layout.layout_griditem12, gridLayout, false);
+                    gridLayout.addView(gridCell12);
+                }
+                LinearLayout layout12 = (LinearLayout) findViewById(R.id.layout_12);
+                textView12 = (TextView) findViewById(R.id.textView12);
+                textView12Label = (TextView) findViewById(R.id.textView12label);
+                if (itsDark){
+                    textView12.setTextColor(getResources().getColor(R.color.white));
+                    textView12Label.setTextColor(getResources().getColor(R.color.white));
+                    layout12.setBackgroundColor(getResources().getColor(R.color.black));
+                    layout12.setBackground(getResources().getDrawable(R.drawable.border_white));
+                } else {
+                    textView12.setTextColor(getResources().getColor(R.color.black));
+                    textView12Label.setTextColor(getResources().getColor(R.color.black));
+                    layout12.setBackgroundColor(getResources().getColor(R.color.white));
+                    layout12.setBackground(getResources().getDrawable(R.drawable.border));
+                }
+                textView12Label.setText(label);
+                textView12.setText(value);
+                break;
+            case 13:
+                if (gridChange) {
+                    View gridCell13 = layoutInflater.inflate(R.layout.layout_griditem13, gridLayout, false);
+                    gridLayout.addView(gridCell13);
+                }
+                LinearLayout layout13 = (LinearLayout) findViewById(R.id.layout_13);
+                textView13 = (TextView) findViewById(R.id.textView13);
+                textView13Label = (TextView) findViewById(R.id.textView13label);
+                if (itsDark){
+                    textView13.setTextColor(getResources().getColor(R.color.white));
+                    textView13Label.setTextColor(getResources().getColor(R.color.white));
+                    layout13.setBackgroundColor(getResources().getColor(R.color.black));
+                    layout13.setBackground(getResources().getDrawable(R.drawable.border_white));
+                } else {
+                    textView13.setTextColor(getResources().getColor(R.color.black));
+                    textView13Label.setTextColor(getResources().getColor(R.color.black));
+                    layout13.setBackgroundColor(getResources().getColor(R.color.white));
+                    layout13.setBackground(getResources().getDrawable(R.drawable.border));
+                }
+                textView13Label.setText(label);
+                textView13.setText(value);
+                break;
+            case 14:
+                if (gridChange) {
+                    View gridCell14 = layoutInflater.inflate(R.layout.layout_griditem14, gridLayout, false);
+                    gridLayout.addView(gridCell14);
+                }
+                LinearLayout layout14 = (LinearLayout) findViewById(R.id.layout_14);
+                textView14 = (TextView) findViewById(R.id.textView14);
+                textView14Label = (TextView) findViewById(R.id.textView14label);
+                if (itsDark){
+                    textView14.setTextColor(getResources().getColor(R.color.white));
+                    textView14Label.setTextColor(getResources().getColor(R.color.white));
+                    layout14.setBackgroundColor(getResources().getColor(R.color.black));
+                    layout14.setBackground(getResources().getDrawable(R.drawable.border_white));
+                } else {
+                    textView14.setTextColor(getResources().getColor(R.color.black));
+                    textView14Label.setTextColor(getResources().getColor(R.color.black));
+                    layout14.setBackgroundColor(getResources().getColor(R.color.white));
+                    layout14.setBackground(getResources().getDrawable(R.drawable.border));
+                }
+                textView14Label.setText(label);
+                textView14.setText(value);
+                break;
+            case 15:
+                if (gridChange) {
+                    View gridCell15 = layoutInflater.inflate(R.layout.layout_griditem15, gridLayout, false);
+                    gridLayout.addView(gridCell15);
+                }
+                LinearLayout layout15 = (LinearLayout) findViewById(R.id.layout_15);
+                textView15 = (TextView) findViewById(R.id.textView15);
+                textView15Label = (TextView) findViewById(R.id.textView15label);
+                if (itsDark){
+                    textView15.setTextColor(getResources().getColor(R.color.white));
+                    textView15Label.setTextColor(getResources().getColor(R.color.white));
+                    layout15.setBackgroundColor(getResources().getColor(R.color.black));
+                    layout15.setBackground(getResources().getDrawable(R.drawable.border_white));
+                } else {
+                    textView15.setTextColor(getResources().getColor(R.color.black));
+                    textView15Label.setTextColor(getResources().getColor(R.color.black));
+                    layout15.setBackgroundColor(getResources().getColor(R.color.white));
+                    layout15.setBackground(getResources().getDrawable(R.drawable.border));
+                }
+                textView15Label.setText(label);
+                textView15.setText(value);
+                break;
+            default:
+                break;
         }
     }
 
@@ -1316,6 +1968,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         Log.d(TAG, "Keycode: " + keyCode);
+        int currentCellCount = Integer.parseInt(sharedPrefs.getString("CELL_COUNT","15"));
+        int maxCellCount = Integer.parseInt(sharedPrefs.getString("prefMaxCells","15"));
+        int nextCellCount = 1;
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 Intent backIntent = new Intent(MainActivity.this, TaskActivity.class);
@@ -1324,6 +1981,58 @@ public class MainActivity extends AppCompatActivity {
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 Intent forwardIntent = new Intent(MainActivity.this, MusicActivity.class);
                 startActivity(forwardIntent);
+                return true;
+            case KeyEvent.KEYCODE_DPAD_UP:
+                gridChange = true;
+                switch (currentCellCount){
+                    case 15:
+                        nextCellCount = 1;
+                        break;
+                    case 12:
+                        nextCellCount = 15;
+                        break;
+                    case 8:
+                        nextCellCount = 12;
+                        break;
+                    case 4:
+                        nextCellCount = 8;
+                        break;
+                    case 2:
+                        nextCellCount = 4;
+                        break;
+                    case 1:
+                        nextCellCount = 2;
+                        break;
+                }
+                editor.putString("CELL_COUNT", String.valueOf(nextCellCount));
+                editor.apply();
+                updateDisplay();
+                return true;
+            case KeyEvent.KEYCODE_DPAD_DOWN:
+                gridChange = true;
+                switch (currentCellCount){
+                    case 15:
+                        nextCellCount = 12;
+                        break;
+                    case 12:
+                        nextCellCount = 8;
+                        break;
+                    case 8:
+                        nextCellCount = 4;
+                        break;
+                    case 4:
+                        nextCellCount = 2;
+                        break;
+                    case 2:
+                        nextCellCount = 1;
+                        break;
+                    case 1:
+                        nextCellCount = 15;
+                        break;
+                }
+                editor.putString("CELL_COUNT", String.valueOf(nextCellCount));
+                editor.apply();
+                updateDisplay();
                 return true;
             default:
                 return super.onKeyUp(keyCode, event);
