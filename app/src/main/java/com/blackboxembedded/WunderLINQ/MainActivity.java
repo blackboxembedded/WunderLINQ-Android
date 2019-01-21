@@ -149,17 +149,23 @@ public class MainActivity extends AppCompatActivity {
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        String orientation = sharedPrefs.getString("prefOrientation", "0");
-        if (!orientation.equals("0")){
-            if(orientation.equals("1")){
+        int orientation = Integer.parseInt(sharedPrefs.getString("prefOrientation", "0"));
+        switch (orientation){
+            case 0:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
+                break;
+            case 1:
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            } else if (orientation.equals("2")){
+                break;
+            case 2:
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
-            } else {
+                break;
+            case 3:
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            }
-        } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
+                break;
+            default:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
+                break;
         }
 
         layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -238,8 +244,8 @@ public class MainActivity extends AppCompatActivity {
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem4, gridLayout, false));
                     break;
                 case 2:
-                    fontSize = 42;
-                    labelFontSize = 26;
+                    fontSize = 80;
+                    labelFontSize = 30;
                     gridLayout.removeAllViews();
                     gridLayout.setColumnCount(1);
                     gridLayout.setRowCount(2);
@@ -247,8 +253,8 @@ public class MainActivity extends AppCompatActivity {
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem2, gridLayout, false));
                     break;
                 case 1:
-                    fontSize = 44;
-                    labelFontSize = 28;
+                    fontSize = 90;
+                    labelFontSize = 40;
                     gridLayout.removeAllViews();
                     gridLayout.setColumnCount(1);
                     gridLayout.setRowCount(1);
@@ -261,8 +267,8 @@ public class MainActivity extends AppCompatActivity {
             gridLayout.setColumnCount(1);
             gridLayout.setRowCount(1);
             gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false));
-            textView1 = (TextView) findViewById(R.id.textView1);
-            textView1Label = (TextView) findViewById(R.id.textView1label);
+            textView1 = findViewById(R.id.textView1);
+            textView1Label = findViewById(R.id.textView1label);
             textView1Label.setText("");
             textView1.setText(getString(R.string.app_name));
         }
@@ -523,12 +529,12 @@ public class MainActivity extends AppCompatActivity {
 
         actionBar.setCustomView(v);
 
-        backButton = (ImageButton) findViewById(R.id.action_back);
-        forwardButton = (ImageButton) findViewById(R.id.action_forward);
-        otherButton = (ImageButton) findViewById(R.id.action_other);
-        dataButton = (ImageButton) findViewById(R.id.action_data);
-        faultButton = (ImageButton) findViewById(R.id.action_faults);
-        btButton = (ImageButton) findViewById(R.id.action_connect);
+        backButton = findViewById(R.id.action_back);
+        forwardButton = findViewById(R.id.action_forward);
+        otherButton = findViewById(R.id.action_other);
+        dataButton = findViewById(R.id.action_data);
+        faultButton = findViewById(R.id.action_faults);
+        btButton = findViewById(R.id.action_connect);
 
         navbarTitle = (TextView) findViewById(R.id.action_title);
         navbarTitle.setText(R.string.main_title);
@@ -680,7 +686,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateColors(boolean itsDark){
         ((MyApplication) this.getApplication()).setitsDark(itsDark);
-        LinearLayout lLayout = (LinearLayout) findViewById(R.id.layout_main);
+        LinearLayout lLayout = findViewById(R.id.layout_main);
         if (lLayout != null){
             if (itsDark) {
                 Log.d(TAG,"Settings things for dark");
@@ -1036,7 +1042,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Update Display
     private void updateDisplay(){
-        gridLayout = (GridLayout) findViewById(R.id.gridLayout);
+        gridLayout = findViewById(R.id.gridLayout);
 
         if (!sharedPrefs.getBoolean("prefMotorcycleData", false)) {
             //Check for active faults
@@ -1216,9 +1222,9 @@ public class MainActivity extends AppCompatActivity {
             gridLayout.setRowCount(1);
             View gridCell1 = layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false);
             gridLayout.addView(gridCell1);
-            LinearLayout layout1 = (LinearLayout) findViewById(R.id.layout_1);
-            textView1 = (TextView) findViewById(R.id.textView1);
-            textView1Label = (TextView) findViewById(R.id.textView1label);
+            LinearLayout layout1 = findViewById(R.id.layout_1);
+            textView1 = findViewById(R.id.textView1);
+            textView1Label = findViewById(R.id.textView1label);
             if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
                 textView1.setTextColor(getResources().getColor(R.color.white));
                 textView1Label.setTextColor(getResources().getColor(R.color.white));
@@ -1258,15 +1264,15 @@ public class MainActivity extends AppCompatActivity {
             temperatureUnit = "F";
         }
         String distanceUnit = "km";
-        String heightUnit = "m";
+        //String heightUnit = "m";
         String distanceTimeUnit = "kmh";
         String consumptionUnit = "L/100";
         String distanceFormat = sharedPrefs.getString("prefDistance", "0");
         if (distanceFormat.contains("1")) {
             distanceUnit = "mi";
-            heightUnit = "ft";
+            //heightUnit = "ft";
             distanceTimeUnit = "mph";
-            consumptionUnit = "mpg"; // 282.5 / (L/100)
+            consumptionUnit = "mpg";
         }
         String voltageUnit = "V";
         String throttleUnit = "%";
@@ -1502,9 +1508,9 @@ public class MainActivity extends AppCompatActivity {
                     View gridCell1 = layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false);
                     gridLayout.addView(gridCell1);
                 }
-                LinearLayout layout1 = (LinearLayout) findViewById(R.id.layout_1);
-                textView1 = (TextView) findViewById(R.id.textView1);
-                textView1Label = (TextView) findViewById(R.id.textView1label);
+                LinearLayout layout1 = findViewById(R.id.layout_1);
+                textView1 = findViewById(R.id.textView1);
+                textView1Label = findViewById(R.id.textView1label);
                 if (itsDark){
                     textView1.setTextColor(getResources().getColor(R.color.white));
                     textView1Label.setTextColor(getResources().getColor(R.color.white));
@@ -1526,9 +1532,9 @@ public class MainActivity extends AppCompatActivity {
                     View gridCell2 = layoutInflater.inflate(R.layout.layout_griditem2, gridLayout, false);
                     gridLayout.addView(gridCell2);
                 }
-                LinearLayout layout2 = (LinearLayout) findViewById(R.id.layout_2);
-                TextView textView2 = (TextView) findViewById(R.id.textView2);
-                TextView textView2Label = (TextView) findViewById(R.id.textView2label);
+                LinearLayout layout2 = findViewById(R.id.layout_2);
+                TextView textView2 = findViewById(R.id.textView2);
+                TextView textView2Label = findViewById(R.id.textView2label);
                 if (itsDark){
                     textView2.setTextColor(getResources().getColor(R.color.white));
                     textView2Label.setTextColor(getResources().getColor(R.color.white));
@@ -1550,9 +1556,9 @@ public class MainActivity extends AppCompatActivity {
                     View gridCell3 = layoutInflater.inflate(R.layout.layout_griditem3, gridLayout, false);
                     gridLayout.addView(gridCell3);
                 }
-                LinearLayout layout3 = (LinearLayout) findViewById(R.id.layout_3);
-                TextView textView3 = (TextView) findViewById(R.id.textView3);
-                TextView textView3Label = (TextView) findViewById(R.id.textView3label);
+                LinearLayout layout3 = findViewById(R.id.layout_3);
+                TextView textView3 = findViewById(R.id.textView3);
+                TextView textView3Label = findViewById(R.id.textView3label);
                 if (itsDark){
                     textView3.setTextColor(getResources().getColor(R.color.white));
                     textView3Label.setTextColor(getResources().getColor(R.color.white));
@@ -1574,9 +1580,9 @@ public class MainActivity extends AppCompatActivity {
                     View gridCell4 = layoutInflater.inflate(R.layout.layout_griditem4, gridLayout, false);
                     gridLayout.addView(gridCell4);
                 }
-                LinearLayout layout4 = (LinearLayout) findViewById(R.id.layout_4);
-                TextView textView4 = (TextView) findViewById(R.id.textView4);
-                TextView textView4Label = (TextView) findViewById(R.id.textView4label);
+                LinearLayout layout4 = findViewById(R.id.layout_4);
+                TextView textView4 = findViewById(R.id.textView4);
+                TextView textView4Label = findViewById(R.id.textView4label);
                 if (itsDark){
                     textView4.setTextColor(getResources().getColor(R.color.white));
                     textView4Label.setTextColor(getResources().getColor(R.color.white));
@@ -1598,9 +1604,9 @@ public class MainActivity extends AppCompatActivity {
                     View gridCell5 = layoutInflater.inflate(R.layout.layout_griditem5, gridLayout, false);
                     gridLayout.addView(gridCell5);
                 }
-                LinearLayout layout5 = (LinearLayout) findViewById(R.id.layout_5);
-                TextView textView5 = (TextView) findViewById(R.id.textView5);
-                TextView textView5Label = (TextView) findViewById(R.id.textView5label);
+                LinearLayout layout5 = findViewById(R.id.layout_5);
+                TextView textView5 = findViewById(R.id.textView5);
+                TextView textView5Label = findViewById(R.id.textView5label);
                 if (itsDark){
                     textView5.setTextColor(getResources().getColor(R.color.white));
                     textView5Label.setTextColor(getResources().getColor(R.color.white));
@@ -1622,9 +1628,9 @@ public class MainActivity extends AppCompatActivity {
                     View gridCell6 = layoutInflater.inflate(R.layout.layout_griditem6, gridLayout, false);
                     gridLayout.addView(gridCell6);
                 }
-                LinearLayout layout6 = (LinearLayout) findViewById(R.id.layout_6);
-                TextView textView6 = (TextView) findViewById(R.id.textView6);
-                TextView textView6Label = (TextView) findViewById(R.id.textView6label);
+                LinearLayout layout6 = findViewById(R.id.layout_6);
+                TextView textView6 = findViewById(R.id.textView6);
+                TextView textView6Label = findViewById(R.id.textView6label);
                 if (itsDark){
                     textView6.setTextColor(getResources().getColor(R.color.white));
                     textView6Label.setTextColor(getResources().getColor(R.color.white));
@@ -1646,9 +1652,9 @@ public class MainActivity extends AppCompatActivity {
                     View gridCell7 = layoutInflater.inflate(R.layout.layout_griditem7, gridLayout, false);
                     gridLayout.addView(gridCell7);
                 }
-                LinearLayout layout7 = (LinearLayout) findViewById(R.id.layout_7);
-                TextView textView7 = (TextView) findViewById(R.id.textView7);
-                TextView textView7Label = (TextView) findViewById(R.id.textView7label);
+                LinearLayout layout7 = findViewById(R.id.layout_7);
+                TextView textView7 = findViewById(R.id.textView7);
+                TextView textView7Label = findViewById(R.id.textView7label);
                 if (itsDark){
                     textView7.setTextColor(getResources().getColor(R.color.white));
                     textView7Label.setTextColor(getResources().getColor(R.color.white));
@@ -1670,9 +1676,9 @@ public class MainActivity extends AppCompatActivity {
                     View gridCell8 = layoutInflater.inflate(R.layout.layout_griditem8, gridLayout, false);
                     gridLayout.addView(gridCell8);
                 }
-                LinearLayout layout8 = (LinearLayout) findViewById(R.id.layout_8);
-                TextView textView8 = (TextView) findViewById(R.id.textView8);
-                TextView textView8Label = (TextView) findViewById(R.id.textView8label);
+                LinearLayout layout8 = findViewById(R.id.layout_8);
+                TextView textView8 = findViewById(R.id.textView8);
+                TextView textView8Label = findViewById(R.id.textView8label);
                 if (itsDark){
                     textView8.setTextColor(getResources().getColor(R.color.white));
                     textView8Label.setTextColor(getResources().getColor(R.color.white));
@@ -1694,9 +1700,9 @@ public class MainActivity extends AppCompatActivity {
                     View gridCell9 = layoutInflater.inflate(R.layout.layout_griditem9, gridLayout, false);
                     gridLayout.addView(gridCell9);
                 }
-                LinearLayout layout9 = (LinearLayout) findViewById(R.id.layout_9);
-                TextView textView9 = (TextView) findViewById(R.id.textView9);
-                TextView textView9Label = (TextView) findViewById(R.id.textView9label);
+                LinearLayout layout9 = findViewById(R.id.layout_9);
+                TextView textView9 = findViewById(R.id.textView9);
+                TextView textView9Label = findViewById(R.id.textView9label);
                 if (itsDark){
                     textView9.setTextColor(getResources().getColor(R.color.white));
                     textView9Label.setTextColor(getResources().getColor(R.color.white));
@@ -1718,9 +1724,9 @@ public class MainActivity extends AppCompatActivity {
                     View gridCell10 = layoutInflater.inflate(R.layout.layout_griditem10, gridLayout, false);
                     gridLayout.addView(gridCell10);
                 }
-                LinearLayout layout10 = (LinearLayout) findViewById(R.id.layout_10);
-                TextView textView10 = (TextView) findViewById(R.id.textView10);
-                TextView textView10Label = (TextView) findViewById(R.id.textView10label);
+                LinearLayout layout10 = findViewById(R.id.layout_10);
+                TextView textView10 = findViewById(R.id.textView10);
+                TextView textView10Label = findViewById(R.id.textView10label);
                 if (itsDark){
                     textView10.setTextColor(getResources().getColor(R.color.white));
                     textView10Label.setTextColor(getResources().getColor(R.color.white));
@@ -1742,9 +1748,9 @@ public class MainActivity extends AppCompatActivity {
                     View gridCell11 = layoutInflater.inflate(R.layout.layout_griditem11, gridLayout, false);
                     gridLayout.addView(gridCell11);
                 }
-                LinearLayout layout11 = (LinearLayout) findViewById(R.id.layout_11);
-                TextView textView11 = (TextView) findViewById(R.id.textView11);
-                TextView textView11Label = (TextView) findViewById(R.id.textView11label);
+                LinearLayout layout11 = findViewById(R.id.layout_11);
+                TextView textView11 = findViewById(R.id.textView11);
+                TextView textView11Label = findViewById(R.id.textView11label);
                 if (itsDark){
                     textView11.setTextColor(getResources().getColor(R.color.white));
                     textView11Label.setTextColor(getResources().getColor(R.color.white));
@@ -1766,9 +1772,9 @@ public class MainActivity extends AppCompatActivity {
                     View gridCell12 = layoutInflater.inflate(R.layout.layout_griditem12, gridLayout, false);
                     gridLayout.addView(gridCell12);
                 }
-                LinearLayout layout12 = (LinearLayout) findViewById(R.id.layout_12);
-                TextView textView12 = (TextView) findViewById(R.id.textView12);
-                TextView textView12Label = (TextView) findViewById(R.id.textView12label);
+                LinearLayout layout12 = findViewById(R.id.layout_12);
+                TextView textView12 = findViewById(R.id.textView12);
+                TextView textView12Label = findViewById(R.id.textView12label);
                 if (itsDark){
                     textView12.setTextColor(getResources().getColor(R.color.white));
                     textView12Label.setTextColor(getResources().getColor(R.color.white));
@@ -1790,9 +1796,9 @@ public class MainActivity extends AppCompatActivity {
                     View gridCell13 = layoutInflater.inflate(R.layout.layout_griditem13, gridLayout, false);
                     gridLayout.addView(gridCell13);
                 }
-                LinearLayout layout13 = (LinearLayout) findViewById(R.id.layout_13);
-                TextView textView13 = (TextView) findViewById(R.id.textView13);
-                TextView textView13Label = (TextView) findViewById(R.id.textView13label);
+                LinearLayout layout13 = findViewById(R.id.layout_13);
+                TextView textView13 = findViewById(R.id.textView13);
+                TextView textView13Label = findViewById(R.id.textView13label);
                 if (itsDark){
                     textView13.setTextColor(getResources().getColor(R.color.white));
                     textView13Label.setTextColor(getResources().getColor(R.color.white));
@@ -1814,9 +1820,9 @@ public class MainActivity extends AppCompatActivity {
                     View gridCell14 = layoutInflater.inflate(R.layout.layout_griditem14, gridLayout, false);
                     gridLayout.addView(gridCell14);
                 }
-                LinearLayout layout14 = (LinearLayout) findViewById(R.id.layout_14);
-                TextView textView14 = (TextView) findViewById(R.id.textView14);
-                TextView textView14Label = (TextView) findViewById(R.id.textView14label);
+                LinearLayout layout14 = findViewById(R.id.layout_14);
+                TextView textView14 = findViewById(R.id.textView14);
+                TextView textView14Label = findViewById(R.id.textView14label);
                 if (itsDark){
                     textView14.setTextColor(getResources().getColor(R.color.white));
                     textView14Label.setTextColor(getResources().getColor(R.color.white));
@@ -1838,9 +1844,9 @@ public class MainActivity extends AppCompatActivity {
                     View gridCell15 = layoutInflater.inflate(R.layout.layout_griditem15, gridLayout, false);
                     gridLayout.addView(gridCell15);
                 }
-                LinearLayout layout15 = (LinearLayout) findViewById(R.id.layout_15);
-                TextView textView15 = (TextView) findViewById(R.id.textView15);
-                TextView textView15Label = (TextView) findViewById(R.id.textView15label);
+                LinearLayout layout15 = findViewById(R.id.layout_15);
+                TextView textView15 = findViewById(R.id.textView15);
+                TextView textView15Label = findViewById(R.id.textView15label);
                 if (itsDark){
                     textView15.setTextColor(getResources().getColor(R.color.white));
                     textView15Label.setTextColor(getResources().getColor(R.color.white));
