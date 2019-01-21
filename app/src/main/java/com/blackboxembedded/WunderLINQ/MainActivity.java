@@ -42,6 +42,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayout;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -84,49 +85,18 @@ public class MainActivity extends AppCompatActivity {
 
     private GridLayout gridLayout;
     private TextView textView1;
-    private TextView textView2;
-    private TextView textView3;
-    private TextView textView4;
-    private TextView textView5;
-    private TextView textView6;
-    private TextView textView7;
-    private TextView textView8;
-    private TextView textView9;
-    private TextView textView10;
-    private TextView textView11;
-    private TextView textView12;
-    private TextView textView13;
-    private TextView textView14;
-    private TextView textView15;
-
     private TextView textView1Label;
-    private TextView textView2Label;
-    private TextView textView3Label;
-    private TextView textView4Label;
-    private TextView textView5Label;
-    private TextView textView6Label;
-    private TextView textView7Label;
-    private TextView textView8Label;
-    private TextView textView9Label;
-    private TextView textView10Label;
-    private TextView textView11Label;
-    private TextView textView12Label;
-    private TextView textView13Label;
-    private TextView textView14Label;
-    private TextView textView15Label;
 
-    private TextView textViewAppName;
+    private int labelFontSize = 20;
+    private int fontSize = 36;
 
     private SharedPreferences sharedPrefs;
 
     private boolean gridChange = false;
 
-    static boolean hasSensor = false;
     static boolean itsDark = false;
     private long darkTimer = 0;
     private long lightTimer = 0;
-
-    private static Context mContext;
 
     private SensorManager sensorManager;
     private Sensor lightSensor;
@@ -201,6 +171,8 @@ public class MainActivity extends AppCompatActivity {
             int currentCellCount = Integer.parseInt(sharedPrefs.getString("CELL_COUNT","15"));
             switch(currentCellCount){
                 case 15:
+                    fontSize = 34;
+                    labelFontSize = 18;
                     gridLayout.removeAllViews();
                     gridLayout.setColumnCount(3);
                     gridLayout.setRowCount(5);
@@ -221,6 +193,8 @@ public class MainActivity extends AppCompatActivity {
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem15, gridLayout, false));
                     break;
                 case 12:
+                    fontSize = 36;
+                    labelFontSize = 20;
                     gridLayout.removeAllViews();
                     gridLayout.setColumnCount(3);
                     gridLayout.setRowCount(4);
@@ -238,6 +212,8 @@ public class MainActivity extends AppCompatActivity {
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem12, gridLayout, false));
                     break;
                 case 8:
+                    fontSize = 38;
+                    labelFontSize = 22;
                     gridLayout.removeAllViews();
                     gridLayout.setColumnCount(2);
                     gridLayout.setRowCount(4);
@@ -251,6 +227,8 @@ public class MainActivity extends AppCompatActivity {
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem8, gridLayout, false));
                     break;
                 case 4:
+                    fontSize = 40;
+                    labelFontSize = 24;
                     gridLayout.removeAllViews();
                     gridLayout.setColumnCount(2);
                     gridLayout.setRowCount(2);
@@ -260,6 +238,8 @@ public class MainActivity extends AppCompatActivity {
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem4, gridLayout, false));
                     break;
                 case 2:
+                    fontSize = 42;
+                    labelFontSize = 26;
                     gridLayout.removeAllViews();
                     gridLayout.setColumnCount(1);
                     gridLayout.setRowCount(2);
@@ -267,6 +247,8 @@ public class MainActivity extends AppCompatActivity {
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem2, gridLayout, false));
                     break;
                 case 1:
+                    fontSize = 44;
+                    labelFontSize = 28;
                     gridLayout.removeAllViews();
                     gridLayout.setColumnCount(1);
                     gridLayout.setRowCount(1);
@@ -297,8 +279,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(backIntent);
             }
         });
-
-        mContext = this;
 
         showActionBar();
 
@@ -506,7 +486,7 @@ public class MainActivity extends AppCompatActivity {
                             // Set the last Launched date to today.
                             SharedPreferences.Editor editor = sharedPrefs.edit();
                             editor.putString("LAST_LAUNCH_DATE", currentDate);
-                            editor.commit();
+                            editor.apply();
                             dialog.cancel();
                         }
                     });
@@ -775,7 +755,7 @@ public class MainActivity extends AppCompatActivity {
             unregisterReceiver(mBondingBroadcast);
             unbindService(mServiceConnection);
         } catch (IllegalArgumentException e){
-
+            Log.d(TAG,e.toString());
         }
         mBluetoothLeService = null;
         sensorManager.unregisterListener(sensorEventListener, lightSensor);
@@ -790,7 +770,7 @@ public class MainActivity extends AppCompatActivity {
             unregisterReceiver(mBondingBroadcast);
             unbindService(mServiceConnection);
         } catch (IllegalArgumentException e){
-
+            Log.d(TAG,e.toString());
         }
         mBluetoothLeService = null;
         sensorManager.unregisterListener(sensorEventListener, lightSensor);
@@ -805,7 +785,7 @@ public class MainActivity extends AppCompatActivity {
             unregisterReceiver(mBondingBroadcast);
             unbindService(mServiceConnection);
         } catch (IllegalArgumentException e){
-
+            Log.d(TAG,e.toString());
         }
         mBluetoothLeService = null;
         sensorManager.unregisterListener(sensorEventListener, lightSensor);
@@ -1250,6 +1230,8 @@ public class MainActivity extends AppCompatActivity {
                 layout1.setBackgroundColor(getResources().getColor(R.color.white));
                 layout1.setBackground(getResources().getDrawable(R.drawable.border));
             }
+            textView1Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
+            textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
             textView1Label.setText("");
             textView1.setText(getString(R.string.app_name));
         }
@@ -1534,6 +1516,8 @@ public class MainActivity extends AppCompatActivity {
                     layout1.setBackgroundColor(getResources().getColor(R.color.white));
                     layout1.setBackground(getResources().getDrawable(R.drawable.border));
                 }
+                textView1Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
+                textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView1Label.setText(label);
                 textView1.setText(value);
                 break;
@@ -1543,8 +1527,8 @@ public class MainActivity extends AppCompatActivity {
                     gridLayout.addView(gridCell2);
                 }
                 LinearLayout layout2 = (LinearLayout) findViewById(R.id.layout_2);
-                textView2 = (TextView) findViewById(R.id.textView2);
-                textView2Label = (TextView) findViewById(R.id.textView2label);
+                TextView textView2 = (TextView) findViewById(R.id.textView2);
+                TextView textView2Label = (TextView) findViewById(R.id.textView2label);
                 if (itsDark){
                     textView2.setTextColor(getResources().getColor(R.color.white));
                     textView2Label.setTextColor(getResources().getColor(R.color.white));
@@ -1556,6 +1540,8 @@ public class MainActivity extends AppCompatActivity {
                     layout2.setBackgroundColor(getResources().getColor(R.color.white));
                     layout2.setBackground(getResources().getDrawable(R.drawable.border));
                 }
+                textView2Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
+                textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView2Label.setText(label);
                 textView2.setText(value);
                 break;
@@ -1565,8 +1551,8 @@ public class MainActivity extends AppCompatActivity {
                     gridLayout.addView(gridCell3);
                 }
                 LinearLayout layout3 = (LinearLayout) findViewById(R.id.layout_3);
-                textView3 = (TextView) findViewById(R.id.textView3);
-                textView3Label = (TextView) findViewById(R.id.textView3label);
+                TextView textView3 = (TextView) findViewById(R.id.textView3);
+                TextView textView3Label = (TextView) findViewById(R.id.textView3label);
                 if (itsDark){
                     textView3.setTextColor(getResources().getColor(R.color.white));
                     textView3Label.setTextColor(getResources().getColor(R.color.white));
@@ -1578,6 +1564,8 @@ public class MainActivity extends AppCompatActivity {
                     layout3.setBackgroundColor(getResources().getColor(R.color.white));
                     layout3.setBackground(getResources().getDrawable(R.drawable.border));
                 }
+                textView3Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
+                textView3.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView3Label.setText(label);
                 textView3.setText(value);
                 break;
@@ -1587,8 +1575,8 @@ public class MainActivity extends AppCompatActivity {
                     gridLayout.addView(gridCell4);
                 }
                 LinearLayout layout4 = (LinearLayout) findViewById(R.id.layout_4);
-                textView4 = (TextView) findViewById(R.id.textView4);
-                textView4Label = (TextView) findViewById(R.id.textView4label);
+                TextView textView4 = (TextView) findViewById(R.id.textView4);
+                TextView textView4Label = (TextView) findViewById(R.id.textView4label);
                 if (itsDark){
                     textView4.setTextColor(getResources().getColor(R.color.white));
                     textView4Label.setTextColor(getResources().getColor(R.color.white));
@@ -1600,6 +1588,8 @@ public class MainActivity extends AppCompatActivity {
                     layout4.setBackgroundColor(getResources().getColor(R.color.white));
                     layout4.setBackground(getResources().getDrawable(R.drawable.border));
                 }
+                textView4Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
+                textView4.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView4Label.setText(label);
                 textView4.setText(value);
                 break;
@@ -1609,8 +1599,8 @@ public class MainActivity extends AppCompatActivity {
                     gridLayout.addView(gridCell5);
                 }
                 LinearLayout layout5 = (LinearLayout) findViewById(R.id.layout_5);
-                textView5 = (TextView) findViewById(R.id.textView5);
-                textView5Label = (TextView) findViewById(R.id.textView5label);
+                TextView textView5 = (TextView) findViewById(R.id.textView5);
+                TextView textView5Label = (TextView) findViewById(R.id.textView5label);
                 if (itsDark){
                     textView5.setTextColor(getResources().getColor(R.color.white));
                     textView5Label.setTextColor(getResources().getColor(R.color.white));
@@ -1622,6 +1612,8 @@ public class MainActivity extends AppCompatActivity {
                     layout5.setBackgroundColor(getResources().getColor(R.color.white));
                     layout5.setBackground(getResources().getDrawable(R.drawable.border));
                 }
+                textView5Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
+                textView5.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView5Label.setText(label);
                 textView5.setText(value);
                 break;
@@ -1631,8 +1623,8 @@ public class MainActivity extends AppCompatActivity {
                     gridLayout.addView(gridCell6);
                 }
                 LinearLayout layout6 = (LinearLayout) findViewById(R.id.layout_6);
-                textView6 = (TextView) findViewById(R.id.textView6);
-                textView6Label = (TextView) findViewById(R.id.textView6label);
+                TextView textView6 = (TextView) findViewById(R.id.textView6);
+                TextView textView6Label = (TextView) findViewById(R.id.textView6label);
                 if (itsDark){
                     textView6.setTextColor(getResources().getColor(R.color.white));
                     textView6Label.setTextColor(getResources().getColor(R.color.white));
@@ -1644,6 +1636,8 @@ public class MainActivity extends AppCompatActivity {
                     layout6.setBackgroundColor(getResources().getColor(R.color.white));
                     layout6.setBackground(getResources().getDrawable(R.drawable.border));
                 }
+                textView6Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
+                textView6.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView6Label.setText(label);
                 textView6.setText(value);
                 break;
@@ -1653,8 +1647,8 @@ public class MainActivity extends AppCompatActivity {
                     gridLayout.addView(gridCell7);
                 }
                 LinearLayout layout7 = (LinearLayout) findViewById(R.id.layout_7);
-                textView7 = (TextView) findViewById(R.id.textView7);
-                textView7Label = (TextView) findViewById(R.id.textView7label);
+                TextView textView7 = (TextView) findViewById(R.id.textView7);
+                TextView textView7Label = (TextView) findViewById(R.id.textView7label);
                 if (itsDark){
                     textView7.setTextColor(getResources().getColor(R.color.white));
                     textView7Label.setTextColor(getResources().getColor(R.color.white));
@@ -1666,6 +1660,8 @@ public class MainActivity extends AppCompatActivity {
                     layout7.setBackgroundColor(getResources().getColor(R.color.white));
                     layout7.setBackground(getResources().getDrawable(R.drawable.border));
                 }
+                textView7Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
+                textView7.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView7Label.setText(label);
                 textView7.setText(value);
                 break;
@@ -1675,8 +1671,8 @@ public class MainActivity extends AppCompatActivity {
                     gridLayout.addView(gridCell8);
                 }
                 LinearLayout layout8 = (LinearLayout) findViewById(R.id.layout_8);
-                textView8 = (TextView) findViewById(R.id.textView8);
-                textView8Label = (TextView) findViewById(R.id.textView8label);
+                TextView textView8 = (TextView) findViewById(R.id.textView8);
+                TextView textView8Label = (TextView) findViewById(R.id.textView8label);
                 if (itsDark){
                     textView8.setTextColor(getResources().getColor(R.color.white));
                     textView8Label.setTextColor(getResources().getColor(R.color.white));
@@ -1688,6 +1684,8 @@ public class MainActivity extends AppCompatActivity {
                     layout8.setBackgroundColor(getResources().getColor(R.color.white));
                     layout8.setBackground(getResources().getDrawable(R.drawable.border));
                 }
+                textView8Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
+                textView8.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView8Label.setText(label);
                 textView8.setText(value);
                 break;
@@ -1697,8 +1695,8 @@ public class MainActivity extends AppCompatActivity {
                     gridLayout.addView(gridCell9);
                 }
                 LinearLayout layout9 = (LinearLayout) findViewById(R.id.layout_9);
-                textView9 = (TextView) findViewById(R.id.textView9);
-                textView9Label = (TextView) findViewById(R.id.textView9label);
+                TextView textView9 = (TextView) findViewById(R.id.textView9);
+                TextView textView9Label = (TextView) findViewById(R.id.textView9label);
                 if (itsDark){
                     textView9.setTextColor(getResources().getColor(R.color.white));
                     textView9Label.setTextColor(getResources().getColor(R.color.white));
@@ -1710,6 +1708,8 @@ public class MainActivity extends AppCompatActivity {
                     layout9.setBackgroundColor(getResources().getColor(R.color.black));
                     layout9.setBackground(getResources().getDrawable(R.drawable.border));
                 }
+                textView9Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
+                textView9.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView9Label.setText(label);
                 textView9.setText(value);
                 break;
@@ -1719,8 +1719,8 @@ public class MainActivity extends AppCompatActivity {
                     gridLayout.addView(gridCell10);
                 }
                 LinearLayout layout10 = (LinearLayout) findViewById(R.id.layout_10);
-                textView10 = (TextView) findViewById(R.id.textView10);
-                textView10Label = (TextView) findViewById(R.id.textView10label);
+                TextView textView10 = (TextView) findViewById(R.id.textView10);
+                TextView textView10Label = (TextView) findViewById(R.id.textView10label);
                 if (itsDark){
                     textView10.setTextColor(getResources().getColor(R.color.white));
                     textView10Label.setTextColor(getResources().getColor(R.color.white));
@@ -1732,6 +1732,8 @@ public class MainActivity extends AppCompatActivity {
                     layout10.setBackgroundColor(getResources().getColor(R.color.white));
                     layout10.setBackground(getResources().getDrawable(R.drawable.border));
                 }
+                textView10Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
+                textView10.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView10Label.setText(label);
                 textView10.setText(value);
                 break;
@@ -1741,8 +1743,8 @@ public class MainActivity extends AppCompatActivity {
                     gridLayout.addView(gridCell11);
                 }
                 LinearLayout layout11 = (LinearLayout) findViewById(R.id.layout_11);
-                textView11 = (TextView) findViewById(R.id.textView11);
-                textView11Label = (TextView) findViewById(R.id.textView11label);
+                TextView textView11 = (TextView) findViewById(R.id.textView11);
+                TextView textView11Label = (TextView) findViewById(R.id.textView11label);
                 if (itsDark){
                     textView11.setTextColor(getResources().getColor(R.color.white));
                     textView11Label.setTextColor(getResources().getColor(R.color.white));
@@ -1754,6 +1756,8 @@ public class MainActivity extends AppCompatActivity {
                     layout11.setBackgroundColor(getResources().getColor(R.color.white));
                     layout11.setBackground(getResources().getDrawable(R.drawable.border));
                 }
+                textView11Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
+                textView11.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView11Label.setText(label);
                 textView11.setText(value);
                 break;
@@ -1763,8 +1767,8 @@ public class MainActivity extends AppCompatActivity {
                     gridLayout.addView(gridCell12);
                 }
                 LinearLayout layout12 = (LinearLayout) findViewById(R.id.layout_12);
-                textView12 = (TextView) findViewById(R.id.textView12);
-                textView12Label = (TextView) findViewById(R.id.textView12label);
+                TextView textView12 = (TextView) findViewById(R.id.textView12);
+                TextView textView12Label = (TextView) findViewById(R.id.textView12label);
                 if (itsDark){
                     textView12.setTextColor(getResources().getColor(R.color.white));
                     textView12Label.setTextColor(getResources().getColor(R.color.white));
@@ -1776,6 +1780,8 @@ public class MainActivity extends AppCompatActivity {
                     layout12.setBackgroundColor(getResources().getColor(R.color.white));
                     layout12.setBackground(getResources().getDrawable(R.drawable.border));
                 }
+                textView12Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
+                textView12.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView12Label.setText(label);
                 textView12.setText(value);
                 break;
@@ -1785,8 +1791,8 @@ public class MainActivity extends AppCompatActivity {
                     gridLayout.addView(gridCell13);
                 }
                 LinearLayout layout13 = (LinearLayout) findViewById(R.id.layout_13);
-                textView13 = (TextView) findViewById(R.id.textView13);
-                textView13Label = (TextView) findViewById(R.id.textView13label);
+                TextView textView13 = (TextView) findViewById(R.id.textView13);
+                TextView textView13Label = (TextView) findViewById(R.id.textView13label);
                 if (itsDark){
                     textView13.setTextColor(getResources().getColor(R.color.white));
                     textView13Label.setTextColor(getResources().getColor(R.color.white));
@@ -1798,6 +1804,8 @@ public class MainActivity extends AppCompatActivity {
                     layout13.setBackgroundColor(getResources().getColor(R.color.white));
                     layout13.setBackground(getResources().getDrawable(R.drawable.border));
                 }
+                textView13Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
+                textView13.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView13Label.setText(label);
                 textView13.setText(value);
                 break;
@@ -1807,8 +1815,8 @@ public class MainActivity extends AppCompatActivity {
                     gridLayout.addView(gridCell14);
                 }
                 LinearLayout layout14 = (LinearLayout) findViewById(R.id.layout_14);
-                textView14 = (TextView) findViewById(R.id.textView14);
-                textView14Label = (TextView) findViewById(R.id.textView14label);
+                TextView textView14 = (TextView) findViewById(R.id.textView14);
+                TextView textView14Label = (TextView) findViewById(R.id.textView14label);
                 if (itsDark){
                     textView14.setTextColor(getResources().getColor(R.color.white));
                     textView14Label.setTextColor(getResources().getColor(R.color.white));
@@ -1820,6 +1828,8 @@ public class MainActivity extends AppCompatActivity {
                     layout14.setBackgroundColor(getResources().getColor(R.color.white));
                     layout14.setBackground(getResources().getDrawable(R.drawable.border));
                 }
+                textView14Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
+                textView14.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView14Label.setText(label);
                 textView14.setText(value);
                 break;
@@ -1829,8 +1839,8 @@ public class MainActivity extends AppCompatActivity {
                     gridLayout.addView(gridCell15);
                 }
                 LinearLayout layout15 = (LinearLayout) findViewById(R.id.layout_15);
-                textView15 = (TextView) findViewById(R.id.textView15);
-                textView15Label = (TextView) findViewById(R.id.textView15label);
+                TextView textView15 = (TextView) findViewById(R.id.textView15);
+                TextView textView15Label = (TextView) findViewById(R.id.textView15label);
                 if (itsDark){
                     textView15.setTextColor(getResources().getColor(R.color.white));
                     textView15Label.setTextColor(getResources().getColor(R.color.white));
@@ -1842,6 +1852,8 @@ public class MainActivity extends AppCompatActivity {
                     layout15.setBackgroundColor(getResources().getColor(R.color.white));
                     layout15.setBackground(getResources().getDrawable(R.drawable.border));
                 }
+                textView15Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
+                textView15.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView15Label.setText(label);
                 textView15.setText(value);
                 break;
@@ -1969,7 +1981,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         Log.d(TAG, "Keycode: " + keyCode);
         int currentCellCount = Integer.parseInt(sharedPrefs.getString("CELL_COUNT","15"));
-        int maxCellCount = Integer.parseInt(sharedPrefs.getString("prefMaxCells","15"));
+        //int maxCellCount = Integer.parseInt(sharedPrefs.getString("prefMaxCells","15"));
         int nextCellCount = 1;
         SharedPreferences.Editor editor = sharedPrefs.edit();
 
@@ -1987,21 +1999,35 @@ public class MainActivity extends AppCompatActivity {
                 switch (currentCellCount){
                     case 15:
                         nextCellCount = 1;
+                        //fontSize = 44;
+                        //labelFontSize = 28;
+                        fontSize = 90;
+                        labelFontSize = 40;
                         break;
                     case 12:
                         nextCellCount = 15;
+                        fontSize = 34;
+                        labelFontSize = 18;
                         break;
                     case 8:
                         nextCellCount = 12;
+                        fontSize = 36;
+                        labelFontSize = 24;
                         break;
                     case 4:
                         nextCellCount = 8;
+                        fontSize = 38;
+                        labelFontSize = 26;
                         break;
                     case 2:
                         nextCellCount = 4;
+                        fontSize = 40;
+                        labelFontSize = 28;
                         break;
                     case 1:
                         nextCellCount = 2;
+                        fontSize = 80;
+                        labelFontSize = 30;
                         break;
                 }
                 editor.putString("CELL_COUNT", String.valueOf(nextCellCount));
@@ -2013,21 +2039,33 @@ public class MainActivity extends AppCompatActivity {
                 switch (currentCellCount){
                     case 15:
                         nextCellCount = 12;
+                        fontSize = 36;
+                        labelFontSize = 20;
                         break;
                     case 12:
                         nextCellCount = 8;
+                        fontSize = 38;
+                        labelFontSize = 22;
                         break;
                     case 8:
                         nextCellCount = 4;
+                        fontSize = 40;
+                        labelFontSize = 24;
                         break;
                     case 4:
                         nextCellCount = 2;
+                        fontSize = 80;
+                        labelFontSize = 30;
                         break;
                     case 2:
                         nextCellCount = 1;
+                        fontSize = 90;
+                        labelFontSize = 40;
                         break;
                     case 1:
                         nextCellCount = 15;
+                        fontSize = 34;
+                        labelFontSize = 18;
                         break;
                 }
                 editor.putString("CELL_COUNT", String.valueOf(nextCellCount));
@@ -2038,9 +2076,4 @@ public class MainActivity extends AppCompatActivity {
                 return super.onKeyUp(keyCode, event);
         }
     }
-
-    public static Context getContext(){
-        return mContext;
-    }
-
 }
