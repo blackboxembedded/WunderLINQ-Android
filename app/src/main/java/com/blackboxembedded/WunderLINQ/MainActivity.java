@@ -241,8 +241,14 @@ public class MainActivity extends AppCompatActivity {
                     fontSize = 40;
                     labelFontSize = 24;
                     gridLayout.removeAllViews();
-                    gridLayout.setColumnCount(2);
-                    gridLayout.setRowCount(2);
+                    if(getResources().getConfiguration().orientation == 2) {
+                        //Landscape
+                        gridLayout.setColumnCount(2);
+                        gridLayout.setRowCount(2);
+                    } else {
+                        gridLayout.setColumnCount(1);
+                        gridLayout.setRowCount(4);
+                    }
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false));
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem2, gridLayout, false));
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem3, gridLayout, false));
@@ -252,8 +258,6 @@ public class MainActivity extends AppCompatActivity {
                     fontSize = 80;
                     labelFontSize = 30;
                     gridLayout.removeAllViews();
-
-                    Log.d(TAG,"orientation: " + getResources().getConfiguration().orientation);
                     if(getResources().getConfiguration().orientation == 2) {
                         //Landscape
                         gridLayout.setColumnCount(2);
@@ -816,6 +820,7 @@ public class MainActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Log.d(TAG,"In onConfigChange");
+        gridChange = true;
         updateDisplay();
     }
 
@@ -1202,8 +1207,14 @@ public class MainActivity extends AppCompatActivity {
                 case 4:
                     if (gridChange) {
                         gridLayout.removeAllViews();
-                        gridLayout.setColumnCount(2);
-                        gridLayout.setRowCount(2);
+                        if(getResources().getConfiguration().orientation == 2) {
+                            //Landscape
+                            gridLayout.setColumnCount(2);
+                            gridLayout.setRowCount(2);
+                        } else {
+                            gridLayout.setColumnCount(1);
+                            gridLayout.setRowCount(4);
+                        }
                     }
                     // Cell One
                     setCellText(1, cell1Data);
@@ -1318,31 +1329,31 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 1:
                 //Engine
-                label = getString(R.string.engine_temp_label);
+                label = getString(R.string.engine_temp_label) + " (" + temperatureUnit + ")";
                 if(Data.getEngineTemperature() != null ){
                     Double engineTemp = Data.getEngineTemperature();
                     if (temperatureFormat.contains("1")) {
                         // F
                         engineTemp = Utils.celsiusToFahrenheit(engineTemp);
                     }
-                    value = Utils.oneDigit.format(engineTemp) + " " + temperatureUnit;
+                    value = Utils.oneDigit.format(engineTemp);
                 }
                 break;
             case 2:
                 //Ambient
-                label = getString(R.string.ambient_temp_label);
+                label = getString(R.string.ambient_temp_label) + " (" + temperatureUnit + ")";
                 if(Data.getAmbientTemperature() != null ){
                     Double ambientTemp = Data.getAmbientTemperature();
                     if (temperatureFormat.contains("1")) {
                         // F
                         ambientTemp = Utils.celsiusToFahrenheit(ambientTemp);
                     }
-                    value = Utils.oneDigit.format(ambientTemp) + " " + temperatureUnit;
+                    value = Utils.oneDigit.format(ambientTemp);
                 }
                 break;
             case 3:
                 //FrontTire
-                label = getString(R.string.frontpressure_header);
+                label = getString(R.string.frontpressure_header) + " (" + pressureUnit + ")";
                 if(Data.getFrontTirePressure() != null){
                     Double rdcFront = Data.getFrontTirePressure();
                     if (pressureFormat.contains("1")) {
@@ -1355,12 +1366,12 @@ public class MainActivity extends AppCompatActivity {
                         // Psi
                         rdcFront = Double.valueOf(Utils.oneDigit.format(Utils.barToPsi(rdcFront)));
                     }
-                    value = rdcFront + " " + pressureUnit;
+                    value = String.valueOf(rdcFront);
                 }
                 break;
             case 4:
                 //RearTire
-                label = getString(R.string.rearpressure_header);
+                label = getString(R.string.rearpressure_header) + " (" + pressureUnit + ")";
                 if(Data.getRearTirePressure() != null){
                     Double rdcRear = Data.getRearTirePressure();
                     if (pressureFormat.contains("1")) {
@@ -1373,34 +1384,34 @@ public class MainActivity extends AppCompatActivity {
                         // Psi
                         rdcRear = Double.valueOf(Utils.oneDigit.format(Utils.barToPsi(rdcRear)));
                     }
-                    value = rdcRear + " " + pressureUnit;
+                    value = String.valueOf(rdcRear);
                 }
                 break;
             case 5:
                 //Odometer
-                label = getString(R.string.odometer_label);
+                label = getString(R.string.odometer_label) + " (" + distanceUnit + ")";
                 if(Data.getOdometer() != null){
                     Double odometer = Data.getOdometer();
                     if (distanceFormat.contains("1")) {
                         odometer = Utils.kmToMiles(odometer);
                     }
-                    value = Math.round(odometer) + " " + distanceUnit;
+                    value = String.valueOf(Math.round(odometer));
                 }
                 break;
             case 6:
                 //Voltage
-                label = getString(R.string.voltage_label);
+                label = getString(R.string.voltage_label) + " (" + voltageUnit + ")";
                 if(Data.getvoltage() != null){
                     Double voltage = Data.getvoltage();
-                    value = String.valueOf(Utils.oneDigit.format(voltage)) + " " + voltageUnit;
+                    value = String.valueOf(Utils.oneDigit.format(voltage));
                 }
                 break;
             case 7:
                 //Throttle
-                label = getString(R.string.throttle_label);
+                label = getString(R.string.throttle_label) + " (" + throttleUnit + ")";
                 if(Data.getThrottlePosition() != null){
                     Double throttlePosition = Data.getThrottlePosition();
-                    value = String.valueOf(throttlePosition) + " " + throttleUnit;
+                    value = String.valueOf(throttlePosition);
                 }
                 break;
             case 8:
@@ -1429,101 +1440,101 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 11:
                 //Trip 1
-                label = getString(R.string.trip1_label);
+                label = getString(R.string.trip1_label) + " (" + distanceUnit + ")";
                 if(Data.getTripOne() != null) {
                     Double trip1 = Data.getTripOne();
                     if (distanceFormat.contains("1")) {
                         trip1 = Utils.kmToMiles(trip1);
                     }
-                    value = Utils.oneDigit.format(trip1) + " " + distanceUnit;
+                    value = Utils.oneDigit.format(trip1);
                 }
                 break;
             case 12:
                 //Trip 2
-                label = getString(R.string.trip2_label);
+                label = getString(R.string.trip2_label) + " (" + distanceUnit + ")";
                 if(Data.getTripTwo() != null){
                     Double trip2 = Data.getTripTwo();
                     if (distanceFormat.contains("1")) {
                         trip2 = Utils.kmToMiles(trip2);
                     }
-                    value = Utils.oneDigit.format(trip2) + " " + distanceUnit;
+                    value = Utils.oneDigit.format(trip2);
                 }
                 break;
             case 13:
                 //Trip Auto
-                label = getString(R.string.tripauto_label);
+                label = getString(R.string.tripauto_label) + " (" + distanceUnit + ")";
                 if(Data.getTripAuto() != null){
                     Double tripauto = Data.getTripAuto();
                     if (distanceFormat.contains("1")) {
                         tripauto = Utils.kmToMiles(tripauto);
                     }
-                    value = Utils.oneDigit.format(tripauto) + " " + distanceUnit;
+                    value = Utils.oneDigit.format(tripauto);
                 }
                 break;
             case 14:
                 //Speed
-                label = getString(R.string.speed_label);
+                label = getString(R.string.speed_label) + " (" + distanceTimeUnit + ")";
                 if(Data.getSpeed() != null){
                     Double speed = Data.getSpeed();
                     if (distanceFormat.contains("1")) {
                         speed = Utils.kmToMiles(speed);
                     }
-                    value = String.valueOf(Math.round(speed)) + " " + distanceTimeUnit;
+                    value = String.valueOf(Math.round(speed));
                 }
                 break;
             case 15:
                 //Average Speed
-                label = getString(R.string.avgspeed_label);
+                label = getString(R.string.avgspeed_label) + " (" + distanceTimeUnit + ")";
                 if(Data.getAvgSpeed() != null){
                     Double avgspeed = Data.getAvgSpeed();
                     if (distanceFormat.contains("1")) {
                         avgspeed = Utils.kmToMiles(avgspeed);
                     }
-                    value = String.valueOf(Utils.oneDigit.format(avgspeed)) + " " + distanceTimeUnit;
+                    value = String.valueOf(Utils.oneDigit.format(avgspeed));
                 }
                 break;
             case 16:
                 //Current Consumption
-                label = getString(R.string.cconsumption_label);
+                label = getString(R.string.cconsumption_label) + " (" + consumptionUnit + ")";
                 if(Data.getCurrentConsumption() != null){
                     Double currentConsumption = Data.getCurrentConsumption();
                     if (distanceFormat.contains("1")) {
                         currentConsumption = Utils.l100Tompg(currentConsumption);
                     }
-                    value = String.valueOf(Utils.oneDigit.format(currentConsumption)) + " " + consumptionUnit;
+                    value = String.valueOf(Utils.oneDigit.format(currentConsumption));
                 }
                 break;
             case 17:
                 //Fuel Economy One
-                label = getString(R.string.fueleconomyone_label);
+                label = getString(R.string.fueleconomyone_label) + " (" + consumptionUnit + ")";
                 if(Data.getFuelEconomyOne() != null){
                     Double fuelEconomyOne = Data.getFuelEconomyOne();
                     if (distanceFormat.contains("1")) {
                         fuelEconomyOne = Utils.l100Tompg(fuelEconomyOne);
                     }
-                    value = String.valueOf(Utils.oneDigit.format(fuelEconomyOne)) + " " + consumptionUnit;
+                    value = String.valueOf(Utils.oneDigit.format(fuelEconomyOne));
                 }
                 break;
             case 18:
                 //Fuel Economy Two
-                label = getString(R.string.fueleconomytwo_label);
+                label = getString(R.string.fueleconomytwo_label) + " (" + consumptionUnit + ")";
                 if(Data.getFuelEconomyTwo() != null){
                     Double fuelEconomyTwo = Data.getFuelEconomyTwo();
                     if (distanceFormat.contains("1")) {
                         fuelEconomyTwo = Utils.l100Tompg(fuelEconomyTwo);
                     }
-                    value = String.valueOf(Utils.oneDigit.format(fuelEconomyTwo)) + " " + consumptionUnit;
+                    value = String.valueOf(Utils.oneDigit.format(fuelEconomyTwo));
                 }
                 break;
             case 19:
                 //Fuel Range
-                label = getString(R.string.fuelrange_label);
+                label = getString(R.string.fuelrange_label) + " (" + distanceUnit + ")";
                 if(Data.getFuelRange() != null){
                     Double fuelrange = Data.getFuelRange();
                     if (distanceFormat.contains("1")) {
                         fuelrange = Utils.kmToMiles(fuelrange);
                     }
-                    value = String.valueOf(Utils.oneDigit.format(fuelrange)) + " " + distanceUnit;
+                    value = String.valueOf(Utils.oneDigit.format(fuelrange));
                 }
                 break;
             default:
@@ -1570,7 +1581,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 textView1Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
 
-                //textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP,(float)(cellHeight * 0.10));
+                //textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP,(float)(cellHeight * 0.20));
                 textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView1Label.setText(label);
                 textView1.setText(value);
