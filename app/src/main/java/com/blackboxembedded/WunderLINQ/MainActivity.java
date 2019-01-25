@@ -49,6 +49,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -84,8 +85,12 @@ public class MainActivity extends AppCompatActivity {
     private TextView navbarTitle;
 
     private GridLayout gridLayout;
+    private LinearLayout layout1;
     private TextView textView1;
     private TextView textView1Label;
+
+    private int cellHeight = 0;
+    private int cellWidth = 0;
 
     private int labelFontSize = 20;
     private int fontSize = 36;
@@ -247,8 +252,16 @@ public class MainActivity extends AppCompatActivity {
                     fontSize = 80;
                     labelFontSize = 30;
                     gridLayout.removeAllViews();
-                    gridLayout.setColumnCount(1);
-                    gridLayout.setRowCount(2);
+
+                    Log.d(TAG,"orientation: " + getResources().getConfiguration().orientation);
+                    if(getResources().getConfiguration().orientation == 2) {
+                        //Landscape
+                        gridLayout.setColumnCount(2);
+                        gridLayout.setRowCount(1);
+                    } else {
+                        gridLayout.setColumnCount(1);
+                        gridLayout.setRowCount(2);
+                    }
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false));
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem2, gridLayout, false));
                     break;
@@ -272,6 +285,7 @@ public class MainActivity extends AppCompatActivity {
             textView1Label.setText("");
             textView1.setText(getString(R.string.app_name));
         }
+        layout1 = findViewById(R.id.layout_1);
 
         view.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
@@ -515,6 +529,7 @@ public class MainActivity extends AppCompatActivity {
         startService(new Intent(MainActivity.this, BluetoothLeService.class));
 
         if (!sharedPrefs.getBoolean("prefMotorcycleData", false)){
+            gridChange = true;
             updateDisplay();
         }
     }
@@ -801,6 +816,7 @@ public class MainActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Log.d(TAG,"In onConfigChange");
+        updateDisplay();
     }
 
     @Override
@@ -1125,6 +1141,7 @@ public class MainActivity extends AppCompatActivity {
                     setCellText(14, cell14Data);
                     // Cell Fifteen
                     setCellText(15, cell15Data);
+                    gridChange = false;
                     break;
                 case 12:
                     if (gridChange) {
@@ -1156,6 +1173,7 @@ public class MainActivity extends AppCompatActivity {
                     setCellText(11, cell11Data);
                     // Cell Twelve
                     setCellText(12, cell12Data);
+                    gridChange = false;
                     break;
                 case 8:
                     if (gridChange) {
@@ -1179,6 +1197,7 @@ public class MainActivity extends AppCompatActivity {
                     setCellText(7, cell7Data);
                     // Cell Eight
                     setCellText(8, cell8Data);
+                    gridChange = false;
                     break;
                 case 4:
                     if (gridChange) {
@@ -1194,17 +1213,25 @@ public class MainActivity extends AppCompatActivity {
                     setCellText(3, cell3Data);
                     // Cell Four
                     setCellText(4, cell4Data);
+                    gridChange = false;
                     break;
                 case 2:
                     if (gridChange) {
                         gridLayout.removeAllViews();
-                        gridLayout.setColumnCount(1);
-                        gridLayout.setRowCount(2);
+                        if(getResources().getConfiguration().orientation == 2) {
+                            //Landscape
+                            gridLayout.setColumnCount(2);
+                            gridLayout.setRowCount(1);
+                        } else {
+                            gridLayout.setColumnCount(1);
+                            gridLayout.setRowCount(2);
+                        }
                     }
                     // Cell One
                     setCellText(1, cell1Data);
                     // Cell Two
                     setCellText(2, cell2Data);
+                    gridChange = false;
                     break;
                 case 1:
                     if (gridChange) {
@@ -1214,6 +1241,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     // Cell One
                     setCellText(1, cell1Data);
+                    gridChange = false;
                     break;
             }
         } else {
@@ -1297,7 +1325,7 @@ public class MainActivity extends AppCompatActivity {
                         // F
                         engineTemp = Utils.celsiusToFahrenheit(engineTemp);
                     }
-                    value = (int) Math.round(engineTemp) + " " + temperatureUnit;
+                    value = Utils.oneDigit.format(engineTemp) + " " + temperatureUnit;
                 }
                 break;
             case 2:
@@ -1309,7 +1337,7 @@ public class MainActivity extends AppCompatActivity {
                         // F
                         ambientTemp = Utils.celsiusToFahrenheit(ambientTemp);
                     }
-                    value = (int) Math.round(ambientTemp) + " " + temperatureUnit;
+                    value = Utils.oneDigit.format(ambientTemp) + " " + temperatureUnit;
                 }
                 break;
             case 3:
@@ -1364,7 +1392,7 @@ public class MainActivity extends AppCompatActivity {
                 label = getString(R.string.voltage_label);
                 if(Data.getvoltage() != null){
                     Double voltage = Data.getvoltage();
-                    value = String.valueOf(Math.round(voltage)) + " " + voltageUnit;
+                    value = String.valueOf(Utils.oneDigit.format(voltage)) + " " + voltageUnit;
                 }
                 break;
             case 7:
@@ -1394,9 +1422,9 @@ public class MainActivity extends AppCompatActivity {
             case 10:
                 //Ambient Light
                 label = getString(R.string.ambientlight_label);
-                if(Data.getRearBrake() != null){
-                    Integer rearBrakes = Data.getRearBrake();
-                    value = String.valueOf(rearBrakes);
+                if(Data.getAmbientLight() != null){
+                    Integer ambientLight = Data.getAmbientLight();
+                    value = String.valueOf(ambientLight);
                 }
                 break;
             case 11:
@@ -1407,7 +1435,7 @@ public class MainActivity extends AppCompatActivity {
                     if (distanceFormat.contains("1")) {
                         trip1 = Utils.kmToMiles(trip1);
                     }
-                    value = Math.round(trip1) + " " + distanceUnit;
+                    value = Utils.oneDigit.format(trip1) + " " + distanceUnit;
                 }
                 break;
             case 12:
@@ -1418,7 +1446,7 @@ public class MainActivity extends AppCompatActivity {
                     if (distanceFormat.contains("1")) {
                         trip2 = Utils.kmToMiles(trip2);
                     }
-                    value = Math.round(trip2) + " " + distanceUnit;
+                    value = Utils.oneDigit.format(trip2) + " " + distanceUnit;
                 }
                 break;
             case 13:
@@ -1429,7 +1457,7 @@ public class MainActivity extends AppCompatActivity {
                     if (distanceFormat.contains("1")) {
                         tripauto = Utils.kmToMiles(tripauto);
                     }
-                    value = Math.round(tripauto) + " " + distanceUnit;
+                    value = Utils.oneDigit.format(tripauto) + " " + distanceUnit;
                 }
                 break;
             case 14:
@@ -1451,7 +1479,7 @@ public class MainActivity extends AppCompatActivity {
                     if (distanceFormat.contains("1")) {
                         avgspeed = Utils.kmToMiles(avgspeed);
                     }
-                    value = String.valueOf(Math.round(avgspeed)) + " " + distanceTimeUnit;
+                    value = String.valueOf(Utils.oneDigit.format(avgspeed)) + " " + distanceTimeUnit;
                 }
                 break;
             case 16:
@@ -1462,7 +1490,7 @@ public class MainActivity extends AppCompatActivity {
                     if (distanceFormat.contains("1")) {
                         currentConsumption = Utils.l100Tompg(currentConsumption);
                     }
-                    value = String.valueOf(currentConsumption) + " " + consumptionUnit;
+                    value = String.valueOf(Utils.oneDigit.format(currentConsumption)) + " " + consumptionUnit;
                 }
                 break;
             case 17:
@@ -1473,7 +1501,7 @@ public class MainActivity extends AppCompatActivity {
                     if (distanceFormat.contains("1")) {
                         fuelEconomyOne = Utils.l100Tompg(fuelEconomyOne);
                     }
-                    value = String.valueOf(fuelEconomyOne) + " " + consumptionUnit;
+                    value = String.valueOf(Utils.oneDigit.format(fuelEconomyOne)) + " " + consumptionUnit;
                 }
                 break;
             case 18:
@@ -1484,7 +1512,7 @@ public class MainActivity extends AppCompatActivity {
                     if (distanceFormat.contains("1")) {
                         fuelEconomyTwo = Utils.l100Tompg(fuelEconomyTwo);
                     }
-                    value = String.valueOf(fuelEconomyTwo) + " " + consumptionUnit;
+                    value = String.valueOf(Utils.oneDigit.format(fuelEconomyTwo)) + " " + consumptionUnit;
                 }
                 break;
             case 19:
@@ -1495,7 +1523,7 @@ public class MainActivity extends AppCompatActivity {
                     if (distanceFormat.contains("1")) {
                         fuelrange = Utils.kmToMiles(fuelrange);
                     }
-                    value = String.valueOf(Math.round(fuelrange)) + " " + distanceUnit;
+                    value = String.valueOf(Utils.oneDigit.format(fuelrange)) + " " + distanceUnit;
                 }
                 break;
             default:
@@ -1507,8 +1535,26 @@ public class MainActivity extends AppCompatActivity {
                 if (gridChange) {
                     View gridCell1 = layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false);
                     gridLayout.addView(gridCell1);
+                    layout1 = findViewById(R.id.layout_1);
+                    ViewTreeObserver vto = layout1.getViewTreeObserver();
+                    vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                        @Override
+                        public void onGlobalLayout() {
+                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                                layout1.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                            } else {
+                                layout1.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                            }
+                            cellWidth = layout1.getMeasuredWidth();
+                            cellHeight = layout1.getMeasuredHeight();
+                            Log.d(TAG,"HxW: " + cellHeight + "x" + cellWidth);
+
+                        }
+                    });
+                } else {
+                    layout1 = findViewById(R.id.layout_1);
                 }
-                LinearLayout layout1 = findViewById(R.id.layout_1);
+
                 textView1 = findViewById(R.id.textView1);
                 textView1Label = findViewById(R.id.textView1label);
                 if (itsDark){
@@ -1523,6 +1569,8 @@ public class MainActivity extends AppCompatActivity {
                     layout1.setBackground(getResources().getDrawable(R.drawable.border));
                 }
                 textView1Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
+
+                //textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP,(float)(cellHeight * 0.10));
                 textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView1Label.setText(label);
                 textView1.setText(value);
@@ -1532,7 +1580,7 @@ public class MainActivity extends AppCompatActivity {
                     View gridCell2 = layoutInflater.inflate(R.layout.layout_griditem2, gridLayout, false);
                     gridLayout.addView(gridCell2);
                 }
-                LinearLayout layout2 = findViewById(R.id.layout_2);
+                final LinearLayout layout2 = findViewById(R.id.layout_2);
                 TextView textView2 = findViewById(R.id.textView2);
                 TextView textView2Label = findViewById(R.id.textView2label);
                 if (itsDark){
@@ -2082,4 +2130,15 @@ public class MainActivity extends AppCompatActivity {
                 return super.onKeyUp(keyCode, event);
         }
     }
+
+    public static void runJustBeforeBeingDrawn(final View view, final Runnable runnable) {
+        final ViewTreeObserver.OnPreDrawListener preDrawListener = new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                view.getViewTreeObserver().removeOnPreDrawListener(this);
+                runnable.run();
+                return true;
+            }
+        };
+        view.getViewTreeObserver().addOnPreDrawListener(preDrawListener); }
 }

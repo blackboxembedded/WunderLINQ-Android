@@ -51,7 +51,7 @@
     <string name="trip2_label">Trip 2</string>
     <string name="tripauto_label">Trip Auto</string>
     <string name="voltage_label">Voltage</string>
-    <string name="throttle_label">Trottle</string>
+    <string name="throttle_label">Throttle</string>
     <string name="gear_label">Gear</string>
     <string name="frontbrakes_label">Front Brakes</string>
     <string name="rearbrakes_label">Rear Brakes</string>
@@ -412,21 +412,36 @@
         <item name="2">1</item>
         <item name="3">2</item>
     </string-array>
-    <string name="pref_grid_one">First</string>
-    <string name="pref_grid_two">Second</string>
-    <string name="pref_grid_three">Third</string>
-    <string name="pref_grid_four">Fourth</string>
-    <string name="pref_grid_five">Fith</string>
-    <string name="pref_grid_six">Sixth</string>
-    <string name="pref_grid_seven">Seventh</string>
-    <string name="pref_grid_eight">Eighth</string>
-    <string name="pref_grid_nine">Ninth</string>
-    <string name="pref_grid_ten">Tenth</string>
-    <string name="pref_grid_eleven">Eleventh</string>
-    <string name="pref_grid_twelve">Twelfth</string>
-    <string name="pref_grid_thirteen">Thirteen</string>
-    <string name="pref_grid_fourteen">Fourteen</string>
-    <string name="pref_grid_fifteen">Fifteen</string>
+    <string name="first">First</string>
+    <string name="second">Second</string>
+    <string name="third">Third</string>
+    <string name="fourth">Fourth</string>
+    <string name="fifth">Fifth</string>
+    <string name="sixth">Sixth</string>
+    <string name="seventh">Seventh</string>
+    <string name="eighth">Eighth</string>
+    <string name="ninth">Ninth</string>
+    <string name="tenth">Tenth</string>
+    <string name="eleventh">Eleventh</string>
+    <string name="twelfth">Twelfth</string>
+    <string name="thirteenth">Thirteenth</string>
+    <string name="fourteenth">Fourteenth</string>
+    <string name="fiftheenth">Fifteenth</string>
+    <string name="pref_grid_one" translatable="false">@string/first</string>
+    <string name="pref_grid_two" translatable="false">@string/second</string>
+    <string name="pref_grid_three" translatable="false">@string/third</string>
+    <string name="pref_grid_four" translatable="false">@string/fourth</string>
+    <string name="pref_grid_five" translatable="false">@string/fifth</string>
+    <string name="pref_grid_six" translatable="false">@string/sixth</string>
+    <string name="pref_grid_seven" translatable="false">@string/seventh</string>
+    <string name="pref_grid_eight" translatable="false">@string/eighth</string>
+    <string name="pref_grid_nine" translatable="false">@string/ninth</string>
+    <string name="pref_grid_ten" translatable="false">@string/tenth</string>
+    <string name="pref_grid_eleven" translatable="false">@string/eleventh</string>
+    <string name="pref_grid_twelve" translatable="false">@string/twelfth</string>
+    <string name="pref_grid_thirteen" translatable="false">@string/thirteenth</string>
+    <string name="pref_grid_fourteen" translatable="false">@string/fourteenth</string>
+    <string name="pref_grid_fifteen" translatable="false">@string/fiftheenth</string>
     <string-array name="dataPoints_array">
         <item name="1">@string/gear_header</item>
         <item name="2">@string/enginetemp_header</item>
@@ -473,18 +488,18 @@
     </string-array>
     <string name="pref_tasks_settings_title">Quick Task Customization</string>
     <string name="pref_tasks_settings_summary">Customize which tasks to display and in which order</string>
-    <string name="pref_task_one">First</string>
-    <string name="pref_task_two">Second</string>
-    <string name="pref_task_three">Third</string>
-    <string name="pref_task_four">Fourth</string>
-    <string name="pref_task_five">Fith</string>
-    <string name="pref_task_six">Sixth</string>
-    <string name="pref_task_seven">Seventh</string>
-    <string name="pref_task_eight">Eighth</string>
-    <string name="pref_task_nine">Ninth</string>
-    <string name="pref_task_ten">Tenth</string>
-    <string name="pref_task_eleven">Eleventh</string>
-    <string name="pref_task_twelve">Twelfth</string>
+    <string name="pref_task_one" translatable="false">@string/first</string>
+    <string name="pref_task_two" translatable="false">@string/second</string>
+    <string name="pref_task_three" translatable="false">@string/third</string>
+    <string name="pref_task_four" translatable="false">@string/fourth</string>
+    <string name="pref_task_five" translatable="false">@string/fifth</string>
+    <string name="pref_task_six" translatable="false">@string/sixth</string>
+    <string name="pref_task_seven" translatable="false">@string/seventh</string>
+    <string name="pref_task_eight" translatable="false">@string/eighth</string>
+    <string name="pref_task_nine" translatable="false">@string/ninth</string>
+    <string name="pref_task_ten" translatable="false">@string/tenth</string>
+    <string name="pref_task_eleven" translatable="false">@string/eleventh</string>
+    <string name="pref_task_twelve" translatable="false">@string/twelfth</string>
     <string-array name="tasks_array">
         <item name="1">@string/task_title_navigation</item>
         <item name="2">@string/task_title_gohome</item>
