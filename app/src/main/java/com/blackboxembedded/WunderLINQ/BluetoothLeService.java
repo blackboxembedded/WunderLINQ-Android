@@ -1905,16 +1905,22 @@ public class BluetoothLeService extends Service {
                 if ((data[2] & 0xFF) != 0xFF) {
                     double fuelEconomyOne = ((((data[2] & 0xFF) >> 4) & 0x0f) * 1.6) + (((data[2] & 0xFF) & 0x0f) * 0.1);
                     Data.setFuelEconomyOne(fuelEconomyOne);
+                } else {
+                    Data.setFuelEconomyOne(null);
                 }
                 //Fuel Economy 2
                 if ((data[3] & 0xFF) != 0xFF) {
                     double fuelEconomyTwo = ((((data[3] & 0xFF) >> 4) & 0x0f) * 1.6) + (((data[3] & 0xFF) & 0x0f) * 0.1);
                     Data.setFuelEconomyTwo(fuelEconomyTwo);
+                } else {
+                    Data.setFuelEconomyTwo(null);
                 }
                 //Current Consumption
                 if ((data[4] & 0xFF) != 0xFF) {
                     double cConsumption = ((((data[4] & 0xFF) >> 4) & 0x0f) * 1.6) + (((data[4] & 0xFF) & 0x0f) * 0.1);
                     Data.setCurrentConsumption(cConsumption);
+                } else {
+                    Data.setCurrentConsumption(null);
                 }
                 break;
             case 0x0a:
