@@ -1336,7 +1336,7 @@ public class MainActivity extends AppCompatActivity {
                         // F
                         engineTemp = Utils.celsiusToFahrenheit(engineTemp);
                     }
-                    value = Utils.oneDigit.format(engineTemp);
+                    value = String.valueOf(Math.round(engineTemp));
                 }
                 break;
             case 2:
@@ -1348,7 +1348,7 @@ public class MainActivity extends AppCompatActivity {
                         // F
                         ambientTemp = Utils.celsiusToFahrenheit(ambientTemp);
                     }
-                    value = Utils.oneDigit.format(ambientTemp);
+                    value = String.valueOf(Math.round(ambientTemp));
                 }
                 break;
             case 3:
@@ -1364,9 +1364,9 @@ public class MainActivity extends AppCompatActivity {
                         rdcFront = Utils.barTokgf(rdcFront);
                     } else if (pressureFormat.contains("3")) {
                         // Psi
-                        rdcFront = Double.valueOf(Utils.oneDigit.format(Utils.barToPsi(rdcFront)));
+                        rdcFront = Utils.barToPsi(rdcFront);
                     }
-                    value = String.valueOf(rdcFront);
+                    value = String.valueOf(Utils.oneDigit.format(rdcFront));
                 }
                 break;
             case 4:
@@ -1382,9 +1382,9 @@ public class MainActivity extends AppCompatActivity {
                         rdcRear = Utils.barTokgf(rdcRear);
                     } else if (pressureFormat.contains("3")) {
                         // Psi
-                        rdcRear = Double.valueOf(Utils.oneDigit.format(Utils.barToPsi(rdcRear)));
+                        rdcRear = Utils.barToPsi(rdcRear);
                     }
-                    value = String.valueOf(rdcRear);
+                    value = String.valueOf(Utils.oneDigit.format(rdcRear));
                 }
                 break;
             case 5:
@@ -1534,7 +1534,7 @@ public class MainActivity extends AppCompatActivity {
                     if (distanceFormat.contains("1")) {
                         fuelrange = Utils.kmToMiles(fuelrange);
                     }
-                    value = String.valueOf(Utils.oneDigit.format(fuelrange));
+                    value = String.valueOf(Math.round(fuelrange));
                 }
                 break;
             default:

@@ -86,9 +86,9 @@ public class Utils {
     }
     // L/100 to MPG
     public static double l100Tompg(double l100){
-        return 282.5 / l100;
+        return 235.215 / l100;
     }
 
     //format to 1 decimal place
-    public static DecimalFormat oneDigit = new DecimalFormat("#,##0.0");
+    public static DecimalFormat oneDigit = new DecimalFormat("###0.0");
 }

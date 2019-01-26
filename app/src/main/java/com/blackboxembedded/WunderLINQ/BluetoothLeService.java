@@ -1185,7 +1185,7 @@ public class BluetoothLeService extends Service {
 
                 //Voltage
                 if ((data[4] & 0xFF) != 0xFF) {
-                    double voltage = (data[4] & 0xFF) / 10;
+                    double voltage = (data[4] & 0xFF) / 10.0;
                     Data.setvoltage(voltage);
                 }
 

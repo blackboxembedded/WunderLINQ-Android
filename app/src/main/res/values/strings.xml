@@ -375,8 +375,8 @@
     <string name="shifts_header">Shifts</string>
     <string name="vin_header">VIN</string>
     <string name="ambientlight_header">Ambient Light</string>
-    <string name="tripone_header">Trip1</string>
-    <string name="triptwo_header">Trip2</string>
+    <string name="tripone_header">Trip 1</string>
+    <string name="triptwo_header">Trip 2</string>
     <string name="tripauto_header">Trip Auto</string>
     <string name="speed_header">Speed</string>
     <string name="avgspeed_header">Average Speed</string>
