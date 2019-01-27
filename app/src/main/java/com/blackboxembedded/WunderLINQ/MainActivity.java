@@ -52,6 +52,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
@@ -283,13 +284,17 @@ public class MainActivity extends AppCompatActivity {
             gridLayout.removeAllViews();
             gridLayout.setColumnCount(1);
             gridLayout.setRowCount(1);
-            gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false));
-            textView1 = findViewById(R.id.textView1);
-            textView1Label = findViewById(R.id.textView1label);
-            textView1Label.setText("");
-            textView1.setText(getString(R.string.app_name));
+            gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem_nodata, gridLayout, false));
+            layout1 = findViewById(R.id.layout_no_data);
+            ImageView logoImageView = findViewById(R.id.imageView);
+            if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
+                layout1.setBackgroundColor(getResources().getColor(R.color.black));
+                logoImageView.setImageDrawable(getResources().getDrawable(R.drawable.wunderlinq_logo_white));
+            } else {
+                layout1.setBackgroundColor(getResources().getColor(R.color.white));
+                logoImageView.setImageDrawable(getResources().getDrawable(R.drawable.wunderlinq_logo_black));
+            }
         }
-        layout1 = findViewById(R.id.layout_1);
 
         view.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
@@ -1259,26 +1264,17 @@ public class MainActivity extends AppCompatActivity {
             gridLayout.removeAllViews();
             gridLayout.setColumnCount(1);
             gridLayout.setRowCount(1);
-            View gridCell1 = layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false);
+            View gridCell1 = layoutInflater.inflate(R.layout.layout_griditem_nodata, gridLayout, false);
             gridLayout.addView(gridCell1);
-            LinearLayout layout1 = findViewById(R.id.layout_1);
-            textView1 = findViewById(R.id.textView1);
-            textView1Label = findViewById(R.id.textView1label);
+            LinearLayout layout1 = findViewById(R.id.layout_no_data);
+            ImageView logoImageView = findViewById(R.id.imageView);
             if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
-                textView1.setTextColor(getResources().getColor(R.color.white));
-                textView1Label.setTextColor(getResources().getColor(R.color.white));
                 layout1.setBackgroundColor(getResources().getColor(R.color.black));
-                layout1.setBackground(getResources().getDrawable(R.drawable.border_white));
+                logoImageView.setImageDrawable(getResources().getDrawable(R.drawable.wunderlinq_logo_white));
             } else {
-                textView1.setTextColor(getResources().getColor(R.color.black));
-                textView1Label.setTextColor(getResources().getColor(R.color.black));
                 layout1.setBackgroundColor(getResources().getColor(R.color.white));
-                layout1.setBackground(getResources().getDrawable(R.drawable.border));
+                logoImageView.setImageDrawable(getResources().getDrawable(R.drawable.wunderlinq_logo_black));
             }
-            textView1Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
-            textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
-            textView1Label.setText("");
-            textView1.setText(getString(R.string.app_name));
         }
     }
 
