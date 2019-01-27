@@ -847,19 +847,19 @@ public class BluetoothLeService extends Service {
                             String pressureFormat = sharedPrefs.getString("prefPressureF", "0");
                             if (pressureFormat.contains("1")) {
                                 // KPa
-                                if (pressureThreshold >= (rdcFront * 100)){
+                                if (pressureThreshold >= Utils.barTokPa(rdcFront)){
                                     FaultStatus.setfrontTirePressureCriticalActive(true);
                                     updateNotification();
                                 }
                             } else if (pressureFormat.contains("2")) {
                                 // Kg-f
-                                if (pressureThreshold >= (rdcFront * 1.0197162129779)){
+                                if (pressureThreshold >= Utils.barTokgf(rdcFront)){
                                     FaultStatus.setfrontTirePressureCriticalActive(true);
                                     updateNotification();
                                 }
                             } else if (pressureFormat.contains("3")) {
                                 // Psi
-                                if (pressureThreshold >= (rdcFront * 14.5037738)){
+                                if (pressureThreshold >= Utils.barToPsi(rdcFront)){
                                     FaultStatus.setfrontTirePressureCriticalActive(true);
                                     updateNotification();
                                 }
@@ -869,9 +869,9 @@ public class BluetoothLeService extends Service {
                                 FaultStatus.setfrontTirePressureCriticalNotificationActive(true);
                             }
                         } else {
+                            FaultStatus.setfrontTirePressureCriticalNotificationActive(false);
                             if (FaultStatus.getfrontTirePressureCriticalNotificationActive()) {
                                 updateNotification();
-                                FaultStatus.setfrontTirePressureCriticalNotificationActive(false);
                             }
                         }
                     }
@@ -884,17 +884,17 @@ public class BluetoothLeService extends Service {
                             String pressureFormat = sharedPrefs.getString("prefPressureF", "0");
                             if (pressureFormat.contains("1")) {
                                 // KPa
-                                if (pressureThreshold >= (rdcRear * 100)){
+                                if (pressureThreshold >= Utils.barTokPa(rdcRear)){
                                     FaultStatus.setrearTirePressureCriticalActive(true);
                                 }
                             } else if (pressureFormat.contains("2")) {
                                 // Kg-f
-                                if (pressureThreshold >= (rdcRear * 1.0197162129779)){
+                                if (pressureThreshold >= Utils.barTokgf(rdcRear)){
                                     FaultStatus.setrearTirePressureCriticalActive(true);
                                 }
                             } else if (pressureFormat.contains("3")) {
                                 // Psi
-                                if (pressureThreshold >= (rdcRear * 14.5037738)){
+                                if (pressureThreshold >= Utils.barToPsi(rdcRear)){
                                     FaultStatus.setrearTirePressureCriticalActive(true);
                                 }
                             }
@@ -903,9 +903,9 @@ public class BluetoothLeService extends Service {
                                 FaultStatus.setrearTirePressureCriticalNotificationActive(true);
                             }
                         } else {
+                            FaultStatus.setrearTirePressureCriticalNotificationActive(false);
                             if (FaultStatus.getrearTirePressureCriticalNotificationActive()) {
                                 updateNotification();
-                                FaultStatus.setrearTirePressureCriticalNotificationActive(false);
                             }
                         }
                     }
