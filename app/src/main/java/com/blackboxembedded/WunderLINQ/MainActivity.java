@@ -37,6 +37,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -48,6 +49,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
@@ -70,7 +72,8 @@ import static android.app.AppOpsManager.MODE_ALLOWED;
 import static android.app.AppOpsManager.OPSTR_GET_USAGE_STATS;
 import static android.os.Process.myUid;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
 
     public final static String TAG = "MainActivity";
 
@@ -132,6 +135,8 @@ public class MainActivity extends AppCompatActivity {
     private PopupMenu mPopupMenu;
     private PopupMenu mOtherMenu;
     private Menu otherMenu;
+
+    private GestureDetectorCompat gestureDetector;
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -296,6 +301,121 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        gestureDetector = new GestureDetectorCompat(this,new OnSwipeListener(){
+
+            @Override
+            public boolean onSwipe(Direction direction) {
+                int currentCellCount = Integer.parseInt(sharedPrefs.getString("CELL_COUNT","15"));
+                //int maxCellCount = Integer.parseInt(sharedPrefs.getString("prefMaxCells","15"));
+                int nextCellCount = 1;
+                SharedPreferences.Editor editor = sharedPrefs.edit();
+                if (direction==Direction.up){
+                    //do your stuff
+                    Log.d(TAG, "onSwipe: up");
+                    gridChange = true;
+                    switch (currentCellCount){
+                        case 15:
+                            nextCellCount = 1;
+                            //fontSize = 44;
+                            //labelFontSize = 28;
+                            fontSize = 90;
+                            labelFontSize = 40;
+                            break;
+                        case 12:
+                            nextCellCount = 15;
+                            fontSize = 34;
+                            labelFontSize = 18;
+                            break;
+                        case 8:
+                            nextCellCount = 12;
+                            fontSize = 36;
+                            labelFontSize = 24;
+                            break;
+                        case 4:
+                            nextCellCount = 8;
+                            fontSize = 38;
+                            labelFontSize = 26;
+                            break;
+                        case 2:
+                            nextCellCount = 4;
+                            fontSize = 40;
+                            labelFontSize = 28;
+                            break;
+                        case 1:
+                            nextCellCount = 2;
+                            fontSize = 80;
+                            labelFontSize = 30;
+                            break;
+                    }
+                    editor.putString("CELL_COUNT", String.valueOf(nextCellCount));
+                    editor.apply();
+                    updateDisplay();
+                }
+
+                if (direction==Direction.down){
+                    //do your stuff
+                    Log.d(TAG, "onSwipe: down");
+                    gridChange = true;
+                    switch (currentCellCount){
+                        case 15:
+                            nextCellCount = 12;
+                            fontSize = 36;
+                            labelFontSize = 20;
+                            break;
+                        case 12:
+                            nextCellCount = 8;
+                            fontSize = 38;
+                            labelFontSize = 22;
+                            break;
+                        case 8:
+                            nextCellCount = 4;
+                            fontSize = 40;
+                            labelFontSize = 24;
+                            break;
+                        case 4:
+                            nextCellCount = 2;
+                            fontSize = 80;
+                            labelFontSize = 30;
+                            break;
+                        case 2:
+                            nextCellCount = 1;
+                            fontSize = 90;
+                            labelFontSize = 40;
+                            break;
+                        case 1:
+                            nextCellCount = 15;
+                            fontSize = 34;
+                            labelFontSize = 18;
+                            break;
+                    }
+                    editor.putString("CELL_COUNT", String.valueOf(nextCellCount));
+                    editor.apply();
+                    updateDisplay();
+                }
+
+                if (direction==Direction.left){
+                    //do your stuff
+                    Log.d(TAG, "onSwipe: left");
+                    Intent backIntent = new Intent(MainActivity.this, MusicActivity.class);
+                    startActivity(backIntent);
+                }
+
+                if (direction==Direction.right){
+                    //do your stuff
+                    Log.d(TAG, "onSwipe: right");
+                    Intent backIntent = new Intent(MainActivity.this, TaskActivity.class);
+                    startActivity(backIntent);
+                }
+
+                return true;
+            }
+
+
+        });
+
+        view.setOnTouchListener(this);
+
+        /*
         view.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
             public void onSwipeLeft() {
@@ -308,6 +428,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(backIntent);
             }
         });
+        */
 
         showActionBar();
 
@@ -629,6 +750,13 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        Log.d(TAG, "onTouch: ");
+        gestureDetector.onTouchEvent(event);
+        return true;
     }
 
     private View.OnClickListener mClickListener = new View.OnClickListener() {
