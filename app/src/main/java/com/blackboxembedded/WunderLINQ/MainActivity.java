@@ -310,8 +310,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 int nextCellCount = 1;
                 SharedPreferences.Editor editor = sharedPrefs.edit();
                 if (direction==Direction.up){
-                    //do your stuff
-                    Log.d(TAG, "onSwipe: up");
                     gridChange = true;
                     switch (currentCellCount){
                         case 15:
@@ -353,8 +351,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 }
 
                 if (direction==Direction.down){
-                    //do your stuff
-                    Log.d(TAG, "onSwipe: down");
                     gridChange = true;
                     switch (currentCellCount){
                         case 15:
@@ -392,17 +388,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     editor.apply();
                     updateDisplay();
                 }
-
                 if (direction==Direction.left){
-                    //do your stuff
-                    Log.d(TAG, "onSwipe: left");
                     Intent backIntent = new Intent(MainActivity.this, MusicActivity.class);
                     startActivity(backIntent);
                 }
-
                 if (direction==Direction.right){
-                    //do your stuff
-                    Log.d(TAG, "onSwipe: right");
                     Intent backIntent = new Intent(MainActivity.this, TaskActivity.class);
                     startActivity(backIntent);
                 }
@@ -414,21 +404,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         });
 
         view.setOnTouchListener(this);
-
-        /*
-        view.setOnTouchListener(new OnSwipeTouchListener(this) {
-            @Override
-            public void onSwipeLeft() {
-                Intent backIntent = new Intent(MainActivity.this, MusicActivity.class);
-                startActivity(backIntent);
-            }
-            @Override
-            public void onSwipeRight() {
-                Intent backIntent = new Intent(MainActivity.this, TaskActivity.class);
-                startActivity(backIntent);
-            }
-        });
-        */
 
         showActionBar();
 
@@ -754,7 +729,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        Log.d(TAG, "onTouch: ");
         gestureDetector.onTouchEvent(event);
         return true;
     }
