@@ -17,7 +17,12 @@
         android:textAlignment="center"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="@color/black"/>
+        android:textColor="@color/black"
+        android:maxLines="1"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="12sp"
+        app:autoSizeMaxTextSize="200sp"
+        app:autoSizeStepGranularity="2sp"/>
 
     <TextView
         android:id="@+id/textView5"
@@ -28,5 +33,10 @@
         android:textAlignment="center"
         android:textSize="36sp"
         android:textStyle="bold"
-        android:textColor="@color/black"/>
+        android:textColor="@color/black"
+        android:maxLines="1"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="12sp"
+        app:autoSizeMaxTextSize="200sp"
+        app:autoSizeStepGranularity="2sp"/>
 </LinearLayout>
