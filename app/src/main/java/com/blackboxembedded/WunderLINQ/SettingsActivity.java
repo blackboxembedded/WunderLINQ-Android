@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.EditTextPreference;
@@ -11,6 +12,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 
@@ -49,6 +51,12 @@ public class SettingsActivity extends PreferenceActivity{
 
             EditTextPreference favNumberPref = (EditTextPreference) findPreference("prefHomePhone");
             favNumberPref.setSummary(sharedPrefs.getString("prefHomePhone",getString(R.string.pref_homePhone_summary)));
+
+            if (Build.VERSION.SDK_INT < 26) {
+                PreferenceScreen preferenceScreen = getPreferenceScreen();
+                Preference pipPreference = (Preference) findPreference("prefPIP") ;
+                preferenceScreen.removePreference(pipPreference);
+            }
 
             Preference button = findPreference("prefSendLog");
             button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

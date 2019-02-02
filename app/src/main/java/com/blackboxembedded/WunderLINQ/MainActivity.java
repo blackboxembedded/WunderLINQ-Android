@@ -38,14 +38,12 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayout;
 import android.util.Log;
 import android.util.Rational;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -55,11 +53,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -98,9 +99,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private int cellHeight = 0;
     private int cellWidth = 0;
 
-    private int labelFontSize = 20;
-    private int fontSize = 36;
-
     private SharedPreferences sharedPrefs;
 
     private boolean gridChange = false;
@@ -138,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private PopupMenu mOtherMenu;
     private Menu otherMenu;
 
-    private GestureDetectorCompat gestureDetector;
+    private GestureDetectorListener gestureDetector;
 
     private boolean inPIP = false;
 
@@ -192,8 +190,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             int currentCellCount = Integer.parseInt(sharedPrefs.getString("CELL_COUNT","15"));
             switch(currentCellCount){
                 case 15:
-                    fontSize = 34;
-                    labelFontSize = 18;
                     gridLayout.removeAllViews();
                     gridLayout.setColumnCount(3);
                     gridLayout.setRowCount(5);
@@ -214,8 +210,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem15, gridLayout, false));
                     break;
                 case 12:
-                    fontSize = 36;
-                    labelFontSize = 20;
                     gridLayout.removeAllViews();
                     gridLayout.setColumnCount(3);
                     gridLayout.setRowCount(4);
@@ -233,8 +227,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem12, gridLayout, false));
                     break;
                 case 8:
-                    fontSize = 38;
-                    labelFontSize = 22;
                     gridLayout.removeAllViews();
                     gridLayout.setColumnCount(2);
                     gridLayout.setRowCount(4);
@@ -248,8 +240,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem8, gridLayout, false));
                     break;
                 case 4:
-                    fontSize = 40;
-                    labelFontSize = 24;
                     gridLayout.removeAllViews();
                     if(getResources().getConfiguration().orientation == 2) {
                         //Landscape
@@ -265,8 +255,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem4, gridLayout, false));
                     break;
                 case 2:
-                    fontSize = 80;
-                    labelFontSize = 30;
                     gridLayout.removeAllViews();
                     if(getResources().getConfiguration().orientation == 2) {
                         //Landscape
@@ -280,8 +268,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem2, gridLayout, false));
                     break;
                 case 1:
-                    fontSize = 90;
-                    labelFontSize = 40;
                     gridLayout.removeAllViews();
                     gridLayout.setColumnCount(1);
                     gridLayout.setRowCount(1);
@@ -305,107 +291,96 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             }
         }
 
-        gestureDetector = new GestureDetectorCompat(this,new OnSwipeListener(){
+        gestureDetector = new GestureDetectorListener(this){
 
             @Override
-            public boolean onSwipe(Direction direction) {
+            public void onPressLong() {
+                Log.d(TAG, "Long Press");
+                if ( cell >= 1 && cell <= 15){
+                    showCellSelector(cell);
+                }
+            }
+
+            @Override
+            public void onSwipeUp() {
+                Log.d(TAG, "Swipe Up");
                 int currentCellCount = Integer.parseInt(sharedPrefs.getString("CELL_COUNT","15"));
                 //int maxCellCount = Integer.parseInt(sharedPrefs.getString("prefMaxCells","15"));
                 int nextCellCount = 1;
                 SharedPreferences.Editor editor = sharedPrefs.edit();
-                if (direction==Direction.up){
-                    gridChange = true;
-                    switch (currentCellCount){
-                        case 15:
-                            nextCellCount = 1;
-                            //fontSize = 44;
-                            //labelFontSize = 28;
-                            fontSize = 90;
-                            labelFontSize = 40;
-                            break;
-                        case 12:
-                            nextCellCount = 15;
-                            fontSize = 34;
-                            labelFontSize = 18;
-                            break;
-                        case 8:
-                            nextCellCount = 12;
-                            fontSize = 36;
-                            labelFontSize = 24;
-                            break;
-                        case 4:
-                            nextCellCount = 8;
-                            fontSize = 38;
-                            labelFontSize = 26;
-                            break;
-                        case 2:
-                            nextCellCount = 4;
-                            fontSize = 40;
-                            labelFontSize = 28;
-                            break;
-                        case 1:
-                            nextCellCount = 2;
-                            fontSize = 80;
-                            labelFontSize = 30;
-                            break;
-                    }
-                    editor.putString("CELL_COUNT", String.valueOf(nextCellCount));
-                    editor.apply();
-                    updateDisplay();
+                gridChange = true;
+                switch (currentCellCount){
+                    case 15:
+                        nextCellCount = 1;
+                        break;
+                    case 12:
+                        nextCellCount = 15;
+                        break;
+                    case 8:
+                        nextCellCount = 12;
+                        break;
+                    case 4:
+                        nextCellCount = 8;
+                        break;
+                    case 2:
+                        nextCellCount = 4;
+                        break;
+                    case 1:
+                        nextCellCount = 2;
+                        break;
                 }
-
-                if (direction==Direction.down){
-                    gridChange = true;
-                    switch (currentCellCount){
-                        case 15:
-                            nextCellCount = 12;
-                            fontSize = 36;
-                            labelFontSize = 20;
-                            break;
-                        case 12:
-                            nextCellCount = 8;
-                            fontSize = 38;
-                            labelFontSize = 22;
-                            break;
-                        case 8:
-                            nextCellCount = 4;
-                            fontSize = 40;
-                            labelFontSize = 24;
-                            break;
-                        case 4:
-                            nextCellCount = 2;
-                            fontSize = 80;
-                            labelFontSize = 30;
-                            break;
-                        case 2:
-                            nextCellCount = 1;
-                            fontSize = 90;
-                            labelFontSize = 40;
-                            break;
-                        case 1:
-                            nextCellCount = 15;
-                            fontSize = 34;
-                            labelFontSize = 18;
-                            break;
-                    }
-                    editor.putString("CELL_COUNT", String.valueOf(nextCellCount));
-                    editor.apply();
-                    updateDisplay();
-                }
-                if (direction==Direction.left){
-                    Intent backIntent = new Intent(MainActivity.this, MusicActivity.class);
-                    startActivity(backIntent);
-                }
-                if (direction==Direction.right){
-                    Intent backIntent = new Intent(MainActivity.this, TaskActivity.class);
-                    startActivity(backIntent);
-                }
-
-                return true;
+                editor.putString("CELL_COUNT", String.valueOf(nextCellCount));
+                editor.apply();
+                updateDisplay();
             }
 
+            @Override
+            public void onSwipeDown() {
+                Log.d(TAG, "Swipe Down");
+                int currentCellCount = Integer.parseInt(sharedPrefs.getString("CELL_COUNT","15"));
+                //int maxCellCount = Integer.parseInt(sharedPrefs.getString("prefMaxCells","15"));
+                int nextCellCount = 1;
+                SharedPreferences.Editor editor = sharedPrefs.edit();
+                gridChange = true;
+                switch (currentCellCount){
+                    case 15:
+                        nextCellCount = 12;
+                        break;
+                    case 12:
+                        nextCellCount = 8;
+                        break;
+                    case 8:
+                        nextCellCount = 4;
+                        break;
+                    case 4:
+                        nextCellCount = 2;
+                        break;
+                    case 2:
+                        nextCellCount = 1;
+                        break;
+                    case 1:
+                        nextCellCount = 15;
+                        break;
+                }
+                editor.putString("CELL_COUNT", String.valueOf(nextCellCount));
+                editor.apply();
+                updateDisplay();
+            }
 
-        });
+            @Override
+            public void onSwipeLeft() {
+                Log.d(TAG, "Swipe Left");
+                Intent backIntent = new Intent(MainActivity.this, MusicActivity.class);
+                startActivity(backIntent);
+            }
+
+            @Override
+            public void onSwipeRight() {
+                Log.d(TAG, "Swipe Right");
+                Intent backIntent = new Intent(MainActivity.this, TaskActivity.class);
+                startActivity(backIntent);
+            }
+        };
 
         view.setOnTouchListener(this);
 
@@ -643,6 +618,89 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         }
     }
 
+    private void showCellSelector(int cell){
+        Log.d(TAG,"In showCellSelector: " + cell);
+        final int selectedCell = cell;
+        String prefStringKey = "";
+        switch (selectedCell){
+            case 1:
+                prefStringKey = "prefCellOne";
+                break;
+            case 2:
+                prefStringKey = "prefCellTwo";
+                break;
+            case 3:
+                prefStringKey = "prefCellThree";
+                break;
+            case 4:
+                prefStringKey = "prefCellFour";
+                break;
+            case 5:
+                prefStringKey = "prefCellFive";
+                break;
+            case 6:
+                prefStringKey = "prefCellSix";
+                break;
+            case 7:
+                prefStringKey = "prefCellSeven";
+                break;
+            case 8:
+                prefStringKey = "prefCellEight";
+                break;
+            case 9:
+                prefStringKey = "prefCellNine";
+                break;
+            case 10:
+                prefStringKey = "prefCellTen";
+                break;
+            case 11:
+                prefStringKey = "prefCellEleven";
+                break;
+            case 12:
+                prefStringKey = "prefCellTwelve";
+                break;
+            case 13:
+                prefStringKey = "prefCellThirteen";
+                break;
+            case 14:
+                prefStringKey = "prefCellFourteen";
+                break;
+            case 15:
+                prefStringKey = "prefCellFifteen";
+                break;
+        }
+        final String selectedPrefStringKey = prefStringKey;
+        if (prefStringKey != "") {
+            final ArrayAdapter<String> adp = new ArrayAdapter<String>(MainActivity.this, R.layout.spinner_griditem,
+                    R.id.textview, getResources().getStringArray(R.array.dataPoints_array));
+
+            final Spinner sp1 = new Spinner(MainActivity.this);
+            sp1.setLayoutParams(new LinearLayout.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT));
+            sp1.setAdapter(adp);
+            sp1.setSelection(Integer.parseInt(sharedPrefs.getString(prefStringKey, String.valueOf(selectedCell))));
+            sp1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent,
+                                           View view, int pos, long id) {
+                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                    editor.putString(selectedPrefStringKey, String.valueOf(pos));
+                    editor.apply();
+                    updateDisplay();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView parent) {
+                    // Do nothing.
+                }
+
+            });
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setView(sp1);
+            builder.create().show();
+        }
+    }
+
     private void showActionBar(){
         View v = layoutInflater.inflate(R.layout.actionbar_nav_main, null);
         actionBar = getSupportActionBar();
@@ -733,7 +791,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        gestureDetector.onTouchEvent(event);
+        gestureDetector.onTouch(v, event);
         return true;
     }
 
@@ -935,7 +993,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 int height = getWindow().getDecorView().getHeight();
                 PictureInPictureParams params = new PictureInPictureParams.Builder()
                         .setAspectRatio(new Rational(width, height)).build();
-                //.setActions(getPIPActions(getCurrentVideo())).build();
                 enterPictureInPictureMode(params);
             }
         }
@@ -1714,16 +1771,18 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                             }
                             cellWidth = layout1.getMeasuredWidth();
                             cellHeight = layout1.getMeasuredHeight();
-                            Log.d(TAG,"HxW: " + cellHeight + "x" + cellWidth);
 
                         }
                     });
                 } else {
                     layout1 = findViewById(R.id.layout_1);
                 }
-
                 textView1 = findViewById(R.id.textView1);
                 textView1Label = findViewById(R.id.textView1label);
+                layout1.setOnTouchListener(MainActivity.this);
+                layout1.setTag(cellNumber);
+                textView1.setTag(cellNumber);
+                textView1Label.setTag(cellNumber);
                 if (itsDark){
                     textView1.setTextColor(getResources().getColor(R.color.white));
                     textView1Label.setTextColor(getResources().getColor(R.color.white));
@@ -1735,10 +1794,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     layout1.setBackgroundColor(getResources().getColor(R.color.white));
                     layout1.setBackground(getResources().getDrawable(R.drawable.border));
                 }
-                textView1Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
-
-                //textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP,(float)(cellHeight * 0.20));
-                textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView1Label.setText(label);
                 textView1.setText(value);
                 break;
@@ -1750,6 +1805,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 final LinearLayout layout2 = findViewById(R.id.layout_2);
                 TextView textView2 = findViewById(R.id.textView2);
                 TextView textView2Label = findViewById(R.id.textView2label);
+                layout2.setOnTouchListener(MainActivity.this);
+                layout2.setTag(cellNumber);
+                textView2.setTag(cellNumber);
+                textView2Label.setTag(cellNumber);
                 if (itsDark){
                     textView2.setTextColor(getResources().getColor(R.color.white));
                     textView2Label.setTextColor(getResources().getColor(R.color.white));
@@ -1761,8 +1820,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     layout2.setBackgroundColor(getResources().getColor(R.color.white));
                     layout2.setBackground(getResources().getDrawable(R.drawable.border));
                 }
-                textView2Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
-                textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView2Label.setText(label);
                 textView2.setText(value);
                 break;
@@ -1774,6 +1831,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 LinearLayout layout3 = findViewById(R.id.layout_3);
                 TextView textView3 = findViewById(R.id.textView3);
                 TextView textView3Label = findViewById(R.id.textView3label);
+                layout3.setOnTouchListener(MainActivity.this);
+                layout3.setTag(cellNumber);
+                textView3.setTag(cellNumber);
+                textView3Label.setTag(cellNumber);
                 if (itsDark){
                     textView3.setTextColor(getResources().getColor(R.color.white));
                     textView3Label.setTextColor(getResources().getColor(R.color.white));
@@ -1785,8 +1846,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     layout3.setBackgroundColor(getResources().getColor(R.color.white));
                     layout3.setBackground(getResources().getDrawable(R.drawable.border));
                 }
-                textView3Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
-                textView3.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView3Label.setText(label);
                 textView3.setText(value);
                 break;
@@ -1798,6 +1857,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 LinearLayout layout4 = findViewById(R.id.layout_4);
                 TextView textView4 = findViewById(R.id.textView4);
                 TextView textView4Label = findViewById(R.id.textView4label);
+                layout4.setOnTouchListener(MainActivity.this);
+                layout4.setTag(cellNumber);
+                textView4.setTag(cellNumber);
+                textView4Label.setTag(cellNumber);
                 if (itsDark){
                     textView4.setTextColor(getResources().getColor(R.color.white));
                     textView4Label.setTextColor(getResources().getColor(R.color.white));
@@ -1809,8 +1872,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     layout4.setBackgroundColor(getResources().getColor(R.color.white));
                     layout4.setBackground(getResources().getDrawable(R.drawable.border));
                 }
-                textView4Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
-                textView4.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView4Label.setText(label);
                 textView4.setText(value);
                 break;
@@ -1822,6 +1883,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 LinearLayout layout5 = findViewById(R.id.layout_5);
                 TextView textView5 = findViewById(R.id.textView5);
                 TextView textView5Label = findViewById(R.id.textView5label);
+                layout5.setOnTouchListener(MainActivity.this);
+                layout5.setTag(cellNumber);
+                textView5.setTag(cellNumber);
+                textView5Label.setTag(cellNumber);
                 if (itsDark){
                     textView5.setTextColor(getResources().getColor(R.color.white));
                     textView5Label.setTextColor(getResources().getColor(R.color.white));
@@ -1833,8 +1898,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     layout5.setBackgroundColor(getResources().getColor(R.color.white));
                     layout5.setBackground(getResources().getDrawable(R.drawable.border));
                 }
-                textView5Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
-                textView5.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView5Label.setText(label);
                 textView5.setText(value);
                 break;
@@ -1846,6 +1909,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 LinearLayout layout6 = findViewById(R.id.layout_6);
                 TextView textView6 = findViewById(R.id.textView6);
                 TextView textView6Label = findViewById(R.id.textView6label);
+                layout6.setOnTouchListener(MainActivity.this);
+                layout6.setTag(cellNumber);
+                textView6.setTag(cellNumber);
+                textView6Label.setTag(cellNumber);
                 if (itsDark){
                     textView6.setTextColor(getResources().getColor(R.color.white));
                     textView6Label.setTextColor(getResources().getColor(R.color.white));
@@ -1857,8 +1924,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     layout6.setBackgroundColor(getResources().getColor(R.color.white));
                     layout6.setBackground(getResources().getDrawable(R.drawable.border));
                 }
-                textView6Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
-                textView6.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView6Label.setText(label);
                 textView6.setText(value);
                 break;
@@ -1870,6 +1935,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 LinearLayout layout7 = findViewById(R.id.layout_7);
                 TextView textView7 = findViewById(R.id.textView7);
                 TextView textView7Label = findViewById(R.id.textView7label);
+                layout7.setOnTouchListener(MainActivity.this);
+                layout7.setTag(cellNumber);
+                textView7.setTag(cellNumber);
+                textView7Label.setTag(cellNumber);
                 if (itsDark){
                     textView7.setTextColor(getResources().getColor(R.color.white));
                     textView7Label.setTextColor(getResources().getColor(R.color.white));
@@ -1881,8 +1950,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     layout7.setBackgroundColor(getResources().getColor(R.color.white));
                     layout7.setBackground(getResources().getDrawable(R.drawable.border));
                 }
-                textView7Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
-                textView7.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView7Label.setText(label);
                 textView7.setText(value);
                 break;
@@ -1894,6 +1961,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 LinearLayout layout8 = findViewById(R.id.layout_8);
                 TextView textView8 = findViewById(R.id.textView8);
                 TextView textView8Label = findViewById(R.id.textView8label);
+                layout8.setOnTouchListener(MainActivity.this);
+                layout8.setTag(cellNumber);
+                textView8.setTag(cellNumber);
+                textView8Label.setTag(cellNumber);
                 if (itsDark){
                     textView8.setTextColor(getResources().getColor(R.color.white));
                     textView8Label.setTextColor(getResources().getColor(R.color.white));
@@ -1905,8 +1976,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     layout8.setBackgroundColor(getResources().getColor(R.color.white));
                     layout8.setBackground(getResources().getDrawable(R.drawable.border));
                 }
-                textView8Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
-                textView8.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView8Label.setText(label);
                 textView8.setText(value);
                 break;
@@ -1918,6 +1987,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 LinearLayout layout9 = findViewById(R.id.layout_9);
                 TextView textView9 = findViewById(R.id.textView9);
                 TextView textView9Label = findViewById(R.id.textView9label);
+                layout9.setOnTouchListener(MainActivity.this);
+                layout9.setTag(cellNumber);
+                textView9.setTag(cellNumber);
+                textView9Label.setTag(cellNumber);
                 if (itsDark){
                     textView9.setTextColor(getResources().getColor(R.color.white));
                     textView9Label.setTextColor(getResources().getColor(R.color.white));
@@ -1929,8 +2002,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     layout9.setBackgroundColor(getResources().getColor(R.color.black));
                     layout9.setBackground(getResources().getDrawable(R.drawable.border));
                 }
-                textView9Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
-                textView9.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView9Label.setText(label);
                 textView9.setText(value);
                 break;
@@ -1942,6 +2013,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 LinearLayout layout10 = findViewById(R.id.layout_10);
                 TextView textView10 = findViewById(R.id.textView10);
                 TextView textView10Label = findViewById(R.id.textView10label);
+                layout10.setOnTouchListener(MainActivity.this);
+                layout10.setTag(cellNumber);
+                textView10.setTag(cellNumber);
+                textView10Label.setTag(cellNumber);
                 if (itsDark){
                     textView10.setTextColor(getResources().getColor(R.color.white));
                     textView10Label.setTextColor(getResources().getColor(R.color.white));
@@ -1953,8 +2028,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     layout10.setBackgroundColor(getResources().getColor(R.color.white));
                     layout10.setBackground(getResources().getDrawable(R.drawable.border));
                 }
-                textView10Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
-                textView10.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView10Label.setText(label);
                 textView10.setText(value);
                 break;
@@ -1966,6 +2039,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 LinearLayout layout11 = findViewById(R.id.layout_11);
                 TextView textView11 = findViewById(R.id.textView11);
                 TextView textView11Label = findViewById(R.id.textView11label);
+                layout11.setOnTouchListener(MainActivity.this);
+                layout11.setTag(cellNumber);
+                textView11.setTag(cellNumber);
+                textView11Label.setTag(cellNumber);
                 if (itsDark){
                     textView11.setTextColor(getResources().getColor(R.color.white));
                     textView11Label.setTextColor(getResources().getColor(R.color.white));
@@ -1977,8 +2054,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     layout11.setBackgroundColor(getResources().getColor(R.color.white));
                     layout11.setBackground(getResources().getDrawable(R.drawable.border));
                 }
-                textView11Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
-                textView11.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView11Label.setText(label);
                 textView11.setText(value);
                 break;
@@ -1990,6 +2065,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 LinearLayout layout12 = findViewById(R.id.layout_12);
                 TextView textView12 = findViewById(R.id.textView12);
                 TextView textView12Label = findViewById(R.id.textView12label);
+                layout12.setOnTouchListener(MainActivity.this);
+                layout12.setTag(cellNumber);
+                textView12.setTag(cellNumber);
+                textView12Label.setTag(cellNumber);
                 if (itsDark){
                     textView12.setTextColor(getResources().getColor(R.color.white));
                     textView12Label.setTextColor(getResources().getColor(R.color.white));
@@ -2001,8 +2080,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     layout12.setBackgroundColor(getResources().getColor(R.color.white));
                     layout12.setBackground(getResources().getDrawable(R.drawable.border));
                 }
-                textView12Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
-                textView12.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView12Label.setText(label);
                 textView12.setText(value);
                 break;
@@ -2014,6 +2091,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 LinearLayout layout13 = findViewById(R.id.layout_13);
                 TextView textView13 = findViewById(R.id.textView13);
                 TextView textView13Label = findViewById(R.id.textView13label);
+                layout13.setOnTouchListener(MainActivity.this);
+                layout13.setTag(cellNumber);
+                textView13.setTag(cellNumber);
+                textView13Label.setTag(cellNumber);
                 if (itsDark){
                     textView13.setTextColor(getResources().getColor(R.color.white));
                     textView13Label.setTextColor(getResources().getColor(R.color.white));
@@ -2025,8 +2106,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     layout13.setBackgroundColor(getResources().getColor(R.color.white));
                     layout13.setBackground(getResources().getDrawable(R.drawable.border));
                 }
-                textView13Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
-                textView13.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView13Label.setText(label);
                 textView13.setText(value);
                 break;
@@ -2038,6 +2117,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 LinearLayout layout14 = findViewById(R.id.layout_14);
                 TextView textView14 = findViewById(R.id.textView14);
                 TextView textView14Label = findViewById(R.id.textView14label);
+                layout14.setOnTouchListener(MainActivity.this);
+                layout14.setTag(cellNumber);
+                textView14.setTag(cellNumber);
+                textView14Label.setTag(cellNumber);
+
                 if (itsDark){
                     textView14.setTextColor(getResources().getColor(R.color.white));
                     textView14Label.setTextColor(getResources().getColor(R.color.white));
@@ -2049,8 +2133,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     layout14.setBackgroundColor(getResources().getColor(R.color.white));
                     layout14.setBackground(getResources().getDrawable(R.drawable.border));
                 }
-                textView14Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
-                textView14.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView14Label.setText(label);
                 textView14.setText(value);
                 break;
@@ -2062,6 +2144,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 LinearLayout layout15 = findViewById(R.id.layout_15);
                 TextView textView15 = findViewById(R.id.textView15);
                 TextView textView15Label = findViewById(R.id.textView15label);
+                layout15.setOnTouchListener(MainActivity.this);
+                layout15.setTag(cellNumber);
+                textView15.setTag(cellNumber);
+                textView15Label.setTag(cellNumber);
                 if (itsDark){
                     textView15.setTextColor(getResources().getColor(R.color.white));
                     textView15Label.setTextColor(getResources().getColor(R.color.white));
@@ -2073,8 +2159,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     layout15.setBackgroundColor(getResources().getColor(R.color.white));
                     layout15.setBackground(getResources().getDrawable(R.drawable.border));
                 }
-                textView15Label.setTextSize(TypedValue.COMPLEX_UNIT_SP,labelFontSize);
-                textView15.setTextSize(TypedValue.COMPLEX_UNIT_SP,fontSize);
                 textView15Label.setText(label);
                 textView15.setText(value);
                 break;
@@ -2211,35 +2295,21 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 switch (currentCellCount){
                     case 15:
                         nextCellCount = 1;
-                        //fontSize = 44;
-                        //labelFontSize = 28;
-                        fontSize = 90;
-                        labelFontSize = 40;
                         break;
                     case 12:
                         nextCellCount = 15;
-                        fontSize = 34;
-                        labelFontSize = 18;
                         break;
                     case 8:
                         nextCellCount = 12;
-                        fontSize = 36;
-                        labelFontSize = 24;
                         break;
                     case 4:
                         nextCellCount = 8;
-                        fontSize = 38;
-                        labelFontSize = 26;
                         break;
                     case 2:
                         nextCellCount = 4;
-                        fontSize = 40;
-                        labelFontSize = 28;
                         break;
                     case 1:
                         nextCellCount = 2;
-                        fontSize = 80;
-                        labelFontSize = 30;
                         break;
                 }
                 editor.putString("CELL_COUNT", String.valueOf(nextCellCount));
@@ -2251,33 +2321,21 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 switch (currentCellCount){
                     case 15:
                         nextCellCount = 12;
-                        fontSize = 36;
-                        labelFontSize = 20;
                         break;
                     case 12:
                         nextCellCount = 8;
-                        fontSize = 38;
-                        labelFontSize = 22;
                         break;
                     case 8:
                         nextCellCount = 4;
-                        fontSize = 40;
-                        labelFontSize = 24;
                         break;
                     case 4:
                         nextCellCount = 2;
-                        fontSize = 80;
-                        labelFontSize = 30;
                         break;
                     case 2:
                         nextCellCount = 1;
-                        fontSize = 90;
-                        labelFontSize = 40;
                         break;
                     case 1:
                         nextCellCount = 15;
-                        fontSize = 34;
-                        labelFontSize = 18;
                         break;
                 }
                 editor.putString("CELL_COUNT", String.valueOf(nextCellCount));
