@@ -140,6 +140,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private GestureDetectorCompat gestureDetector;
 
+    private boolean inPIP = false;
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -929,8 +931,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     public void onUserLeaveHint () {
         if (sharedPrefs.getBoolean("prefPIP", false)) {
             if (Build.VERSION.SDK_INT >= 26) {
+                int width = getWindow().getDecorView().getWidth();
+                int height = getWindow().getDecorView().getHeight();
                 PictureInPictureParams params = new PictureInPictureParams.Builder()
-                        .setAspectRatio(new Rational(4, 3)).build();
+                        .setAspectRatio(new Rational(width, height)).build();
                 //.setActions(getPIPActions(getCurrentVideo())).build();
                 enterPictureInPictureMode(params);
             }
@@ -939,13 +943,17 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     public void onPictureInPictureModeChanged(boolean isInPIPMode) {
+        gridChange = true;
         if (isInPIPMode) {
+            inPIP = true;
             //Hide your clickable components
             getSupportActionBar().hide();
-
+            updateDisplay();
         } else {
+            inPIP = false;
             //Show your clickable components
             getSupportActionBar().show();
+            updateDisplay();
         }
         super.onPictureInPictureModeChanged(isInPIPMode);
     }
@@ -1242,152 +1250,175 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             Integer cell15Data = Integer.parseInt(sharedPrefs.getString("prefCellFifteen", "15"));
 
             int currentCellCount = Integer.parseInt(sharedPrefs.getString("CELL_COUNT", "15"));
-            switch (currentCellCount) {
-                case 15:
-                    if (gridChange) {
-                        gridLayout.removeAllViews();
-                        gridLayout.setColumnCount(3);
-                        gridLayout.setRowCount(5);
-                    }
+            if (!inPIP) {
+                switch (currentCellCount) {
+                    case 15:
+                        if (gridChange) {
+                            gridLayout.removeAllViews();
+                            gridLayout.setColumnCount(3);
+                            gridLayout.setRowCount(5);
+                        }
 
-                    // Cell One
-                    setCellText(1, cell1Data);
-                    // Cell Two
-                    setCellText(2, cell2Data);
-                    // Cell Three
-                    setCellText(3, cell3Data);
-                    // Cell Four
-                    setCellText(4, cell4Data);
-                    // Cell Five
-                    setCellText(5, cell5Data);
-                    // Cell Six
-                    setCellText(6, cell6Data);
-                    // Cell Seven
-                    setCellText(7, cell7Data);
-                    // Cell Eight
-                    setCellText(8, cell8Data);
-                    // Cell Nine
-                    setCellText(9, cell9Data);
-                    // Cell Ten
-                    setCellText(10, cell10Data);
-                    // Cell Eleven
-                    setCellText(11, cell11Data);
-                    // Cell Twelve
-                    setCellText(12, cell12Data);
-                    // Cell Thirteen
-                    setCellText(13, cell13Data);
-                    // Cell Fourteen
-                    setCellText(14, cell14Data);
-                    // Cell Fifteen
-                    setCellText(15, cell15Data);
-                    gridChange = false;
-                    break;
-                case 12:
-                    if (gridChange) {
-                        gridLayout.removeAllViews();
-                        gridLayout.setColumnCount(3);
-                        gridLayout.setRowCount(4);
-                    }
-                    // Cell One
-                    setCellText(1, cell1Data);
-                    // Cell Two
-                    setCellText(2, cell2Data);
-                    // Cell Three
-                    setCellText(3, cell3Data);
-                    // Cell Four
-                    setCellText(4, cell4Data);
-                    // Cell Five
-                    setCellText(5, cell5Data);
-                    // Cell Six
-                    setCellText(6, cell6Data);
-                    // Cell Seven
-                    setCellText(7, cell7Data);
-                    // Cell Eight
-                    setCellText(8, cell8Data);
-                    // Cell Nine
-                    setCellText(9, cell9Data);
-                    // Cell Ten
-                    setCellText(10, cell10Data);
-                    // Cell Eleven
-                    setCellText(11, cell11Data);
-                    // Cell Twelve
-                    setCellText(12, cell12Data);
-                    gridChange = false;
-                    break;
-                case 8:
-                    if (gridChange) {
-                        gridLayout.removeAllViews();
-                        gridLayout.setColumnCount(2);
-                        gridLayout.setRowCount(4);
-                    }
-                    // Cell One
-                    setCellText(1, cell1Data);
-                    // Cell Two
-                    setCellText(2, cell2Data);
-                    // Cell Three
-                    setCellText(3, cell3Data);
-                    // Cell Four
-                    setCellText(4, cell4Data);
-                    // Cell Five
-                    setCellText(5, cell5Data);
-                    // Cell Six
-                    setCellText(6, cell6Data);
-                    // Cell Seven
-                    setCellText(7, cell7Data);
-                    // Cell Eight
-                    setCellText(8, cell8Data);
-                    gridChange = false;
-                    break;
-                case 4:
-                    if (gridChange) {
-                        gridLayout.removeAllViews();
-                        if(getResources().getConfiguration().orientation == 2) {
-                            //Landscape
-                            gridLayout.setColumnCount(2);
-                            gridLayout.setRowCount(2);
-                        } else {
-                            gridLayout.setColumnCount(1);
+                        // Cell One
+                        setCellText(1, cell1Data);
+                        // Cell Two
+                        setCellText(2, cell2Data);
+                        // Cell Three
+                        setCellText(3, cell3Data);
+                        // Cell Four
+                        setCellText(4, cell4Data);
+                        // Cell Five
+                        setCellText(5, cell5Data);
+                        // Cell Six
+                        setCellText(6, cell6Data);
+                        // Cell Seven
+                        setCellText(7, cell7Data);
+                        // Cell Eight
+                        setCellText(8, cell8Data);
+                        // Cell Nine
+                        setCellText(9, cell9Data);
+                        // Cell Ten
+                        setCellText(10, cell10Data);
+                        // Cell Eleven
+                        setCellText(11, cell11Data);
+                        // Cell Twelve
+                        setCellText(12, cell12Data);
+                        // Cell Thirteen
+                        setCellText(13, cell13Data);
+                        // Cell Fourteen
+                        setCellText(14, cell14Data);
+                        // Cell Fifteen
+                        setCellText(15, cell15Data);
+                        gridChange = false;
+                        break;
+                    case 12:
+                        if (gridChange) {
+                            gridLayout.removeAllViews();
+                            gridLayout.setColumnCount(3);
                             gridLayout.setRowCount(4);
                         }
-                    }
-                    // Cell One
-                    setCellText(1, cell1Data);
-                    // Cell Two
-                    setCellText(2, cell2Data);
-                    // Cell Three
-                    setCellText(3, cell3Data);
-                    // Cell Four
-                    setCellText(4, cell4Data);
-                    gridChange = false;
-                    break;
-                case 2:
-                    if (gridChange) {
-                        gridLayout.removeAllViews();
-                        if(getResources().getConfiguration().orientation == 2) {
-                            //Landscape
+                        // Cell One
+                        setCellText(1, cell1Data);
+                        // Cell Two
+                        setCellText(2, cell2Data);
+                        // Cell Three
+                        setCellText(3, cell3Data);
+                        // Cell Four
+                        setCellText(4, cell4Data);
+                        // Cell Five
+                        setCellText(5, cell5Data);
+                        // Cell Six
+                        setCellText(6, cell6Data);
+                        // Cell Seven
+                        setCellText(7, cell7Data);
+                        // Cell Eight
+                        setCellText(8, cell8Data);
+                        // Cell Nine
+                        setCellText(9, cell9Data);
+                        // Cell Ten
+                        setCellText(10, cell10Data);
+                        // Cell Eleven
+                        setCellText(11, cell11Data);
+                        // Cell Twelve
+                        setCellText(12, cell12Data);
+                        gridChange = false;
+                        break;
+                    case 8:
+                        if (gridChange) {
+                            gridLayout.removeAllViews();
                             gridLayout.setColumnCount(2);
-                            gridLayout.setRowCount(1);
-                        } else {
-                            gridLayout.setColumnCount(1);
-                            gridLayout.setRowCount(2);
+                            gridLayout.setRowCount(4);
                         }
-                    }
-                    // Cell One
-                    setCellText(1, cell1Data);
-                    // Cell Two
-                    setCellText(2, cell2Data);
-                    gridChange = false;
-                    break;
-                case 1:
-                    if (gridChange) {
-                        gridLayout.removeAllViews();
+                        // Cell One
+                        setCellText(1, cell1Data);
+                        // Cell Two
+                        setCellText(2, cell2Data);
+                        // Cell Three
+                        setCellText(3, cell3Data);
+                        // Cell Four
+                        setCellText(4, cell4Data);
+                        // Cell Five
+                        setCellText(5, cell5Data);
+                        // Cell Six
+                        setCellText(6, cell6Data);
+                        // Cell Seven
+                        setCellText(7, cell7Data);
+                        // Cell Eight
+                        setCellText(8, cell8Data);
+                        gridChange = false;
+                        break;
+                    case 4:
+                        if (gridChange) {
+                            gridLayout.removeAllViews();
+                            if (getResources().getConfiguration().orientation == 2) {
+                                //Landscape
+                                gridLayout.setColumnCount(2);
+                                gridLayout.setRowCount(2);
+                            } else {
+                                gridLayout.setColumnCount(1);
+                                gridLayout.setRowCount(4);
+                            }
+                        }
+                        // Cell One
+                        setCellText(1, cell1Data);
+                        // Cell Two
+                        setCellText(2, cell2Data);
+                        // Cell Three
+                        setCellText(3, cell3Data);
+                        // Cell Four
+                        setCellText(4, cell4Data);
+                        gridChange = false;
+                        break;
+                    case 2:
+                        if (gridChange) {
+                            gridLayout.removeAllViews();
+                            if (getResources().getConfiguration().orientation == 2) {
+                                //Landscape
+                                gridLayout.setColumnCount(2);
+                                gridLayout.setRowCount(1);
+                            } else {
+                                gridLayout.setColumnCount(1);
+                                gridLayout.setRowCount(2);
+                            }
+                        }
+                        // Cell One
+                        setCellText(1, cell1Data);
+                        // Cell Two
+                        setCellText(2, cell2Data);
+                        gridChange = false;
+                        break;
+                    case 1:
+                        if (gridChange) {
+                            gridLayout.removeAllViews();
+                            gridLayout.setColumnCount(1);
+                            gridLayout.setRowCount(1);
+                        }
+                        // Cell One
+                        setCellText(1, cell1Data);
+                        gridChange = false;
+                        break;
+                }
+            } else {
+                if (gridChange) {
+                    gridLayout.removeAllViews();
+                    if (getResources().getConfiguration().orientation == 2) {
+                        //Landscape
+                        gridLayout.setColumnCount(2);
+                        gridLayout.setRowCount(2);
+                    } else {
                         gridLayout.setColumnCount(1);
-                        gridLayout.setRowCount(1);
+                        gridLayout.setRowCount(4);
                     }
-                    // Cell One
-                    setCellText(1, cell1Data);
-                    gridChange = false;
-                    break;
+                }
+                // Cell One
+                setCellText(1, cell1Data);
+                // Cell Two
+                setCellText(2, cell2Data);
+                // Cell Three
+                setCellText(3, cell3Data);
+                // Cell Four
+                setCellText(4, cell4Data);
+                gridChange = false;
             }
         } else {
             gridLayout.removeAllViews();
