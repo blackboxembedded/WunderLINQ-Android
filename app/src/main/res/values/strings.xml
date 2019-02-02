@@ -625,6 +625,8 @@
     </string-array>
     <string name="pref_autoNightModeDelay_name">Auto Night Mode Delay</string>
     <string name="pref_autoNightModeDelay_summary">Set Auto Night Mode Delay In Seconds</string>
+    <string name="pref_pip_name">Enable Picture in Picture mode</string>
+    <string name="pref_pip_summary">When leaving the app the data grid is minimized into a hovering window.</string>
     <string name="alerting_title">Alert Settings</string>
     <string name="pref_tpmsAlert_name">Custom Tire Pressure Threshold</string>
     <string name="pref_tpmsAlert_summary">Use a custom threshold for low tire pressure alerting</string>

@@ -50,6 +50,8 @@
 
         <activity
             android:name=".MainActivity"
+            android:resizeableActivity="true"
+            android:supportsPictureInPicture="true"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|fontScale|density"
             android:launchMode="singleTask">
             <intent-filter>

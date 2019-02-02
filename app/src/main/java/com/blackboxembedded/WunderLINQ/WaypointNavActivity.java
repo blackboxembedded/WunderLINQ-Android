@@ -29,6 +29,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import static android.content.Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT;
+
 public class WaypointNavActivity extends AppCompatActivity {
 
     public final static String TAG = "WaypointNav";
@@ -138,6 +140,7 @@ public class WaypointNavActivity extends AppCompatActivity {
                 try {
                     Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
                     navIntent.setData(Uri.parse(navUrl));
+                    navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
                     startActivity(navIntent);
                 } catch ( ActivityNotFoundException ex  ) {
                     // Add Alert

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AppOpsManager;
+import android.app.PictureInPictureParams;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -43,6 +44,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayout;
 import android.util.Log;
+import android.util.Rational;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -921,6 +923,31 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         }
         mBluetoothLeService = null;
         sensorManager.unregisterListener(sensorEventListener, lightSensor);
+    }
+
+    @Override
+    public void onUserLeaveHint () {
+        if (sharedPrefs.getBoolean("prefPIP", false)) {
+            if (Build.VERSION.SDK_INT >= 26) {
+                PictureInPictureParams params = new PictureInPictureParams.Builder()
+                        .setAspectRatio(new Rational(4, 3)).build();
+                //.setActions(getPIPActions(getCurrentVideo())).build();
+                enterPictureInPictureMode(params);
+            }
+        }
+    }
+
+    @Override
+    public void onPictureInPictureModeChanged(boolean isInPIPMode) {
+        if (isInPIPMode) {
+            //Hide your clickable components
+            getSupportActionBar().hide();
+
+        } else {
+            //Show your clickable components
+            getSupportActionBar().show();
+        }
+        super.onPictureInPictureModeChanged(isInPIPMode);
     }
 
     @Override
