@@ -975,7 +975,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         Log.d(TAG,"In onPause");
         super.onPause();
         try {
-            unregisterReceiver(mGattUpdateReceiver);
+            //unregisterReceiver(mGattUpdateReceiver);
             unregisterReceiver(mBondingBroadcast);
             unbindService(mServiceConnection);
         } catch (IllegalArgumentException e){
