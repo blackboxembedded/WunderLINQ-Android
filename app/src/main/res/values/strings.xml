@@ -68,6 +68,7 @@
     <!-- Other Menu -->
     <string name="appsettings_label">App Settings</string>
     <string name="hwsettings_label">HW Settings</string>
+    <string name="splitscreen_label">Enter Split Screen</string>
     <string name="info_label">About</string>
     <string name="close_label">Close</string>
 
@@ -265,6 +266,8 @@
     <string name="waypoint_view_bt_delete">Delete</string>
     <string name="waypoint_view_waypoint_label">Waypoint</string>
     <string name="waypoint_view_share_label">Share via</string>
+    <string name="delete_waypoint_alert_title">Warning!</string>
+    <string name="delete_waypoint_alert_body">Delete Waypoint?</string>
 
     <!-- TripsActivity -->
     <string name="trips_title">Recorded Trips</string>
@@ -285,6 +288,10 @@
     <string name="hours">h</string>
     <string name="minutes">m</string>
     <string name="seconds">s</string>
+    <string name="delete_trip_alert_title">Warning!</string>
+    <string name="delete_trip_alert_body">Delete Trip Log?</string>
+    <string name="delete_bt">Delete</string>
+    <string name="cancel_bt">Cancel</string>
 
     <!-- CompassActivity -->
     <string name="compass_title">Compass</string>

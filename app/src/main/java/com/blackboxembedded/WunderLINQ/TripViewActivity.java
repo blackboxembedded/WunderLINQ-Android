@@ -1,6 +1,7 @@
 package com.blackboxembedded.WunderLINQ;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -11,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -329,9 +331,22 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
 
     // Delete button press
     public void onClickDelete(View view) {
-        file.delete();
-        Intent backIntent = new Intent(TripViewActivity.this, TripsActivity.class);
-        startActivity(backIntent);
+        // Display dialog text here......
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.delete_trip_alert_title));
+        builder.setMessage(getString(R.string.delete_trip_alert_body));
+        builder.setPositiveButton(R.string.delete_bt,
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        file.delete();
+                        Intent backIntent = new Intent(TripViewActivity.this, TripsActivity.class);
+                        startActivity(backIntent);
+                    }
+                });
+        builder.setNegativeButton(R.string.cancel_bt,null);
+        builder.show();
     }
 
     // Export button press

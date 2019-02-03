@@ -2,6 +2,7 @@ package com.blackboxembedded.WunderLINQ;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -169,10 +171,23 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
 
     // Delete button press
     public void onClickDelete(View view) {
-        datasource.removeRecord(record);
-        Intent intent = new Intent(this, WaypointActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+        // Display dialog text here......
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.delete_waypoint_alert_title));
+        builder.setMessage(getString(R.string.delete_waypoint_alert_body));
+        builder.setPositiveButton(R.string.delete_bt,
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        datasource.removeRecord(record);
+                        Intent intent = new Intent(WaypointViewActivity.this, WaypointActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    }
+                });
+        builder.setNegativeButton(R.string.cancel_bt,null);
+        builder.show();
     }
 
     // Open button press
