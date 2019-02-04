@@ -110,7 +110,20 @@
             android:name=".PhotoService"
             android:enabled="true"
             android:exported="true" />
+        <service
+            android:name=".SplitScreenService"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
 
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibilityservice" />
+        </service>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.blackboxembedded.wunderlinq.fileprovider"

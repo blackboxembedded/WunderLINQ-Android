@@ -330,6 +330,24 @@
             android:summary="@string/pref_pip_summary"
             android:title="@string/pref_pip_name" >
         </CheckBoxPreference>
+        <ListPreference
+            android:dependency="prefPIP"
+            android:key="prefPIPorientation"
+            android:title="@string/pref_piporientation_name"
+            android:summary="%s"
+            android:entries="@array/piporientation_array"
+            android:entryValues="@array/piporientation_arrayValues"
+            android:defaultValue="0"
+            />
+        <ListPreference
+            android:dependency="prefPIP"
+            android:key="prefPIPCellCount"
+            android:title="@string/pref_pipgrid_name"
+            android:summary="%s"
+            android:entries="@array/pipgrid_array"
+            android:entryValues="@array/pipgrid_arrayValues"
+            android:defaultValue="4"
+            />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/alerting_title" >
         <CheckBoxPreference

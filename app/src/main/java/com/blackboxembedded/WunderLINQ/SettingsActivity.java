@@ -54,8 +54,12 @@ public class SettingsActivity extends PreferenceActivity{
 
             if (Build.VERSION.SDK_INT < 26) {
                 PreferenceScreen preferenceScreen = getPreferenceScreen();
-                Preference pipPreference = (Preference) findPreference("prefPIP") ;
+                Preference pipPreference = (Preference) findPreference("prefPIP");
+                Preference pipOrientationPreference = (Preference) findPreference("prefPIPorientation");
+                Preference pipCellCountPreference = (Preference) findPreference("prefPIPCellCount") ;
                 preferenceScreen.removePreference(pipPreference);
+                preferenceScreen.removePreference(pipOrientationPreference);
+                preferenceScreen.removePreference(pipCellCountPreference);
             }
 
             Preference button = findPreference("prefSendLog");
