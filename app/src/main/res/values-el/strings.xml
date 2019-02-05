@@ -394,4 +394,16 @@
     <string name="fueleconomyone_label">Economy 1</string>
     <string name="fueleconomytwo_label">Economy 2</string>
     <string name="fuelrange_label">Range</string>
+    <string name="accessibility_explanation">This is required to automatically enter multi window mode, if you chose to not enable this you will be prompted to manually enter multi window mode.</string>
+    <string name="pref_pipgrid_name">PiP Cell Count</string>
+    <string name="pref_piporientation_name">PiP Orientation</string>
+    <string name="pref_pip_summary">When leaving the app the data grid is minimized into a hovering window.  Only available in Android 8.0+</string>
+    <string name="pref_pip_name">Enable Picture in Picture mode</string>
+    <string name="splitscreen_label">Enter Split Screen</string>
+    <string name="delete_waypoint_alert_title">Warning!</string>
+    <string name="delete_waypoint_alert_body">Delete Waypoint?</string>
+    <string name="delete_trip_alert_title">Warning!</string>
+    <string name="delete_trip_alert_body">Delete Trip Log?</string>
+    <string name="delete_bt">Delete</string>
+    <string name="cancel_bt">Cancel</string>
 </resources>
