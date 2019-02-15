@@ -324,6 +324,14 @@
             android:defaultValue="30"
             android:inputType="number"
             android:key="prefAutoNightModeDelay" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/experimental_title" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="prefTaskSwitcher"
+            android:summary="@string/pref_taskswitcher_summary"
+            android:title="@string/pref_taskswitcher_name" >
+        </CheckBoxPreference>
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="prefPIP"

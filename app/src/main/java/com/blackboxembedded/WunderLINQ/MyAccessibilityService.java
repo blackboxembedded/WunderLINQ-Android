@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
-public class SplitScreenService extends AccessibilityService {
+public class MyAccessibilityService extends AccessibilityService {
+
+    public final static String TAG = "MyAccessibilityService";
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
@@ -19,14 +21,22 @@ public class SplitScreenService extends AccessibilityService {
 
     @Override
     public void onCreate() {
-        Log.d("SplitScreenService", "In onCreate");
         super.onCreate();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("SplitScreenService", "onStartCOmmand");
-        performGlobalAction(GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN);
+        int command = intent.getIntExtra("command",1);
+        switch (command){
+            case 1:
+                performGlobalAction(GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN);
+                break;
+            case 2:
+                performGlobalAction(GLOBAL_ACTION_RECENTS);
+                break;
+            default:
+                Log.d(TAG, "Unknown command: " + command);
+        }
 
         return super.onStartCommand(intent, flags, startId);
     }

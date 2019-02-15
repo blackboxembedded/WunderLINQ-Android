@@ -31,6 +31,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,6 +60,11 @@ public class BluetoothLeService extends Service {
     private static int prevBrakeValue = 0;
 
     private static SharedPreferences sharedPrefs;
+
+    private static Date holdStartTime;
+    private static boolean holdStart = false;
+    private static Date RTholdStartTime;
+    private static boolean RTholdStart = false;
 
     /**
      * GATT Status constants
@@ -727,6 +733,28 @@ public class BluetoothLeService extends Service {
                 break;
             case 0x01:
                 //Log.d(TAG, "Message ID 1");
+                if (sharedPrefs.getBoolean("prefTaskSwitcher",false)) {
+                    if ((data[1] & 0xFF) == 0x65) {
+                        if (RTholdStartTime == null) {
+                            RTholdStartTime = new Date();
+                        } else {
+                            Date currentTime = new Date();
+                            if (currentTime.getTime() - RTholdStartTime.getTime() >= 1500) {
+                                if (!RTholdStart) {
+                                    RTholdStart = true;
+                                    Log.d("task", "RT Open Task Switcher");
+                                    Intent accessibilityService = new Intent(MyApplication.getContext(), MyAccessibilityService.class);
+                                    accessibilityService.putExtra("command", 2);
+                                    MyApplication.getContext().startService(accessibilityService);
+                                }
+                            }
+                        }
+
+                    } else {
+                        RTholdStart = false;
+                        RTholdStartTime = null;
+                    }
+                }
                 //Fuel Range
                 if ((data[4] & 0xFF) != 0xFF && (data[5] & 0xFF) != 0xFF) {
                     double fuelRange = (((data[4] & 0xFF) >> 4) & 0x0f) + (((data[5] & 0xFF) & 0x0f) * 16) + ((((data[5] & 0xFF) >> 4) & 0x0f) * 256);
@@ -744,6 +772,28 @@ public class BluetoothLeService extends Service {
                 break;
             case 0x04:
                 //Log.d(TAG, "Message ID 4");
+                if (sharedPrefs.getBoolean("prefTaskSwitcher",false)) {
+                    if (((data[4] & 0xFF) == 0xFD) || (data[4] & 0xFF) == 0x01) {
+                        if (holdStartTime == null) {
+                            holdStartTime = new Date();
+                        } else {
+                            Date currentTime = new Date();
+                            if (currentTime.getTime() - holdStartTime.getTime() >= 1500) {
+                                if (!holdStart) {
+                                    holdStart = true;
+                                    Log.d("task", "Open Task Switcher");
+                                    Intent accessibilityService = new Intent(MyApplication.getContext(), MyAccessibilityService.class);
+                                    accessibilityService.putExtra("command", 2);
+                                    MyApplication.getContext().startService(accessibilityService);
+                                }
+                            }
+                        }
+
+                    } else {
+                        holdStart = false;
+                        holdStartTime = null;
+                    }
+                }
                 break;
             case 0x05:
                 //Log.d(TAG, "Message ID 5");

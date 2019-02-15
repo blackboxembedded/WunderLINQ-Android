@@ -5,8 +5,10 @@
     <!-- MainActivity -->
     <string name="main_title">Motorcycle</string>
     <string name="blank_field">∞</string>
-    <string name="accessibility_explanation">This is required to automatically enter multi window mode, if you chose to not enable this you will be prompted to manually enter multi window mode.</string>
+    <string name="accessibility_explanation">This is required to automatically enter multi window mode and to launch the Android Task Switcher, if you chose to not enable WunderLINQ will not fully function</string>
     <!-- Permission Requests -->
+    <string name="accessibilityservice_alert_title">WunderLINQ needs to run a Accessibility Service</string>
+    <string name="accessibilityservice_alert_body">Please enable the WunderLINQ accessibilty service.  </string>
     <string name="camera_alert_title">WunderLINQ needs permissions to use your camera</string>
     <string name="camera_alert_body">Please grant access to use your camera</string>
     <string name="call_alert_title">WunderLINQ needs permissions to use your phone to make phone calls</string>
@@ -633,6 +635,9 @@
     </string-array>
     <string name="pref_autoNightModeDelay_name">Auto Night Mode Delay</string>
     <string name="pref_autoNightModeDelay_summary">Set Auto Night Mode Delay In Seconds</string>
+    <string name="experimental_title">Experimental Features</string>
+    <string name="pref_taskswitcher_name">Enable task switcher</string>
+    <string name="pref_taskswitcher_summary">If wheel is held left it brings up the task switcher, only enable if it isn\'t working as a back button</string>
     <string name="pref_pip_name">Enable Picture in Picture mode</string>
     <string name="pref_pip_summary">When leaving the app the data grid is minimized into a hovering window.  Only available in Android 8.0+</string>
     <string name="pref_piporientation_name">PiP Orientation</string>

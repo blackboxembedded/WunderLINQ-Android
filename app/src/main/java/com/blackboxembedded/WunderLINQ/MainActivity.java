@@ -229,8 +229,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     break;
                 case 8:
                     gridLayout.removeAllViews();
-                    gridLayout.setColumnCount(2);
-                    gridLayout.setRowCount(4);
+                    if (getResources().getConfiguration().orientation == 2) {
+                        //Landscape
+                        gridLayout.setColumnCount(4);
+                        gridLayout.setRowCount(2);
+                    } else {
+                        gridLayout.setColumnCount(2);
+                        gridLayout.setRowCount(4);
+                    }
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false));
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem2, gridLayout, false));
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem3, gridLayout, false));
@@ -571,6 +577,22 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             builder.show();
         }
 
+        if (!isAccessibilityServiceEnabled(MainActivity.this, MyAccessibilityService.class)) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(getString(R.string.accessibilityservice_alert_title));
+            builder.setMessage(getString(R.string.accessibilityservice_alert_body));
+            builder.setPositiveButton(android.R.string.ok, null);
+            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @TargetApi(23)
+                public void onDismiss(DialogInterface dialog) {
+                    Intent accessibilityIntent = new Intent();
+                    accessibilityIntent.setAction(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                    startActivity(accessibilityIntent);
+                }
+            });
+            builder.show();
+        }
+
         // Daily Disclaimer Warning
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         final String currentDate = sdf.format(new Date());
@@ -780,10 +802,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     case R.id.action_enter_splitscreen:
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                             if (!isInMultiWindowMode()) {
-                                if (isAccessibilityServiceEnabled(MainActivity.this, SplitScreenService.class)) {
+                                if (isAccessibilityServiceEnabled(MainActivity.this, MyAccessibilityService.class)) {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                        Log.d(TAG, "startingservice");
-                                        startService(new Intent(MainActivity.this, SplitScreenService.class));
+                                        Intent accessibilityService = new Intent(MainActivity.this, MyAccessibilityService.class);
+                                        accessibilityService.putExtra("command", 1);
+                                        startService(accessibilityService);
                                     }
                                 } else {
                                     Intent accessibilityIntent = new Intent();
@@ -915,6 +938,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
                     layoutParams.screenBrightness = 1;
                     getWindow().setAttributes(layoutParams);
+                } else {
+                    //Set Brightness to defaults
+                    WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+                    layoutParams.screenBrightness = -1;
+                    getWindow().setAttributes(layoutParams);
                 }
 
                 lLayout.setBackgroundColor(getResources().getColor(R.color.white));
@@ -1005,6 +1033,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     public void onUserLeaveHint () {
+        //Set Brightness to defaults
+        WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+        layoutParams.screenBrightness = -1;
+        getWindow().setAttributes(layoutParams);
         if (Build.VERSION.SDK_INT >= 26) {
             if (sharedPrefs.getBoolean("prefPIP", false) && (!isInMultiWindowMode())) {
                 int width = getWindow().getDecorView().getWidth();
@@ -1424,8 +1456,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 case 8:
                     if (gridChange) {
                         gridLayout.removeAllViews();
-                        gridLayout.setColumnCount(2);
-                        gridLayout.setRowCount(4);
+                        if (getResources().getConfiguration().orientation == 2) {
+                            //Landscape
+                            gridLayout.setColumnCount(4);
+                            gridLayout.setRowCount(2);
+                        } else {
+                            gridLayout.setColumnCount(2);
+                            gridLayout.setRowCount(4);
+                        }
                     }
                     // Cell One
                     setCellText(1, cell1Data);
@@ -2301,6 +2339,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         SharedPreferences.Editor editor = sharedPrefs.edit();
 
         switch (keyCode) {
+            case KeyEvent.KEYCODE_ESCAPE:
+                return true;
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 Intent backIntent = new Intent(MainActivity.this, TaskActivity.class);
                 startActivity(backIntent);
