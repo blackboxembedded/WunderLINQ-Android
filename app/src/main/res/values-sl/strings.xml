@@ -378,12 +378,11 @@
     <string name="pref_fuelAlert_name">Obvoz za bencinsko črpalko</string>
     <string name="pref_fuelAlert_summary">Opozori na obvoz do najbližje bencinske črpalke, ko je nivo goriva nizek</string>
     <string name="advanced_settings_title">Napredne nastavitve</string>
-    <string name="pref_btn_sendlogs_title">Pošiljaj dnevnike</string>
+    <string name="btn_sendlogs_title">Pošiljaj dnevnike</string>
     <string name="pref_btn_sendlogs_summary">Pošiljaj dnevnike Black Box Embedded Support</string>
     <string name="pref_sendlogs_body">Prosimo spodaj opišite vaše težave:</string>
     <string name="pref_sendlogs_intent_title">Pošlji dnevnike...</string>
     <string name="hw_settings_title">WunderLINQ nastavitve naprave</string>
-    <string name="pref_btn_version_title">WunderLINQ verzija</string>
     <string name="waypoint_view_bt_navigate">Navigacija</string>
     <string name="appsettings_label">Nastavitve aplikacije</string>
     <string name="hwsettings_label">Nastavitve naprave</string>

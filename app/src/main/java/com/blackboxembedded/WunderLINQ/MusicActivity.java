@@ -472,6 +472,9 @@ public class MusicActivity extends AppCompatActivity {
             navbarTitle.setTextColor(getResources().getColor(R.color.white));
             backButton.setColorFilter(getResources().getColor(R.color.white));
             forwardButton.setColorFilter(getResources().getColor(R.color.white));
+            mPrevButton.setColorFilter(getResources().getColor(R.color.white));
+            mPlayPauseButton.setColorFilter(getResources().getColor(R.color.white));
+            mNextButton.setColorFilter(getResources().getColor(R.color.white));
         } else {
             if (sharedPrefs.getBoolean("prefBrightnessOverride", false)) {
                 //Set Brightness to 100%
@@ -488,6 +491,9 @@ public class MusicActivity extends AppCompatActivity {
             navbarTitle.setTextColor(getResources().getColor(R.color.black));
             backButton.setColorFilter(getResources().getColor(R.color.black));
             forwardButton.setColorFilter(getResources().getColor(R.color.black));
+            mPrevButton.setColorFilter(getResources().getColor(R.color.black));
+            mPlayPauseButton.setColorFilter(getResources().getColor(R.color.black));
+            mNextButton.setColorFilter(getResources().getColor(R.color.black));
         }
     }
 

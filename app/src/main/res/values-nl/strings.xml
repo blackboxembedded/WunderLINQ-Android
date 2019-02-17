@@ -238,7 +238,7 @@
     <string name="pref_fuelAlert_summary">Bereken route naar dichts bij zijnde tankstation bij laag brandstof waarschuwing</string>
     <string name="debug_settings_title">Instellen Voorkeuren</string>
     <string name="advanced_settings_title">Geavanveerde Instellingen</string>
-    <string name="pref_btn_sendlogs_title">Stuur Logbestanden</string>
+    <string name="btn_sendlogs_title">Stuur Logbestanden</string>
     <string name="pref_btn_sendlogs_summary">Stuur Logbestanden naar Black Box Embedded Support</string>
     <string name="pref_sendlogs_body">Beschrijf uw problem hieronder:</string>
     <string name="pref_sendlogs_intent_title">Stuur Logbestanden...</string>
@@ -291,7 +291,6 @@
     <string name="pref_debuglogging_summary">Only enable if needed by Support, may impact performance if left running. Please disable when finished.</string>
     <string name="waypoint_view_bt_navigate">Navigate</string>
     <string name="hw_settings_title">WunderLINQ hardware Settings</string>
-    <string name="pref_btn_version_title">WunderLINQ Version</string>
     <string name="pref_grid_settings_title">Data Grid Customization</string>
     <string name="pref_grid_settings_summary">Customize which data points to display and in which cell</string>
     <string name="version_label">Version:</string>

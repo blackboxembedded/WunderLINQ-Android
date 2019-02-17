@@ -331,12 +331,11 @@
     <string name="pref_fuelAlert_name">Navigace k čerpací stanici</string>
     <string name="pref_fuelAlert_summary">Nabídnout navigaci k nejbližší čerpací stanici při nízkém stavu paliva</string>
     <string name="advanced_settings_title">Rozšířená nastavení</string>
-    <string name="pref_btn_sendlogs_title">Odeslat Logy</string>
+    <string name="btn_sendlogs_title">Odeslat Logy</string>
     <string name="pref_btn_sendlogs_summary">Odeslat logy podpoře Black Box Embedded</string>
     <string name="pref_sendlogs_body">Prosím popište problém (anglicky):</string>
     <string name="pref_sendlogs_intent_title">Odeslat Logy...</string>
     <string name="hw_settings_title">Nastavení WunderLINQ hardware</string>
-    <string name="pref_btn_version_title">Verze WunderLINQ</string>
     <string name="usagestats_alert_title">WunderLINQ vyžaduje oprávnění pro přístup k údajům o využití</string>
     <string name="usagestats_alert_body">Udělte prosím oprávnění pro přístup k údajům o využití tak, aby bylo možné automaticky spustit aplikaci po připojení k zařízení WunderLINQ</string>
     <string name="negative_usagestats_alert_body">Chybí oprávnění k přístupu k údajům o využití, nebude možné automaticky spustit aplikaci po připojení k zařízení WunderLINQ</string> <!-- New -->

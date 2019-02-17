@@ -264,6 +264,7 @@
     <string name="waypoint_view_tv_lon_label">Longitude</string>
     <string name="waypoint_view_tv_label_label">Label</string>
     <string name="waypoint_view_label_hint">Waypoint Label</string>
+    <string name="waypoint_view_bt_navigate">Navigate</string>
     <string name="waypoint_view_bt_open">Open in Map App</string>
     <string name="waypoint_view_bt_share">Share</string>
     <string name="waypoint_view_bt_delete">Delete</string>
@@ -669,7 +670,7 @@
     <string name="pref_fuelAlert_summary">Prompt to route to nearest fuel station when low fuel fault is present</string>
     <string name="debug_settings_title">Debug Settings</string>
     <string name="advanced_settings_title">Advanced Settings</string>
-    <string name="pref_btn_sendlogs_title">Send Logs</string>
+    <string name="btn_sendlogs_title">Send Logs</string>
     <string name="pref_btn_sendlogs_summary">Send Logs to Black Box Embedded Support</string>
     <string name="pref_autolaunch_name">Auto Launch App</string>
     <string name="pref_autolaunch_summary">Auto launch WunderLINQ app when WunderLINQ hardware connects</string>
@@ -680,6 +681,4 @@
     <string name="pref_sendlogs_body">Please describe your problem below:\n</string>
     <string name="pref_sendlogs_intent_title">Send Logs...</string>
     <string name="hw_settings_title">WunderLINQ hardware Settings</string>
-    <string name="pref_btn_version_title">WunderLINQ Version</string>
-    <string name="waypoint_view_bt_navigate">Navigate</string>
 </resources>

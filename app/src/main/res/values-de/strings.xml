@@ -214,12 +214,11 @@
     <string name="pref_autoNightModeDelay_summary">Auto-Nachtmodus, Verzögerung in Sekunden setzen</string>
 
     <string name="advanced_settings_title">Erweiterte Einstellungen</string>
-    <string name="pref_btn_sendlogs_title">Logdaten schicken</string>
+    <string name="btn_sendlogs_title">Logdaten schicken</string>
     <string name="pref_btn_sendlogs_summary">Logdaten zu Black Box Embedded Support schicken</string>
     <string name="pref_sendlogs_body">Bitte beschreiben Sie Ihr Problem:</string>
     <string name="pref_sendlogs_intent_title">Logdaten schicken...</string>
     <string name="hw_settings_title">WunderLINQ Hardware Einstellungen</string>
-    <string name="pref_btn_version_title">WunderLINQ Version</string>
     <string name="info_label">Über</string>
     <string name="close_label">Schliessen</string>
     <string name="about_title">Über</string>

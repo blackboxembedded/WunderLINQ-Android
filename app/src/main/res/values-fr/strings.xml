@@ -378,12 +378,11 @@
     <string name="pref_fuelAlert_name">Assistance carburant</string>
     <string name="pref_fuelAlert_summary">Proposer l\'itinéraire vers la station la plus proche en cas de niveau de carburant bas</string>
     <string name="advanced_settings_title">Réglages avancés</string>
-    <string name="pref_btn_sendlogs_title">Envoyer les journaux</string>
+    <string name="btn_sendlogs_title">Envoyer les journaux</string>
     <string name="pref_btn_sendlogs_summary">Envoyer les journaux au support de Black Box Embedded</string>
     <string name="pref_sendlogs_body">Entrez une description du problème ci-dessous:</string>
     <string name="pref_sendlogs_intent_title">Envoyer les journaux...</string>
     <string name="hw_settings_title">WunderLINQ réglages matériels</string>
-    <string name="pref_btn_version_title">WunderLINQ Version</string>
     <string name="waypoint_view_bt_navigate">Navigation</string>
     <string name="appsettings_label">Réglages</string>
     <string name="hwsettings_label">Régl. matériels</string>
