@@ -41,8 +41,6 @@
     <string name="trip2_label">Διαδρομή 2</string>
     <string name="gear_label">Ταχύτητα</string>
     <!-- Data Menu -->
-    <string name="trip_logs_label">Καταγραφές διαδρομών</string>
-    <string name="waypoints_label">Προορισμοί</string>
 
     <!-- FaultActivity -->
     <string name="title_activity_fault">Δραστιριότητα σφαλμάτων</string>
@@ -412,4 +410,5 @@
     <string name="accessibilityservice_alert_body">"Please enable the WunderLINQ accessibilty service.  "</string>
     <string name="leanangle_header">Lean Angle</string>
     <string name="gforce_header">g-force</string>
+    <string name="geodata_label">Trips &amp; Waypoints</string>
 </resources>

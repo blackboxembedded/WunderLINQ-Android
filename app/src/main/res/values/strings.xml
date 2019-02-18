@@ -65,10 +65,9 @@
     <string name="fueleconomyone_label">Economy 1</string>
     <string name="fueleconomytwo_label">Economy 2</string>
     <string name="fuelrange_label">Range</string>
-    <!-- Data Menu -->
-    <string name="trip_logs_label">Trip Logs</string>
-    <string name="waypoints_label">Waypoints</string>
-    <!-- Other Menu -->
+
+    <!-- Menu -->
+    <string name="geodata_label">Trips &amp; Waypoints</string>
     <string name="appsettings_label">App Settings</string>
     <string name="hwsettings_label">HW Settings</string>
     <string name="splitscreen_label">Enter Split Screen</string>
@@ -416,7 +415,6 @@
     <string name="pref_motorcycledata_summary">Enable for bikes that lack performance data.</string>
     <string name="pref_grid_settings_title">Data Grid Customization</string>
     <string name="pref_grid_settings_summary">Customize which data points to display and in which cell</string>
-    <string name="pref_grid_maxcells">Maximum number of cells to display</string>
     <string-array name="maxCells_array">
         <item name="1">15</item>
         <item name="2">12</item>

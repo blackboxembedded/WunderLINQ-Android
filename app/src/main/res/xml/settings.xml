@@ -24,16 +24,6 @@
             android:key="prefScreenGrid"
             android:title="@string/pref_grid_settings_title"
             android:summary="@string/pref_grid_settings_summary">
-            <!--
-            <ListPreference
-                android:key="prefMaxCells"
-                android:title="@string/pref_grid_maxcells"
-                android:summary="%s"
-                android:entries="@array/maxCells_array"
-                android:entryValues="@array/maxCells_arrayValues"
-                android:defaultValue="1"
-                />
-                -->
             <ListPreference
                 android:key="prefCellOne"
                 android:title="@string/pref_grid_one"

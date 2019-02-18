@@ -43,8 +43,6 @@
     <string name="trip2_label">Voyage 2</string>
     <string name="gear_label">Vitesse</string>
     <!-- Data Menu -->
-    <string name="trip_logs_label">Journaux de voyages</string>
-    <string name="waypoints_label">Emplacements</string>
     <!-- Other Menu -->
     <string name="info_label">À propos</string>
     <string name="close_label">Fermer</string>
@@ -456,4 +454,5 @@
     <string name="accessibilityservice_alert_body">"Please enable the WunderLINQ accessibilty service.  "</string>
     <string name="leanangle_header">Lean Angle</string>
     <string name="gforce_header">g-force</string>
+    <string name="geodata_label">Trips &amp; Waypoints</string>
 </resources>

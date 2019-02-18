@@ -41,8 +41,6 @@
     <string name="trip2_label">Parcial 2</string>
     <string name="gear_label">Marcha</string>
     <!-- Data Menu -->
-    <string name="trip_logs_label">Registros de Viaje</string>
-    <string name="waypoints_label">Waypoints</string>
 
     <!-- FaultActivity -->
     <string name="title_activity_fault">Actividad de fallas</string>
@@ -400,4 +398,5 @@
     <string name="accessibilityservice_alert_body">"Please enable the WunderLINQ accessibilty service.  "</string>
     <string name="leanangle_header">Lean Angle</string>
     <string name="gforce_header">g-force</string>
+    <string name="geodata_label">Trips &amp; Waypoints</string>
 </resources>

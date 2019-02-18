@@ -41,8 +41,6 @@
     <string name="trip2_label">Trip 2</string>
     <string name="gear_label">Stupeň</string>
     <!-- Data Menu -->
-    <string name="trip_logs_label">Záznamy jízd</string>
-    <string name="waypoints_label">Uložená místa</string>
     <!-- Other Menu -->
     <string name="info_label">O aplikaci</string>
     <string name="close_label">Zavřít</string>
@@ -419,4 +417,5 @@
     <string name="accessibilityservice_alert_body">"Please enable the WunderLINQ accessibilty service.  "</string>
     <string name="leanangle_header">Lean Angle</string>
     <string name="gforce_header">g-force</string>
+    <string name="geodata_label">Trips &amp; Waypoints</string>
 </resources>

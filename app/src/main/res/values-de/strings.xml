@@ -40,9 +40,6 @@
     <string name="trip2_label">KM-Zähler 2</string>
     <string name="gear_label">Gang</string>
 
-    <string name="trip_logs_label">Fahrtaufzeichnungen</string>
-    <string name="waypoints_label">Wegpunkte</string>
-
 
     <string name="title_activity_fault">Fehleraufzeichnungen</string>
     <string name="fault_title">Aktive Fehler</string>
@@ -373,4 +370,5 @@
     <string name="accessibilityservice_alert_body">"Please enable the WunderLINQ accessibilty service.  "</string>
     <string name="leanangle_header">Lean Angle</string>
     <string name="gforce_header">g-force</string>
+    <string name="geodata_label">Trips &amp; Waypoints</string>
 </resources>

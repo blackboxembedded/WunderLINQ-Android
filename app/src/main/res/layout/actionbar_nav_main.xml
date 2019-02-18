@@ -35,25 +35,14 @@
         android:paddingTop="4dp"/>
 
     <ImageButton
-        android:id="@+id/action_data"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:background="@null"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_area_chart"
-        android:layout_toLeftOf="@+id/action_other"
-        android:paddingRight="10dp"
-        android:paddingTop="4dp"/>
-
-    <ImageButton
-        android:id="@+id/action_other"
+        android:id="@+id/action_menu"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:background="@null"
         android:scaleType="centerInside"
         android:src="@drawable/ic_bars"
         android:layout_toLeftOf="@+id/action_forward"
-        android:paddingRight="10dp"
+        android:paddingRight="25dp"
         android:paddingTop="4dp"/>
 
     <ImageButton

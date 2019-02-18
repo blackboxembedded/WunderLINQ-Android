@@ -86,7 +86,7 @@ public class TripsActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch(v.getId()) {
                 case R.id.action_back:
-                    Intent backIntent = new Intent(TripsActivity.this, MainActivity.class);
+                    Intent backIntent = new Intent(TripsActivity.this, GeoDataActivity.class);
                     startActivity(backIntent);
                     break;
             }

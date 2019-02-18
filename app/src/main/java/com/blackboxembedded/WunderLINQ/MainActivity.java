@@ -86,19 +86,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private ActionBar actionBar;
     private ImageButton backButton;
     private ImageButton forwardButton;
-    private ImageButton otherButton;
-    private ImageButton dataButton;
+    private ImageButton menuButton;
     private ImageButton faultButton;
     private ImageButton btButton;
     private TextView navbarTitle;
 
     private GridLayout gridLayout;
     private LinearLayout layout1;
-    private TextView textView1;
-    private TextView textView1Label;
-
-    private int cellHeight = 0;
-    private int cellWidth = 0;
 
     private SharedPreferences sharedPrefs;
 
@@ -134,8 +128,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private static final int PERMISSION_REQUEST_WRITE_STORAGE = 112;
     private static final int PERMISSION_REQUEST_RECORD_AUDIO = 122;
     private PopupMenu mPopupMenu;
-    private PopupMenu mOtherMenu;
-    private Menu otherMenu;
+    private Menu mMenu;
 
     private GestureDetectorListener gestureDetector;
 
@@ -736,8 +729,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         backButton = findViewById(R.id.action_back);
         forwardButton = findViewById(R.id.action_forward);
-        otherButton = findViewById(R.id.action_other);
-        dataButton = findViewById(R.id.action_data);
+        menuButton = findViewById(R.id.action_menu);
         faultButton = findViewById(R.id.action_faults);
         btButton = findViewById(R.id.action_connect);
 
@@ -747,39 +739,17 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         backButton.setOnClickListener(mClickListener);
         forwardButton.setOnClickListener(mClickListener);
         faultButton.setOnClickListener(mClickListener);
-        otherButton.setOnClickListener(mClickListener);
-        dataButton.setOnClickListener(mClickListener);
+        menuButton.setOnClickListener(mClickListener);
         btButton.setOnClickListener(mClickListener);
 
         faultButton.setVisibility(View.GONE);
 
-        mPopupMenu = new PopupMenu(this, dataButton);
-        MenuInflater menuInflater = mPopupMenu.getMenuInflater();
-        menuInflater.inflate(R.menu.data_menu, mPopupMenu.getMenu());
+        mPopupMenu = new PopupMenu(this, menuButton);
+        MenuInflater menuOtherInflater = mPopupMenu.getMenuInflater();
+        menuOtherInflater.inflate(R.menu.menu, mPopupMenu.getMenu());
+        mMenu = mPopupMenu.getMenu();
+        mMenu.findItem(R.id.action_hwsettings).setVisible(false);
         mPopupMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch(item.getItemId()) {
-                    case R.id.action_trip_logs:
-                        Intent tripsIntent = new Intent(MainActivity.this, TripsActivity.class);
-                        startActivity(tripsIntent);
-                        break;
-                    case R.id.action_waypoints:
-                        Intent waypointsIntent = new Intent(MainActivity.this, WaypointActivity.class);
-                        startActivity(waypointsIntent);
-                        break;
-                }
-                return true;
-            }
-        });
-
-        mOtherMenu = new PopupMenu(this, otherButton);
-        MenuInflater menuOtherInflater = mOtherMenu.getMenuInflater();
-        menuOtherInflater.inflate(R.menu.other_menu, mOtherMenu.getMenu());
-        otherMenu = mOtherMenu.getMenu();
-        otherMenu.findItem(R.id.action_hwsettings).setVisible(false);
-        mOtherMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -790,6 +760,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         } else {
                             Log.d(TAG,"Running in the emulator");
                         }
+                        break;
+                    case R.id.action_data:
+                        Intent geoDataIntent = new Intent(MainActivity.this, GeoDataActivity.class);
+                        startActivity(geoDataIntent);
                         break;
                     case R.id.action_settings:
                         Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
@@ -852,11 +826,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Intent faultIntent = new Intent(MainActivity.this, FaultActivity.class);
                     startActivity(faultIntent);
                     break;
-                case R.id.action_data:
+                case R.id.action_menu:
                     mPopupMenu.show();
-                    break;
-                case R.id.action_other:
-                    mOtherMenu.show();
                     break;
             }
         }
@@ -928,8 +899,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 navbarTitle.setTextColor(getResources().getColor(R.color.white));
                 backButton.setColorFilter(getResources().getColor(R.color.white));
                 forwardButton.setColorFilter(getResources().getColor(R.color.white));
-                dataButton.setColorFilter(getResources().getColor(R.color.white));
-                otherButton.setColorFilter(getResources().getColor(R.color.white));
+                menuButton.setColorFilter(getResources().getColor(R.color.white));
                 updateDisplay();
             } else {
                 Log.d(TAG, "Settings things for light");
@@ -950,8 +920,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 navbarTitle.setTextColor(getResources().getColor(R.color.black));
                 backButton.setColorFilter(getResources().getColor(R.color.black));
                 forwardButton.setColorFilter(getResources().getColor(R.color.black));
-                dataButton.setColorFilter(getResources().getColor(R.color.black));
-                otherButton.setColorFilter(getResources().getColor(R.color.black));
+                menuButton.setColorFilter(getResources().getColor(R.color.black));
                 updateDisplay();
             }
         }
@@ -1253,7 +1222,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 Log.d(TAG,"GATT_CONNECTED");
                 mBluetoothLeService.discoverServices();
-                //checkGattServices(mBluetoothLeService.getSupportedGattServices());
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 Log.d(TAG,"GATT_DISCONNECTED");
                 Data.clear();
@@ -1262,18 +1230,17 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 }
                 btButton.setColorFilter(getResources().getColor(R.color.motorrad_red));
                 btButton.setEnabled(true);
-                otherMenu.findItem(R.id.action_hwsettings).setVisible(false);
+                mMenu.findItem(R.id.action_hwsettings).setVisible(false);
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 Log.d(TAG,"GATT_SERVICE_DISCOVERED");
                 checkGattServices(mBluetoothLeService.getSupportedGattServices());
                 btButton.setColorFilter(getResources().getColor(R.color.motorrad_blue));
                 btButton.setEnabled(false);
-                otherMenu.findItem(R.id.action_hwsettings).setVisible(true);
+                mMenu.findItem(R.id.action_hwsettings).setVisible(true);
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-                //Log.d(TAG,"GATT_DATA_AVAILABLE");
                 btButton.setColorFilter(getResources().getColor(R.color.motorrad_blue));
                 btButton.setEnabled(false);
-                otherMenu.findItem(R.id.action_hwsettings).setVisible(true);
+                mMenu.findItem(R.id.action_hwsettings).setVisible(true);
                 if (!sharedPrefs.getBoolean("prefMotorcycleData", false)){
                     updateDisplay();
                 }
@@ -1816,26 +1783,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 if (gridChange) {
                     View gridCell1 = layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false);
                     gridLayout.addView(gridCell1);
-                    layout1 = findViewById(R.id.layout_1);
-                    ViewTreeObserver vto = layout1.getViewTreeObserver();
-                    vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                        @Override
-                        public void onGlobalLayout() {
-                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                                layout1.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                            } else {
-                                layout1.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                            }
-                            cellWidth = layout1.getMeasuredWidth();
-                            cellHeight = layout1.getMeasuredHeight();
-
-                        }
-                    });
-                } else {
-                    layout1 = findViewById(R.id.layout_1);
                 }
-                textView1 = findViewById(R.id.textView1);
-                textView1Label = findViewById(R.id.textView1label);
+                layout1 = findViewById(R.id.layout_1);
+                TextView textView1 = findViewById(R.id.textView1);
+                TextView textView1Label = findViewById(R.id.textView1label);
                 layout1.setOnTouchListener(MainActivity.this);
                 layout1.setTag(cellNumber);
                 textView1.setTag(cellNumber);
@@ -1859,7 +1810,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     View gridCell2 = layoutInflater.inflate(R.layout.layout_griditem2, gridLayout, false);
                     gridLayout.addView(gridCell2);
                 }
-                final LinearLayout layout2 = findViewById(R.id.layout_2);
+                LinearLayout layout2 = findViewById(R.id.layout_2);
                 TextView textView2 = findViewById(R.id.textView2);
                 TextView textView2Label = findViewById(R.id.textView2label);
                 layout2.setOnTouchListener(MainActivity.this);
