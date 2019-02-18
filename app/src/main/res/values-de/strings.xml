@@ -214,7 +214,7 @@
     <string name="btn_sendlogs_title">Logdaten schicken</string>
     <string name="pref_btn_sendlogs_summary">Logdaten zu Black Box Embedded Support schicken</string>
     <string name="sendlogs_body">Bitte beschreiben Sie Ihr Problem:</string>
-    <string name="pref_sendlogs_intent_title">Logdaten schicken...</string>
+    <string name="sendlogs_intent_title">Logdaten schicken...</string>
     <string name="hw_settings_title">WunderLINQ Hardware Einstellungen</string>
     <string name="info_label">Über</string>
     <string name="close_label">Schliessen</string>

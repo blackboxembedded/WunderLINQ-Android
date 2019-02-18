@@ -1,29 +1,19 @@
 package com.blackboxembedded.WunderLINQ;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.support.v4.content.FileProvider;
-import android.util.Log;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class SettingsActivity extends PreferenceActivity{
 
     private final static String TAG = "SettingsActivity";
-    private static SharedPreferences sharedPrefs;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +34,7 @@ public class SettingsActivity extends PreferenceActivity{
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.settings);
 
-            sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
             EditTextPreference addressPref = (EditTextPreference) findPreference("prefHomeAddress");
             addressPref.setSummary(sharedPrefs.getString("prefHomeAddress",getString(R.string.pref_homeAddress_summary)));
@@ -61,59 +51,6 @@ public class SettingsActivity extends PreferenceActivity{
                 preferenceScreen.removePreference(pipOrientationPreference);
                 preferenceScreen.removePreference(pipCellCountPreference);
             }
-
-            Preference button = findPreference("prefSendLog");
-            button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    // save logcat in file
-                    File root = new File(Environment.getExternalStorageDirectory(), "/WunderLINQ/debug/");
-                    if(!root.exists()){
-                        if(!root.mkdirs()){
-                            Log.d(TAG,"Unable to create directory: " + root);
-                        }
-                    }
-                    File outputFile = new File(Environment.getExternalStorageDirectory(),
-                            "/WunderLINQ/debug/logcat.txt");
-                    try {
-                        Runtime.getRuntime().exec(
-                                "logcat -f " + outputFile.getAbsolutePath());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    File debugFile = new File(MyApplication.getContext().getCacheDir(), "/tmp/dbg");
-                    //send file using email
-                    Intent emailIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-                    // set the type to 'email'
-                    emailIntent.setType("text/plain");
-                    String to[] = {getString(R.string.pref_sendlogs_email)};
-                    emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
-                    // the attachment
-                    //has to be an ArrayList
-                    ArrayList<Uri> uris = new ArrayList<Uri>();
-                    if(debugFile.exists()){
-                        uris.add(FileProvider.getUriForFile(getActivity(), "com.blackboxembedded.wunderlinq.fileprovider", debugFile));
-                    }
-                    //convert from paths to Android friendly Parcelable Uri's
-                    uris.add(FileProvider.getUriForFile(getActivity(), "com.blackboxembedded.wunderlinq.fileprovider", outputFile));
-                    emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
-                    // the mail subject
-                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.pref_sendlogs_subject));
-                    emailIntent.putExtra(Intent.EXTRA_TEXT, "App Version: " + BuildConfig.VERSION_NAME + "\n"
-                            + "Android Version: " + Build.VERSION.RELEASE + "\n"
-                            + "Manufacturer,Model: " + Build.MANUFACTURER + ", " + Build.MODEL + "\n"
-                            + getString(R.string.sendlogs_body));
-                    emailIntent.setType("message/rfc822");
-                    emailIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivity(Intent.createChooser(emailIntent, getString(R.string.pref_sendlogs_intent_title)));
-
-                    SharedPreferences.Editor editor = sharedPrefs.edit();
-                    editor.putBoolean("prefDebugLogging", false);
-                    editor.apply();
-                    return true;
-                }
-            });
         }
 
         @Override

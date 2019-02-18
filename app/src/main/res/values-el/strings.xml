@@ -288,7 +288,7 @@
     <string name="btn_sendlogs_title">Αποστολή αρχείων καταγραφής</string>
     <string name="pref_btn_sendlogs_summary">Αποστολή αρχείων καταγραφής στην υποστήριξη της Black Box Embedded</string>
     <string name="sendlogs_body">Παρακαλώ περιγράψτε το πρόβλημα παρακάτω:</string>
-    <string name="pref_sendlogs_intent_title">Αποστολή αρχείων καταγραφής...</string>
+    <string name="sendlogs_intent_title">Αποστολή αρχείων καταγραφής...</string>
     <string name="hw_settings_title">Ρυθμίσεις συσκευής WunderLINQ</string>
     <string name="info_label">Περί..</string>
     <string name="close_label">Κλείσιμο</string>

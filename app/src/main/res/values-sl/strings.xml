@@ -379,7 +379,7 @@
     <string name="btn_sendlogs_title">Pošiljaj dnevnike</string>
     <string name="pref_btn_sendlogs_summary">Pošiljaj dnevnike Black Box Embedded Support</string>
     <string name="sendlogs_body">Prosimo spodaj opišite vaše težave:</string>
-    <string name="pref_sendlogs_intent_title">Pošlji dnevnike...</string>
+    <string name="sendlogs_intent_title">Pošlji dnevnike...</string>
     <string name="hw_settings_title">WunderLINQ nastavitve naprave</string>
     <string name="waypoint_view_bt_navigate">Navigacija</string>
     <string name="appsettings_label">Nastavitve aplikacije</string>

@@ -355,7 +355,7 @@
     <string name="btn_sendlogs_title">Enviar logs</string>
     <string name="pref_btn_sendlogs_summary">Enviar Logs al soporte de Black Box Embedded</string>
     <string name="sendlogs_body">Por favor, describa su problema a continuación:</string>
-    <string name="pref_sendlogs_intent_title">Enviar Logs...</string>
+    <string name="sendlogs_intent_title">Enviar Logs...</string>
     <string name="hw_settings_title">Ajustes de hardware WunderLINQ</string>
     <string name="hours">h</string>
     <string name="minutes">m</string>

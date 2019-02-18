@@ -274,7 +274,7 @@
     <string name="btn_sendlogs_title">Enviar registros</string>
     <string name="pref_btn_sendlogs_summary">Enviar registros a Black Box Embedded Support</string>
     <string name="sendlogs_body">Por favor describa su problema a continuación:</string>
-    <string name="pref_sendlogs_intent_title">Enviar registros...</string>
+    <string name="sendlogs_intent_title">Enviar registros...</string>
     <string name="hw_settings_title">Configuración de hardware de WunderLINQ</string>
     <string name="info_label">About</string>
     <string name="close_label">Close</string>

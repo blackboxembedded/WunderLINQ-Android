@@ -2,32 +2,39 @@ package com.blackboxembedded.WunderLINQ;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.preference.PreferenceManager;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
 public class AboutActivity extends AppCompatActivity {
 
-    private ImageView ivAppLogo;
-    private TextView tvAppName;
-    private TextView tvVersion;
-    private TextView tvCompany;
-    private TextView tvCredits;
+    private final static String TAG = "AboutActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
-        ivAppLogo = findViewById(R.id.ivLogo);
+        ImageView ivAppLogo = findViewById(R.id.ivLogo);
         ivAppLogo.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -39,11 +46,64 @@ public class AboutActivity extends AppCompatActivity {
             }
 
         });
-        tvVersion = (TextView) findViewById(R.id.tvVersion);
+        TextView tvVersion = findViewById(R.id.tvVersion);
         tvVersion.setText(getString(R.string.version_label) + " " + BuildConfig.VERSION_NAME);
-        tvCompany = (TextView) findViewById(R.id.tvCompany);
+        TextView tvCompany = findViewById(R.id.tvCompany);
         tvCompany.setMovementMethod(LinkMovementMethod.getInstance());
-        tvCredits = (TextView) findViewById(R.id.tvCredits);
+        Button btSendLogs = findViewById(R.id.btSendLogs);
+        btSendLogs.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                // save logcat in file
+                File root = new File(Environment.getExternalStorageDirectory(), "/WunderLINQ/debug/");
+                if(!root.exists()){
+                    if(!root.mkdirs()){
+                        Log.d(TAG,"Unable to create directory: " + root);
+                    }
+                }
+                File outputFile = new File(Environment.getExternalStorageDirectory(),
+                        "/WunderLINQ/debug/logcat.txt");
+                try {
+                    Runtime.getRuntime().exec(
+                            "logcat -f " + outputFile.getAbsolutePath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                File debugFile = new File(MyApplication.getContext().getCacheDir(), "/tmp/dbg");
+                //send file using email
+                Intent emailIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+                // set the type to 'email'
+                emailIntent.setType("text/plain");
+                String to[] = {getString(R.string.sendlogs_email)};
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
+                // the attachment
+                //has to be an ArrayList
+                ArrayList<Uri> uris = new ArrayList<Uri>();
+                if(debugFile.exists()){
+                    uris.add(FileProvider.getUriForFile(AboutActivity.this, "com.blackboxembedded.wunderlinq.fileprovider", debugFile));
+                }
+                //convert from paths to Android friendly Parcelable Uri's
+                uris.add(FileProvider.getUriForFile(AboutActivity.this, "com.blackboxembedded.wunderlinq.fileprovider", outputFile));
+                emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+                // the mail subject
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sendlogs_subject));
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "App Version: " + BuildConfig.VERSION_NAME + "\n"
+                        + "Android Version: " + Build.VERSION.RELEASE + "\n"
+                        + "Manufacturer, Model: " + Build.MANUFACTURER + ", " + Build.MODEL + "\n"
+                        + getString(R.string.sendlogs_body));
+                emailIntent.setType("message/rfc822");
+                emailIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(Intent.createChooser(emailIntent, getString(R.string.sendlogs_intent_title)));
+                SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(AboutActivity.this);
+                SharedPreferences.Editor editor = sharedPrefs.edit();
+                editor.putBoolean("prefDebugLogging", false);
+                editor.apply();
+            }
+
+        });
+        TextView tvCredits = findViewById(R.id.tvCredits);
         tvCredits.setMovementMethod(new ScrollingMovementMethod());
 
         showActionBar();
@@ -60,11 +120,11 @@ public class AboutActivity extends AppCompatActivity {
         actionBar.setCustomView(v);
 
         TextView navbarTitle;
-        navbarTitle = (TextView) findViewById(R.id.action_title);
+        navbarTitle = findViewById(R.id.action_title);
         navbarTitle.setText(R.string.about_title);
 
-        ImageButton backButton = (ImageButton) findViewById(R.id.action_back);
-        ImageButton forwardButton = (ImageButton) findViewById(R.id.action_forward);
+        ImageButton backButton = findViewById(R.id.action_back);
+        ImageButton forwardButton = findViewById(R.id.action_forward);
         backButton.setOnClickListener(mClickListener);
         forwardButton.setVisibility(View.INVISIBLE);
     }
