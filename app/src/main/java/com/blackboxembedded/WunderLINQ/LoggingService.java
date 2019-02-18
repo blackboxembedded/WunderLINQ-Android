@@ -6,9 +6,14 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +26,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.view.Surface;
+import android.view.WindowManager;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -48,6 +55,12 @@ public class LoggingService extends Service implements LocationListener, GoogleA
     LocationRequest locationRequest;
     GoogleApiClient googleApiClient;
 
+    SensorManager sensorManager;
+    Sensor rotationVector;
+    Sensor gravity;
+    int xAxis = SensorManager.AXIS_X;
+    int yAxis = SensorManager.AXIS_Z;
+
     Handler handler;
     Runnable runnable;
 
@@ -60,7 +73,6 @@ public class LoggingService extends Service implements LocationListener, GoogleA
     String pressureFormat = "";
     String temperatureFormat = "";
     String distanceFormat = "";
-
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -92,6 +104,8 @@ public class LoggingService extends Service implements LocationListener, GoogleA
         } else {
             mNotificationManager.cancel(1234);
         }
+        sensorManager.unregisterListener(sensorEventListener, rotationVector);
+        sensorManager.unregisterListener(sensorEventListener, gravity);
         /*
         Intent restartService = new Intent(getApplicationContext(),
                 this.getClass());
@@ -146,6 +160,24 @@ public class LoggingService extends Service implements LocationListener, GoogleA
                 .addOnConnectionFailedListener(this)
                 .build();
         googleApiClient.connect();
+
+        // Sensor Stuff
+        sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        rotationVector = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+        sensorManager.registerListener(sensorEventListener, rotationVector, SensorManager.SENSOR_DELAY_GAME);
+        gravity = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        sensorManager.registerListener(sensorEventListener, gravity, SensorManager.SENSOR_DELAY_GAME);
+
+        // take account of screen rotation away from its natural rotation
+        WindowManager windowService = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        int rotation = windowService.getDefaultDisplay().getRotation();
+        switch (rotation) {
+            case Surface.ROTATION_0: break;
+            case Surface.ROTATION_90: xAxis = SensorManager.AXIS_Z; yAxis = SensorManager.AXIS_MINUS_X; break;
+            case Surface.ROTATION_180: xAxis = SensorManager.AXIS_MINUS_X; yAxis = SensorManager.AXIS_MINUS_Z; break;
+            case Surface.ROTATION_270: xAxis = SensorManager.AXIS_MINUS_Z; yAxis = SensorManager.AXIS_X; break;
+            default: break;
+        }
 
         ((MyApplication) this.getApplication()).setTripRecording(true);
     }
@@ -229,7 +261,10 @@ public class LoggingService extends Service implements LocationListener, GoogleA
                         MyApplication.getContext().getResources().getString(R.string.cconsumption_header) + "(" + consumptionUnit + ")," +
                         MyApplication.getContext().getResources().getString(R.string.fueleconomyone_header) + "(" + consumptionUnit + ")," +
                         MyApplication.getContext().getResources().getString(R.string.fueleconomytwo_header) + "(" + consumptionUnit + ")," +
-                        MyApplication.getContext().getResources().getString(R.string.fuelrange_header) + "(" + distanceUnit + ")\n";
+                        MyApplication.getContext().getResources().getString(R.string.fuelrange_header) + "(" + distanceUnit + ")" + "," +
+                        MyApplication.getContext().getResources().getString(R.string.leanangle_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.gforce_header) +
+                        "\n";
 
                 File logFile = new File( root, filename + curdatetime + ".csv" );
                 FileWriter logWriter = new FileWriter( logFile );
@@ -362,7 +397,6 @@ public class LoggingService extends Service implements LocationListener, GoogleA
                             fuelRange = Utils.kmToMiles(fuelRange);
                         }
                     }
-
                     outFile.write(curdatetime + "," + lat + "," + lon + "," + alt + "," + gpsSpeed + ","
                             + Data.getGear() + "," + engineTemp + "," + ambientTemp
                             + "," + rdcFront + "," + rdcRear + ","
@@ -371,7 +405,7 @@ public class LoggingService extends Service implements LocationListener, GoogleA
                             + Data.getVin()  + "," + Data.getAmbientLight() + "," + trip1 + ","
                             + trip2 + "," + tripAuto + "," + speed + ","
                             + avgSpeed + "," + currentConsumption + "," + fuelEconomyOne + ","
-                            + fuelEconomyTwo + "," + fuelRange + "\n");
+                            + fuelEconomyTwo + "," + fuelRange + "," + Data.getLeanAngle() + "," + Data.getGForce() + "\n");
                     outFile.flush();
                     handler.postDelayed(runnable, loggingInterval);
                 }
@@ -395,6 +429,9 @@ public class LoggingService extends Service implements LocationListener, GoogleA
 
         stopLocationUpdates();
         googleApiClient.disconnect();
+
+        sensorManager.unregisterListener(sensorEventListener, rotationVector);
+        sensorManager.unregisterListener(sensorEventListener, gravity);
 
         ((MyApplication) this.getApplication()).setTripRecording(false);
     }
@@ -448,5 +485,48 @@ public class LoggingService extends Service implements LocationListener, GoogleA
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    // Listens for sensor events
+    private final SensorEventListener sensorEventListener
+            = new SensorEventListener() {
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            // Do something
+        }
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
+                //Get Rotation Vector Sensor Values
+                float[] mRotationMatrix = new float[9];
+                float[] mRotationFixMatrix = new float[9];
+                SensorManager.getRotationMatrixFromVector(mRotationMatrix, event.values);
+                SensorManager.remapCoordinateSystem(mRotationMatrix, xAxis, yAxis, mRotationFixMatrix);
+                // Transform rotation matrix into azimuth/pitch/roll
+                float[] orientation = new float[3];
+                SensorManager.getOrientation(mRotationFixMatrix, orientation);
+                double leanAngle = orientation[2] * -57;
+                Data.setLeanAngle(leanAngle);
+            } else if (event.sensor.getType() == Sensor.TYPE_GRAVITY) {
+                float[] gravity = event.values.clone();
+                double gforce = Math.sqrt(gravity[0] * gravity[0] + gravity[1] * gravity[1] + gravity[2] * gravity[2]) / 9.81;
+                Data.setGForce(gforce);
+            }
+        }
+    };
+
+    private double[] convertFloatsToDoubles(float[] input)
+    {
+        if (input == null)
+            return null;
+
+        double[] output = new double[input.length];
+
+        for (int i = 0; i < input.length; i++)
+            output[i] = input[i];
+
+        return output;
     }
 }

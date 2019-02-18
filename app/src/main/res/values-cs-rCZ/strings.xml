@@ -417,4 +417,6 @@
     <string name="pref_taskswitcher_summary">If wheel is held left it brings up the task switcher, only enable if it isn\'t working as a back button</string>
     <string name="accessibilityservice_alert_title">WunderLINQ needs to run a Accessibility Service</string>
     <string name="accessibilityservice_alert_body">"Please enable the WunderLINQ accessibilty service.  "</string>
+    <string name="leanangle_header">Lean Angle</string>
+    <string name="gforce_header">g-force</string>
 </resources>

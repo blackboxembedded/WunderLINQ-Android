@@ -397,6 +397,8 @@
     <string name="fueleconomyone_header">Fuel Economy 1</string>
     <string name="fueleconomytwo_header">Fuel Economy 2</string>
     <string name="fuelrange_header">Fuel Range</string>
+    <string name="leanangle_header">Lean Angle</string>
+    <string name="gforce_header">g-force</string>
 
     <!-- VideoRecService -->
     <string name="title_video_notification">WunderLINQ recording video</string>

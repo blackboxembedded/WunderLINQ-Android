@@ -224,6 +224,24 @@ public class Data {
         Data.fuelRange = fuelRange;
     }
 
+    // Lean Angle
+    private static Double leanAngle;
+    public static Double getLeanAngle() {
+        return leanAngle;
+    }
+    public static void setLeanAngle(Double leanAngle){
+        Data.leanAngle = leanAngle;
+    }
+
+    // g-force
+    private static Double gForce;
+    public static Double getGForce() {
+        return gForce;
+    }
+    public static void setGForce(Double gForce){
+        Data.gForce = gForce;
+    }
+
     // Utility functions
     public static void clear(){
         Data.lastLocation = null;
@@ -248,5 +266,7 @@ public class Data {
         Data.fuelEconomyOne = null;
         Data.fuelEconomyTwo = null;
         Data.fuelRange = null;
+        Data.leanAngle = null;
+        Data.gForce = null;
     }
 }
