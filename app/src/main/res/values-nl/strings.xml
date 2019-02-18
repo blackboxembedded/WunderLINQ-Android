@@ -200,8 +200,18 @@
     <string name="pref_homePhone_name">Telefoonnummer Thuis</string>
     <string name="pref_homePhone_summary">Formaat: +3112345679</string>
     <string name="ui_title">User Interface</string>
-    <string-array name="nav_apps_array"><item name="1">Google Maps</item><item name="2">Locus</item><item name="3">Waze</item></string-array>
-    <string-array name="nav_apps_arrayValues"><item name="1">1</item><item name="2">2</item><item name="3">3</item></string-array>
+    <string-array name="nav_apps_array">
+        <item name="1">Android Default</item>
+        <item name="1">Google Maps</item>
+        <item name="2">Locus</item>
+        <item name="3">Waze</item>
+    </string-array>
+    <string-array name="nav_apps_arrayValues">
+        <item name="1">1</item>
+        <item name="2">2</item>
+        <item name="3">3</item>
+        <item name="3">4</item>
+    </string-array>
     <string name="pref_tempf_name">Temperatuur Eenheid</string>
     <string-array name="tempf_array"><item name="1">Celsius</item><item name="2">Fahrenheit</item></string-array>
     <string-array name="tempf_arrayValues"><item name="1">0</item><item name="2">1</item>

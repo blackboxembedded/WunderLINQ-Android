@@ -97,7 +97,7 @@
     <string name="sendlogs_email" translatable="false">support@blackboxembedded.com</string>
     <string name="sendlogs_subject" translatable="false">WunderLINQ Debug Logs</string>
     <string name="sendlogs_body">Please describe your problem below:\n</string>
-    <string name="sendlogs_intent_title">Send Logs...</string>
+    <string name="sendlogs_intent_title">Send Logs&#8230;</string>
     <string name="credits_label">Credits</string>
     <string name="company_name_link" translatable="false"><a href="https://www.blackboxembedded.com">Black Box Embedded, LLC</a></string>
     <string name="thanks" translatable="false">

@@ -13,13 +13,13 @@
         android:icon="@drawable/ic_cog"
         android:title="@string/hwsettings_label"
         app:showAsAction="always|withText"/>
-    <item android:id="@+id/action_enter_splitscreen"
-        android:icon="@drawable/ic_cog"
-        android:title="@string/splitscreen_label"
-        app:showAsAction="always|withText"/>
     <item android:id="@+id/action_about"
         android:icon="@drawable/ic_info_circle"
         android:title="@string/info_label"
+        app:showAsAction="always|withText"/>
+    <item android:id="@+id/action_enter_splitscreen"
+        android:icon="@drawable/ic_cog"
+        android:title="@string/splitscreen_label"
         app:showAsAction="always|withText"/>
     <item android:id="@+id/action_exit"
         android:icon="@drawable/ic_window_close"
