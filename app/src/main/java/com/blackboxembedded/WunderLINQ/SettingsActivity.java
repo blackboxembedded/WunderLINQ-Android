@@ -83,7 +83,6 @@ public class SettingsActivity extends PreferenceActivity{
                     }
 
                     File debugFile = new File(MyApplication.getContext().getCacheDir(), "/tmp/dbg");
-
                     //send file using email
                     Intent emailIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
                     // set the type to 'email'
@@ -101,10 +100,17 @@ public class SettingsActivity extends PreferenceActivity{
                     emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
                     // the mail subject
                     emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.pref_sendlogs_subject));
-                    emailIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.pref_sendlogs_body));
+                    emailIntent.putExtra(Intent.EXTRA_TEXT, "App Version: " + BuildConfig.VERSION_NAME + "\n"
+                            + "Android Version: " + Build.VERSION.RELEASE + "\n"
+                            + "Manufacturer,Model: " + Build.MANUFACTURER + ", " + Build.MODEL + "\n"
+                            + getString(R.string.sendlogs_body));
                     emailIntent.setType("message/rfc822");
                     emailIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     startActivity(Intent.createChooser(emailIntent, getString(R.string.pref_sendlogs_intent_title)));
+
+                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                    editor.putBoolean("prefDebugLogging", false);
+                    editor.apply();
                     return true;
                 }
             });

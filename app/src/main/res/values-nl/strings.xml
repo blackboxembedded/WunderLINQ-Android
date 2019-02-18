@@ -240,7 +240,7 @@
     <string name="advanced_settings_title">Geavanveerde Instellingen</string>
     <string name="btn_sendlogs_title">Stuur Logbestanden</string>
     <string name="pref_btn_sendlogs_summary">Stuur Logbestanden naar Black Box Embedded Support</string>
-    <string name="pref_sendlogs_body">Beschrijf uw problem hieronder:</string>
+    <string name="sendlogs_body">Beschrijf uw problem hieronder:</string>
     <string name="pref_sendlogs_intent_title">Stuur Logbestanden...</string>
     <string name="call_alert_title">WunderLINQ needs permissions to use your phone to make phone calls</string>
     <string name="call_alert_body">Please grant access to use your phone</string>
