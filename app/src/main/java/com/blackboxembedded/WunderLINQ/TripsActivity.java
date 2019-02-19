@@ -40,6 +40,13 @@ public class TripsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_trips);
 
         tripList = findViewById(R.id.lv_trips);
+        tripList.setOnTouchListener(new OnSwipeTouchListener(this) {
+            @Override
+            public void onSwipeRight() {
+                Intent backIntent = new Intent(TripsActivity.this, MainActivity.class);
+                startActivity(backIntent);
+            }
+        });
         tripList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {

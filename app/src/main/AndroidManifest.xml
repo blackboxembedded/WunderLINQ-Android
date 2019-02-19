@@ -37,7 +37,6 @@
         android:showOnLockScreen="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".GeoDataActivity"></activity>
         <!-- Work Around for GMaps crash https://issuetracker.google.com/issues/79478779 -->
         <uses-library
             android:name="org.apache.http.legacy"
@@ -70,6 +69,8 @@
         <activity android:name=".SettingsActivity" />
         <activity android:name=".ContactListActivity" />
         <activity android:name=".FaultActivity" />
+        <activity android:name=".GeoDataActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".WaypointActivity"
             android:screenOrientation="portrait" />
@@ -84,8 +85,10 @@
             android:screenOrientation="portrait" />
         <activity android:name=".WaypointNavActivity" />
         <activity android:name=".AlertActivity" />
-        <activity android:name=".AboutActivity" />
-        <activity android:name=".FWConfigActivity" />
+        <activity android:name=".AboutActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".FWConfigActivity"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".NotificationListener"

@@ -24,6 +24,15 @@ public class GeoDataActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_geo_data);
 
+        View view = findViewById(R.id.clGeoData);
+        view.setOnTouchListener(new OnSwipeTouchListener(this) {
+            @Override
+            public void onSwipeRight() {
+                Intent backIntent = new Intent(GeoDataActivity.this, MainActivity.class);
+                startActivity(backIntent);
+            }
+        });
+
         tripsLayout = findViewById(R.id.llTrips);
         waypointsLayout = findViewById(R.id.llWaypoints);
         tripsLayout.setOnClickListener(mClickListener);

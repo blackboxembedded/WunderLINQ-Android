@@ -35,6 +35,13 @@ public class FaultActivity extends AppCompatActivity {
         showActionBar();
 
         faultList = (ListView) findViewById(R.id.lv_faults);
+        faultList.setOnTouchListener(new OnSwipeTouchListener(this) {
+            @Override
+            public void onSwipeRight() {
+                Intent backIntent = new Intent(FaultActivity.this, MainActivity.class);
+                startActivity(backIntent);
+            }
+        });
 
         faults = (new FaultStatus(this));
         faultListData = faults.getallActiveDesc();

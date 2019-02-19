@@ -34,6 +34,15 @@ public class AboutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
+        View view = findViewById(R.id.clAbout);
+        view.setOnTouchListener(new OnSwipeTouchListener(this) {
+            @Override
+            public void onSwipeRight() {
+                Intent backIntent = new Intent(AboutActivity.this, MainActivity.class);
+                startActivity(backIntent);
+            }
+        });
+
         ImageView ivAppLogo = findViewById(R.id.ivLogo);
         ivAppLogo.setOnClickListener(new View.OnClickListener() {
 

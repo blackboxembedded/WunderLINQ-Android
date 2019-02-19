@@ -39,6 +39,13 @@ public class WaypointActivity extends AppCompatActivity {
         adapter = new
                 WaypointListView(this, listValues, false);
         waypointList.setAdapter(adapter);
+        waypointList.setOnTouchListener(new OnSwipeTouchListener(this) {
+            @Override
+            public void onSwipeRight() {
+                Intent backIntent = new Intent(WaypointActivity.this, MainActivity.class);
+                startActivity(backIntent);
+            }
+        });
         waypointList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick (AdapterView < ? > adapter, View view, int position, long arg){
