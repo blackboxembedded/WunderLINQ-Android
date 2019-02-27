@@ -13,7 +13,7 @@ public class WaypointDatasource {
     final String TAG = "WunderLINQ";
     private SQLiteDatabase db;
     private WaypointDatabase dbHelper;
-    String sqlTable = "records";
+    private String sqlTable = "records";
 
     public WaypointDatasource(Context context) {
         dbHelper = new WaypointDatabase(context);
@@ -86,8 +86,8 @@ public class WaypointDatasource {
         db.close();
         return record;
     }
-    public Cursor getAllRecordsCursor() {
 
+    public Cursor getAllRecordsCursor() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c = db.query(sqlTable, new String[] {"date", "data", "label"}, null, null, null, null,  "date DESC");
         if (c != null) {
@@ -96,6 +96,7 @@ public class WaypointDatasource {
         db.close();
         return c;
     }
+
     private WaypointRecord cursorToRecord(Cursor cursor) {
         WaypointRecord record = new WaypointRecord();
         record.setID(cursor.getInt(0));

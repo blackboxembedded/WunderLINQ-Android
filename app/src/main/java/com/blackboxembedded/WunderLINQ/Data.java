@@ -242,6 +242,15 @@ public class Data {
         Data.gForce = gForce;
     }
 
+    // bearing
+    private static Integer bearing;
+    public static Integer getBearing() {
+        return bearing;
+    }
+    public static void setBearing(Integer bearing){
+        Data.bearing = bearing;
+    }
+
     // Utility functions
     public static void clear(){
         Data.lastLocation = null;
@@ -268,5 +277,6 @@ public class Data {
         Data.fuelRange = null;
         Data.leanAngle = null;
         Data.gForce = null;
+        Data.bearing = null;
     }
 }

@@ -18,23 +18,19 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class FaultActivity extends AppCompatActivity {
-
-    private ImageButton backButton;
-    private ImageButton forwardButton;
-
-    private ListView faultList;
-    private FaultStatus faults;
     ArrayList<String> faultListData = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ListView faultList;
+        FaultStatus faults;
         super.onCreate(savedInstanceState);
         AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
         setContentView(R.layout.activity_fault);
 
         showActionBar();
 
-        faultList = (ListView) findViewById(R.id.lv_faults);
+        faultList = findViewById(R.id.lv_faults);
         faultList.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
             public void onSwipeRight() {
@@ -73,9 +69,8 @@ public class FaultActivity extends AppCompatActivity {
         TextView navbarTitle;
         navbarTitle = (TextView) findViewById(R.id.action_title);
         navbarTitle.setText(R.string.fault_title);
-
-        backButton = (ImageButton) findViewById(R.id.action_back);
-        forwardButton = (ImageButton) findViewById(R.id.action_forward);
+        ImageButton backButton = findViewById(R.id.action_back);
+        ImageButton forwardButton = findViewById(R.id.action_forward);
         backButton.setOnClickListener(mClickListener);
         forwardButton.setVisibility(View.INVISIBLE);
     }

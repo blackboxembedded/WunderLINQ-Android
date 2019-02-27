@@ -18,6 +18,10 @@ import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -65,6 +69,25 @@ public class BluetoothLeService extends Service {
     private static boolean holdStart = false;
     private static Date RTholdStartTime;
     private static boolean RTholdStart = false;
+
+    private SensorManager sensorManager;
+    private Sensor accelerometer;
+    private Sensor magnetometer;
+    private Sensor rotationVector;
+    private Sensor gravity;
+    int xAxis = SensorManager.AXIS_X;
+    int yAxis = SensorManager.AXIS_Z;
+
+    /*
+     * time smoothing constant for low-pass filter
+     * 0 ≤ alpha ≤ 1 ; a smaller value basically means more smoothing
+     * was 0.15f
+     * See: http://en.wikipedia.org/wiki/Low-pass_filter#Discrete-time_realization
+     */
+    static final float ALPHA = 0.05f;
+    float[] mGravity = new float[3];
+    float[] mGeomagnetic = new float[3];
+    private int lastDirection;
 
     /**
      * GATT Status constants
@@ -164,6 +187,16 @@ public class BluetoothLeService extends Service {
         if (!initialize()) {
             Log.d(TAG,"Service not initialized");
         }
+        // Sensor Stuff
+        sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        rotationVector = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+        gravity = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        sensorManager.registerListener(sensorEventListener, accelerometer, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(sensorEventListener, magnetometer, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(sensorEventListener, rotationVector, SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(sensorEventListener, gravity, SensorManager.SENSOR_DELAY_GAME);
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -195,7 +228,59 @@ public class BluetoothLeService extends Service {
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
         // The service is no longer used and is being destroyed
+        sensorManager.unregisterListener(sensorEventListener, magnetometer);
+        sensorManager.unregisterListener(sensorEventListener, accelerometer);
+        sensorManager.unregisterListener(sensorEventListener, rotationVector);
+        sensorManager.unregisterListener(sensorEventListener, gravity);
     }
+
+    // Listens for sensor events
+    private final SensorEventListener sensorEventListener
+            = new SensorEventListener() {
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            // Do something
+        }
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
+                //Get Rotation Vector Sensor Values
+                float[] mRotationMatrix = new float[9];
+                float[] mRotationFixMatrix = new float[9];
+                SensorManager.getRotationMatrixFromVector(mRotationMatrix, event.values);
+                SensorManager.remapCoordinateSystem(mRotationMatrix, xAxis, yAxis, mRotationFixMatrix);
+                // Transform rotation matrix into azimuth/pitch/roll
+                float[] orientation = new float[3];
+                SensorManager.getOrientation(mRotationFixMatrix, orientation);
+                double leanAngle = orientation[2] * -57;
+                Data.setLeanAngle(leanAngle);
+            } else if (event.sensor.getType() == Sensor.TYPE_GRAVITY) {
+                mGravity = event.values.clone();
+                double gforce = Math.sqrt(mGravity[0] * mGravity[0] + mGravity[1] * mGravity[1] + mGravity[2] * mGravity[2]) / 9.81;
+                Data.setGForce(gforce);
+            } else if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+                mGeomagnetic = Utils.lowPass(event.values.clone(), mGeomagnetic, ALPHA);
+            }
+            if (mGravity != null && mGeomagnetic != null) {
+                float R[] = new float[9];
+                float I[] = new float[9];
+                float remappedR[] = new float[9];
+                boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
+                if (success) {
+                    float orientation[] = new float[3];
+                    SensorManager.remapCoordinateSystem(R, SensorManager.AXIS_X, SensorManager.AXIS_Z, remappedR);
+                    SensorManager.getOrientation(remappedR, orientation);
+                    int direction = filterChange(Utils.normalizeDegrees(Math.toDegrees(orientation[0])));
+                    if(direction != lastDirection) {
+                        lastDirection = direction;
+                        Data.setBearing(lastDirection);
+                    }
+                }
+            }
+        }
+    };
 
     /**
      * Initializes a reference to the local BlueTooth adapter.
@@ -374,7 +459,7 @@ public class BluetoothLeService extends Service {
                 if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
                     // Log data
                     if (debugLogger == null) {
-                        debugLogger = new Logger();;
+                        debugLogger = new Logger();
                     }
                     try {
                         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
@@ -393,6 +478,7 @@ public class BluetoothLeService extends Service {
                             | InvalidKeyException
                             | BadPaddingException
                             | IllegalBlockSizeException e){
+                        e.printStackTrace();
 
                     }
                 } else {
@@ -2001,5 +2087,19 @@ public class BluetoothLeService extends Service {
                 //Log.d(TAG, "Unknown Message ID: " + String.format("%02x", msgID));
                 break;
         }
+    }
+
+    private int filterChange(int newDir){
+        int change = newDir - lastDirection;
+        int circularChange = newDir-(lastDirection+360);
+        int smallestChange;
+        if(Math.abs(change) < Math.abs(circularChange)){
+            smallestChange = change;
+        }
+        else{
+            smallestChange = circularChange;
+        }
+        smallestChange = Math.max(Math.min(change,3),-3);
+        return lastDirection+smallestChange;
     }
 }

@@ -310,12 +310,10 @@
     <string-array name="bearing_array">
         <item name="1">Stopinje</item>
         <item name="2">Strani neba</item>
-        <item name="3">Oboje</item>
     </string-array>
     <string-array name="bearing_arrayValues">
         <item name="1">0</item>
         <item name="2">1</item>
-        <item name="3">2</item>
     </string-array>
     <string name="pref_pressuref_name">Enota za tlak</string>
     <string-array name="pressuref_array">
@@ -377,7 +375,6 @@
     <string name="pref_fuelAlert_summary">Opozori na obvoz do najbližje bencinske črpalke, ko je nivo goriva nizek</string>
     <string name="advanced_settings_title">Napredne nastavitve</string>
     <string name="btn_sendlogs_title">Pošiljaj dnevnike</string>
-    <string name="pref_btn_sendlogs_summary">Pošiljaj dnevnike Black Box Embedded Support</string>
     <string name="sendlogs_body">Prosimo spodaj opišite vaše težave:</string>
     <string name="sendlogs_intent_title">Pošlji dnevnike...</string>
     <string name="hw_settings_title">WunderLINQ nastavitve naprave</string>
@@ -455,4 +452,5 @@
     <string name="leanangle_header">Lean Angle</string>
     <string name="gforce_header">g-force</string>
     <string name="geodata_label">Trips &amp; Waypoints</string>
+    <string name="bearing_header">Bearing</string>
 </resources>

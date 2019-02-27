@@ -13,12 +13,6 @@ import android.widget.TextView;
 
 public class GeoDataActivity extends AppCompatActivity {
 
-    private ImageButton backButton;
-    private ImageButton forwardButton;
-
-    private LinearLayout tripsLayout;
-    private LinearLayout waypointsLayout;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,8 +27,8 @@ public class GeoDataActivity extends AppCompatActivity {
             }
         });
 
-        tripsLayout = findViewById(R.id.llTrips);
-        waypointsLayout = findViewById(R.id.llWaypoints);
+        LinearLayout tripsLayout = findViewById(R.id.llTrips);
+        LinearLayout waypointsLayout = findViewById(R.id.llWaypoints);
         tripsLayout.setOnClickListener(mClickListener);
         waypointsLayout.setOnClickListener(mClickListener);
         showActionBar();
@@ -50,12 +44,11 @@ public class GeoDataActivity extends AppCompatActivity {
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setCustomView(v);
 
-        TextView navbarTitle;
-        navbarTitle = (TextView) findViewById(R.id.action_title);
+        TextView navbarTitle = findViewById(R.id.action_title);
         navbarTitle.setText(R.string.geodata_label);
 
-        backButton = (ImageButton) findViewById(R.id.action_back);
-        forwardButton = (ImageButton) findViewById(R.id.action_forward);
+        ImageButton backButton = findViewById(R.id.action_back);
+        ImageButton forwardButton = findViewById(R.id.action_forward);
         backButton.setOnClickListener(mClickListener);
         forwardButton.setVisibility(View.INVISIBLE);
     }

@@ -54,8 +54,6 @@ public class ContactListActivity extends AppCompatActivity {
     private ImageButton backButton;
     private TextView navbarTitle;
 
-    private ContactListView adapter;
-
     private SharedPreferences sharedPrefs;
 
     static boolean itsDark = false;
@@ -102,8 +100,8 @@ public class ContactListActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_contact_list);
 
-        View view = findViewById(R.id.lv_contacts);
-        view.setOnTouchListener(new OnSwipeTouchListener(this) {
+        contactList = findViewById(R.id.lv_contacts);
+        contactList.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
             public void onSwipeRight() {
                 Intent backIntent = new Intent(ContactListActivity.this, TaskActivity.class);
@@ -125,8 +123,6 @@ public class ContactListActivity extends AppCompatActivity {
         } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
         }
-
-        contactList = (ListView) findViewById(R.id.lv_contacts);
 
         showActionBar();
 
@@ -266,7 +262,7 @@ public class ContactListActivity extends AppCompatActivity {
 
     public void updateColors(boolean itsDark){
         ((MyApplication) this.getApplication()).setitsDark(itsDark);
-        LinearLayout lLayout = (LinearLayout) findViewById(R.id.layout_contact_list);
+        LinearLayout lLayout = findViewById(R.id.layout_contact_list);
         if (itsDark) {
             //Set Brightness to default
             WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
@@ -312,13 +308,11 @@ public class ContactListActivity extends AppCompatActivity {
                     .appendQueryParameter(ContactsContract.REMOVE_DUPLICATE_ENTRIES, "1")
                     .build(), PROJECTION, null, null, sortOrder);
             if (cursor != null) {
-
-
                 try {
                     HashSet<String> normalizedNumbersAlreadyFound = new HashSet<>();
-                    contacts = new ArrayList<String>();
-                    phoneNumbers = new ArrayList<String>();
-                    photoId = new ArrayList<Drawable>();
+                    contacts = new ArrayList<>();
+                    phoneNumbers = new ArrayList<>();
+                    photoId = new ArrayList<>();
                     final int contactIdIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID);
                     final int displayNameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
                     final int phoneTypeIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE);
@@ -330,7 +324,6 @@ public class ContactListActivity extends AppCompatActivity {
 
                     long contactId;
                     String displayName, phoneType, phoneNumber,photoURI, lastName, givenName, normalNum;
-                    Log.d(TAG, "Cursor Count: " + cursor.getCount());
                     while (cursor.moveToNext()) {
                         contactId = cursor.getLong(contactIdIndex);
                         displayName = cursor.getString(displayNameIndex);
@@ -341,11 +334,10 @@ public class ContactListActivity extends AppCompatActivity {
                         givenName = cursor.getString(givenNameIndex);
                         normalNum = cursor.getString(normalizedNumIndex);
 
-
                         if (phoneType != null && normalNum != null) {
                             if((phoneType.equals("1")) || phoneType.equals("2") || phoneType.equals("3")) {
                                 if (normalizedNumbersAlreadyFound.add(normalNum.replaceAll("\\p{C}", ""))) {
-                                    Log.d(TAG, "Display Name: " + displayName + ", NN: " + normalNum + ", " + phoneType);
+                                    //Log.d(TAG, "Display Name: " + displayName + ", NN: " + normalNum + ", " + phoneType);
                                     contacts.add(displayName + " (" + typeIDtoString(Integer.parseInt(phoneType)) + ")");
                                     phoneNumbers.add(normalNum);
                                     Drawable photo;
@@ -366,47 +358,31 @@ public class ContactListActivity extends AppCompatActivity {
                                             photo = new BitmapDrawable(getResources(), photoBitmap);
 
                                         } catch (FileNotFoundException e) {
-                                            // TODO Auto-generated catch block
                                             e.printStackTrace();
                                         } catch (IOException e) {
-                                            // TODO Auto-generated catch block
                                             e.printStackTrace();
                                         }
                                     }
-                                    /*
-                                    photoId[index] = photo;
-                                    index++;
-                                    */
                                     photoId.add(photo);
-                                    //haven't seen this number yet: do something with this contact!
-                                } else {
-                                    //don't do anything with this contact because we've already found this number
                                 }
-
-
                             }
                         }
-
                     }
                 } finally {
                     cursor.close();
                 }
-                Log.d(TAG, "Contact Count: " + contacts.size());
             }
 
             ContactListView adapter = new
                     ContactListView(this, contacts, photoId, itsDark);
-            contactList=(ListView)findViewById(R.id.lv_contacts);
+            contactList = findViewById(R.id.lv_contacts);
             contactList.setAdapter(adapter);
             contactList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, final View view,
                                         int position, long id) {
-                    final String item = (String) parent.getItemAtPosition(position);
-
                     lastPosition = position;
-
                     // Call Number
                     boolean callPerms = false;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -430,7 +406,7 @@ public class ContactListActivity extends AppCompatActivity {
                         // Android version is lesser than 6.0 or the permission is already granted.
                         callPerms = true;
                     }
-                    if (callPerms == true) {
+                    if (callPerms) {
                         Intent callHomeIntent = new Intent(Intent.ACTION_CALL);
                         callHomeIntent.setData(Uri.parse("tel:" + phoneNumbers.get(position)));
                         startActivity(callHomeIntent);
@@ -520,13 +496,13 @@ public class ContactListActivity extends AppCompatActivity {
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setCustomView(v);
 
-        navbarTitle = (TextView) findViewById(R.id.action_title);
+        navbarTitle = findViewById(R.id.action_title);
         navbarTitle.setText(R.string.contactlist_title);
 
-        backButton = (ImageButton) findViewById(R.id.action_back);
+        backButton = findViewById(R.id.action_back);
         backButton.setOnClickListener(mClickListener);
 
-        ImageButton forwardButton = (ImageButton) findViewById(R.id.action_forward);
+        ImageButton forwardButton = findViewById(R.id.action_forward);
         forwardButton.setVisibility(View.INVISIBLE);
     }
 

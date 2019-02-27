@@ -27,7 +27,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -65,7 +64,7 @@ public class TaskActivity extends AppCompatActivity {
 
     GridView gridview;
     private int lastPosition = -1;
-    private int numTasks = 12;
+
     private List<Integer> mapping;
 
     private SharedPreferences sharedPrefs;
@@ -76,7 +75,6 @@ public class TaskActivity extends AppCompatActivity {
 
     SensorManager sensorManager;
     Sensor lightSensor;
-    OnSwipeTouchListener detector;
 
     private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
     private static final int PERMISSION_REQUEST_CAMERA = 100;
@@ -104,9 +102,7 @@ public class TaskActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         setContentView(R.layout.activity_task);
-        gridview = (GridView) findViewById(R.id.gridview_tasks);
-
-        ConstraintLayout clTasks = (ConstraintLayout) findViewById(R.id.cl_tasks);
+        gridview = findViewById(R.id.gridview_tasks);
         gridview.setOnTouchListener(new GridOnSwipeTouchListener(this) {
             @Override
             public void onSwipeLeft() {
@@ -115,7 +111,7 @@ public class TaskActivity extends AppCompatActivity {
             }
             @Override
             public void onSwipeRight() {
-                Intent backIntent = new Intent(TaskActivity.this, CompassActivity.class);
+                Intent backIntent = new Intent(TaskActivity.this, MusicActivity.class);
                 startActivity(backIntent);
             }
         });
@@ -208,11 +204,11 @@ public class TaskActivity extends AppCompatActivity {
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setCustomView(v);
 
-        navbarTitle = (TextView) findViewById(R.id.action_title);
+        navbarTitle = findViewById(R.id.action_title);
         navbarTitle.setText(R.string.quicktask_title);
 
-        backButton = (ImageButton) findViewById(R.id.action_back);
-        forwardButton = (ImageButton) findViewById(R.id.action_forward);
+        backButton = findViewById(R.id.action_back);
+        forwardButton = findViewById(R.id.action_forward);
         backButton.setOnClickListener(mClickListener);
         forwardButton.setOnClickListener(mClickListener);
     }
@@ -223,7 +219,7 @@ public class TaskActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch(v.getId()) {
                 case R.id.action_back:
-                    Intent backIntent = new Intent(TaskActivity.this, CompassActivity.class);
+                    Intent backIntent = new Intent(TaskActivity.this, MusicActivity.class);
                     startActivity(backIntent);
                     break;
                 case R.id.action_forward:
@@ -311,7 +307,7 @@ public class TaskActivity extends AppCompatActivity {
                 getResources().getString(R.string.task_title_voicecontrol),
                 getResources().getString(R.string.task_title_settings)
         };
-
+        int numTasks = taskTitles.length;
         Drawable[] iconId = new Drawable[numTasks];
         if (itsDark) {
             iconId[0] = getResources().getDrawable(R.drawable.ic_map, getTheme());
@@ -478,7 +474,6 @@ public class TaskActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 lastPosition = position;
-                final String item = (String) parent.getItemAtPosition(position);
                 String navApp = sharedPrefs.getString("prefNavApp", "1");
                 switch (mapping.get(position)){
                     case 0:
@@ -497,7 +492,9 @@ public class TaskActivity extends AppCompatActivity {
                         try {
                             Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
                             navIntent.setData(Uri.parse(url));
-                            navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                            if (android.os.Build.VERSION.SDK_INT >= 24) {
+                                navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                            }
                             startActivity(navIntent);
                         } catch ( ActivityNotFoundException ex  ) {
                             // Add Alert
@@ -506,13 +503,14 @@ public class TaskActivity extends AppCompatActivity {
                     case 1:
                         //Navigate Home
                         String address = sharedPrefs.getString("prefHomeAddress","");
-                        if ( address != "" ) {
+                        if (!address.equals("")) {
                             LatLng location = getLocationFromAddress(TaskActivity.this, address);
                             if (location != null) {
                                 String navUrl = "google.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
                                 if (navApp.equals("1") || navApp.equals("2")){
                                     // Android Default or Google Maps
                                     // Nothing to do
+                                    navUrl = "google.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
                                 } else if (navApp.equals("3")){
                                     //Locus
 
@@ -557,9 +555,9 @@ public class TaskActivity extends AppCompatActivity {
                             // Android version is lesser than 6.0 or the permission is already granted.
                             callPerms = true;
                         }
-                        if (callPerms == true) {
+                        if (callPerms) {
                             String phonenumber = sharedPrefs.getString("prefHomePhone", "");
-                            if (phonenumber != "") {
+                            if (!phonenumber.equals("")) {
                                 Intent callHomeIntent = new Intent(Intent.ACTION_CALL);
                                 callHomeIntent.setData(Uri.parse("tel:" + phonenumber));
                                 startActivity(callHomeIntent);
@@ -613,7 +611,6 @@ public class TaskActivity extends AppCompatActivity {
                                     }
                                 });
                                 builder.show();
-                                cameraPerms = false;
                             } else {
                                 cameraPerms = true;
                             }
@@ -630,12 +627,11 @@ public class TaskActivity extends AppCompatActivity {
                                     }
                                 });
                                 builder.show();
-                                writePerms = false;
                             } else {
                                 writePerms = true;
                             }
 
-                            if (cameraPerms == true && writePerms == true){
+                            if (cameraPerms && writePerms){
                                 Intent photoIntent = new Intent(TaskActivity.this, PhotoService.class);
                                 photoIntent.putExtra("camera",CameraCharacteristics.LENS_FACING_BACK);
                                 startService(photoIntent);
@@ -665,7 +661,6 @@ public class TaskActivity extends AppCompatActivity {
                                     }
                                 });
                                 builder.show();
-                                selfieCameraPerms = false;
                             } else {
                                 selfieCameraPerms = true;
                             }
@@ -682,12 +677,11 @@ public class TaskActivity extends AppCompatActivity {
                                     }
                                 });
                                 builder.show();
-                                selfieWritePerms = false;
                             } else {
                                 selfieWritePerms = true;
                             }
 
-                            if (selfieCameraPerms == true && selfieWritePerms == true){
+                            if (selfieCameraPerms && selfieWritePerms){
                                 Intent photoIntent = new Intent(TaskActivity.this, PhotoService.class);
                                 photoIntent.putExtra("camera",CameraCharacteristics.LENS_FACING_FRONT);
                                 startService(photoIntent);
@@ -702,7 +696,7 @@ public class TaskActivity extends AppCompatActivity {
                     case 6:
                         //Record Video
 
-                        TextView taskText=(TextView)view.findViewById(R.id.gridTextView);
+                        TextView taskText = view.findViewById(R.id.gridTextView);
 
                         boolean cameraVidPerms = false;
                         boolean writeVidPerms = false;
@@ -722,7 +716,6 @@ public class TaskActivity extends AppCompatActivity {
                                     }
                                 });
                                 builder.show();
-                                cameraVidPerms = false;
                             } else {
                                 cameraVidPerms = true;
                             }
@@ -739,7 +732,6 @@ public class TaskActivity extends AppCompatActivity {
                                     }
                                 });
                                 builder.show();
-                                audioVidPerms = false;
                             } else {
                                 audioVidPerms = true;
                             }
@@ -756,7 +748,6 @@ public class TaskActivity extends AppCompatActivity {
                                     }
                                 });
                                 builder.show();
-                                writeVidPerms = false;
                             } else {
                                 writeVidPerms = true;
                             }
@@ -775,11 +766,10 @@ public class TaskActivity extends AppCompatActivity {
                                     }
                                 });
                                 builder.show();
-                                overlayVidPerms = false;
                             } else {
                                 overlayVidPerms = true;
                             }
-                            if (cameraVidPerms == true && audioVidPerms == true && writeVidPerms == true && overlayVidPerms == true){
+                            if (cameraVidPerms && audioVidPerms && writeVidPerms && overlayVidPerms){
                                 if (taskText.getText().equals(getResources().getString(R.string.task_title_start_record))) {
                                     startService(new Intent(TaskActivity.this, VideoRecService.class));
                                     taskText.setText(getResources().getString(R.string.task_title_stop_record));
@@ -816,7 +806,6 @@ public class TaskActivity extends AppCompatActivity {
                                     }
                                 });
                                 builder.show();
-                                writeLogPerms = false;
                             } else {
                                 writeLogPerms = true;
                             }
@@ -833,12 +822,11 @@ public class TaskActivity extends AppCompatActivity {
                                     }
                                 });
                                 builder.show();
-                                locationLogPerms = false;
                             } else {
                                 locationLogPerms = true;
                             }
-                            if (writeLogPerms == true && locationLogPerms == true){
-                                TextView tripTaskText=(TextView)view.findViewById(R.id.gridTextView);
+                            if (writeLogPerms && locationLogPerms){
+                                TextView tripTaskText = view.findViewById(R.id.gridTextView);
                                 if (tripTaskText.getText().equals(getResources().getString(R.string.task_title_start_trip))) {
                                     startService(new Intent(TaskActivity.this, LoggingService.class));
                                     tripTaskText.setText(getResources().getString(R.string.task_title_stop_trip));
@@ -848,7 +836,7 @@ public class TaskActivity extends AppCompatActivity {
                                 }
                             }
                         } else {
-                            TextView tripTaskText = (TextView) view.findViewById(R.id.tv_label);
+                            TextView tripTaskText = view.findViewById(R.id.tv_label);
                             if (tripTaskText.getText().equals(getResources().getString(R.string.task_title_start_trip))) {
                                 startService(new Intent(TaskActivity.this, LoggingService.class));
                                 tripTaskText.setText(getResources().getString(R.string.task_title_stop_trip));
@@ -887,7 +875,6 @@ public class TaskActivity extends AppCompatActivity {
                                 // Get the location manager
                                 double lat;
                                 double lon;
-                                String waypoint = "";
                                 LocationManager locationManager = (LocationManager)
                                         TaskActivity.this.getSystemService(LOCATION_SERVICE);
                                 Criteria criteria = new Criteria();
@@ -897,7 +884,7 @@ public class TaskActivity extends AppCompatActivity {
                                     Location location = locationManager.getLastKnownLocation(bestProvider);
                                     lat = location.getLatitude();
                                     lon = location.getLongitude();
-                                    waypoint = lat + "," + lon;
+                                    String waypoint = lat + "," + lon;
                                     // Get current date/time
                                     Calendar cal = Calendar.getInstance();
                                     Date date = cal.getTime();
@@ -913,8 +900,7 @@ public class TaskActivity extends AppCompatActivity {
                                     datasource.close();
 
                                 } catch (NullPointerException e) {
-                                    lat = -1.0;
-                                    lon = -1.0;
+                                    e.printStackTrace();
                                 }
 
                             } catch (Exception ex) {
@@ -1114,7 +1100,7 @@ public class TaskActivity extends AppCompatActivity {
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 gridview.setSelection(lastPosition);
-                Intent backIntent = new Intent(TaskActivity.this, CompassActivity.class);
+                Intent backIntent = new Intent(TaskActivity.this, MusicActivity.class);
                 startActivity(backIntent);
                 return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:

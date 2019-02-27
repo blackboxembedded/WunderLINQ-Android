@@ -191,7 +191,6 @@
     <string-array name="bearing_array">
         <item name="1">Grad</item>
         <item name="2">Kardinal (Himmelsrichtung)</item>
-        <item name="3">Beides</item>
     </string-array>
 
     <string name="pref_pressuref_name">Einheit Druck</string>
@@ -212,7 +211,6 @@
 
     <string name="advanced_settings_title">Erweiterte Einstellungen</string>
     <string name="btn_sendlogs_title">Logdaten schicken</string>
-    <string name="pref_btn_sendlogs_summary">Logdaten zu Black Box Embedded Support schicken</string>
     <string name="sendlogs_body">Bitte beschreiben Sie Ihr Problem:</string>
     <string name="sendlogs_intent_title">Logdaten schicken...</string>
     <string name="hw_settings_title">WunderLINQ Hardware Einstellungen</string>
@@ -371,4 +369,5 @@
     <string name="leanangle_header">Lean Angle</string>
     <string name="gforce_header">g-force</string>
     <string name="geodata_label">Trips &amp; Waypoints</string>
+    <string name="bearing_header">Bearing</string>
 </resources>

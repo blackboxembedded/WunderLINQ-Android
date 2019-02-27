@@ -37,12 +37,6 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
 
     public final static String TAG = "WptViewActivity";
 
-    private ImageButton backButton;
-    private ImageButton forwardButton;
-
-    private TextView tvDate;
-    private TextView tvLatitude;
-    private TextView tvLongitude;
     private EditText etLabel;
 
     private WaypointDatasource datasource;
@@ -62,10 +56,10 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
         setContentView(R.layout.activity_waypoint_view);
 
         showActionBar();
-        tvDate = findViewById(R.id.tvDate);
-        tvLatitude = findViewById(R.id.tvLatitude);
-        tvLongitude = findViewById(R.id.tvLongitude);
-        etLabel = (EditText) findViewById(R.id.tvLabel);
+        TextView tvDate = findViewById(R.id.tvDate);
+        TextView tvLatitude = findViewById(R.id.tvLatitude);
+        TextView tvLongitude = findViewById(R.id.tvLongitude);
+        etLabel = findViewById(R.id.tvLabel);
         etLabel.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
             @Override
@@ -160,11 +154,11 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
         actionBar.setCustomView(v);
 
         TextView navbarTitle;
-        navbarTitle = (TextView) findViewById(R.id.action_title);
+        navbarTitle = findViewById(R.id.action_title);
         navbarTitle.setText(R.string.waypoint_view_title);
 
-        backButton = (ImageButton) findViewById(R.id.action_back);
-        forwardButton = (ImageButton) findViewById(R.id.action_forward);
+        ImageButton backButton = findViewById(R.id.action_back);
+        ImageButton forwardButton = findViewById(R.id.action_forward);
         backButton.setOnClickListener(mClickListener);
         forwardButton.setVisibility(View.INVISIBLE);
     }
@@ -207,7 +201,9 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
         try {
             Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
             navIntent.setData(Uri.parse(navUrl));
-            navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+            if (android.os.Build.VERSION.SDK_INT >= 24) {
+                navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+            }
             startActivity(navIntent);
         } catch ( ActivityNotFoundException ex  ) {
             // Add Alert
@@ -231,7 +227,9 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
         try {
             Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
             navIntent.setData(Uri.parse(navUrl));
-            navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+            if (android.os.Build.VERSION.SDK_INT >= 24) {
+                navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+            }
             startActivity(navIntent);
         } catch ( ActivityNotFoundException ex  ) {
             // Add Alert

@@ -50,7 +50,6 @@ public class BTConnectReceiver extends BroadcastReceiver {
                                     //Log.d(TAG, "Package: " + usageStats.getPackageName() + ", LastTime Used: " + usageStats.getLastTimeUsed());
                                     if (usageStats.getLastTimeUsed() > lastUsedAppTime) {
                                         topPackageName = usageStats.getPackageName();
-                                        //lastUsedAppTime = usageStats.getLastTimeUsed();
                                         if (topPackageName.equals("com.blackboxembedded.wunderlinqdfu")) {
                                             Log.d(TAG, "WunderLINQ DFU Running, not launching App");
                                             return;

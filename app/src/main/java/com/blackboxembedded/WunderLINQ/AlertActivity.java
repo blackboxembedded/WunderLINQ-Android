@@ -80,9 +80,9 @@ public class AlertActivity extends AppCompatActivity {
             }
         }
 
-        tvAlertbody = (TextView) findViewById(R.id.tvAlertBody);
-        Button btnClose = (Button) findViewById(R.id.btnClose);
-        btnOK = (Button) findViewById(R.id.btnOK);
+        tvAlertbody = findViewById(R.id.tvAlertBody);
+        Button btnClose = findViewById(R.id.btnClose);
+        btnOK = findViewById(R.id.btnOK);
         btnClose.setOnClickListener(mClickListener);
         btnOK.setOnClickListener(mClickListener);
 
@@ -168,11 +168,11 @@ public class AlertActivity extends AppCompatActivity {
         actionBar.setCustomView(v);
 
 
-        navbarTitle = (TextView) findViewById(R.id.action_title);
+        navbarTitle = findViewById(R.id.action_title);
         navbarTitle.setText(title);
 
-        ImageButton backButton = (ImageButton) findViewById(R.id.action_back);
-        ImageButton forwardButton = (ImageButton) findViewById(R.id.action_forward);
+        ImageButton backButton = findViewById(R.id.action_back);
+        ImageButton forwardButton = findViewById(R.id.action_forward);
         backButton.setVisibility(View.INVISIBLE);
         forwardButton.setVisibility(View.INVISIBLE);
     }

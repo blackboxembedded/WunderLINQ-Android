@@ -65,7 +65,6 @@
         <activity
             android:name=".TaskActivity"
             android:launchMode="singleTop" />
-        <activity android:name=".CompassActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".ContactListActivity" />
         <activity android:name=".FaultActivity" />

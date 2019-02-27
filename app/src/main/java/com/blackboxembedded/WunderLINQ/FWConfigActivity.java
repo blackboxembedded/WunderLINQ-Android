@@ -28,9 +28,6 @@ public class FWConfigActivity extends AppCompatActivity {
 
     BluetoothGattCharacteristic characteristic;
 
-    private ActionBar actionBar;
-    private ImageButton backButton;
-    private TextView navbarTitle;
     private Spinner wwModeSpinner;
     private LinearLayout sensitivityLLayout;
     private TextView sensitivityTV;
@@ -48,7 +45,7 @@ public class FWConfigActivity extends AppCompatActivity {
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        wwModeSpinner = (Spinner) findViewById(R.id.wwModeSpinner);
+        wwModeSpinner = findViewById(R.id.wwModeSpinner);
         wwModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
@@ -76,9 +73,9 @@ public class FWConfigActivity extends AppCompatActivity {
             }
         });
 
-        sensitivityLLayout = (LinearLayout) findViewById(R.id.llSensitivity);
-        sensitivityTV = (TextView) findViewById(R.id.tvSensitivityValue);
-        sensitivitySeekBar = (SeekBar) findViewById(R.id.sbSensitivity);
+        sensitivityLLayout = findViewById(R.id.llSensitivity);
+        sensitivityTV = findViewById(R.id.tvSensitivityValue);
+        sensitivitySeekBar = findViewById(R.id.sbSensitivity);
         sensitivitySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 sensitivityTV.setText(String.valueOf(progress));
@@ -90,15 +87,13 @@ public class FWConfigActivity extends AppCompatActivity {
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
-                // TODO Auto-generated method stub
             }
 
             public void onStopTrackingTouch(SeekBar seekBar) {
-                // TODO Auto-generated method stub
             }
         });
 
-        writeBtn = (Button) findViewById(R.id.writeBtn);
+        writeBtn = findViewById(R.id.writeBtn);
         writeBtn.setOnClickListener(mClickListener);
         writeBtn.setEnabled(false);
 
@@ -127,7 +122,7 @@ public class FWConfigActivity extends AppCompatActivity {
         try {
             unregisterReceiver(mGattUpdateReceiver);
         } catch (IllegalArgumentException e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -160,7 +155,7 @@ public class FWConfigActivity extends AppCompatActivity {
                                             if (sensitivityChar.length == 1) {
                                                 byte[] writeSensitivityCmd = {0x57, 0x57, 0x43, 0x53, wwMode, 0x45, (byte) sensOne, 0x0D, 0x0A};
                                                 characteristic.setValue(writeSensitivityCmd);
-                                            } else if (sensitivityChar.length > 1) {
+                                            } else {
                                                 char sensTwo = sensitivityChar[1];
                                                 byte[] writeSensitivityCmd = {0x57, 0x57, 0x43, 0x53, wwMode, 0x45, (byte) sensOne, (byte) sensTwo, 0x0D, 0x0A};
                                                 characteristic.setValue(writeSensitivityCmd);
@@ -198,20 +193,20 @@ public class FWConfigActivity extends AppCompatActivity {
     private void showActionBar(){
         LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflator.inflate(R.layout.actionbar_nav, null);
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled(false);
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setCustomView(v);
 
-        navbarTitle = (TextView) findViewById(R.id.action_title);
+        TextView navbarTitle = findViewById(R.id.action_title);
         navbarTitle.setText(R.string.fw_config_title);
 
-        backButton = (ImageButton) findViewById(R.id.action_back);
+        ImageButton backButton = findViewById(R.id.action_back);
         backButton.setOnClickListener(mClickListener);
 
-        ImageButton forwardButton = (ImageButton) findViewById(R.id.action_forward);
+        ImageButton forwardButton = findViewById(R.id.action_forward);
         forwardButton.setVisibility(View.INVISIBLE);
     }
 
@@ -228,8 +223,7 @@ public class FWConfigActivity extends AppCompatActivity {
                 if(bd != null){
                     if(bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE).contains(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC)) {
                         byte[] data = bd.getByteArray(BluetoothLeService.EXTRA_BYTE_VALUE);
-                        String characteristicValue = Utils.ByteArraytoHex(data) + " ";
-                        //Log.d(TAG, "UUID: " + bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE) + " DATA: " + characteristicValue);
+                        //Log.d(TAG, "UUID: " + bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE) + " DATA: " + Utils.ByteArraytoHex(data));
                         if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x57)) {
                             byte mode = data[26];
                             currentConfig = mode;

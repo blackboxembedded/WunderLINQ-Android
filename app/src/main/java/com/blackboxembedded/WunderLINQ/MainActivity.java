@@ -52,7 +52,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -635,10 +634,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     private void showCellSelector(int cell){
-        Log.d(TAG,"In showCellSelector: " + cell);
-        final int selectedCell = cell;
         String prefStringKey = "";
-        switch (selectedCell){
+        switch (cell){
             case 1:
                 prefStringKey = "prefCellOne";
                 break;
@@ -686,14 +683,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 break;
         }
         final String selectedPrefStringKey = prefStringKey;
-        if (prefStringKey != "") {
+        if (!prefStringKey.equals("")) {
             final ArrayAdapter<String> adp = new ArrayAdapter<String>(MainActivity.this, R.layout.spinner_griditem,
                     R.id.textview, getResources().getStringArray(R.array.dataPoints_array));
 
             final Spinner sp1 = new Spinner(MainActivity.this);
             sp1.setLayoutParams(new LinearLayout.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT));
             sp1.setAdapter(adp);
-            sp1.setSelection(Integer.parseInt(sharedPrefs.getString(prefStringKey, String.valueOf(selectedCell))));
+            sp1.setSelection(Integer.parseInt(sharedPrefs.getString(prefStringKey, String.valueOf(cell))));
             sp1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent,
@@ -1017,15 +1014,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     if (height > width) {
                         pipWidth = height;
                         pipHeight = width;
-                    } else {
-                        pipWidth = width;
-                        pipHeight = height;
                     }
                 } else {
-                    if (height > width) {
-                        pipWidth = width;
-                        pipHeight = height;
-                    } else {
+                    if (height < width) {
                         pipWidth = height;
                         pipHeight = width;
                     }
@@ -1774,6 +1765,50 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     value = String.valueOf(Math.round(fuelrange));
                 }
                 break;
+            case 20:
+                //Lean Angle
+                label = getString(R.string.leanangle_header);
+                if(Data.getLeanAngle() != null){
+                    Double leanAngle = Data.getLeanAngle();
+                    value = String.valueOf(Utils.oneDigit.format(leanAngle));
+                }
+                break;
+            case 21:
+                //g-force
+                label = getString(R.string.gforce_header);
+                if(Data.getGForce() != null){
+                    Double gForce = Data.getGForce();
+                    value = String.valueOf(Utils.oneDigit.format(gForce));
+                }
+                break;
+            case 22:
+                //bearing
+                label = getString(R.string.bearing_header);
+                if (Data.getBearing() != null) {
+                    Integer bearingValue = Data.getBearing();
+                    String bearing = bearingValue.toString() + "°";
+                    if (!sharedPrefs.getString("prefBearing", "0").contains("0")) {
+                        if (bearingValue > 331 || bearingValue <= 28) {
+                            bearing = getString(R.string.north);
+                        } else if (bearingValue > 28 && bearingValue <= 73) {
+                            bearing = getString(R.string.north_east);
+                        } else if (bearingValue > 73 && bearingValue <= 118) {
+                            bearing = getString(R.string.east);
+                        } else if (bearingValue > 118 && bearingValue <= 163) {
+                            bearing = getString(R.string.south_east);
+                        } else if (bearingValue > 163 && bearingValue <= 208) {
+                            bearing = getString(R.string.south);
+                        } else if (bearingValue > 208 && bearingValue <= 253) {
+                            bearing = getString(R.string.south_west);
+                        } else if (bearingValue > 253 && bearingValue <= 298) {
+                            bearing = getString(R.string.west);
+                        } else if (bearingValue > 298 && bearingValue <= 331) {
+                            bearing = getString(R.string.north_west);
+                        }
+                    }
+                    value = bearing;
+                }
+                break;
             default:
 
                 break;
@@ -2356,18 +2391,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 return super.onKeyUp(keyCode, event);
         }
     }
-
-    public static void runJustBeforeBeingDrawn(final View view, final Runnable runnable) {
-        final ViewTreeObserver.OnPreDrawListener preDrawListener = new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                view.getViewTreeObserver().removeOnPreDrawListener(this);
-                runnable.run();
-                return true;
-            }
-        };
-        view.getViewTreeObserver().addOnPreDrawListener(preDrawListener); }
-
 
     public static boolean isAccessibilityServiceEnabled(Context context, Class<?> accessibilityService) {
         ComponentName expectedComponentName = new ComponentName(context, accessibilityService);

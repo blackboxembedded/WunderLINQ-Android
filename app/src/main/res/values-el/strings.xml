@@ -229,12 +229,10 @@
     <string-array name="bearing_array">
         <item name="1">Μοίρες</item>
         <item name="2">Σημεία ορίζοντα</item>
-        <item name="3">Όλα</item>
     </string-array>
     <string-array name="bearing_arrayValues">
         <item name="1">0</item>
         <item name="2">1</item>
-        <item name="3">2</item>
     </string-array>
     <string name="pref_pressuref_name">Μονάδα μέτρησης πίεσης</string>
     <string-array name="pressuref_array">
@@ -286,7 +284,6 @@
     <string name="pref_fuelAlert_summary">Ερώτηση για πλοήγηση στο πλησιέστερο πρατήριο υγρών καυσίμων όταν το σφάλμα χαμηλής στάθμης καυσίμου είναι ενεργοποιημένο</string>
     <string name="advanced_settings_title">Προηγμένες ρυθμίσεις</string>
     <string name="btn_sendlogs_title">Αποστολή αρχείων καταγραφής</string>
-    <string name="pref_btn_sendlogs_summary">Αποστολή αρχείων καταγραφής στην υποστήριξη της Black Box Embedded</string>
     <string name="sendlogs_body">Παρακαλώ περιγράψτε το πρόβλημα παρακάτω:</string>
     <string name="sendlogs_intent_title">Αποστολή αρχείων καταγραφής...</string>
     <string name="hw_settings_title">Ρυθμίσεις συσκευής WunderLINQ</string>
@@ -411,4 +408,5 @@
     <string name="leanangle_header">Lean Angle</string>
     <string name="gforce_header">g-force</string>
     <string name="geodata_label">Trips &amp; Waypoints</string>
+    <string name="bearing_header">Bearing</string>
 </resources>

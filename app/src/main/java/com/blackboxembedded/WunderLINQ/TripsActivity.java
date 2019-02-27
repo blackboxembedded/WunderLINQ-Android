@@ -23,10 +23,7 @@ import java.util.Collections;
 
 public class TripsActivity extends AppCompatActivity {
 
-    private static final String TAG = "WunderLINQ";
-
-    private ImageButton backButton;
-    private ImageButton forwardButton;
+    private static final String TAG = "TripsActivity";
 
     private ListView tripList;
 
@@ -77,12 +74,11 @@ public class TripsActivity extends AppCompatActivity {
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setCustomView(v);
 
-        TextView navbarTitle;
-        navbarTitle = (TextView) findViewById(R.id.action_title);
+        TextView navbarTitle = findViewById(R.id.action_title);
         navbarTitle.setText(R.string.trips_title);
 
-        backButton = (ImageButton) findViewById(R.id.action_back);
-        forwardButton = (ImageButton) findViewById(R.id.action_forward);
+        ImageButton backButton = findViewById(R.id.action_back);
+        ImageButton forwardButton = findViewById(R.id.action_forward);
         backButton.setOnClickListener(mClickListener);
         forwardButton.setVisibility(View.INVISIBLE);
     }

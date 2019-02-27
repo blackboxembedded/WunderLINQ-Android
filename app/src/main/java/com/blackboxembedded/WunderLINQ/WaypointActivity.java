@@ -19,9 +19,6 @@ public class WaypointActivity extends AppCompatActivity {
 
     public final static String TAG = "WaypointActivity";
 
-    private ImageButton backButton;
-    private ImageButton forwardButton;
-
     private ListView waypointList;
     List<WaypointRecord> listValues;
     ArrayAdapter<WaypointRecord> adapter;
@@ -31,7 +28,7 @@ public class WaypointActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
         setContentView(R.layout.activity_waypoint);
-        waypointList = (ListView) findViewById(R.id.lv_waypoints);
+        waypointList = findViewById(R.id.lv_waypoints);
         showActionBar();
 
         updateListing();
@@ -81,8 +78,8 @@ public class WaypointActivity extends AppCompatActivity {
         navbarTitle = (TextView) findViewById(R.id.action_title);
         navbarTitle.setText(R.string.waypoint_title);
 
-        backButton = (ImageButton) findViewById(R.id.action_back);
-        forwardButton = (ImageButton) findViewById(R.id.action_forward);
+        ImageButton backButton = findViewById(R.id.action_back);
+        ImageButton forwardButton = findViewById(R.id.action_forward);
         backButton.setOnClickListener(mClickListener);
         forwardButton.setVisibility(View.INVISIBLE);
     }

@@ -22,6 +22,7 @@ public class ContactListView extends ArrayAdapter<String>{
     private final ArrayList<String> label;
     private final ArrayList<Drawable> icon;
     private final boolean itsDark;
+
     public ContactListView(Activity context,
                            ArrayList<String> label, ArrayList<Drawable> icon, boolean itsDark) {
         super(context, R.layout.list_task, label);
@@ -29,14 +30,14 @@ public class ContactListView extends ArrayAdapter<String>{
         this.label = label;
         this.icon = icon;
         this.itsDark = itsDark;
-
     }
+
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView= inflater.inflate(R.layout.list_task, null, true);
-        TextView txtTitle = (TextView) rowView.findViewById(R.id.tv_label);
-        ImageView imageView = (ImageView) rowView.findViewById(R.id.iv_icon);
+        TextView txtTitle = rowView.findViewById(R.id.tv_label);
+        ImageView imageView = rowView.findViewById(R.id.iv_icon);
 
         txtTitle.setText(label.get(position));
         if (itsDark){

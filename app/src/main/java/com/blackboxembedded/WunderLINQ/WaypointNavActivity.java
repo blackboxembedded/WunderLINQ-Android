@@ -36,13 +36,10 @@ public class WaypointNavActivity extends AppCompatActivity {
     public final static String TAG = "WaypointNav";
 
     private ImageButton backButton;
-    private ImageButton forwardButton;
     private ActionBar actionBar;
     private TextView navbarTitle;
 
     private ListView waypointList;
-    private WaypointDatasource datasource;
-    private WaypointRecord record;
     List<WaypointRecord> listValues;
     ArrayAdapter<WaypointRecord> adapter;
 
@@ -99,8 +96,8 @@ public class WaypointNavActivity extends AppCompatActivity {
             itsDark = false;
         }
 
-        View view = findViewById(R.id.lv_waypoints);
-        view.setOnTouchListener(new OnSwipeTouchListener(this) {
+        waypointList = findViewById(R.id.lv_waypoints);
+        waypointList.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
             public void onSwipeRight() {
                 Intent backIntent = new Intent(WaypointNavActivity.this, TaskActivity.class);
@@ -108,10 +105,8 @@ public class WaypointNavActivity extends AppCompatActivity {
             }
         });
 
-        waypointList = (ListView) findViewById(R.id.lv_waypoints);
-
         // Open database
-        datasource = new WaypointDatasource(this);
+        WaypointDatasource datasource = new WaypointDatasource(this);
         datasource.open();
 
         listValues = datasource.getAllRecords();
@@ -140,7 +135,9 @@ public class WaypointNavActivity extends AppCompatActivity {
                 try {
                     Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
                     navIntent.setData(Uri.parse(navUrl));
-                    navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                    if (android.os.Build.VERSION.SDK_INT >= 24) {
+                        navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                    }
                     startActivity(navIntent);
                 } catch ( ActivityNotFoundException ex  ) {
                     // Add Alert
@@ -197,11 +194,11 @@ public class WaypointNavActivity extends AppCompatActivity {
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setCustomView(v);
 
-        navbarTitle = (TextView) findViewById(R.id.action_title);
+        navbarTitle = findViewById(R.id.action_title);
         navbarTitle.setText(R.string.waypoint_title);
 
-        backButton = (ImageButton) findViewById(R.id.action_back);
-        forwardButton = (ImageButton) findViewById(R.id.action_forward);
+        backButton = findViewById(R.id.action_back);
+        ImageButton forwardButton = findViewById(R.id.action_forward);
         backButton.setOnClickListener(mClickListener);
         forwardButton.setVisibility(View.INVISIBLE);
     }
@@ -271,7 +268,7 @@ public class WaypointNavActivity extends AppCompatActivity {
 
     public void updateColors(boolean itsDark){
         ((MyApplication) this.getApplication()).setitsDark(itsDark);
-        LinearLayout lLayout = (LinearLayout) findViewById(R.id.layout_waypoint_nav);
+        LinearLayout lLayout = findViewById(R.id.layout_waypoint_nav);
         if (itsDark) {
             //Set Brightness to default
             WindowManager.LayoutParams layoutParams = getWindow().getAttributes();

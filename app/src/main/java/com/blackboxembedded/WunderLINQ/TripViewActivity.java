@@ -3,12 +3,10 @@ package com.blackboxembedded.WunderLINQ;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
@@ -47,21 +45,7 @@ import java.util.List;
 
 public class TripViewActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    private static final String TAG = "WunderLINQ";
-
-    private ImageButton backButton;
-    private ImageButton forwardButton;
-
-    private TextView tvDate;
-    private TextView tvDistance;
-    private TextView tvDuration;
-    private TextView tvSpeed;
-    private TextView tvGearShifts;
-    private TextView tvBrakes;
-    private TextView tvAmbient;
-    private TextView tvEngine;
-
-    private SharedPreferences sharedPrefs;
+    private static final String TAG = "TripViewActivity";
 
     private List<LatLng> routePoints;
 
@@ -75,18 +59,16 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
         AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
         setContentView(R.layout.activity_trip_view);
 
-        tvDate = findViewById(R.id.tvDate);
-        tvDistance = findViewById(R.id.tvDistance);
-        tvDuration = findViewById(R.id.tvDuration);
-        tvSpeed = findViewById(R.id.tvSpeed);
-        tvGearShifts = findViewById(R.id.tvGearShifts);
-        tvBrakes = findViewById(R.id.tvBrakes);
-        tvAmbient = findViewById(R.id.tvAmbient);
-        tvEngine = findViewById(R.id.tvEngine);
+        TextView tvDate = findViewById(R.id.tvDate);
+        TextView tvDistance = findViewById(R.id.tvDistance);
+        TextView tvDuration = findViewById(R.id.tvDuration);
+        TextView tvSpeed = findViewById(R.id.tvSpeed);
+        TextView tvGearShifts = findViewById(R.id.tvGearShifts);
+        TextView tvBrakes = findViewById(R.id.tvBrakes);
+        TextView tvAmbient = findViewById(R.id.tvAmbient);
+        TextView tvEngine = findViewById(R.id.tvEngine);
 
         showActionBar();
-
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -116,7 +98,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 }
             });
 
-            routePoints = new ArrayList<LatLng>();
+            routePoints = new ArrayList<>();
             List<Double> speeds = new ArrayList<>();
             Double maxSpeed = null;
             List<Double> ambientTemps = new ArrayList<>();
@@ -156,7 +138,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                             endTime = df.parse(nextLine[0]);
                         }
                     } catch (ParseException e){
-
+                        e.printStackTrace();
                     }
 
                     if((lineNumber > 1) && (!nextLine[1].equals("No Fix") && (!nextLine[2].equals("No Fix")))) {
@@ -371,11 +353,11 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
         actionBar.setCustomView(v);
 
         TextView navbarTitle;
-        navbarTitle = (TextView) findViewById(R.id.action_title);
+        navbarTitle = findViewById(R.id.action_title);
         navbarTitle.setText(R.string.trip_view_title);
 
-        backButton = (ImageButton) findViewById(R.id.action_back);
-        forwardButton = (ImageButton) findViewById(R.id.action_forward);
+        ImageButton backButton = findViewById(R.id.action_back);
+        ImageButton forwardButton = findViewById(R.id.action_forward);
         backButton.setOnClickListener(mClickListener);
         forwardButton.setVisibility(View.INVISIBLE);
     }
@@ -403,7 +385,6 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
         File list[] = root.listFiles();
         if (list != null ) {
             Arrays.sort(list, Collections.reverseOrder());
-
             for (int i = 0; i < list.length; i++) {
                 tripFileList.add(list[i].getName());
             }

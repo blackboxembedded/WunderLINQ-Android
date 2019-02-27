@@ -89,7 +89,7 @@ public class AboutActivity extends AppCompatActivity {
                 emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
                 // the attachment
                 //has to be an ArrayList
-                ArrayList<Uri> uris = new ArrayList<Uri>();
+                ArrayList<Uri> uris = new ArrayList<>();
                 if(debugFile.exists()){
                     uris.add(FileProvider.getUriForFile(AboutActivity.this, "com.blackboxembedded.wunderlinq.fileprovider", debugFile));
                 }

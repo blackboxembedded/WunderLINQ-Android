@@ -62,7 +62,6 @@ public class MusicActivity extends AppCompatActivity {
 
     private MediaController.TransportControls controls;
     private MediaController controller;
-    private MediaMetadata metaData;
 
     private SharedPreferences sharedPrefs;
 
@@ -116,7 +115,7 @@ public class MusicActivity extends AppCompatActivity {
                     startActivity(backIntent);
                     break;
                 case R.id.action_forward:
-                    Intent forwardIntent = new Intent(MusicActivity.this, CompassActivity.class);
+                    Intent forwardIntent = new Intent(MusicActivity.this, TaskActivity.class);
                     startActivity(forwardIntent);
                     break;
             }
@@ -162,7 +161,7 @@ public class MusicActivity extends AppCompatActivity {
         view.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
             public void onSwipeLeft() {
-                Intent backIntent = new Intent(MusicActivity.this, CompassActivity.class);
+                Intent backIntent = new Intent(MusicActivity.this, TaskActivity.class);
                 startActivity(backIntent);
             }
             @Override
@@ -172,15 +171,15 @@ public class MusicActivity extends AppCompatActivity {
             }
         });
 
-        mPrevButton = (ImageButton)findViewById(R.id.prev_button);
-        mPlayPauseButton = (ImageButton)findViewById(R.id.play_pause_button);
-        mNextButton = (ImageButton)findViewById(R.id.next_button);
+        mPrevButton = findViewById(R.id.prev_button);
+        mPlayPauseButton = findViewById(R.id.play_pause_button);
+        mNextButton = findViewById(R.id.next_button);
 
-        mTitleText = (TextView)findViewById(R.id.title_text);
-        mAlbumText = (TextView)findViewById(R.id.album_text);
-        mArtistText = (TextView)findViewById(R.id.artist_text);
+        mTitleText = findViewById(R.id.title_text);
+        mAlbumText = findViewById(R.id.album_text);
+        mArtistText = findViewById(R.id.artist_text);
 
-        mArtwork = (ImageView)findViewById(R.id.album_art);
+        mArtwork = findViewById(R.id.album_art);
 
         mPrevButton.setOnClickListener(mClickListener);
         mNextButton.setOnClickListener(mClickListener);
@@ -281,11 +280,11 @@ public class MusicActivity extends AppCompatActivity {
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setCustomView(v);
 
-        navbarTitle = (TextView) findViewById(R.id.action_title);
+        navbarTitle = findViewById(R.id.action_title);
         navbarTitle.setText(R.string.music_title);
 
-        backButton = (ImageButton) findViewById(R.id.action_back);
-        forwardButton = (ImageButton) findViewById(R.id.action_forward);
+        backButton = findViewById(R.id.action_back);
+        forwardButton = findViewById(R.id.action_forward);
         backButton.setOnClickListener(mClickListener);
         forwardButton.setOnClickListener(mClickListener);
     }
@@ -336,7 +335,7 @@ public class MusicActivity extends AppCompatActivity {
                 }
 
                 try {
-                    metaData = controller.getMetadata();
+                    MediaMetadata metaData = controller.getMetadata();
 
                     String metadataArtist = getString(R.string.unknown);
                     if (metaData.getString(MediaMetadata.METADATA_KEY_ARTIST) != null) {
@@ -395,7 +394,6 @@ public class MusicActivity extends AppCompatActivity {
                     Log.d(TAG,"Error: " + e.toString());
                 }
             } else {
-                Log.d(TAG, "No music player running");
                 mArtistText.setText(R.string.not_found_media_player);
                 mTitleText.setText(R.string.start_media_player);
                 mAlbumText.setText("");
@@ -457,7 +455,7 @@ public class MusicActivity extends AppCompatActivity {
 
     public void updateColors(boolean itsDark){
         ((MyApplication) this.getApplication()).setitsDark(itsDark);
-        ConstraintLayout lLayout = (ConstraintLayout) findViewById(R.id.layout_music);
+        ConstraintLayout lLayout = findViewById(R.id.layout_music);
         if (itsDark) {
             //Set Brightness back to defaults
             WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
@@ -536,7 +534,7 @@ public class MusicActivity extends AppCompatActivity {
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 mPlayPauseButton.setFocusable(true);
                 mPlayPauseButton.requestFocus();
-                Intent forwardIntent = new Intent(MusicActivity.this, CompassActivity.class);
+                Intent forwardIntent = new Intent(MusicActivity.this, TaskActivity.class);
                 startActivity(forwardIntent);
                 return true;
             default:
