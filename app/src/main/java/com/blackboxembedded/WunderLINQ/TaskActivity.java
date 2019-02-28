@@ -526,6 +526,8 @@ public class TaskActivity extends AppCompatActivity {
                                 } catch ( ActivityNotFoundException ex  ) {
                                     // Add Alert
                                 }
+                            } else {
+                                Toast.makeText(TaskActivity.this, R.string.geocode_error, Toast.LENGTH_LONG).show();
                             }
                         } else {
                             Toast.makeText(TaskActivity.this, R.string.toast_address_not_set, Toast.LENGTH_LONG).show();
@@ -898,6 +900,8 @@ public class TaskActivity extends AppCompatActivity {
                                     WaypointRecord record = new WaypointRecord(curdatetime, waypoint, "");
                                     datasource.addRecord(record);
                                     datasource.close();
+
+                                    Toast.makeText(TaskActivity.this, R.string.toast_waypoint_saved, Toast.LENGTH_LONG).show();
 
                                 } catch (NullPointerException e) {
                                     e.printStackTrace();

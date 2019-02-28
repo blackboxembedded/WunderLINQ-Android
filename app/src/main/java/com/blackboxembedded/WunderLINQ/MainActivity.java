@@ -401,7 +401,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         // Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Toast.makeText(this, R.string.toast_ble_not_supported, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.bt_not_supported, Toast.LENGTH_SHORT).show();
             Log.d(TAG, "Brand: " + Build.BRAND);
             Log.d(TAG, "Device: " + Build.DEVICE);
             //Only quit on real device
@@ -420,7 +420,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         // Checks if Bluetooth is supported on the device.
         if (mBluetoothAdapter == null) {
-            Toast.makeText(this, R.string.toast_error_bluetooth_not_supported, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.bt_not_supported, Toast.LENGTH_LONG).show();
 
             Log.d(TAG, "Brand: " + Build.BRAND);
             Log.d(TAG, "Device: " + Build.DEVICE);

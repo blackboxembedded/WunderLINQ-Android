@@ -29,8 +29,7 @@
     <string name="disclaimer_ok">Συμφωνώ</string>
     <string name="disclaimer_quit">Κλείσιμο</string>
     <!-- BLE Stuff Below -->
-    <string name="toast_ble_not_supported">Το Bluetooth χαμηλής κατανάλωσης δεν υποστηρίζεται</string>
-    <string name="toast_error_bluetooth_not_supported">Το Bluetooth δεν υποστηρίζεται</string>
+    <string name="bt_not_supported">Το Bluetooth χαμηλής κατανάλωσης δεν υποστηρίζεται</string>
 
     <string name="rdc_front_label">Εμπρός ελαστικό</string>
     <string name="rdc_rear_label">Πίσω ελαστικό</string>
@@ -176,10 +175,10 @@
     <string name="contact_type_20">MMS</string>
 
     <!-- AlertActivity -->
-    <string name="alertActivityBtnOK">Εντάξει</string>
-    <string name="alertActivityBtnClose">Κλείσιμο</string>
-    <string name="alertLowFuelTitle">Χαμηλή στάθμη καυσίμου</string>
-    <string name="alertLowFuelBody">Πλοήγηση στο πλησιέστερο πρατήριο υγρών καυσίμων?"</string>
+    <string name="alert_btn_ok">Εντάξει</string>
+    <string name="alert_btn_close">Κλείσιμο</string>
+    <string name="alert_title_fuel">Χαμηλή στάθμη καυσίμου</string>
+    <string name="alert_label_fuel">Πλοήγηση στο πλησιέστερο πρατήριο υγρών καυσίμων?"</string>
 
     <!-- VideoRecService -->
     <string name="title_video_notification">WunderLINQ εγγραφή βίντεο</string>
@@ -364,4 +363,7 @@
     <string name="wwMode1">Full</string>
     <string name="wwMode2">RT</string>
     <string name="wwMode3">Custom</string>
+    <string name="waypoints_nav_title">Waypoints</string>
+    <string name="toast_waypoint_saved">Waypoint Saved</string>
+    <string name="geocode_error">Problem looking up geocode</string>
 </resources>

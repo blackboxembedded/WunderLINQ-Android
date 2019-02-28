@@ -29,8 +29,7 @@
     <string name="disclaimer_ok">Souhlasím</string>
     <string name="disclaimer_quit">Ukončit</string>
     <!-- BLE Stuff Below -->
-    <string name="toast_ble_not_supported">BLE není podporováno</string>
-    <string name="toast_error_bluetooth_not_supported">Bluetooth není podporován</string>
+    <string name="bt_not_supported">BLE není podporováno</string>
 
     <string name="rdc_front_label">Přední pneu</string>
     <string name="rdc_rear_label">Zadní pneu</string>
@@ -193,10 +192,10 @@
     <string name="contact_type_20">MMS</string>
 
     <!-- AlertActivity -->
-    <string name="alertActivityBtnOK">OK</string>
-    <string name="alertActivityBtnClose">Zavřít</string>
-    <string name="alertLowFuelTitle">Nízký stav paliva</string>
-    <string name="alertLowFuelBody">Navigovat k nejbližší čerpací stanici?</string>
+    <string name="alert_btn_ok">OK</string>
+    <string name="alert_btn_close">Zavřít</string>
+    <string name="alert_title_fuel">Nízký stav paliva</string>
+    <string name="alert_label_fuel">Navigovat k nejbližší čerpací stanici?</string>
 
     <!-- LoggingService -->
     <string name="time_header">Čas</string>
@@ -370,4 +369,7 @@
     <string name="nav_app_google">Google Maps</string>
     <string name="nav_app_locus">Locus</string>
     <string name="nav_app_waze">Waze</string>
+    <string name="waypoints_nav_title">Waypoints</string>
+    <string name="toast_waypoint_saved">Waypoint Saved</string>
+    <string name="geocode_error">Problem looking up geocode</string>
 </resources>

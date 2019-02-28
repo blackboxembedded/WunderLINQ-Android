@@ -31,8 +31,7 @@
     <string name="disclaimer_ok">Se strinjam</string>
     <string name="disclaimer_quit">Izhod</string>
     <!-- BLE Stuff Below -->
-    <string name="toast_ble_not_supported">Bluetooth z nizko porabo energije - BLE ni podprt</string>
-    <string name="toast_error_bluetooth_not_supported">Bluetooth ni podprt.</string>
+    <string name="bt_not_supported">Bluetooth z nizko porabo energije - BLE ni podprt</string>
 
     <string name="rdc_front_label">Prednja pnevmatika</string>
     <string name="rdc_rear_label">Zadnja pnevmatika</string>
@@ -197,10 +196,10 @@
     <string name="contact_type_20">MMS</string>
 
     <!-- AlertActivity -->
-    <string name="alertActivityBtnOK">V redu</string>
-    <string name="alertActivityBtnClose">Zapri</string>
-    <string name="alertLowFuelTitle">Nizek nivo goriva</string>
-    <string name="alertLowFuelBody">Prikažem pot do najbližje bencinske črpalke?"</string>
+    <string name="alert_btn_ok">V redu</string>
+    <string name="alert_btn_close">Zapri</string>
+    <string name="alert_title_fuel">Nizek nivo goriva</string>
+    <string name="alert_label_fuel">Prikažem pot do najbližje bencinske črpalke?"</string>
 
     <!-- LoggingService -->
     <string name="time_header">Čas</string>
@@ -368,4 +367,7 @@
     <string name="wwMode1">Full</string>
     <string name="wwMode2">RT</string>
     <string name="wwMode3">Custom</string>
+    <string name="waypoints_nav_title">Waypoints</string>
+    <string name="toast_waypoint_saved">Waypoint Saved</string>
+    <string name="geocode_error">Problem looking up geocode</string>
 </resources>

@@ -29,8 +29,7 @@
     <string name="disclaimer_ok">Ich stimme zu</string>
     <string name="disclaimer_quit">Beenden</string>
 
-    <string name="toast_ble_not_supported">BLE wird nicht unterstützt</string>
-    <string name="toast_error_bluetooth_not_supported">Bluetooth ist nicht unterstützt.</string>
+    <string name="bt_not_supported">BLE wird nicht unterstützt</string>
     <string name="rdc_front_label">Vorderreifen</string>
     <string name="rdc_rear_label">Hinterreifen</string>
     <string name="engine_temp_label">Motortemperatur</string>
@@ -194,10 +193,10 @@
     <string name="not_found_media_player">Keine aktive Medienplayer-App gefunden</string>
     <string name="task_title_selfie">Selfie aufnehmen</string>
     <string name="task_title_waypoint_nav">Zu Wegpunkt navigieren</string>
-    <string name="alertActivityBtnOK">OK</string>
-    <string name="alertActivityBtnClose">Schliessen</string>
-    <string name="alertLowFuelTitle">Benzinstand niedrig</string>
-    <string name="alertLowFuelBody">Zur nächsten Tankstelle navigieren?</string>
+    <string name="alert_btn_ok">OK</string>
+    <string name="alert_btn_close">Schliessen</string>
+    <string name="alert_title_fuel">Benzinstand niedrig</string>
+    <string name="alert_label_fuel">Zur nächsten Tankstelle navigieren?</string>
     <string name="time_header">Zeit</string>
     <string name="latitude_header">Breitengrad</string>
     <string name="longitude_header">Längengrad</string>
@@ -347,4 +346,7 @@
     <string name="wwMode1">Full</string>
     <string name="wwMode2">RT</string>
     <string name="wwMode3">Custom</string>
+    <string name="waypoints_nav_title">Waypoints</string>
+    <string name="toast_waypoint_saved">Waypoint Saved</string>
+    <string name="geocode_error">Problem looking up geocode</string>
 </resources>

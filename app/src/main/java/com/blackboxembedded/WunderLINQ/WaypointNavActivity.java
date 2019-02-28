@@ -195,7 +195,7 @@ public class WaypointNavActivity extends AppCompatActivity {
         actionBar.setCustomView(v);
 
         navbarTitle = findViewById(R.id.action_title);
-        navbarTitle.setText(R.string.waypoint_title);
+        navbarTitle.setText(R.string.waypoints_nav_title);
 
         backButton = findViewById(R.id.action_back);
         ImageButton forwardButton = findViewById(R.id.action_forward);

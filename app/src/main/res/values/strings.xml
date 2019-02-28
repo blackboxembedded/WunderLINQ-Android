@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">WunderLINQ</string>
+    <string name="product" translatable="false">WunderLINQ</string>
     <string name="company_name" translatable="false">Black Box Embedded, LLC</string>
     <string name="device_name" translatable="false">WunderLINQ</string>
     <!-- MainActivity -->
@@ -42,8 +43,7 @@
     <string name="disclaimer_ok">I agree</string>
     <string name="disclaimer_quit">Quit</string>
     <!-- BLE Stuff Below -->
-    <string name="toast_ble_not_supported">BLE is not supported</string>
-    <string name="toast_error_bluetooth_not_supported">Bluetooth not supported.</string>
+    <string name="bt_not_supported">BLE is not supported</string>
 
     <string name="rdc_front_label">Front Tire</string>
     <string name="rdc_rear_label">Rear Tire</string>
@@ -371,10 +371,10 @@
     <string name="contact_type_20">MMS</string>
 
     <!-- AlertActivity -->
-    <string name="alertActivityBtnOK">OK</string>
-    <string name="alertActivityBtnClose">Close</string>
-    <string name="alertLowFuelTitle">Low Fuel</string>
-    <string name="alertLowFuelBody">Route to the nearest fuel station?"</string>
+    <string name="alert_btn_ok">OK</string>
+    <string name="alert_btn_close">Close</string>
+    <string name="alert_title_fuel">Low Fuel</string>
+    <string name="alert_label_fuel">Route to the nearest fuel station?"</string>
 
     <!-- LoggingService -->
     <string name="time_header">Time</string>
@@ -692,4 +692,7 @@
     <string name="pref_debuglogging_name">Enable Debug Logging</string>
     <string name="pref_debuglogging_summary">Only enable if needed by Support, may impact performance if left running.  Please disable when finished.</string>
     <string name="hw_settings_title">WunderLINQ hardware Settings</string>
+    <string name="waypoints_nav_title">Waypoints</string>
+    <string name="toast_waypoint_saved">Waypoint Saved</string>
+    <string name="geocode_error">Problem looking up geocode</string>
 </resources>

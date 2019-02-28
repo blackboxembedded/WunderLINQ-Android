@@ -792,8 +792,8 @@ public class BluetoothLeService extends Service {
             if (!fuelAlertSent) {
                 fuelAlertSent = true;
                 Intent alertIntent = new Intent(MyApplication.getContext(), AlertActivity.class);
-                alertIntent.putExtra("TITLE", MyApplication.getContext().getResources().getString(R.string.alertLowFuelTitle));
-                alertIntent.putExtra("BODY", MyApplication.getContext().getResources().getString(R.string.alertLowFuelBody));
+                alertIntent.putExtra("TITLE", MyApplication.getContext().getResources().getString(R.string.alert_title_fuel));
+                alertIntent.putExtra("BODY", MyApplication.getContext().getResources().getString(R.string.alert_label_fuel));
                 MyApplication.getContext().startActivity(alertIntent);
             }
 
