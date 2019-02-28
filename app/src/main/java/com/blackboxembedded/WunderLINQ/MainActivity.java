@@ -1766,6 +1766,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 }
                 break;
             case 20:
+                //Shifts
+                label = getString(R.string.shifts_header);
+                if(Data.getNumberOfShifts() != null){
+                    int shifts = Data.getNumberOfShifts();
+                    value = String.valueOf(shifts);
+                }
+                break;
+            case 21:
                 //Lean Angle
                 label = getString(R.string.leanangle_header);
                 if(Data.getLeanAngle() != null){
@@ -1773,7 +1781,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     value = String.valueOf(Utils.oneDigit.format(leanAngle));
                 }
                 break;
-            case 21:
+            case 22:
                 //g-force
                 label = getString(R.string.gforce_header);
                 if(Data.getGForce() != null){
@@ -1781,7 +1789,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     value = String.valueOf(Utils.oneDigit.format(gForce));
                 }
                 break;
-            case 22:
+            case 23:
                 //bearing
                 label = getString(R.string.bearing_header);
                 if (Data.getBearing() != null) {

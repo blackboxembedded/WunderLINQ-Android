@@ -121,7 +121,6 @@
     <string name="notification_alert_title">WunderLINQ benötigt Zugriff auf Benachrichtigungen</string>
     <string name="notification_alert_body">Bitte erlauben Sie den Zugriff auf Benachrichtigungen damit diese App Ihren Media-Player steuern kann</string>
 
-
     <string name="quicktask_title">Schnellzugriff</string>
     <string name="task_title_navigation">Navigation</string>
     <string name="task_title_gohome">Nach Hause</string>
@@ -161,54 +160,27 @@
     <string name="contact_type_18">Arbeit Pager</string>
     <string name="contact_type_19">Assistent</string>
     <string name="contact_type_20">MMS</string>
-
-
     <string name="title_video_notification">WunderLINQ Videoaufnahme</string>
-
-
     <string name="title_activity_settings">Einstellungen</string>
-
     <string name="info_title">Persönliche Angaben</string>
     <string name="pref_homeAddress_name">Adresse (Nach Hause)</string>
     <string name="pref_homeAddress_summary">Format: Strasse 123, 12345 Ort, Staat</string>
     <string name="pref_homePhone_name">Bevorzugte Nummer</string>
     <string name="pref_homePhone_summary">Format: 1234567890</string>
-
     <string name="ui_title">Bedienoberfläche</string>
     <string name="pref_tempf_name">Einheit Temperatur</string>
-    <string-array name="tempf_array">
-        <item name="1">Celsius</item>
-        <item name="2">Fahrenheit</item>
-    </string-array>
-
+    <string name="tempf_c">Celsius</string>
+    <string name="tempf_f">Fahrenheit</string>
     <string name="pref_distance_name">Einheit Länge</string>
-    <string-array name="distance_array">
-        <item name="1">Metrisch</item>
-        <item name="2">Imperial</item>
-    </string-array>
-
+    <string name="distance_m">Metrisch</string>
+    <string name="distance_i">Imperial</string>
     <string name="pref_bearing_name">Einheit Richtung</string>
-    <string-array name="bearing_array">
-        <item name="1">Grad</item>
-        <item name="2">Kardinal (Himmelsrichtung)</item>
-    </string-array>
-
+    <string name="bearing_d">Grad</string>
+    <string name="bearing_c">Kardinal (Himmelsrichtung)</string>
     <string name="pref_pressuref_name">Einheit Druck</string>
-
     <string name="pref_nightMode_name">Nachtmodus</string>
-    <string-array name="night_mode_array">
-        <item name="1">Off</item>
-        <item name="2">On</item>
-        <item name="3">Auto</item>
-    </string-array>
-    <string-array name="night_mode_arrayValues">
-        <item name="1">0</item>
-        <item name="2">1</item>
-        <item name="3">2</item>
-    </string-array>
     <string name="pref_autoNightModeDelay_name">Auto-Nachtmodus, Verzögerung</string>
     <string name="pref_autoNightModeDelay_summary">Auto-Nachtmodus, Verzögerung in Sekunden setzen</string>
-
     <string name="advanced_settings_title">Erweiterte Einstellungen</string>
     <string name="btn_sendlogs_title">Logdaten schicken</string>
     <string name="sendlogs_body">Bitte beschreiben Sie Ihr Problem:</string>
@@ -254,7 +226,6 @@
     <string name="fueleconomytwo_header">Verbrauch 2</string>
     <string name="fuelrange_header">Reichweite</string>
     <string name="pref_nav_app_title">Navigations-App</string>
-    <string name="pref_contact_name">Kontaktlisten-Sortierung</string>
     <string name="pref_orientation_name">Ausrichtungs-Sperre</string>
     <string name="pref_brightness_name">Anzeigehelligkeit</string>
     <string name="pref_brightness_summary">Anzeigehelligkeit auf Maximum setzen.</string>
@@ -323,18 +294,6 @@
     <string name="call_alert_title">WunderLINQ needs permissions to use your phone to make phone calls</string>
     <string name="pref_motorcycledata_name">Disable data display</string>
     <string name="pref_motorcycledata_summary">Enable for bikes that lack performance data.</string>
-    <string-array name="nav_apps_array">
-        <item name="1">Android Default</item>
-        <item name="2">Google Maps</item>
-        <item name="3">Locus</item>
-        <item name="4">Waze</item>
-    </string-array>
-    <string-array name="nav_apps_arrayValues">
-        <item name="1">1</item>
-        <item name="2">2</item>
-        <item name="3">3</item>
-        <item name="4">4</item>
-    </string-array>
     <string name="pref_grid_settings_title">Data Grid Customization</string>
     <string name="pref_grid_settings_summary">Customize which data points to display and in which cell</string>
     <string name="tripauto_label">Trip Auto</string>
@@ -370,4 +329,22 @@
     <string name="gforce_header">g-force</string>
     <string name="geodata_label">Trips &amp; Waypoints</string>
     <string name="bearing_header">Bearing</string>
+    <string name="nav_app_default">Android Default</string>
+    <string name="nav_app_google">Google Maps</string>
+    <string name="nav_app_locus">Locus</string>
+    <string name="nav_app_waze">Waze</string>
+    <string name="pressuref_bar">Bar</string>
+    <string name="pressuref_kpa">kPa</string>
+    <string name="pressuref_kgf">Kg-f</string>
+    <string name="pressuref_psi">psi</string>
+    <string name="orientation_a">Off</string>
+    <string name="orientation_l">Landscape</string>
+    <string name="orientation_p">Portrait</string>
+    <string name="orientation_rl">Reverse Landscape</string>
+    <string name="off">Off</string>
+    <string name="on">On</string>
+    <string name="auto">Auto</string>
+    <string name="wwMode1">Full</string>
+    <string name="wwMode2">RT</string>
+    <string name="wwMode3">Custom</string>
 </resources>

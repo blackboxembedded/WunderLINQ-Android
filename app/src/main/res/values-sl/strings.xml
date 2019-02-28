@@ -245,125 +245,37 @@
     <string name="ui_title">Uporabniški vmesnik</string>
     <string name="pref_tasks_settings_title">Prilagoditev hitrih opravil</string>
     <string name="pref_tasks_settings_summary">Izberi katera opravila bodo prikazana in v kakšnem redu</string>
-    <string-array name="tasks_array">
-        <item name="1">@string/task_title_navigation</item>
-        <item name="2">@string/task_title_gohome</item>
-        <item name="3">@string/task_title_favnumber</item>
-        <item name="4">@string/task_title_callcontact</item>
-        <item name="5">@string/task_title_photo</item>
-        <item name="6">@string/task_title_selfie</item>
-        <item name="7">@string/task_title_start_record</item>
-        <item name="8">@string/task_title_start_trip</item>
-        <item name="9">@string/task_title_waypoint</item>
-        <item name="10">@string/task_title_waypoint_nav</item>
-        <item name="11">@string/task_title_voicecontrol</item>
-        <item name="12">@string/task_title_settings</item>
-        <item name="13">@string/task_title_empty</item>
-    </string-array>
-    <string-array name="tasks_arrayValues">
-        <item name="1">0</item>
-        <item name="2">1</item>
-        <item name="3">2</item>
-        <item name="4">3</item>
-        <item name="5">4</item>
-        <item name="6">5</item>
-        <item name="7">6</item>
-        <item name="8">7</item>
-        <item name="9">8</item>
-        <item name="10">9</item>
-        <item name="11">10</item>
-        <item name="12">11</item>
-        <item name="13">12</item>
-    </string-array>
     <string name="pref_nav_app_title">Aplikacija za navigacijo</string>
-    <string-array name="nav_apps_array">
-        <item name="1">Android Default</item>
-        <item name="2">Google Zemljevidi</item>
-        <item name="3">Locus</item>
-        <item name="4">Waze</item>
-    </string-array>
-    <string-array name="nav_apps_arrayValues">
-        <item name="1">1</item>
-        <item name="2">2</item>
-        <item name="3">3</item>
-        <item name="4">4</item>
-    </string-array>
+    <string name="nav_app_default">Android Default</string>
+    <string name="nav_app_google">Google Maps</string>
+    <string name="nav_app_locus">Locus</string>
+    <string name="nav_app_waze">Waze</string>
     <string name="pref_tempf_name">Enota za temperaturo</string>
-    <string-array name="tempf_array">
-        <item name="1">Celzij</item>
-        <item name="2">Fahrenheit</item>
-    </string-array>
-    <string-array name="tempf_arrayValues">
-        <item name="1">0</item>
-        <item name="2">1</item>
-    </string-array>
+    <string name="tempf_c">Celzij</string>
+    <string name="tempf_f">Fahrenheit</string>
     <string name="pref_distance_name">Enota za razdalje</string>
-    <string-array name="distance_array">
-        <item name="1">metri</item>
-        <item name="2">milje</item>
-    </string-array>
-    <string-array name="distance_arrayValues">
-        <item name="1">0</item>
-        <item name="2">1</item>
-    </string-array>
+    <string name="distance_m">metri</string>
+    <string name="distance_i">milje</string>
     <string name="pref_bearing_name">Prikaz kompasa</string>
-    <string-array name="bearing_array">
-        <item name="1">Stopinje</item>
-        <item name="2">Strani neba</item>
-    </string-array>
-    <string-array name="bearing_arrayValues">
-        <item name="1">0</item>
-        <item name="2">1</item>
-    </string-array>
+    <string name="bearing_d">Stopinje</string>
+    <string name="bearing_c">Strani neba</string>
     <string name="pref_pressuref_name">Enota za tlak</string>
-    <string-array name="pressuref_array">
-        <item name="1">Bar</item>
-        <item name="2">kPa</item>
-        <item name="3">Kg-f</item>
-        <item name="4">psi</item>
-    </string-array>
-    <string-array name="pressuref_arrayValues">
-        <item name="1">0</item>
-        <item name="2">1</item>
-        <item name="3">2</item>
-        <item name="4">3</item>
-    </string-array>
-    <string name="pref_contact_name">Razvrščanje stikov</string>
-    <string-array name="contact_sort_array">
-        <item name="1">Priimek</item>
-        <item name="2">Ime</item>
-    </string-array>
-    <string-array name="contact_sort_arrayValues">
-        <item name="1">0</item>
-        <item name="2">1</item>
-    </string-array>
+    <string name="pressuref_bar">Bar</string>
+    <string name="pressuref_kpa">kPa</string>
+    <string name="pressuref_kgf">Kg-f</string>
+    <string name="pressuref_psi">psi</string>
     <string name="pref_orientation_name">Orientacija naprave</string>
-    <string-array name="orientation_array">
-        <item name="1">Izklopljeno</item>
-        <item name="2">Ležeče</item>
-        <item name="3">Obratno ležeče</item>
-        <item name="4">Pokončno</item>
-    </string-array>
-    <string-array name="orientation_arrayValues">
-        <item name="1">0</item>
-        <item name="2">1</item>
-        <item name="3">2</item>
-        <item name="3">3</item>
-    </string-array>
+    <string name="orientation_a">Izklopljeno</string>
+    <string name="orientation_l">Ležeče</string>
+    <string name="orientation_p">Pokončno</string>
+    <string name="orientation_rl">Obratno ležeče</string>
     <string name="pref_brightness_name">Svetlost zaslona</string>
     <string name="pref_brightness_summary">Nastavi svetlost na max.</string>
     <string name="pref_nightMode_name">Nočni način</string>
     <string name="pref_nightMode_summary">Uporabnikova barvna tema</string>
-    <string-array name="night_mode_array">
-        <item name="1">Izklop</item>
-        <item name="2">Vklop</item>
-        <item name="3">Samodejno</item>
-    </string-array>
-    <string-array name="night_mode_arrayValues">
-        <item name="1">0</item>
-        <item name="2">1</item>
-        <item name="3">2</item>
-    </string-array>
+    <string name="off">Izklop</string>
+    <string name="on">Vklop</string>
+    <string name="auto">Samodejno</string>
     <string name="pref_autoNightModeDelay_name">Zakasnitev samodejnega nočnega načina</string>
     <string name="pref_autoNightModeDelay_summary">Nastavi zakasnitev samodejnega nočnega načina v sekundah</string>
     <string name="alerting_title">Nastavitve opozoril</string>
@@ -453,4 +365,7 @@
     <string name="gforce_header">g-force</string>
     <string name="geodata_label">Trips &amp; Waypoints</string>
     <string name="bearing_header">Bearing</string>
+    <string name="wwMode1">Full</string>
+    <string name="wwMode2">RT</string>
+    <string name="wwMode3">Custom</string>
 </resources>
