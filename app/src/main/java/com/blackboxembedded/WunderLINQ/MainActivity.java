@@ -294,7 +294,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
             @Override
             public void onPressLong() {
-                Log.d(TAG, "Long Press");
                 if ( cell >= 1 && cell <= 15){
                     showCellSelector(cell);
                 }
@@ -302,7 +301,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
             @Override
             public void onSwipeUp() {
-                Log.d(TAG, "Swipe Up");
                 int currentCellCount = Integer.parseInt(sharedPrefs.getString("CELL_COUNT","15"));
                 //int maxCellCount = Integer.parseInt(sharedPrefs.getString("prefMaxCells","15"));
                 int nextCellCount = 1;
@@ -335,7 +333,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
             @Override
             public void onSwipeDown() {
-                Log.d(TAG, "Swipe Down");
                 int currentCellCount = Integer.parseInt(sharedPrefs.getString("CELL_COUNT","15"));
                 //int maxCellCount = Integer.parseInt(sharedPrefs.getString("prefMaxCells","15"));
                 int nextCellCount = 1;
@@ -368,14 +365,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
             @Override
             public void onSwipeLeft() {
-                Log.d(TAG, "Swipe Left");
                 Intent backIntent = new Intent(MainActivity.this, MusicActivity.class);
                 startActivity(backIntent);
             }
 
             @Override
             public void onSwipeRight() {
-                Log.d(TAG, "Swipe Right");
                 Intent backIntent = new Intent(MainActivity.this, TaskActivity.class);
                 startActivity(backIntent);
             }

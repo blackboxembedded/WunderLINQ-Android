@@ -555,17 +555,20 @@
     <string name="nav_app_google">Google Maps</string>
     <string name="nav_app_locus">Locus</string>
     <string name="nav_app_waze">Waze</string>
+    <string name="nav_app_mapsme">Maps.me</string>
     <string-array name="nav_apps_array" translatable="false">
         <item name="1">@string/nav_app_default</item>
         <item name="2">@string/nav_app_google</item>
         <item name="3">@string/nav_app_locus</item>
         <item name="4">@string/nav_app_waze</item>
+        <item name="5">@string/nav_app_mapsme</item>
     </string-array>
     <string-array name="nav_apps_arrayValues" translatable="false">
         <item name="1">1</item>
         <item name="2">2</item>
         <item name="3">3</item>
         <item name="4">4</item>
+        <item name="5">5</item>
     </string-array>
     <string name="pref_tempf_name">Temperature Unit</string>
     <string name="tempf_c">Celsius</string>

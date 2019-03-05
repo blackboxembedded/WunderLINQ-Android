@@ -488,6 +488,10 @@ public class TaskActivity extends AppCompatActivity {
                         } else if (navApp.equals("4")){
                             //Waze
                             url = "https://waze.com/ul";
+                        } else if (navApp.equals("5")){
+                            //Maps.me
+                            //mapsme://map?ll=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&n=\(label ?? "")&type=vehicle&id="WunderLINQ"&backurl=wunderlinq://&appname=WunderLINQ
+                            url = "mapsme://?id=WunderLINQ&backurl=wunderlinq://&appname=WunderLINQ";
                         }
                         try {
                             Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
@@ -506,25 +510,69 @@ public class TaskActivity extends AppCompatActivity {
                         if (!address.equals("")) {
                             LatLng location = getLocationFromAddress(TaskActivity.this, address);
                             if (location != null) {
-                                String navUrl = "google.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
-                                if (navApp.equals("1") || navApp.equals("2")){
-                                    // Android Default or Google Maps
-                                    // Nothing to do
-                                    navUrl = "google.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
-                                } else if (navApp.equals("3")){
-                                    //Locus
-
-                                } else if (navApp.equals("4")){
-                                    //Waze
-                                    navUrl = "https://www.waze.com/ul?ll=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes&zoom=17";
+                                // Get location
+                                boolean locationWPPerms = false;
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    // Check Location permissions
+                                    if (getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                        final AlertDialog.Builder builder = new AlertDialog.Builder(TaskActivity.this);
+                                        builder.setTitle(getString(R.string.location_alert_title));
+                                        builder.setMessage(getString(R.string.location_alert_body));
+                                        builder.setPositiveButton(android.R.string.ok, null);
+                                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                            @TargetApi(23)
+                                            public void onDismiss(DialogInterface dialog) {
+                                                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_FINE_LOCATION);
+                                            }
+                                        });
+                                        builder.show();
+                                    } else {
+                                        locationWPPerms = true;
+                                    }
+                                } else {
+                                    locationWPPerms = true;
                                 }
-                                try {
-                                    Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                                    navIntent.setData(Uri.parse(navUrl));
-                                    navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
-                                    startActivity(navIntent);
-                                } catch ( ActivityNotFoundException ex  ) {
-                                    // Add Alert
+                                if (locationWPPerms) {
+                                    try {
+                                        // Get the location manager
+                                        LocationManager locationManager = (LocationManager)
+                                                TaskActivity.this.getSystemService(LOCATION_SERVICE);
+                                        Criteria criteria = new Criteria();
+                                        try {
+                                            String bestProvider = locationManager.getBestProvider(criteria, false);
+                                            Log.d(TAG,"Trying Best Provider: " + bestProvider);
+                                            Location currentLocation = locationManager.getLastKnownLocation(bestProvider);
+                                            String navUrl = "google.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
+                                            if (navApp.equals("1") || navApp.equals("2")){
+                                                // Android Default or Google Maps
+                                                // Nothing to do
+                                                navUrl = "google.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
+                                            } else if (navApp.equals("3")){
+                                                //Locus
+
+                                            } else if (navApp.equals("4")){
+                                                //Waze
+                                                navUrl = "https://www.waze.com/ul?ll=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes&zoom=17";
+                                            } else if (navApp.equals("5")){
+                                                //Maps.me
+                                                navUrl = "mapsme://route?sll=" + String.valueOf(currentLocation.getLatitude()) + "," + String.valueOf(currentLocation.getLongitude()) + "&saddr=Start&dll=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&daddr=Home&type=vehicle";
+                                            }
+                                            try {
+                                                Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                                                navIntent.setData(Uri.parse(navUrl));
+                                                if (android.os.Build.VERSION.SDK_INT >= 24) {
+                                                    navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                                                }
+                                                startActivity(navIntent);
+                                            } catch ( ActivityNotFoundException ex  ) {
+                                                // Add Alert
+                                            }
+                                        } catch (NullPointerException e) {
+                                            e.printStackTrace();
+                                        }
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    }
                                 }
                             } else {
                                 Toast.makeText(TaskActivity.this, R.string.geocode_error, Toast.LENGTH_LONG).show();

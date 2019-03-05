@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -12,6 +15,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -197,6 +201,9 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
         } else if (navApp.equals("4")){
             //Waze
             navUrl = "https://www.waze.com/ul?ll=" + record.getData() + "&zoom=10";
+        } else if (navApp.equals("5")){
+            //Maps.me
+            navUrl = "mapsme://map?ll=" + record.getData() + "&n=" + record.getLabel() + "&id=WunderLINQ&backurl=wunderlinq://&appname=WunderLINQ";
         }
         try {
             Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
@@ -213,26 +220,44 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
     // Navigate
     public void onClickNav(View view) {
         //Navigation
-        String navUrl = "google.navigation:q=" + record.getData() + "&navigate=yes";
-        if (navApp.equals("1") || navApp.equals("2")){
-            // Android Default or Google Maps
-            // Nothing to do
-        } else if (navApp.equals("3")){
-            //Locus
-
-        } else if (navApp.equals("4")){
-            //Waze
-            navUrl = "https://www.waze.com/ul?ll=" + record.getData() + "&navigate=yes&zoom=17";
-        }
+        // Get location
+        // Get the location manager
+        LocationManager locationManager = (LocationManager)
+                WaypointViewActivity.this.getSystemService(LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
         try {
-            Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
-            navIntent.setData(Uri.parse(navUrl));
-            if (android.os.Build.VERSION.SDK_INT >= 24) {
-                navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+            String bestProvider = locationManager.getBestProvider(criteria, false);
+            Log.d(TAG,"Trying Best Provider: " + bestProvider);
+            Location currentLocation = locationManager.getLastKnownLocation(bestProvider);
+            String navUrl = "google.navigation:q=" + record.getData() + "&navigate=yes";
+            if (navApp.equals("1") || navApp.equals("2")){
+                // Android Default or Google Maps
+                // Nothing to do
+            } else if (navApp.equals("3")){
+                //Locus
+
+            } else if (navApp.equals("4")){
+                //Waze
+                navUrl = "https://www.waze.com/ul?ll=" + record.getData() + "&navigate=yes&zoom=17";
+            } else if (navApp.equals("5")){
+                //Maps.me
+                navUrl = "mapsme://route?sll=" + String.valueOf(currentLocation.getLatitude()) + ","
+                        + String.valueOf(currentLocation.getLongitude()) + "&saddr="
+                        + getString(R.string.trip_view_waypoint_start_label) + "&dll="
+                        + record.getData() + "&daddr=" + record.getLabel() + "&type=vehicle";
             }
-            startActivity(navIntent);
-        } catch ( ActivityNotFoundException ex  ) {
-            // Add Alert
+            try {
+                Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                navIntent.setData(Uri.parse(navUrl));
+                if (android.os.Build.VERSION.SDK_INT >= 24) {
+                    navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                }
+                startActivity(navIntent);
+            } catch ( ActivityNotFoundException ex  ) {
+                // Add Alert
+            }
+        } catch (SecurityException|NullPointerException e) {
+            e.printStackTrace();
         }
     }
 
