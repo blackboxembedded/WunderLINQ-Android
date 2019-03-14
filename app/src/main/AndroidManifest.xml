@@ -55,16 +55,27 @@
             android:launchMode="singleTask"
             android:resizeableActivity="true"
             android:supportsPictureInPicture="true">
-            <intent-filter>
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+                <data
+                    android:scheme="wunderlinq"
+                    android:host="datagrid" />
             </intent-filter>
         </activity>
         <activity android:name=".MusicActivity" />
         <activity
             android:name=".TaskActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="wunderlinq"
+                    android:host="quicktasks" />
+            </intent-filter>
+        </activity>
         <activity android:name=".SettingsActivity" />
         <activity android:name=".ContactListActivity" />
         <activity android:name=".FaultActivity" />
@@ -75,14 +86,32 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".WaypointViewActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="wunderlinq"
+                    android:host="wptview" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".TripsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".TripViewActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".WaypointNavActivity" />
+        <activity android:name=".WaypointNavActivity">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="wunderlinq"
+                    android:host="wptnav" />
+            </intent-filter>
+        </activity>
         <activity android:name=".AlertActivity" />
         <activity android:name=".AboutActivity"
             android:screenOrientation="portrait"/>

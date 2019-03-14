@@ -26,18 +26,19 @@ public class MyAccessibilityService extends AccessibilityService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        int command = intent.getIntExtra("command",1);
-        switch (command){
-            case 1:
-                performGlobalAction(GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN);
-                break;
-            case 2:
-                performGlobalAction(GLOBAL_ACTION_RECENTS);
-                break;
-            default:
-                Log.d(TAG, "Unknown command: " + command);
+        if (intent.getExtras() != null){
+            int command = intent.getIntExtra("command",1);
+            switch (command){
+                case 1:
+                    performGlobalAction(GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN);
+                    break;
+                case 2:
+                    performGlobalAction(GLOBAL_ACTION_RECENTS);
+                    break;
+                default:
+                    Log.d(TAG, "Unknown command: " + command);
+            }
         }
-
         return super.onStartCommand(intent, flags, startId);
     }
 }

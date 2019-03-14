@@ -263,12 +263,9 @@ public class Data {
         Data.odometer = null;
         Data.tripOne = null;
         Data.tripTwo = null;
-        Data.numberOfShifts = 0;
         Data.gear = null;
         Data.voltage = null;
         Data.throttlePosition = null;
-        Data.frontBrake = 0;
-        Data.rearBrake = 0;
         Data.speed = null;
         Data.avgSpeed = null;
         Data.currentConsumption = null;
