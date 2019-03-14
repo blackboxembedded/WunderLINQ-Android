@@ -304,9 +304,17 @@ public class ContactListActivity extends AppCompatActivity {
             }
             */
             ContentResolver cr = getContentResolver();
-            Cursor cursor = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI.buildUpon()
-                    .appendQueryParameter(ContactsContract.REMOVE_DUPLICATE_ENTRIES, "1")
-                    .build(), PROJECTION, null, null, sortOrder);
+            Cursor cursor;
+            if (sharedPrefs.getString("prefContactsFilter","1").contains("1")){
+                cursor = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI.buildUpon()
+                        .appendQueryParameter(ContactsContract.REMOVE_DUPLICATE_ENTRIES, "1")
+                        .build(), PROJECTION, "starred=?", new String[] {"1"}, sortOrder);
+            } else {
+                cursor = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI.buildUpon()
+                        .appendQueryParameter(ContactsContract.REMOVE_DUPLICATE_ENTRIES, "1")
+                        .build(), PROJECTION, null, null, sortOrder);
+            }
+
             if (cursor != null) {
                 try {
                     HashSet<String> normalizedNumbersAlreadyFound = new HashSet<>();

@@ -370,4 +370,8 @@
     <string name="waypoints_nav_title">Kažipoti</string>
     <string name="toast_waypoint_saved">Kažipot shranjen</string>
     <string name="geocode_error">Problem s prikazom geokode</string>
+    <string name="nav_app_mapsme">Maps.me</string>
+    <string name="pref_contacts_filter_title">Contacts Display</string>
+    <string name="contacts_filter_all">All</string>
+    <string name="contacts_filter_favorites">Favorites</string>
 </resources>

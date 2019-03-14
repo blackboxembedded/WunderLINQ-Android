@@ -252,7 +252,15 @@
             android:summary="%s"
             android:entries="@array/nav_apps_array"
             android:entryValues="@array/nav_apps_arrayValues"
-            android:defaultValue="0"
+            android:defaultValue="1"
+            />
+        <ListPreference
+            android:key="prefContactsFilter"
+            android:title="@string/pref_contacts_filter_title"
+            android:summary="%s"
+            android:entries="@array/contacts_filter_array"
+            android:entryValues="@array/contacts_filter_arrayValues"
+            android:defaultValue="1"
             />
         <ListPreference
             android:key="prefPressureF"

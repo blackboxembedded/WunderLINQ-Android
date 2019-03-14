@@ -570,6 +570,17 @@
         <item name="4">4</item>
         <item name="5">5</item>
     </string-array>
+    <string name="pref_contacts_filter_title">Contacts Display</string>
+    <string name="contacts_filter_favorites">Favorites</string>
+    <string name="contacts_filter_all">All</string>
+    <string-array name="contacts_filter_array" translatable="false">
+        <item name="1">@string/contacts_filter_favorites</item>
+        <item name="2">@string/contacts_filter_all</item>
+    </string-array>
+    <string-array name="contacts_filter_arrayValues" translatable="false">
+        <item name="1">1</item>
+        <item name="2">2</item>
+    </string-array>
     <string name="pref_tempf_name">Temperature Unit</string>
     <string name="tempf_c">Celsius</string>
     <string name="tempf_f">Fahrenheit</string>

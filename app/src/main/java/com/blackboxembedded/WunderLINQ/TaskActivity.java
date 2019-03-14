@@ -490,7 +490,6 @@ public class TaskActivity extends AppCompatActivity {
                             url = "https://waze.com/ul";
                         } else if (navApp.equals("5")){
                             //Maps.me
-                            //mapsme://map?ll=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&n=\(label ?? "")&type=vehicle&id="WunderLINQ"&backurl=wunderlinq://&appname=WunderLINQ
                             url = "mapsme://?id=WunderLINQ&backurl=wunderlinq://&appname=WunderLINQ";
                         }
                         try {
