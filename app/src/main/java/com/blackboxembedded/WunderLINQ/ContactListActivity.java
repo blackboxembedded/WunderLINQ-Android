@@ -298,11 +298,6 @@ public class ContactListActivity extends AppCompatActivity {
             // Android version is lesser than 6.0 or the permission is already granted.
 
             String sortOrder = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
-            /*
-            if (!sharedPrefs.getString("prefContactSorting", "0").equals("0")) {
-                sortOrder = ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME + " COLLATE LOCALIZED ASC";
-            }
-            */
             ContentResolver cr = getContentResolver();
             Cursor cursor;
             if (sharedPrefs.getString("prefContactsFilter","1").contains("1")){
@@ -345,7 +340,7 @@ public class ContactListActivity extends AppCompatActivity {
                         if (phoneType != null && normalNum != null) {
                             if((phoneType.equals("1")) || phoneType.equals("2") || phoneType.equals("3")) {
                                 if (normalizedNumbersAlreadyFound.add(normalNum.replaceAll("\\p{C}", ""))) {
-                                    //Log.d(TAG, "Display Name: " + displayName + ", NN: " + normalNum + ", " + phoneType);
+                                    Log.d(TAG, "Adding Display Name: " + displayName + ", NN: " + normalNum + ", " + phoneType);
                                     contacts.add(displayName + " (" + typeIDtoString(Integer.parseInt(phoneType)) + ")");
                                     phoneNumbers.add(normalNum);
                                     Drawable photo;
@@ -373,6 +368,8 @@ public class ContactListActivity extends AppCompatActivity {
                                     }
                                     photoId.add(photo);
                                 }
+                            } else {
+                                Log.d(TAG, "Not Adding Display Name: " + displayName + ", NN: " + normalNum + ", " + phoneType);
                             }
                         }
                     }

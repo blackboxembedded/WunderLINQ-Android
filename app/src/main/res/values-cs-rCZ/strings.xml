@@ -282,7 +282,7 @@
     <string name="hw_settings_title">Nastavení WunderLINQ hardware</string>
     <string name="usagestats_alert_title">WunderLINQ vyžaduje oprávnění pro přístup k údajům o využití</string>
     <string name="usagestats_alert_body">Udělte prosím oprávnění pro přístup k údajům o využití tak, aby bylo možné automaticky spustit aplikaci po připojení k zařízení WunderLINQ</string>
-    <string name="negative_usagestats_alert_body">Chybí oprávnění k přístupu k údajům o využití, nebude možné automaticky spustit aplikaci po připojení k zařízení WunderLINQ</string> <!-- New -->
+    <!-- New -->
     <string name="task_title_empty">Prázdná</string>
     <string name="pref_tasks_settings_title">Pořadí rychlých akcí</string>
     <string name="pref_tasks_settings_summary">Upravte pořadí a výběr rychlých akcí</string>
@@ -376,4 +376,7 @@
     <string name="pref_contacts_filter_title">Contacts Display</string>
     <string name="contacts_filter_all">All</string>
     <string name="contacts_filter_favorites">Favorites</string>
+    <string name="pref_photopreview_name">Photo Preview</string>
+    <string name="pref_photopreview_summary">Displays the photo after capture</string>
+    <string name="alert_title_photopreview">Photo Preview</string>
 </resources>

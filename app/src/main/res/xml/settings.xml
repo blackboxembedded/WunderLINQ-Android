@@ -346,6 +346,12 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/advanced_settings_title" >
         <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="prefPhotoPreview"
+            android:summary="@string/pref_photopreview_summary"
+            android:title="@string/pref_photopreview_name" >
+        </CheckBoxPreference>
+        <CheckBoxPreference
             android:defaultValue="true"
             android:key="prefAutoLaunch"
             android:summary="@string/pref_autolaunch_summary"

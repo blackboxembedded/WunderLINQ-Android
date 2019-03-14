@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -27,11 +29,14 @@ public class AlertActivity extends AppCompatActivity {
 
     public final static String TAG = "AlertActivity";
 
+    int type = 1;
     String title = "";
     String body = "";
+    String backgroundPath = "";
 
     TextView tvAlertbody;
     Button btnOK;
+    Button btnClose;
     TextView navbarTitle;
     ActionBar actionBar;
 
@@ -43,6 +48,9 @@ public class AlertActivity extends AppCompatActivity {
 
     SensorManager sensorManager;
     Sensor lightSensor;
+
+    private Handler handler;
+    private Runnable runnable;
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -81,42 +89,62 @@ public class AlertActivity extends AppCompatActivity {
         }
 
         tvAlertbody = findViewById(R.id.tvAlertBody);
-        Button btnClose = findViewById(R.id.btnClose);
+        btnClose = findViewById(R.id.btnClose);
         btnOK = findViewById(R.id.btnOK);
         btnClose.setOnClickListener(mClickListener);
         btnOK.setOnClickListener(mClickListener);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
+            type = extras.getInt("TYPE");
             title = extras.getString("TITLE");
             body = extras.getString("BODY");
+            backgroundPath = extras.getString("BACKGROUND");
+            Log.d(TAG,"Background Image: " + backgroundPath);
         }
         tvAlertbody.setText(body);
 
-        showActionBar();
-
-        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getBoolean("prefNightMode", false)){
-            itsDark = true;
-        } else {
-            itsDark = false;
+        if (type == 2){
+            btnOK.setVisibility(View.INVISIBLE);
         }
-
-        updateColors(itsDark);
-
+        switch (type){
+            case 2:
+                btnOK.setVisibility(View.INVISIBLE);
+                break;
+            default:
+                break;
+        }
+        if(!backgroundPath.equals("")){
+            Log.d(TAG,"Setting Background Image");
+            view.setBackground(Drawable.createFromPath(backgroundPath));
+        }
+        showActionBar();
         // Sensor Stuff
         sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+
+        // Close after some seconds
+        handler  = new Handler();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                finish();;
+            }
+        };
+
+        handler.postDelayed(runnable, 10000);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getBoolean("prefNightMode", false)){
-            updateColors(true);
+        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
+            itsDark = true;
         } else {
-            updateColors(false);
+            itsDark = false;
         }
+        updateColors(itsDark);
         if (sharedPrefs.getBoolean("prefAutoNightMode", false)) {
             sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
@@ -137,6 +165,7 @@ public class AlertActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        handler.removeCallbacks(runnable);
         sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
@@ -202,7 +231,7 @@ public class AlertActivity extends AppCompatActivity {
                             long duration = (currentTime - darkTimer);
                             if ((duration >= delay) && (!itsDark)) {
                                 itsDark = true;
-                                Log.d(TAG, "Its dark");
+                                Log.d(TAG, "Sensor Setting: Its dark");
                                 // Update colors
                                 updateColors(true);
                             }
@@ -216,7 +245,7 @@ public class AlertActivity extends AppCompatActivity {
                             long duration = (currentTime - lightTimer);
                             if ((duration >= delay) && (itsDark)) {
                                 itsDark = false;
-                                Log.d(TAG, "Its light");
+                                Log.d(TAG, "Sensor Setting: Its NOT dark");
                                 // Update colors
                                 updateColors(false);
                             }
@@ -231,16 +260,24 @@ public class AlertActivity extends AppCompatActivity {
         ((MyApplication) this.getApplication()).setitsDark(itsDark);
         android.support.constraint.ConstraintLayout lLayout = findViewById(R.id.layout_alert);
         if (itsDark) {
+            Log.d(TAG, "updateColors: Its dark");
             //Set Brightness to default
             WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
             layoutParams.screenBrightness = -1;
             getWindow().setAttributes(layoutParams);
 
-            lLayout.setBackgroundColor(getResources().getColor(R.color.black));
+            if(backgroundPath.equals("")) {
+               lLayout.setBackgroundColor(getResources().getColor(R.color.black));
+            }
+            btnOK.setBackgroundColor(getResources().getColor(R.color.black));
+            btnOK.setTextColor(getResources().getColor(R.color.white));
+            btnClose.setBackgroundColor(getResources().getColor(R.color.black));
+            btnClose.setTextColor(getResources().getColor(R.color.white));
             tvAlertbody.setTextColor(getResources().getColor(R.color.white));
             actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
             navbarTitle.setTextColor(getResources().getColor(R.color.white));
         } else {
+            Log.d(TAG, "updateColors: Its NOT dark");
             if (sharedPrefs.getBoolean("prefBrightnessOverride", false)) {
                 //Set Brightness to 100%
                 WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
@@ -248,7 +285,13 @@ public class AlertActivity extends AppCompatActivity {
                 getWindow().setAttributes(layoutParams);
             }
 
-            lLayout.setBackgroundColor(getResources().getColor(R.color.white));
+            if(backgroundPath.equals("")) {
+                lLayout.setBackgroundColor(getResources().getColor(R.color.white));
+            }
+            btnOK.setBackgroundColor(getResources().getColor(R.color.white));
+            btnOK.setTextColor(getResources().getColor(R.color.black));
+            btnClose.setBackgroundColor(getResources().getColor(R.color.white));
+            btnClose.setTextColor(getResources().getColor(R.color.black));
             tvAlertbody.setTextColor(getResources().getColor(R.color.black));
             actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
             navbarTitle.setTextColor(getResources().getColor(R.color.black));
@@ -264,7 +307,17 @@ public class AlertActivity extends AppCompatActivity {
                 finish();
                 return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
-                btnOK.performClick();
+                if (type != 2) {
+                    btnOK.performClick();
+                }
+                switch (type){
+                    case 2:
+                        finish();
+                        break;
+                    default:
+                        btnOK.performClick();
+                        break;
+                }
                 return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
 

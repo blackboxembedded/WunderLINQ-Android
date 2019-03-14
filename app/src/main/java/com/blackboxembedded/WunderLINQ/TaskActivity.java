@@ -644,6 +644,7 @@ public class TaskActivity extends AppCompatActivity {
                         break;
                     case 4:
                         //Take photo
+                        Log.d(TAG,"Take Rear Photo");
                         boolean cameraPerms = false;
                         boolean writePerms = false;
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -694,6 +695,7 @@ public class TaskActivity extends AppCompatActivity {
                         break;
                     case 5:
                         //Take selfie
+                        Log.d(TAG,"Take Front Photo");
                         boolean selfieCameraPerms = false;
                         boolean selfieWritePerms = false;
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

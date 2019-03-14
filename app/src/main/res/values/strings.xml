@@ -375,6 +375,7 @@
     <string name="alert_btn_close">Close</string>
     <string name="alert_title_fuel">Low Fuel</string>
     <string name="alert_label_fuel">Route to the nearest fuel station?"</string>
+    <string name="alert_title_photopreview">Photo Preview</string>
 
     <!-- LoggingService -->
     <string name="time_header">Time</string>
@@ -701,6 +702,8 @@
     <string name="pref_fuelAlert_summary">Prompt to route to nearest fuel station when low fuel fault is present</string>
     <string name="debug_settings_title">Debug Settings</string>
     <string name="advanced_settings_title">Advanced Settings</string>
+    <string name="pref_photopreview_name">Photo Preview</string>
+    <string name="pref_photopreview_summary">Displays the photo after capture</string>
     <string name="pref_autolaunch_name">Auto Launch App</string>
     <string name="pref_autolaunch_summary">Auto launch WunderLINQ app when WunderLINQ hardware connects</string>
     <string name="pref_debuglogging_name">Enable Debug Logging</string>

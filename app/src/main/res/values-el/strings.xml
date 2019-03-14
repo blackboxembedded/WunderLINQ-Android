@@ -370,4 +370,7 @@
     <string name="pref_contacts_filter_title">Contacts Display</string>
     <string name="contacts_filter_all">All</string>
     <string name="contacts_filter_favorites">Favorites</string>
+    <string name="pref_photopreview_name">Photo Preview</string>
+    <string name="pref_photopreview_summary">Displays the photo after capture</string>
+    <string name="alert_title_photopreview">Photo Preview</string>
 </resources>

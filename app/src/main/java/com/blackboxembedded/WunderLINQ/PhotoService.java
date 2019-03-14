@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
@@ -31,6 +32,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -50,6 +52,7 @@ import java.util.Date;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static java.lang.Math.abs;
 
 /*
@@ -312,9 +315,10 @@ public class PhotoService extends Service {
                 CameraCharacteristics characteristics
                         = manager.getCameraCharacteristics(cameraId);
 
-                // We don't use a front facing camera in this sample.
                 Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
-                if (facing != null && facing == CAMERACHOICE) {
+                Log.d(TAG,"Current Camera: " + facing);
+                if (facing != null && facing != CAMERACHOICE) {
+                    Log.d(TAG,"Continue");
                     continue;
                 }
 
@@ -685,7 +689,16 @@ public class PhotoService extends Service {
                             Log.d(TAG,"Location: " + location.toString());
                             storeGeoCoordsToImage(mFile, location);
                         }
-
+                        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
+                        if (sharedPrefs.getBoolean("prefPhotoPreview",false)) {
+                            Intent alertIntent = new Intent(MyApplication.getContext(), AlertActivity.class);
+                            alertIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
+                            alertIntent.putExtra("TYPE", 2);
+                            alertIntent.putExtra("TITLE", MyApplication.getContext().getResources().getString(R.string.alert_title_photopreview));
+                            alertIntent.putExtra("BODY", "");
+                            alertIntent.putExtra("BACKGROUND", mFile.getAbsolutePath());
+                            MyApplication.getContext().startActivity(alertIntent);
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -765,6 +778,7 @@ public class PhotoService extends Service {
                 Log.d(TAG, "Camera Choice: " + CAMERACHOICE);
             }
         }
+        openCamera(MAX_PREVIEW_WIDTH,MAX_PREVIEW_HEIGHT);
         File root = new File( Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_DCIM), "/WunderLINQ/");
         if(!root.exists()){
@@ -808,16 +822,13 @@ public class PhotoService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreate");
-
         startBackgroundThread();
-        openCamera(MAX_PREVIEW_WIDTH,MAX_PREVIEW_HEIGHT);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy");
-
         closeCamera();
         stopBackgroundThread();
     }
