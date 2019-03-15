@@ -338,7 +338,7 @@ public class ContactListActivity extends AppCompatActivity {
                         normalNum = cursor.getString(normalizedNumIndex);
 
                         if (phoneType != null && normalNum != null) {
-                            if((phoneType.equals("1")) || phoneType.equals("2") || phoneType.equals("3")) {
+                            if((phoneType.equals("0")) || (phoneType.equals("1")) || phoneType.equals("2") || phoneType.equals("3")) {
                                 if (normalizedNumbersAlreadyFound.add(normalNum.replaceAll("\\p{C}", ""))) {
                                     Log.d(TAG, "Adding Display Name: " + displayName + ", NN: " + normalNum + ", " + phoneType);
                                     contacts.add(displayName + " (" + typeIDtoString(Integer.parseInt(phoneType)) + ")");
