@@ -41,7 +41,7 @@ import java.util.Date;
 public class LoggingService extends Service implements LocationListener, GoogleApiClient
         .ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String TAG = "WunderLINQ";
+    private static final String TAG = "LoggingSvc";
 
     private SharedPreferences sharedPrefs;
 
@@ -118,22 +118,35 @@ public class LoggingService extends Service implements LocationListener, GoogleA
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Start foreground service to avoid unexpected kill
+        /*
+        Intent resumeReceive = new Intent(this, LoggingNotificationReceiver.class).setAction(LoggingNotificationReceiver.RESUME_ACTION);
+        PendingIntent pendingIntentResume = PendingIntent.getBroadcast(this, LoggingNotificationReceiver.REQUEST_CODE_NOTIFICATION, resumeReceive, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Action actionResume = new NotificationCompat.Action.Builder(R.drawable.ic_pause, "resume", pendingIntentResume).build();
+        */
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, this.getString(R.string.title_logging_notification),
-                    NotificationManager.IMPORTANCE_DEFAULT);
-            channel.setShowBadge(false);
-            channel.setSound(null, null);
-            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            manager.createNotificationChannel(channel);
-        }
+        Intent stopReceive = new Intent(this, LoggingNotificationReceiver.class).setAction(LoggingNotificationReceiver.STOP_ACTION);
+        PendingIntent pendingIntentStop = PendingIntent.getBroadcast(this, LoggingNotificationReceiver.REQUEST_CODE_NOTIFICATION, stopReceive, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Action actionStop = new NotificationCompat.Action.Builder(R.drawable.ic_stop, getResources().getString(R.string.btn_logging_notification_stop), pendingIntentStop).build();
+
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setChannelId(CHANNEL_ID)
                 .setContentTitle(getResources().getString(R.string.title_logging_notification))
                 .setContentText("")
                 .setContentIntent(contentIntent)
-                .setSmallIcon(R.drawable.ic_road);
+                .setSmallIcon(R.drawable.ic_road)
+                //.addAction(actionResume)
+                .addAction(actionStop);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, this.getString(R.string.title_logging_notification),
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setShowBadge(false);
+            channel.setSound(null, null);
+            manager.createNotificationChannel(channel);
+        }
+
         Notification notification = builder.build();
         startForeground(1234, notification);
 

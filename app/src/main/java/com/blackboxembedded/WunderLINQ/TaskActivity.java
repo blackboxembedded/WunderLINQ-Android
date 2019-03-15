@@ -95,6 +95,7 @@ public class TaskActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG,"In oncreate");
         super.onCreate(savedInstanceState);
 
         AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
@@ -103,6 +104,7 @@ public class TaskActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_task);
         gridview = findViewById(R.id.gridview_tasks);
+        gridview.setDrawSelectorOnTop(false);
         gridview.setOnTouchListener(new GridOnSwipeTouchListener(this) {
             @Override
             public void onSwipeLeft() {
@@ -154,6 +156,7 @@ public class TaskActivity extends AppCompatActivity {
 
     @Override
     public void onResume() {
+        Log.d(TAG,"In onresume");
         super.onResume();
         if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
             updateColors(true);
@@ -161,6 +164,11 @@ public class TaskActivity extends AppCompatActivity {
             updateColors(false);
         }
         displayTasks();
+        if(lastPosition != -1) {
+            Log.d(TAG,"onresume: setting selection");
+            gridview.setSelection(lastPosition);
+        }
+
         if (sharedPrefs.getBoolean("prefAutoNightMode", false)) {
             sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
@@ -180,6 +188,7 @@ public class TaskActivity extends AppCompatActivity {
 
     @Override
     public void onDestroy() {
+        Log.d(TAG,"ondestroy");
         super.onDestroy();
         sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
@@ -469,6 +478,7 @@ public class TaskActivity extends AppCompatActivity {
             x = x + 1 ;
         }
 
+        gridview.setDrawSelectorOnTop(false);
         gridview.setAdapter(new TaskAdapter(this,taskTitle,taskIcon,itsDark));
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
@@ -1145,6 +1155,10 @@ public class TaskActivity extends AppCompatActivity {
             navbarTitle.setTextColor(getResources().getColor(R.color.black));
             backButton.setColorFilter(getResources().getColor(R.color.black));
             forwardButton.setColorFilter(getResources().getColor(R.color.black));
+        }
+        if(lastPosition != -1) {
+            Log.d(TAG,"updatecolors: setting selection");
+            gridview.setSelection(lastPosition);
         }
     }
 

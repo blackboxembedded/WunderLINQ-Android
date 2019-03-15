@@ -260,7 +260,6 @@ public class AlertActivity extends AppCompatActivity {
         ((MyApplication) this.getApplication()).setitsDark(itsDark);
         android.support.constraint.ConstraintLayout lLayout = findViewById(R.id.layout_alert);
         if (itsDark) {
-            Log.d(TAG, "updateColors: Its dark");
             //Set Brightness to default
             WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
             layoutParams.screenBrightness = -1;
@@ -277,7 +276,6 @@ public class AlertActivity extends AppCompatActivity {
             actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
             navbarTitle.setTextColor(getResources().getColor(R.color.white));
         } else {
-            Log.d(TAG, "updateColors: Its NOT dark");
             if (sharedPrefs.getBoolean("prefBrightnessOverride", false)) {
                 //Set Brightness to 100%
                 WindowManager.LayoutParams layoutParams = getWindow().getAttributes();

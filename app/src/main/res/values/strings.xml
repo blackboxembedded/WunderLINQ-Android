@@ -336,7 +336,6 @@
     <string name="task_title_stop_record">Stop Recording</string>
     <string name="task_title_start_trip">Start Trip Log</string>
     <string name="task_title_stop_trip">Stop Trip Log</string>
-    <string name="title_logging_notification">WunderLINQ Trip Recording Active</string>
     <string name="task_title_waypoint">Save Waypoint</string>
     <string name="task_title_waypoint_nav">Navigate to Waypoint</string>
     <string name="task_title_voicecontrol">Voice Assistant</string>
@@ -378,6 +377,8 @@
     <string name="alert_title_photopreview">Photo Preview</string>
 
     <!-- LoggingService -->
+    <string name="title_logging_notification">WunderLINQ Trip Recording Active</string>
+    <string name="btn_logging_notification_stop">Stop Recording</string>
     <string name="time_header">Time</string>
     <string name="latitude_header">Latitude</string>
     <string name="longitude_header">Longitude</string>
