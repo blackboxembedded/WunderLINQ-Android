@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class AlertActivity extends AppCompatActivity {
@@ -39,6 +40,7 @@ public class AlertActivity extends AppCompatActivity {
     Button btnClose;
     TextView navbarTitle;
     ActionBar actionBar;
+    ImageView backgroundImageView;
 
     private SharedPreferences sharedPrefs;
 
@@ -104,19 +106,17 @@ public class AlertActivity extends AppCompatActivity {
         }
         tvAlertbody.setText(body);
 
-        if (type == 2){
-            btnOK.setVisibility(View.INVISIBLE);
-        }
         switch (type){
             case 2:
                 btnOK.setVisibility(View.INVISIBLE);
+                if(!backgroundPath.equals("")){
+                    Log.d(TAG,"Setting Background Image");
+                    backgroundImageView = findViewById(R.id.imageViewBackground);
+                    backgroundImageView.setImageDrawable(Drawable.createFromPath(backgroundPath));
+                }
                 break;
             default:
                 break;
-        }
-        if(!backgroundPath.equals("")){
-            Log.d(TAG,"Setting Background Image");
-            view.setBackground(Drawable.createFromPath(backgroundPath));
         }
         showActionBar();
         // Sensor Stuff

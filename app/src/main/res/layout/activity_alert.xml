@@ -5,7 +5,14 @@
     android:id="@+id/layout_alert"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:scaleType="centerCrop"
     tools:context=".AlertActivity">
+
+    <ImageView
+        android:id="@+id/imageViewBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/guidelineVertical"
