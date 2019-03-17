@@ -164,11 +164,6 @@ public class TaskActivity extends AppCompatActivity {
             updateColors(false);
         }
         displayTasks();
-        if(lastPosition != -1) {
-            Log.d(TAG,"onresume: setting selection");
-            gridview.setSelection(lastPosition);
-        }
-
         if (sharedPrefs.getBoolean("prefAutoNightMode", false)) {
             sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
@@ -1155,10 +1150,6 @@ public class TaskActivity extends AppCompatActivity {
             navbarTitle.setTextColor(getResources().getColor(R.color.black));
             backButton.setColorFilter(getResources().getColor(R.color.black));
             forwardButton.setColorFilter(getResources().getColor(R.color.black));
-        }
-        if(lastPosition != -1) {
-            Log.d(TAG,"updatecolors: setting selection");
-            gridview.setSelection(lastPosition);
         }
     }
 

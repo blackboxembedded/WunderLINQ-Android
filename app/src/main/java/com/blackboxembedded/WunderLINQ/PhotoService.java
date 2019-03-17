@@ -616,7 +616,20 @@ public class PhotoService extends Service {
         // We have to take that into account and rotate JPEG properly.
         // For devices with orientation of 90, we simply return our mapping from ORIENTATIONS.
         // For devices with orientation of 270, we need to rotate the JPEG 180 degrees.
-        return (ORIENTATIONS.get(rotation) + mSensorOrientation + 270) % 360;
+        int orientation = (ORIENTATIONS.get(rotation) + mSensorOrientation + 270) % 360;
+        if (CAMERACHOICE == CameraCharacteristics.LENS_FACING_FRONT){
+            switch (orientation){
+                case 0:
+                    orientation = orientation + 180;
+                    break;
+                case 180:
+                    orientation = orientation - 180;
+                    break;
+                default:
+                    break;
+            }
+        }
+        return orientation;
     }
 
     /**
