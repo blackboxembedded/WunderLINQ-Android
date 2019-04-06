@@ -266,6 +266,7 @@ public class Data {
         Data.gear = null;
         Data.voltage = null;
         Data.throttlePosition = null;
+        Data.ambientLight = null;
         Data.speed = null;
         Data.avgSpeed = null;
         Data.currentConsumption = null;
