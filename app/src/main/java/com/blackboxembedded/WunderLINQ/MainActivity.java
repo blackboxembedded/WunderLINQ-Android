@@ -1285,7 +1285,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     // Update Display
     private void updateDisplay(){
-        Log.d(TAG,"updateDisplay()");
+        //Log.d(TAG,"updateDisplay()");
         gridLayout = findViewById(R.id.gridLayout);
 
         if (!sharedPrefs.getBoolean("prefMotorcycleData", false)) {

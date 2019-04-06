@@ -35,6 +35,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -88,6 +89,17 @@ public class BluetoothLeService extends Service {
     float[] mGravity = new float[3];
     float[] mGeomagnetic = new float[3];
     private int lastDirection;
+
+    private static byte[] lastMessage00 = new byte[8];
+    private static byte[] lastMessage01 = new byte[8];
+    private static byte[] lastMessage04 = new byte[8];
+    private static byte[] lastMessage05 = new byte[8];
+    private static byte[] lastMessage06 = new byte[8];
+    private static byte[] lastMessage07 = new byte[8];
+    private static byte[] lastMessage08 = new byte[8];
+    private static byte[] lastMessage09 = new byte[8];
+    private static byte[] lastMessage0A = new byte[8];
+    private static byte[] lastMessage0C = new byte[8];
 
     /**
      * GATT Status constants
@@ -332,6 +344,16 @@ public class BluetoothLeService extends Service {
                 String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
                         "Disconnected";
                 Log.d(TAG,dataLog);
+                lastMessage00 = new byte[8];
+                lastMessage01 = new byte[8];
+                lastMessage04 = new byte[8];
+                lastMessage05 = new byte[8];
+                lastMessage06 = new byte[8];
+                lastMessage07 = new byte[8];
+                lastMessage08 = new byte[8];
+                lastMessage09 = new byte[8];
+                lastMessage0A = new byte[8];
+                lastMessage0C = new byte[8];
                 Data.clear();
                 FaultStatus.clear();
             }
@@ -487,17 +509,90 @@ public class BluetoothLeService extends Service {
                         debugLogger = null;
                     }
                 }
+                //Check if message changed
+                Boolean process = false;
+                switch (data[0]){
+                    case 0x00:
+                        if(!Arrays.equals(lastMessage00, data)){
+                            lastMessage00 = data;
+                            process = true;
+                        }
+                        break;
+                    case 0x01:
+                        if(!Arrays.equals(lastMessage01, data)){
+                            lastMessage01 = data;
+                            process = true;
+                        }
+                        break;
+                    case 0x04:
 
-                parseMessage(data);
+                        if(!Arrays.equals(lastMessage04, data)){
+                            lastMessage04 = data;
+                            process = true;
+                        }
+                        break;
+                    case 0x05:
+                        if(!Arrays.equals(lastMessage05, data)){
+                            lastMessage05 = data;
+                            process = true;
+                        }
+                        break;
+                    case 0x06:
+                        if(!Arrays.equals(lastMessage06, data)){
+                            lastMessage06 = data;
+                            process = true;
+                        }
+                        break;
+                    case 0x07:
+                        if(!Arrays.equals(lastMessage07, data)){
+                            lastMessage07 = data;
+                            process = true;
+                        }
+                        break;
+                    case 0x08:
+                        if(!Arrays.equals(lastMessage08, data)){
+                            lastMessage08 = data;
+                            process = true;
+                        }
+                        break;
+                    case 0x09:
+                        if(!Arrays.equals(lastMessage09, data)){
+                            lastMessage09 = data;
+                            process = true;
+                        }
+                        break;
+                    case 0x0a:
+                        if(!Arrays.equals(lastMessage0A, data)){
+                            lastMessage0A = data;
+                            process = true;
+                        }
+                        break;
+                    case 0x0c:
+                        if(!Arrays.equals(lastMessage0C, data)){
+                            lastMessage0C = data;
+                            process = true;
+                        }
+                        break;
+                }
+
+                if(process) {
+                    parseMessage(data);
+                    /*
+                     * Sending the broad cast so that it can be received on registered
+                     * receivers
+                     */
+                    intent.putExtras(mBundle);
+                    MyApplication.getContext().sendBroadcast(intent);
+                }
             }
+        } else {
+            /*
+             * Sending the broad cast so that it can be received on registered
+             * receivers
+             */
+            intent.putExtras(mBundle);
+            MyApplication.getContext().sendBroadcast(intent);
         }
-
-        /*
-         * Sending the broad cast so that it can be received on registered
-         * receivers
-         */
-        intent.putExtras(mBundle);
-        MyApplication.getContext().sendBroadcast(intent);
     }
 
     /**
