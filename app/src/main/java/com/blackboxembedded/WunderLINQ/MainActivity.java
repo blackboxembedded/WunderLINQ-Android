@@ -2315,6 +2315,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         builder.show();
                     }
                 }
+                default:
+                    Log.d(TAG, "Unknown Permissions Request Code");
             }
         }
 
