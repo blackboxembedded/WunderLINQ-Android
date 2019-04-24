@@ -22,6 +22,7 @@ import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
 import android.media.session.PlaybackState;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -33,6 +34,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -43,7 +45,7 @@ import android.widget.TextView;
 import java.util.List;
 import java.util.Set;
 
-public class MusicActivity extends AppCompatActivity {
+public class MusicActivity extends AppCompatActivity implements View.OnTouchListener {
 
     public final static String TAG = "WunderLINQ";
 
@@ -75,6 +77,10 @@ public class MusicActivity extends AppCompatActivity {
     private Handler mHandler = new Handler();
 
     private boolean alertDiagUp = true;
+
+    private GestureDetectorListener gestureDetector;
+
+    private CountDownTimer cTimer = null;
 
     private OnClickListener mClickListener = new OnClickListener() {
 
@@ -158,18 +164,38 @@ public class MusicActivity extends AppCompatActivity {
         setContentView(R.layout.activity_music);
 
         View view = findViewById(R.id.layout_music);
-        view.setOnTouchListener(new OnSwipeTouchListener(this) {
+
+        gestureDetector = new GestureDetectorListener(this){
+
+            @Override
+            public void onPressLong() {
+
+            }
+
+            @Override
+            public void onSwipeUp() {
+
+            }
+
+            @Override
+            public void onSwipeDown() {
+
+            }
+
             @Override
             public void onSwipeLeft() {
                 Intent backIntent = new Intent(MusicActivity.this, TaskActivity.class);
                 startActivity(backIntent);
             }
+
             @Override
             public void onSwipeRight() {
                 Intent backIntent = new Intent(MusicActivity.this, MainActivity.class);
                 startActivity(backIntent);
             }
-        });
+        };
+
+        view.setOnTouchListener(this);
 
         mPrevButton = findViewById(R.id.prev_button);
         mPlayPauseButton = findViewById(R.id.play_pause_button);
@@ -247,11 +273,14 @@ public class MusicActivity extends AppCompatActivity {
         if (sharedPrefs.getBoolean("prefAutoNightMode", false)) {
             sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
+        getSupportActionBar().show();
+        startTimer();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        cancelTimer();
         mHandler.removeCallbacks(mUpdateMetaData);
         sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
@@ -259,6 +288,7 @@ public class MusicActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
+        cancelTimer();
         mHandler.removeCallbacks(mUpdateMetaData);
         sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
@@ -266,8 +296,17 @@ public class MusicActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        cancelTimer();
         mHandler.removeCallbacks(mUpdateMetaData);
         sensorManager.unregisterListener(sensorEventListener, lightSensor);
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        getSupportActionBar().show();
+        startTimer();
+        gestureDetector.onTouch(v, event);
+        return true;
     }
 
     private void showActionBar(){
@@ -540,5 +579,23 @@ public class MusicActivity extends AppCompatActivity {
             default:
                 return super.onKeyUp(keyCode, event);
         }
+    }
+
+    //start timer function
+    void startTimer() {
+        cTimer = new CountDownTimer(10000, 1000) {
+            public void onTick(long millisUntilFinished) {
+            }
+            public void onFinish() {
+                getSupportActionBar().hide();
+            }
+        };
+        cTimer.start();
+    }
+
+    //cancel timer
+    void cancelTimer() {
+        if(cTimer!=null)
+            cTimer.cancel();
     }
 }

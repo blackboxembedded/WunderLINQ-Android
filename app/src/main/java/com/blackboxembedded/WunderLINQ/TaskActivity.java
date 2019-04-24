@@ -25,6 +25,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v7.app.ActionBar;
@@ -33,6 +34,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -76,6 +78,8 @@ public class TaskActivity extends AppCompatActivity {
     SensorManager sensorManager;
     Sensor lightSensor;
 
+    private CountDownTimer cTimer = null;
+
     private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
     private static final int PERMISSION_REQUEST_CAMERA = 100;
     private static final int PERMISSION_REQUEST_CALL_PHONE = 101;
@@ -106,6 +110,13 @@ public class TaskActivity extends AppCompatActivity {
         gridview = findViewById(R.id.gridview_tasks);
         gridview.setDrawSelectorOnTop(false);
         gridview.setOnTouchListener(new GridOnSwipeTouchListener(this) {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                getSupportActionBar().show();
+                startTimer();
+                return super.onTouch(v,event);
+            }
             @Override
             public void onSwipeLeft() {
                 Intent backIntent = new Intent(TaskActivity.this, MainActivity.class);
@@ -117,6 +128,7 @@ public class TaskActivity extends AppCompatActivity {
                 startActivity(backIntent);
             }
         });
+
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -167,24 +179,28 @@ public class TaskActivity extends AppCompatActivity {
         if (sharedPrefs.getBoolean("prefAutoNightMode", false)) {
             sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
+        getSupportActionBar().show();
+        startTimer();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        cancelTimer();
         sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        cancelTimer();
         sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     @Override
     public void onDestroy() {
-        Log.d(TAG,"ondestroy");
         super.onDestroy();
+        cancelTimer();
         sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
@@ -1190,5 +1206,23 @@ public class TaskActivity extends AppCompatActivity {
             default:
                 return super.onKeyUp(keyCode, event);
         }
+    }
+
+    //start timer function
+    void startTimer() {
+        cTimer = new CountDownTimer(10000, 1000) {
+            public void onTick(long millisUntilFinished) {
+            }
+            public void onFinish() {
+                getSupportActionBar().hide();
+            }
+        };
+        cTimer.start();
+    }
+
+    //cancel timer
+    void cancelTimer() {
+        if(cTimer!=null)
+            cTimer.cancel();
     }
 }

@@ -34,6 +34,7 @@ import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -132,6 +133,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private GestureDetectorListener gestureDetector;
 
     private boolean inPIP = false;
+
+    private CountDownTimer cTimer = null;
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -787,6 +790,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         startActivity(aboutIntent);
                         break;
                     case R.id.action_exit:
+                        BluetoothLeService.clearNotifications();
                         finish();
                         break;
                 }
@@ -797,6 +801,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        getSupportActionBar().show();
+        startTimer();
         gestureDetector.onTouch(v, event);
         return true;
     }
@@ -943,12 +949,16 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         } else {
             updateColors(false);
         }
+
+        getSupportActionBar().show();
+        startTimer();
     }
 
     @Override
     protected void onDestroy() {
         Log.d(TAG,"In onDestroy");
         super.onDestroy();
+        cancelTimer();
         try {
             unregisterReceiver(mGattUpdateReceiver);
             unregisterReceiver(mBondingBroadcast);
@@ -964,6 +974,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     public void onStop() {
         Log.d(TAG,"In onStop");
         super.onStop();
+        cancelTimer();
         try {
             unregisterReceiver(mGattUpdateReceiver);
             unregisterReceiver(mBondingBroadcast);
@@ -979,6 +990,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     protected void onPause() {
         Log.d(TAG,"In onPause");
         super.onPause();
+        cancelTimer();
         try {
             if (!sharedPrefs.getBoolean("prefPIP", false)) {
                 unregisterReceiver(mGattUpdateReceiver);
@@ -2417,5 +2429,23 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         }
 
         return false;
+    }
+
+    //start timer function
+    void startTimer() {
+        cTimer = new CountDownTimer(10000, 1000) {
+            public void onTick(long millisUntilFinished) {
+            }
+            public void onFinish() {
+                getSupportActionBar().hide();
+            }
+        };
+        cTimer.start();
+    }
+
+    //cancel timer
+    void cancelTimer() {
+        if(cTimer!=null)
+            cTimer.cancel();
     }
 }
