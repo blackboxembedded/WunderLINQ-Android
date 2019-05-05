@@ -1071,28 +1071,28 @@ public class BluetoothLeService extends Service {
                 }
 
                 // Tire Pressure
-                if (((data[4] & 0xFF) != 0xFF) && ((data[5] & 0xFF) != 0xFF)){
+                if ((data[4] & 0xFF) != 0xFF) {
                     double rdcFront = (data[4] & 0xFF) / 50.0;
                     Data.setFrontTirePressure(rdcFront);
-                    if (sharedPrefs.getBoolean("prefTPMSAlert",false)) {
-                        int pressureThreshold = Integer.parseInt(sharedPrefs.getString("prefTPMSAlertThreshold","-1"));
+                    if (sharedPrefs.getBoolean("prefTPMSAlert", false)) {
+                        int pressureThreshold = Integer.parseInt(sharedPrefs.getString("prefTPMSAlertThreshold", "-1"));
                         if (pressureThreshold >= 0) {
                             String pressureFormat = sharedPrefs.getString("prefPressureF", "0");
                             if (pressureFormat.contains("1")) {
                                 // KPa
-                                if (pressureThreshold >= Utils.barTokPa(rdcFront)){
+                                if (pressureThreshold >= Utils.barTokPa(rdcFront)) {
                                     FaultStatus.setfrontTirePressureCriticalActive(true);
                                     updateNotification();
                                 }
                             } else if (pressureFormat.contains("2")) {
                                 // Kg-f
-                                if (pressureThreshold >= Utils.barTokgf(rdcFront)){
+                                if (pressureThreshold >= Utils.barTokgf(rdcFront)) {
                                     FaultStatus.setfrontTirePressureCriticalActive(true);
                                     updateNotification();
                                 }
                             } else if (pressureFormat.contains("3")) {
                                 // Psi
-                                if (pressureThreshold >= Utils.barToPsi(rdcFront)){
+                                if (pressureThreshold >= Utils.barToPsi(rdcFront)) {
                                     FaultStatus.setfrontTirePressureCriticalActive(true);
                                     updateNotification();
                                 }
@@ -1108,7 +1108,8 @@ public class BluetoothLeService extends Service {
                             }
                         }
                     }
-
+                }
+                if ((data[5] & 0xFF) != 0xFF){
                     double rdcRear = (data[5] & 0xFF) / 50.0;
                     Data.setRearTirePressure(rdcRear);
                     if (sharedPrefs.getBoolean("prefTPMSAlert",false)) {
