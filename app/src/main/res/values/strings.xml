@@ -558,12 +558,14 @@
     <string name="nav_app_locus">Locus</string>
     <string name="nav_app_waze">Waze</string>
     <string name="nav_app_mapsme">Maps.me</string>
+    <string name="nav_app_osmand">OsmAnd</string>
     <string-array name="nav_apps_array" translatable="false">
         <item name="1">@string/nav_app_default</item>
         <item name="2">@string/nav_app_google</item>
         <item name="3">@string/nav_app_locus</item>
         <item name="4">@string/nav_app_waze</item>
         <item name="5">@string/nav_app_mapsme</item>
+        <item name="6">@string/nav_app_osmand</item>
     </string-array>
     <string-array name="nav_apps_arrayValues" translatable="false">
         <item name="1">1</item>
@@ -571,6 +573,7 @@
         <item name="3">3</item>
         <item name="4">4</item>
         <item name="5">5</item>
+        <item name="6">6</item>
     </string-array>
     <string name="pref_contacts_filter_title">Contacts Display</string>
     <string name="contacts_filter_favorites">Favorites</string>

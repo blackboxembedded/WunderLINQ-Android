@@ -55,7 +55,7 @@ import java.util.List;
 import static android.content.Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT;
 
 
-public class TaskActivity extends AppCompatActivity {
+public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOsmandMissingListener{
 
     public final static String TAG = "TaskActivity";
 
@@ -86,6 +86,11 @@ public class TaskActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_READ_CONTACTS = 102;
     private static final int PERMISSION_REQUEST_WRITE_STORAGE = 112;
     private static final int PERMISSION_REQUEST_RECORD_AUDIO = 122;
+
+    @Override
+    public void osmandMissing() {
+        //OsmAndMissingDialogFragment().show(supportFragmentManager, null);
+    }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -512,6 +517,9 @@ public class TaskActivity extends AppCompatActivity {
                         } else if (navApp.equals("5")){
                             //Maps.me
                             url = "mapsme://?id=WunderLINQ&backurl=wunderlinq://&appname=WunderLINQ";
+                        } else if (navApp.equals("6")){
+                            // OsmAnd
+                            url = "http://osmand.net/go";
                         }
                         try {
                             Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
@@ -576,7 +584,13 @@ public class TaskActivity extends AppCompatActivity {
                                             } else if (navApp.equals("5")){
                                                 //Maps.me
                                                 navUrl = "mapsme://route?sll=" + String.valueOf(currentLocation.getLatitude()) + "," + String.valueOf(currentLocation.getLongitude()) + "&saddr=Start&dll=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&daddr=Home&type=vehicle";
+                                            } else if (navApp.equals("6")){
+                                                // OsmAnd
+                                                navUrl = "osmand.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
+                                                OsmAndHelper osmAndHelper = new OsmAndHelper(TaskActivity.this, OsmAndHelper.REQUEST_OSMAND_API, TaskActivity.this);
+                                                osmAndHelper.navigate("Start",currentLocation.getLatitude(),currentLocation.getLongitude(),"Destination",location.latitude,location.longitude,"motorcycle", true);
                                             }
+
                                             try {
                                                 Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
                                                 navIntent.setData(Uri.parse(navUrl));
