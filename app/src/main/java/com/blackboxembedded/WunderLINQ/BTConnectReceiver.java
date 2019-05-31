@@ -33,35 +33,37 @@ public class BTConnectReceiver extends BroadcastReceiver {
                 // Get the BluetoothDevice object from the Intent
                 BluetoothDevice device = intent
                         .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                if (device.getName().contains("WunderLINQ")) {
-                    String topPackageName;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        AppOpsManager appOps = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
-                        int mode = appOps.checkOpNoThrow(OPSTR_GET_USAGE_STATS, myUid(), context.getPackageName());
-                        if (mode == MODE_ALLOWED) {
-                            UsageStatsManager mUsageStatsManager = (UsageStatsManager) MyApplication.getContext().getSystemService(Context.USAGE_STATS_SERVICE);
-                            long currentTime = System.currentTimeMillis();
-                            // get usage stats for the last 10 seconds
-                            List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, currentTime - 1000 * 10, currentTime);
-                            // search for app with most recent last used time
-                            if (stats != null) {
-                                long lastUsedAppTime = 0;
-                                for (UsageStats usageStats : stats) {
-                                    //Log.d(TAG, "Package: " + usageStats.getPackageName() + ", LastTime Used: " + usageStats.getLastTimeUsed());
-                                    if (usageStats.getLastTimeUsed() > lastUsedAppTime) {
-                                        topPackageName = usageStats.getPackageName();
-                                        if (topPackageName.equals("com.blackboxembedded.wunderlinqdfu")) {
-                                            Log.d(TAG, "WunderLINQ DFU Running, not launching App");
-                                            return;
+                if (device != null) {
+                    if (device.getName().contains("WunderLINQ")) {
+                        String topPackageName;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            AppOpsManager appOps = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+                            int mode = appOps.checkOpNoThrow(OPSTR_GET_USAGE_STATS, myUid(), context.getPackageName());
+                            if (mode == MODE_ALLOWED) {
+                                UsageStatsManager mUsageStatsManager = (UsageStatsManager) MyApplication.getContext().getSystemService(Context.USAGE_STATS_SERVICE);
+                                long currentTime = System.currentTimeMillis();
+                                // get usage stats for the last 10 seconds
+                                List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, currentTime - 1000 * 10, currentTime);
+                                // search for app with most recent last used time
+                                if (stats != null) {
+                                    long lastUsedAppTime = 0;
+                                    for (UsageStats usageStats : stats) {
+                                        //Log.d(TAG, "Package: " + usageStats.getPackageName() + ", LastTime Used: " + usageStats.getLastTimeUsed());
+                                        if (usageStats.getLastTimeUsed() > lastUsedAppTime) {
+                                            topPackageName = usageStats.getPackageName();
+                                            if (topPackageName.equals("com.blackboxembedded.wunderlinqdfu")) {
+                                                Log.d(TAG, "WunderLINQ DFU Running, not launching App");
+                                                return;
+                                            }
                                         }
                                     }
+                                    Log.d(TAG, "WunderLINQ Connected, launching App");
+                                    // Start activity
+                                    Intent i = new Intent();
+                                    i.setClassName("com.blackboxembedded.WunderLINQ", "com.blackboxembedded.WunderLINQ.MainActivity");
+                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    context.startActivity(i);
                                 }
-                                Log.d(TAG, "WunderLINQ Connected, launching App");
-                                // Start activity
-                                Intent i = new Intent();
-                                i.setClassName("com.blackboxembedded.WunderLINQ", "com.blackboxembedded.WunderLINQ.MainActivity");
-                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                context.startActivity(i);
                             }
                         }
                     }

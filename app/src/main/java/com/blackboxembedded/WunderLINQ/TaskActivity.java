@@ -586,20 +586,21 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                                                 navUrl = "mapsme://route?sll=" + String.valueOf(currentLocation.getLatitude()) + "," + String.valueOf(currentLocation.getLongitude()) + "&saddr=Start&dll=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&daddr=Home&type=vehicle";
                                             } else if (navApp.equals("6")){
                                                 // OsmAnd
-                                                navUrl = "osmand.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
+                                                //navUrl = "osmand.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
                                                 OsmAndHelper osmAndHelper = new OsmAndHelper(TaskActivity.this, OsmAndHelper.REQUEST_OSMAND_API, TaskActivity.this);
                                                 osmAndHelper.navigate("Start",currentLocation.getLatitude(),currentLocation.getLongitude(),"Destination",location.latitude,location.longitude,"motorcycle", true);
                                             }
-
-                                            try {
-                                                Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                                                navIntent.setData(Uri.parse(navUrl));
-                                                if (android.os.Build.VERSION.SDK_INT >= 24) {
-                                                    navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                                            if (!navApp.equals("6")) {
+                                                try {
+                                                    Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                                                    navIntent.setData(Uri.parse(navUrl));
+                                                    if (android.os.Build.VERSION.SDK_INT >= 24) {
+                                                        navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                                                    }
+                                                    startActivity(navIntent);
+                                                } catch (ActivityNotFoundException ex) {
+                                                    // Add Alert
                                                 }
-                                                startActivity(navIntent);
-                                            } catch ( ActivityNotFoundException ex  ) {
-                                                // Add Alert
                                             }
                                         } catch (NullPointerException e) {
                                             e.printStackTrace();

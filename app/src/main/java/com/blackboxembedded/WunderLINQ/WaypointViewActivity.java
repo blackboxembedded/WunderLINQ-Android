@@ -37,7 +37,7 @@ import java.util.List;
 import static android.content.Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT;
 
 
-public class WaypointViewActivity extends AppCompatActivity implements OnMapReadyCallback  {
+public class WaypointViewActivity extends AppCompatActivity implements OnMapReadyCallback, OsmAndHelper.OnOsmandMissingListener  {
 
     public final static String TAG = "WptViewActivity";
 
@@ -52,6 +52,11 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
     private Double lon;
 
     private String navApp;
+
+    @Override
+    public void osmandMissing() {
+        //OsmAndMissingDialogFragment().show(supportFragmentManager, null);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -245,16 +250,26 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
                         + String.valueOf(currentLocation.getLongitude()) + "&saddr="
                         + getString(R.string.trip_view_waypoint_start_label) + "&dll="
                         + record.getData() + "&daddr=" + record.getLabel() + "&type=vehicle";
+            } else if (navApp.equals("6")){
+                // OsmAnd
+                String location[] = record.getData().split(",");
+                Double latitude =  Double.parseDouble(location[0]);
+                Double longitude =  Double.parseDouble(location[1]);
+                //navUrl = "osmand.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
+                OsmAndHelper osmAndHelper = new OsmAndHelper(WaypointViewActivity.this, OsmAndHelper.REQUEST_OSMAND_API, WaypointViewActivity.this);
+                osmAndHelper.navigate("Start",currentLocation.getLatitude(),currentLocation.getLongitude(),"Destination",latitude,longitude,"motorcycle", true);
             }
-            try {
-                Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                navIntent.setData(Uri.parse(navUrl));
-                if (android.os.Build.VERSION.SDK_INT >= 24) {
-                    navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+            if (!navApp.equals("6")) {
+                try {
+                    Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                    navIntent.setData(Uri.parse(navUrl));
+                    if (android.os.Build.VERSION.SDK_INT >= 24) {
+                        navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                    }
+                    startActivity(navIntent);
+                } catch (ActivityNotFoundException ex) {
+                    // Add Alert
                 }
-                startActivity(navIntent);
-            } catch ( ActivityNotFoundException ex  ) {
-                // Add Alert
             }
         } catch (SecurityException|NullPointerException e) {
             e.printStackTrace();
