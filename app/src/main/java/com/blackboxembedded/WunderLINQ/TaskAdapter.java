@@ -57,7 +57,7 @@ public class TaskAdapter extends BaseAdapter {
             if (itsDark){
                 textView.setTextColor(Color.WHITE);
             } else {
-                textView.setTextColor(Color.BLACK);
+                textView.setTextColor(mContext.getResources().getColorStateList(R.color.task_text_color_light));
             }
         } else {
             gridView = convertView;
