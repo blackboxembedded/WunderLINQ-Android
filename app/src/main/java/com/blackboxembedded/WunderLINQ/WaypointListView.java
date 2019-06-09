@@ -36,7 +36,7 @@ public class WaypointListView extends ArrayAdapter {
         if (itsDark){
             txtTitle.setTextColor(Color.WHITE);
         } else {
-            txtTitle.setTextColor(Color.BLACK);
+            txtTitle.setTextColor(context.getResources().getColorStateList(R.color.task_text_color_light));
         }
         return rowView;
     }

@@ -11,7 +11,9 @@
             android:gravity="center_vertical"
             android:text="test label"
             android:textAppearance="@android:style/TextAppearance.Material.Large"
-            android:textColor="@color/black"/>
+            android:textColor="@color/task_text_color_light"
+            android:textStyle="bold"
+            android:textSize="20sp"/>
 
     </TableRow>
 </TableLayout>
