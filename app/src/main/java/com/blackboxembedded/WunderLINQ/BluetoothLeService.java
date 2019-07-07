@@ -239,6 +239,7 @@ public class BluetoothLeService extends Service {
     @Override
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
+        clearNotifications();
         // The service is no longer used and is being destroyed
         sensorManager.unregisterListener(sensorEventListener, magnetometer);
         sensorManager.unregisterListener(sensorEventListener, accelerometer);
@@ -641,6 +642,7 @@ public class BluetoothLeService extends Service {
             Log.d(TAG,dataLog);
             Data.clear();
             FaultStatus.clear();
+            clearNotifications();
             close();
         }
     }
