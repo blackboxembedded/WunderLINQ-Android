@@ -243,8 +243,9 @@ public class LoggingService extends Service implements LocationListener, GoogleA
                         MyApplication.getContext().getResources().getString(R.string.fueleconomytwo_header) + "(" + consumptionUnit + ")," +
                         MyApplication.getContext().getResources().getString(R.string.fuelrange_header) + "(" + distanceUnit + ")" + "," +
                         MyApplication.getContext().getResources().getString(R.string.leanangle_header) + "," +
-                        MyApplication.getContext().getResources().getString(R.string.gforce_header) +
-                        MyApplication.getContext().getResources().getString(R.string.bearing_header) +
+                        MyApplication.getContext().getResources().getString(R.string.gforce_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.bearing_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.barometricpressure_header) + "(mBar)" +
                         "\n";
 
                 File logFile = new File( root, filename + curdatetime + ".csv" );
@@ -414,7 +415,7 @@ public class LoggingService extends Service implements LocationListener, GoogleA
                             + trip2 + "," + tripAuto + "," + speed + "," + avgSpeed + ","
                             + currentConsumption + "," + fuelEconomyOne + "," + fuelEconomyTwo + ","
                             + fuelRange + "," + Data.getLeanAngle() + "," + Data.getGForce() + ","
-                            + bearing + "\n");
+                            + bearing + "," + Data.getBarometricPressure() + "\n");
                     outFile.flush();
                     handler.postDelayed(runnable, loggingInterval);
                 }

@@ -76,6 +76,7 @@ public class BluetoothLeService extends Service {
     private Sensor magnetometer;
     private Sensor rotationVector;
     private Sensor gravity;
+    private Sensor barometer;
     int xAxis = SensorManager.AXIS_X;
     int yAxis = SensorManager.AXIS_Z;
 
@@ -88,6 +89,7 @@ public class BluetoothLeService extends Service {
     static final float ALPHA = 0.05f;
     float[] mGravity = new float[3];
     float[] mGeomagnetic = new float[3];
+
     private int lastDirection;
 
     private static byte[] lastMessage00 = new byte[8];
@@ -205,10 +207,12 @@ public class BluetoothLeService extends Service {
         magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         rotationVector = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         gravity = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        barometer = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
         sensorManager.registerListener(sensorEventListener, accelerometer, SensorManager.SENSOR_DELAY_UI);
         sensorManager.registerListener(sensorEventListener, magnetometer, SensorManager.SENSOR_DELAY_UI);
         sensorManager.registerListener(sensorEventListener, rotationVector, SensorManager.SENSOR_DELAY_GAME);
         sensorManager.registerListener(sensorEventListener, gravity, SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(sensorEventListener, barometer, SensorManager.SENSOR_DELAY_UI);
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -275,6 +279,9 @@ public class BluetoothLeService extends Service {
                 Data.setGForce(gforce);
             } else if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
                 mGeomagnetic = Utils.lowPass(event.values.clone(), mGeomagnetic, ALPHA);
+            } else if (event.sensor.getType() == Sensor.TYPE_PRESSURE) {
+                float[] mBarometricPressure = event.values;
+                Data.setBarometricPressure((double)mBarometricPressure[0]);
             }
             if (mGravity != null && mGeomagnetic != null) {
                 float R[] = new float[9];

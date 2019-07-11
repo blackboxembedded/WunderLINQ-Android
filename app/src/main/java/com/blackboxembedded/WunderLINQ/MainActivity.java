@@ -1825,6 +1825,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     value = bearing;
                 }
                 break;
+            case 24:
+                //barometric pressure
+                label = getString(R.string.barometricpressure_header) + " (mBar)";
+                if (Data.getBarometricPressure() != null) {
+                    value = String.valueOf(Utils.oneDigit.format(Data.getBarometricPressure()));
+                }
+                break;
             default:
 
                 break;

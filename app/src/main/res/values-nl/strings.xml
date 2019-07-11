@@ -351,4 +351,6 @@
     <string name="pref_photopreview_summary">Displays the photo after capture</string>
     <string name="alert_title_photopreview">Photo Preview</string>
     <string name="btn_logging_notification_stop">Stop Recording</string>
+    <string name="barometricpressure_header">Barometric Pressure</string>
+    <string name="nav_app_osmand">OsmAnd</string>
 </resources>

@@ -251,6 +251,15 @@ public class Data {
         Data.bearing = bearing;
     }
 
+    // barometric pressure
+    private static Double barometricPressure;
+    public static Double getBarometricPressure() {
+        return barometricPressure;
+    }
+    public static void setBarometricPressure(Double barometricPressure){
+        Data.barometricPressure = barometricPressure;
+    }
+
     // Utility functions
     public static void clear(){
         Data.lastLocation = null;
@@ -276,5 +285,6 @@ public class Data {
         Data.leanAngle = null;
         Data.gForce = null;
         Data.bearing = null;
+        Data.barometricPressure = null;
     }
 }
