@@ -374,4 +374,5 @@
     <string name="alert_title_photopreview">Photo Preview</string>
     <string name="barometricpressure_header">Barometric Pressure</string>
     <string name="nav_app_osmand">OsmAnd</string>
+    <string name="task_title_homescreen">Home Screen</string>
 </resources>

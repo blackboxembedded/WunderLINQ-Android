@@ -330,7 +330,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 getResources().getString(R.string.task_title_waypoint),
                 getResources().getString(R.string.task_title_waypoint_nav),
                 getResources().getString(R.string.task_title_voicecontrol),
-                getResources().getString(R.string.task_title_settings)
+                getResources().getString(R.string.task_title_settings),
+                getResources().getString(R.string.task_title_homescreen)
         };
         int numTasks = taskTitles.length;
         Drawable[] iconId = new Drawable[numTasks];
@@ -359,6 +360,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             iconId[10].setTint(Color.WHITE);
             iconId[11] = getResources().getDrawable(R.drawable.ic_cog, getTheme());
             iconId[11].setTint(Color.WHITE);
+            iconId[12] = getResources().getDrawable(R.drawable.ic_home, getTheme());
+            iconId[12].setTint(Color.WHITE);
         } else  {
             iconId[0] = getResources().getDrawable(R.drawable.ic_map, getTheme());
             iconId[0].setTint(Color.BLACK);
@@ -384,6 +387,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             iconId[10].setTint(Color.BLACK);
             iconId[11] = getResources().getDrawable(R.drawable.ic_cog, getTheme());
             iconId[11].setTint(Color.BLACK);
+            iconId[12] = getResources().getDrawable(R.drawable.ic_home, getTheme());
+            iconId[12].setTint(Color.BLACK);
         }
 
         mapping = new ArrayList<>();
@@ -1009,6 +1014,10 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                         //Settings
                         Intent settingsIntent = new Intent(TaskActivity.this, SettingsActivity.class);
                         startActivity(settingsIntent);
+                        break;
+                    case 12:
+                        //Home Screen
+                        moveTaskToBack(true);
                         break;
                 }
             }
