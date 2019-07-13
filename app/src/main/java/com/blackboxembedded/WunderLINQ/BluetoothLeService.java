@@ -36,8 +36,12 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 import javax.crypto.BadPaddingException;
@@ -213,6 +217,19 @@ public class BluetoothLeService extends Service {
         sensorManager.registerListener(sensorEventListener, rotationVector, SensorManager.SENSOR_DELAY_GAME);
         sensorManager.registerListener(sensorEventListener, gravity, SensorManager.SENSOR_DELAY_GAME);
         sensorManager.registerListener(sensorEventListener, barometer, SensorManager.SENSOR_DELAY_UI);
+
+        Timer t = new Timer();
+        t.scheduleAtFixedRate(new TimerTask()
+        {
+            @Override
+            public void run() {
+                Calendar c = Calendar.getInstance();
+                final String finalTime = String.format(Locale.getDefault(), "%d:%d:%d", c.get(Calendar.HOUR), c.get(Calendar.MINUTE), c.get(Calendar.SECOND));
+
+                Data.setTime(finalTime);
+            }
+
+        }, 1000, 1000); //Initial Delay and Period for update (in milliseconds)
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {

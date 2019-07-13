@@ -1826,6 +1826,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 }
                 break;
             case 24:
+                //time
+                label = getString(R.string.time_header);
+                if (Data.getTime() != null) {
+                    value = Data.getTime();
+                }
+                break;
+            case 25:
                 //barometric pressure
                 label = getString(R.string.barometricpressure_header) + " (mBar)";
                 if (Data.getBarometricPressure() != null) {

@@ -251,6 +251,15 @@ public class Data {
         Data.bearing = bearing;
     }
 
+    // time
+    private static String time;
+    public static String getTime() {
+        return time;
+    }
+    public static void setTime(String time){
+        Data.time = time;
+    }
+
     // barometric pressure
     private static Double barometricPressure;
     public static Double getBarometricPressure() {

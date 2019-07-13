@@ -173,7 +173,6 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
 
     @Override
     public void onResume() {
-        Log.d(TAG,"In onresume");
         super.onResume();
         if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
             updateColors(true);
@@ -1017,7 +1016,11 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                         break;
                     case 12:
                         //Home Screen
-                        moveTaskToBack(true);
+                        //moveTaskToBack(true);
+                        Intent startMain = new Intent(Intent.ACTION_MAIN);
+                        startMain.addCategory(Intent.CATEGORY_HOME);
+                        //startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(startMain);
                         break;
                 }
             }
