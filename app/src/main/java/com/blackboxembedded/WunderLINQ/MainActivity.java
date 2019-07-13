@@ -1539,13 +1539,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             temperatureUnit = "F";
         }
         String distanceUnit = "km";
-        //String heightUnit = "m";
+        String heightUnit = "m";
         String distanceTimeUnit = "kmh";
         String consumptionUnit = "L/100";
         String distanceFormat = sharedPrefs.getString("prefDistance", "0");
         if (distanceFormat.contains("1")) {
             distanceUnit = "mi";
-            //heightUnit = "ft";
+            heightUnit = "ft";
             distanceTimeUnit = "mph";
             consumptionUnit = "mpg";
         }
@@ -1838,6 +1838,30 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 if (Data.getBarometricPressure() != null) {
                     value = String.valueOf(Utils.oneDigit.format(Data.getBarometricPressure()));
                 }
+                break;
+            case 26:
+                //GPS Speed
+                label = getString(R.string.gpsspeed_header) + " (" + distanceTimeUnit + ")";
+                String gpsSpeed = "No Fix";
+                if (Data.getLastLocation() != null){
+                    gpsSpeed = String.valueOf(Math.round(Data.getLastLocation().getSpeed() * 3.6));
+                    if (distanceFormat.contains("1")) {
+                        gpsSpeed = String.valueOf(Math.round(Utils.kmToMiles(Data.getLastLocation().getSpeed() * 3.6)));
+                    }
+                }
+                value = gpsSpeed;
+                break;
+            case 27:
+                //Altitude
+                label = getString(R.string.altitude_header) + " (" + heightUnit + ")";
+                String altitude = "No Fix";
+                if (Data.getLastLocation() != null){
+                    altitude = String.valueOf(Data.getLastLocation().getAltitude());
+                    if (distanceFormat.contains("1")) {
+                        altitude = String.valueOf(Math.round(Utils.mToFeet(Data.getLastLocation().getAltitude())));
+                    }
+                }
+                value = altitude;
                 break;
             default:
 

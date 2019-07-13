@@ -485,6 +485,8 @@
         <item name="24">@string/bearing_header</item>
         <item name="25">@string/time_header</item>
         <item name="26">@string/barometricpressure_header</item>
+        <item name="27">@string/gpsspeed_header</item>
+        <item name="28">@string/altitude_header</item>
     </string-array>
     <string-array name="dataPoints_arrayValues" translatable="false">
         <item name="1">0</item>
@@ -512,7 +514,9 @@
         <item name="23">22</item>
         <item name="24">23</item>
         <item name="25">24</item>
-        <item name="26">26</item>
+        <item name="26">25</item>
+        <item name="27">26</item>
+        <item name="28">27</item>
     </string-array>
     <string name="pref_tasks_settings_title">Quick Task Customization</string>
     <string name="pref_tasks_settings_summary">Customize which tasks to display and in which order</string>

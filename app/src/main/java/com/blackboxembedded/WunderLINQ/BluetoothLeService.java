@@ -1,5 +1,6 @@
 package com.blackboxembedded.WunderLINQ;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -18,16 +19,29 @@ import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
@@ -56,7 +70,8 @@ import javax.crypto.spec.SecretKeySpec;
  * Service for managing connection and data communication with a GATT server
  * hosted on a given BlueTooth LE device.
  */
-public class BluetoothLeService extends Service {
+public class BluetoothLeService extends Service implements LocationListener, GoogleApiClient
+        .ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private final static String TAG = "BluetoothLeService";
 
@@ -93,6 +108,9 @@ public class BluetoothLeService extends Service {
     static final float ALPHA = 0.05f;
     float[] mGravity = new float[3];
     float[] mGeomagnetic = new float[3];
+
+    LocationRequest locationRequest;
+    GoogleApiClient googleApiClient;
 
     private int lastDirection;
 
@@ -218,6 +236,16 @@ public class BluetoothLeService extends Service {
         sensorManager.registerListener(sensorEventListener, gravity, SensorManager.SENSOR_DELAY_GAME);
         sensorManager.registerListener(sensorEventListener, barometer, SensorManager.SENSOR_DELAY_UI);
 
+        // Location stuff
+        createLocationRequest();
+
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+        googleApiClient.connect();
+
         Timer t = new Timer();
         t.scheduleAtFixedRate(new TimerTask()
         {
@@ -260,12 +288,15 @@ public class BluetoothLeService extends Service {
     @Override
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
-        clearNotifications();
         // The service is no longer used and is being destroyed
+        clearNotifications();
         sensorManager.unregisterListener(sensorEventListener, magnetometer);
         sensorManager.unregisterListener(sensorEventListener, accelerometer);
         sensorManager.unregisterListener(sensorEventListener, rotationVector);
         sensorManager.unregisterListener(sensorEventListener, gravity);
+
+        stopLocationUpdates();
+        googleApiClient.disconnect();
     }
 
     // Listens for sensor events
@@ -2225,5 +2256,57 @@ public class BluetoothLeService extends Service {
         }
         smallestChange = Math.max(Math.min(change,3),-3);
         return lastDirection+smallestChange;
+    }
+
+    protected void startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        PendingResult<Status> pendingResult = LocationServices.FusedLocationApi
+                .requestLocationUpdates(googleApiClient, locationRequest, this);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Data.setLastLocation(location);
+
+    }
+
+    protected void stopLocationUpdates() {
+        if (googleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(
+                    googleApiClient, this);
+        }
+    }
+
+    protected void createLocationRequest() {
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(1000);
+        locationRequest.setFastestInterval(1000);
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        startLocationUpdates();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }

@@ -1,6 +1,5 @@
 package com.blackboxembedded.WunderLINQ;
 
-import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -8,27 +7,14 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -38,15 +24,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class LoggingService extends Service implements LocationListener, GoogleApiClient
-        .ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class LoggingService extends Service {
 
     private static final String TAG = "LoggingSvc";
 
     private SharedPreferences sharedPrefs;
-
-    LocationRequest locationRequest;
-    GoogleApiClient googleApiClient;
 
     Handler handler;
     Runnable runnable;
@@ -149,15 +131,6 @@ public class LoggingService extends Service implements LocationListener, GoogleA
 
         Notification notification = builder.build();
         startForeground(1234, notification);
-
-        createLocationRequest();
-
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-        googleApiClient.connect();
 
         ((MyApplication) this.getApplication()).setTripRecording(true);
     }
@@ -437,60 +410,14 @@ public class LoggingService extends Service implements LocationListener, GoogleA
         }
         handler.removeCallbacks(runnable);
 
-        stopLocationUpdates();
-        googleApiClient.disconnect();
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mNotificationManager.deleteNotificationChannel(CHANNEL_ID);
+        } else {
+            mNotificationManager.cancel(1234);
+        }
 
         ((MyApplication) this.getApplication()).setTripRecording(false);
-    }
-
-    protected void createLocationRequest() {
-        locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(1000);
-        locationRequest.setFastestInterval(1000);
-    }
-
-    protected void startLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        PendingResult<Status> pendingResult = LocationServices.FusedLocationApi
-                .requestLocationUpdates(googleApiClient, locationRequest, this);
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        Data.setLastLocation(location);
-    }
-
-    protected void stopLocationUpdates() {
-        if (googleApiClient.isConnected()) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(
-                    googleApiClient, this);
-        }
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        startLocationUpdates();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
 }
