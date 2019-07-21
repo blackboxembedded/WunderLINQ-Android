@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WaypointDatasource {
-    final String TAG = "WunderLINQ";
+    final String TAG = "WptDataSource";
     private SQLiteDatabase db;
     private WaypointDatabase dbHelper;
     private String sqlTable = "records";

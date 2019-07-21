@@ -247,14 +247,6 @@
                 />
         </PreferenceScreen>
         <ListPreference
-            android:key="prefNavApp"
-            android:title="@string/pref_nav_app_title"
-            android:summary="%s"
-            android:entries="@array/nav_apps_array"
-            android:entryValues="@array/nav_apps_arrayValues"
-            android:defaultValue="1"
-            />
-        <ListPreference
             android:key="prefContactsFilter"
             android:title="@string/pref_contacts_filter_title"
             android:summary="%s"
@@ -390,6 +382,27 @@
             android:defaultValue="4"
             />
     </PreferenceCategory>
+    <PreferenceScreen
+        android:key="prefScreenIntegrations"
+        android:title="@string/pref_integrations_settings_title"
+        android:summary="@string/pref_integrations_settings_summary">
+        <ListPreference
+            android:key="prefNavApp"
+            android:title="@string/pref_nav_app_title"
+            android:summary="%s"
+            android:entries="@array/nav_apps_array"
+            android:entryValues="@array/nav_apps_arrayValues"
+            android:defaultValue="1"
+            />
+        <ListPreference
+            android:key="prefActionCam"
+            android:title="@string/pref_actioncam_title"
+            android:summary="%s"
+            android:entries="@array/actioncam_array"
+            android:entryValues="@array/actioncam_arrayValues"
+            android:defaultValue="0"
+            />
+    </PreferenceScreen>
     <PreferenceCategory
         android:title="@string/debug_settings_title"
         android:key="prefDebugCategory">

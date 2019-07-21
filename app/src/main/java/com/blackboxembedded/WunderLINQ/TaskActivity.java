@@ -43,14 +43,22 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blackboxembedded.WunderLINQ.externalcamera.goproV1API.ApiBase;
+import com.blackboxembedded.WunderLINQ.externalcamera.goproV1API.ApiClient;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.content.Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT;
 
@@ -86,6 +94,9 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
     private static final int PERMISSION_REQUEST_READ_CONTACTS = 102;
     private static final int PERMISSION_REQUEST_WRITE_STORAGE = 112;
     private static final int PERMISSION_REQUEST_RECORD_AUDIO = 122;
+
+    private boolean actionCamOnline = false;
+    private boolean actionCamRecording = false;
 
     @Override
     public void osmandMissing() {
@@ -315,6 +326,124 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             tripTaskText = getResources().getString(R.string.task_title_stop_trip);
         }
 
+        Integer actionCamEnabled = Integer.parseInt(sharedPrefs.getString("prefActionCam", "0"));
+        switch (actionCamEnabled){
+            case 1:
+                //GoPro Hero3
+                ApiClient GoProV1Api = ApiBase.getMainClient().create(ApiClient.class);
+                Call<ResponseBody> setting;
+                String actionCamPwd = sharedPrefs.getString("ACTIONCAM_GOPRO3_PWD","");
+                if (actionCamPwd.equals("")){
+                    setting = GoProV1Api.status();
+                } else {
+                    setting = GoProV1Api.statusPwd(actionCamPwd);
+                }
+                setting.clone().enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        try{
+                            int responseCode = response.code();
+                            Log.d(TAG,"GoPro Status Response Code: " + responseCode);
+                            ApiClient GoProV1Api = ApiBase.getMainClient().create(ApiClient.class);
+                            switch(responseCode){
+                                case 200:
+                                    //Success
+                                    actionCamOnline = true;
+                                    if (response.body() != null) {
+                                        //String responseBody = response.body().;
+                                        byte[] byteArr = response.body().bytes();
+                                        Log.d(TAG, "GoPro Status byte array: " + Arrays.toString(byteArr));
+                                        Log.d(TAG, "GoPro Recording Status byte: " + byteArr[33]);
+                                        if (byteArr[29] == 0x01) {
+                                            if (!actionCamRecording) {
+                                                actionCamRecording = true;
+                                                displayTasks();
+                                            }
+                                        } else {
+                                            if (actionCamRecording) {
+                                                actionCamRecording = false;
+                                                displayTasks();
+                                            }
+                                        }
+                                    }
+                                    break;
+                                case 403:
+                                    //Bad Password
+                                    //Get Password
+                                    Call<ResponseBody> getPwd = GoProV1Api.getPwd();
+                                    getPwd.clone().enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            try{
+                                                int responseCode = response.code();
+                                                Log.d(TAG,"GoPro Get Password Response Code: " + responseCode);
+                                                switch(responseCode){
+                                                    case 200:
+                                                        //Success
+                                                        if (response.body() != null) {
+                                                            String actionCamPass = response.body().string().substring(2);
+                                                            Log.d(TAG,"Got GoPro Password: " + actionCamPass);
+                                                            SharedPreferences.Editor editor = sharedPrefs.edit();
+                                                            editor.putString("ACTIONCAM_GOPRO3_PWD", actionCamPass);
+                                                            editor.apply();
+                                                            displayTasks();
+                                                        }
+                                                    default:
+                                                        break;
+
+                                                }
+
+                                            } catch (IOException e){
+
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            // handle failure
+                                            Log.d(TAG,"onFailure() Get GoPro Password");
+                                            actionCamOnline = false;
+                                            if (actionCamRecording) {
+                                                actionCamRecording = false;
+                                                displayTasks();
+                                            }
+                                        }
+                                    });
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                        } catch (IOException e){
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        // handle failure
+                        Log.d(TAG,"onFailure() Get GoPro Status");
+                        actionCamOnline = false;
+                        if (actionCamRecording) {
+                            actionCamRecording = false;
+                            displayTasks();
+                        }
+                    }
+                });
+                break;
+            case 2:
+                //GoPro Hero 5+
+                break;
+            default:
+                break;
+        }
+
+        String goProVideoTaskText = getResources().getString(R.string.task_title_actioncam_start_video);
+        if (actionCamRecording){
+            goProVideoTaskText = getResources().getString(R.string.task_title_actioncam_stop_video);
+        }
+
         // Tasks
         // Order must match between text, icon and onItemClick case
         final String[] taskTitles = new String[] {
@@ -330,7 +459,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 getResources().getString(R.string.task_title_waypoint_nav),
                 getResources().getString(R.string.task_title_voicecontrol),
                 getResources().getString(R.string.task_title_settings),
-                getResources().getString(R.string.task_title_homescreen)
+                getResources().getString(R.string.task_title_homescreen),
+                goProVideoTaskText
         };
         int numTasks = taskTitles.length;
         Drawable[] iconId = new Drawable[numTasks];
@@ -361,6 +491,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             iconId[11].setTint(Color.WHITE);
             iconId[12] = getResources().getDrawable(R.drawable.ic_home, getTheme());
             iconId[12].setTint(Color.WHITE);
+            iconId[13] = getResources().getDrawable(R.drawable.ic_video_camera, getTheme());
+            iconId[13].setTint(Color.WHITE);
         } else  {
             iconId[0] = getResources().getDrawable(R.drawable.ic_map, getTheme());
             iconId[0].setTint(Color.BLACK);
@@ -388,6 +520,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             iconId[11].setTint(Color.BLACK);
             iconId[12] = getResources().getDrawable(R.drawable.ic_home, getTheme());
             iconId[12].setTint(Color.BLACK);
+            iconId[13] = getResources().getDrawable(R.drawable.ic_video_camera, getTheme());
+            iconId[13].setTint(Color.BLACK);
         }
 
         mapping = new ArrayList<>();
@@ -1016,12 +1150,129 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                         break;
                     case 12:
                         //Home Screen
-                        //moveTaskToBack(true);
                         Intent startMain = new Intent(Intent.ACTION_MAIN);
                         startMain.addCategory(Intent.CATEGORY_HOME);
-                        //startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(startMain);
                         break;
+                    case 13:
+                        //ActionCam Video Control
+                        Integer actionCamEnabled = Integer.parseInt(sharedPrefs.getString("prefActionCam", "0"));
+                        switch (actionCamEnabled) {
+                            case 1:
+                                if (actionCamRecording) {
+                                    ApiClient GoProV1Api = ApiBase.getMainClient().create(ApiClient.class);
+                                    Call<ResponseBody> shutterCommand;
+                                    String actionCamPwd = sharedPrefs.getString("ACTIONCAM_GOPRO3_PWD","");
+                                    if (actionCamPwd.equals("")){
+                                        shutterCommand = GoProV1Api.command("bacpac", "SH", "%00");
+                                    } else {
+                                        shutterCommand = GoProV1Api.commandPwd("bacpac", "SH", actionCamPwd, "%00");
+                                    }
+                                    shutterCommand.clone().enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            int responseCode = response.code();
+                                            Log.d(TAG,"GoPro Shutter Off Response Code: " + responseCode);
+                                            switch(responseCode) {
+                                                case 200:
+                                                    actionCamOnline = true;
+                                                    if (actionCamRecording) {
+                                                        actionCamRecording = false;
+                                                        displayTasks();
+                                                    }
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            Log.d(TAG, "onFailure(): GoPro Shutter Off");
+                                        }
+
+                                    });
+                                } else {
+                                    ApiClient GoProV1Api = ApiBase.getMainClient().create(ApiClient.class);
+                                    Call<ResponseBody> shutterCommand;
+                                    String actionCamPwd = sharedPrefs.getString("ACTIONCAM_GOPRO3_PWD","");
+                                    if (actionCamPwd.equals("")){
+                                        shutterCommand = GoProV1Api.command("bacpac", "SH", "%01");
+                                    } else {
+                                        shutterCommand = GoProV1Api.commandPwd("bacpac", "SH", actionCamPwd, "%01");
+                                    }
+                                    shutterCommand.clone().enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            int responseCode = response.code();
+                                            Log.d(TAG,"GoPro Shutter On Response Code" + responseCode);
+                                            ApiClient GoProV1Api = ApiBase.getMainClient().create(ApiClient.class);
+                                            switch(responseCode) {
+                                                case 200:
+                                                    actionCamOnline = true;
+                                                    actionCamRecording = true;
+                                                    displayTasks();
+                                                    break;
+                                                case 410:
+                                                    //Camera Off
+                                                    //Turn Camera On
+                                                    Call<ResponseBody> onCommand;
+                                                    String actionCamPwd = sharedPrefs.getString("ACTIONCAM_GOPRO3_PWD","");
+                                                    if (actionCamPwd.equals("")){
+                                                        // Date matches. User has already Launched the app once today. So do nothing.
+                                                        onCommand = GoProV1Api.command("bacpac", "PW", "%01");
+                                                    } else {
+                                                        onCommand = GoProV1Api.commandPwd("bacpac", "PW", actionCamPwd, "%01");
+                                                    }
+                                                    onCommand.clone().enqueue(new Callback<ResponseBody>() {
+                                                        @Override
+                                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                            int responseCode = response.code();
+                                                            Log.d(TAG,"GoPro Power On Response Code: " + responseCode);
+                                                            switch(responseCode) {
+                                                                case 200:
+                                                                    actionCamOnline = true;
+                                                                  break;
+                                                                default:
+                                                                    break;
+                                                            }
+
+                                                        }
+
+                                                        @Override
+                                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                            Log.d(TAG, "onFailure() GoPro Power On");
+                                                            actionCamOnline = false;
+                                                            if (actionCamRecording) {
+                                                                actionCamRecording = false;
+                                                                displayTasks();
+                                                            }
+                                                        }
+
+                                                    });
+                                                    break;
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            Log.d(TAG, "onFailure() GoPro Shutter On");
+                                            actionCamOnline = false;
+                                            if (actionCamRecording) {
+                                                actionCamRecording = false;
+                                                displayTasks();
+                                            }
+                                        }
+
+                                    });
+                                }
+                                break;
+                            case 2:
+                                break;
+                            default:
+                                break;
+
+                        }
                 }
             }
 
@@ -1252,3 +1503,4 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             cTimer.cancel();
     }
 }
+
