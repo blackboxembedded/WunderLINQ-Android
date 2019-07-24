@@ -1,21 +1,24 @@
-package com.blackboxembedded.WunderLINQ.externalcamera.goproV1API;
+package com.blackboxembedded.WunderLINQ.externalcamera.goproV2API;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiBase {
 
-    private static Retrofit GoProV1MainAPI = null;
+    private static Retrofit GoProV2MainAPI = null;
 
     public static Retrofit getMainClient() {
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
-        GoProV1MainAPI = new Retrofit.Builder()
+        GoProV2MainAPI = new Retrofit.Builder()
                 .baseUrl("http://10.5.5.9")
+                .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();
-        return GoProV1MainAPI;
+        return GoProV2MainAPI;
     }
 }
