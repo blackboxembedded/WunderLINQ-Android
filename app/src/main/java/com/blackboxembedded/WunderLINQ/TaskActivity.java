@@ -52,6 +52,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -439,8 +442,51 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             case 2:
                 //GoPro Hero 4+
                 com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiClient GoProV2Api = com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiBase.getMainClient().create(com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiClient.class);
+                Call<ResponseBody> goProV2Info = GoProV2Api.info();
+                goProV2Info.clone().enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        try {
+                            String responseBody = response.body().string();
+                            Log.d(TAG, responseBody);
+                            try {
+                                JSONObject mainObject = new JSONObject(responseBody);
+                                JSONObject statusObject = mainObject.getJSONObject("info");
+                                final String macAddress = statusObject.getString("ap_mac");
+                                Log.d(TAG,"MAC Address: " + macAddress);
+                                Thread thread = new Thread(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        try  {
+                                            WakeOnLan(macAddress);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+
+                                thread.start();
+                            } catch (JSONException e){
+
+                            }
+
+                        } catch (IOException e){
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        // handle failure
+                        Log.d(TAG,"onFailure() Get GoPro Info");
+                        actionCamOnline = false;
+                    }
+
+                });
+                //com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiClient GoProV2Api = com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiBase.getMainClient().create(com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiClient.class);
                 Call<ResponseBody> goProV2Status = GoProV2Api.status();
-                goProV2Status.enqueue(new Callback<ResponseBody>() {
+                goProV2Status.clone().enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         try {
@@ -450,6 +496,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                                 JSONObject mainObject = new JSONObject(responseBody);
                                 JSONObject statusObject = mainObject.getJSONObject("status");
                                 String recordingState = statusObject.getString("8");
+                                String macAddress = statusObject.getString("40");
                                 Log.d(TAG,"Recording State: " + recordingState);
                                 if(recordingState.equals("1")){
                                     actionCamRecording = true;
@@ -459,9 +506,58 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                             } catch (JSONException e){
 
                             }
+
                         } catch (IOException e){
 
                         }
+                        //Keep Wifi from going to sleep
+                        //"http://10.5.5.9/gp/gpControl/execute?p1=gpStream&a1=proto_v2&c1=restart"
+                        //"http://10.5.5.9/gp/gpControl/execute?p1=gpStream&a1=proto_v2&c1=stop"
+                        Call<GoProResponse> restartCommand = com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.model.GPConstants.Commands.Stream.Restart;
+                        restartCommand.clone().enqueue(new Callback<GoProResponse>() {
+                            @Override
+                            public void onResponse(Call<GoProResponse> call, Response<GoProResponse> response) {
+                                switch (response.code()){
+                                    case 200:
+                                        //Success
+                                        String responseMessage = response.message();
+                                        Log.d(TAG,"Response: " + responseMessage);
+                                        if(responseMessage.equals("OK")) {
+                                            Call<GoProResponse> stopCommand = com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.model.GPConstants.Commands.Stream.Stop;
+                                            stopCommand.clone().enqueue(new Callback<GoProResponse>() {
+                                                @Override
+                                                public void onResponse(Call<GoProResponse> call, Response<GoProResponse> response) {
+                                                    switch (response.code()){
+                                                        case 200:
+                                                            //Success
+                                                            String responseMessage = response.message();
+                                                            Log.d(TAG,"Response: " + responseMessage);
+                                                            if(responseMessage.equals("OK")) {
+
+                                                            }
+                                                            break;
+                                                        default:
+                                                            break;
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<GoProResponse> call, Throwable t) {
+                                                    // handle failure
+                                                }
+                                            });
+                                        }
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<GoProResponse> call, Throwable t) {
+                                // handle failure
+                            }
+                        });
                     }
 
                     @Override
@@ -1314,7 +1410,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                                 final View txtView = view;
                                 if (actionCamRecording) {
                                     Call<GoProResponse> shutterCommand = com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.model.GPConstants.Commands.Shutter.stop;
-                                    shutterCommand.enqueue(new Callback<GoProResponse>() {
+                                    shutterCommand.clone().enqueue(new Callback<GoProResponse>() {
                                         @Override
                                         public void onResponse(Call<GoProResponse> call, Response<GoProResponse> response) {
                                             switch (response.code()){
@@ -1328,6 +1424,44 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                                                         //displayTasks();
                                                         TextView tripTaskText = txtView.findViewById(R.id.gridTextView);
                                                         tripTaskText.setText(getResources().getString(R.string.task_title_actioncam_start_video));
+                                                        com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiClient GoProV2Api = com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiBase.getMainClient().create(com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiClient.class);
+                                                        Call<ResponseBody> goProV2Status = GoProV2Api.status();
+                                                        goProV2Status.clone().enqueue(new Callback<ResponseBody>() {
+                                                            @Override
+                                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                                try {
+                                                                    String responseBody = response.body().string();
+                                                                    Log.d(TAG, responseBody);
+                                                                    try {
+                                                                        JSONObject mainObject = new JSONObject(responseBody);
+                                                                        JSONObject statusObject = mainObject.getJSONObject("status");
+                                                                        String recordingState = statusObject.getString("8");
+                                                                        Log.d(TAG, "Recording State: " + recordingState);
+                                                                        /*
+                                                                        if (recordingState.equals("1")) {
+                                                                            actionCamRecording = true;
+                                                                        } else {
+                                                                            actionCamRecording = false;
+                                                                        }
+                                                                        */
+                                                                    } catch (JSONException e) {
+
+                                                                    }
+
+                                                                } catch (IOException e) {
+
+                                                                }
+                                                            }
+                                                            @Override
+                                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                                // handle failure
+                                                                actionCamOnline = false;
+                                                                if (actionCamRecording) {
+                                                                    actionCamRecording = false;
+                                                                    displayTasks();
+                                                                }
+                                                            }
+                                                        });
                                                     }
                                                     break;
                                                 default:
@@ -1349,7 +1483,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
 
                                 } else {
                                     Call<GoProResponse> shutterCommand = com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.model.GPConstants.Commands.Shutter.shutter;
-                                    shutterCommand.enqueue(new Callback<GoProResponse>() {
+                                    shutterCommand.clone().enqueue(new Callback<GoProResponse>() {
                                         @Override
                                         public void onResponse(Call<GoProResponse> call, Response<GoProResponse> response) {
                                             switch (response.code()){
@@ -1615,6 +1749,69 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
     void cancelTimer() {
         if(cTimer!=null)
             cTimer.cancel();
+    }
+
+    public void WakeOnLan(String macAddress) {
+        // from http://www.jibble.org/wake-on-lan/WakeOnLan.java
+
+        String ipStr = "10.5.5.9";
+        String macStr = macAddress;
+        int port = 80;
+
+        try {
+            byte[] macBytes = getMacBytes(macStr);
+            byte[] bytes = new byte[6 + 16 * macBytes.length];
+            for (int i = 0; i < 6; i++) {
+                bytes[i] = (byte) 0xff;
+            }
+            for (int i = 6; i < bytes.length; i += macBytes.length) {
+                System.arraycopy(macBytes, 0, bytes, i, macBytes.length);
+            }
+
+            InetAddress address = InetAddress.getByName(ipStr);
+            DatagramPacket packet = new DatagramPacket(bytes, bytes.length, address, port);
+            DatagramSocket socket = new DatagramSocket();
+            socket.send(packet);
+            socket.close();
+            Thread.sleep(3000);
+            Log.d(TAG,"Wake-on-LAN packet sent.");
+        }
+        catch (Exception e) {
+            Log.d(TAG,"Failed to send Wake-on-LAN packet: " + e);
+        }
+
+    }
+
+    private static byte[] getMacBytes(String macStr) throws IllegalArgumentException {
+        Log.d(TAG,"getMacBytes()");
+        byte[] bytes = new byte[6];
+        //String[] hex = macStr.split("(\\:|\\-)");
+        //String[] hex = macStr.split("(?<=\\G.{" + 2 + "})");
+        String[] hex = splitEqually(macStr,2).toArray(new String[6]);
+        Log.d(TAG,"MAC array: " + java.util.Arrays.toString(hex));
+        if (hex.length != 6) {
+            throw new IllegalArgumentException("Invalid MAC address.");
+        }
+        try {
+            for (int i = 0; i < 6; i++) {
+                bytes[i] = (byte) Integer.parseInt(hex[i], 16);
+            }
+        }
+        catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid hex digit in MAC address.");
+        }
+        return bytes;
+    }
+
+    public static List<String> splitEqually(String text, int size) {
+        // Give the list the right capacity to start with. You could use an array
+        // instead if you wanted.
+        List<String> ret = new ArrayList<String>((text.length() + size - 1) / size);
+
+        for (int start = 0; start < text.length(); start += size) {
+            ret.add(text.substring(start, Math.min(text.length(), start + size)));
+        }
+        return ret;
     }
 }
 

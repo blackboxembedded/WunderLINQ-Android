@@ -13,11 +13,12 @@ import retrofit2.Call;
 public class GPConstants {
     static ApiClient GoProV2Api = ApiBase.getMainClient().create(ApiClient.class);
     public static class Status{
-        public static Call<GoProResponse> Status = GoProV2Api.execute("?p1=gpStream&a1=proto_v2&c1=restart");
+        public static Call<GoProResponse> Status = GoProV2Api.execute("gpStream", "proto_v2", "restart");
     }
     public static class Commands {
     public static class Stream{
-        public static Call<GoProResponse> Restart = GoProV2Api.execute("?p1=gpStream&a1=proto_v2&c1=restart");
+        public static Call<GoProResponse> Restart = GoProV2Api.execute("gpStream", "proto_v2", "restart");
+        public static Call<GoProResponse> Stop = GoProV2Api.execute("gpStream", "proto_v2", "stop");
     }
     public static class Shutter {
         public static Call<GoProResponse> shutter = GoProV2Api.command("shutter","1");
