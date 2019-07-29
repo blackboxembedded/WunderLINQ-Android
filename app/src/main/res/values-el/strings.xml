@@ -377,4 +377,11 @@
     <string name="barometricpressure_header">Barometric Pressure</string>
     <string name="nav_app_osmand">OsmAnd</string>
     <string name="task_title_homescreen">Home Screen</string>
+    <string name="pref_actioncam_title">Action Camera</string>
+    <string name="pref_integrations_settings_summary">Enable integration with 3rd Party Apps and hardware.</string>
+    <string name="pref_integrations_settings_title">Integrations</string>
+    <string name="task_title_actioncam_start_video">Start ActionCam Recording</string>
+    <string name="task_title_actioncam_stop_video">Stop ActionCam Recording</string>
+    <string name="toast_actioncam_notconnected">ActionCam Not Connected</string>
+    <string name="toast_actioncam_notset">Set ActionCam type in the app settings</string>
 </resources>

@@ -191,6 +191,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
 
     @Override
     public void onResume() {
+        Log.d(TAG,"in onResume");
         super.onResume();
         if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
             updateColors(true);
@@ -203,6 +204,311 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         }
         getSupportActionBar().show();
         startTimer();
+
+        //Check ActionCam Status
+        Integer actionCamEnabled = Integer.parseInt(sharedPrefs.getString("prefActionCam", "0"));
+        switch (actionCamEnabled){
+            case 1:
+                //GoPro Hero3
+                ApiClient GoProV1Api = com.blackboxembedded.WunderLINQ.externalcamera.goproV1API.ApiBase.getMainClient().create(ApiClient.class);
+                Call<ResponseBody> setting;
+                String actionCamPwd = sharedPrefs.getString("ACTIONCAM_GOPRO3_PWD","");
+                if (actionCamPwd.equals("")){
+                    setting = GoProV1Api.status();
+                } else {
+                    setting = GoProV1Api.statusPwd(actionCamPwd);
+                }
+                setting.clone().enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        try{
+                            int responseCode = response.code();
+                            Log.d(TAG,"GoPro Hero3 Status Response Code: " + responseCode);
+                            switch(responseCode){
+                                case 200:
+                                    //Success
+                                    if (response.body() != null) {
+                                        actionCamOnline = true;
+                                        byte[] byteArr = response.body().bytes();
+                                        Log.d(TAG, "GoPro Hero3 Status byte array: " + Arrays.toString(byteArr));
+                                        Log.d(TAG, "GoPro Hero3 Recording Status byte: " + byteArr[33]);
+                                        if (byteArr[29] == 0x01) {
+                                            if (!actionCamRecording) {
+                                                actionCamRecording = true;
+                                                displayTasks();
+                                            }
+                                        } else {
+                                            if (actionCamRecording) {
+                                                actionCamRecording = false;
+                                                displayTasks();
+                                            }
+                                        }
+                                    }
+                                    break;
+                                case 403:
+                                    //Bad Password
+                                    //Get Password
+                                    Log.d(TAG,"GoPro Hero3 Bad Password");
+                                    ApiClient GoProV1Api = ApiBase.getMainClient().create(ApiClient.class);
+                                    Call<ResponseBody> getPwd = GoProV1Api.getPwd();
+                                    getPwd.clone().enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            try{
+                                                int responseCode = response.code();
+                                                Log.d(TAG,"GoPro Hero3 Get Password Response Code: " + responseCode);
+                                                switch(responseCode){
+                                                    case 200:
+                                                        //Success
+                                                        if (response.body() != null) {
+                                                            actionCamOnline = true;
+                                                            String actionCamPass = response.body().string().substring(2);
+                                                            Log.d(TAG,"Got GoPro Hero3 Password");
+                                                            //Save Password
+                                                            SharedPreferences.Editor editor = sharedPrefs.edit();
+                                                            editor.putString("ACTIONCAM_GOPRO3_PWD", actionCamPass);
+                                                            editor.apply();
+
+                                                            ApiClient GoProV1Api = ApiBase.getMainClient().create(ApiClient.class);
+                                                            Call<ResponseBody> setting = GoProV1Api.statusPwd(actionCamPass);
+                                                            String actionCamPwd = sharedPrefs.getString("ACTIONCAM_GOPRO3_PWD","");
+                                                            setting.clone().enqueue(new Callback<ResponseBody>() {
+                                                                @Override
+                                                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                                    try{
+                                                                        int responseCode = response.code();
+                                                                        Log.d(TAG,"GoPro Hero3 Status(ReAuth) Response Code: " + responseCode);
+                                                                        switch(responseCode){
+                                                                            case 200:
+                                                                                //Success
+                                                                                if (response.body() != null) {
+                                                                                    actionCamOnline = true;
+                                                                                    byte[] byteArr = response.body().bytes();
+                                                                                    Log.d(TAG, "GoPro Status(ReAuth) byte array: " + Arrays.toString(byteArr));
+                                                                                    Log.d(TAG, "GoPro Recording Status(ReAuth) byte: " + byteArr[33]);
+                                                                                    if (byteArr[29] == 0x01) {
+                                                                                        if (!actionCamRecording) {
+                                                                                            actionCamRecording = true;
+                                                                                            displayTasks();
+                                                                                        }
+                                                                                    } else {
+                                                                                        if (actionCamRecording) {
+                                                                                            actionCamRecording = false;
+                                                                                            displayTasks();
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                                break;
+                                                                            case 403:
+                                                                                //Bad Password
+                                                                                Log.d(TAG,"GoPro Hero3 Bad Password(ReAuth)");
+                                                                                break;
+                                                                            default:
+                                                                                break;
+                                                                        }
+                                                                    } catch (IOException e){
+
+                                                                    }
+                                                                }
+
+                                                                @Override
+                                                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                                    // handle failure
+                                                                    Log.d(TAG,"onFailure() Get GoPro Hero3 Status(ReAuth)");
+                                                                    actionCamOnline = false;
+                                                                    if (actionCamRecording) {
+                                                                        actionCamRecording = false;
+                                                                        displayTasks();
+                                                                    }
+                                                                }
+                                                            });
+                                                        }
+                                                    default:
+                                                        break;
+
+                                                }
+                                            } catch (IOException e){
+
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            // handle failure
+                                            Log.d(TAG,"onFailure() Get GoPro Hero3 Password");
+                                            actionCamOnline = false;
+                                            if (actionCamRecording) {
+                                                actionCamRecording = false;
+                                                displayTasks();
+                                            }
+                                        }
+                                    });
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } catch (IOException e){
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        // handle failure
+                        Log.d(TAG,"onFailure() Get GoPro Hero3 Status");
+                        actionCamOnline = false;
+                        if (actionCamRecording) {
+                            actionCamRecording = false;
+                            displayTasks();
+                        }
+                    }
+                });
+                break;
+            case 2:
+                //GoPro Hero 4+
+                final com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiClient GoProV2Api = com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiBase.getMainClient().create(com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiClient.class);
+                Call<ResponseBody> goProV2Status = GoProV2Api.status();
+                goProV2Status.clone().enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        try {
+                            String responseBody = response.body().string();
+                            Log.d(TAG, responseBody);
+                            try {
+                                JSONObject mainObject = new JSONObject(responseBody);
+                                JSONObject statusObject = mainObject.getJSONObject("status");
+                                String recordingState = statusObject.getString("8");
+                                String macAddress = statusObject.getString("40");
+                                Log.d(TAG,"GoPro Hero4+ Recording State: " + recordingState);
+                                actionCamOnline = true;
+                                if(recordingState.equals("1")){
+                                    actionCamRecording = true;
+                                } else {
+                                    actionCamRecording = false;
+                                }
+                                displayTasks();
+                            } catch (JSONException e){
+
+                            }
+
+                        } catch (IOException e){
+
+                        }
+                        //Keep Wifi from going to sleep
+                        //"http://10.5.5.9/gp/gpControl/execute?p1=gpStream&a1=proto_v2&c1=restart"
+                        //"http://10.5.5.9/gp/gpControl/execute?p1=gpStream&a1=proto_v2&c1=stop"
+                        Call<GoProResponse> restartCommand = com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.model.GPConstants.Commands.Stream.Restart;
+                        restartCommand.clone().enqueue(new Callback<GoProResponse>() {
+                            @Override
+                            public void onResponse(Call<GoProResponse> call, Response<GoProResponse> response) {
+                                switch (response.code()){
+                                    case 200:
+                                        //Success
+                                        String responseMessage = response.message();
+                                        Log.d(TAG,"GoPro Hero4+ Stream Restart Response: " + responseMessage);
+                                        if(responseMessage.equals("OK")) {
+                                            Call<GoProResponse> stopCommand = com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.model.GPConstants.Commands.Stream.Stop;
+                                            stopCommand.clone().enqueue(new Callback<GoProResponse>() {
+                                                @Override
+                                                public void onResponse(Call<GoProResponse> call, Response<GoProResponse> response) {
+                                                    switch (response.code()){
+                                                        case 200:
+                                                            //Success
+                                                            String responseMessage = response.message();
+                                                            Log.d(TAG,"GoPro Hero4+ Stream Stop Response: " + responseMessage);
+                                                            if(responseMessage.equals("OK")) {
+                                                                // Get MAC address
+                                                                Call<ResponseBody> goProV2Info = GoProV2Api.info();
+                                                                goProV2Info.clone().enqueue(new Callback<ResponseBody>() {
+                                                                    @Override
+                                                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                                        switch (response.code()) {
+                                                                            case 200:
+                                                                                //Success
+                                                                                try {
+                                                                                    String responseBody = response.body().string();
+                                                                                    Log.d(TAG, responseBody);
+                                                                                    try {
+                                                                                        JSONObject mainObject = new JSONObject(responseBody);
+                                                                                        JSONObject statusObject = mainObject.getJSONObject("info");
+                                                                                        final String macAddress = statusObject.getString("ap_mac");
+                                                                                        Log.d(TAG,"GoPro Hero4+ MAC Address: " + macAddress);
+                                                                                        Thread thread = new Thread(new Runnable() {
+
+                                                                                            @Override
+                                                                                            public void run() {
+                                                                                                try  {
+                                                                                                    WakeOnLan(macAddress);
+                                                                                                } catch (Exception e) {
+                                                                                                    e.printStackTrace();
+                                                                                                }
+                                                                                            }
+                                                                                        });
+
+                                                                                        thread.start();
+                                                                                    } catch (JSONException e){
+
+                                                                                    }
+                                                                                } catch (IOException e){
+
+                                                                                }
+                                                                            default:
+                                                                                break;
+                                                                        }
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                                        // handle failure
+                                                                        Log.d(TAG,"onFailure() Get GoPro Hero4+ Info");
+                                                                        actionCamOnline = false;
+                                                                    }
+                                                                });
+                                                            }
+                                                            break;
+                                                        default:
+                                                            break;
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<GoProResponse> call, Throwable t) {
+                                                    // handle failure
+                                                    Log.d(TAG,"onFailure() Get GoPro Hero4+ Stream Stop");
+                                                }
+                                            });
+                                        }
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<GoProResponse> call, Throwable t) {
+                                // handle failure
+                                Log.d(TAG,"onFailure() Get GoPro Hero4+ Stream Restart");
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        // handle failure
+                        Log.d(TAG,"onFailure() Get GoPro Hero4+ Status");
+                        actionCamOnline = false;
+                        if (actionCamRecording) {
+                            actionCamRecording = false;
+                            displayTasks();
+                        }
+                    }
+
+                });
+
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -331,250 +637,6 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         String tripTaskText = getResources().getString(R.string.task_title_start_trip);
         if (((MyApplication) this.getApplication()).getTripRecording()){
             tripTaskText = getResources().getString(R.string.task_title_stop_trip);
-        }
-
-        Integer actionCamEnabled = Integer.parseInt(sharedPrefs.getString("prefActionCam", "0"));
-        switch (actionCamEnabled){
-            case 1:
-                //GoPro Hero3
-                ApiClient GoProV1Api = com.blackboxembedded.WunderLINQ.externalcamera.goproV1API.ApiBase.getMainClient().create(ApiClient.class);
-                Call<ResponseBody> setting;
-                String actionCamPwd = sharedPrefs.getString("ACTIONCAM_GOPRO3_PWD","");
-                if (actionCamPwd.equals("")){
-                    setting = GoProV1Api.status();
-                } else {
-                    setting = GoProV1Api.statusPwd(actionCamPwd);
-                }
-                setting.clone().enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        try{
-                            int responseCode = response.code();
-                            Log.d(TAG,"GoPro Status Response Code: " + responseCode);
-                            ApiClient GoProV1Api = ApiBase.getMainClient().create(ApiClient.class);
-                            switch(responseCode){
-                                case 200:
-                                    //Success
-                                    actionCamOnline = true;
-                                    if (response.body() != null) {
-                                        //String responseBody = response.body().;
-                                        byte[] byteArr = response.body().bytes();
-                                        Log.d(TAG, "GoPro Status byte array: " + Arrays.toString(byteArr));
-                                        Log.d(TAG, "GoPro Recording Status byte: " + byteArr[33]);
-                                        if (byteArr[29] == 0x01) {
-                                            if (!actionCamRecording) {
-                                                actionCamRecording = true;
-                                                displayTasks();
-                                            }
-                                        } else {
-                                            if (actionCamRecording) {
-                                                actionCamRecording = false;
-                                                displayTasks();
-                                            }
-                                        }
-                                    }
-                                    break;
-                                case 403:
-                                    //Bad Password
-                                    //Get Password
-                                    Call<ResponseBody> getPwd = GoProV1Api.getPwd();
-                                    getPwd.clone().enqueue(new Callback<ResponseBody>() {
-                                        @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            try{
-                                                int responseCode = response.code();
-                                                Log.d(TAG,"GoPro Get Password Response Code: " + responseCode);
-                                                switch(responseCode){
-                                                    case 200:
-                                                        //Success
-                                                        if (response.body() != null) {
-                                                            String actionCamPass = response.body().string().substring(2);
-                                                            Log.d(TAG,"Got GoPro Password: " + actionCamPass);
-                                                            SharedPreferences.Editor editor = sharedPrefs.edit();
-                                                            editor.putString("ACTIONCAM_GOPRO3_PWD", actionCamPass);
-                                                            editor.apply();
-                                                            displayTasks();
-                                                        }
-                                                    default:
-                                                        break;
-
-                                                }
-
-                                            } catch (IOException e){
-
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            // handle failure
-                                            Log.d(TAG,"onFailure() Get GoPro Password");
-                                            actionCamOnline = false;
-                                            if (actionCamRecording) {
-                                                actionCamRecording = false;
-                                                displayTasks();
-                                            }
-                                        }
-                                    });
-                                    break;
-                                default:
-                                    break;
-                            }
-
-                        } catch (IOException e){
-
-                        }
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        // handle failure
-                        Log.d(TAG,"onFailure() Get GoPro Status");
-                        actionCamOnline = false;
-                        if (actionCamRecording) {
-                            actionCamRecording = false;
-                            displayTasks();
-                        }
-                    }
-                });
-                break;
-            case 2:
-                //GoPro Hero 4+
-                com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiClient GoProV2Api = com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiBase.getMainClient().create(com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiClient.class);
-                Call<ResponseBody> goProV2Info = GoProV2Api.info();
-                goProV2Info.clone().enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        try {
-                            String responseBody = response.body().string();
-                            Log.d(TAG, responseBody);
-                            try {
-                                JSONObject mainObject = new JSONObject(responseBody);
-                                JSONObject statusObject = mainObject.getJSONObject("info");
-                                final String macAddress = statusObject.getString("ap_mac");
-                                Log.d(TAG,"MAC Address: " + macAddress);
-                                Thread thread = new Thread(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        try  {
-                                            WakeOnLan(macAddress);
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                });
-
-                                thread.start();
-                            } catch (JSONException e){
-
-                            }
-
-                        } catch (IOException e){
-
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        // handle failure
-                        Log.d(TAG,"onFailure() Get GoPro Info");
-                        actionCamOnline = false;
-                    }
-
-                });
-                //com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiClient GoProV2Api = com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiBase.getMainClient().create(com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiClient.class);
-                Call<ResponseBody> goProV2Status = GoProV2Api.status();
-                goProV2Status.clone().enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        try {
-                            String responseBody = response.body().string();
-                            Log.d(TAG, responseBody);
-                            try {
-                                JSONObject mainObject = new JSONObject(responseBody);
-                                JSONObject statusObject = mainObject.getJSONObject("status");
-                                String recordingState = statusObject.getString("8");
-                                String macAddress = statusObject.getString("40");
-                                Log.d(TAG,"Recording State: " + recordingState);
-                                if(recordingState.equals("1")){
-                                    actionCamRecording = true;
-                                } else {
-                                    actionCamRecording = false;
-                                }
-                            } catch (JSONException e){
-
-                            }
-
-                        } catch (IOException e){
-
-                        }
-                        //Keep Wifi from going to sleep
-                        //"http://10.5.5.9/gp/gpControl/execute?p1=gpStream&a1=proto_v2&c1=restart"
-                        //"http://10.5.5.9/gp/gpControl/execute?p1=gpStream&a1=proto_v2&c1=stop"
-                        Call<GoProResponse> restartCommand = com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.model.GPConstants.Commands.Stream.Restart;
-                        restartCommand.clone().enqueue(new Callback<GoProResponse>() {
-                            @Override
-                            public void onResponse(Call<GoProResponse> call, Response<GoProResponse> response) {
-                                switch (response.code()){
-                                    case 200:
-                                        //Success
-                                        String responseMessage = response.message();
-                                        Log.d(TAG,"Response: " + responseMessage);
-                                        if(responseMessage.equals("OK")) {
-                                            Call<GoProResponse> stopCommand = com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.model.GPConstants.Commands.Stream.Stop;
-                                            stopCommand.clone().enqueue(new Callback<GoProResponse>() {
-                                                @Override
-                                                public void onResponse(Call<GoProResponse> call, Response<GoProResponse> response) {
-                                                    switch (response.code()){
-                                                        case 200:
-                                                            //Success
-                                                            String responseMessage = response.message();
-                                                            Log.d(TAG,"Response: " + responseMessage);
-                                                            if(responseMessage.equals("OK")) {
-
-                                                            }
-                                                            break;
-                                                        default:
-                                                            break;
-                                                    }
-                                                }
-
-                                                @Override
-                                                public void onFailure(Call<GoProResponse> call, Throwable t) {
-                                                    // handle failure
-                                                }
-                                            });
-                                        }
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<GoProResponse> call, Throwable t) {
-                                // handle failure
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        // handle failure
-                        Log.d(TAG,"onFailure() Get GoPro Status");
-                        actionCamOnline = false;
-                        if (actionCamRecording) {
-                            actionCamRecording = false;
-                            displayTasks();
-                        }
-                    }
-
-                });
-                break;
-            default:
-                break;
         }
 
         String goProVideoTaskText = getResources().getString(R.string.task_title_actioncam_start_video);
@@ -1294,167 +1356,128 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                         break;
                     case 13:
                         //ActionCam Video Control
-                        Integer actionCamEnabled = Integer.parseInt(sharedPrefs.getString("prefActionCam", "0"));
-                        switch (actionCamEnabled) {
-                            case 1:
-                                if (actionCamRecording) {
-                                    ApiClient GoProV1Api = ApiBase.getMainClient().create(ApiClient.class);
-                                    Call<ResponseBody> shutterCommand;
-                                    String actionCamPwd = sharedPrefs.getString("ACTIONCAM_GOPRO3_PWD","");
-                                    if (actionCamPwd.equals("")){
-                                        shutterCommand = GoProV1Api.command("bacpac", "SH", "%00");
-                                    } else {
-                                        shutterCommand = GoProV1Api.commandPwd("bacpac", "SH", actionCamPwd, "%00");
-                                    }
-                                    shutterCommand.clone().enqueue(new Callback<ResponseBody>() {
-                                        @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            int responseCode = response.code();
-                                            Log.d(TAG,"GoPro Shutter Off Response Code: " + responseCode);
-                                            switch(responseCode) {
-                                                case 200:
-                                                    actionCamOnline = true;
-                                                    if (actionCamRecording) {
-                                                        actionCamRecording = false;
-                                                        displayTasks();
-                                                    }
-                                                    break;
-                                                default:
-                                                    break;
-                                            }
+                        if (actionCamOnline) {
+                            final View txtView = view;
+                            Integer actionCamEnabled = Integer.parseInt(sharedPrefs.getString("prefActionCam", "0"));
+                            switch (actionCamEnabled) {
+                                case 1:
+                                    //GoPro Hero3
+                                    if (actionCamRecording) {
+                                        ApiClient GoProV1Api = ApiBase.getMainClient().create(ApiClient.class);
+                                        Call<ResponseBody> shutterCommand;
+                                        String actionCamPwd = sharedPrefs.getString("ACTIONCAM_GOPRO3_PWD", "");
+                                        if (actionCamPwd.equals("")) {
+                                            shutterCommand = GoProV1Api.command("bacpac", "SH", "%00");
+                                        } else {
+                                            shutterCommand = GoProV1Api.commandPwd("bacpac", "SH", actionCamPwd, "%00");
                                         }
-
-                                        @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Log.d(TAG, "onFailure(): GoPro Shutter Off");
-                                        }
-
-                                    });
-                                } else {
-                                    ApiClient GoProV1Api = ApiBase.getMainClient().create(ApiClient.class);
-                                    Call<ResponseBody> shutterCommand;
-                                    String actionCamPwd = sharedPrefs.getString("ACTIONCAM_GOPRO3_PWD","");
-                                    if (actionCamPwd.equals("")){
-                                        shutterCommand = GoProV1Api.command("bacpac", "SH", "%01");
-                                    } else {
-                                        shutterCommand = GoProV1Api.commandPwd("bacpac", "SH", actionCamPwd, "%01");
-                                    }
-                                    shutterCommand.clone().enqueue(new Callback<ResponseBody>() {
-                                        @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            int responseCode = response.code();
-                                            Log.d(TAG,"GoPro Shutter On Response Code" + responseCode);
-                                            ApiClient GoProV1Api = ApiBase.getMainClient().create(ApiClient.class);
-                                            switch(responseCode) {
-                                                case 200:
-                                                    actionCamOnline = true;
-                                                    actionCamRecording = true;
-                                                    displayTasks();
-                                                    break;
-                                                case 410:
-                                                    //Camera Off
-                                                    //Turn Camera On
-                                                    Call<ResponseBody> onCommand;
-                                                    String actionCamPwd = sharedPrefs.getString("ACTIONCAM_GOPRO3_PWD","");
-                                                    if (actionCamPwd.equals("")){
-                                                        // Date matches. User has already Launched the app once today. So do nothing.
-                                                        onCommand = GoProV1Api.command("bacpac", "PW", "%01");
-                                                    } else {
-                                                        onCommand = GoProV1Api.commandPwd("bacpac", "PW", actionCamPwd, "%01");
-                                                    }
-                                                    onCommand.clone().enqueue(new Callback<ResponseBody>() {
-                                                        @Override
-                                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                            int responseCode = response.code();
-                                                            Log.d(TAG,"GoPro Power On Response Code: " + responseCode);
-                                                            switch(responseCode) {
-                                                                case 200:
-                                                                    actionCamOnline = true;
-                                                                  break;
-                                                                default:
-                                                                    break;
-                                                            }
-
-                                                        }
-
-                                                        @Override
-                                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                            Log.d(TAG, "onFailure() GoPro Power On");
-                                                            actionCamOnline = false;
-                                                            if (actionCamRecording) {
-                                                                actionCamRecording = false;
-                                                                displayTasks();
-                                                            }
-                                                        }
-
-                                                    });
-                                                    break;
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Log.d(TAG, "onFailure() GoPro Shutter On");
-                                            actionCamOnline = false;
-                                            if (actionCamRecording) {
-                                                actionCamRecording = false;
-                                                displayTasks();
-                                            }
-                                        }
-
-                                    });
-                                }
-                                break;
-                            case 2:
-                                //GoProHero4+
-                                final View txtView = view;
-                                if (actionCamRecording) {
-                                    Call<GoProResponse> shutterCommand = com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.model.GPConstants.Commands.Shutter.stop;
-                                    shutterCommand.clone().enqueue(new Callback<GoProResponse>() {
-                                        @Override
-                                        public void onResponse(Call<GoProResponse> call, Response<GoProResponse> response) {
-                                            switch (response.code()){
-                                                case 200:
-                                                    //Success
-                                                    String responseMessage = response.message();
-                                                    Log.d(TAG,"Response: " + responseMessage);
-                                                    if(responseMessage.equals("OK")) {
+                                        shutterCommand.clone().enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                int responseCode = response.code();
+                                                Log.d(TAG, "GoPro Shutter Off Response Code: " + responseCode);
+                                                switch (responseCode) {
+                                                    case 200:
                                                         actionCamOnline = true;
-                                                        actionCamRecording = true;
-                                                        //displayTasks();
+                                                        actionCamRecording = false;
                                                         TextView tripTaskText = txtView.findViewById(R.id.gridTextView);
                                                         tripTaskText.setText(getResources().getString(R.string.task_title_actioncam_start_video));
-                                                        com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiClient GoProV2Api = com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiBase.getMainClient().create(com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiClient.class);
-                                                        Call<ResponseBody> goProV2Status = GoProV2Api.status();
-                                                        goProV2Status.clone().enqueue(new Callback<ResponseBody>() {
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                Log.d(TAG, "onFailure(): GoPro Shutter Off");
+                                            }
+
+                                        });
+                                    } else {
+                                        final ApiClient GoProV1Api = ApiBase.getMainClient().create(ApiClient.class);
+                                        Call<ResponseBody> shutterCommand;
+                                        String actionCamPwd = sharedPrefs.getString("ACTIONCAM_GOPRO3_PWD", "");
+                                        if (actionCamPwd.equals("")) {
+                                            shutterCommand = GoProV1Api.command("bacpac", "SH", "%01");
+                                        } else {
+                                            shutterCommand = GoProV1Api.commandPwd("bacpac", "SH", actionCamPwd, "%01");
+                                        }
+                                        shutterCommand.clone().enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                int responseCode = response.code();
+                                                Log.d(TAG, "GoPro Shutter On Response Code" + responseCode);
+                                                switch (responseCode) {
+                                                    case 200:
+                                                        actionCamOnline = true;
+                                                        actionCamRecording = true;
+                                                        TextView tripTaskText = txtView.findViewById(R.id.gridTextView);
+                                                        tripTaskText.setText(getResources().getString(R.string.task_title_actioncam_stop_video));
+                                                        break;
+                                                    case 410:
+                                                        //Camera Off
+                                                        //Turn Camera On
+                                                        Call<ResponseBody> onCommand;
+                                                        String actionCamPwd = sharedPrefs.getString("ACTIONCAM_GOPRO3_PWD", "");
+                                                        if (actionCamPwd.equals("")) {
+                                                            onCommand = GoProV1Api.command("bacpac", "PW", "%01");
+                                                        } else {
+                                                            onCommand = GoProV1Api.commandPwd("bacpac", "PW", actionCamPwd, "%01");
+                                                        }
+                                                        onCommand.clone().enqueue(new Callback<ResponseBody>() {
                                                             @Override
                                                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                                try {
-                                                                    String responseBody = response.body().string();
-                                                                    Log.d(TAG, responseBody);
-                                                                    try {
-                                                                        JSONObject mainObject = new JSONObject(responseBody);
-                                                                        JSONObject statusObject = mainObject.getJSONObject("status");
-                                                                        String recordingState = statusObject.getString("8");
-                                                                        Log.d(TAG, "Recording State: " + recordingState);
-                                                                        /*
-                                                                        if (recordingState.equals("1")) {
-                                                                            actionCamRecording = true;
+                                                                int responseCode = response.code();
+                                                                Log.d(TAG, "GoPro Power On Response Code: " + responseCode);
+                                                                switch (responseCode) {
+                                                                    case 200:
+                                                                        actionCamOnline = true;
+                                                                        Call<ResponseBody> shutterCommand;
+                                                                        String actionCamPwd = sharedPrefs.getString("ACTIONCAM_GOPRO3_PWD", "");
+                                                                        if (actionCamPwd.equals("")) {
+                                                                            shutterCommand = GoProV1Api.command("bacpac", "SH", "%01");
                                                                         } else {
-                                                                            actionCamRecording = false;
+                                                                            shutterCommand = GoProV1Api.commandPwd("bacpac", "SH", actionCamPwd, "%01");
                                                                         }
-                                                                        */
-                                                                    } catch (JSONException e) {
+                                                                        shutterCommand.clone().enqueue(new Callback<ResponseBody>() {
+                                                                            @Override
+                                                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                                                int responseCode = response.code();
+                                                                                Log.d(TAG, "GoPro Shutter On Response Code" + responseCode);
+                                                                                switch (responseCode) {
+                                                                                    case 200:
+                                                                                        actionCamOnline = true;
+                                                                                        actionCamRecording = true;
+                                                                                        TextView tripTaskText = txtView.findViewById(R.id.gridTextView);
+                                                                                        tripTaskText.setText(getResources().getString(R.string.task_title_actioncam_stop_video));
+                                                                                        break;
+                                                                                    default:
+                                                                                        break;
+                                                                                }
+                                                                            }
 
-                                                                    }
+                                                                            @Override
+                                                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                                                Log.d(TAG, "onFailure() GoPro Hero3 Shutter On");
+                                                                                actionCamOnline = false;
+                                                                                if (actionCamRecording) {
+                                                                                    actionCamRecording = false;
+                                                                                    displayTasks();
+                                                                                }
+                                                                            }
+                                                                        });
 
-                                                                } catch (IOException e) {
-
+                                                                        break;
+                                                                    default:
+                                                                        break;
                                                                 }
+
                                                             }
+
                                                             @Override
                                                             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                                // handle failure
+                                                                Log.d(TAG, "onFailure() GoPro Hero3 Power On");
                                                                 actionCamOnline = false;
                                                                 if (actionCamRecording) {
                                                                     actionCamRecording = false;
@@ -1462,68 +1485,107 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                                                                 }
                                                             }
                                                         });
-                                                    }
-                                                    break;
-                                                default:
-                                                    break;
+                                                        break;
+                                                }
                                             }
-                                        }
 
-                                        @Override
-                                        public void onFailure(Call<GoProResponse> call, Throwable t) {
-                                            // handle failure
-                                            Log.d(TAG,"onFailure() Get GoProV2 Status");
-                                            actionCamOnline = false;
-                                            if (actionCamRecording) {
-                                                actionCamRecording = false;
-                                                displayTasks();
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                Log.d(TAG, "onFailure() GoPro Hero3 Shutter On");
+                                                actionCamOnline = false;
+                                                if (actionCamRecording) {
+                                                    actionCamRecording = false;
+                                                    displayTasks();
+                                                }
                                             }
-                                        }
-                                    });
-
-                                } else {
-                                    Call<GoProResponse> shutterCommand = com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.model.GPConstants.Commands.Shutter.shutter;
-                                    shutterCommand.clone().enqueue(new Callback<GoProResponse>() {
-                                        @Override
-                                        public void onResponse(Call<GoProResponse> call, Response<GoProResponse> response) {
-                                            switch (response.code()){
-                                                case 200:
-                                                    //Success
-                                                    String responseMessage = response.message();
-                                                    Log.d(TAG,"Response: " + responseMessage);
-                                                    if(responseMessage.equals("OK")) {
-                                                        actionCamOnline = true;
-                                                        actionCamRecording = true;
-                                                        //displayTasks();
-                                                        TextView tripTaskText = txtView.findViewById(R.id.gridTextView);
-                                                        tripTaskText.setText(getResources().getString(R.string.task_title_actioncam_stop_video));
-                                                    }
-                                                    break;
-                                                default:
-                                                    break;
+                                        });
+                                    }
+                                    break;
+                                case 2:
+                                    //GoPro Hero4+
+                                    if (actionCamRecording) {
+                                        Call<GoProResponse> shutterCommand = com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.model.GPConstants.Commands.Shutter.stop;
+                                        shutterCommand.clone().enqueue(new Callback<GoProResponse>() {
+                                            @Override
+                                            public void onResponse(Call<GoProResponse> call, Response<GoProResponse> response) {
+                                                switch (response.code()) {
+                                                    case 200:
+                                                        //Success
+                                                        String responseMessage = response.message();
+                                                        Log.d(TAG, "GoPro Hero4+ Off Response: " + responseMessage);
+                                                        if (responseMessage.equals("OK")) {
+                                                            actionCamOnline = true;
+                                                            actionCamRecording = true;
+                                                            TextView tripTaskText = txtView.findViewById(R.id.gridTextView);
+                                                            tripTaskText.setText(getResources().getString(R.string.task_title_actioncam_start_video));
+                                                        }
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }
                                             }
-                                        }
 
-                                        @Override
-                                        public void onFailure(Call<GoProResponse> call, Throwable t) {
-                                            // handle failure
-                                            Log.d(TAG,"onFailure() Get GoProV2 Status");
-                                            actionCamOnline = false;
-                                            if (actionCamRecording) {
-                                                actionCamRecording = false;
-                                                displayTasks();
+                                            @Override
+                                            public void onFailure(Call<GoProResponse> call, Throwable t) {
+                                                // handle failure
+                                                Log.d(TAG, "onFailure() GoPro Hero4+ Off");
+                                                actionCamOnline = false;
+                                                if (actionCamRecording) {
+                                                    actionCamRecording = false;
+                                                    displayTasks();
+                                                }
                                             }
-                                        }
-                                    });
-                                }
-                                break;
-                            default:
-                                break;
+                                        });
 
+                                    } else {
+                                        Call<GoProResponse> shutterCommand = com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.model.GPConstants.Commands.Shutter.shutter;
+                                        shutterCommand.clone().enqueue(new Callback<GoProResponse>() {
+                                            @Override
+                                            public void onResponse(Call<GoProResponse> call, Response<GoProResponse> response) {
+                                                switch (response.code()) {
+                                                    case 200:
+                                                        //Success
+                                                        String responseMessage = response.message();
+                                                        Log.d(TAG, "GoPro Hero4+ On Response: " + responseMessage);
+                                                        if (responseMessage.equals("OK")) {
+                                                            actionCamOnline = true;
+                                                            actionCamRecording = true;
+                                                            TextView tripTaskText = txtView.findViewById(R.id.gridTextView);
+                                                            tripTaskText.setText(getResources().getString(R.string.task_title_actioncam_stop_video));
+                                                        }
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<GoProResponse> call, Throwable t) {
+                                                // handle failure
+                                                Log.d(TAG, "onFailure() GoPro Hero4+ On");
+                                                actionCamOnline = false;
+                                                if (actionCamRecording) {
+                                                    actionCamRecording = false;
+                                                    displayTasks();
+                                                }
+                                            }
+                                        });
+                                    }
+                                    break;
+                                default:
+                                    //ActionCam Not Set
+                                    Toast.makeText(TaskActivity.this, R.string.toast_actioncam_notset, Toast.LENGTH_LONG).show();
+                                    break;
+
+                            }
+                        } else {
+                            //ActionCam Not Detected
+                            Toast.makeText(TaskActivity.this, R.string.toast_actioncam_notconnected, Toast.LENGTH_LONG).show();
                         }
+                    default:
+                        break;
                 }
             }
-
         });
         // End of Tasks
     }
