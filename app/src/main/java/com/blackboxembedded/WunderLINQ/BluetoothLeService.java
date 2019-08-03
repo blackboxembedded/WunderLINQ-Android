@@ -48,6 +48,7 @@ import java.lang.reflect.Method;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -252,9 +253,11 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
             @Override
             public void run() {
                 Calendar c = Calendar.getInstance();
-                final String finalTime = String.format(Locale.getDefault(), "%d:%d:%d", c.get(Calendar.HOUR), c.get(Calendar.MINUTE), c.get(Calendar.SECOND));
-
+                SimpleDateFormat dateformat = new SimpleDateFormat("hh:mm aa",Locale.getDefault());
+                String finalTime = dateformat.format(c.getTime());
                 Data.setTime(finalTime);
+                final Intent intent = new Intent(BluetoothLeService.ACTION_DATA_AVAILABLE);
+                MyApplication.getContext().sendBroadcast(intent);
             }
 
         }, 1000, 1000); //Initial Delay and Period for update (in milliseconds)
@@ -2071,9 +2074,6 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                         case 0x5:
                             FaultStatus.setRearFogLightActive(true);
                             break;
-                        case 0x7:
-                            FaultStatus.setRearFogLightActive(true);
-                            break;
                         case 0x9:
                             FaultStatus.setRearFogLightActive(true);
                             break;
@@ -2171,12 +2171,6 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                             break;
                         case 0xE:
                             FaultStatus.setAddDippedLightActive(false);
-                            FaultStatus.setAddBrakeLightActive(true);
-                            FaultStatus.setFrontLampOneLightActive(true);
-                            FaultStatus.setFrontLampTwoLightActive(true);
-                            break;
-                        case 0xF:
-                            FaultStatus.setAddDippedLightActive(true);
                             FaultStatus.setAddBrakeLightActive(true);
                             FaultStatus.setFrontLampOneLightActive(true);
                             FaultStatus.setFrontLampTwoLightActive(true);

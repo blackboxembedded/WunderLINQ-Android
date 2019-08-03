@@ -1236,9 +1236,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 btButton.setEnabled(false);
                 mMenu.findItem(R.id.action_hwsettings).setVisible(true);
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-                btButton.setColorFilter(getResources().getColor(R.color.motorrad_blue));
-                btButton.setEnabled(false);
-                mMenu.findItem(R.id.action_hwsettings).setVisible(true);
+                Bundle extras = getIntent().getExtras();
+                if (extras != null) {
+                    btButton.setColorFilter(getResources().getColor(R.color.motorrad_blue));
+                    btButton.setEnabled(false);
+                    mMenu.findItem(R.id.action_hwsettings).setVisible(true);
+                }
                 if (!sharedPrefs.getBoolean("prefMotorcycleData", false)){
                     updateDisplay();
                 }
