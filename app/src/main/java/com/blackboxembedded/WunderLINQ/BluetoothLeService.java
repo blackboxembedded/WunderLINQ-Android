@@ -109,6 +109,7 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
     static final float ALPHA = 0.05f;
     float[] mGravity = new float[3];
     float[] mGeomagnetic = new float[3];
+    float[] mAcceleration = new float[3];
 
     LocationRequest locationRequest;
     GoogleApiClient googleApiClient;
@@ -326,13 +327,15 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 Data.setLeanAngle(leanAngle);
             } else if (event.sensor.getType() == Sensor.TYPE_GRAVITY) {
                 mGravity = event.values.clone();
-                double gforce = Math.sqrt(mGravity[0] * mGravity[0] + mGravity[1] * mGravity[1] + mGravity[2] * mGravity[2]) / 9.81;
-                Data.setGForce(gforce);
             } else if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
                 mGeomagnetic = Utils.lowPass(event.values.clone(), mGeomagnetic, ALPHA);
             } else if (event.sensor.getType() == Sensor.TYPE_PRESSURE) {
                 float[] mBarometricPressure = event.values;
                 Data.setBarometricPressure((double)mBarometricPressure[0]);
+            } else if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+                mAcceleration = event.values.clone();
+                double gforce = Math.sqrt(mAcceleration[0] * mAcceleration[0] + mAcceleration[1] * mAcceleration[1] + mAcceleration[2] * mAcceleration[2]) / 9.81;
+                Data.setGForce(gforce);
             }
             if (mGravity != null && mGeomagnetic != null) {
                 float R[] = new float[9];
