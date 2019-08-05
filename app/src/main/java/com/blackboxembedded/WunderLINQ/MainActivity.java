@@ -1841,7 +1841,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 //barometric pressure
                 label = getString(R.string.barometricpressure_header) + " (mBar)";
                 if (Data.getBarometricPressure() != null) {
-                    value = String.valueOf(Utils.oneDigit.format(Data.getBarometricPressure()));
+                    value = String.valueOf(Math.round(Data.getBarometricPressure()));
                 }
                 break;
             case 26:
