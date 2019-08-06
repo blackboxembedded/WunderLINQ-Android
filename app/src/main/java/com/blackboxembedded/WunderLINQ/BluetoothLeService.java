@@ -97,6 +97,7 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
     private Sensor rotationVector;
     private Sensor gravity;
     private Sensor barometer;
+    private Sensor acceleration;
     int xAxis = SensorManager.AXIS_X;
     int yAxis = SensorManager.AXIS_Z;
 
@@ -232,11 +233,13 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
         rotationVector = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         gravity = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
         barometer = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
+        acceleration = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         sensorManager.registerListener(sensorEventListener, accelerometer, SensorManager.SENSOR_DELAY_UI);
         sensorManager.registerListener(sensorEventListener, magnetometer, SensorManager.SENSOR_DELAY_UI);
         sensorManager.registerListener(sensorEventListener, rotationVector, SensorManager.SENSOR_DELAY_GAME);
         sensorManager.registerListener(sensorEventListener, gravity, SensorManager.SENSOR_DELAY_GAME);
         sensorManager.registerListener(sensorEventListener, barometer, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(sensorEventListener, acceleration, SensorManager.SENSOR_DELAY_UI);
 
         // Location stuff
         createLocationRequest();
@@ -298,6 +301,8 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
         sensorManager.unregisterListener(sensorEventListener, accelerometer);
         sensorManager.unregisterListener(sensorEventListener, rotationVector);
         sensorManager.unregisterListener(sensorEventListener, gravity);
+        sensorManager.unregisterListener(sensorEventListener, barometer);
+        sensorManager.unregisterListener(sensorEventListener, acceleration);
 
         stopLocationUpdates();
         googleApiClient.disconnect();
@@ -332,9 +337,9 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
             } else if (event.sensor.getType() == Sensor.TYPE_PRESSURE) {
                 float[] mBarometricPressure = event.values;
                 Data.setBarometricPressure((double)mBarometricPressure[0]);
-            } else if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            } else if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
                 mAcceleration = event.values.clone();
-                double gforce = Math.sqrt(mAcceleration[0] * mAcceleration[0] + mAcceleration[1] * mAcceleration[1] + mAcceleration[2] * mAcceleration[2]) / 9.81;
+                double gforce = Math.sqrt(mAcceleration[0] * mAcceleration[0] + mAcceleration[1] * mAcceleration[1] + mAcceleration[2] * mAcceleration[2]);
                 Data.setGForce(gforce);
             }
             if (mGravity != null && mGeomagnetic != null) {
