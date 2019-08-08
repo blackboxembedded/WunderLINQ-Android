@@ -67,8 +67,10 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
@@ -1652,7 +1654,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 label = getString(R.string.throttle_label) + " (" + throttleUnit + ")";
                 if(Data.getThrottlePosition() != null){
                     Double throttlePosition = Data.getThrottlePosition();
-                    value = String.valueOf(throttlePosition);
+                    value = String.valueOf(Math.round(throttlePosition));
                 }
                 break;
             case 8:
@@ -1791,7 +1793,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 label = getString(R.string.leanangle_header);
                 if(Data.getLeanAngle() != null){
                     Double leanAngle = Data.getLeanAngle();
-                    value = String.valueOf(Utils.oneDigit.format(leanAngle));
+                    value = String.valueOf(Math.round(leanAngle));
                 }
                 break;
             case 22:
@@ -1867,6 +1869,21 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                 }
                 value = altitude;
+                break;
+            case 28:
+                //Sunrise/Sunset
+                label = getString(R.string.sunrisesunset_header);
+                if (Data.getLastLocation() != null) {
+                    Calendar[] sunriseSunset = ca.rmen.sunrisesunset.SunriseSunset.getSunriseSunset(Calendar.getInstance(), Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
+                    Date sunrise = sunriseSunset[0].getTime();
+                    Date sunset = sunriseSunset[1].getTime();
+                    SimpleDateFormat dateformat = new SimpleDateFormat("hh:mm aa", Locale.getDefault());
+                    String sunriseString = dateformat.format(sunrise);
+                    String sunsetString = dateformat.format(sunset);
+                    value = sunriseString + "/" + sunsetString;
+                } else {
+                    value = "No Fix";
+                }
                 break;
             default:
 
