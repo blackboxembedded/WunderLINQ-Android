@@ -323,13 +323,22 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 //Get Rotation Vector Sensor Values
                 float[] mRotationMatrix = new float[9];
                 float[] mRotationFixMatrix = new float[9];
-                SensorManager.getRotationMatrixFromVector(mRotationMatrix, event.values);
-                SensorManager.remapCoordinateSystem(mRotationMatrix, xAxis, yAxis, mRotationFixMatrix);
-                // Transform rotation matrix into azimuth/pitch/roll
                 float[] orientation = new float[3];
-                SensorManager.getOrientation(mRotationFixMatrix, orientation);
-                double leanAngle = orientation[2] * -57;
+                Double leanAngle = 0.0;
+                SensorManager.getRotationMatrixFromVector(mRotationMatrix, event.values);
+                int rotation = MyApplication.getContext().getResources().getConfiguration().orientation;
+                if(rotation == 1) { // Default display rotation is portrait
+                    SensorManager.remapCoordinateSystem(mRotationMatrix, SensorManager.AXIS_X, SensorManager.AXIS_Z, mRotationFixMatrix);
+                    SensorManager.getOrientation(mRotationFixMatrix, orientation);
+                    leanAngle = (orientation[2] * 180) / Math.PI;
+                } else {   // Default display rotation is landscape
+                    SensorManager.remapCoordinateSystem(mRotationMatrix, SensorManager.AXIS_X, SensorManager.AXIS_Z, mRotationFixMatrix);
+                    SensorManager.getOrientation(mRotationFixMatrix, orientation);
+                    leanAngle = ((orientation[2] * 180) / Math.PI) + 90;
+                }
                 Data.setLeanAngle(leanAngle);
+                //final Intent intent = new Intent(BluetoothLeService.ACTION_DATA_AVAILABLE);
+                //MyApplication.getContext().sendBroadcast(intent);
             } else if (event.sensor.getType() == Sensor.TYPE_GRAVITY) {
                 mGravity = event.values.clone();
             } else if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
