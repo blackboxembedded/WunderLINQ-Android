@@ -758,6 +758,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                             Log.d(TAG,"Running in the emulator");
                         }
                         break;
+                    case R.id.action_bike_info:
+                        Intent bikeInfoIntent = new Intent(MainActivity.this, BikeInfoActivity.class);
+                        startActivity(bikeInfoIntent);
+                        break;
                     case R.id.action_data:
                         Intent geoDataIntent = new Intent(MainActivity.this, GeoDataActivity.class);
                         startActivity(geoDataIntent);
@@ -1224,7 +1228,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 mBluetoothLeService.discoverServices();
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 Log.d(TAG,"GATT_DISCONNECTED");
-                Data.clear();
+                //Data.clear();
                 if (!sharedPrefs.getBoolean("prefMotorcycleData", false)){
                     updateDisplay();
                 }

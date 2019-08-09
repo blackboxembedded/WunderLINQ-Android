@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_bike_info"
+        android:icon="@drawable/ic_info_circle"
+        android:title="@string/bike_info_label"
+        app:showAsAction="always|withText"/>
     <item android:id="@+id/action_data"
         android:icon="@drawable/ic_area_chart"
         android:title="@string/geodata_label"

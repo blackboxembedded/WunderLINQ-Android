@@ -416,4 +416,9 @@
     <string name="sunrisesunset_header">Sunrise/Sunset</string>
     <string name="task_title_weathermap">Weather Map</string>
     <string name="weathermap_title">Weather Map</string>
+    <string name="bike_info_label">Bike Info</string>
+    <string name="bike_info_title">Bike Info</string>
+    <string name="next_service_date_label">Next Service Date</string>
+    <string name="next_service_label">Next Service</string>
+    <string name="vin_label">VIN</string>
 </resources>

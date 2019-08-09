@@ -35,9 +35,9 @@
         android:label="@string/app_name"
         android:showOnLockScreen="true"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/AppTheme">
-
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".BikeInfoActivity"></activity>
         <!-- Work Around for GMaps crash https://issuetracker.google.com/issues/79478779 -->
         <uses-library
             android:name="org.apache.http.legacy"
@@ -58,15 +58,18 @@
             android:supportsPictureInPicture="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
-                    android:scheme="wunderlinq"
-                    android:host="datagrid" />
+                    android:host="datagrid"
+                    android:scheme="wunderlinq" />
             </intent-filter>
         </activity>
         <activity android:name=".MusicActivity" />
@@ -75,17 +78,20 @@
             android:launchMode="singleTop">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
-                    android:scheme="wunderlinq"
-                    android:host="quicktasks" />
+                    android:host="quicktasks"
+                    android:scheme="wunderlinq" />
             </intent-filter>
         </activity>
         <activity android:name=".SettingsActivity" />
         <activity android:name=".ContactListActivity" />
         <activity android:name=".FaultActivity" />
-        <activity android:name=".GeoDataActivity"
+        <activity
+            android:name=".GeoDataActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".WaypointActivity"
@@ -95,11 +101,13 @@
             android:screenOrientation="portrait">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
-                    android:scheme="wunderlinq"
-                    android:host="wptview" />
+                    android:host="wptview"
+                    android:scheme="wunderlinq" />
             </intent-filter>
         </activity>
         <activity
@@ -111,19 +119,23 @@
         <activity android:name=".WaypointNavActivity">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
-                    android:scheme="wunderlinq"
-                    android:host="wptnav" />
+                    android:host="wptnav"
+                    android:scheme="wunderlinq" />
             </intent-filter>
         </activity>
         <activity android:name=".AlertActivity" />
-        <activity android:name=".AboutActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".FWConfigActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".WeatherMapActivity"/>
+        <activity
+            android:name=".AboutActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FWConfigActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".WeatherMapActivity" />
 
         <service
             android:name=".NotificationListener"
@@ -180,12 +192,11 @@
                 <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
             </intent-filter>
         </receiver>
-
         <receiver android:name=".LoggingNotificationReceiver">
             <intent-filter>
-                <action android:name="RESUME_ACTION"/>
-                <action android:name="STOP_ACTION"/>
-                <action android:name="CANCEL_ACTION"/>
+                <action android:name="RESUME_ACTION" />
+                <action android:name="STOP_ACTION" />
+                <action android:name="CANCEL_ACTION" />
             </intent-filter>
         </receiver>
     </application>

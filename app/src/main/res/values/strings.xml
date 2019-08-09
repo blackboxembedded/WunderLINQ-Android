@@ -67,12 +67,19 @@
     <string name="fuelrange_label">Range</string>
 
     <!-- Menu -->
+    <string name="bike_info_label">Bike Info</string>
     <string name="geodata_label">Trips &amp; Waypoints</string>
     <string name="appsettings_label">App Settings</string>
     <string name="hwsettings_label">HW Settings</string>
     <string name="splitscreen_label">Enter Split Screen</string>
     <string name="info_label">About</string>
     <string name="close_label">Close</string>
+
+    <!-- BikeInfoActivity -->
+    <string name="bike_info_title">Bike Info</string>
+    <string name="vin_label">VIN</string>
+    <string name="next_service_date_label">Next Service Date</string>
+    <string name="next_service_label">Next Service</string>
 
     <!-- FWConfigActivity -->
     <string name="fw_config_title">WunderLINQ Settings</string>
@@ -544,7 +551,7 @@
     <string name="pref_task_eleven" translatable="false">@string/eleventh</string>
     <string name="pref_task_twelve" translatable="false">@string/twelfth</string>
     <string-array name="tasks_array" translatable="false">
-        <item name="1" >@string/task_title_navigation</item>
+        <item name="1">@string/task_title_navigation</item>
         <item name="2">@string/task_title_gohome</item>
         <item name="3">@string/task_title_favnumber</item>
         <item name="4">@string/task_title_callcontact</item>
