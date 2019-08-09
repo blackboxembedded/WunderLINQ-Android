@@ -2,6 +2,8 @@ package com.blackboxembedded.WunderLINQ;
 
 import android.location.Location;
 
+import java.util.Date;
+
 /**
  * Created by keithconger on 9/10/17.
  */
@@ -26,13 +28,30 @@ public class Data {
     }
 
     // VIN
-    // Last Location
     private static String vin;
     public static String getVin() {
         return vin;
     }
     public static void setVin(String vin){
         Data.vin = vin;
+    }
+
+    // Next Service, km
+    private static Integer nextService;
+    public static Integer getNextService() {
+        return nextService;
+    }
+    public static void setNextService(Integer nextService){
+        Data.nextService = nextService;
+    }
+
+    // Next Service, Date
+    private static Date nextServiceDate;
+    public static Date getNextServiceDate() {
+        return nextServiceDate;
+    }
+    public static void setNextServiceDate(Date nextServiceDate){
+        Data.nextServiceDate = nextServiceDate;
     }
 
     // Front Tire Pressure in bar
@@ -274,6 +293,8 @@ public class Data {
         Data.lastLocation = null;
         Data.lastMessage = null;
         Data.vin = null;
+        Data.nextService = null;
+        Data.nextServiceDate = null;
         Data.frontTirePressure = null;
         Data.rearTirePressure = null;
         Data.ambientTemperature = null;

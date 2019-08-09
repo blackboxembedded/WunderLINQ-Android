@@ -126,6 +126,7 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
     private static byte[] lastMessage08 = new byte[8];
     private static byte[] lastMessage09 = new byte[8];
     private static byte[] lastMessage0A = new byte[8];
+    private static byte[] lastMessage0B = new byte[8];
     private static byte[] lastMessage0C = new byte[8];
 
     /**
@@ -420,6 +421,7 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
                         "Disconnected";
                 Log.d(TAG,dataLog);
+                /*
                 lastMessage00 = new byte[8];
                 lastMessage01 = new byte[8];
                 lastMessage04 = new byte[8];
@@ -432,6 +434,7 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 lastMessage0C = new byte[8];
                 Data.clear();
                 FaultStatus.clear();
+                */
             }
             // GATT Server Connecting
             if (newState == BluetoothProfile.STATE_CONNECTING) {
@@ -643,6 +646,12 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                             process = true;
                         }
                         break;
+                    case 0x0b:
+                        if(!Arrays.equals(lastMessage0B, data)){
+                            lastMessage0B = data;
+                            process = true;
+                        }
+                        break;
                     case 0x0c:
                         if(!Arrays.equals(lastMessage0C, data)){
                             lastMessage0C = data;
@@ -715,8 +724,8 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
             String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
                     "Disconnection request sent";
             Log.d(TAG,dataLog);
-            Data.clear();
-            FaultStatus.clear();
+            //Data.clear();
+            //FaultStatus.clear();
             clearNotifications();
             close();
         }
@@ -2237,6 +2246,22 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 break;
             case 0x0b:
                 //Log.d(TAG, "Message ID 11");
+                if ((data[3] & 0xFF) != 0xFF && (data[2] & 0xFF) != 0xFF && (data[1] & 0xFF) != 0xFF) {
+                    int year = (((data[2] & 0xFF) >> 4) & 0x0f) << 8 |(data[1] & 0xFF);
+                    //(b & 0xFF) << 8 | (c & 0xFF);
+                    int month = ((data[2] & 0xFF) & 0x0f) - 1;
+                    int day = (data[3] & 0xFF);
+                    Calendar cal = Calendar.getInstance();
+                    cal.set(Calendar.YEAR, year);
+                    cal.set(Calendar.MONTH, month);
+                    cal.set(Calendar.DAY_OF_MONTH, day);
+                    Date nextServiceDate = cal.getTime();
+                    Data.setNextServiceDate(nextServiceDate);
+                }
+                if ((data[4] & 0xFF) != 0xFF){
+                    int nextService = data[4] * 100;
+                    Data.setNextService(nextService);
+                }
                 break;
             case 0x0c:
                 //Log.d(TAG, "Message ID 12");

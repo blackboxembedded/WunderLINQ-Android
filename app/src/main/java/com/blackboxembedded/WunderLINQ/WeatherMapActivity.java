@@ -26,6 +26,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
@@ -155,6 +156,7 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
 
         // Move the camera
         LatLng location = new LatLng(Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
+        mMap.addMarker(new MarkerOptions().position(location));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, currentZoom));
 
         TileProvider tileProvider = new UrlTileProvider(256, 256) {
