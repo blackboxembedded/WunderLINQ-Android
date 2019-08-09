@@ -660,7 +660,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 getResources().getString(R.string.task_title_voicecontrol),
                 getResources().getString(R.string.task_title_settings),
                 getResources().getString(R.string.task_title_homescreen),
-                goProVideoTaskText
+                goProVideoTaskText,
+                getResources().getString(R.string.task_title_weathermap)
         };
         int numTasks = taskTitles.length;
         Drawable[] iconId = new Drawable[numTasks];
@@ -693,6 +694,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             iconId[12].setTint(Color.WHITE);
             iconId[13] = getResources().getDrawable(R.drawable.ic_video_camera, getTheme());
             iconId[13].setTint(Color.WHITE);
+            iconId[14] = getResources().getDrawable(R.drawable.ic_cloud_sun, getTheme());
+            iconId[14].setTint(Color.WHITE);
         } else  {
             iconId[0] = getResources().getDrawable(R.drawable.ic_map, getTheme());
             iconId[0].setTint(Color.BLACK);
@@ -722,6 +725,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             iconId[12].setTint(Color.BLACK);
             iconId[13] = getResources().getDrawable(R.drawable.ic_video_camera, getTheme());
             iconId[13].setTint(Color.BLACK);
+            iconId[14] = getResources().getDrawable(R.drawable.ic_cloud_sun, getTheme());
+            iconId[14].setTint(Color.BLACK);
         }
 
         mapping = new ArrayList<>();
@@ -804,7 +809,9 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                     break;
                 case 9:
                     int selectionTen = Integer.parseInt(sharedPrefs.getString("prefQuickTaskTen", "9"));
+                    Log.d(TAG,"Selection: " + selectionTen);
                     if (!(selectionTen >= numTasks)){
+                        Log.d(TAG,"Mapping: " + selectionTen);
                         mapping.add(selectionTen);
                         taskTitle.add(taskTitles[selectionTen]);
                         taskIcon.add(iconId[selectionTen]);
@@ -1582,6 +1589,11 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                             //ActionCam Not Detected
                             Toast.makeText(TaskActivity.this, R.string.toast_actioncam_notconnected, Toast.LENGTH_LONG).show();
                         }
+                    case 14:
+                        //Weather Map
+                        Intent weatherIntent = new Intent(TaskActivity.this, WeatherMapActivity.class);
+                        startActivity(weatherIntent);
+                        break;
                     default:
                         break;
                 }

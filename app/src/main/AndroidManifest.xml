@@ -123,6 +123,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".FWConfigActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".WeatherMapActivity"/>
 
         <service
             android:name=".NotificationListener"
