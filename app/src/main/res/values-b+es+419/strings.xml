@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- MainActivity -->
     <string name="main_title">Motocicleta</string>
@@ -28,7 +29,6 @@
     </string>
     <string name="disclaimer_ok">Estoy de acuerdo</string>
     <string name="disclaimer_quit">Salir</string>
-
     <!-- BLE Stuff Below -->
     <string name="bt_not_supported">Sin soporte de Bluetooth Baja Energía.</string>
     <string name="rdc_front_label">Neumático Del.</string>
@@ -40,12 +40,10 @@
     <string name="trip2_label">Parcial 2</string>
     <string name="gear_label">Marcha</string>
     <!-- Data Menu -->
-
     <!-- FaultActivity -->
     <string name="title_activity_fault">Actividad de fallas</string>
     <string name="fault_title">Fallas Activas</string>
     <string name="notification_channel">Fallas Activas</string>
-
     <!-- Fault strings -->
     <string name="fault_ABSSLF">Autodiagnóstico del ABS no completado</string>
     <string name="fault_ABSERR">Error del ABS</string>
@@ -84,10 +82,8 @@
     <string name="fault_TIRERWF">Advertencia de Presión de neumático trasero</string>
     <string name="fault_TIREFCF">Presión crítica en neumático delantero</string>
     <string name="fault_TIRERCF">Presión crítica en neumático trasero</string>
-
     <!-- WaypointActivity -->
     <string name="waypoint_title">Waypoints guardados</string>
-
     <!-- WaypointViewActivity -->
     <string name="waypoint_view_title">Waypoint guardado</string>
     <string name="waypoint_view_tv_date_label">Fecha Grabación</string>
@@ -100,10 +96,8 @@
     <string name="waypoint_view_bt_delete">Eliminar</string>
     <string name="waypoint_view_waypoint_label">Waypoint</string>
     <string name="waypoint_view_share_label">Compartir via</string>
-
     <!-- TripsActivity -->
     <string name="trips_title">Recorded Trips</string>
-
     <!-- TripViewActivity -->
     <string name="trip_view_title">Viaje</string>
     <string name="trip_view_trip_label">Bitácora de Viajes WunderLINQ</string>
@@ -117,10 +111,8 @@
     <string name="trip_view_tv_brakes">Frenos (Del/Tras)</string>
     <string name="trip_view_tv_ambient">Temp ambiente(Min/Prom/Máx)</string>
     <string name="trip_view_tv_engine">Temp Motor(Min/Prom/Máx)</string>
-
     <!-- CompassActivity -->
     <string name="compass_title">Compás</string>
-
     <!-- MusicActivity -->
     <string name="music_title">Música</string>
     <string name="title_activity_music">Actividad Musical</string>
@@ -129,7 +121,6 @@
     <string name="unknown">Desconocido</string>
     <string name="notification_alert_title">WunderLINQ necesita acceso a las notificaciones</string>
     <string name="notification_alert_body">Por favor, otorgue acceso de notificación para que esta aplicación pueda controlar su reproductor de música.</string>
-
     <!-- TaskActivity -->
     <string name="quicktask_title">Tareas Rápidas</string>
     <string name="task_title_navigation">Navegación</string>
@@ -149,7 +140,6 @@
     <string name="toast_address_not_set">Domicilio de \'Ir a Casa\' no informado en Configuración</string>
     <string name="toast_phone_not_set">Núm. de Teléfono favorito no informado en Configuración</string>
     <string name="toast_photo_taken">Fotografía tomada!</string>
-
     <!-- ContactListActivity -->
     <string name="contactlist_title">Contactos</string>
     <string name="contact_type_0">Personalizado</string>
@@ -173,16 +163,13 @@
     <string name="contact_type_18">Buscaper. trabajo</string>
     <string name="contact_type_19">Asistente</string>
     <string name="contact_type_20">MMS</string>
-
     <!-- AlertActivity -->
     <string name="alert_btn_ok">OK</string>
     <string name="alert_btn_close">Cerrar</string>
     <string name="alert_title_fuel">Poco Combutible</string>
     <string name="alert_label_fuel">Desea direcciones hacia la gasolinera mas cercana?"</string>
-
     <!-- VideoRecService -->
     <string name="title_video_notification">WunderLINQ grabando video</string>
-
     <!-- SettingsActivity -->
     <string name="title_activity_settings">Configuraciones</string>
     <!-- Preference strings -->
@@ -390,4 +377,5 @@
     <string name="next_service_date_label">Next Service Date</string>
     <string name="next_service_label">Next Service</string>
     <string name="vin_label">VIN</string>
+    <string name="btn_logging_notification_stop">Stop Recording</string>
 </resources>
