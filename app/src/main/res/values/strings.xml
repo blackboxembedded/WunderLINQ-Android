@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">WunderLINQ</string>
     <string name="product" translatable="false">WunderLINQ</string>
@@ -6,7 +7,7 @@
     <!-- MainActivity -->
     <string name="main_title">Motorcycle</string>
     <string name="blank_field">∞</string>
-    <string name="accessibility_explanation">This is required to automatically enter multi window mode and to launch the Android Task Switcher, if you chose to not enable WunderLINQ will not fully function</string>
+    <string name="accessibility_explanation">This is required to automatically enter multi window mode and to launch the Android Task Switcher, if you chose to not enable WunderLINQ will not fully function.</string>
     <!-- Permission Requests -->
     <string name="accessibilityservice_alert_title">WunderLINQ needs to run a Accessibility Service</string>
     <string name="accessibilityservice_alert_body">Please enable the WunderLINQ accessibilty service.  </string>
@@ -44,7 +45,6 @@
     <string name="disclaimer_quit">Quit</string>
     <!-- BLE Stuff Below -->
     <string name="bt_not_supported">BLE is not supported</string>
-
     <string name="rdc_front_label">Front Tire</string>
     <string name="rdc_rear_label">Rear Tire</string>
     <string name="engine_temp_label">Engine Temp</string>
@@ -65,7 +65,6 @@
     <string name="fueleconomyone_label">Economy 1</string>
     <string name="fueleconomytwo_label">Economy 2</string>
     <string name="fuelrange_label">Range</string>
-
     <!-- Menu -->
     <string name="bike_info_label">Bike Info</string>
     <string name="geodata_label">Trips &amp; Waypoints</string>
@@ -74,13 +73,11 @@
     <string name="splitscreen_label">Enter Split Screen</string>
     <string name="info_label">About</string>
     <string name="close_label">Close</string>
-
     <!-- BikeInfoActivity -->
     <string name="bike_info_title">Bike Info</string>
     <string name="vin_label">VIN</string>
     <string name="next_service_date_label">Next Service Date</string>
     <string name="next_service_label">Next Service</string>
-
     <!-- FWConfigActivity -->
     <string name="fw_config_title">WunderLINQ Settings</string>
     <string name="wwtype_label">Wheel Type</string>
@@ -98,18 +95,21 @@
     <string name="hwsave_alert_body">After saving new hardware settings, the WunderLINQ hardware will become unstable and will need to be removed and reinstalled into the cradle.</string>
     <string name="hwsave_alert_btn_ok">Continue</string>
     <string name="hwsave_alert_btn_cancel">Cancel</string>
-
     <!-- AboutActivity -->
     <string name="about_title">About</string>
-    <string name="app_name_link" translatable="false"><a href="http://www.wunderlinq.com">WunderLINQ™</a></string>
+    <string name="app_name_link" translatable="false">
+        <a href="http://www.wunderlinq.com">WunderLINQ™</a>
+    </string>
     <string name="version_label">Version:</string>
     <string name="btn_sendlogs_title">Send Logs</string>
     <string name="sendlogs_email" translatable="false">support@blackboxembedded.com</string>
     <string name="sendlogs_subject" translatable="false">WunderLINQ Debug Logs</string>
     <string name="sendlogs_body">Please describe your problem below:\n</string>
-    <string name="sendlogs_intent_title">Send Logs&#8230;</string>
+    <string name="sendlogs_intent_title">Send Logs…</string>
     <string name="credits_label">Credits</string>
-    <string name="company_name_link" translatable="false"><a href="https://www.blackboxembedded.com">Black Box Embedded, LLC</a></string>
+    <string name="company_name_link" translatable="false">
+        <a href="https://www.blackboxembedded.com">Black Box Embedded, LLC</a>
+    </string>
     <string name="thanks" translatable="false">
         <b>Support and Patience</b>\n
         \n
@@ -223,12 +223,10 @@
         <b>Icons from fontawesome.com</b>\n
         \n
     </string>
-
     <!-- FaultActivity -->
     <string name="title_activity_fault">FaultActivity</string>
     <string name="fault_title">Active Faults</string>
     <string name="notification_channel">Active Faults</string>
-
     <!-- Fault strings -->
     <string name="fault_ABSSLF">ABS self-diagnosis not completed</string>
     <string name="fault_ABSERR">ABS error</string>
@@ -267,10 +265,8 @@
     <string name="fault_TIRERWF">Rear Tire Pressure Warning</string>
     <string name="fault_TIREFCF">Front Tire Pressure Critical</string>
     <string name="fault_TIRERCF">Rear Tire Pressure Critical</string>
-
     <!-- WaypointActivity -->
     <string name="waypoint_title">Saved Waypoints</string>
-
     <!-- WaypointViewActivity -->
     <string name="waypoint_view_title">Saved Waypoint</string>
     <string name="waypoint_view_tv_date_label">Date Recorded</string>
@@ -286,10 +282,8 @@
     <string name="waypoint_view_share_label">Share via</string>
     <string name="delete_waypoint_alert_title">Warning!</string>
     <string name="delete_waypoint_alert_body">Delete Waypoint?</string>
-
     <!-- TripsActivity -->
     <string name="trips_title">Recorded Trips</string>
-
     <!-- TripViewActivity -->
     <string name="trip_view_title">Trip</string>
     <string name="trip_view_trip_label">WunderLINQ Trip Log</string>
@@ -310,7 +304,6 @@
     <string name="delete_trip_alert_body">Delete Trip Log?</string>
     <string name="delete_bt">Delete</string>
     <string name="cancel_bt">Cancel</string>
-
     <!-- CompassActivity -->
     <string name="compass_title">Compass</string>
     <string name="north">N</string>
@@ -321,7 +314,6 @@
     <string name="south_east">SE</string>
     <string name="west">W</string>
     <string name="east">E</string>
-
     <!-- MusicActivity -->
     <string name="music_title">Music</string>
     <string name="title_activity_music">MusicActivity</string>
@@ -330,7 +322,6 @@
     <string name="unknown">Unknown</string>
     <string name="notification_alert_title">WunderLINQ needs notification access</string>
     <string name="notification_alert_body">Please grant notification access so this app can control your music player</string>
-
     <!-- TaskActivity -->
     <string name="quicktask_title">Quick Tasks</string>
     <string name="task_title_navigation">Navigation</string>
@@ -357,7 +348,6 @@
     <string name="toast_address_not_set">No Go Home address set in Settings</string>
     <string name="toast_phone_not_set">No Favorite Number set in Settings</string>
     <string name="toast_photo_taken">Photo Taken!</string>
-
     <!-- ContactListActivity -->
     <string name="contactlist_title">Contacts</string>
     <string name="contact_type_0">Custom</string>
@@ -381,14 +371,12 @@
     <string name="contact_type_18">Work Pager</string>
     <string name="contact_type_19">Assistant</string>
     <string name="contact_type_20">MMS</string>
-
     <!-- AlertActivity -->
     <string name="alert_btn_ok">OK</string>
     <string name="alert_btn_close">Close</string>
     <string name="alert_title_fuel">Low Fuel</string>
     <string name="alert_label_fuel">Route to the nearest fuel station?"</string>
     <string name="alert_title_photopreview">Photo Preview</string>
-
     <!-- LoggingService -->
     <string name="title_logging_notification">WunderLINQ Trip Recording Active</string>
     <string name="btn_logging_notification_stop">Stop Recording</string>
@@ -424,13 +412,10 @@
     <string name="bearing_header">Bearing</string>
     <string name="barometricpressure_header">Barometric Pressure</string>
     <string name="sunrisesunset_header">Sunrise/Sunset</string>
-
     <!-- VideoRecService -->
     <string name="title_video_notification">WunderLINQ recording video</string>
-
     <!-- WeatherMapActivity -->
     <string name="weathermap_title">Weather Map</string>
-
     <!-- SettingsActivity -->
     <string name="title_activity_settings">Settings</string>
     <!-- Preference strings -->
