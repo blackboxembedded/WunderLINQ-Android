@@ -153,7 +153,7 @@
 \n</string>
     <string name="btn_sendlogs_title">ログを送る</string>
     <string name="version_label">バージョン：</string>
-    <string name="about_title">WunderLINQについて</string>
+    <string name="about_title">アバウト</string>
     <string name="hwsave_alert_btn_cancel">キャンセル</string>
     <string name="hwsave_alert_body">ハードウェアセッティングを変更すると動作が不安定になります。　クレードルから一度外してリセットして下さい.</string>
     <string name="hwsave_alert_title">警告！</string>
@@ -186,4 +186,10 @@
     <string name="negative_location_alert_body">位置情報へのアクセスが許可されていないためウェイポイントやロケーションログは使えません.</string>
     <string name="blank_field">∞</string>
     <string name="negative_alert_title">機能的制限</string>
+    <string name="time_header">時間</string>
+    <string name="toast_waypoint_saved">ウェイポイント記録完了</string>
+    <string name="geodata_label">トリップログとウェイポイント</string>
+    <string name="negative_contacts_alert_body">連絡先へのアクセスが許可されていないため連絡先を表示出来ません.</string>
+    <string name="negative_write_alert_body">写真へのアクセスが許可されていないため写真を保存出来ません.</string>
+    <string name="main_title">モーターサイクル</string>
 </resources>
