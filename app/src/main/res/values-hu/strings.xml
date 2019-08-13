@@ -239,9 +239,11 @@
     <string name="negative_write_alert_body">Mivel nem járultál hozzá a fotókönyvtárhoz való hozzáféréshez, az applikáció nem tud fényképeket elmenteni.</string>
     <string name="negative_location_alert_body">Mivel nem járultál hozzá az aktuális helyzethez való hozzáféréshez, az applikáció nem lesz képes útipontokat vagy az útvonalat rögzíteni.</string>
     <string name="negative_alert_title">Korlátozott funkcionalitás</string>
-    <string name="blank_field">∞</string>
     <string name="main_title">Motorkerékpár</string>
     <string name="contactlist_title">Kapcsolatok</string>
     <string name="task_title_empty">Üres</string>
     <string name="geodata_label">Útvonalak és útipontok</string>
+    <string name="fueleconomyone_label">Üzemanyag takarékosság 1</string>
+    <string name="fueleconomytwo_label">Üzemanyag takarékosság 2</string>
+    <string name="fuelrange_label">Megtehető távolság</string>
 </resources>

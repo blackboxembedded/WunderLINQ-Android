@@ -184,7 +184,6 @@
     <string name="negative_microphone_alert_body">マイクへのアクセスが許可されていないためビデオ撮影が出来ません.</string>
     <string name="negative_camera_alert_body">カメラへのアクセスが許可されていないため写真やビデオが撮影出来ません.</string>
     <string name="negative_location_alert_body">位置情報へのアクセスが許可されていないためウェイポイントやロケーションログは使えません.</string>
-    <string name="blank_field">∞</string>
     <string name="negative_alert_title">機能的制限</string>
     <string name="time_header">時間</string>
     <string name="toast_waypoint_saved">ウェイポイント記録完了</string>
@@ -192,4 +191,10 @@
     <string name="negative_contacts_alert_body">連絡先へのアクセスが許可されていないため連絡先を表示出来ません.</string>
     <string name="negative_write_alert_body">写真へのアクセスが許可されていないため写真を保存出来ません.</string>
     <string name="main_title">モーターサイクル</string>
+    <string name="ambientlight_label">周囲の明るさ</string>
+    <string name="rearbrakes_label">リヤブレーキ</string>
+    <string name="fueleconomyone_label">燃費１</string>
+    <string name="fueleconomytwo_label">燃費２</string>
+    <string name="fuelrange_label">走行可能距離</string>
+    <string name="frontbrakes_label">フロントブレーキ</string>
 </resources>

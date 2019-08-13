@@ -1,7 +1,6 @@
 <resources>
     <!-- MainActivity -->
     <string name="main_title">Motocyclette</string>
-    <string name="blank_field">∞</string>
     <!-- Permission Requests -->
     <string name="camera_alert_title">WunderLINQ requiert la permission d\'utiliser la caméra</string>
     <string name="camera_alert_body">Merci d\'accorder l\'accès à votre caméra</string>
@@ -371,29 +370,8 @@
     <string name="toast_waypoint_saved">Destination sauvegardée</string>
     <string name="geocode_error">Un problème est survenu lors de la validation de l\'emplacement.</string>
     <string name="nav_app_mapsme">Maps.me</string>
-    <string name="pref_contacts_filter_title">Contacts Display</string>
-    <string name="contacts_filter_all">All</string>
-    <string name="contacts_filter_favorites">Favorites</string>
-    <string name="pref_photopreview_name">Photo Preview</string>
-    <string name="pref_photopreview_summary">Displays the photo after capture</string>
-    <string name="alert_title_photopreview">Photo Preview</string>
-    <string name="btn_logging_notification_stop">Stop Recording</string>
-    <string name="barometricpressure_header">Barometric Pressure</string>
     <string name="nav_app_osmand">OsmAnd</string>
-    <string name="task_title_homescreen">Home Screen</string>
-    <string name="pref_actioncam_title">Action Camera</string>
     <string name="pref_integrations_settings_summary">Enable integration with 3rd Party Apps and hardware.</string>
     <string name="pref_integrations_settings_title">Integrations</string>
-    <string name="task_title_actioncam_start_video">Start ActionCam Recording</string>
-    <string name="task_title_actioncam_stop_video">Stop ActionCam Recording</string>
-    <string name="toast_actioncam_notconnected">ActionCam Not Connected</string>
-    <string name="toast_actioncam_notset">Set ActionCam type in the app settings</string>
-    <string name="sunrisesunset_header">Sunrise/Sunset</string>
-    <string name="task_title_weathermap">Weather Map</string>
-    <string name="weathermap_title">Weather Map</string>
-    <string name="bike_info_label">Bike Info</string>
-    <string name="bike_info_title">Bike Info</string>
-    <string name="next_service_date_label">Next Service Date</string>
-    <string name="next_service_label">Next Service</string>
     <string name="vin_label">VIN</string>
 </resources>

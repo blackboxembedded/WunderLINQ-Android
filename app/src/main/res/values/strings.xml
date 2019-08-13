@@ -6,7 +6,7 @@
     <string name="device_name" translatable="false">WunderLINQ</string>
     <!-- MainActivity -->
     <string name="main_title">Motorcycle</string>
-    <string name="blank_field">∞</string>
+    <string name="blank_field" translatable="false">∞</string>
     <string name="accessibility_explanation">This is required to automatically enter multi window mode and to launch the Android Task Switcher, if you chose to not enable WunderLINQ will not fully function.</string>
     <!-- Permission Requests -->
     <string name="accessibilityservice_alert_title">WunderLINQ needs to run a Accessibility Service</string>
