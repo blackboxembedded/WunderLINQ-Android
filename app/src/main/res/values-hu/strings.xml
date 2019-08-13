@@ -246,4 +246,7 @@
     <string name="fueleconomyone_label">Üzemanyag takarékosság 1</string>
     <string name="fueleconomytwo_label">Üzemanyag takarékosság 2</string>
     <string name="fuelrange_label">Megtehető távolság</string>
+    <string name="title_activity_fault">FaultActivity</string>
+    <string name="nav_app_locus">Locus</string>
+    <string name="toast_waypoint_saved">Útipont elmentve</string>
 </resources>
