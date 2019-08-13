@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- MainActivity -->
     <string name="main_title">Motorfiets</string>
@@ -36,7 +36,8 @@
     <string name="gear_label">Versnelling</string>
     <!-- Data Menu -->
     <!-- Other Menu -->
-    <string name="info_label">Over </string><string name="close_label">Sluiten</string>
+    <string name="info_label">Over </string>
+    <string name="close_label">Sluiten</string>
     <!-- AboutActivity -->
     <string name="about_title">Over</string>
     <!-- FaultActivity -->
@@ -60,7 +61,8 @@
     <string name="fault_LAMPRLI">Richtingaanwijzer links achter</string>
     <string name="fault_LAMPRRI">Richtingaanwijzer rechts achter</string>
     <string name="fault_LAMPFPK1">Parkeerlicht 1</string>
-    <string name="fault_LAMPFPK2">Parkeerlicht 2</string><string name="fault_LAMPLOW">Dim licht</string>
+    <string name="fault_LAMPFPK2">Parkeerlicht 2</string>
+    <string name="fault_LAMPLOW">Dim licht</string>
     <string name="fault_LAMPHI">Groot licht</string>
     <string name="fault_LAMPREAR">Achter licht</string>
     <string name="fault_LAMPBRK">Rem Licht</string>
@@ -69,7 +71,8 @@
     <string name="fault_LAMPADDB">Extra rem licht</string>
     <string name="fault_LAMPFL1">Koplamp 1</string>
     <string name="fault_LAMPFL2">Koplamp 2</string>
-    <string name="fault_ICEWARN">Vorst waarschuwing</string><string name="fault_GENWARNFSYLW">Algemeen waarschuwings lamp knippert geel</string>
+    <string name="fault_ICEWARN">Vorst waarschuwing</string>
+    <string name="fault_GENWARNFSYLW">Algemeen waarschuwings lamp knippert geel</string>
     <string name="fault_GENWARNSHYLW"> Algemeen waarschuwings lamp brandt geel</string>
     <string name="fault_GENWARNFSRED">Algemeen waarsschuwings lamp knippert rood</string>
     <string name="fault_GENWARNSHRED">Algemeen waarschuwings lamp brandt rood</string>
@@ -128,7 +131,8 @@
     <string name="task_title_start_record">Start Opname</string>
     <string name="task_title_stop_record">Stop Opname</string>
     <string name="task_title_start_trip">Start Route Oslag</string>
-    <string name="task_title_stop_trip">Stop Route Opslag</string><string name="title_logging_notification">WunderLINQ Route Opslag Aktief</string>
+    <string name="task_title_stop_trip">Stop Route Opslag</string>
+    <string name="title_logging_notification">WunderLINQ Route Opslag Aktief</string>
     <string name="task_title_waypoint">Route Punt Opslaan</string>
     <string name="task_title_waypoint_nav">Navigeer naar Route Punt</string>
     <string name="task_title_voicecontrol">Voice Assistant</string>
@@ -139,13 +143,17 @@
     <string name="contactlist_title">Contacten</string>
     <string name="contact_type_0">Algemeen</string>
     <string name="contact_type_1">Thuis</string>
-    <string name="contact_type_2">Mobiel</string><string name="contact_type_3">Werk</string>
+    <string name="contact_type_2">Mobiel</string>
+    <string name="contact_type_3">Werk</string>
     <string name="contact_type_4">Werk Fax</string>
     <string name="contact_type_5">Thuis Fax</string>
-    <string name="contact_type_6">Pager</string><string name="contact_type_7">Anderen</string><string name="contact_type_8">Terug Bellen</string>
+    <string name="contact_type_6">Pager</string>
+    <string name="contact_type_7">Anderen</string>
+    <string name="contact_type_8">Terug Bellen</string>
     <string name="contact_type_9">Auto</string>
     <string name="contact_type_10">Werk Algemeen</string>
-    <string name="contact_type_11">ISDN</string><string name="contact_type_12">Algemeen</string>
+    <string name="contact_type_11">ISDN</string>
+    <string name="contact_type_12">Algemeen</string>
     <string name="contact_type_13">Anderen Fax</string>
     <string name="contact_type_14">Radio</string>
     <string name="contact_type_15">Telex</string>
@@ -190,7 +198,7 @@
     <!-- VideoRecService -->
     <string name="title_video_notification">WunderLINQ opnemen video</string>
     <!-- SettingsActivity -->
-    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_settings"></string>
     <!-- Preference strings -->
     <string name="info_title">Persoonlijke Informatie</string>
     <string name="pref_homeAddress_name">Thuis Adres</string>
@@ -236,7 +244,7 @@
     <string name="btn_sendlogs_title">Stuur Logbestanden</string>
     <string name="sendlogs_body">Beschrijf uw problem hieronder:</string>
     <string name="sendlogs_intent_title">Stuur Logbestanden...</string>
-    <string name="negative_contacts_alert_body">Since contact access has not been granted, this app will not be able to display or call your contacts.</string>
+    <string name="negative_contacts_alert_body"></string>
     <string name="tripauto_label">Trip Auto</string>
     <string name="voltage_label">Voltage</string>
     <string name="throttle_label">Throttle</string>
@@ -254,7 +262,7 @@
     <string name="east">E</string>
     <string name="waypoint_view_bt_navigate">Navigate</string>
     <string name="version_label">Version:</string>
-    <string name="config_write_label">Save Settings</string>
+    <string name="config_write_label"></string>
     <string name="fueleconomytwo_label">Gem. Gebruik 2 (L/100)</string>
     <string name="fueleconomyone_label">Gem. Gebruik 1 (L/100)</string>
     <string name="cconsumption_label">Consumption</string>
@@ -270,4 +278,7 @@
     <string name="nav_app_osmand">OsmAnd</string>
     <string name="vin_label">VIN</string>
     <string name="fuelrange_label">Bereik (km)</string>
+    <string name="wwMode3">Algemeen</string>
+    <string name="hwsave_alert_btn_cancel">Cancel</string>
+    <string name="delete_bt">Verwijderen</string>
 </resources>
