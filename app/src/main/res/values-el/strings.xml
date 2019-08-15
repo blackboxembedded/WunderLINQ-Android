@@ -356,7 +356,7 @@
     <string name="pref_integrations_settings_title">Διασυνδέσεις</string>
     <string name="vin_label">Αριθμός πλαισίου</string>
     <string name="contacts_filter_favorites">Προτιμώμενες επαφές</string>
-    <string name="ambientlight_header">Φωτισμός</string>
+    <string name="ambientlight_header">Φωτισμός περιβάλλοντος</string>
     <string name="toast_actioncam_notset">Ορίστε τύπο action camera στις ρυθμίσεις της εφαρμογής</string>
     <string name="btn_logging_notification_stop">Παύση εγγραφής</string>
     <string name="bike_info_title">Πληροφορίες μοτοσυκλέτας</string>
@@ -377,5 +377,5 @@
     <string name="sunrisesunset_header">Ανατολή/Δύση Ηλίου</string>
     <string name="barometricpressure_header">Βαρομετρική πίεση</string>
     <string name="pref_contacts_filter_title">Εμφάνιση επαφών</string>
-    <string name="ambientlight_label">Φωτισμός</string>
+    <string name="ambientlight_label">Φωτισμός περιβάλλοντος</string>
 </resources>
