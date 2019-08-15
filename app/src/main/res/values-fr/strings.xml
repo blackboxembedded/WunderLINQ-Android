@@ -22,7 +22,7 @@
     <string name="negative_microphone_alert_body">Sans l\'accès au micro, cette app ne sera pas en mesure d\'enregistrer des vidéos.</string>
     <string name="usagestats_alert_title">WunderLINQ requiert l\'accès aux données d\'utilisation</string>
     <string name="usagestats_alert_body">Merci d\'accorder l\'accès aux données d\'utilisation, ceci permet le lancement automatique lorque votre WunderLINQ est branché.</string>
-    <string name="disclaimer_alert_title">AVERTISSEMENT!</string>
+    <string name="disclaimer_alert_title">AVERTISSEMENT !</string>
     <string name="disclaimer_alert_body">
         Ne tentez pas de saisir votre destination ou de faire des manipulations à votre WunderLINQ en conduisant.
         La perte d\'attention à la conduite de votre véhicule peut mener à la mort, des blessures sérieuses ou des dommages matériels.
