@@ -1589,6 +1589,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                             //ActionCam Not Detected
                             Toast.makeText(TaskActivity.this, R.string.toast_actioncam_notconnected, Toast.LENGTH_LONG).show();
                         }
+                        break;
                     case 14:
                         //Weather Map
                         Intent weatherIntent = new Intent(TaskActivity.this, WeatherMapActivity.class);
