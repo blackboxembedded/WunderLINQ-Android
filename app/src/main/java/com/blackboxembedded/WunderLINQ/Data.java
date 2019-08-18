@@ -271,11 +271,11 @@ public class Data {
     }
 
     // time
-    private static String time;
-    public static String getTime() {
+    private static Date time;
+    public static Date getTime() {
         return time;
     }
-    public static void setTime(String time){
+    public static void setTime(Date time){
         Data.time = time;
     }
 

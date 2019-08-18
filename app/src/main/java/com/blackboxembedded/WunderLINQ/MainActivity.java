@@ -1840,7 +1840,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 //time
                 label = getString(R.string.time_header);
                 if (Data.getTime() != null) {
-                    value = Data.getTime();
+                    SimpleDateFormat dateformat = new SimpleDateFormat("hh:mm aa", Locale.getDefault());
+                    if (!sharedPrefs.getString("prefTime", "0").equals("0")) {
+                        dateformat = new SimpleDateFormat("HH:mm aa", Locale.getDefault());
+                    }
+                    value = dateformat.format(Data.getTime());
                 }
                 break;
             case 25:
@@ -1867,7 +1871,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 label = getString(R.string.altitude_header) + " (" + heightUnit + ")";
                 String altitude = "No Fix";
                 if (Data.getLastLocation() != null){
-                    altitude = String.valueOf(Data.getLastLocation().getAltitude());
+                    altitude = String.valueOf(Math.round(Data.getLastLocation().getAltitude()));
                     if (distanceFormat.contains("1")) {
                         altitude = String.valueOf(Math.round(Utils.mToFeet(Data.getLastLocation().getAltitude())));
                     }
@@ -1882,6 +1886,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Date sunrise = sunriseSunset[0].getTime();
                     Date sunset = sunriseSunset[1].getTime();
                     SimpleDateFormat dateformat = new SimpleDateFormat("hh:mm aa", Locale.getDefault());
+                    if (!sharedPrefs.getString("prefTime", "0").equals("0")) {
+                        dateformat = new SimpleDateFormat("HH:mm aa", Locale.getDefault());
+                    }
                     String sunriseString = dateformat.format(sunrise);
                     String sunsetString = dateformat.format(sunset);
                     value = sunriseString + "/" + sunsetString;

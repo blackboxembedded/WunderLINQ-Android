@@ -48,13 +48,11 @@ import java.lang.reflect.Method;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
@@ -258,9 +256,7 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
             @Override
             public void run() {
                 Calendar c = Calendar.getInstance();
-                SimpleDateFormat dateformat = new SimpleDateFormat("hh:mm aa",Locale.getDefault());
-                String finalTime = dateformat.format(c.getTime());
-                Data.setTime(finalTime);
+                Data.setTime(c.getTime());
                 final Intent intent = new Intent(BluetoothLeService.ACTION_DATA_AVAILABLE);
                 MyApplication.getContext().sendBroadcast(intent);
             }

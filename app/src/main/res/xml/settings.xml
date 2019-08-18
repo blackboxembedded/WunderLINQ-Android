@@ -287,6 +287,14 @@
             android:defaultValue="0"
             />
         <ListPreference
+            android:key="prefTime"
+            android:title="@string/pref_time_name"
+            android:summary="%s"
+            android:entries="@array/time_array"
+            android:entryValues="@array/time_arrayValues"
+            android:defaultValue="0"
+            />
+        <ListPreference
             android:key="prefOrientation"
             android:title="@string/pref_orientation_name"
             android:summary="%s"
