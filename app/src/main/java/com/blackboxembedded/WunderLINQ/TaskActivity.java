@@ -1615,9 +1615,10 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             if (address == null) {
                 return null;
             }
-
-            Address location = address.get(0);
-            p1 = new LatLng(location.getLatitude(), location.getLongitude() );
+            if (address.size() > 0) {
+                Address location = address.get(0);
+                p1 = new LatLng(location.getLatitude(), location.getLongitude());
+            }
 
         } catch (IOException ex) {
 
