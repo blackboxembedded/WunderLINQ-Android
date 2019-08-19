@@ -289,9 +289,9 @@
     <string name="version_label">Έκδοση:</string>
     <string name="credits_label">Συντελεστές</string>
     <string name="pref_autolaunch_name">Αυτόματη εκκίνηση εφαρμογής</string>
-    <string name="pref_autolaunch_summary">Αυτόματη εκκίνηση εφαρμογής WunderLINQ app όταν συνδέεται με τη συσκευή WunderLINQ</string>
-    <string name="pref_debuglogging_name">Ενεργοποίησης καταγραφών αποσφαλμάτωσης</string>
-    <string name="pref_debuglogging_summary">Ενεργοποιήστε μόνο αν χρειαστεί από την υποστήριξη καθώς μπορεί να επιρρεάσει την απόδωση.  Παρακαλώ απενεργοποιήστε όταν ολοκληρωθεί η υποστήριξη.</string>
+    <string name="pref_autolaunch_summary">Αυτόματη εκκίνηση εφαρμογής WunderLINQ όταν συνδέεται με τη συσκευή WunderLINQ</string>
+    <string name="pref_debuglogging_name">Ενεργοποίηση καταγραφών αποσφαλμάτωσης</string>
+    <string name="pref_debuglogging_summary">Ενεργοποιήστε μόνο αν χρειαστεί για υποστήριξη καθώς μπορεί να επιρρεάσει την απόδοση. Παρακαλώ απενεργοποιήστε όταν ολοκληρωθεί η υποστήριξη.</string>
     <string name="debug_settings_title">Ρυθμίσεις αποσφαλμάτωσης</string>
     <string name="negative_record_audio_alert_body">Η εφαρμογή δεν θα μπορεί να κάνει εγγραφή βίντεο, όσο δεν έχει εκχωρηθεί πρόσβαση καταγραφής.</string>
     <string name="negative_call_alert_body">Η εφαρμογή δεν θα μπορεί να πραγματοποιήσει κλήσεις, όσο δεν έχει εκχωρηθεί πρόσβαση στο τηλέφωνο.</string>
@@ -330,7 +330,7 @@
     <string name="cancel_bt">Ακύρωση</string>
     <string name="experimental_title">Πειραματικά χαρακτηριστικά</string>
     <string name="pref_taskswitcher_name">Ενεργοποίηση εναλλαγής δραστηριοτήτων</string>
-    <string name="pref_taskswitcher_summary">Όταν η ροδέλα προήγησης κρατιέται αριστερά εμφανίζει την εναλλαγή διεργασιών. Ενεργοποιήστε μόνο αν δεν λειτουργεί σαν κουμπί επιστροφής</string>
+    <string name="pref_taskswitcher_summary">Όταν η ροδέλα πλοήγησης κρατιέται αριστερά εμφανίζει την εναλλαγή διεργασιών. Ενεργοποιήστε μόνο αν δεν λειτουργεί σαν κουμπί επιστροφής</string>
     <string name="accessibilityservice_alert_title">Το WunderLINQ χρειάζεται να εκτελέση την υπηρεσία προσβασιμότητας</string>
     <string name="accessibilityservice_alert_body">Παρακαλώ ενεργοποιήστε την υπηρεσία προσβασιμότητας WunderLINQ.</string>
     <string name="leanangle_header">Γωνία κλίσης</string>
@@ -378,4 +378,7 @@
     <string name="barometricpressure_header">Βαρομετρική πίεση</string>
     <string name="pref_contacts_filter_title">Εμφάνιση επαφών</string>
     <string name="ambientlight_label">Φωτισμός περιβάλλοντος</string>
+    <string name="timef_24h">24ωρο</string>
+    <string name="timef_12h">12ωρο</string>
+    <string name="pref_time_name">Μορφή ώρας</string>
 </resources>
