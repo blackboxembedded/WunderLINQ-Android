@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- MainActivity -->
     <string name="main_title">Motor</string>
@@ -14,14 +15,14 @@
     <string name="write_alert_body">Prosim dovolite pisanje</string>
     <string name="overlay_alert_title">WunderLINQ potrebuje dovoljenje za prekrivanje</string>
     <string name="overlay_alert_body">Prosim dovolite prekrivanje, da lahko aplikacija snema video</string>
-    <string name="negative_alert_title">Zmožnosti omejene</string>
+    <string name="negative_alert_title">Omejena zmogljivost</string>
     <string name="negative_location_alert_body">Ker dostop do lokacije ni dovoljen, aplikacija ne bo shranjevala kažipotov in vaših lokacij.</string>
     <string name="negative_write_alert_body">Ker zapisovanje ni dovoljeno, aplikacija ne bo shranjevala datotek.</string>
     <string name="negative_camera_alert_body">Ker dostop do kamere ni dovoljen, aplikacija ne bo zajemala slik ali videoposnetkov.</string>
     <string name="negative_microphone_alert_body">Ker dostop do mikrofona ni dovoljen, aplikacija ne bo zajemala videoposnetkov.</string>
     <string name="usagestats_alert_title">WunderLINQ potrebuje dostop do stanja porabe podatkov</string>
     <string name="usagestats_alert_body">Prosim dovolite dostop do stanja porabe podatkov, to bo aplikaciji omogočilo samodejni zagon, ko se naprava WunderLINQ poveže.</string>
-    <string name="disclaimer_alert_title">OPOZORILO!</string>
+    <string name="disclaimer_alert_title">POZOR!</string>
     <string name="disclaimer_alert_body">
         Ne vnašajte poti ali nastavljajte WunderLINQ med vožnjo.
         Odvračanje pozornosti od nadzora vozila lahko privede do smrti, resnih poškodb ali poškodovanja lastnine.
@@ -31,7 +32,6 @@
     <string name="disclaimer_quit">Izhod</string>
     <!-- BLE Stuff Below -->
     <string name="bt_not_supported">Bluetooth z nizko porabo energije - BLE ni podprt</string>
-
     <string name="rdc_front_label">Prednja pnevmatika</string>
     <string name="rdc_rear_label">Zadnja pnevmatika</string>
     <string name="engine_temp_label">Temperatura motorja</string>
@@ -44,15 +44,12 @@
     <!-- Other Menu -->
     <string name="info_label">O aplikaciji</string>
     <string name="close_label">Zapri</string>
-
     <!-- AboutActivity -->
     <string name="about_title">O aplikaciji</string>
-
     <!-- FaultActivity -->
     <string name="title_activity_fault">Dejavnost napake</string>
     <string name="fault_title">Aktivne napake</string>
     <string name="notification_channel">Aktivne napake</string>
-
     <!-- Fault strings -->
     <string name="fault_ABSSLF">ABS samodiagnoza ni zaključena</string>
     <string name="fault_ABSERR">ABS napaka</string>
@@ -89,12 +86,10 @@
     <string name="fault_OILLOW">Nivo olja prenizek</string>
     <string name="fault_TIREFWF">Tlak v prednji pnevmatiki nizek</string>
     <string name="fault_TIRERWF">Tlak v zadnji pnevmatiki nizek</string>
-    <string name="fault_TIREFCF">Tlak v prednji pnevmatiki prenizek!</string>
-    <string name="fault_TIRERCF">Tlak v zadnji pnevmatiki prenizek!</string>
-
+    <string name="fault_TIREFCF">Tlak v prednji pnevmatiki prenizek</string>
+    <string name="fault_TIRERCF">Tlak v zadnji pnevmatiki prenizek</string>
     <!-- WaypointActivity -->
     <string name="waypoint_title">Shranjeni kažipoti</string>
-
     <!-- WaypointViewActivity -->
     <string name="waypoint_view_title">Shranjen kažipot</string>
     <string name="waypoint_view_tv_date_label">Datum shranjevanja</string>
@@ -107,10 +102,8 @@
     <string name="waypoint_view_bt_delete">Izbriši</string>
     <string name="waypoint_view_waypoint_label">Kažipot</string>
     <string name="waypoint_view_share_label">Deli z</string>
-
     <!-- TripsActivity -->
     <string name="trips_title">Shranjena potovanja</string>
-
     <!-- TripViewActivity -->
     <string name="trip_view_title">Potovanje</string>
     <string name="trip_view_trip_label">WunderLINQ dnevnik potovanj</string>
@@ -127,7 +120,6 @@
     <string name="hours">u</string>
     <string name="minutes">m</string>
     <string name="seconds">s</string>
-
     <!-- CompassActivity -->
     <string name="compass_title">Kompas</string>
     <string name="north">S</string>
@@ -138,7 +130,6 @@
     <string name="south_east">JV</string>
     <string name="west">Z</string>
     <string name="east">V</string>
-
     <!-- MusicActivity -->
     <string name="music_title">Glasba</string>
     <string name="title_activity_music">Glasbena dejavnost</string>
@@ -147,13 +138,12 @@
     <string name="unknown">Neznano</string>
     <string name="notification_alert_title">WunderLINQ potrebuje dovoljenje za obvestila</string>
     <string name="notification_alert_body">Prosim dovolite dostop do obvestil, da lahko aplikacija upravlja vaš predvajalnik glasbe</string>
-
     <!-- TaskActivity -->
     <string name="quicktask_title">Hitra opravila</string>
     <string name="task_title_navigation">Navigacija</string>
     <string name="task_title_gohome">Vodi domov</string>
     <string name="task_title_favnumber">Hitri klic</string>
-    <string name="task_title_callcontact">Imenik stikov</string>
+    <string name="task_title_callcontact">Pokliči stik</string>
     <string name="task_title_photo">Posnemi fotografijo</string>
     <string name="task_title_selfie">Posnemi selfie</string>
     <string name="task_title_start_record">Začni snemanje</string>
@@ -162,14 +152,13 @@
     <string name="task_title_stop_trip">Zaključi dnevnik potovanja</string>
     <string name="title_logging_notification">WunderLINQ snemanje potovanja aktivno</string>
     <string name="task_title_waypoint">Shrani kažipot</string>
-    <string name="task_title_waypoint_nav">Vodi me do kažipota</string>
+    <string name="task_title_waypoint_nav">Vodi do kažipota</string>
     <string name="task_title_voicecontrol">Glasovno vodenje</string>
     <string name="task_title_settings">Nastavitve</string>
     <string name="task_title_empty">Prazno</string>
     <string name="toast_address_not_set">Ni domačega naslova v nastavitvah</string>
     <string name="toast_phone_not_set">Ni nastavljene številke za hitri klic</string>
     <string name="toast_photo_taken">Posnetek zajet!</string>
-
     <!-- ContactListActivity -->
     <string name="contactlist_title">Stiki</string>
     <string name="contact_type_0">Po meri</string>
@@ -193,13 +182,11 @@
     <string name="contact_type_18">Službeni pozivnik</string>
     <string name="contact_type_19">Asistent</string>
     <string name="contact_type_20">MMS</string>
-
     <!-- AlertActivity -->
     <string name="alert_btn_ok">V redu</string>
     <string name="alert_btn_close">Zapri</string>
     <string name="alert_title_fuel">Nizek nivo goriva</string>
     <string name="alert_label_fuel">Prikažem pot do najbližje bencinske črpalke?"</string>
-
     <!-- LoggingService -->
     <string name="time_header">Čas</string>
     <string name="latitude_header">Širina</string>
@@ -219,8 +206,8 @@
     <string name="shifts_header">Št. prestavljanj</string>
     <string name="vin_header">VIN</string>
     <string name="ambientlight_header">Svetloba okolice</string>
-    <string name="tripone_header">Trip1</string>
-    <string name="triptwo_header">Trip2</string>
+    <string name="tripone_header">Trip 1</string>
+    <string name="triptwo_header">Trip 2</string>
     <string name="tripauto_header">Trip Auto</string>
     <string name="speed_header">Hitrost</string>
     <string name="avgspeed_header">Povprečna hitrost</string>
@@ -228,10 +215,8 @@
     <string name="fueleconomyone_header">Poraba goriva 1</string>
     <string name="fueleconomytwo_header">Poraba goriva 2</string>
     <string name="fuelrange_header">Doseg</string>
-
     <!-- VideoRecService -->
     <string name="title_video_notification">WunderLINQ snemanje videoposnetkov</string>
-
     <!-- SettingsActivity -->
     <string name="title_activity_settings">Nastavitve</string>
     <!-- Preference strings -->
@@ -249,11 +234,11 @@
     <string name="nav_app_locus">Locus</string>
     <string name="nav_app_waze">Waze</string>
     <string name="pref_tempf_name">Enota za temperaturo</string>
-    <string name="tempf_c">Celzij</string>
+    <string name="tempf_c">Celziji</string>
     <string name="tempf_f">Fahrenheit</string>
     <string name="pref_distance_name">Enota za razdalje</string>
-    <string name="distance_m">metri</string>
-    <string name="distance_i">milje</string>
+    <string name="distance_m">Metri</string>
+    <string name="distance_i">Milje</string>
     <string name="pref_bearing_name">Prikaz kompasa</string>
     <string name="bearing_d">Stopinje</string>
     <string name="bearing_c">Strani neba</string>
@@ -284,9 +269,10 @@
     <string name="pref_fuelAlert_name">Obvoz za bencinsko črpalko</string>
     <string name="pref_fuelAlert_summary">Opozori na obvoz do najbližje bencinske črpalke, ko je nivo goriva nizek</string>
     <string name="advanced_settings_title">Napredne nastavitve</string>
-    <string name="btn_sendlogs_title">Pošiljaj dnevnike</string>
-    <string name="sendlogs_body">Prosimo spodaj opišite vaše težave:</string>
-    <string name="sendlogs_intent_title">Pošlji dnevnike...</string>
+    <string name="btn_sendlogs_title">Pošlji dnevnik</string>
+    <string name="sendlogs_body">Prosimo spodaj opišite vaše težave:
+\n</string>
+    <string name="sendlogs_intent_title">Pošlji dnevnike…</string>
     <string name="hw_settings_title">WunderLINQ nastavitve naprave</string>
     <string name="waypoint_view_bt_navigate">Navigacija</string>
     <string name="appsettings_label">Nastavitve aplikacije</string>
@@ -339,8 +325,8 @@
     <string name="speed_label">Hitrost</string>
     <string name="avgspeed_label">Povp. hitrost</string>
     <string name="cconsumption_label">Poraba</string>
-    <string name="fueleconomyone_label">Economy 1</string>
-    <string name="fueleconomytwo_label">Economy 2</string>
+    <string name="fueleconomyone_label">Poraba 1</string>
+    <string name="fueleconomytwo_label">Poraba 2</string>
     <string name="fuelrange_label">Doseg</string>
     <string name="accessibility_explanation">To je potrebno za samodejni prehod v način večih oken, če tega ne omogočite boste opomnjeni da sami preklopite.</string>
     <string name="pref_pipgrid_name">SvS število celic</string>
@@ -358,19 +344,44 @@
     <string name="pref_taskswitcher_name">Omogoči upravitelj opravil</string>
     <string name="pref_taskswitcher_summary">Če držite kolesce v levo, prikliče upravitelja opravil. Omogočite le če ne deluje kot gumb nazaj</string>
     <string name="accessibilityservice_alert_title">WunderLINQ mora zagnati pripomoček za osebe s posebnimi potrebami</string>
-    <string name="accessibilityservice_alert_body">"Omogočite WunderLINQ pripomoček za osebe s posebnimi potrebami.  "</string>
+    <string name="accessibilityservice_alert_body">Omogočite WunderLINQ pripomoček za osebe s posebnimi potrebami.</string>
     <string name="leanangle_header">Kot nagiba</string>
     <string name="gforce_header">g sila</string>
-    <string name="geodata_label">Potovanja &amp; Kažipoti</string>
+    <string name="geodata_label">Potovanja in kažipoti</string>
     <string name="bearing_header">Smer</string>
     <string name="wwMode1">Polno</string>
     <string name="wwMode2">RT</string>
     <string name="wwMode3">Po meri</string>
     <string name="waypoints_nav_title">Kažipoti</string>
     <string name="toast_waypoint_saved">Kažipot shranjen</string>
-    <string name="geocode_error">Problem s prikazom geokode</string>
+    <string name="geocode_error">Napaka pri iskanju geokode</string>
     <string name="nav_app_mapsme">Maps.me</string>
-    <string name="pref_contacts_filter_title">Contacts Display</string>
+    <string name="pref_contacts_filter_title">Prikaz stikov</string>
     <string name="nav_app_osmand">OsmAnd</string>
-    <string name="vin_label">VIN</string>
+    <string name="vin_label">Številka šasije</string>
+    <string name="pref_integrations_settings_summary">Omogoči integracijo zunanjih aplikacij in naprav.</string>
+    <string name="task_title_weathermap">Vremenska slika</string>
+    <string name="task_title_actioncam_stop_video">Ustavi snemanje s kamero</string>
+    <string name="task_title_actioncam_start_video">Začni snemanje s kamero</string>
+    <string name="pref_integrations_settings_title">Integracija</string>
+    <string name="pref_photopreview_name">Predogled slike</string>
+    <string name="timef_24h">24 ur</string>
+    <string name="timef_12h">12 ur</string>
+    <string name="pref_time_name">Časovni format</string>
+    <string name="pref_actioncam_title">Zunanja kamera</string>
+    <string name="sunrisesunset_header">Sončni vzhod/zahod</string>
+    <string name="weathermap_title">Vremenska slika</string>
+    <string name="next_service_label">Naslednji servis</string>
+    <string name="next_service_date_label">Datum naslednjega servisa</string>
+    <string name="bike_info_title">Podatki o motorju</string>
+    <string name="toast_actioncam_notset">Nastavite tip kamere v nastavitvah aplikacije</string>
+    <string name="toast_actioncam_notconnected">Kamera ni povezana</string>
+    <string name="alert_title_photopreview">Predogled slike</string>
+    <string name="bike_info_label">Podatki o motorju</string>
+    <string name="pref_photopreview_summary">Prikaže sliko po zajetju</string>
+    <string name="contacts_filter_all">Vse</string>
+    <string name="contacts_filter_favorites">Priljubljene</string>
+    <string name="barometricpressure_header">Zračni tlak</string>
+    <string name="btn_logging_notification_stop">Ustavi snemanje</string>
+    <string name="task_title_homescreen">Začetni zaslon</string>
 </resources>
