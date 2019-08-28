@@ -254,4 +254,21 @@
     <string name="pref_orientation_name">オリエンテーション</string>
     <string name="off">オフ</string>
     <string name="pref_debuglogging_summary">"サポートで必要な場合のみ有効にする, 放置するとパフォーマンスに影響が出ます.  終了後は停止して下さい."</string>
+    <string name="pref_actioncam_title">アクションカメラ</string>
+    <string name="pref_integrations_settings_summary">第3者APPとハードウェアの組み込み</string>
+    <string name="pref_integrations_settings_title">統合表示</string>
+    <string name="timef_24h">24時間表示</string>
+    <string name="timef_12h">12時間表示</string>
+    <string name="pref_time_name">時間フォーマット</string>
+    <string name="weathermap_title">ウェザーマップ</string>
+    <string name="sunrisesunset_header">日の出/日没</string>
+    <string name="toast_actioncam_notset">アクションカメラをAPPセッティングで設定してください</string>
+    <string name="toast_actioncam_notconnected">アクションカメラが接続されていません</string>
+    <string name="task_title_weathermap">ウェザーマップ</string>
+    <string name="task_title_actioncam_stop_video">アクションカメラ録画停止</string>
+    <string name="task_title_actioncam_start_video">アクションカメラ録画開始</string>
+    <string name="next_service_label">次の整備</string>
+    <string name="next_service_date_label">次の整備日程</string>
+    <string name="bike_info_title">バイク情報</string>
+    <string name="bike_info_label">バイク情報</string>
 </resources>
