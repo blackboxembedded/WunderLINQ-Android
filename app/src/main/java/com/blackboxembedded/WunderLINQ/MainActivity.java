@@ -1842,7 +1842,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 if (Data.getTime() != null) {
                     SimpleDateFormat dateformat = new SimpleDateFormat("h:mm aa", Locale.getDefault());
                     if (!sharedPrefs.getString("prefTime", "0").equals("0")) {
-                        dateformat = new SimpleDateFormat("HH:mm aa", Locale.getDefault());
+                        dateformat = new SimpleDateFormat("HH:mm", Locale.getDefault());
                     }
                     value = dateformat.format(Data.getTime());
                 }
@@ -1887,7 +1887,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Date sunset = sunriseSunset[1].getTime();
                     SimpleDateFormat dateformat = new SimpleDateFormat("h:mm aa", Locale.getDefault());
                     if (!sharedPrefs.getString("prefTime", "0").equals("0")) {
-                        dateformat = new SimpleDateFormat("HH:mm aa", Locale.getDefault());
+                        dateformat = new SimpleDateFormat("HH:mm", Locale.getDefault());
                     }
                     String sunriseString = dateformat.format(sunrise);
                     String sunsetString = dateformat.format(sunset);
