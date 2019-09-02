@@ -14,8 +14,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -25,6 +23,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 public class AlertActivity extends AppCompatActivity {
 
@@ -258,7 +260,7 @@ public class AlertActivity extends AppCompatActivity {
 
     public void updateColors(boolean itsDark){
         ((MyApplication) this.getApplication()).setitsDark(itsDark);
-        android.support.constraint.ConstraintLayout lLayout = findViewById(R.id.layout_alert);
+        ConstraintLayout lLayout = findViewById(R.id.layout_alert);
         if (itsDark) {
             //Set Brightness to default
             WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
