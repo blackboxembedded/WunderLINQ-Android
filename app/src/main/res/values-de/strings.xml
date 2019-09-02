@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- MainActivity -->
     <string name="main_title">Motorrad</string>
@@ -15,7 +16,7 @@
     <string name="overlay_alert_title">WunderLINQ benötigt Überlagerungsrecht</string>
     <string name="overlay_alert_body">Bitte erlauben Sie Überlagerungsrecht für Videoaufzeichnung</string>
     <string name="negative_alert_title">Funktionalität eingeschränkt</string>
-    <string name="negative_location_alert_body">Weil Standortdaten nicht gewährt wurden, kann diese App Ihren WunderLINQ nicht finden wenn sie im Hintergrund läuft.</string>
+    <string name="negative_location_alert_body">Weil der Zugriff zu den Standortdaten nicht gewährt wurde, kann diese App keine Wegpunkte oder Ihren Standort mitschreiben.</string>
     <string name="negative_write_alert_body">Weil Schreibzugriff nicht gewährt wurde, kann diese App keine Dateien abspeichern.</string>
     <string name="negative_camera_alert_body">Weil Kamerazugriff nicht gewährt wurde, kann diese App keine Fotos oder Videos aufnehmen.</string>
     <string name="negative_microphone_alert_body">Weil Mikrofonzugriff nicht gewährt wurde, kann diese App keine Videos aufnehmen.</string>
@@ -27,7 +28,6 @@
     </string>
     <string name="disclaimer_ok">Ich stimme zu</string>
     <string name="disclaimer_quit">Beenden</string>
-
     <string name="bt_not_supported">BLE wird nicht unterstützt</string>
     <string name="rdc_front_label">Vorderreifen</string>
     <string name="rdc_rear_label">Hinterreifen</string>
@@ -37,12 +37,9 @@
     <string name="trip1_label">KM-Zähler 1</string>
     <string name="trip2_label">KM-Zähler 2</string>
     <string name="gear_label">Gang</string>
-
-
     <string name="title_activity_fault">Fehleraufzeichnungen</string>
     <string name="fault_title">Aktive Fehler</string>
     <string name="notification_channel">Aktive Fehler</string>
-
     <string name="fault_ABSSLF">ABS Eigendiagnose nicht beendet</string>
     <string name="fault_ABSERR">ABS Fehler</string>
     <string name="fault_ABSDAC">ABS deaktiviert</string>
@@ -80,9 +77,7 @@
     <string name="fault_TIRERWF">Hinterreifen-Druck Warnung</string>
     <string name="fault_TIREFCF">Vorderreifen-Druck Kritisch</string>
     <string name="fault_TIRERCF">Hinterreifen-Druck Kritisch</string>
-
     <string name="waypoint_title">Gespeicherte Wegpunkte</string>
-
     <string name="waypoint_view_title">Gespeicherter Wegpunkt</string>
     <string name="waypoint_view_tv_date_label">Aufzeichnungsdatum</string>
     <string name="waypoint_view_tv_lat_label">Breitengrad</string>
@@ -92,9 +87,7 @@
     <string name="waypoint_view_bt_delete">Löschen</string>
     <string name="waypoint_view_waypoint_label">Wegpunkt</string>
     <string name="waypoint_view_share_label">Teilen via</string>
-
     <string name="trips_title">Gespeicherte Fahrten</string>
-
     <string name="trip_view_title">Fahrt</string>
     <string name="trip_view_trip_label">WunderLINQ Fahrtaufzeichnung</string>
     <string name="trip_view_waypoint_start_label">Start</string>
@@ -107,18 +100,13 @@
     <string name="trip_view_tv_brakes">Bremsen (Vorne/Hinten)</string>
     <string name="trip_view_tv_ambient">Aussentemp. (Min/Ø/Max)</string>
     <string name="trip_view_tv_engine">Motortemp. (Min/Ø/Max)</string>
-
-
     <string name="compass_title">Kompass</string>
-
-
     <string name="music_title">Musik</string>
     <string name="title_activity_music">Media-Player</string>
     <string name="start_media_player">Starten Sie Ihren bevorzugten Media-Player für Steuerung</string>
     <string name="unknown">Unbekannt</string>
     <string name="notification_alert_title">WunderLINQ benötigt Zugriff auf Benachrichtigungen</string>
     <string name="notification_alert_body">Bitte erlauben Sie den Zugriff auf Benachrichtigungen damit diese App Ihren Media-Player steuern kann</string>
-
     <string name="quicktask_title">Schnellzugriff</string>
     <string name="task_title_navigation">Navigation</string>
     <string name="task_title_gohome">Nach Hause</string>
@@ -135,7 +123,6 @@
     <string name="toast_address_not_set">Keine Nach Hause Adresse gesetzt in den Einstellungen</string>
     <string name="toast_phone_not_set">Keine Bevorzugte Nummer gesetzt in den Einstellungen</string>
     <string name="toast_photo_taken">Foto aufgenommen!</string>
-
     <string name="contactlist_title">Kontakte</string>
     <string name="contact_type_0">Spezial</string>
     <string name="contact_type_1">Zuhause</string>
@@ -149,7 +136,7 @@
     <string name="contact_type_9">Auto</string>
     <string name="contact_type_10">Geschäft</string>
     <string name="contact_type_11">ISDN</string>
-    <string name="contact_type_12">Main</string>
+    <string name="contact_type_12">Haupt</string>
     <string name="contact_type_13">Andere Fax</string>
     <string name="contact_type_14">Radio</string>
     <string name="contact_type_15">Telex</string>
@@ -180,9 +167,10 @@
     <string name="pref_autoNightModeDelay_name">Auto-Nachtmodus, Verzögerung</string>
     <string name="pref_autoNightModeDelay_summary">Auto-Nachtmodus, Verzögerung in Sekunden setzen</string>
     <string name="advanced_settings_title">Erweiterte Einstellungen</string>
-    <string name="btn_sendlogs_title">Logdaten schicken</string>
-    <string name="sendlogs_body">Bitte beschreiben Sie Ihr Problem:</string>
-    <string name="sendlogs_intent_title">Logdaten schicken...</string>
+    <string name="btn_sendlogs_title">Logdaten senden</string>
+    <string name="sendlogs_body">Bitte beschreiben Sie Ihr Problem:
+\n</string>
+    <string name="sendlogs_intent_title">Logdaten senden…</string>
     <string name="hw_settings_title">WunderLINQ Hardware Einstellungen</string>
     <string name="info_label">Über</string>
     <string name="close_label">Schliessen</string>
@@ -199,24 +187,24 @@
     <string name="time_header">Zeit</string>
     <string name="latitude_header">Breitengrad</string>
     <string name="longitude_header">Längengrad</string>
-    <string name="altitude_header">Höhe (m)</string>
+    <string name="altitude_header">Höhe</string>
     <string name="gpsspeed_header">GPS Geschwindigkeit</string>
     <string name="gear_header">Gang</string>
     <string name="enginetemp_header">Motortemperatur</string>
-    <string name="ambienttemp_header">Aussentemperatur</string>
+    <string name="ambienttemp_header">Umgebungstemperatur</string>
     <string name="frontpressure_header">Vorderreifen-Druck</string>
     <string name="rearpressure_header">Hinterreifen-Druck</string>
-    <string name="odometer_header">KM-Zähler Total</string>
+    <string name="odometer_header">Kilometerzähler</string>
     <string name="voltage_header">Spannung</string>
     <string name="throttle_header">Gasgriffposition</string>
-    <string name="frontbrakes_header">Vorderbremse</string>
-    <string name="rearbrakes_header">Hinterbremse</string>
-    <string name="shifts_header">Gangwechsel</string>
+    <string name="frontbrakes_header">Vorderradbremse</string>
+    <string name="rearbrakes_header">Hinterradbremse</string>
+    <string name="shifts_header">Schaltungen</string>
     <string name="vin_header">Fahrgestellnnummer (VIN)</string>
     <string name="ambientlight_header">Umgebungslicht</string>
-    <string name="tripone_header">KM-Zähler 1</string>
-    <string name="triptwo_header">KM-Zähler 2</string>
-    <string name="tripauto_header">KM-Zähler Auto</string>
+    <string name="tripone_header">Tageszähler 1</string>
+    <string name="triptwo_header">Tageszähler 2</string>
+    <string name="tripauto_header">Tageszähler Auto</string>
     <string name="speed_header">Geschwindigkeit</string>
     <string name="avgspeed_header">Ø Geschwindigkeit</string>
     <string name="cconsumption_header">Aktueller Verbrauch</string>
@@ -234,7 +222,7 @@
     <string name="pref_tpmsAlertThreshold_name">Niedriger Reifendruck-Schwellwert</string>
     <string name="pref_tpmsAlertThreshold_summary">Geben Sie eine Zahl ein relativ zur gewählten Druck-Einheit</string>
     <string name="pref_fuelAlert_name">Zur nächsten Tankstelle navigieren</string>
-    <string name="pref_fuelAlert_summary">Fragen ob zur nächsten Tankstelle navigiert werden soll wenn Benzinstand niedrig Meldung vorliegt.</string>
+    <string name="pref_fuelAlert_summary">Fragen ob zur nächsten Tankstelle navigiert werden soll wenn Benzinstand niedrig Meldung vorliegt</string>
     <string name="hours">h</string>
     <string name="minutes">m</string>
     <string name="seconds">s</string>
@@ -268,11 +256,11 @@
     <string name="fiftheenth">Schnellzugriff #15</string>
     <string name="task_title_settings">Einstellungen</string>
     <string name="waypoint_view_bt_navigate">Navigieren</string>
-    <string name="appsettings_label">App Einstellung</string>
-    <string name="hwsettings_label">Geräte Einstellung</string>
-    <string name="fw_config_title">WunderLINQ Einstellung</string>
+    <string name="appsettings_label">App-Einstellungen</string>
+    <string name="hwsettings_label">Geräte-Einstellungen</string>
+    <string name="fw_config_title">WunderLINQ Einstellungen</string>
     <string name="wwtype_label">Scrollrad Typ</string>
-    <string name="sensitivity_label">Empfindlichkeit</string>
+    <string name="sensitivity_label">Halte-Empfindlichkeit</string>
     <string name="config_write_label">Einstellungen speichern</string>
     <string name="hwsave_alert_title">Warnung!</string>
     <string name="hwsave_alert_body">Nach dem Speichern von Einstellungen kann das WunderLINQ Gerät u.U. unstabil laufen, bitte entfernen Sie es aus der Halterung und setzen Sie es neu ein.</string>
@@ -289,10 +277,10 @@
     <string name="negative_contacts_alert_body">Weil Kontaktlistenzugriff nicht gewährt wurde, kann diese App bei eingehendem Anruf keine Kontaktdaten anzeigen oder ausgehende Anrufe tätigen.</string>
     <string name="call_alert_body">Bitte erlauben Sie den Zugriff auf Ihr Telefon</string>
     <string name="call_alert_title">WunderLINQ benötigt Zugriff auf Ihr Telefon um Anrufe zu tätigen</string>
-    <string name="pref_motorcycledata_name">Datenanzeige ausschalten</string>
+    <string name="pref_motorcycledata_name">Leistungsdaten-anzeige deaktivieren</string>
     <string name="pref_motorcycledata_summary">Einschalten für Motorräder, die keine Datenanzeige ermöglichen.</string>
     <string name="pref_grid_settings_title">Anpassung der Datenfelder</string>
-    <string name="pref_grid_settings_summary">Passen Sie die Datenfelder an und in welcher Zelle sie angezeigt werden.</string>
+    <string name="pref_grid_settings_summary">Passen Sie an welche Datenfelder und in welcher Zelle diese angezeigt werden sollen</string>
     <string name="tripauto_label">Auto Fahrtaufzeichnung</string>
     <string name="voltage_label">Spannung</string>
     <string name="throttle_label">Gasgriff</string>
@@ -305,7 +293,7 @@
     <string name="fueleconomyone_label">Verbrauch 1</string>
     <string name="fueleconomytwo_label">Verbrauch 1</string>
     <string name="fuelrange_label">Reichweite</string>
-    <string name="accessibility_explanation">Dies wird für automatischen Mehrfachfenster-Modus benötigt, wenn Sie sich entscheiden dies nicht einzuschalten werden Sie aufgefordert manuell in den Mehrfachfenster-Modus zu wechseln.</string>
+    <string name="accessibility_explanation">Dies wird für automatischen Mehrfachfenster-Modus benötigt, wenn Sie sich entscheiden dies nicht einzuschalten wird WunderLINQ nicht vollständig funktionieren.</string>
     <string name="pref_pipgrid_name">Bild-in-Bild Zellenanzahl</string>
     <string name="pref_piporientation_name">Bild-in-Bild Orientierung</string>
     <string name="pref_pip_summary">Wenn die App verlassen wird, wird die Bild-in-Bild Anzeige in ein Fenster minimiert. Nur verfügbar mit Android 8.0+</string>
@@ -314,7 +302,7 @@
     <string name="delete_waypoint_alert_title">Warnung!</string>
     <string name="delete_waypoint_alert_body">Wegpunkt löschen?</string>
     <string name="delete_trip_alert_title">Warnung!</string>
-    <string name="delete_trip_alert_body">Wegpunkte-Protokoll löschen?</string>
+    <string name="delete_trip_alert_body">Fahrtenlog löschen\?</string>
     <string name="delete_bt">Löschen</string>
     <string name="cancel_bt">Abbrechen</string>
     <string name="experimental_title">Experimentelle Funktionen</string>
@@ -343,13 +331,38 @@
     <string name="auto">Auto</string>
     <string name="wwMode1">Normal</string>
     <string name="wwMode2">RT</string>
-    <string name="wwMode3">Custom</string>
+    <string name="wwMode3">Individuell</string>
     <string name="waypoints_nav_title">Wegpunkte</string>
-    <string name="toast_waypoint_saved">Gespeicherte Wegpunkte</string>
-    <string name="geocode_error">Problem: Geocode kann nicht geladen werden</string>
+    <string name="toast_waypoint_saved">Wegpunkt gespeichert</string>
+    <string name="geocode_error">Problem: Geocode kann nicht gefunden werden</string>
     <string name="nav_app_mapsme">Maps.me</string>
     <string name="nav_app_osmand">OsmAnd</string>
-    <string name="pref_integrations_settings_summary">Enable integration with 3rd Party Apps and hardware.</string>
-    <string name="pref_integrations_settings_title">Integrations</string>
+    <string name="pref_integrations_settings_summary">Genehmigen Sie die Integration mit Apps und Hardware anderer Hersteller.</string>
+    <string name="pref_integrations_settings_title">Integrationen</string>
     <string name="vin_label">Fahrgestellnnummer (VIN)</string>
+    <string name="task_title_homescreen">Hauptanzeige</string>
+    <string name="pref_time_name">Zeitformat</string>
+    <string name="timef_12h">12 Std</string>
+    <string name="timef_24h">24 Std</string>
+    <string name="credits_label">Credits</string>
+    <string name="toast_actioncam_notset">Bitte ActionCam in den App-Einstellungen auswählen</string>
+    <string name="next_service_label">Nächste Wartung</string>
+    <string name="pref_contacts_filter_title">Kontakte anzeigen</string>
+    <string name="bike_info_title">Motorrad-Information</string>
+    <string name="task_title_actioncam_stop_video">ActionCam Aufnahmestop</string>
+    <string name="alert_title_photopreview">Foto-Vorschau</string>
+    <string name="barometricpressure_header">Barometrischer Druck</string>
+    <string name="sunrisesunset_header">Sonnenaufgang/Untergang</string>
+    <string name="bike_info_label">Motorrad-Information</string>
+    <string name="next_service_date_label">Nächste fällige Wartung</string>
+    <string name="task_title_actioncam_start_video">ActionCam Aufnahmestart</string>
+    <string name="contacts_filter_all">Alle</string>
+    <string name="toast_actioncam_notconnected">ActionCam nicht verbunden</string>
+    <string name="weathermap_title">Wetterkarte</string>
+    <string name="pref_photopreview_name">Foto-Vorschau</string>
+    <string name="task_title_weathermap">Wetterkarte</string>
+    <string name="contacts_filter_favorites">Favoriten</string>
+    <string name="pref_photopreview_summary">Zeigt das Foto nach Aufnahme an</string>
+    <string name="btn_logging_notification_stop">Aufnahme-Stop</string>
+    <string name="pref_actioncam_title">Action-Kamera</string>
 </resources>
