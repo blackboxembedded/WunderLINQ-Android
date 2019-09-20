@@ -158,7 +158,7 @@
     <string name="hwsave_alert_body">ハードウェアセッティングを変更すると動作が不安定になります。　クレードルから一度外してリセットして下さい.</string>
     <string name="hwsave_alert_title">警告！</string>
     <string name="wwMode3">Custom</string>
-    <string name="wwMode2">RT</string>
+    <string name="wwMode2">RT/K1600</string>
     <string name="wwMode1">Full</string>
     <string name="gear_header">ギア</string>
     <string name="gpsspeed_header">GPS スピード</string>

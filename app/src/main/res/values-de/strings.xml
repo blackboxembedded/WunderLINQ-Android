@@ -330,7 +330,7 @@
     <string name="on">Ein</string>
     <string name="auto">Auto</string>
     <string name="wwMode1">Normal</string>
-    <string name="wwMode2">RT</string>
+    <string name="wwMode2">RT/K1600</string>
     <string name="wwMode3">Individuell</string>
     <string name="waypoints_nav_title">Wegpunkte</string>
     <string name="toast_waypoint_saved">Wegpunkt gespeichert</string>

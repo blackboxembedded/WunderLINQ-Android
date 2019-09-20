@@ -82,7 +82,7 @@
     <string name="fw_config_title">WunderLINQ Settings</string>
     <string name="wwtype_label">Wheel Type</string>
     <string name="wwMode1">Full</string>
-    <string name="wwMode2">RT</string>
+    <string name="wwMode2">RT/K1600</string>
     <string name="wwMode3">Custom</string>
     <string-array name="wwtype_array" translatable="false">
         <item name="1">@string/wwMode1</item>
@@ -129,7 +129,7 @@
         Frederic Boucher\n
         Žiga Selčan\n
         Remco van den Ende\n
-        Taro Mizutani, Touratech Japan\n
+        Touratech Japan\n
         \n
         <b>Kickstarter Backers</b>\n
         \n

@@ -350,7 +350,7 @@
     <string name="geodata_label">Potovanja in kažipoti</string>
     <string name="bearing_header">Smer</string>
     <string name="wwMode1">Polno</string>
-    <string name="wwMode2">RT</string>
+    <string name="wwMode2">RT/K1600</string>
     <string name="wwMode3">Po meri</string>
     <string name="waypoints_nav_title">Kažipoti</string>
     <string name="toast_waypoint_saved">Kažipot shranjen</string>

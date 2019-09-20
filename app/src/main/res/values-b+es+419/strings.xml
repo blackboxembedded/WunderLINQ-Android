@@ -231,7 +231,7 @@
     <string name="nav_app_waze">Waze</string>
     <string name="on">On</string>
     <string name="off">Off</string>
-    <string name="wwMode2">RT</string>
+    <string name="wwMode2">RT/K1600</string>
     <string name="nav_app_mapsme">Maps.me</string>
     <string name="nav_app_osmand">OsmAnd</string>
     <string name="vin_label">VIN</string>

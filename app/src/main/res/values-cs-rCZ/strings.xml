@@ -292,7 +292,7 @@
     <string name="fw_config_title">Nastavení WunderLINQ</string>
     <string name="wwtype_label">Typ otočného ovladače</string>
     <string name="wwMode1">Standardní (GS)</string>
-    <string name="wwMode2">RT</string>
+    <string name="wwMode2">RT/K1600</string>
     <string name="wwMode3">Vlastní</string>
     <string name="sensitivity_label">Prodleva pro dlouhý stisk</string>
     <string name="config_write_label">Uložit nastavení</string>

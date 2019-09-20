@@ -183,7 +183,7 @@
     <string name="config_write_label">Beállítások mentése</string>
     <string name="sensitivity_label">Érzékenység</string>
     <string name="wwMode3">Egyedi</string>
-    <string name="wwMode2">RT</string>
+    <string name="wwMode2">RT/K1600</string>
     <string name="wwMode1">Teljes</string>
     <string name="wwtype_label">Keréktípus</string>
     <string name="fw_config_title">WunderLINQ beállítások</string>

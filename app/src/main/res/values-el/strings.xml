@@ -345,7 +345,7 @@
     <string name="on">Ενεργοποιημένο</string>
     <string name="auto">Αυτόματο</string>
     <string name="wwMode1">Πλήρης</string>
-    <string name="wwMode2">RT</string>
+    <string name="wwMode2">RT/K1600</string>
     <string name="wwMode3">Προσαρμοσμένο</string>
     <string name="waypoints_nav_title">Προορισμοί</string>
     <string name="toast_waypoint_saved">Ο προορισμός αποθηκεύτηκε</string>
