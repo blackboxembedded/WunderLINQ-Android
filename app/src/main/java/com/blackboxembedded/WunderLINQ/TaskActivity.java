@@ -81,7 +81,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
     private TextView navbarTitle;
 
     GridView gridview;
-    private int lastPosition = -1;
+    private int lastPosition = 0;
 
     private List<Integer> mapping;
 
@@ -200,6 +200,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             updateColors(false);
         }
         displayTasks();
+
         if (sharedPrefs.getBoolean("prefAutoNightMode", false)) {
             sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
@@ -1794,10 +1795,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 }
                 return true;
             case KeyEvent.KEYCODE_DPAD_UP:
-                if (lastPosition == -1){
-                    lastPosition = lastPosition + 1;
-                    gridview.setSelection(lastPosition);
-                } else if (gridview.getSelectedItemPosition() == 0 && lastPosition == 0){
+                if (gridview.getSelectedItemPosition() == 0 && lastPosition == 0){
                     lastPosition = mapping.size() - 1;
                     gridview.setSelection(lastPosition);
                 } else {
