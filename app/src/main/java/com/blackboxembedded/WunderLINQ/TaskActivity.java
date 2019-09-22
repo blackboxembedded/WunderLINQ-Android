@@ -179,7 +179,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
 
         updateColors(itsDark);
 
-        displayTasks();
+        //displayTasks();
 
         // Sensor Stuff
         sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);

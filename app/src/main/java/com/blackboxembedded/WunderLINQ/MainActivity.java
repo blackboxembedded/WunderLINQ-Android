@@ -137,6 +137,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private boolean inPIP = false;
 
+    private boolean drawingComplete = true;
+
     private CountDownTimer cTimer = null;
 
     @Override
@@ -1252,7 +1254,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                 }
                 if (!sharedPrefs.getBoolean("prefMotorcycleData", false)){
-                    updateDisplay();
+                    if(drawingComplete) {
+                        updateDisplay();
+                    }
                 }
             }
         }
@@ -1310,6 +1314,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     // Update Display
     private void updateDisplay(){
         //Log.d(TAG,"updateDisplay()");
+        drawingComplete = false;
         gridLayout = findViewById(R.id.gridLayout);
 
         if (!sharedPrefs.getBoolean("prefMotorcycleData", false)) {
@@ -2296,6 +2301,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             default:
                 break;
         }
+        drawingComplete = true;
     }
 
     @Override

@@ -48,20 +48,23 @@ public class TaskAdapter extends BaseAdapter {
         View gridView;
         if (convertView == null) {
             gridView = inflater.inflate(R.layout.grid_task, null);
-            // set image
             ImageView imageView = gridView.findViewById(R.id.gridImageView);
-            imageView.setImageDrawable(icon.get(position));
-            // set text
             TextView textView = gridView.findViewById(R.id.gridTextView);
+
             textView.setText(label.get(position));
             if (itsDark){
+                imageView.setImageDrawable(icon.get(position));
                 textView.setTextColor(Color.WHITE);
             } else {
+                Drawable temp = icon.get(position);
+                temp.setTintList(mContext.getResources().getColorStateList(R.color.task_text_color_light));
+                imageView.setImageDrawable(temp);
                 textView.setTextColor(mContext.getResources().getColorStateList(R.color.task_text_color_light));
             }
         } else {
             gridView = convertView;
         }
+
         return gridView;
     }
 }
