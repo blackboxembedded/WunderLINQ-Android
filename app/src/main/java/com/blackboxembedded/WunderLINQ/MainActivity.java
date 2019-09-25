@@ -1115,13 +1115,15 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
         if (!pairedDevices.isEmpty()) {
             for (BluetoothDevice devices : pairedDevices) {
-                if (devices.getName().equals(getString(R.string.device_name))){
-                    Log.d(TAG,"WunderLINQ previously paired");
-                    mDeviceAddress = devices.getAddress();
-                    Log.d(TAG,"Address: " + mDeviceAddress);
-                    bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
-                    scanLeDevice(false);
-                    return;
+                if (devices.getName() != null) {
+                    if (devices.getName().equals(getString(R.string.device_name))) {
+                        Log.d(TAG, "WunderLINQ previously paired");
+                        mDeviceAddress = devices.getAddress();
+                        Log.d(TAG, "Address: " + mDeviceAddress);
+                        bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+                        scanLeDevice(false);
+                        return;
+                    }
                 }
             }
         }
