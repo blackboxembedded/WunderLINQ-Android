@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.drawable.ColorDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -130,6 +132,7 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
                 lastPosition = position;
                 WaypointRecord record = (WaypointRecord) waypointList.getItemAtPosition(position);
                 String navApp = sharedPrefs.getString("prefNavApp", "1");
+                Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
                 String navUrl = "google.navigation:q=" + record.getData() + "&navigate=yes";
                 // Get location
                 // Get the location manager
@@ -140,12 +143,20 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
                     String bestProvider = locationManager.getBestProvider(criteria, false);
                     Log.d(TAG,"Trying Best Provider: " + bestProvider);
                     Location currentLocation = locationManager.getLastKnownLocation(bestProvider);
-                    if (navApp.equals("1") || navApp.equals("2")){
-                        // Android Default or Google Maps
+                    if (navApp.equals("1")) {
+                        // Android Default
                         // Nothing to do
+                    } else if (navApp.equals("2")){
+                        //Google Maps
+                        navIntent.setPackage("com.google.android.apps.maps");
                     } else if (navApp.equals("3")){
                         //Locus
-
+                        navIntent.setPackage("menion.android.locus.pro");
+                        navIntent.setData(Uri.parse(navUrl));
+                        if(!isCallable(navIntent)){
+                            Log.d(TAG,"Locus Maps Pro Not Installed");
+                            navIntent.setPackage("menion.android.locus");
+                        }
                     } else if (navApp.equals("4")){
                         //Waze
                         navUrl = "https://www.waze.com/ul?ll=" + record.getData() + "&navigate=yes&zoom=17";
@@ -163,10 +174,12 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
                         //navUrl = "osmand.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
                         OsmAndHelper osmAndHelper = new OsmAndHelper(WaypointNavActivity.this, OsmAndHelper.REQUEST_OSMAND_API, WaypointNavActivity.this);
                         osmAndHelper.navigate("Start",currentLocation.getLatitude(),currentLocation.getLongitude(),"Destination",latitude,longitude,"motorcycle", true);
+                    } else if (navApp.equals("7")){
+                        navIntent.setPackage("com.mapfactor.navigator");
+                        navUrl = "http://maps.google.com/maps?f=d&daddr=@"  + record.getData() + "&navigate=yes";
                     }
                     if (!navApp.equals("6")) {
                         try {
-                            Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
                             navIntent.setData(Uri.parse(navUrl));
                             if (android.os.Build.VERSION.SDK_INT >= 24) {
                                 navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
@@ -355,5 +368,13 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
             default:
                 return super.onKeyUp(keyCode, event);
         }
+    }
+
+    private boolean isCallable(Intent intent) {
+        List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent,
+
+                PackageManager.MATCH_DEFAULT_ONLY);
+
+        return list.size() > 0;
     }
 }

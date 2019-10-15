@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -851,13 +852,18 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 switch (mapping.get(position)){
                     case 0:
                         //Navigation
-                        String url = "google.navigation:/?free=1&mode=d&entry=fnls";
-                        if (navApp.equals("1") || navApp.equals("2")){
-                            // Android Default or Google Maps
-                            url = "google.navigation:/?free=1&mode=d&entry=fnls";
+                        Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                        String url = "google.navigation://?free=1&mode=d&entry=fnls";
+                        Log.d(TAG,"navApp: " + navApp);
+                        if (navApp.equals("1")) {
+                            // Android Default
+                        } else if (navApp.equals("2")){
+                            //Google Maps
+                            navIntent.setPackage("com.google.android.apps.maps");
+                            url = "google.navigation://?free=1&mode=d&entry=fnls";
                         } else if (navApp.equals("3")){
                             //Locus
-
+                            url = "http://link.locusmap.eu";
                         } else if (navApp.equals("4")){
                             //Waze
                             url = "https://waze.com/ul";
@@ -867,9 +873,12 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                         } else if (navApp.equals("6")){
                             // OsmAnd
                             url = "http://osmand.net/go";
+                        } else if (navApp.equals("7")){
+                            //Mapfactor Navigator
+                            navIntent.setPackage("com.mapfactor.navigator");
+                            url = "http://maps.google.com/maps";
                         }
                         try {
-                            Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
                             navIntent.setData(Uri.parse(url));
                             if (android.os.Build.VERSION.SDK_INT >= 24) {
                                 navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
@@ -917,14 +926,22 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                                             String bestProvider = locationManager.getBestProvider(criteria, false);
                                             Log.d(TAG,"Trying Best Provider: " + bestProvider);
                                             Location currentLocation = locationManager.getLastKnownLocation(bestProvider);
+                                            Intent homeNavIntent = new Intent(android.content.Intent.ACTION_VIEW);
                                             String navUrl = "google.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
-                                            if (navApp.equals("1") || navApp.equals("2")){
+                                            if (navApp.equals("1")){
                                                 // Android Default or Google Maps
                                                 // Nothing to do
+                                            } else if (navApp.equals("2")){
+                                                homeNavIntent.setPackage("com.google.android.apps.maps");
                                                 navUrl = "google.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
                                             } else if (navApp.equals("3")){
                                                 //Locus
-
+                                                homeNavIntent.setPackage("menion.android.locus.pro");
+                                                homeNavIntent.setData(Uri.parse(navUrl));
+                                                if(!isCallable(homeNavIntent)){
+                                                    Log.d(TAG,"Locus Maps Pro Not Installed");
+                                                    homeNavIntent.setPackage("menion.android.locus");
+                                                }
                                             } else if (navApp.equals("4")){
                                                 //Waze
                                                 navUrl = "https://www.waze.com/ul?ll=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes&zoom=17";
@@ -932,19 +949,22 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                                                 //Maps.me
                                                 navUrl = "mapsme://route?sll=" + String.valueOf(currentLocation.getLatitude()) + "," + String.valueOf(currentLocation.getLongitude()) + "&saddr=Start&dll=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&daddr=Home&type=vehicle";
                                             } else if (navApp.equals("6")){
-                                                // OsmAnd
+                                                //OsmAnd
                                                 //navUrl = "osmand.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
                                                 OsmAndHelper osmAndHelper = new OsmAndHelper(TaskActivity.this, OsmAndHelper.REQUEST_OSMAND_API, TaskActivity.this);
                                                 osmAndHelper.navigate("Start",currentLocation.getLatitude(),currentLocation.getLongitude(),"Destination",location.latitude,location.longitude,"motorcycle", true);
+                                            } else if (navApp.equals("7")){
+                                                //Mapfactor Navigator
+                                                homeNavIntent.setPackage("com.mapfactor.navigator");
+                                                navUrl = "http://maps.google.com/maps?f=d&daddr=@"  + location.latitude + "," + location.longitude + "&navigate=yes";
                                             }
                                             if (!navApp.equals("6")) {
                                                 try {
-                                                    Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                                                    navIntent.setData(Uri.parse(navUrl));
+                                                    homeNavIntent.setData(Uri.parse(navUrl));
                                                     if (android.os.Build.VERSION.SDK_INT >= 24) {
-                                                        navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                                                        homeNavIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
                                                     }
-                                                    startActivity(navIntent);
+                                                    startActivity(homeNavIntent);
                                                 } catch (ActivityNotFoundException ex) {
                                                     // Add Alert
                                                 }
@@ -1887,6 +1907,14 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             ret.add(text.substring(start, Math.min(text.length(), start + size)));
         }
         return ret;
+    }
+
+    private boolean isCallable(Intent intent) {
+        List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent,
+
+                PackageManager.MATCH_DEFAULT_ONLY);
+
+        return list.size() > 0;
     }
 }
 

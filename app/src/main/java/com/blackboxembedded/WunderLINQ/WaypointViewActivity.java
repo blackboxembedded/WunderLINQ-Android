@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -197,22 +199,35 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
     // Open button press
     public void onClickOpen(View view) {
         //Open waypoint in map app
+        Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
         String navUrl = "geo:0,0?q=" + record.getData() + "(" + getString(R.string.waypoint_view_waypoint_label) + " " + record.getDate() + ")";
-        if (navApp.equals("1") || navApp.equals("2")){
+        if (navApp.equals("1")) {
             // Android Default or Google Maps
             // Nothing to do
+        } else if (navApp.equals("2")){
+            //Google Maps
+            navIntent.setPackage("com.google.android.apps.maps");
         } else if (navApp.equals("3")){
             //Locus
-
+            navIntent.setPackage("menion.android.locus.pro");
+            navIntent.setData(Uri.parse(navUrl));
+            if(!isCallable(navIntent)){
+                Log.d(TAG,"Locus Maps Pro Not Installed");
+                navIntent.setPackage("menion.android.locus");
+            }
         } else if (navApp.equals("4")){
             //Waze
             navUrl = "https://www.waze.com/ul?ll=" + record.getData() + "&zoom=10";
         } else if (navApp.equals("5")){
             //Maps.me
             navUrl = "mapsme://map?ll=" + record.getData() + "&n=" + record.getLabel() + "&id=WunderLINQ&backurl=wunderlinq://&appname=WunderLINQ";
+        } else if (navApp.equals("6")){
+            //OsmAnd
+        } else if (navApp.equals("7")){
+            //Mapfactor Navigator
+            navIntent.setPackage("com.mapfactor.navigator");
         }
         try {
-            Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
             navIntent.setData(Uri.parse(navUrl));
             if (android.os.Build.VERSION.SDK_INT >= 24) {
                 navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
@@ -235,13 +250,21 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
             String bestProvider = locationManager.getBestProvider(criteria, false);
             Log.d(TAG,"Trying Best Provider: " + bestProvider);
             Location currentLocation = locationManager.getLastKnownLocation(bestProvider);
+            Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
             String navUrl = "google.navigation:q=" + record.getData() + "&navigate=yes";
-            if (navApp.equals("1") || navApp.equals("2")){
+            if (navApp.equals("1")) {
                 // Android Default or Google Maps
                 // Nothing to do
+            } else if (navApp.equals("2")){
+                navIntent.setPackage("com.google.android.apps.maps");
             } else if (navApp.equals("3")){
-                //Locus
-
+                //Locus Maps
+                navIntent.setPackage("menion.android.locus.pro");
+                navIntent.setData(Uri.parse(navUrl));
+                if(!isCallable(navIntent)){
+                    Log.d(TAG,"Locus Maps Pro Not Installed");
+                    navIntent.setPackage("menion.android.locus");
+                }
             } else if (navApp.equals("4")){
                 //Waze
                 navUrl = "https://www.waze.com/ul?ll=" + record.getData() + "&navigate=yes&zoom=17";
@@ -259,10 +282,12 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
                 //navUrl = "osmand.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
                 OsmAndHelper osmAndHelper = new OsmAndHelper(WaypointViewActivity.this, OsmAndHelper.REQUEST_OSMAND_API, WaypointViewActivity.this);
                 osmAndHelper.navigate("Start",currentLocation.getLatitude(),currentLocation.getLongitude(),"Destination",latitude,longitude,"motorcycle", true);
+            } else if (navApp.equals("7")){
+                navIntent.setPackage("com.mapfactor.navigator");
+                navUrl = "http://maps.google.com/maps?f=d&daddr=@"  + record.getData() + "&navigate=yes";
             }
             if (!navApp.equals("6")) {
                 try {
-                    Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
                     navIntent.setData(Uri.parse(navUrl));
                     if (android.os.Build.VERSION.SDK_INT >= 24) {
                         navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
@@ -301,4 +326,12 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
             }
         }
     };
+
+    private boolean isCallable(Intent intent) {
+        List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent,
+
+                PackageManager.MATCH_DEFAULT_ONLY);
+
+        return list.size() > 0;
+    }
 }
