@@ -150,7 +150,7 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
                         //Google Maps
                         navIntent.setPackage("com.google.android.apps.maps");
                     } else if (navApp.equals("3")){
-                        //Locus
+                        //Locus Maps
                         navIntent.setPackage("menion.android.locus.pro");
                         navIntent.setData(Uri.parse(navUrl));
                         if(!isCallable(navIntent)){
@@ -175,6 +175,7 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
                         OsmAndHelper osmAndHelper = new OsmAndHelper(WaypointNavActivity.this, OsmAndHelper.REQUEST_OSMAND_API, WaypointNavActivity.this);
                         osmAndHelper.navigate("Start",currentLocation.getLatitude(),currentLocation.getLongitude(),"Destination",latitude,longitude,"motorcycle", true);
                     } else if (navApp.equals("7")){
+                        //Mapfactor Navigator
                         navIntent.setPackage("com.mapfactor.navigator");
                         navUrl = "http://maps.google.com/maps?f=d&daddr=@"  + record.getData() + "&navigate=yes";
                     }

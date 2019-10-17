@@ -202,13 +202,13 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
         Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
         String navUrl = "geo:0,0?q=" + record.getData() + "(" + getString(R.string.waypoint_view_waypoint_label) + " " + record.getDate() + ")";
         if (navApp.equals("1")) {
-            // Android Default or Google Maps
-            // Nothing to do
+            //Android Default or Google Maps
+            //Nothing to do
         } else if (navApp.equals("2")){
             //Google Maps
             navIntent.setPackage("com.google.android.apps.maps");
         } else if (navApp.equals("3")){
-            //Locus
+            //Locus Maps
             navIntent.setPackage("menion.android.locus.pro");
             navIntent.setData(Uri.parse(navUrl));
             if(!isCallable(navIntent)){
@@ -223,18 +223,26 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
             navUrl = "mapsme://map?ll=" + record.getData() + "&n=" + record.getLabel() + "&id=WunderLINQ&backurl=wunderlinq://&appname=WunderLINQ";
         } else if (navApp.equals("6")){
             //OsmAnd
+            String location[] = record.getData().split(",");
+            Double latitude =  Double.parseDouble(location[0]);
+            Double longitude =  Double.parseDouble(location[1]);
+            //navUrl = "osmand.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
+            OsmAndHelper osmAndHelper = new OsmAndHelper(WaypointViewActivity.this, OsmAndHelper.REQUEST_OSMAND_API, WaypointViewActivity.this);
+            osmAndHelper.showLocation(latitude,longitude);
         } else if (navApp.equals("7")){
             //Mapfactor Navigator
             navIntent.setPackage("com.mapfactor.navigator");
         }
-        try {
-            navIntent.setData(Uri.parse(navUrl));
-            if (android.os.Build.VERSION.SDK_INT >= 24) {
-                navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+        if (!navApp.equals("6")) {
+            try {
+                navIntent.setData(Uri.parse(navUrl));
+                if (android.os.Build.VERSION.SDK_INT >= 24) {
+                    navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                }
+                startActivity(navIntent);
+            } catch (ActivityNotFoundException ex) {
+                // Add Alert
             }
-            startActivity(navIntent);
-        } catch ( ActivityNotFoundException ex  ) {
-            // Add Alert
         }
     }
 
@@ -283,6 +291,7 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
                 OsmAndHelper osmAndHelper = new OsmAndHelper(WaypointViewActivity.this, OsmAndHelper.REQUEST_OSMAND_API, WaypointViewActivity.this);
                 osmAndHelper.navigate("Start",currentLocation.getLatitude(),currentLocation.getLongitude(),"Destination",latitude,longitude,"motorcycle", true);
             } else if (navApp.equals("7")){
+                //Mapfactor Navigator
                 navIntent.setPackage("com.mapfactor.navigator");
                 navUrl = "http://maps.google.com/maps?f=d&daddr=@"  + record.getData() + "&navigate=yes";
             }

@@ -862,8 +862,14 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                             navIntent.setPackage("com.google.android.apps.maps");
                             url = "google.navigation://?free=1&mode=d&entry=fnls";
                         } else if (navApp.equals("3")){
-                            //Locus
+                            //Locus Maps
                             url = "http://link.locusmap.eu";
+                            navIntent.setPackage("menion.android.locus.pro");
+                            navIntent.setData(Uri.parse(url));
+                            if(!isCallable(navIntent)){
+                                Log.d(TAG,"Locus Maps Pro Not Installed");
+                                navIntent.setPackage("menion.android.locus");
+                            }
                         } else if (navApp.equals("4")){
                             //Waze
                             url = "https://waze.com/ul";
@@ -933,9 +939,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                                                 // Nothing to do
                                             } else if (navApp.equals("2")){
                                                 homeNavIntent.setPackage("com.google.android.apps.maps");
-                                                navUrl = "google.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
                                             } else if (navApp.equals("3")){
-                                                //Locus
+                                                //Locus Maps
                                                 homeNavIntent.setPackage("menion.android.locus.pro");
                                                 homeNavIntent.setData(Uri.parse(navUrl));
                                                 if(!isCallable(homeNavIntent)){
@@ -958,6 +963,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                                                 homeNavIntent.setPackage("com.mapfactor.navigator");
                                                 navUrl = "http://maps.google.com/maps?f=d&daddr=@"  + location.latitude + "," + location.longitude + "&navigate=yes";
                                             }
+                                            Log.d(TAG,"NavURL: " + navUrl);
                                             if (!navApp.equals("6")) {
                                                 try {
                                                     homeNavIntent.setData(Uri.parse(navUrl));
