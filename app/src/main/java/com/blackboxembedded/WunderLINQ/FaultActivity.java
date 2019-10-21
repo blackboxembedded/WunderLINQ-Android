@@ -2,7 +2,9 @@ package com.blackboxembedded.WunderLINQ;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,12 +22,17 @@ import java.util.ArrayList;
 
 public class FaultActivity extends AppCompatActivity {
     ArrayList<String> faultListData = new ArrayList<String>();
+    SharedPreferences sharedPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         ListView faultList;
         FaultStatus faults;
-        super.onCreate(savedInstanceState);
+
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
         AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
         setContentView(R.layout.activity_fault);
 
@@ -57,6 +64,16 @@ public class FaultActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void recreate() {
+        super.recreate();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     private void showActionBar(){
         LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflator.inflate(R.layout.actionbar_nav, null);
@@ -68,7 +85,7 @@ public class FaultActivity extends AppCompatActivity {
         actionBar.setCustomView(v);
 
         TextView navbarTitle;
-        navbarTitle = (TextView) findViewById(R.id.action_title);
+        navbarTitle = findViewById(R.id.action_title);
         navbarTitle.setText(R.string.fault_title);
         ImageButton backButton = findViewById(R.id.action_back);
         ImageButton forwardButton = findViewById(R.id.action_forward);

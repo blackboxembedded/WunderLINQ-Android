@@ -119,6 +119,16 @@ public class AboutActivity extends AppCompatActivity {
         showActionBar();
     }
 
+    @Override
+    public void recreate() {
+        super.recreate();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     private void showActionBar(){
         LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflator.inflate(R.layout.actionbar_nav, null);
@@ -151,5 +161,4 @@ public class AboutActivity extends AppCompatActivity {
             }
         }
     };
-
 }

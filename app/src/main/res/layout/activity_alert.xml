@@ -40,7 +40,7 @@
         android:layout_marginBottom="8dp"
         android:text="Alert Body"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="?attr/primaryTextColor"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/btnOK"
@@ -57,6 +57,8 @@
         android:layout_marginBottom="8dp"
         android:text="@string/alert_btn_close"
         android:textSize="36sp"
+        android:background="?attr/buttonColor"
+        android:textColor="?attr/buttonTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guidelineVertical"
         app:layout_constraintStart_toStartOf="parent" />
@@ -70,6 +72,8 @@
         android:layout_marginBottom="8dp"
         android:text="@string/alert_btn_ok"
         android:textSize="36sp"
+        android:background="?attr/buttonColor"
+        android:textColor="?attr/buttonTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guidelineVertical" />

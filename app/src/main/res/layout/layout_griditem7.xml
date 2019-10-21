@@ -8,7 +8,7 @@
     app:layout_rowWeight="1"
     android:layout_weight="1"
     android:orientation="vertical"
-    android:background="@drawable/border">
+    android:background="?attr/gridViewBorder">
 
     <TextView
         android:id="@+id/textView7label"
@@ -17,7 +17,7 @@
         android:textAlignment="center"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
+        android:textColor="?attr/primaryTextColor"
         android:maxLines="1"
         app:autoSizeTextType="uniform"
         app:autoSizeMinTextSize="12sp"
@@ -33,7 +33,7 @@
         android:textAlignment="center"
         android:textSize="36sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
+        android:textColor="?attr/primaryTextColor"
         android:maxLines="1"
         app:autoSizeTextType="uniform"
         app:autoSizeMinTextSize="12sp"

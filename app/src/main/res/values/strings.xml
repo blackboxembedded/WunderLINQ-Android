@@ -694,15 +694,18 @@
     <string name="off">Off</string>
     <string name="on">On</string>
     <string name="auto">Auto</string>
+    <string name="android_default">Android Default</string>
     <string-array name="night_mode_array" translatable="false">
         <item name="1">@string/off</item>
         <item name="2">@string/on</item>
         <item name="3">@string/auto</item>
+        <item name="4">@string/android_default</item>
     </string-array>
     <string-array name="night_mode_arrayValues" translatable="false">
         <item name="1">0</item>
         <item name="2">1</item>
         <item name="3">2</item>
+        <item name="4">3</item>
     </string-array>
     <string name="pref_autoNightModeDelay_name">Auto Night Mode Delay</string>
     <string name="pref_autoNightModeDelay_summary">Set Auto Night Mode Delay In Seconds</string>

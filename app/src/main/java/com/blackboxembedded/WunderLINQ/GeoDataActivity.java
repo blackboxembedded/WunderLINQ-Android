@@ -35,6 +35,16 @@ public class GeoDataActivity extends AppCompatActivity {
         showActionBar();
     }
 
+    @Override
+    public void recreate() {
+        super.recreate();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     private void showActionBar(){
         LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflator.inflate(R.layout.actionbar_nav, null);

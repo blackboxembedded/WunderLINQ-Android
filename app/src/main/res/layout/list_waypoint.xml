@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
     <TableRow>
-
         <TextView
             android:id="@+id/tv_label"
             android:layout_width="match_parent"
@@ -12,7 +11,7 @@
             android:paddingStart="10dp"
             android:text="test label"
             android:textAppearance="@android:style/TextAppearance.Material.Large"
-            android:textColor="@color/task_text_color_light"
+            android:textColor="?attr/taskTextColor"
             android:textStyle="bold" />
     </TableRow>
 </TableLayout>

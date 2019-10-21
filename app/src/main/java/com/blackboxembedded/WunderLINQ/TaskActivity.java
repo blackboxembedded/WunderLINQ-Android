@@ -10,13 +10,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.hardware.camera2.CameraCharacteristics;
 import android.location.Address;
 import android.location.Criteria;
@@ -76,24 +70,12 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
 
     public final static String TAG = "TaskActivity";
 
-    private ActionBar actionBar;
-    private ImageButton backButton;
-    private ImageButton forwardButton;
-    private TextView navbarTitle;
-
     GridView gridview;
     private int lastPosition = 0;
 
     private List<Integer> mapping;
 
     private SharedPreferences sharedPrefs;
-
-    static boolean itsDark = false;
-    private long darkTimer = 0;
-    private long lightTimer = 0;
-
-    SensorManager sensorManager;
-    Sensor lightSensor;
 
     private CountDownTimer cTimer = null;
 
@@ -127,6 +109,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         Log.d(TAG,"In oncreate");
         super.onCreate(savedInstanceState);
 
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
         AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -154,9 +138,6 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             }
         });
 
-
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-
         String orientation = sharedPrefs.getString("prefOrientation", "0");
         if (!orientation.equals("0")){
             if(orientation.equals("1")){
@@ -171,40 +152,20 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         }
 
         showActionBar();
+    }
 
-        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
-            itsDark = true;
-        } else {
-            itsDark = false;
-        }
-
-        updateColors(itsDark);
-
-        //displayTasks();
-
-        // Sensor Stuff
-        sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        if (sharedPrefs.getBoolean("prefAutoNightMode", false)) {
-            sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        }
-
+    @Override
+    public void recreate() {
+        super.recreate();
     }
 
     @Override
     public void onResume() {
         Log.d(TAG,"in onResume");
         super.onResume();
-        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
-            updateColors(true);
-        } else {
-            updateColors(false);
-        }
+
         displayTasks();
 
-        if (sharedPrefs.getBoolean("prefAutoNightMode", false)) {
-            sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        }
         getSupportActionBar().show();
         startTimer();
 
@@ -518,21 +479,18 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
     public void onPause() {
         super.onPause();
         cancelTimer();
-        sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     @Override
     public void onStop() {
         super.onStop();
         cancelTimer();
-        sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         cancelTimer();
-        sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     @Override
@@ -548,18 +506,18 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
     private void showActionBar(){
         LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflator.inflate(R.layout.actionbar_nav, null);
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled (false);
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setCustomView(v);
 
-        navbarTitle = findViewById(R.id.action_title);
+        TextView navbarTitle = findViewById(R.id.action_title);
         navbarTitle.setText(R.string.quicktask_title);
 
-        backButton = findViewById(R.id.action_back);
-        forwardButton = findViewById(R.id.action_forward);
+        ImageButton backButton = findViewById(R.id.action_back);
+        ImageButton forwardButton = findViewById(R.id.action_forward);
         backButton.setOnClickListener(mClickListener);
         forwardButton.setOnClickListener(mClickListener);
     }
@@ -577,55 +535,6 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                     Intent forwardIntent = new Intent(TaskActivity.this, MainActivity.class);
                     startActivity(forwardIntent);
                     break;
-            }
-        }
-    };
-    // Listens for light sensor events
-    private final SensorEventListener sensorEventListener
-            = new SensorEventListener(){
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            // Do something
-        }
-
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            if (sharedPrefs.getString("prefNightModeCombo", "0").equals("2")) {
-                int delay = (Integer.parseInt(sharedPrefs.getString("prefAutoNightModeDelay", "30")) * 1000);
-                if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
-                    float currentReading = event.values[0];
-                    double darkThreshold = 20.0;  // Light level to determine darkness
-                    if (currentReading < darkThreshold) {
-                        lightTimer = 0;
-                        if (darkTimer == 0) {
-                            darkTimer = System.currentTimeMillis();
-                        } else {
-                            long currentTime = System.currentTimeMillis();
-                            long duration = (currentTime - darkTimer);
-                            if ((duration >= delay) && (!itsDark)) {
-                                itsDark = true;
-                                // Update colors
-                                updateColors(true);
-                                displayTasks();
-                            }
-                        }
-                    } else {
-                        darkTimer = 0;
-                        if (lightTimer == 0) {
-                            lightTimer = System.currentTimeMillis();
-                        } else {
-                            long currentTime = System.currentTimeMillis();
-                            long duration = (currentTime - lightTimer);
-                            if ((duration >= delay) && (itsDark)) {
-                                itsDark = false;
-                                // Update colors
-                                updateColors(false);
-                                displayTasks();
-                            }
-                        }
-                    }
-                }
             }
         }
     };
@@ -668,69 +577,21 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         };
         int numTasks = taskTitles.length;
         Drawable[] iconId = new Drawable[numTasks];
-        if (itsDark) {
-            iconId[0] = getResources().getDrawable(R.drawable.ic_map, getTheme());
-            iconId[0].setTint(Color.WHITE);
-            iconId[1] = getResources().getDrawable(R.drawable.ic_home, getTheme());
-            iconId[1].setTint(Color.WHITE);
-            iconId[2] = getResources().getDrawable(R.drawable.ic_phone, getTheme());
-            iconId[2].setTint(Color.WHITE);
-            iconId[3] = getResources().getDrawable(R.drawable.ic_address_book, getTheme());
-            iconId[3].setTint(Color.WHITE);
-            iconId[4] = getResources().getDrawable(R.drawable.ic_camera, getTheme());
-            iconId[4].setTint(Color.WHITE);
-            iconId[5] = getResources().getDrawable(R.drawable.ic_camera, getTheme());
-            iconId[5].setTint(Color.WHITE);
-            iconId[6] = getResources().getDrawable(R.drawable.ic_video_camera, getTheme());
-            iconId[6].setTint(Color.WHITE);
-            iconId[7] = getResources().getDrawable(R.drawable.ic_road, getTheme());
-            iconId[7].setTint(Color.WHITE);
-            iconId[8] = getResources().getDrawable(R.drawable.ic_map_marker, getTheme());
-            iconId[8].setTint(Color.WHITE);
-            iconId[9] = getResources().getDrawable(R.drawable.ic_route, getTheme());
-            iconId[9].setTint(Color.WHITE);
-            iconId[10] = getResources().getDrawable(R.drawable.ic_microphone, getTheme());
-            iconId[10].setTint(Color.WHITE);
-            iconId[11] = getResources().getDrawable(R.drawable.ic_cog, getTheme());
-            iconId[11].setTint(Color.WHITE);
-            iconId[12] = getResources().getDrawable(R.drawable.ic_home, getTheme());
-            iconId[12].setTint(Color.WHITE);
-            iconId[13] = getResources().getDrawable(R.drawable.ic_video_camera, getTheme());
-            iconId[13].setTint(Color.WHITE);
-            iconId[14] = getResources().getDrawable(R.drawable.ic_cloud_sun, getTheme());
-            iconId[14].setTint(Color.WHITE);
-        } else  {
-            iconId[0] = getResources().getDrawable(R.drawable.ic_map, getTheme());
-            iconId[0].setTint(Color.BLACK);
-            iconId[1] = getResources().getDrawable(R.drawable.ic_home, getTheme());
-            iconId[1].setTint(Color.BLACK);
-            iconId[2] = getResources().getDrawable(R.drawable.ic_phone, getTheme());
-            iconId[2].setTint(Color.BLACK);
-            iconId[3] = getResources().getDrawable(R.drawable.ic_address_book, getTheme());
-            iconId[3].setTint(Color.BLACK);
-            iconId[4] = getResources().getDrawable(R.drawable.ic_camera, getTheme());
-            iconId[4].setTint(Color.BLACK);
-            iconId[5] = getResources().getDrawable(R.drawable.ic_camera, getTheme());
-            iconId[5].setTint(Color.BLACK);
-            iconId[6] = getResources().getDrawable(R.drawable.ic_video_camera, getTheme());
-            iconId[6].setTint(Color.BLACK);
-            iconId[7] = getResources().getDrawable(R.drawable.ic_road, getTheme());
-            iconId[7].setTint(Color.BLACK);
-            iconId[8] = getResources().getDrawable(R.drawable.ic_map_marker, getTheme());
-            iconId[8].setTint(Color.BLACK);
-            iconId[9] = getResources().getDrawable(R.drawable.ic_route, getTheme());
-            iconId[9].setTint(Color.BLACK);
-            iconId[10] = getResources().getDrawable(R.drawable.ic_microphone, getTheme());
-            iconId[10].setTint(Color.BLACK);
-            iconId[11] = getResources().getDrawable(R.drawable.ic_cog, getTheme());
-            iconId[11].setTint(Color.BLACK);
-            iconId[12] = getResources().getDrawable(R.drawable.ic_home, getTheme());
-            iconId[12].setTint(Color.BLACK);
-            iconId[13] = getResources().getDrawable(R.drawable.ic_video_camera, getTheme());
-            iconId[13].setTint(Color.BLACK);
-            iconId[14] = getResources().getDrawable(R.drawable.ic_cloud_sun, getTheme());
-            iconId[14].setTint(Color.BLACK);
-        }
+        iconId[0] = getResources().getDrawable(R.drawable.ic_map, getTheme());
+        iconId[1] = getResources().getDrawable(R.drawable.ic_home, getTheme());
+        iconId[2] = getResources().getDrawable(R.drawable.ic_phone, getTheme());
+        iconId[3] = getResources().getDrawable(R.drawable.ic_address_book, getTheme());
+        iconId[4] = getResources().getDrawable(R.drawable.ic_camera, getTheme());
+        iconId[5] = getResources().getDrawable(R.drawable.ic_camera, getTheme());
+        iconId[6] = getResources().getDrawable(R.drawable.ic_video_camera, getTheme());
+        iconId[7] = getResources().getDrawable(R.drawable.ic_road, getTheme());
+        iconId[8] = getResources().getDrawable(R.drawable.ic_map_marker, getTheme());
+        iconId[9] = getResources().getDrawable(R.drawable.ic_route, getTheme());
+        iconId[10] = getResources().getDrawable(R.drawable.ic_microphone, getTheme());
+        iconId[11] = getResources().getDrawable(R.drawable.ic_cog, getTheme());
+        iconId[12] = getResources().getDrawable(R.drawable.ic_home, getTheme());
+        iconId[13] = getResources().getDrawable(R.drawable.ic_video_camera, getTheme());
+        iconId[14] = getResources().getDrawable(R.drawable.ic_cloud_sun, getTheme());
 
         mapping = new ArrayList<>();
         List<String> taskTitle = new ArrayList<>();
@@ -843,7 +704,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         }
 
         gridview.setDrawSelectorOnTop(false);
-        gridview.setAdapter(new TaskAdapter(this,taskTitle,taskIcon,itsDark));
+        gridview.setAdapter(new TaskAdapter(this,taskTitle,taskIcon));
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
@@ -1766,35 +1627,6 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                     builder.show();
                 }
             }
-        }
-    }
-
-    public void updateColors(boolean itsDark){
-        ((MyApplication) this.getApplication()).setitsDark(itsDark);
-        if (itsDark) {
-            //Set Brightness to defaults
-            WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
-            layoutParams.screenBrightness = -1;
-            getWindow().setAttributes(layoutParams);
-
-            gridview.setBackgroundColor(getResources().getColor(R.color.black));
-            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
-            navbarTitle.setTextColor(getResources().getColor(R.color.white));
-            backButton.setColorFilter(getResources().getColor(R.color.white));
-            forwardButton.setColorFilter(getResources().getColor(R.color.white));
-        } else {
-            if (sharedPrefs.getBoolean("prefBrightnessOverride", false)) {
-                //Set Brightness to 100%
-                WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
-                layoutParams.screenBrightness = 1;
-                getWindow().setAttributes(layoutParams);
-            }
-
-            gridview.setBackgroundColor(getResources().getColor(R.color.white));
-            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
-            navbarTitle.setTextColor(getResources().getColor(R.color.black));
-            backButton.setColorFilter(getResources().getColor(R.color.black));
-            forwardButton.setColorFilter(getResources().getColor(R.color.black));
         }
     }
 

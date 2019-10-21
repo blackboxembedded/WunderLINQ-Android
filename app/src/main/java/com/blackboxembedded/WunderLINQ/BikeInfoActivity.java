@@ -17,20 +17,12 @@ import java.text.SimpleDateFormat;
 
 public class BikeInfoActivity extends AppCompatActivity {
 
-    private ImageButton backButton;
-    private ActionBar actionBar;
-    private TextView navbarTitle;
-
-    private TextView tvVIN;
-    private TextView tvNextServiceDate;
-    private TextView tvNextService;
-
-    private SharedPreferences sharedPrefs;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bike_info);
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         View view = findViewById(R.id.clBikeInfo);
         view.setOnTouchListener(new OnSwipeTouchListener(this) {
@@ -41,13 +33,11 @@ public class BikeInfoActivity extends AppCompatActivity {
             }
         });
 
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-
         showActionBar();
 
-        tvVIN = findViewById(R.id.tvVINValue);
-        tvNextServiceDate = findViewById(R.id.tvNextServiceDateValue);
-        tvNextService = findViewById(R.id.tvNextServiceValue);
+        TextView tvVIN = findViewById(R.id.tvVINValue);
+        TextView tvNextServiceDate = findViewById(R.id.tvNextServiceDateValue);
+        TextView tvNextService = findViewById(R.id.tvNextServiceValue);
 
         if (Data.getVin() != null){
             tvVIN.setText(Data.getVin());
@@ -69,20 +59,30 @@ public class BikeInfoActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void recreate() {
+        super.recreate();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     private void showActionBar(){
         LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflator.inflate(R.layout.actionbar_nav, null);
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled (false);
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setCustomView(v);
 
-        navbarTitle = findViewById(R.id.action_title);
+        TextView navbarTitle = findViewById(R.id.action_title);
         navbarTitle.setText(R.string.bike_info_title);
 
-        backButton = findViewById(R.id.action_back);
+        ImageButton backButton = findViewById(R.id.action_back);
         ImageButton forwardButton = findViewById(R.id.action_forward);
         backButton.setOnClickListener(mClickListener);
         forwardButton.setVisibility(View.INVISIBLE);

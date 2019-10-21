@@ -41,6 +41,7 @@ public class FWConfigActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_fwconfig);
 
         // Keep screen on
@@ -107,6 +108,10 @@ public class FWConfigActivity extends AppCompatActivity {
             characteristic.setValue(readWLQConfigCmd);
             BluetoothLeService.writeCharacteristic(characteristic);
         }
+    }
+    @Override
+    public void recreate() {
+        super.recreate();
     }
 
     @Override

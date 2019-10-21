@@ -57,6 +57,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
         setContentView(R.layout.activity_trip_view);
 
@@ -271,6 +272,16 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
             }
         }
 
+    }
+
+    @Override
+    public void recreate() {
+        super.recreate();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override

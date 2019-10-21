@@ -10,7 +10,7 @@
         android:layout_height="30dip"
         android:layout_margin="4dp"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="?attr/primaryTextColor"
         android:textSize="20sp"
         android:textStyle="bold" />
 </LinearLayout>

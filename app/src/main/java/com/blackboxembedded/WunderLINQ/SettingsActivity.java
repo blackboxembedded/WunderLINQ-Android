@@ -15,8 +15,11 @@ public class SettingsActivity extends PreferenceActivity{
 
     private final static String TAG = "SettingsActivity";
 
+    private SharedPreferences sharedPrefs;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         super.onCreate(savedInstanceState);
         getFragmentManager().beginTransaction().replace(android.R.id.content, new UserSettingActivityFragment()).commit();
     }
@@ -76,5 +79,4 @@ public class SettingsActivity extends PreferenceActivity{
             favNumberPref.setSummary(sharedPreferences.getString("prefHomePhone",getString(R.string.pref_homePhone_summary)));
         }
     }
-
 }

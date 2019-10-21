@@ -27,6 +27,7 @@ public class WaypointActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
         setContentView(R.layout.activity_waypoint);
         waypointList = findViewById(R.id.lv_waypoints);
@@ -35,7 +36,7 @@ public class WaypointActivity extends AppCompatActivity {
         updateListing();
 
         adapter = new
-                WaypointListView(this, listValues, false);
+                WaypointListView(this, listValues);
         waypointList.setAdapter(adapter);
         waypointList.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
@@ -57,8 +58,14 @@ public class WaypointActivity extends AppCompatActivity {
     }
 
     @Override
+    public void recreate() {
+        super.recreate();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
+
         updateListing();
         adapter.clear();
         adapter.addAll(listValues);

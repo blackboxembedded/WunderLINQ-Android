@@ -11,14 +11,8 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,7 +26,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -51,18 +44,7 @@ public class ContactListActivity extends AppCompatActivity {
 
     private ListView contactList;
 
-    private ActionBar actionBar;
-    private ImageButton backButton;
-    private TextView navbarTitle;
-
     private SharedPreferences sharedPrefs;
-
-    static boolean itsDark = false;
-    private long darkTimer = 0;
-    private long lightTimer = 0;
-
-    SensorManager sensorManager;
-    Sensor lightSensor;
 
     private ArrayList<String> contacts;
     private ArrayList<String> phoneNumbers;
@@ -96,6 +78,9 @@ public class ContactListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
         AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -109,8 +94,6 @@ public class ContactListActivity extends AppCompatActivity {
                 startActivity(backIntent);
             }
         });
-
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         String orientation = sharedPrefs.getString("prefOrientation", "0");
         if (!orientation.equals("0")){
@@ -126,12 +109,6 @@ public class ContactListActivity extends AppCompatActivity {
         }
 
         showActionBar();
-
-        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
-            itsDark = true;
-        } else {
-            itsDark = false;
-        }
 
         // Check Read Contacts permissions
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -150,49 +127,31 @@ public class ContactListActivity extends AppCompatActivity {
             } else {
                 // Android version is lesser than 6.0 or the permission is already granted.
                 updateList();
-                updateColors(itsDark);
             }
         }  else {
             // Android version is lesser than 6.0 or the permission is already granted.
             updateList();
-            updateColors(itsDark);
         }
-
-        // Sensor Stuff
-        sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
-            updateColors(true);
-        } else {
-            updateColors(false);
-        }
-        if (sharedPrefs.getBoolean("prefAutoNightMode", false)) {
-            sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     @Override
@@ -202,92 +161,12 @@ public class ContactListActivity extends AppCompatActivity {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission is granted
                 updateList();
-                updateColors(itsDark);
             } else {
                 //GO Back
                 Intent backIntent = new Intent(ContactListActivity.this, TaskActivity.class);
                 startActivity(backIntent);
             }
         }
-    }
-
-    // Listens for light sensor events
-    private final SensorEventListener sensorEventListener
-            = new SensorEventListener(){
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            // Do something
-        }
-
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            if (sharedPrefs.getString("prefNightModeCombo", "0").equals("2")) {
-                int delay = (Integer.parseInt(sharedPrefs.getString("prefAutoNightModeDelay", "30")) * 1000);
-                if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
-                    float currentReading = event.values[0];
-                    double darkThreshold = 20.0;  // Light level to determine darkness
-                    if (currentReading < darkThreshold) {
-                        lightTimer = 0;
-                        if (darkTimer == 0) {
-                            darkTimer = System.currentTimeMillis();
-                        } else {
-                            long currentTime = System.currentTimeMillis();
-                            long duration = (currentTime - darkTimer);
-                            if ((duration >= delay) && (!itsDark)) {
-                                itsDark = true;
-                                Log.d(TAG, "Its dark");
-                                // Update colors
-                                updateColors(true);
-                            }
-                        }
-                    } else {
-                        darkTimer = 0;
-                        if (lightTimer == 0) {
-                            lightTimer = System.currentTimeMillis();
-                        } else {
-                            long currentTime = System.currentTimeMillis();
-                            long duration = (currentTime - lightTimer);
-                            if ((duration >= delay) && (itsDark)) {
-                                itsDark = false;
-                                Log.d(TAG, "Its light");
-                                // Update colors
-                                updateColors(false);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    };
-
-    public void updateColors(boolean itsDark){
-        ((MyApplication) this.getApplication()).setitsDark(itsDark);
-        LinearLayout lLayout = findViewById(R.id.layout_contact_list);
-        if (itsDark) {
-            //Set Brightness to default
-            WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
-            layoutParams.screenBrightness = -1;
-            getWindow().setAttributes(layoutParams);
-
-            lLayout.setBackgroundColor(getResources().getColor(R.color.black));
-            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
-            navbarTitle.setTextColor(getResources().getColor(R.color.white));
-            backButton.setColorFilter(getResources().getColor(R.color.white));
-        } else {
-            if (sharedPrefs.getBoolean("prefBrightnessOverride", false)) {
-                //Set Brightness to 100%
-                WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
-                layoutParams.screenBrightness = 1;
-                getWindow().setAttributes(layoutParams);
-            }
-
-            lLayout.setBackgroundColor(getResources().getColor(R.color.white));
-            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
-            navbarTitle.setTextColor(getResources().getColor(R.color.black));
-            backButton.setColorFilter(getResources().getColor(R.color.black));
-        }
-        updateList();
     }
 
     public void updateList(){
@@ -341,17 +220,11 @@ public class ContactListActivity extends AppCompatActivity {
                         if (phoneType != null && normalNum != null) {
                             if((phoneType.equals("0")) || (phoneType.equals("1")) || phoneType.equals("2") || phoneType.equals("3")) {
                                 if (normalizedNumbersAlreadyFound.add(normalNum.replaceAll("\\p{C}", ""))) {
-                                    Log.d(TAG, "Adding Display Name: " + displayName + ", NN: " + normalNum + ", " + phoneType);
+                                    Log.d(TAG, "Adding Contact");
                                     contacts.add(displayName + " (" + typeIDtoString(Integer.parseInt(phoneType)) + ")");
                                     phoneNumbers.add(normalNum);
                                     Drawable photo;
-                                    if (itsDark) {
-                                        photo = getResources().getDrawable(R.drawable.ic_default_contact, getTheme());
-                                        photo.setTint(Color.WHITE);
-                                    } else {
-                                        photo = getResources().getDrawable(R.drawable.ic_default_contact, getTheme());
-                                        photo.setTint(Color.BLACK);
-                                    }
+                                    photo = getResources().getDrawable(R.drawable.ic_default_contact, getTheme());
 
                                     if (photoURI != null) {
 
@@ -360,7 +233,6 @@ public class ContactListActivity extends AppCompatActivity {
                                                     .getBitmap(getContentResolver(),
                                                             Uri.parse(photoURI));
                                             photo = new BitmapDrawable(getResources(), photoBitmap);
-
                                         } catch (FileNotFoundException e) {
                                             e.printStackTrace();
                                         } catch (IOException e) {
@@ -370,7 +242,7 @@ public class ContactListActivity extends AppCompatActivity {
                                     photoId.add(photo);
                                 }
                             } else {
-                                Log.d(TAG, "Not Adding Display Name: " + displayName + ", NN: " + normalNum + ", " + phoneType);
+                                Log.d(TAG, "Not Adding Contact");
                             }
                         }
                     }
@@ -380,7 +252,7 @@ public class ContactListActivity extends AppCompatActivity {
             }
 
             ContactListView adapter = new
-                    ContactListView(this, contacts, photoId, itsDark);
+                    ContactListView(this, contacts, photoId);
             contactList = findViewById(R.id.lv_contacts);
             contactList.setAdapter(adapter);
             contactList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -495,17 +367,17 @@ public class ContactListActivity extends AppCompatActivity {
     private void showActionBar(){
         LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflator.inflate(R.layout.actionbar_nav, null);
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled(false);
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setCustomView(v);
 
-        navbarTitle = findViewById(R.id.action_title);
+        TextView navbarTitle = findViewById(R.id.action_title);
         navbarTitle.setText(R.string.contactlist_title);
 
-        backButton = findViewById(R.id.action_back);
+        ImageButton backButton = findViewById(R.id.action_back);
         backButton.setOnClickListener(mClickListener);
 
         ImageButton forwardButton = findViewById(R.id.action_forward);

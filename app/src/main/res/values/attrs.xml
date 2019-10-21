@@ -1,0 +1,17 @@
+<resources>
+    <declare-styleable name="WunderLINQAppTheme">
+        <attr name="themeName" format="string"/>
+        <attr name="primaryTextColor" format="color"/>
+        <attr name="iconTintColor" format="color"/>
+        <attr name="itemHighlight" format="color"/>
+        <attr name="highlightedTextColor" format="color"/>
+        <attr name="taskTextColor" format="color"/>
+        <attr name="backgroundColor" format="color"/>
+        <attr name="buttonColor" format="color"/>
+        <attr name="buttonTextColor" format="color"/>
+
+        <!-- MainActivity -->
+        <attr name="wunderLINQLogo" format="integer"/>
+        <attr name="gridViewBorder" format="integer"/>
+    </declare-styleable>
+</resources>

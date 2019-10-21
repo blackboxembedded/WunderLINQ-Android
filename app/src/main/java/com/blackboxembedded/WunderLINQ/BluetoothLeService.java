@@ -33,6 +33,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
@@ -97,6 +98,12 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
     private Sensor gravity;
     private Sensor barometer;
     private Sensor acceleration;
+    private Sensor lightSensor;
+
+    static boolean itsDark = false;
+    private long darkTimer = 0;
+    private long lightTimer = 0;
+
     int xAxis = SensorManager.AXIS_X;
     int yAxis = SensorManager.AXIS_Z;
 
@@ -226,6 +233,9 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
         if (!initialize()) {
             Log.d(TAG,"Service not initialized");
         }
+
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
+
         // Sensor Stuff
         sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -234,12 +244,15 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
         gravity = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
         barometer = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
         acceleration = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+
         sensorManager.registerListener(sensorEventListener, accelerometer, SensorManager.SENSOR_DELAY_UI);
         sensorManager.registerListener(sensorEventListener, magnetometer, SensorManager.SENSOR_DELAY_UI);
         sensorManager.registerListener(sensorEventListener, rotationVector, SensorManager.SENSOR_DELAY_GAME);
         sensorManager.registerListener(sensorEventListener, gravity, SensorManager.SENSOR_DELAY_GAME);
         sensorManager.registerListener(sensorEventListener, barometer, SensorManager.SENSOR_DELAY_UI);
         sensorManager.registerListener(sensorEventListener, acceleration, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         // Location stuff
         createLocationRequest();
@@ -301,6 +314,7 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
         sensorManager.unregisterListener(sensorEventListener, gravity);
         sensorManager.unregisterListener(sensorEventListener, barometer);
         sensorManager.unregisterListener(sensorEventListener, acceleration);
+        sensorManager.unregisterListener(sensorEventListener, lightSensor);
 
         stopLocationUpdates();
         googleApiClient.disconnect();
@@ -348,6 +362,41 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 mAcceleration = event.values.clone();
                 double gforce = Math.sqrt(mAcceleration[0] * mAcceleration[0] + mAcceleration[1] * mAcceleration[1] + mAcceleration[2] * mAcceleration[2]);
                 Data.setGForce(gforce);
+            } else if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
+                if (sharedPrefs.getString("prefNightModeCombo", "0").equals("2")) {
+                    int delay = (Integer.parseInt(sharedPrefs.getString("prefAutoNightModeDelay", "30")) * 1000);
+                    float currentReading = event.values[0];
+                    double darkThreshold = 20.0;  // Light level to determine darkness
+                    if (currentReading < darkThreshold) {
+                        lightTimer = 0;
+                        if (darkTimer == 0) {
+                            darkTimer = System.currentTimeMillis();
+                        } else {
+                            long currentTime = System.currentTimeMillis();
+                            long duration = (currentTime - darkTimer);
+                            if ((duration >= delay) && (!itsDark)) {
+                                itsDark = true;
+                                Log.d(TAG, "Its dark");
+                                // Update Theme
+                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                            }
+                        }
+                    } else {
+                        darkTimer = 0;
+                        if (lightTimer == 0) {
+                            lightTimer = System.currentTimeMillis();
+                        } else {
+                            long currentTime = System.currentTimeMillis();
+                            long duration = (currentTime - lightTimer);
+                            if ((duration >= delay) && (itsDark)) {
+                                itsDark = false;
+                                Log.d(TAG, "Its light");
+                                // Update Theme
+                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                            }
+                        }
+                    }
+                }
             }
             if (mGravity != null && mGeomagnetic != null) {
                 float R[] = new float[9];
@@ -553,7 +602,6 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
             // For all other profiles, writes the data formatted in HEX.
             final byte[] data = characteristic.getValue();
             if (data != null) {
-                sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
                 if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
                     // Log data
                     if (debugLogger == null) {

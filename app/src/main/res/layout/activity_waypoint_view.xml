@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_waypoint_view"
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/backgroundColor">
 
     <fragment xmlns:map="http://schemas.android.com/apk/res-auto"
         android:id="@+id/map"
@@ -38,7 +38,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/waypoint_view_tv_date_label"
-            android:textColor="@color/black"
+            android:textColor="?attr/primaryTextColor"
             android:textSize="18sp"
             android:textStyle="bold"/>
 
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textAlignment="viewStart"
-            android:textColor="@color/black"
+            android:textColor="?attr/primaryTextColor"
             android:textSize="18sp"
             android:textStyle="bold"/>
     </LinearLayout>
@@ -74,7 +74,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/waypoint_view_tv_lat_label"
-            android:textColor="@color/black"
+            android:textColor="?attr/primaryTextColor"
             android:textSize="18sp"
             android:textStyle="bold"/>
 
@@ -85,7 +85,7 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textAlignment="viewStart"
-            android:textColor="@color/black"
+            android:textColor="?attr/primaryTextColor"
             android:textSize="18sp"
             android:textStyle="bold"/>
     </LinearLayout>
@@ -110,7 +110,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/waypoint_view_tv_lon_label"
-            android:textColor="@color/black"
+            android:textColor="?attr/primaryTextColor"
             android:textSize="18sp"
             android:textStyle="bold"/>
 
@@ -121,7 +121,7 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textAlignment="viewStart"
-            android:textColor="@color/black"
+            android:textColor="?attr/primaryTextColor"
             android:textSize="18sp"
             android:textStyle="bold"/>
     </LinearLayout>
@@ -146,7 +146,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/waypoint_view_tv_label_label"
-            android:textColor="@color/black"
+            android:textColor="?attr/primaryTextColor"
             android:textSize="18sp"
             android:textStyle="bold"/>
 
@@ -161,7 +161,8 @@
             android:inputType="textPersonName"
             android:text=""
             android:textAlignment="viewStart"
-            android:textColor="@color/black"
+            android:background="?attr/backgroundColor"
+            android:textColor="?attr/primaryTextColor"
             android:textSize="18sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -171,8 +172,8 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:onClick="onClickShare"
-        android:background="@color/black"
-        android:textColor="@color/white"
+        android:background="?attr/buttonColor"
+        android:textColor="?attr/buttonTextColor"
         android:text="@string/waypoint_view_bt_share"
         android:textSize="18sp"
         android:layout_marginStart="16dp"
@@ -188,8 +189,8 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:onClick="onClickNav"
-        android:background="@color/black"
-        android:textColor="@color/white"
+        android:background="?attr/buttonColor"
+        android:textColor="?attr/buttonTextColor"
         android:text="@string/waypoint_view_bt_navigate"
         android:textSize="18sp"
         android:layout_marginStart="16dp"
@@ -205,8 +206,8 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:onClick="onClickOpen"
-        android:background="@color/black"
-        android:textColor="@color/white"
+        android:background="?attr/buttonColor"
+        android:textColor="?attr/buttonTextColor"
         android:text="@string/waypoint_view_bt_open"
         android:textSize="18sp"
         android:layout_marginStart="16dp"
@@ -222,8 +223,8 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:onClick="onClickDelete"
-        android:background="@color/black"
-        android:textColor="@color/white"
+        android:background="?attr/buttonColor"
+        android:textColor="?attr/buttonTextColor"
         android:text="@string/waypoint_view_bt_delete"
         android:textSize="18sp"
         android:layout_marginStart="16dp"

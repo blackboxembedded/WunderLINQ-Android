@@ -26,11 +26,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.drawable.ColorDrawable;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -53,7 +48,6 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
@@ -64,6 +58,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.gridlayout.widget.GridLayout;
 
 import java.text.SimpleDateFormat;
@@ -86,27 +81,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private LayoutInflater layoutInflater;
 
-    private ActionBar actionBar;
-    private ImageButton backButton;
-    private ImageButton forwardButton;
-    private ImageButton menuButton;
     private ImageButton faultButton;
     private ImageButton btButton;
-    private TextView navbarTitle;
-
     private GridLayout gridLayout;
     private LinearLayout layout1;
 
     private SharedPreferences sharedPrefs;
 
     private boolean gridChange = false;
-
-    static boolean itsDark = false;
-    private long darkTimer = 0;
-    private long lightTimer = 0;
-
-    private SensorManager sensorManager;
-    private Sensor lightSensor;
 
     private Intent gattServiceIntent;
     public static BluetoothAdapter mBluetoothAdapter;
@@ -153,15 +135,15 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "In onCreate");
         super.onCreate(savedInstanceState);
-        Log.d(TAG,"In onCreate");
+
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
 
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         int orientation = Integer.parseInt(sharedPrefs.getString("prefOrientation", "0"));
         switch (orientation){
@@ -288,14 +270,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             gridLayout.setRowCount(1);
             gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem_nodata, gridLayout, false));
             layout1 = findViewById(R.id.layout_no_data);
-            ImageView logoImageView = findViewById(R.id.imageView);
-            if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
-                layout1.setBackgroundColor(getResources().getColor(R.color.black));
-                logoImageView.setImageDrawable(getResources().getDrawable(R.drawable.wunderlinq_logo_white));
-            } else {
-                layout1.setBackgroundColor(getResources().getColor(R.color.white));
-                logoImageView.setImageDrawable(getResources().getDrawable(R.drawable.wunderlinq_logo_black));
-            }
         }
 
         gestureDetector = new GestureDetectorListener(this){
@@ -388,18 +362,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         showActionBar();
 
-        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
-            updateColors(true);
-        } else {
-            updateColors(false);
-        }
         mHandler = new Handler();
-
-        // Sensor Stuff
-        sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-
-        sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         // Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
@@ -719,7 +682,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private void showActionBar(){
         View v = layoutInflater.inflate(R.layout.actionbar_nav_main, null);
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled (false);
         actionBar.setDisplayShowCustomEnabled(true);
@@ -727,13 +690,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         actionBar.setCustomView(v);
 
-        backButton = findViewById(R.id.action_back);
-        forwardButton = findViewById(R.id.action_forward);
-        menuButton = findViewById(R.id.action_menu);
+        ImageButton backButton = findViewById(R.id.action_back);
+        ImageButton forwardButton = findViewById(R.id.action_forward);
+        ImageButton menuButton = findViewById(R.id.action_menu);
         faultButton = findViewById(R.id.action_faults);
         btButton = findViewById(R.id.action_connect);
 
-        navbarTitle = (TextView) findViewById(R.id.action_title);
+        TextView navbarTitle = (TextView) findViewById(R.id.action_title);
         navbarTitle.setText(R.string.main_title);
 
         backButton.setOnClickListener(mClickListener);
@@ -840,97 +803,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         }
     };
 
-    // Listens for light sensor events
-    private final SensorEventListener sensorEventListener
-            = new SensorEventListener(){
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            // Do something
-        }
-
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            if (sharedPrefs.getString("prefNightModeCombo", "0").equals("2")) {
-                int delay = (Integer.parseInt(sharedPrefs.getString("prefAutoNightModeDelay", "30")) * 1000);
-                if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
-                    float currentReading = event.values[0];
-                    double darkThreshold = 20.0;  // Light level to determine darkness
-                    if (currentReading < darkThreshold) {
-                        lightTimer = 0;
-                        if (darkTimer == 0) {
-                            darkTimer = System.currentTimeMillis();
-                        } else {
-                            long currentTime = System.currentTimeMillis();
-                            long duration = (currentTime - darkTimer);
-                            if ((duration >= delay) && (!itsDark)) {
-                                itsDark = true;
-                                Log.d(TAG, "Its dark");
-                                // Update colors
-                                updateColors(true);
-                            }
-                        }
-                    } else {
-                        darkTimer = 0;
-                        if (lightTimer == 0) {
-                            lightTimer = System.currentTimeMillis();
-                        } else {
-                            long currentTime = System.currentTimeMillis();
-                            long duration = (currentTime - lightTimer);
-                            if ((duration >= delay) && (itsDark)) {
-                                itsDark = false;
-                                Log.d(TAG, "Its light");
-                                // Update colors
-                                updateColors(false);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    };
-
-    public void updateColors(boolean itsDark){
-        ((MyApplication) this.getApplication()).setitsDark(itsDark);
-        LinearLayout lLayout = findViewById(R.id.layout_main);
-        if (lLayout != null){
-            if (itsDark) {
-                Log.d(TAG,"Settings things for dark");
-                //Set Brightness to defaults
-                WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
-                layoutParams.screenBrightness = -1;
-                getWindow().setAttributes(layoutParams);
-
-                lLayout.setBackgroundColor(getResources().getColor(R.color.black));
-                actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
-                navbarTitle.setTextColor(getResources().getColor(R.color.white));
-                backButton.setColorFilter(getResources().getColor(R.color.white));
-                forwardButton.setColorFilter(getResources().getColor(R.color.white));
-                menuButton.setColorFilter(getResources().getColor(R.color.white));
-                updateDisplay();
-            } else {
-                Log.d(TAG, "Settings things for light");
-                if (sharedPrefs.getBoolean("prefBrightnessOverride", false)) {
-                    //Set Brightness to 100%
-                    WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
-                    layoutParams.screenBrightness = 1;
-                    getWindow().setAttributes(layoutParams);
-                } else {
-                    //Set Brightness to defaults
-                    WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
-                    layoutParams.screenBrightness = -1;
-                    getWindow().setAttributes(layoutParams);
-                }
-
-                lLayout.setBackgroundColor(getResources().getColor(R.color.white));
-                actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
-                navbarTitle.setTextColor(getResources().getColor(R.color.black));
-                backButton.setColorFilter(getResources().getColor(R.color.black));
-                forwardButton.setColorFilter(getResources().getColor(R.color.black));
-                menuButton.setColorFilter(getResources().getColor(R.color.black));
-                updateDisplay();
-            }
-        }
+    @Override
+    public void recreate() {
+        Log.d(TAG, "In recreate");
+        super.recreate();
     }
 
     @Override
@@ -951,13 +827,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             Log.d(TAG,"mBluetoothLeService is NOT null");
             //mBluetoothLeService.connect(mDeviceAddress,getString(R.string.device_name));
         }
-        sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
-
-        if (((MyApplication) this.getApplication()).getitsDark()){
-            updateColors(true);
-        } else {
-            updateColors(false);
-        }
 
         getSupportActionBar().show();
         startTimer();
@@ -976,7 +845,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             Log.d(TAG,e.toString());
         }
         mBluetoothLeService = null;
-        sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     @Override
@@ -992,7 +860,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             Log.d(TAG,e.toString());
         }
         mBluetoothLeService = null;
-        sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     @Override
@@ -1010,7 +877,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             Log.d(TAG,e.toString());
         }
         mBluetoothLeService = null;
-        sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     @Override
@@ -1071,17 +937,43 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG,"onActivityResult");
         // User chose not to enable Bluetooth.
         if (requestCode == REQUEST_ENABLE_BT && resultCode == Activity.RESULT_CANCELED) {
             finish();
             return;
         } else if (requestCode == SETTINGS_CHECK) {
-            Log.d(TAG,"onActivityResult");
             gridChange = true;
-            if (sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
-                updateColors(true);
-            } else {
-                updateColors(false);
+
+            int currentNightMode = getResources().getConfiguration().uiMode
+                    & Configuration.UI_MODE_NIGHT_MASK;
+            int prefNightMode = Integer.parseInt(sharedPrefs.getString("prefNightModeCombo", "3"));
+
+            switch(prefNightMode){
+                case 0:
+                    //Off
+                    if(currentNightMode != Configuration.UI_MODE_NIGHT_NO){
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                        Log.d(TAG,"Setting NIGHT MODE OFF");
+                    }
+                    break;
+                case 1:
+                    //On
+                    if(currentNightMode != Configuration.UI_MODE_NIGHT_YES){
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                        Log.d(TAG,"Setting NIGHT MODE ON");
+                    }
+                    break;
+                case 3:
+                    //Android
+                    if(currentNightMode != Configuration.UI_MODE_NIGHT_UNDEFINED){
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                        Log.d(TAG,"Setting NIGHT MODE FOLLOW SYSTEM");
+                    }
+                    break;
+                default:
+                    //
+                    break;
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -1315,7 +1207,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     // Update Display
     private void updateDisplay(){
-        //Log.d(TAG,"updateDisplay()");
         drawingComplete = false;
         gridLayout = findViewById(R.id.gridLayout);
 
@@ -1525,15 +1416,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             gridLayout.setRowCount(1);
             View gridCell1 = layoutInflater.inflate(R.layout.layout_griditem_nodata, gridLayout, false);
             gridLayout.addView(gridCell1);
-            LinearLayout layout1 = findViewById(R.id.layout_no_data);
-            ImageView logoImageView = findViewById(R.id.imageView);
-            if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
-                layout1.setBackgroundColor(getResources().getColor(R.color.black));
-                logoImageView.setImageDrawable(getResources().getDrawable(R.drawable.wunderlinq_logo_white));
-            } else {
-                layout1.setBackgroundColor(getResources().getColor(R.color.white));
-                logoImageView.setImageDrawable(getResources().getDrawable(R.drawable.wunderlinq_logo_black));
-            }
         }
     }
 
@@ -1573,7 +1455,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         String label = "";
         String value = getString(R.string.blank_field);
-        boolean itsDark = ((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1");
+
         switch (dataPoint){
             case 0:
                 //Gear
@@ -1921,17 +1803,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 layout1.setTag(cellNumber);
                 textView1.setTag(cellNumber);
                 textView1Label.setTag(cellNumber);
-                if (itsDark){
-                    textView1.setTextColor(getResources().getColor(R.color.white));
-                    textView1Label.setTextColor(getResources().getColor(R.color.white));
-                    layout1.setBackgroundColor(getResources().getColor(R.color.black));
-                    layout1.setBackground(getResources().getDrawable(R.drawable.border_white));
-                } else {
-                    textView1.setTextColor(getResources().getColor(R.color.black));
-                    textView1Label.setTextColor(getResources().getColor(R.color.black));
-                    layout1.setBackgroundColor(getResources().getColor(R.color.white));
-                    layout1.setBackground(getResources().getDrawable(R.drawable.border));
-                }
                 textView1Label.setText(label);
                 textView1.setText(value);
                 break;
@@ -1947,17 +1818,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 layout2.setTag(cellNumber);
                 textView2.setTag(cellNumber);
                 textView2Label.setTag(cellNumber);
-                if (itsDark){
-                    textView2.setTextColor(getResources().getColor(R.color.white));
-                    textView2Label.setTextColor(getResources().getColor(R.color.white));
-                    layout2.setBackgroundColor(getResources().getColor(R.color.black));
-                    layout2.setBackground(getResources().getDrawable(R.drawable.border_white));
-                } else {
-                    textView2.setTextColor(getResources().getColor(R.color.black));
-                    textView2Label.setTextColor(getResources().getColor(R.color.black));
-                    layout2.setBackgroundColor(getResources().getColor(R.color.white));
-                    layout2.setBackground(getResources().getDrawable(R.drawable.border));
-                }
                 textView2Label.setText(label);
                 textView2.setText(value);
                 break;
@@ -1973,17 +1833,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 layout3.setTag(cellNumber);
                 textView3.setTag(cellNumber);
                 textView3Label.setTag(cellNumber);
-                if (itsDark){
-                    textView3.setTextColor(getResources().getColor(R.color.white));
-                    textView3Label.setTextColor(getResources().getColor(R.color.white));
-                    layout3.setBackgroundColor(getResources().getColor(R.color.black));
-                    layout3.setBackground(getResources().getDrawable(R.drawable.border_white));
-                } else {
-                    textView3.setTextColor(getResources().getColor(R.color.black));
-                    textView3Label.setTextColor(getResources().getColor(R.color.black));
-                    layout3.setBackgroundColor(getResources().getColor(R.color.white));
-                    layout3.setBackground(getResources().getDrawable(R.drawable.border));
-                }
                 textView3Label.setText(label);
                 textView3.setText(value);
                 break;
@@ -1999,17 +1848,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 layout4.setTag(cellNumber);
                 textView4.setTag(cellNumber);
                 textView4Label.setTag(cellNumber);
-                if (itsDark){
-                    textView4.setTextColor(getResources().getColor(R.color.white));
-                    textView4Label.setTextColor(getResources().getColor(R.color.white));
-                    layout4.setBackgroundColor(getResources().getColor(R.color.black));
-                    layout4.setBackground(getResources().getDrawable(R.drawable.border_white));
-                } else {
-                    textView4.setTextColor(getResources().getColor(R.color.black));
-                    textView4Label.setTextColor(getResources().getColor(R.color.black));
-                    layout4.setBackgroundColor(getResources().getColor(R.color.white));
-                    layout4.setBackground(getResources().getDrawable(R.drawable.border));
-                }
                 textView4Label.setText(label);
                 textView4.setText(value);
                 break;
@@ -2025,17 +1863,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 layout5.setTag(cellNumber);
                 textView5.setTag(cellNumber);
                 textView5Label.setTag(cellNumber);
-                if (itsDark){
-                    textView5.setTextColor(getResources().getColor(R.color.white));
-                    textView5Label.setTextColor(getResources().getColor(R.color.white));
-                    layout5.setBackgroundColor(getResources().getColor(R.color.black));
-                    layout5.setBackground(getResources().getDrawable(R.drawable.border_white));
-                } else {
-                    textView5.setTextColor(getResources().getColor(R.color.black));
-                    textView5Label.setTextColor(getResources().getColor(R.color.black));
-                    layout5.setBackgroundColor(getResources().getColor(R.color.white));
-                    layout5.setBackground(getResources().getDrawable(R.drawable.border));
-                }
                 textView5Label.setText(label);
                 textView5.setText(value);
                 break;
@@ -2051,17 +1878,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 layout6.setTag(cellNumber);
                 textView6.setTag(cellNumber);
                 textView6Label.setTag(cellNumber);
-                if (itsDark){
-                    textView6.setTextColor(getResources().getColor(R.color.white));
-                    textView6Label.setTextColor(getResources().getColor(R.color.white));
-                    layout6.setBackgroundColor(getResources().getColor(R.color.black));
-                    layout6.setBackground(getResources().getDrawable(R.drawable.border_white));
-                } else {
-                    textView6.setTextColor(getResources().getColor(R.color.black));
-                    textView6Label.setTextColor(getResources().getColor(R.color.black));
-                    layout6.setBackgroundColor(getResources().getColor(R.color.white));
-                    layout6.setBackground(getResources().getDrawable(R.drawable.border));
-                }
                 textView6Label.setText(label);
                 textView6.setText(value);
                 break;
@@ -2077,17 +1893,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 layout7.setTag(cellNumber);
                 textView7.setTag(cellNumber);
                 textView7Label.setTag(cellNumber);
-                if (itsDark){
-                    textView7.setTextColor(getResources().getColor(R.color.white));
-                    textView7Label.setTextColor(getResources().getColor(R.color.white));
-                    layout7.setBackgroundColor(getResources().getColor(R.color.black));
-                    layout7.setBackground(getResources().getDrawable(R.drawable.border_white));
-                } else {
-                    textView7.setTextColor(getResources().getColor(R.color.black));
-                    textView7Label.setTextColor(getResources().getColor(R.color.black));
-                    layout7.setBackgroundColor(getResources().getColor(R.color.white));
-                    layout7.setBackground(getResources().getDrawable(R.drawable.border));
-                }
                 textView7Label.setText(label);
                 textView7.setText(value);
                 break;
@@ -2103,17 +1908,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 layout8.setTag(cellNumber);
                 textView8.setTag(cellNumber);
                 textView8Label.setTag(cellNumber);
-                if (itsDark){
-                    textView8.setTextColor(getResources().getColor(R.color.white));
-                    textView8Label.setTextColor(getResources().getColor(R.color.white));
-                    layout8.setBackgroundColor(getResources().getColor(R.color.black));
-                    layout8.setBackground(getResources().getDrawable(R.drawable.border_white));
-                } else {
-                    textView8.setTextColor(getResources().getColor(R.color.black));
-                    textView8Label.setTextColor(getResources().getColor(R.color.black));
-                    layout8.setBackgroundColor(getResources().getColor(R.color.white));
-                    layout8.setBackground(getResources().getDrawable(R.drawable.border));
-                }
                 textView8Label.setText(label);
                 textView8.setText(value);
                 break;
@@ -2129,17 +1923,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 layout9.setTag(cellNumber);
                 textView9.setTag(cellNumber);
                 textView9Label.setTag(cellNumber);
-                if (itsDark){
-                    textView9.setTextColor(getResources().getColor(R.color.white));
-                    textView9Label.setTextColor(getResources().getColor(R.color.white));
-                    layout9.setBackgroundColor(getResources().getColor(R.color.black));
-                    layout9.setBackground(getResources().getDrawable(R.drawable.border_white));
-                } else {
-                    textView9.setTextColor(getResources().getColor(R.color.black));
-                    textView9Label.setTextColor(getResources().getColor(R.color.black));
-                    layout9.setBackgroundColor(getResources().getColor(R.color.black));
-                    layout9.setBackground(getResources().getDrawable(R.drawable.border));
-                }
                 textView9Label.setText(label);
                 textView9.setText(value);
                 break;
@@ -2155,17 +1938,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 layout10.setTag(cellNumber);
                 textView10.setTag(cellNumber);
                 textView10Label.setTag(cellNumber);
-                if (itsDark){
-                    textView10.setTextColor(getResources().getColor(R.color.white));
-                    textView10Label.setTextColor(getResources().getColor(R.color.white));
-                    layout10.setBackgroundColor(getResources().getColor(R.color.black));
-                    layout10.setBackground(getResources().getDrawable(R.drawable.border_white));
-                } else {
-                    textView10.setTextColor(getResources().getColor(R.color.black));
-                    textView10Label.setTextColor(getResources().getColor(R.color.black));
-                    layout10.setBackgroundColor(getResources().getColor(R.color.white));
-                    layout10.setBackground(getResources().getDrawable(R.drawable.border));
-                }
                 textView10Label.setText(label);
                 textView10.setText(value);
                 break;
@@ -2181,17 +1953,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 layout11.setTag(cellNumber);
                 textView11.setTag(cellNumber);
                 textView11Label.setTag(cellNumber);
-                if (itsDark){
-                    textView11.setTextColor(getResources().getColor(R.color.white));
-                    textView11Label.setTextColor(getResources().getColor(R.color.white));
-                    layout11.setBackgroundColor(getResources().getColor(R.color.black));
-                    layout11.setBackground(getResources().getDrawable(R.drawable.border_white));
-                } else {
-                    textView11.setTextColor(getResources().getColor(R.color.black));
-                    textView11Label.setTextColor(getResources().getColor(R.color.black));
-                    layout11.setBackgroundColor(getResources().getColor(R.color.white));
-                    layout11.setBackground(getResources().getDrawable(R.drawable.border));
-                }
                 textView11Label.setText(label);
                 textView11.setText(value);
                 break;
@@ -2207,17 +1968,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 layout12.setTag(cellNumber);
                 textView12.setTag(cellNumber);
                 textView12Label.setTag(cellNumber);
-                if (itsDark){
-                    textView12.setTextColor(getResources().getColor(R.color.white));
-                    textView12Label.setTextColor(getResources().getColor(R.color.white));
-                    layout12.setBackgroundColor(getResources().getColor(R.color.black));
-                    layout12.setBackground(getResources().getDrawable(R.drawable.border_white));
-                } else {
-                    textView12.setTextColor(getResources().getColor(R.color.black));
-                    textView12Label.setTextColor(getResources().getColor(R.color.black));
-                    layout12.setBackgroundColor(getResources().getColor(R.color.white));
-                    layout12.setBackground(getResources().getDrawable(R.drawable.border));
-                }
                 textView12Label.setText(label);
                 textView12.setText(value);
                 break;
@@ -2233,17 +1983,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 layout13.setTag(cellNumber);
                 textView13.setTag(cellNumber);
                 textView13Label.setTag(cellNumber);
-                if (itsDark){
-                    textView13.setTextColor(getResources().getColor(R.color.white));
-                    textView13Label.setTextColor(getResources().getColor(R.color.white));
-                    layout13.setBackgroundColor(getResources().getColor(R.color.black));
-                    layout13.setBackground(getResources().getDrawable(R.drawable.border_white));
-                } else {
-                    textView13.setTextColor(getResources().getColor(R.color.black));
-                    textView13Label.setTextColor(getResources().getColor(R.color.black));
-                    layout13.setBackgroundColor(getResources().getColor(R.color.white));
-                    layout13.setBackground(getResources().getDrawable(R.drawable.border));
-                }
                 textView13Label.setText(label);
                 textView13.setText(value);
                 break;
@@ -2259,18 +1998,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 layout14.setTag(cellNumber);
                 textView14.setTag(cellNumber);
                 textView14Label.setTag(cellNumber);
-
-                if (itsDark){
-                    textView14.setTextColor(getResources().getColor(R.color.white));
-                    textView14Label.setTextColor(getResources().getColor(R.color.white));
-                    layout14.setBackgroundColor(getResources().getColor(R.color.black));
-                    layout14.setBackground(getResources().getDrawable(R.drawable.border_white));
-                } else {
-                    textView14.setTextColor(getResources().getColor(R.color.black));
-                    textView14Label.setTextColor(getResources().getColor(R.color.black));
-                    layout14.setBackgroundColor(getResources().getColor(R.color.white));
-                    layout14.setBackground(getResources().getDrawable(R.drawable.border));
-                }
                 textView14Label.setText(label);
                 textView14.setText(value);
                 break;
@@ -2286,17 +2013,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 layout15.setTag(cellNumber);
                 textView15.setTag(cellNumber);
                 textView15Label.setTag(cellNumber);
-                if (itsDark){
-                    textView15.setTextColor(getResources().getColor(R.color.white));
-                    textView15Label.setTextColor(getResources().getColor(R.color.white));
-                    layout15.setBackgroundColor(getResources().getColor(R.color.black));
-                    layout15.setBackground(getResources().getDrawable(R.drawable.border_white));
-                } else {
-                    textView15.setTextColor(getResources().getColor(R.color.black));
-                    textView15Label.setTextColor(getResources().getColor(R.color.black));
-                    layout15.setBackgroundColor(getResources().getColor(R.color.white));
-                    layout15.setBackground(getResources().getDrawable(R.drawable.border));
-                }
                 textView15Label.setText(label);
                 textView15.setText(value);
                 break;

@@ -4,11 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.graphics.drawable.ColorDrawable;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -43,22 +38,14 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
     private GoogleMap mMap;
     private SharedPreferences sharedPrefs;
 
-    private ImageButton backButton;
-    private ActionBar actionBar;
-    private TextView navbarTitle;
-
     private int currentZoom = 10;
-
-    static boolean itsDark = false;
-    private long darkTimer = 0;
-    private long lightTimer = 0;
-
-    SensorManager sensorManager;
-    Sensor lightSensor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
         setContentView(R.layout.activity_weather);
 
         AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
@@ -66,7 +53,6 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         String orientation = sharedPrefs.getString("prefOrientation", "0");
         if (!orientation.equals("0")){
             if(orientation.equals("1")){
@@ -80,56 +66,37 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
         }
 
-        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
-            itsDark = true;
-        } else {
-            itsDark = false;
-        }
-
         showActionBar();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
 
-        updateColors(itsDark);
-
-        // Sensor Stuff
-        sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+    @Override
+    public void recreate() {
+        super.recreate();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
-            updateColors(true);
-        } else {
-            updateColors(false);
-        }
-        if (sharedPrefs.getBoolean("prefAutoNightMode", false)) {
-            sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     @Override
@@ -183,95 +150,20 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
     private void showActionBar(){
         LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflator.inflate(R.layout.actionbar_nav, null);
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled (false);
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setCustomView(v);
 
-        navbarTitle = findViewById(R.id.action_title);
+        TextView navbarTitle = findViewById(R.id.action_title);
         navbarTitle.setText(R.string.weathermap_title);
 
-        backButton = findViewById(R.id.action_back);
+        ImageButton backButton = findViewById(R.id.action_back);
         ImageButton forwardButton = findViewById(R.id.action_forward);
         backButton.setOnClickListener(mClickListener);
         forwardButton.setVisibility(View.INVISIBLE);
-    }
-
-    // Listens for light sensor events
-    private final SensorEventListener sensorEventListener
-            = new SensorEventListener(){
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            // Do something
-        }
-
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            if (sharedPrefs.getString("prefNightModeCombo", "0").equals("2")) {
-                int delay = (Integer.parseInt(sharedPrefs.getString("prefAutoNightModeDelay", "30")) * 1000);
-                if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
-                    float currentReading = event.values[0];
-                    double darkThreshold = 20.0;  // Light level to determine darkness
-                    if (currentReading < darkThreshold) {
-                        lightTimer = 0;
-                        if (darkTimer == 0) {
-                            darkTimer = System.currentTimeMillis();
-                        } else {
-                            long currentTime = System.currentTimeMillis();
-                            long duration = (currentTime - darkTimer);
-                            if ((duration >= delay) && (!itsDark)) {
-                                itsDark = true;
-                                Log.d(TAG, "Its dark");
-                                // Update colors
-                                updateColors(true);
-                            }
-                        }
-                    } else {
-                        darkTimer = 0;
-                        if (lightTimer == 0) {
-                            lightTimer = System.currentTimeMillis();
-                        } else {
-                            long currentTime = System.currentTimeMillis();
-                            long duration = (currentTime - lightTimer);
-                            if ((duration >= delay) && (itsDark)) {
-                                itsDark = false;
-                                Log.d(TAG, "Its light");
-                                // Update colors
-                                updateColors(false);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    };
-
-    public void updateColors(boolean itsDark){
-        ((MyApplication) this.getApplication()).setitsDark(itsDark);
-        if (itsDark) {
-            //Set Brightness to default
-            WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
-            layoutParams.screenBrightness = -1;
-            getWindow().setAttributes(layoutParams);
-
-            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
-            navbarTitle.setTextColor(getResources().getColor(R.color.white));
-            backButton.setColorFilter(getResources().getColor(R.color.white));
-        } else {
-            if (sharedPrefs.getBoolean("prefBrightnessOverride", false)) {
-                //Set Brightness to 100%
-                WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
-                layoutParams.screenBrightness = 1;
-                getWindow().setAttributes(layoutParams);
-            }
-
-            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
-            navbarTitle.setTextColor(getResources().getColor(R.color.black));
-            backButton.setColorFilter(getResources().getColor(R.color.black));
-        }
     }
 
     private View.OnClickListener mClickListener = new View.OnClickListener() {

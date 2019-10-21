@@ -8,13 +8,13 @@
     app:layout_rowWeight="1"
     android:layout_weight="1"
     android:orientation="vertical"
-    android:background="@drawable/border">
+    android:background="?attr/gridViewBorder">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/wunderlinq_logo_black"
+        android:src="?attr/wunderLINQLogo"
         android:gravity="center_vertical"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"

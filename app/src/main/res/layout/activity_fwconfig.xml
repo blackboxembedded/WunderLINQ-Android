@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FWConfigActivity">
+    tools:context=".FWConfigActivity"
+    android:background="?attr/backgroundColor">
 
     <LinearLayout
         android:id="@+id/llModel"
@@ -24,7 +25,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/wwtype_label"
-            android:textColor="@color/black"
+            android:textColor="?attr/primaryTextColor"
             android:textSize="20sp"
             android:textStyle="bold"/>
 
@@ -56,7 +57,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/sensitivity_label"
-            android:textColor="@color/black"
+            android:textColor="?attr/primaryTextColor"
             android:textSize="20sp"
             android:textStyle="bold"/>
 
@@ -66,7 +67,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text=""
-            android:textColor="@color/black"
+            android:textColor="?attr/primaryTextColor"
             android:textSize="20sp"
             android:textStyle="bold"/>
     </LinearLayout>
@@ -87,8 +88,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/config_write_label"
-        android:background="@color/black"
-        android:textColor="@color/white"
+        android:background="?attr/buttonColor"
+        android:textColor="?attr/buttonTextColor"
         android:textSize="25sp"
         android:textStyle="bold"
         android:layout_marginBottom="16dp"

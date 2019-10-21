@@ -4,12 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,7 +21,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 public class AlertActivity extends AppCompatActivity {
 
@@ -46,13 +40,6 @@ public class AlertActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPrefs;
 
-    static boolean itsDark = false;
-    private long darkTimer = 0;
-    private long lightTimer = 0;
-
-    SensorManager sensorManager;
-    Sensor lightSensor;
-
     private Handler handler;
     private Runnable runnable;
 
@@ -68,6 +55,8 @@ public class AlertActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alert);
         View view = findViewById(R.id.layout_alert);
@@ -82,7 +71,6 @@ public class AlertActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-
         String orientation = sharedPrefs.getString("prefOrientation", "0");
         if (!orientation.equals("0")){
             if(orientation.equals("1")){
@@ -121,10 +109,6 @@ public class AlertActivity extends AppCompatActivity {
                 break;
         }
         showActionBar();
-        // Sensor Stuff
-        sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         // Close after some seconds
         handler  = new Handler();
@@ -139,36 +123,29 @@ public class AlertActivity extends AppCompatActivity {
     }
 
     @Override
+    public void recreate() {
+        super.recreate();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        if (((MyApplication) this.getApplication()).getitsDark() || sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
-            itsDark = true;
-        } else {
-            itsDark = false;
-        }
-        updateColors(itsDark);
-        if (sharedPrefs.getBoolean("prefAutoNightMode", false)) {
-            sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         handler.removeCallbacks(runnable);
-        sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     private View.OnClickListener mClickListener = new View.OnClickListener() {
@@ -207,97 +184,6 @@ public class AlertActivity extends AppCompatActivity {
         backButton.setVisibility(View.INVISIBLE);
         forwardButton.setVisibility(View.INVISIBLE);
     }
-
-    // Listens for light sensor events
-    private final SensorEventListener sensorEventListener
-            = new SensorEventListener(){
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            // Do something
-        }
-
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            if (sharedPrefs.getBoolean("prefAutoNightMode", false) && (!sharedPrefs.getBoolean("prefNightMode", false))) {
-                int delay = (Integer.parseInt(sharedPrefs.getString("prefAutoNightModeDelay", "30")) * 1000);
-                if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
-                    float currentReading = event.values[0];
-                    double darkThreshold = 20.0;  // Light level to determine darkness
-                    if (currentReading < darkThreshold) {
-                        lightTimer = 0;
-                        if (darkTimer == 0) {
-                            darkTimer = System.currentTimeMillis();
-                        } else {
-                            long currentTime = System.currentTimeMillis();
-                            long duration = (currentTime - darkTimer);
-                            if ((duration >= delay) && (!itsDark)) {
-                                itsDark = true;
-                                Log.d(TAG, "Sensor Setting: Its dark");
-                                // Update colors
-                                updateColors(true);
-                            }
-                        }
-                    } else {
-                        darkTimer = 0;
-                        if (lightTimer == 0) {
-                            lightTimer = System.currentTimeMillis();
-                        } else {
-                            long currentTime = System.currentTimeMillis();
-                            long duration = (currentTime - lightTimer);
-                            if ((duration >= delay) && (itsDark)) {
-                                itsDark = false;
-                                Log.d(TAG, "Sensor Setting: Its NOT dark");
-                                // Update colors
-                                updateColors(false);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    };
-
-    public void updateColors(boolean itsDark){
-        ((MyApplication) this.getApplication()).setitsDark(itsDark);
-        ConstraintLayout lLayout = findViewById(R.id.layout_alert);
-        if (itsDark) {
-            //Set Brightness to default
-            WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
-            layoutParams.screenBrightness = -1;
-            getWindow().setAttributes(layoutParams);
-
-            if(backgroundPath.equals("")) {
-               lLayout.setBackgroundColor(getResources().getColor(R.color.black));
-            }
-            btnOK.setBackgroundColor(getResources().getColor(R.color.black));
-            btnOK.setTextColor(getResources().getColor(R.color.white));
-            btnClose.setBackgroundColor(getResources().getColor(R.color.black));
-            btnClose.setTextColor(getResources().getColor(R.color.white));
-            tvAlertbody.setTextColor(getResources().getColor(R.color.white));
-            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
-            navbarTitle.setTextColor(getResources().getColor(R.color.white));
-        } else {
-            if (sharedPrefs.getBoolean("prefBrightnessOverride", false)) {
-                //Set Brightness to 100%
-                WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
-                layoutParams.screenBrightness = 1;
-                getWindow().setAttributes(layoutParams);
-            }
-
-            if(backgroundPath.equals("")) {
-                lLayout.setBackgroundColor(getResources().getColor(R.color.white));
-            }
-            btnOK.setBackgroundColor(getResources().getColor(R.color.white));
-            btnOK.setTextColor(getResources().getColor(R.color.black));
-            btnClose.setBackgroundColor(getResources().getColor(R.color.white));
-            btnClose.setTextColor(getResources().getColor(R.color.black));
-            tvAlertbody.setTextColor(getResources().getColor(R.color.black));
-            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
-            navbarTitle.setTextColor(getResources().getColor(R.color.black));
-        }
-    }
-
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {

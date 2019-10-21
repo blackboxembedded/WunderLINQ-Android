@@ -23,7 +23,7 @@ public class TripListView extends ArrayAdapter {
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView= inflater.inflate(R.layout.list_trip, null, true);
-        TextView txtTitle = (TextView) rowView.findViewById(R.id.tv_label);
+        TextView txtTitle = rowView.findViewById(R.id.tv_label);
 
         txtTitle.setText(tripList.get(position));
         return rowView;

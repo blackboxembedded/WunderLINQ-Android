@@ -64,6 +64,7 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
         setContentView(R.layout.activity_waypoint_view);
 
@@ -140,6 +141,16 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
             SupportMapFragment mapFragment = (SupportMapFragment) myFragmentManager.findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
         }
+    }
+
+    @Override
+    public void recreate() {
+        super.recreate();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override

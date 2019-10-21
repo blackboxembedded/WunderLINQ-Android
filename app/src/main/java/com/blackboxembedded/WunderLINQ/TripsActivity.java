@@ -33,7 +33,9 @@ public class TripsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
         setContentView(R.layout.activity_trips);
 
@@ -57,6 +59,11 @@ public class TripsActivity extends AppCompatActivity {
         showActionBar();
 
         updateListing();
+    }
+
+    @Override
+    public void recreate() {
+        super.recreate();
     }
 
     @Override

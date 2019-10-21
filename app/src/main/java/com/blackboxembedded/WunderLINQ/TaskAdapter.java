@@ -1,7 +1,6 @@
 package com.blackboxembedded.WunderLINQ;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,13 +18,11 @@ public class TaskAdapter extends BaseAdapter {
     private Context mContext;
     private final List<String> label;
     private final List<Drawable> icon;
-    private final boolean itsDark;
 
-    public TaskAdapter(Context context, List<String> label, List<Drawable> icon, boolean itsDark) {
+    public TaskAdapter(Context context, List<String> label, List<Drawable> icon) {
         this.mContext = context;
         this.label = label;
         this.icon = icon;
-        this.itsDark = itsDark;
     }
 
     public int getCount() {
@@ -52,6 +49,8 @@ public class TaskAdapter extends BaseAdapter {
             TextView textView = gridView.findViewById(R.id.gridTextView);
 
             textView.setText(label.get(position));
+            imageView.setImageDrawable(icon.get(position));
+            /*
             if (itsDark){
                 imageView.setImageDrawable(icon.get(position));
                 textView.setTextColor(Color.WHITE);
@@ -61,6 +60,8 @@ public class TaskAdapter extends BaseAdapter {
                 imageView.setImageDrawable(temp);
                 textView.setTextColor(mContext.getResources().getColorStateList(R.color.task_text_color_light));
             }
+
+             */
         } else {
             gridView = convertView;
         }

@@ -11,12 +11,7 @@ import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.media.MediaMetadata;
 import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
@@ -27,6 +22,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -40,7 +36,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.NotificationManagerCompat;
 
 import java.util.List;
@@ -50,30 +45,16 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
 
     public final static String TAG = "WunderLINQ";
 
-    private ActionBar actionBar;
-    private TextView navbarTitle;
-    private ImageButton mPrevButton;
     private ImageButton mPlayPauseButton;
-    private ImageButton mNextButton;
     private TextView mArtistText;
     private TextView mTitleText;
     private TextView mAlbumText;
     private ImageView mArtwork;
 
-    private ImageButton backButton;
-    private ImageButton forwardButton;
-
     private MediaController.TransportControls controls;
     private MediaController controller;
 
     private SharedPreferences sharedPrefs;
-
-    SensorManager sensorManager;
-    Sensor lightSensor;
-
-    static boolean itsDark = false;
-    private long darkTimer = 0;
-    private long lightTimer = 0;
 
     private Handler mHandler = new Handler();
 
@@ -198,9 +179,9 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
 
         view.setOnTouchListener(this);
 
-        mPrevButton = findViewById(R.id.prev_button);
+        ImageButton mPrevButton = findViewById(R.id.prev_button);
         mPlayPauseButton = findViewById(R.id.play_pause_button);
-        mNextButton = findViewById(R.id.next_button);
+        ImageButton mNextButton = findViewById(R.id.next_button);
 
         mTitleText = findViewById(R.id.title_text);
         mAlbumText = findViewById(R.id.album_text);
@@ -213,12 +194,6 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         mPlayPauseButton.setOnClickListener(mClickListener);
 
         showActionBar();
-
-        if (((MyApplication) this.getApplication()).getitsDark() ||  sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
-            updateColors(true);
-        } else {
-            updateColors(false);
-        }
 
         // Check if we have permissions
         Set<String> packageNames = NotificationManagerCompat.getEnabledListenerPackages (this);
@@ -240,12 +215,11 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
             // Need permissions to read notifications
             requestPermissions();
         }
-        // Sensor Stuff
-        sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        if (sharedPrefs.getBoolean("prefAutoNightMode", false)) {
-            sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        }
+    }
+
+    @Override
+    public void recreate() {
+        super.recreate();
     }
 
     @Override
@@ -255,11 +229,6 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         mPlayPauseButton.setFocusable(true);
         mPlayPauseButton.requestFocus();
 
-        if (((MyApplication) this.getApplication()).getitsDark() ||  sharedPrefs.getString("prefNightModeCombo", "0").equals("1")){
-            updateColors(true);
-        } else {
-            updateColors(false);
-        }
         // Need permissions to read notifications
         Set<String> packageNames = NotificationManagerCompat.getEnabledListenerPackages (this);
         if (packageNames.contains(getApplicationContext().getPackageName())) {
@@ -271,9 +240,7 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
                 requestPermissions();
             }
         }
-        if (sharedPrefs.getBoolean("prefAutoNightMode", false)) {
-            sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        }
+
         getSupportActionBar().show();
         startTimer();
     }
@@ -283,7 +250,6 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         super.onPause();
         cancelTimer();
         mHandler.removeCallbacks(mUpdateMetaData);
-        sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     @Override
@@ -291,7 +257,6 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         super.onStop();
         cancelTimer();
         mHandler.removeCallbacks(mUpdateMetaData);
-        sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     @Override
@@ -299,7 +264,6 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         super.onDestroy();
         cancelTimer();
         mHandler.removeCallbacks(mUpdateMetaData);
-        sensorManager.unregisterListener(sensorEventListener, lightSensor);
     }
 
     @Override
@@ -313,18 +277,18 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
     private void showActionBar(){
         LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflator.inflate(R.layout.actionbar_nav, null);
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled (false);
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setCustomView(v);
 
-        navbarTitle = findViewById(R.id.action_title);
+        TextView navbarTitle = findViewById(R.id.action_title);
         navbarTitle.setText(R.string.music_title);
 
-        backButton = findViewById(R.id.action_back);
-        forwardButton = findViewById(R.id.action_forward);
+        ImageButton backButton = findViewById(R.id.action_back);
+        ImageButton forwardButton = findViewById(R.id.action_forward);
         backButton.setOnClickListener(mClickListener);
         forwardButton.setOnClickListener(mClickListener);
     }
@@ -400,14 +364,6 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
                     } else if (metaData.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART) != null) {
                         mArtwork.setImageBitmap(scaleBitmap(metaData.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART), 800, 800));
                     } else {
-                        // Read your drawable from somewhere
-                        /*
-                        Drawable dr = getResources().getDrawable(R.drawable.ic_music_note);
-                        Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
-                        mArtwork.setImageBitmap(scaleBitmap(bitmap, 800, 800));
-                        */
-                        //mArtwork.setImageResource(R.drawable.ic_music_note);
-
                         Log.d(TAG,"No art");
                         Drawable drawable = getResources().getDrawable(R.drawable.ic_music_note);
                         try {
@@ -420,11 +376,11 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
                             drawable.draw(canvas);
 
                             mArtwork.setImageBitmap(scaleBitmap(bitmap, 800, 800));
-                            if (itsDark) {
-                                mArtwork.setColorFilter(getResources().getColor(R.color.white));
-                            } else {
-                                mArtwork.setColorFilter(getResources().getColor(R.color.black));
-                            }
+
+                            TypedValue typedValue = new TypedValue();
+                            getTheme().resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true);
+                            mArtwork.setColorFilter(typedValue.data);
+
                         } catch (OutOfMemoryError e) {
                             // Handle the error
                             Log.d(TAG,"Error converting drawable to bitmap");
@@ -440,98 +396,6 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
             }
         } else {
             Log.d(TAG, "No permissions to control music player");
-        }
-    }
-
-    // Listens for light sensor events
-    private final SensorEventListener sensorEventListener
-            = new SensorEventListener(){
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            // Do something
-        }
-
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            if (sharedPrefs.getString("prefNightModeCombo", "0").equals("2")) {
-                int delay = (Integer.parseInt(sharedPrefs.getString("prefAutoNightModeDelay", "30")) * 1000);
-                if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
-                    float currentReading = event.values[0];
-                    double darkThreshold = 20.0;  // Light level to determine darkness
-                    if (currentReading < darkThreshold) {
-                        lightTimer = 0;
-                        if (darkTimer == 0) {
-                            darkTimer = System.currentTimeMillis();
-                        } else {
-                            long currentTime = System.currentTimeMillis();
-                            long duration = (currentTime - darkTimer);
-                            if ((duration >= delay) && (!itsDark)) {
-                                itsDark = true;
-                                Log.d(TAG, "Its dark");
-                                // Update colors
-                                updateColors(true);
-                            }
-                        }
-                    } else {
-                        darkTimer = 0;
-                        if (lightTimer == 0) {
-                            lightTimer = System.currentTimeMillis();
-                        } else {
-                            long currentTime = System.currentTimeMillis();
-                            long duration = (currentTime - lightTimer);
-                            if ((duration >= delay) && (itsDark)) {
-                                itsDark = false;
-                                Log.d(TAG, "Its light");
-                                // Update colors
-                                updateColors(false);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    };
-
-    public void updateColors(boolean itsDark){
-        ((MyApplication) this.getApplication()).setitsDark(itsDark);
-        ConstraintLayout lLayout = findViewById(R.id.layout_music);
-        if (itsDark) {
-            //Set Brightness back to defaults
-            WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
-            layoutParams.screenBrightness = -1;
-            getWindow().setAttributes(layoutParams);
-
-            lLayout.setBackgroundColor(getResources().getColor(R.color.black));
-            mTitleText.setTextColor(getResources().getColor(R.color.white));
-            mAlbumText.setTextColor(getResources().getColor(R.color.white));
-            mArtistText.setTextColor(getResources().getColor(R.color.white));
-            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black)));
-            navbarTitle.setTextColor(getResources().getColor(R.color.white));
-            backButton.setColorFilter(getResources().getColor(R.color.white));
-            forwardButton.setColorFilter(getResources().getColor(R.color.white));
-            mPrevButton.setColorFilter(getResources().getColor(R.color.white));
-            mPlayPauseButton.setColorFilter(getResources().getColor(R.color.white));
-            mNextButton.setColorFilter(getResources().getColor(R.color.white));
-        } else {
-            if (sharedPrefs.getBoolean("prefBrightnessOverride", false)) {
-                //Set Brightness to 100%
-                WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
-                layoutParams.screenBrightness = 1;
-                getWindow().setAttributes(layoutParams);
-            }
-
-            lLayout.setBackgroundColor(getResources().getColor(R.color.white));
-            mTitleText.setTextColor(getResources().getColor(R.color.black));
-            mAlbumText.setTextColor(getResources().getColor(R.color.black));
-            mArtistText.setTextColor(getResources().getColor(R.color.black));
-            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
-            navbarTitle.setTextColor(getResources().getColor(R.color.black));
-            backButton.setColorFilter(getResources().getColor(R.color.black));
-            forwardButton.setColorFilter(getResources().getColor(R.color.black));
-            mPrevButton.setColorFilter(getResources().getColor(R.color.black));
-            mPlayPauseButton.setColorFilter(getResources().getColor(R.color.black));
-            mNextButton.setColorFilter(getResources().getColor(R.color.black));
         }
     }
 

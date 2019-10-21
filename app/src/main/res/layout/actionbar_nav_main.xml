@@ -9,6 +9,7 @@
         android:background="@null"
         android:scaleType="centerInside"
         android:src="@drawable/ic_chevron_left"
+        android:tint="?attr/iconTintColor"
         android:paddingTop="4dp"
         android:layout_alignParentLeft="true"/>
 
@@ -41,6 +42,7 @@
         android:background="@null"
         android:scaleType="centerInside"
         android:src="@drawable/ic_bars"
+        android:tint="?attr/iconTintColor"
         android:layout_toLeftOf="@+id/action_forward"
         android:paddingRight="25dp"
         android:paddingTop="4dp"/>
@@ -52,6 +54,7 @@
         android:background="@null"
         android:scaleType="centerInside"
         android:src="@drawable/ic_chevron_right"
+        android:tint="?attr/iconTintColor"
         android:paddingTop="4dp"
         android:layout_alignParentRight="true"/>
 
@@ -65,5 +68,5 @@
         android:text="Title"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="@color/black"/>
+        android:textColor="?attr/primaryTextColor"/>
 </RelativeLayout>

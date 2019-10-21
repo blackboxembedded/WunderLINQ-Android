@@ -1,7 +1,6 @@
 package com.blackboxembedded.WunderLINQ;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +12,14 @@ import java.util.List;
 public class WaypointListView extends ArrayAdapter {
     private final Activity context;
     private final List<WaypointRecord> label;
-    private final boolean itsDark;
+
     public WaypointListView(Activity context,
-                            List<WaypointRecord> label, boolean itsDark) {
+                            List<WaypointRecord> label) {
         super(context, R.layout.list_waypoint, label);
         this.context = context;
         this.label = label;
-        this.itsDark = itsDark;
     }
+
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
@@ -33,11 +32,7 @@ public class WaypointListView extends ArrayAdapter {
         } else {
             txtTitle.setText(record.getDate());
         }
-        if (itsDark){
-            txtTitle.setTextColor(Color.WHITE);
-        } else {
-            txtTitle.setTextColor(context.getResources().getColorStateList(R.color.task_text_color_light));
-        }
+
         return rowView;
     }
 }

@@ -3,12 +3,15 @@
     android:id="@+id/layout_contact_list"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/backgroundColor">
 
     <ListView
         android:id="@+id/lv_contacts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:background="?attr/backgroundColor"
+        android:listSelector="?attr/itemHighlight"/>
 
 </LinearLayout>

@@ -2,13 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/layout_waypoint_nav">
+    android:id="@+id/layout_waypoint_nav"
+    android:background="?attr/backgroundColor">
 
     <ListView
         android:id="@+id/lv_waypoints"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:listSelector="@color/motorrad_blue"/>
+        android:background="?attr/backgroundColor"
+        android:listSelector="?attr/itemHighlight"/>
 
 </LinearLayout>
