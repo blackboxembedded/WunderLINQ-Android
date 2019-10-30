@@ -194,7 +194,7 @@
     <string name="pressuref_kgf">Kg-f</string>
     <string name="pressuref_psi">psi</string>
     <string name="pref_orientation_name">Προσανατολισμός οθόνης</string>
-    <string name="orientation_a">Απενεργοποιημένος</string>
+    <string name="orientation_a">Απενεργοποιημένο</string>
     <string name="orientation_l">Οριζόντιος</string>
     <string name="orientation_p">Κάθετος</string>
     <string name="orientation_rl">Οριζόντιος (ανεστραμμένος)</string>
@@ -339,7 +339,7 @@
     <string name="bearing_header">Κύλιση</string>
     <string name="nav_app_default">Προεπιλεγμένη εφ. Android</string>
     <string name="nav_app_google">Χάρτες Google</string>
-    <string name="nav_app_locus">Locus</string>
+    <string name="nav_app_locus">Χάρτες Locus</string>
     <string name="nav_app_waze">Waze</string>
     <string name="off">Απενεργοποιημένο</string>
     <string name="on">Ενεργοποιημένο</string>
@@ -381,4 +381,6 @@
     <string name="timef_24h">24ωρο</string>
     <string name="timef_12h">12ωρο</string>
     <string name="pref_time_name">Μορφή ώρας</string>
+    <string name="nav_app_mapfactor">Πλοήγηση Mapfactor</string>
+    <string name="system_default">Προεπιλογή συστήματος</string>
 </resources>
