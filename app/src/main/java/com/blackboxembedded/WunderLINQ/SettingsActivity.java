@@ -15,11 +15,8 @@ public class SettingsActivity extends PreferenceActivity{
 
     private final static String TAG = "SettingsActivity";
 
-    private SharedPreferences sharedPrefs;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         super.onCreate(savedInstanceState);
         getFragmentManager().beginTransaction().replace(android.R.id.content, new UserSettingActivityFragment()).commit();
     }

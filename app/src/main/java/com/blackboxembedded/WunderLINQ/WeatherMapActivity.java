@@ -123,9 +123,11 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
         mMap = googleMap;
 
         // Move the camera
-        LatLng location = new LatLng(Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
-        mMap.addMarker(new MarkerOptions().position(location));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, currentZoom));
+        if (Data.getLastLocation() != null) {
+            LatLng location = new LatLng(Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
+            mMap.addMarker(new MarkerOptions().position(location));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, currentZoom));
+        }
 
         TileProvider tileProvider = new UrlTileProvider(256, 256) {
             @Override
