@@ -7,7 +7,6 @@ public class MyApplication extends Application {
 
     private static Context mContext;
 
-    private boolean itsDark;
     private boolean videoRecording;
     private boolean tripRecording;
 
@@ -19,13 +18,6 @@ public class MyApplication extends Application {
 
     public static Context getContext(){
         return mContext;
-    }
-
-    public boolean getitsDark() {
-        return itsDark;
-    }
-    public void setitsDark(boolean itsDark) {
-        this.itsDark = itsDark;
     }
 
     public boolean getVideoRecording() {
