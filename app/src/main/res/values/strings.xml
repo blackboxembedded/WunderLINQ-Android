@@ -80,6 +80,7 @@
     <string name="next_service_label">Next Service</string>
     <!-- FWConfigActivity -->
     <string name="fw_config_title">WunderLINQ Settings</string>
+    <string name="fw_version_label">Firmware Version</string>
     <string name="wwtype_label">Wheel Type</string>
     <string name="wwMode1">Full</string>
     <string name="wwMode2">RT/K1600</string>
@@ -90,6 +91,7 @@
         <!--<item name="3">@string/wwMode3</item>-->
     </string-array>
     <string name="sensitivity_label">Hold Sensitivity</string>
+    <string name="config_reset_label">Reset Settings</string>
     <string name="config_write_label">Save Settings</string>
     <string name="hwsave_alert_title">Warning!</string>
     <string name="hwsave_alert_body">After saving new hardware settings, the WunderLINQ hardware will become unstable and will need to be removed and reinstalled into the cradle.</string>

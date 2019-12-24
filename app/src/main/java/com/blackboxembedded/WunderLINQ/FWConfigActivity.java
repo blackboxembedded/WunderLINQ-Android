@@ -29,11 +29,14 @@ public class FWConfigActivity extends AppCompatActivity {
 
     BluetoothGattCharacteristic characteristic;
 
+    private TextView fwVersionTV;
+    private TextView wwModeLabelTV;
     private Spinner wwModeSpinner;
     private LinearLayout sensitivityLLayout;
     private TextView sensitivityTV;
     private SeekBar sensitivitySeekBar;
     private Button writeBtn;
+    private Button resetBtn;
 
     private byte currentConfig;
     private byte currentSensitivity;
@@ -47,7 +50,11 @@ public class FWConfigActivity extends AppCompatActivity {
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        fwVersionTV = findViewById(R.id.tvFWVersion);
+        wwModeLabelTV = findViewById(R.id.tvwwModeLabel);
+        wwModeLabelTV.setVisibility(View.INVISIBLE);
         wwModeSpinner = findViewById(R.id.wwModeSpinner);
+        wwModeSpinner.setVisibility(View.INVISIBLE);
         wwModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
@@ -98,6 +105,10 @@ public class FWConfigActivity extends AppCompatActivity {
         writeBtn = findViewById(R.id.writeBtn);
         writeBtn.setOnClickListener(mClickListener);
         writeBtn.setEnabled(false);
+        writeBtn.setVisibility(View.INVISIBLE);
+        resetBtn = findViewById(R.id.resetBtn);
+        resetBtn.setOnClickListener(mClickListener);
+        resetBtn.setVisibility(View.INVISIBLE);
 
         showActionBar();
 
@@ -137,6 +148,32 @@ public class FWConfigActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             switch(v.getId()) {
+                case R.id.resetBtn:
+                    // Display dialog
+                    final AlertDialog.Builder resetBuilder = new AlertDialog.Builder(FWConfigActivity.this);
+                    resetBuilder.setTitle(getString(R.string.hwsave_alert_title));
+                    resetBuilder.setMessage(getString(R.string.hwsave_alert_body));
+                    resetBuilder.setPositiveButton(R.string.hwsave_alert_btn_ok,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    byte[] defaultConfig = {0x57,0x57,0x43,0x41,0x32,0x01,0x04,0x04,(byte)0xFE,(byte)0xFC,0x4F,0x28,0x0F,0x04,
+                                            0x04,(byte)0xFD,(byte)0xFC,0x50,0x29,0x0F,0x04,0x06,0x00,0x00,0x00,0x00,0x34,0x02,0x01,0x01,0x65,
+                                            0x55,0x4F,0x28,0x07,0x01,0x01,(byte)0x95,0x55,0x50,0x29,0x07,0x01,0x01,0x56,0x59,0x52,0x51,0x0D,0x0A};
+                                    characteristic.setValue(defaultConfig);
+                                    BluetoothLeService.writeCharacteristic(characteristic);
+                                    finish();
+                                }
+                            });
+                    resetBuilder.setNegativeButton(R.string.hwsave_alert_btn_cancel,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            });
+                    resetBuilder.show();
+                    break;
                 case R.id.writeBtn:
                     // Display dialog
                     final AlertDialog.Builder builder = new AlertDialog.Builder(FWConfigActivity.this);
@@ -229,25 +266,44 @@ public class FWConfigActivity extends AppCompatActivity {
                 if(bd != null){
                     if(bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE).contains(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC)) {
                         byte[] data = bd.getByteArray(BluetoothLeService.EXTRA_BYTE_VALUE);
-                        //Log.d(TAG, "UUID: " + bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE) + " DATA: " + Utils.ByteArraytoHex(data));
+                        Log.d(TAG, "UUID: " + bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE) + " DATA: " + Utils.ByteArraytoHex(data));
                         if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x57)) {
                             byte mode = data[26];
                             currentConfig = mode;
                             byte sensitivity = data[34];
                             currentSensitivity = sensitivity;
                             if (mode == 0x32) {
+                                wwModeLabelTV.setVisibility(View.VISIBLE);
+                                wwModeSpinner.setVisibility(View.VISIBLE);
                                 wwModeSpinner.setSelection(0);
                                 sensitivitySeekBar.setMax(30);
                                 sensitivityLLayout.setVisibility(View.VISIBLE);
                                 sensitivitySeekBar.setVisibility(View.VISIBLE);
-                            } else {
+                                sensitivitySeekBar.setProgress(sensitivity);
+                                writeBtn.setVisibility(View.VISIBLE);
+                            } else if (mode == 0x34){
+                                wwModeLabelTV.setVisibility(View.VISIBLE);
+                                wwModeSpinner.setVisibility(View.VISIBLE);
                                 wwModeSpinner.setSelection(1);
                                 sensitivitySeekBar.setMax(20);
                                 sensitivityLLayout.setVisibility(View.VISIBLE);
                                 sensitivitySeekBar.setVisibility(View.VISIBLE);
+                                sensitivitySeekBar.setProgress(sensitivity);
+                                writeBtn.setVisibility(View.VISIBLE);
+                            } else {
+                                // Corrupt Config
+                                resetBtn.setVisibility(View.VISIBLE);
                             }
-                            sensitivitySeekBar.setProgress(sensitivity);
+
+                            // Write mode
+                            byte[] getVersionCmd = {0x57, 0x52, 0x56};
+                            characteristic.setValue(getVersionCmd);
+                            BluetoothLeService.writeCharacteristic(characteristic);
+                        } else if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x56)){
+                            String version = data[3] + "." + data[4];
+                            fwVersionTV.setText(getString(R.string.fw_version_label) + " " + version);
                         }
+
                     }
                 }
             } else if(BluetoothLeService.ACTION_WRITE_SUCCESS.equals(action)){
