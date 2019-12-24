@@ -347,6 +347,12 @@
     <PreferenceCategory android:title="@string/advanced_settings_title" >
         <CheckBoxPreference
             android:defaultValue="false"
+            android:key="prefBearingOverride"
+            android:summary="@string/pref_bearing_override_summary"
+            android:title="@string/pref_bearing_override_name" >
+        </CheckBoxPreference>
+        <CheckBoxPreference
+            android:defaultValue="false"
             android:key="prefPhotoPreview"
             android:summary="@string/pref_photopreview_summary"
             android:title="@string/pref_photopreview_name" >

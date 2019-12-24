@@ -743,6 +743,8 @@
     <string name="pref_fuelAlert_summary">Prompt to route to nearest fuel station when low fuel fault is present</string>
     <string name="debug_settings_title">Debug Settings</string>
     <string name="advanced_settings_title">Advanced Settings</string>
+    <string name="pref_bearing_override_name">GPS Bearing</string>
+    <string name="pref_bearing_override_summary">Use GPS Bearing instead of magnetic compass.</string>
     <string name="pref_photopreview_name">Photo Preview</string>
     <string name="pref_photopreview_summary">Displays the photo after capture</string>
     <string name="pref_autolaunch_name">Auto Launch App</string>

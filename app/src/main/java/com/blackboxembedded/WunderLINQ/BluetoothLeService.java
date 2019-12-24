@@ -410,7 +410,9 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                     int direction = filterChange(Utils.normalizeDegrees(Math.toDegrees(orientation[0])));
                     if(direction != lastDirection) {
                         lastDirection = direction;
-                        Data.setBearing(lastDirection);
+                        if (!sharedPrefs.getBoolean("prefBearingOverride", false)) {
+                            Data.setBearing(lastDirection);
+                        }
                     }
                 }
             }
@@ -2292,7 +2294,7 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
             case 0x0b:
                 //Log.d(TAG, "Message ID 11");
                 if ((data[3] & 0xFF) != 0xFF && (data[2] & 0xFF) != 0xFF && (data[1] & 0xFF) != 0xFF) {
-                    int year = (((data[2] & 0xFF) >> 4) & 0x0f) << 8 |(data[1] & 0xFF);
+                    int year = ((((data[2] & 0xFF) >> 4) & 0x0f) << 8) |(data[1] & 0xFF);
                     int month = ((data[2] & 0xFF) & 0x0f) - 1;
                     int day = (data[3] & 0xFF);
                     Calendar cal = Calendar.getInstance();
@@ -2358,7 +2360,9 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
     @Override
     public void onLocationChanged(Location location) {
         Data.setLastLocation(location);
-
+        if (sharedPrefs.getBoolean("prefBearingOverride", false) && location.hasBearing()) {
+            Data.setBearing((int)location.getBearing());
+        }
     }
 
     protected void stopLocationUpdates() {
