@@ -31,11 +31,11 @@
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
+        android:hasFragileUserData="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:showOnLockScreen="true"
         android:supportsRtl="true"
-        android:hasFragileUserData="true"
         android:theme="@style/WLQTheme"
         android:usesCleartextTraffic="true">
         <!-- Work Around for GMaps crash https://issuetracker.google.com/issues/79478779 -->
@@ -63,8 +63,10 @@
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="datagrid"
                     android:scheme="wunderlinq" />
@@ -94,6 +96,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".WaypointActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AddWaypointActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".WaypointViewActivity"

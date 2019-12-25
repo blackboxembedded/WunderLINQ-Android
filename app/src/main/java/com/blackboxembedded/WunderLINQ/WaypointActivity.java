@@ -74,7 +74,7 @@ public class WaypointActivity extends AppCompatActivity {
 
     private void showActionBar(){
         LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflator.inflate(R.layout.actionbar_nav, null);
+        View v = inflator.inflate(R.layout.actionbar_nav_addwpt, null);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled (false);
@@ -83,13 +83,13 @@ public class WaypointActivity extends AppCompatActivity {
         actionBar.setCustomView(v);
 
         TextView navbarTitle;
-        navbarTitle = (TextView) findViewById(R.id.action_title);
+        navbarTitle = findViewById(R.id.action_title);
         navbarTitle.setText(R.string.waypoint_title);
 
         ImageButton backButton = findViewById(R.id.action_back);
         ImageButton forwardButton = findViewById(R.id.action_forward);
         backButton.setOnClickListener(mClickListener);
-        forwardButton.setVisibility(View.INVISIBLE);
+        forwardButton.setOnClickListener(mClickListener);
     }
 
     private View.OnClickListener mClickListener = new View.OnClickListener() {
@@ -100,6 +100,10 @@ public class WaypointActivity extends AppCompatActivity {
                 case R.id.action_back:
                     Intent backIntent = new Intent(WaypointActivity.this, GeoDataActivity.class);
                     startActivity(backIntent);
+                    break;
+                case R.id.action_forward:
+                    Intent addIntent = new Intent(WaypointActivity.this, AddWaypointActivity.class);
+                    startActivity(addIntent);
                     break;
             }
         }

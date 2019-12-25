@@ -157,7 +157,7 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
     public void onMapReady(GoogleMap map) {
         map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         map.setTrafficEnabled(false);
-        map.setIndoorEnabled(true);
+        map.setIndoorEnabled(false);
         map.setBuildingsEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(false);
         // Add a marker and move the camera

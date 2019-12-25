@@ -270,6 +270,13 @@
     <string name="fault_TIRERCF">Rear Tire Pressure Critical</string>
     <!-- WaypointActivity -->
     <string name="waypoint_title">Saved Waypoints</string>
+    <!-- AddWaypointActivity -->
+    <string name="addwaypoint_view_title">Add Waypoint</string>
+    <string name="addwaypoint_view_bt_save">Save</string>
+    <string name="addwaypoint_view_bt_search">Lookup</string>
+    <string name="addwaypoint_view_tv_search_label">Drop pin or lookup address</string>
+    <string name="addwaypoint_view_search_hint">Type Address</string>
+    <string name="toast_waypoint_error">Latitude &amp; Logitude Required</string>
     <!-- WaypointViewActivity -->
     <string name="waypoint_view_title">Saved Waypoint</string>
     <string name="waypoint_view_tv_date_label">Date Recorded</string>
