@@ -8,6 +8,10 @@
     <string name="main_title">Motorcycle</string>
     <string name="blank_field" translatable="false">∞</string>
     <string name="accessibility_explanation">This is required to automatically enter multi window mode and to launch the Android Task Switcher, if you chose to not enable WunderLINQ will not fully function.</string>
+    <string name="no_pairing_alert_title">No paired WunderLINQ</string>
+    <string name="no_pairing_alert_body">No paired WunderLINQ.  Please pair to your WunderLINQ under your Bluetooth Settings.</string>
+    <string name="too_many_pairings_alert_title">More than one paired WunderLINQ</string>
+    <string name="too_many_pairings_alert_body">More than one paired WunderLINQ.  Please remove old pairings under your Bluetooth Settings.</string>
     <!-- Permission Requests -->
     <string name="accessibilityservice_alert_title">WunderLINQ needs to run a Accessibility Service</string>
     <string name="accessibilityservice_alert_body">Please enable the WunderLINQ accessibilty service.  </string>

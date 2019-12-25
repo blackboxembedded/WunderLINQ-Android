@@ -10,11 +10,6 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
-import android.bluetooth.le.BluetoothLeScanner;
-import android.bluetooth.le.ScanCallback;
-import android.bluetooth.le.ScanFilter;
-import android.bluetooth.le.ScanResult;
-import android.bluetooth.le.ScanSettings;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -100,8 +95,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private String mDeviceAddress;
     private static final int REQUEST_ENABLE_BT = 1;
     private static final int SETTINGS_CHECK = 10;
-    // Stops scanning after 10 seconds.
-    private static final long SCAN_PERIOD = 10000;
 
     public final static UUID UUID_MOTORCYCLE_SERVICE =
             UUID.fromString(GattAttributes.WUNDERLINQ_SERVICE);
@@ -717,13 +710,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch(item.getItemId()) {
-                    case R.id.action_connect:
-                        if(!(Build.BRAND.startsWith("Android") && Build.DEVICE.startsWith("generic"))) {
-                            setupBLE();
-                        } else {
-                            Log.d(TAG,"Running in the emulator");
-                        }
-                        break;
                     case R.id.action_bike_info:
                         Intent bikeInfoIntent = new Intent(MainActivity.this, BikeInfoActivity.class);
                         startActivity(bikeInfoIntent);
@@ -784,6 +770,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         @Override
         public void onClick(View v) {
             switch(v.getId()) {
+                case R.id.action_connect:
+                    Log.d(TAG,"Connect");
+                    if(!(Build.BRAND.startsWith("Android") && Build.DEVICE.startsWith("generic"))) {
+                        setupBLE();
+                    } else {
+                        Log.d(TAG,"Running in the emulator");
+                    }
+                    break;
                 case R.id.action_back:
                     Intent backIntent = new Intent(MainActivity.this, TaskActivity.class);
                     startActivity(backIntent);
@@ -1004,88 +998,75 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private void setupBLE() {
         Log.d(TAG,"In setupBLE()");
+        int wlqCnt = 0;
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
         if (!pairedDevices.isEmpty()) {
             for (BluetoothDevice devices : pairedDevices) {
                 if (devices.getName() != null) {
                     if (devices.getName().equals(getString(R.string.device_name))) {
-                        Log.d(TAG, "WunderLINQ previously paired");
+                        wlqCnt = wlqCnt + 1;
+                        Log.d(TAG, "Previously Paired WunderLINQ: " + devices.getAddress());
                         mDeviceAddress = devices.getAddress();
-                        Log.d(TAG, "Address: " + mDeviceAddress);
-                        bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
-                        scanLeDevice(false);
-                        return;
                     }
                 }
             }
         }
-        Log.d(TAG, "Previously Paired WunderLINQ not found");
-        scanLeDevice(true);
-    }
+        if (wlqCnt == 0){
+            Log.d(TAG, "No paired WunderLINQ: " + mDeviceAddress);
+            // Display dialog text here......
+            final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+            builder.setTitle(getString(R.string.no_pairing_alert_title));
+            builder.setMessage(getString(R.string.no_pairing_alert_body));
+            builder.setPositiveButton(R.string.alert_btn_ok,
+                    new DialogInterface.OnClickListener() {
 
-    private void scanLeDevice(final boolean enable) {
-        final BluetoothLeScanner bluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
-        if (enable) {
-            Log.d(TAG,"In scanLeDevice() Scanning On");
-            // Stops scanning after a pre-defined scan period.
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (bluetoothLeScanner != null) {
-                        bluetoothLeScanner.stopScan(mLeScanCallback);
-                    }
-                }
-            }, SCAN_PERIOD);
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+            builder.setNegativeButton(R.string.task_title_settings,
+                    new DialogInterface.OnClickListener() {
 
-            //scan specified devices only with ScanFilter
-            ScanFilter scanFilter =
-                    new ScanFilter.Builder()
-                            .setDeviceName(getString(R.string.device_name))
-                            .build();
-            List<ScanFilter> scanFilters = new ArrayList<>();
-            scanFilters.add(scanFilter);
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent settings_intent = new Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
+                            startActivityForResult(settings_intent, 0);
+                        }
+                    });
+            builder.show();
+            return;
+        } else if (wlqCnt == 1){
+            Log.d(TAG, "Connecting to Address: " + mDeviceAddress);
+            bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+            return;
+        } else if (wlqCnt > 1){
+            Log.d(TAG, "Too many WunderLINQ pairings: " + wlqCnt);
+            // Display dialog text here......
+            final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+            builder.setTitle(getString(R.string.too_many_pairings_alert_title));
+            builder.setMessage(getString(R.string.too_many_pairings_alert_body));
+            builder.setPositiveButton(R.string.alert_btn_ok,
+                    new DialogInterface.OnClickListener() {
 
-            ScanSettings scanSettings =
-                    new ScanSettings.Builder().build();
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+            builder.setNegativeButton(R.string.task_title_settings,
+                    new DialogInterface.OnClickListener() {
 
-            try {
-                bluetoothLeScanner.startScan(scanFilters, scanSettings, mLeScanCallback);
-            } catch (NullPointerException e){
-                //Testing
-                Log.d(TAG,"NullPointerException: " + e.toString());
-            }
-
-        } else {
-            Log.d(TAG,"In scanLeDevice() Scanning Off");
-            bluetoothLeScanner.stopScan(mLeScanCallback);
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent settings_intent = new Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
+                            startActivityForResult(settings_intent, 0);
+                        }
+                    });
+            builder.show();
+            return;
         }
     }
-
-    // Device scan callback.
-    private ScanCallback mLeScanCallback = new ScanCallback() {
-        @Override
-        public void onScanResult(int callbackType, ScanResult result) {
-            super.onScanResult(callbackType, result);
-            String device = result.getDevice().getName();
-            if (device != null) {
-                if (device.contains(getString(R.string.device_name))) {
-                    Log.d(TAG, "WunderLINQ Device Found: " + device);
-                    result.getDevice().createBond();
-                    scanLeDevice(false);
-                }
-            }
-        }
-
-        @Override
-        public void onBatchScanResults(List<ScanResult> results) {
-            super.onBatchScanResults(results);
-        }
-
-        @Override
-        public void onScanFailed(int errorCode) {
-            super.onScanFailed(errorCode);
-        }
-    };
 
     BroadcastReceiver mBondingBroadcast = new BroadcastReceiver() {
         @Override
