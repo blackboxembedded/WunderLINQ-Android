@@ -231,7 +231,7 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
             navUrl = "https://www.waze.com/ul?ll=" + record.getData() + "&zoom=10";
         } else if (navApp.equals("5")){
             //Maps.me
-            navUrl = "mapsme://map?ll=" + record.getData() + "&n=" + record.getLabel() + "&id=WunderLINQ&backurl=wunderlinq://&appname=WunderLINQ";
+            navUrl = "https://dlink.maps.me/map?ll=" + record.getData() + "&n=" + record.getLabel() + "&back_url=wunderlinq://datagrid";
         } else if (navApp.equals("6")){
             //OsmAnd
             String location[] = record.getData().split(",");
@@ -289,10 +289,10 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
                 navUrl = "https://www.waze.com/ul?ll=" + record.getData() + "&navigate=yes&zoom=17";
             } else if (navApp.equals("5")){
                 //Maps.me
-                navUrl = "mapsme://route?sll=" + String.valueOf(currentLocation.getLatitude()) + ","
+                navUrl = "https://dlink.maps.me/route?sll=" + String.valueOf(currentLocation.getLatitude()) + ","
                         + String.valueOf(currentLocation.getLongitude()) + "&saddr="
                         + getString(R.string.trip_view_waypoint_start_label) + "&dll="
-                        + record.getData() + "&daddr=" + record.getLabel() + "&type=vehicle";
+                        + record.getData() + "&daddr=" + record.getLabel() + "&type=vehicle&back_url=wunderlinq://datagrid";
             } else if (navApp.equals("6")){
                 // OsmAnd
                 String location[] = record.getData().split(",");

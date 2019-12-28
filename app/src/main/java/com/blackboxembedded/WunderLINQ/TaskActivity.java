@@ -736,7 +736,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                             url = "https://waze.com/ul";
                         } else if (navApp.equals("5")){
                             //Maps.me
-                            url = "mapsme://?id=WunderLINQ&backurl=wunderlinq://&appname=WunderLINQ";
+                            url = "https://dlink.maps.me/?back_url=wunderlinq://datagrid";
                         } else if (navApp.equals("6")){
                             // OsmAnd
                             url = "http://osmand.net/go";
@@ -813,7 +813,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                                                 navUrl = "https://www.waze.com/ul?ll=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes&zoom=17";
                                             } else if (navApp.equals("5")){
                                                 //Maps.me
-                                                navUrl = "mapsme://route?sll=" + String.valueOf(currentLocation.getLatitude()) + "," + String.valueOf(currentLocation.getLongitude()) + "&saddr=Start&dll=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&daddr=Home&type=vehicle";
+                                                navUrl = "https://dlink.maps.me/route?sll=" + String.valueOf(currentLocation.getLatitude()) + "," + String.valueOf(currentLocation.getLongitude()) + "&saddr=Start&dll=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&daddr=Home&type=vehicle&back_url=wunderlinq://datagrid";
                                             } else if (navApp.equals("6")){
                                                 //OsmAnd
                                                 //navUrl = "osmand.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";

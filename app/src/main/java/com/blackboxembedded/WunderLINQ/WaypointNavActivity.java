@@ -140,10 +140,10 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
                         navUrl = "https://www.waze.com/ul?ll=" + record.getData() + "&navigate=yes&zoom=17";
                     } else if (navApp.equals("5")){
                         //Maps.me
-                        navUrl = "mapsme://route?sll=" + String.valueOf(currentLocation.getLatitude()) + ","
+                        navUrl = "https://dlink.maps.me/route?sll=" + String.valueOf(currentLocation.getLatitude()) + ","
                                 + String.valueOf(currentLocation.getLongitude()) + "&saddr="
                                 + getString(R.string.trip_view_waypoint_start_label) + "&dll="
-                                + record.getData() + "&daddr=" + record.getLabel() + "&type=vehicle";
+                                + record.getData() + "&daddr=" + record.getLabel() + "&type=vehicle&back_url=wunderlinq://datagrid";
                     } else if (navApp.equals("6")){
                         // OsmAnd
                         String location[] = record.getData().split(",");
