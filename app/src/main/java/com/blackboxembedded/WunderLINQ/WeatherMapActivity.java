@@ -40,6 +40,8 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
 
     private int currentZoom = 10;
 
+    private String timestamp = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +69,12 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
         }
 
         showActionBar();
+
+
+        long l = System.currentTimeMillis();
+        l -= l % (10*60*1000);
+        long unixtime = l / 1000L;
+        timestamp = String.valueOf(unixtime);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -128,14 +136,14 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
             mMap.addMarker(new MarkerOptions().position(location));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, currentZoom));
         }
-
         TileProvider tileProvider = new UrlTileProvider(256, 256) {
             @Override
             public URL getTileUrl(int x, int y, int zoom) {
 
                 /* Define the URL pattern for the tile images */
-                String s = String.format(Locale.US, "http://tile.openweathermap.org/map/precipitation/%d/%d/%d.png?appid=497912a4e0cfe52a91c565e0cae7f2c0",
-                        zoom, x, y);
+                //https://tilecache.rainviewer.com/v2/radar/{ts}/{size}/{z}/{x}/{y}/{color}/{options}.png
+                String s = String.format(Locale.US, "https://tilecache.rainviewer.com/v2/radar/%s/256/%d/%d/%d/4/1_1.png", timestamp, zoom, x, y);
+                //String s = String.format(Locale.US, "http://tile.openweathermap.org/map/precipitation/%d/%d/%d.png?appid=497912a4e0cfe52a91c565e0cae7f2c0", zoom, x, y);
 
                 try {
                     return new URL(s);
