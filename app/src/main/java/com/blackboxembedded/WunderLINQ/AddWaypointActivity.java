@@ -59,8 +59,10 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
         SupportMapFragment mapFragment = (SupportMapFragment) myFragmentManager.findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        tvLatitude.setText(String.valueOf(Data.getLastLocation().getLatitude()));
-        tvLongitude.setText(String.valueOf(Data.getLastLocation().getLongitude()));
+        if (Data.getLastLocation() != null) {
+            tvLatitude.setText(String.valueOf(Data.getLastLocation().getLatitude()));
+            tvLongitude.setText(String.valueOf(Data.getLastLocation().getLongitude()));
+        }
     }
 
     @Override
