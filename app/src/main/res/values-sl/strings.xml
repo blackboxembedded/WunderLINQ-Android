@@ -231,7 +231,7 @@
     <string name="pref_nav_app_title">Aplikacija za navigacijo</string>
     <string name="nav_app_default">Android Default</string>
     <string name="nav_app_google">Google Maps</string>
-    <string name="nav_app_locus">Locus</string>
+    <string name="nav_app_locus">Locus Maps</string>
     <string name="nav_app_waze">Waze</string>
     <string name="pref_tempf_name">Enota za temperaturo</string>
     <string name="tempf_c">Celziji</string>
@@ -384,4 +384,20 @@
     <string name="barometricpressure_header">Zračni tlak</string>
     <string name="btn_logging_notification_stop">Ustavi snemanje</string>
     <string name="task_title_homescreen">Začetni zaslon</string>
+    <string name="pref_bearing_override_summary">Uporabi usmeritev GPS namesto magnetnega kompasa.</string>
+    <string name="pref_bearing_override_name">GPS smer</string>
+    <string name="system_default">Sistemsko privzeto</string>
+    <string name="nav_app_mapfactor">Mapfactor Navigator</string>
+    <string name="toast_waypoint_error">Potrebni širina in dolžina</string>
+    <string name="addwaypoint_view_search_hint">Vnesi naslov</string>
+    <string name="addwaypoint_view_bt_search">Poišči</string>
+    <string name="addwaypoint_view_tv_search_label">Pokaži točko ali poišči naslov</string>
+    <string name="addwaypoint_view_bt_save">Shrani</string>
+    <string name="addwaypoint_view_title">Dodaj kažipot</string>
+    <string name="config_reset_label">Ponastavi nastavitve</string>
+    <string name="fw_version_label">Različica programske opreme</string>
+    <string name="too_many_pairings_alert_body">Več povezanih WunderLINQ naprav. Odstranite stare povezave v nastavitvah Bluetooth.</string>
+    <string name="too_many_pairings_alert_title">Več povezanih WunderLINQ naprav</string>
+    <string name="no_pairing_alert_body">WunderLINQ ni povezan. Povežite ga v Bluetooth nastavitvah.</string>
+    <string name="no_pairing_alert_title">WunderLINQ ni povezan</string>
 </resources>
