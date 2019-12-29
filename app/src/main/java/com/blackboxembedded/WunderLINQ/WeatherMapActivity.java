@@ -141,9 +141,8 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
             public URL getTileUrl(int x, int y, int zoom) {
 
                 /* Define the URL pattern for the tile images */
-                //https://tilecache.rainviewer.com/v2/radar/{ts}/{size}/{z}/{x}/{y}/{color}/{options}.png
+                //https://www.rainviewer.com/api.html
                 String s = String.format(Locale.US, "https://tilecache.rainviewer.com/v2/radar/%s/256/%d/%d/%d/4/1_1.png", timestamp, zoom, x, y);
-                //String s = String.format(Locale.US, "http://tile.openweathermap.org/map/precipitation/%d/%d/%d.png?appid=497912a4e0cfe52a91c565e0cae7f2c0", zoom, x, y);
 
                 try {
                     return new URL(s);
