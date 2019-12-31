@@ -1,13 +1,20 @@
 package com.blackboxembedded.WunderLINQ;
 
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
@@ -17,10 +24,22 @@ import java.text.SimpleDateFormat;
 
 public class BikeInfoActivity extends AppCompatActivity {
 
+    private final static String TAG = "BikeInfoActvity";
+
+    BluetoothGattCharacteristic characteristic;
+
+    private TextView tvResetHeader;
+    private Spinner spReset;
+    private TextView tvResetLabel;
+    private Button btReset;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bike_info);
+
+        // Keep screen on
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -38,6 +57,11 @@ public class BikeInfoActivity extends AppCompatActivity {
         TextView tvVIN = findViewById(R.id.tvVINValue);
         TextView tvNextServiceDate = findViewById(R.id.tvNextServiceDateValue);
         TextView tvNextService = findViewById(R.id.tvNextServiceValue);
+        tvResetHeader = findViewById(R.id.tvResetHeader);
+        tvResetLabel = findViewById(R.id.tvResetLabel);
+        spReset = findViewById(R.id.spReset);
+        btReset = findViewById(R.id.btReset);
+        btReset.setOnClickListener(mClickListener);
 
         if (Data.getVin() != null){
             tvVIN.setText(Data.getVin());
@@ -57,6 +81,14 @@ public class BikeInfoActivity extends AppCompatActivity {
             }
             tvNextService.setText(nextService);
         }
+
+        characteristic = MainActivity.gattCommandCharacteristic;
+        if ((characteristic != null) & (Data.getFirmwareVersion() == null)) {
+            // Get Version
+            byte[] getVersionCmd = {0x57, 0x52, 0x56};
+            characteristic.setValue(getVersionCmd);
+            BluetoothLeService.writeCharacteristic(characteristic);
+        }
     }
 
     @Override
@@ -67,6 +99,35 @@ public class BikeInfoActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+
+        if (Data.getFirmwareVersion() == null) {
+            if (characteristic != null) {
+                // Get Version
+                byte[] getVersionCmd = {0x57, 0x52, 0x56};
+                characteristic.setValue(getVersionCmd);
+                BluetoothLeService.writeCharacteristic(characteristic);
+            }
+        } else {
+            if (Data.getFirmwareVersion() >= 1.8) {
+                tvResetHeader.setVisibility(View.VISIBLE);
+                spReset.setVisibility(View.VISIBLE);
+                tvResetLabel.setVisibility(View.VISIBLE);
+                btReset.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG,"In onDestroy");
+        super.onDestroy();
+        try {
+            unregisterReceiver(mGattUpdateReceiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showActionBar(){
@@ -97,7 +158,75 @@ public class BikeInfoActivity extends AppCompatActivity {
                     Intent backIntent = new Intent(BikeInfoActivity.this, MainActivity.class);
                     startActivity(backIntent);
                     break;
+                case R.id.btReset:
+                    switch(spReset.getSelectedItemPosition()){
+                        case 0: // Reset Cluster Average Speed
+                            byte[] rstClusterSpeedCmd = {0x57, 0x57, 0x44, 0x52, 0x53};
+                            characteristic.setValue(rstClusterSpeedCmd);
+                            break;
+                        case 1: // Reset Cluster Economy 1
+                            byte[] rstClusterEcono1 = {0x57, 0x57, 0x44, 0x52, 0x45, 0x01};
+                            characteristic.setValue(rstClusterEcono1);
+                            break;
+                        case 2: // Reset Cluster Economy 2
+                            byte[] rstClusterEcono2 = {0x57, 0x57, 0x44, 0x52, 0x45, 0x02};
+                            characteristic.setValue(rstClusterEcono2);
+                            break;
+                        case 3: // Reset Cluster Trip 1
+                            byte[] rstClusterTrip1 = {0x57, 0x57, 0x44, 0x52, 0x54, 0x01};
+                            characteristic.setValue(rstClusterTrip1);
+                            break;
+                        case 4: // Reset Cluster Trip 2
+                            byte[] rstClusterTrip2 = {0x57, 0x57, 0x44, 0x52, 0x54, 0x02};
+                            characteristic.setValue(rstClusterTrip2);
+                            break;
+                        default:
+                            break;
+                    }
+                    BluetoothLeService.writeCharacteristic(characteristic);
+                    break;
             }
         }
     };
+
+    // Handles various events fired by the Service.
+    // ACTION_WRITE_SUCCESS: received when write is successful
+    // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read
+    //                        or notification operations.
+    private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
+                Bundle bd = intent.getExtras();
+                if(bd != null){
+                    if(bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE).contains(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC)) {
+                        byte[] data = bd.getByteArray(BluetoothLeService.EXTRA_BYTE_VALUE);
+                        Log.d(TAG, "UUID: " + bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE) + " DATA: " + Utils.ByteArraytoHex(data));
+                        if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x56)){
+                            String version = data[3] + "." + data[4];
+                            Data.setFirmwareVersion(Double.parseDouble(version));
+                            if (Double.parseDouble(version) >=1.8) {
+                                tvResetHeader.setVisibility(View.VISIBLE);
+                                spReset.setVisibility(View.VISIBLE);
+                                tvResetLabel.setVisibility(View.VISIBLE);
+                                btReset.setVisibility(View.VISIBLE);
+                            }
+                        }
+
+                    }
+                }
+            } else if(BluetoothLeService.ACTION_WRITE_SUCCESS.equals(action)){
+                Log.d(TAG,"Write Success Received");
+                BluetoothLeService.readCharacteristic(characteristic);
+            }
+        }
+    };
+
+    private static IntentFilter makeGattUpdateIntentFilter() {
+        final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
+        intentFilter.addAction(BluetoothLeService.ACTION_WRITE_SUCCESS);
+        return intentFilter;
+    }
 }

@@ -58,7 +58,7 @@ public class FWConfigActivity extends AppCompatActivity {
         wwModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                Log.d(TAG, "Item Selected: " + adapterView.getItemAtPosition(pos).toString());
+                Log.d(TAG, "Bike Mode Selected: " + adapterView.getItemAtPosition(pos).toString());
                 if ((currentConfig == 0x32) && (pos == 0)) {
                     sensitivitySeekBar.setMax(20);
                     sensitivityLLayout.setVisibility(View.VISIBLE);
@@ -112,6 +112,10 @@ public class FWConfigActivity extends AppCompatActivity {
 
         showActionBar();
 
+        if(Data.getFirmwareVersion() != null) {
+            fwVersionTV.setText(getString(R.string.fw_version_label) + " " + Data.getFirmwareVersion());
+        }
+
         characteristic = MainActivity.gattCommandCharacteristic;
         if (characteristic != null) {
             // Read config
@@ -130,6 +134,12 @@ public class FWConfigActivity extends AppCompatActivity {
         Log.d(TAG, "In onResume");
         super.onResume();
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        if ((characteristic != null) & (Data.getFirmwareVersion() == null)) {
+            // Get Version
+            byte[] getVersionCmd = {0x57, 0x52, 0x56};
+            characteristic.setValue(getVersionCmd);
+            BluetoothLeService.writeCharacteristic(characteristic);
+        }
     }
 
     @Override
@@ -295,12 +305,15 @@ public class FWConfigActivity extends AppCompatActivity {
                                 resetBtn.setVisibility(View.VISIBLE);
                             }
 
-                            // Write mode
-                            byte[] getVersionCmd = {0x57, 0x52, 0x56};
-                            characteristic.setValue(getVersionCmd);
-                            BluetoothLeService.writeCharacteristic(characteristic);
+                            if(Data.getFirmwareVersion() == null) {
+                                // Get Version
+                                byte[] getVersionCmd = {0x57, 0x52, 0x56};
+                                characteristic.setValue(getVersionCmd);
+                                BluetoothLeService.writeCharacteristic(characteristic);
+                            }
                         } else if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x56)){
                             String version = data[3] + "." + data[4];
+                            Data.setFirmwareVersion(Double.parseDouble(version));
                             fwVersionTV.setText(getString(R.string.fw_version_label) + " " + version);
                         }
 

@@ -2113,7 +2113,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        Log.d(TAG, "Keycode: " + keyCode);
+        Log.d(TAG, "onKeyUp Keycode: " + keyCode);
         int currentCellCount = Integer.parseInt(sharedPrefs.getString("CELL_COUNT","15"));
         //int maxCellCount = Integer.parseInt(sharedPrefs.getString("prefMaxCells","15"));
         int nextCellCount = 1;
@@ -2185,6 +2185,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             default:
                 return super.onKeyUp(keyCode, event);
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        Log.d(TAG, "onKeyDown Keycode: " + keyCode);
+        return super.onKeyDown(keyCode, event);
     }
 
     public static boolean isAccessibilityServiceEnabled(Context context, Class<?> accessibilityService) {

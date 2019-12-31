@@ -54,6 +54,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -273,6 +274,31 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 Data.setTime(c.getTime());
                 final Intent intent = new Intent(BluetoothLeService.ACTION_DATA_AVAILABLE);
                 MyApplication.getContext().sendBroadcast(intent);
+
+                //Send time to cluster
+                if (MainActivity.gattCommandCharacteristic != null) {
+                    BluetoothGattCharacteristic characteristic = MainActivity.gattCommandCharacteristic;
+                    //Get Current Time
+                    Date date = new Date();
+                    Calendar calendar = new GregorianCalendar();
+                    calendar.setTime(date);
+                    int year = calendar.get(Calendar.YEAR);
+                    //Add one to month {0 - 11}
+                    int month = calendar.get(Calendar.MONTH) + 1;
+                    int day = calendar.get(Calendar.DAY_OF_MONTH);
+                    int hour = calendar.get(Calendar.HOUR);
+                    int minute = calendar.get(Calendar.MINUTE);
+                    int second = calendar.get(Calendar.SECOND);
+                    int yearByte = (year >> 4);
+                    byte yearLByte = (byte) year;
+                    int yearNibble = (yearLByte & 0x0F);
+                    byte monthNibble = (byte) month;
+                    int monthYearByte = ((yearNibble & 0x0F) << 4 | (monthNibble & 0x0F));
+                    byte[] setClusterClock = {0x57, 0x57, 0x44, 0x43, (byte) second, (byte) minute, (byte) hour, (byte) day, (byte) monthYearByte, (byte) yearByte};
+                    characteristic.setValue(setClusterClock);
+                    writeCharacteristic(characteristic);
+                }
+
             }
 
         }, 1000, 1000); //Initial Delay and Period for update (in milliseconds)

@@ -288,6 +288,15 @@ public class Data {
         Data.barometricPressure = barometricPressure;
     }
 
+    // firmware version
+    private static Double firmwareVersion;
+    public static Double getFirmwareVersion() {
+        return firmwareVersion;
+    }
+    public static void setFirmwareVersion(Double firmwareVersion){
+        Data.firmwareVersion = firmwareVersion;
+    }
+
     // Utility functions
     public static void clear(){
         Data.lastLocation = null;
