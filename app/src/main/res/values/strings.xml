@@ -85,11 +85,11 @@
     <string name="reset_header">Cluster Data Reset</string>
     <string name="reset_label">Item</string>
     <string-array name="resettype_array" translatable="false">
-        <item name="1">@string/trip1_label</item>
-        <item name="2">@string/trip2_label</item>
-        <item name="3">@string/fueleconomyone_label</item>
-        <item name="4">@string/fueleconomytwo_label</item>
-        <item name="5">@string/avgspeed_label</item>
+        <item name="1">@string/avgspeed_label</item>
+        <item name="2">@string/fueleconomyone_label</item>
+        <item name="3">@string/fueleconomytwo_label</item>
+        <item name="4">@string/trip1_label</item>
+        <item name="5">@string/trip2_label</item>
     </string-array>
     <string name="reset_btn_label">Reset</string>
     <!-- FWConfigActivity -->
