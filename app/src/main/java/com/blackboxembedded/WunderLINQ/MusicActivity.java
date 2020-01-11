@@ -361,8 +361,12 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
 
                     if (metaData.getBitmap(MediaMetadata.METADATA_KEY_ART) != null) {
                         mArtwork.setImageBitmap(scaleBitmap(metaData.getBitmap(MediaMetadata.METADATA_KEY_ART), 800, 800));
+                        mArtwork.clearColorFilter();
+                        mArtwork.setImageTintMode(null);
                     } else if (metaData.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART) != null) {
                         mArtwork.setImageBitmap(scaleBitmap(metaData.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART), 800, 800));
+                        mArtwork.clearColorFilter();
+                        mArtwork.setImageTintMode(null);
                     } else {
                         Log.d(TAG,"No art");
                         Drawable drawable = getResources().getDrawable(R.drawable.ic_music_note);

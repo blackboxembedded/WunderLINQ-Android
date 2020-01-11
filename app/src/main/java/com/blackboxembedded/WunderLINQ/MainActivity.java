@@ -25,7 +25,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -85,9 +84,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private boolean gridChange = false;
 
-    private Intent gattServiceIntent;
+    private Intent bluetoothLeService;
     public static BluetoothAdapter mBluetoothAdapter;
-    private Handler mHandler;
     private BluetoothLeService mBluetoothLeService;
     private BluetoothGattCharacteristic mNotifyCharacteristic;
     public static BluetoothGattCharacteristic gattCommandCharacteristic;
@@ -355,8 +353,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         showActionBar();
 
-        mHandler = new Handler();
-
         // Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
@@ -583,8 +579,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         registerReceiver(mBondingBroadcast,new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
 
-        gattServiceIntent = new Intent(MainActivity.this, BluetoothLeService.class);
-        startService(new Intent(MainActivity.this, BluetoothLeService.class));
+        bluetoothLeService = new Intent(MainActivity.this, BluetoothLeService.class);
+        startService(bluetoothLeService);
 
         if (!sharedPrefs.getBoolean("prefMotorcycleData", false)){
             gridChange = true;
@@ -853,7 +849,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         } catch (IllegalArgumentException e){
             Log.d(TAG,e.toString());
         }
-        mBluetoothLeService = null;
     }
 
     @Override
@@ -870,7 +865,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         } catch (IllegalArgumentException e){
             Log.d(TAG,e.toString());
         }
-        mBluetoothLeService = null;
     }
 
     @Override
@@ -978,14 +972,15 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {
+            Log.d(TAG, "In onServiceConnected");
             mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
             if (!mBluetoothLeService.initialize()) {
-                Log.e(TAG, "Unable to initialize Bluetooth");
+                Log.d(TAG, "Unable to initialize Bluetooth");
                 finish();
             }
             // Automatically connects to the device upon successful start-up initialization.
             if (mBluetoothLeService.mConnectionState == BluetoothLeService.STATE_DISCONNECTED) {
-                Log.e(TAG, "In onServiceCOnnected Disconnected,reconnected");
+                Log.d(TAG, "In onServiceConnected Disconnected, Connecting...");
                 mBluetoothLeService.connect(mDeviceAddress, getString(R.string.device_name));
             }
         }
@@ -1038,7 +1033,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             return;
         } else if (wlqCnt == 1){
             Log.d(TAG, "Connecting to Address: " + mDeviceAddress);
-            bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+            bindService(bluetoothLeService, mServiceConnection, BIND_AUTO_CREATE);
             return;
         } else if (wlqCnt > 1){
             Log.d(TAG, "Too many WunderLINQ pairings: " + wlqCnt);
