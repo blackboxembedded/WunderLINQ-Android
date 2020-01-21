@@ -744,6 +744,10 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                             //Mapfactor Navigator
                             navIntent.setPackage("com.mapfactor.navigator");
                             url = "http://maps.google.com/maps";
+                        } else if (navApp.equals("8")) {
+                            //Sygic
+                            //https://www.sygic.com/developers/professional-navigation-sdk/android/api-examples/custom-url
+                            url = "com.sygic.aura://";
                         }
                         try {
                             navIntent.setData(Uri.parse(url));
@@ -823,6 +827,10 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                                                 //Mapfactor Navigator
                                                 homeNavIntent.setPackage("com.mapfactor.navigator");
                                                 navUrl = "http://maps.google.com/maps?f=d&daddr=@"  + location.latitude + "," + location.longitude + "&navigate=yes";
+                                            } else if (navApp.equals("8")) {
+                                                //Sygic
+                                                //https://www.sygic.com/developers/professional-navigation-sdk/android/api-examples/custom-url
+                                                navUrl = "com.sygic.aura://coordinate|"  + location.longitude + "|" + location.latitude + "|drive";
                                             }
                                             Log.d(TAG,"NavURL: " + navUrl);
                                             if (!navApp.equals("6")) {

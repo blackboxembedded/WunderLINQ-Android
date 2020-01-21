@@ -156,6 +156,12 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
                         //Mapfactor Navigator
                         navIntent.setPackage("com.mapfactor.navigator");
                         navUrl = "http://maps.google.com/maps?f=d&daddr=@"  + record.getData() + "&navigate=yes";
+                    } else if (navApp.equals("8")) {
+                        //Sygic
+                        //https://www.sygic.com/developers/professional-navigation-sdk/android/api-examples/custom-url
+                        String latlon[] = record.getData().split(",");
+                        navUrl = "com.sygic.aura://coordinate|"  + latlon[1] + "|" + latlon[0] + "|drive";
+                        //navUrl = "com.sygic.aura://coordinate|"  + latlon[1] + "|" + latlon[0] + "|drive&&&back_button|com.blackboxembedded.wunderlinq";
                     }
                     if (!navApp.equals("6")) {
                         try {
