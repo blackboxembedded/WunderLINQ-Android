@@ -2404,7 +2404,6 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 Data.setTime(c.getTime());
                 final Intent intent = new Intent(BluetoothLeService.ACTION_DATA_AVAILABLE);
                 MyApplication.getContext().sendBroadcast(intent);
-
                 //Send time to cluster
                 if (MainActivity.gattCommandCharacteristic != null) {
                     BluetoothGattCharacteristic characteristic = MainActivity.gattCommandCharacteristic;
