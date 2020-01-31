@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -35,8 +38,8 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
     private GoogleMap googleMap;
     private EditText etSearch;
     private Button btSearch;
-    private TextView tvLatitude;
-    private TextView tvLongitude;
+    private EditText etLatitude;
+    private EditText etLongitude;
     private EditText etLabel;
     private Button btSave;
 
@@ -49,19 +52,58 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
         etSearch = findViewById(R.id.etSearch);
         btSearch = findViewById(R.id.btSearch);
         btSearch.setOnClickListener(mClickListener);
-        tvLatitude = findViewById(R.id.tvLatitude);
-        tvLongitude = findViewById(R.id.tvLongitude);
+        etLatitude = findViewById(R.id.etLatitude);
+        etLongitude = findViewById(R.id.etLongitude);
         etLabel = findViewById(R.id.etLabel);
         btSave = findViewById(R.id.btSave);
         btSave.setOnClickListener(mClickListener);
+
+        etLatitude.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+                    LatLng latLong = new LatLng(Double.parseDouble(etLatitude.getText().toString()), Double.parseDouble(etLongitude.getText().toString()));
+                    if(etLatitude.getText().toString().matches(Utils.LATITUDE_PATTERN) && etLongitude.getText().toString().matches(Utils.LONGITUDE_PATTERN)){
+                        googleMap.clear();
+                        googleMap.addMarker(new MarkerOptions().position(latLong));
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLong,15));
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+        etLongitude.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+                    LatLng latLong = new LatLng(Double.parseDouble(etLatitude.getText().toString()), Double.parseDouble(etLongitude.getText().toString()));
+                    if(etLatitude.getText().toString().matches(Utils.LATITUDE_PATTERN) && etLongitude.getText().toString().matches(Utils.LONGITUDE_PATTERN)){
+                        googleMap.clear();
+                        googleMap.addMarker(new MarkerOptions().position(latLong));
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLong,15));
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
 
         FragmentManager myFragmentManager = getSupportFragmentManager();
         SupportMapFragment mapFragment = (SupportMapFragment) myFragmentManager.findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         if (Data.getLastLocation() != null) {
-            tvLatitude.setText(String.valueOf(Data.getLastLocation().getLatitude()));
-            tvLongitude.setText(String.valueOf(Data.getLastLocation().getLongitude()));
+            etLatitude.setText(String.valueOf(Data.getLastLocation().getLatitude()));
+            etLongitude.setText(String.valueOf(Data.getLastLocation().getLongitude()));
         }
     }
 
@@ -78,8 +120,8 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
             public void onMapClick(LatLng point) {
                 googleMap.clear();
                 googleMap.addMarker(new MarkerOptions().position(point));
-                tvLatitude.setText(String.valueOf(point.latitude));
-                tvLongitude.setText(String.valueOf(point.longitude));
+                etLatitude.setText(String.valueOf(point.latitude));
+                etLongitude.setText(String.valueOf(point.longitude));
             }
         });
 
@@ -142,8 +184,9 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
                 if (address.size() > 0) {
                     Address location = address.get(0);
                     LatLng latLong = new LatLng(location.getLatitude(), location.getLongitude());
-                    tvLatitude.setText(String.valueOf(location.getLatitude()));
-                    tvLongitude.setText(String.valueOf(location.getLongitude()));
+                    etLatitude.setText(String.valueOf(location.getLatitude()));
+                    etLongitude.setText(String.valueOf(location.getLongitude()));
+                    googleMap.clear();
                     googleMap.addMarker(new MarkerOptions().position(latLong));
                     googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLong,15));
                 } else {
@@ -158,7 +201,7 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
     }
 
     private void saveWaypoint(){
-        if(!tvLatitude.getText().equals("") && !tvLongitude.getText().equals("")) {
+        if(!etLatitude.getText().equals("") && !etLongitude.getText().equals("")) {
             // Get current date/time
             Calendar cal = Calendar.getInstance();
             Date date = cal.getTime();
@@ -169,7 +212,7 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
             WaypointDatasource datasource = new WaypointDatasource(this);
             datasource.open();
 
-            String waypoint = tvLatitude.getText().toString() + "," + tvLongitude.getText().toString();
+            String waypoint = etLatitude.getText().toString() + "," + etLongitude.getText().toString();
             String label = etLabel.getText().toString();
             WaypointRecord record = new WaypointRecord(curdatetime, waypoint, label);
             datasource.addRecord(record);

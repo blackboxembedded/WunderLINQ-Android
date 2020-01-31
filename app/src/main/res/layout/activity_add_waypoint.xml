@@ -98,16 +98,22 @@
             android:textSize="18sp"
             android:textStyle="bold"/>
 
-        <TextView
-            android:id="@+id/tvLatitude"
-            android:layout_weight="1"
+        <EditText
+            android:id="@+id/etLatitude"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?attr/backgroundColor"
+            android:ems="10"
+            android:hint="@string/waypoint_view_tv_lat_label"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no"
+            android:inputType="numberSigned|numberDecimal"
             android:text=""
             android:textAlignment="viewStart"
             android:textColor="?attr/primaryTextColor"
             android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
@@ -134,16 +140,22 @@
             android:textSize="18sp"
             android:textStyle="bold"/>
 
-        <TextView
-            android:id="@+id/tvLongitude"
+        <EditText
+            android:id="@+id/etLongitude"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/waypoint_view_tv_lon_label"
+            android:imeOptions="actionDone"
+            android:inputType="textPersonName"
             android:text=""
             android:textAlignment="viewStart"
+            android:background="?attr/backgroundColor"
             android:textColor="?attr/primaryTextColor"
             android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:importantForAutofill="no"/>
     </LinearLayout>
 
     <LinearLayout
