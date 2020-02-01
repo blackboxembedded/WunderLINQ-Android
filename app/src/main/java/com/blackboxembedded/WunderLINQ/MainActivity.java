@@ -746,7 +746,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     case R.id.action_exit:
                         BluetoothLeService.clearNotifications();
                         stopService(bluetoothLeService);
-                        finish();
+                        finishAndRemoveTask();
                         break;
                 }
                 return true;

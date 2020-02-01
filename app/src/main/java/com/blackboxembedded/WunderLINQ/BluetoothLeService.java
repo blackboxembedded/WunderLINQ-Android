@@ -92,20 +92,21 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
     private static Date RTholdStartTime;
     private static boolean RTholdStart = false;
 
-    private static SensorManager sensorManager;
-    private static Sensor accelerometer;
-    private static Sensor magnetometer;
-    private static Sensor rotationVector;
-    private static Sensor gravity;
-    private static Sensor barometer;
-    private static Sensor acceleration;
-    private static Sensor lightSensor;
-
-    private static Timer updateTimer;
+    private SensorManager sensorManager;
+    private Sensor accelerometer;
+    private Sensor magnetometer;
+    private Sensor rotationVector;
+    private Sensor gravity;
+    private Sensor barometer;
+    private Sensor acceleration;
+    private Sensor lightSensor;
 
     static boolean itsDark = false;
-    private static long darkTimer = 0;
-    private static long lightTimer = 0;
+    private long darkTimer = 0;
+    private long lightTimer = 0;
+
+    int xAxis = SensorManager.AXIS_X;
+    int yAxis = SensorManager.AXIS_Z;
 
     /*
      * time smoothing constant for low-pass filter
@@ -114,14 +115,14 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
      * See: http://en.wikipedia.org/wiki/Low-pass_filter#Discrete-time_realization
      */
     static final float ALPHA = 0.05f;
-    static float[] mGravity = new float[3];
-    static float[] mGeomagnetic = new float[3];
-    static float[] mAcceleration = new float[3];
+    float[] mGravity = new float[3];
+    float[] mGeomagnetic = new float[3];
+    float[] mAcceleration = new float[3];
 
     LocationRequest locationRequest;
     GoogleApiClient googleApiClient;
 
-    private static int lastDirection;
+    private int lastDirection;
 
     private static byte[] lastMessage00 = new byte[8];
     private static byte[] lastMessage01 = new byte[8];
@@ -246,6 +247,14 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
         acceleration = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 
+        sensorManager.registerListener(sensorEventListener, accelerometer, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(sensorEventListener, magnetometer, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(sensorEventListener, rotationVector, SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(sensorEventListener, gravity, SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(sensorEventListener, barometer, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(sensorEventListener, acceleration, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+
         // Location stuff
         createLocationRequest();
 
@@ -256,8 +265,43 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 .build();
         googleApiClient.connect();
 
-        updateTimer = new Timer();
+        Timer t = new Timer();
+        t.scheduleAtFixedRate(new TimerTask()
+        {
+            @Override
+            public void run() {
+                Calendar c = Calendar.getInstance();
+                Data.setTime(c.getTime());
+                final Intent intent = new Intent(BluetoothLeService.ACTION_DATA_AVAILABLE);
+                MyApplication.getContext().sendBroadcast(intent);
 
+                //Send time to cluster
+                if (MainActivity.gattCommandCharacteristic != null) {
+                    BluetoothGattCharacteristic characteristic = MainActivity.gattCommandCharacteristic;
+                    //Get Current Time
+                    Date date = new Date();
+                    Calendar calendar = new GregorianCalendar();
+                    calendar.setTime(date);
+                    int year = calendar.get(Calendar.YEAR);
+                    //Add one to month {0 - 11}
+                    int month = calendar.get(Calendar.MONTH) + 1;
+                    int day = calendar.get(Calendar.DAY_OF_MONTH);
+                    int hour = calendar.get(Calendar.HOUR);
+                    int minute = calendar.get(Calendar.MINUTE);
+                    int second = calendar.get(Calendar.SECOND);
+                    int yearByte = (year >> 4);
+                    byte yearLByte = (byte) year;
+                    int yearNibble = (yearLByte & 0x0F);
+                    byte monthNibble = (byte) month;
+                    int monthYearByte = ((yearNibble & 0x0F) << 4 | (monthNibble & 0x0F));
+                    byte[] setClusterClock = {0x57, 0x57, 0x44, 0x43, (byte) second, (byte) minute, (byte) hour, (byte) day, (byte) monthYearByte, (byte) yearByte};
+                    characteristic.setValue(setClusterClock);
+                    writeCharacteristic(characteristic);
+                }
+
+            }
+
+        }, 1000, 1000); //Initial Delay and Period for update (in milliseconds)
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -297,14 +341,13 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
         sensorManager.unregisterListener(sensorEventListener, barometer);
         sensorManager.unregisterListener(sensorEventListener, acceleration);
         sensorManager.unregisterListener(sensorEventListener, lightSensor);
-        updateTimer.cancel();
 
         stopLocationUpdates();
         googleApiClient.disconnect();
     }
 
     // Listens for sensor events
-    private static final SensorEventListener sensorEventListener
+    private final SensorEventListener sensorEventListener
             = new SensorEventListener() {
 
         @Override
@@ -437,10 +480,6 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 synchronized (mGattCallback) {
                     mConnectionState = STATE_CONNECTED;
                 }
-
-                if( mBluetoothDeviceName.equals(MyApplication.getContext().getString(R.string.device_name))){
-                    startUp();
-                }
                 broadcastConnectionUpdate(intentAction);
                 String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
                         "Connection established";
@@ -452,14 +491,10 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 synchronized (mGattCallback) {
                     mConnectionState = STATE_DISCONNECTED;
                 }
-
                 broadcastConnectionUpdate(intentAction);
                 String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
                         "Disconnected";
                 Log.d(TAG,dataLog);
-                if( mBluetoothDeviceName.equals(MyApplication.getContext().getString(R.string.device_name))){
-                    shutDown();
-                }
                 /*
                 lastMessage00 = new byte[8];
                 lastMessage01 = new byte[8];
@@ -2317,7 +2352,7 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
         }
     }
 
-    private static int filterChange(int newDir){
+    private int filterChange(int newDir){
         int change = newDir - lastDirection;
         int circularChange = newDir-(lastDirection+360);
         int smallestChange;
@@ -2383,66 +2418,5 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-    }
-
-    private static void startUp(){
-        Log.d(TAG,"In startUp");
-        sensorManager.registerListener(sensorEventListener, accelerometer, SensorManager.SENSOR_DELAY_UI);
-        sensorManager.registerListener(sensorEventListener, magnetometer, SensorManager.SENSOR_DELAY_UI);
-        sensorManager.registerListener(sensorEventListener, rotationVector, SensorManager.SENSOR_DELAY_GAME);
-        sensorManager.registerListener(sensorEventListener, gravity, SensorManager.SENSOR_DELAY_GAME);
-        sensorManager.registerListener(sensorEventListener, barometer, SensorManager.SENSOR_DELAY_UI);
-        sensorManager.registerListener(sensorEventListener, acceleration, SensorManager.SENSOR_DELAY_UI);
-        sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
-
-        updateTimer = new Timer();
-        updateTimer.scheduleAtFixedRate(new TimerTask()
-        {
-            @Override
-            public void run() {
-                Calendar c = Calendar.getInstance();
-                Data.setTime(c.getTime());
-                final Intent intent = new Intent(BluetoothLeService.ACTION_DATA_AVAILABLE);
-                MyApplication.getContext().sendBroadcast(intent);
-                //Send time to cluster
-                if (MainActivity.gattCommandCharacteristic != null) {
-                    BluetoothGattCharacteristic characteristic = MainActivity.gattCommandCharacteristic;
-                    //Get Current Time
-                    Date date = new Date();
-                    Calendar calendar = new GregorianCalendar();
-                    calendar.setTime(date);
-                    int year = calendar.get(Calendar.YEAR);
-                    //Add one to month {0 - 11}
-                    int month = calendar.get(Calendar.MONTH) + 1;
-                    int day = calendar.get(Calendar.DAY_OF_MONTH);
-                    int hour = calendar.get(Calendar.HOUR_OF_DAY);
-                    int minute = calendar.get(Calendar.MINUTE);
-                    int second = calendar.get(Calendar.SECOND);
-                    int yearByte = (year >> 4);
-                    byte yearLByte = (byte) year;
-                    int yearNibble = (yearLByte & 0x0F);
-                    byte monthNibble = (byte) month;
-                    int monthYearByte = ((yearNibble & 0x0F) << 4 | (monthNibble & 0x0F));
-                    byte[] setClusterClock = {0x57, 0x57, 0x44, 0x43, (byte) second, (byte) minute, (byte) hour, (byte) day, (byte) monthYearByte, (byte) yearByte};
-                    characteristic.setValue(setClusterClock);
-                    writeCharacteristic(characteristic);
-                }
-
-            }
-
-        }, 1000, 1000); //Initial Delay and Period for update (in milliseconds)
-    }
-
-    private static void shutDown(){
-        Log.d(TAG,"In shutDown");
-        sensorManager.unregisterListener(sensorEventListener, magnetometer);
-        sensorManager.unregisterListener(sensorEventListener, accelerometer);
-        sensorManager.unregisterListener(sensorEventListener, rotationVector);
-        sensorManager.unregisterListener(sensorEventListener, gravity);
-        sensorManager.unregisterListener(sensorEventListener, barometer);
-        sensorManager.unregisterListener(sensorEventListener, acceleration);
-        sensorManager.unregisterListener(sensorEventListener, lightSensor);
-        updateTimer.cancel();
-        close();
     }
 }
