@@ -1484,13 +1484,18 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 label = getString(R.string.ambient_temp_label) + " (" + temperatureUnit + ")";
                 if(Data.getAmbientTemperature() != null ){
                     Double ambientTemp = Data.getAmbientTemperature();
+                    if(ambientTemp <= 0){
+                        icon = getResources().getDrawable(R.drawable.ic_snowflake);
+                    } else {
+                        icon = getResources().getDrawable(R.drawable.ic_thermometer_half);
+                    }
                     if (temperatureFormat.contains("1")) {
                         // F
                         ambientTemp = Utils.celsiusToFahrenheit(ambientTemp);
                     }
                     value = String.valueOf(Math.round(ambientTemp));
                 }
-                icon = getResources().getDrawable(R.drawable.ic_thermometer_half);
+
                 break;
             case 3:
                 //FrontTire
@@ -1557,6 +1562,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Double throttlePosition = Data.getThrottlePosition();
                     value = String.valueOf(Math.round(throttlePosition));
                 }
+                icon = getResources().getDrawable(R.drawable.ic_signature);
                 break;
             case 8:
                 //Front Brakes
@@ -1592,7 +1598,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = Utils.oneDigit.format(trip1);
                 }
-                icon = getResources().getDrawable(R.drawable.ic_route);
+                icon = getResources().getDrawable(R.drawable.ic_suitcase);
                 break;
             case 12:
                 //Trip 2
@@ -1604,7 +1610,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = Utils.oneDigit.format(trip2);
                 }
-                icon = getResources().getDrawable(R.drawable.ic_route);
+                icon = getResources().getDrawable(R.drawable.ic_suitcase);
                 break;
             case 13:
                 //Trip Auto
@@ -1616,7 +1622,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = Utils.oneDigit.format(tripauto);
                 }
-                icon = getResources().getDrawable(R.drawable.ic_road);
+                icon = getResources().getDrawable(R.drawable.ic_suitcase);
                 break;
             case 14:
                 //Speed
@@ -1705,6 +1711,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Double leanAngle = Data.getLeanAngle();
                     value = String.valueOf(Math.round(leanAngle));
                 }
+                icon = getResources().getDrawable(R.drawable.ic_ruler_combined);
                 break;
             case 22:
                 //g-force
