@@ -1,0 +1,36 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="80dp"
+    android:viewportWidth="100"
+    android:viewportHeight="80">
+  <path
+      android:pathData="M20.343,4.486C21.526,22.314 10.2,26.349 11.406,40.502C11.92,54.983 20.67,61.56 21.81,69.582L22.166,75.406L31.415,75.451L31.148,68.514L36.083,68.514L36.217,75.495L43.286,75.495L43.286,68.381L47.422,68.381L47.555,75.451L53.824,75.451L53.824,68.381L57.96,68.381L58.093,75.495L65.029,75.495L65.163,68.114L69.565,68.114L69.565,75.451L78.858,75.495L79.035,69.181C79.024,61.041 89.557,59.141 89.307,39.302C89.538,25.353 79.675,22.489 79.969,4.486L71.832,4.353C71.913,8.264 70.679,14.062 73.3,17.025C94.491,40.833 79.455,56.816 73.433,64.513L27.946,64.379C16.2,51.918 10.066,37.863 26.879,17.292C29.995,12.751 28.684,8.703 28.88,4.486L20.343,4.486z"
+      android:strokeAlpha="1"
+      android:strokeLineJoin="miter"
+      android:strokeWidth="1"
+      android:fillColor="#000000"
+      android:fillAlpha="1"
+      android:strokeColor="#00000000"
+      android:fillType="evenOdd"
+      android:strokeLineCap="butt"/>
+  <path
+      android:pathData="M50.423,10.359L50.423,10.359A5.525,5.002 90,0 1,55.425 15.884L55.425,38.845A5.525,5.002 90,0 1,50.423 44.37L50.423,44.37A5.525,5.002 90,0 1,45.421 38.845L45.421,15.884A5.525,5.002 90,0 1,50.423 10.359z"
+      android:strokeAlpha="1"
+      android:strokeLineJoin="round"
+      android:strokeWidth="5"
+      android:fillColor="#000000"
+      android:fillAlpha="1"
+      android:strokeColor="#00000000"
+      android:fillType="evenOdd"
+      android:strokeLineCap="square"/>
+  <path
+      android:pathData="M55.145,52.981A4.995,4.995 121.49,1 1,45.154 52.981A4.995,4.995 121.49,1 1,55.145 52.981z"
+      android:strokeAlpha="1"
+      android:strokeLineJoin="round"
+      android:strokeWidth="5"
+      android:fillColor="#000000"
+      android:fillAlpha="1"
+      android:strokeColor="#00000000"
+      android:fillType="evenOdd"
+      android:strokeLineCap="square"/>
+</vector>

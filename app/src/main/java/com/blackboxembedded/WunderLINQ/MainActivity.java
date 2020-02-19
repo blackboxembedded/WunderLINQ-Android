@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,6 +43,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
@@ -53,6 +55,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.gridlayout.widget.GridLayout;
 
 import java.text.SimpleDateFormat;
@@ -78,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private ImageButton faultButton;
     private ImageButton btButton;
     private GridLayout gridLayout;
-    private LinearLayout layout1;
+    private ConstraintLayout layout1;
 
     private SharedPreferences sharedPrefs;
 
@@ -161,12 +164,20 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         View view = findViewById(R.id.layout_main);
         gridLayout = findViewById(R.id.gridLayout);
         if (!sharedPrefs.getBoolean("prefMotorcycleData", false)){
+
+            boolean portrait = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
+
             int currentCellCount = Integer.parseInt(sharedPrefs.getString("CELL_COUNT","15"));
             switch(currentCellCount){
                 case 15:
                     gridLayout.removeAllViews();
-                    gridLayout.setColumnCount(3);
-                    gridLayout.setRowCount(5);
+                    if (portrait) {
+                        gridLayout.setColumnCount(3);
+                        gridLayout.setRowCount(5);
+                    } else {
+                        gridLayout.setColumnCount(5);
+                        gridLayout.setRowCount(3);
+                    }
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false));
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem2, gridLayout, false));
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem3, gridLayout, false));
@@ -202,13 +213,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     break;
                 case 8:
                     gridLayout.removeAllViews();
-                    if (getResources().getConfiguration().orientation == 2) {
-                        //Landscape
-                        gridLayout.setColumnCount(4);
-                        gridLayout.setRowCount(2);
-                    } else {
+                    if (portrait) {
                         gridLayout.setColumnCount(2);
                         gridLayout.setRowCount(4);
+                    } else {
+                        gridLayout.setColumnCount(4);
+                        gridLayout.setRowCount(2);
                     }
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false));
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem2, gridLayout, false));
@@ -221,13 +231,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     break;
                 case 4:
                     gridLayout.removeAllViews();
-                    if(getResources().getConfiguration().orientation == 2) {
-                        //Landscape
-                        gridLayout.setColumnCount(2);
-                        gridLayout.setRowCount(2);
-                    } else {
+                    if (portrait) {
                         gridLayout.setColumnCount(1);
                         gridLayout.setRowCount(4);
+                    } else {
+                        gridLayout.setColumnCount(2);
+                        gridLayout.setRowCount(2);
                     }
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false));
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem2, gridLayout, false));
@@ -236,13 +245,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     break;
                 case 2:
                     gridLayout.removeAllViews();
-                    if(getResources().getConfiguration().orientation == 2) {
-                        //Landscape
-                        gridLayout.setColumnCount(2);
-                        gridLayout.setRowCount(1);
-                    } else {
+                    if (portrait) {
                         gridLayout.setColumnCount(1);
                         gridLayout.setRowCount(2);
+                    } else {
+                        gridLayout.setColumnCount(2);
+                        gridLayout.setRowCount(1);
                     }
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false));
                     gridLayout.addView(layoutInflater.inflate(R.layout.layout_griditem2, gridLayout, false));
@@ -376,7 +384,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         // Checks if Bluetooth is supported on the device.
         if (mBluetoothAdapter == null) {
             Toast.makeText(this, R.string.bt_not_supported, Toast.LENGTH_LONG).show();
-
             Log.d(TAG, "Brand: " + Build.BRAND);
             Log.d(TAG, "Device: " + Build.DEVICE);
             //Only quit if on a real device
@@ -389,155 +396,163 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             return;
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            // Check Read Contacts permissions
-            if (this.checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED){
-                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(getString(R.string.contacts_alert_title));
-                builder.setMessage(getString(R.string.contacts_alert_body));
-                builder.setPositiveButton(android.R.string.ok, null);
-                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @TargetApi(23)
-                    public void onDismiss(DialogInterface dialog) {
-                        requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
-                    }
-                });
-                builder.show();
-            }
-            // Check Camera permissions
-            if (this.checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(getString(R.string.camera_alert_title));
-                builder.setMessage(getString(R.string.camera_alert_body));
-                builder.setPositiveButton(android.R.string.ok, null);
-                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @TargetApi(23)
-                    public void onDismiss(DialogInterface dialog) {
-                        requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
-                    }
-                });
-                builder.show();
-            }
-            // Check Call phone permissions
-            if (this.checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
-                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(getString(R.string.call_alert_title));
-                builder.setMessage(getString(R.string.call_alert_body));
-                builder.setPositiveButton(android.R.string.ok, null);
-                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @TargetApi(23)
-                    public void onDismiss(DialogInterface dialog) {
-                        requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, PERMISSION_REQUEST_CALL_PHONE);
-                    }
-                });
-                builder.show();
-            }
-            // Check Read Audio permissions
-            if (this.checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
-                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(getString(R.string.record_audio_alert_title));
-                builder.setMessage(getString(R.string.record_audio_alert_body));
-                builder.setPositiveButton(android.R.string.ok, null);
-                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @TargetApi(23)
-                    public void onDismiss(DialogInterface dialog) {
-                        requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSION_REQUEST_RECORD_AUDIO);
-                    }
-                });
-                builder.show();
-            }
-            // Check Write permissions
-            if (this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(getString(R.string.write_alert_title));
-                builder.setMessage(getString(R.string.write_alert_body));
-                builder.setPositiveButton(android.R.string.ok, null);
-                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @TargetApi(23)
-                    public void onDismiss(DialogInterface dialog) {
-                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_WRITE_STORAGE);
-                    }
-                });
-                builder.show();
-            }
-            // Check Location permissions
-            if (this.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(getString(R.string.location_alert_title));
-                builder.setMessage(getString(R.string.location_alert_body));
-                builder.setPositiveButton(android.R.string.ok, null);
-                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @TargetApi(23)
-                    public void onDismiss(DialogInterface dialog) {
-                        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_FINE_LOCATION);
-                    }
-                });
-                builder.show();
-            }
-            // Check overlay permissions
-            if (!Settings.canDrawOverlays(this)) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(getString(R.string.overlay_alert_title));
-                builder.setMessage(getString(R.string.overlay_alert_body));
-                builder.setPositiveButton(android.R.string.ok, null);
-                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @TargetApi(23)
-                    public void onDismiss(DialogInterface dialog) {
-                        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                Uri.parse("package:" + getPackageName()));
-                        startActivity(intent);
-                    }
-                });
-                builder.show();
-            }
-        }
-        // Check read notification permissions
-        if (Settings.Secure.getString(this.getContentResolver(),"enabled_notification_listeners") == null
-                || !Settings.Secure.getString(this.getContentResolver(),"enabled_notification_listeners").contains(getApplicationContext().getPackageName())) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(getString(R.string.notification_alert_title));
-            builder.setMessage(getString(R.string.notification_alert_body));
-            builder.setPositiveButton(android.R.string.ok, null);
-            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @TargetApi(23)
-                public void onDismiss(DialogInterface dialog) {
-                    startActivity(new Intent(
-                            "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+        // First run Dialog
+        if (sharedPrefs.getBoolean("FIRST_LAUNCH",true)){
+            //TODO: Nice pro
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                // Check Read Contacts permissions
+                if (this.checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED){
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.contacts_alert_title));
+                    builder.setMessage(getString(R.string.contacts_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @TargetApi(23)
+                        public void onDismiss(DialogInterface dialog) {
+                            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
+                        }
+                    });
+                    builder.show();
                 }
-            });
-            builder.show();
-        }
-        //Check usage stats permissions
-        AppOpsManager appOps = (AppOpsManager) this.getSystemService(Context.APP_OPS_SERVICE);
-        int mode = appOps.checkOpNoThrow(OPSTR_GET_USAGE_STATS, myUid(), this.getPackageName());
-        if (mode != MODE_ALLOWED) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(getString(R.string.usagestats_alert_title));
-            builder.setMessage(getString(R.string.usagestats_alert_body));
-            builder.setPositiveButton(android.R.string.ok, null);
-            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @TargetApi(23)
-                public void onDismiss(DialogInterface dialog) {
-                    startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                // Check Camera permissions
+                if (this.checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.camera_alert_title));
+                    builder.setMessage(getString(R.string.camera_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @TargetApi(23)
+                        public void onDismiss(DialogInterface dialog) {
+                            requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
+                        }
+                    });
+                    builder.show();
                 }
-            });
-            builder.show();
-        }
+                // Check Call phone permissions
+                if (this.checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.call_alert_title));
+                    builder.setMessage(getString(R.string.call_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @TargetApi(23)
+                        public void onDismiss(DialogInterface dialog) {
+                            requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, PERMISSION_REQUEST_CALL_PHONE);
+                        }
+                    });
+                    builder.show();
+                }
+                // Check Read Audio permissions
+                if (this.checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.record_audio_alert_title));
+                    builder.setMessage(getString(R.string.record_audio_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @TargetApi(23)
+                        public void onDismiss(DialogInterface dialog) {
+                            requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSION_REQUEST_RECORD_AUDIO);
+                        }
+                    });
+                    builder.show();
+                }
+                // Check Write permissions
+                if (this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.write_alert_title));
+                    builder.setMessage(getString(R.string.write_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @TargetApi(23)
+                        public void onDismiss(DialogInterface dialog) {
+                            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_WRITE_STORAGE);
+                        }
+                    });
+                    builder.show();
+                }
+                // Check Location permissions
+                if (this.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.location_alert_title));
+                    builder.setMessage(getString(R.string.location_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @TargetApi(23)
+                        public void onDismiss(DialogInterface dialog) {
+                            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_FINE_LOCATION);
+                        }
+                    });
+                    builder.show();
+                }
+                // Check overlay permissions
+                if (!Settings.canDrawOverlays(this)) {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.overlay_alert_title));
+                    builder.setMessage(getString(R.string.overlay_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @TargetApi(23)
+                        public void onDismiss(DialogInterface dialog) {
+                            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                    Uri.parse("package:" + getPackageName()));
+                            startActivity(intent);
+                        }
+                    });
+                    builder.show();
+                }
+            }
+            // Check read notification permissions
+            if (Settings.Secure.getString(this.getContentResolver(),"enabled_notification_listeners") == null
+                    || !Settings.Secure.getString(this.getContentResolver(),"enabled_notification_listeners").contains(getApplicationContext().getPackageName())) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(getString(R.string.notification_alert_title));
+                builder.setMessage(getString(R.string.notification_alert_body));
+                builder.setPositiveButton(android.R.string.ok, null);
+                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @TargetApi(23)
+                    public void onDismiss(DialogInterface dialog) {
+                        startActivity(new Intent(
+                                "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+                    }
+                });
+                builder.show();
+            }
+            //Check usage stats permissions
+            AppOpsManager appOps = (AppOpsManager) this.getSystemService(Context.APP_OPS_SERVICE);
+            int mode = appOps.checkOpNoThrow(OPSTR_GET_USAGE_STATS, myUid(), this.getPackageName());
+            if (mode != MODE_ALLOWED) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(getString(R.string.usagestats_alert_title));
+                builder.setMessage(getString(R.string.usagestats_alert_body));
+                builder.setPositiveButton(android.R.string.ok, null);
+                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @TargetApi(23)
+                    public void onDismiss(DialogInterface dialog) {
+                        startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                    }
+                });
+                builder.show();
+            }
 
-        if (!isAccessibilityServiceEnabled(MainActivity.this, MyAccessibilityService.class)) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(getString(R.string.accessibilityservice_alert_title));
-            builder.setMessage(getString(R.string.accessibilityservice_alert_body));
-            builder.setPositiveButton(android.R.string.ok, null);
-            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @TargetApi(23)
-                public void onDismiss(DialogInterface dialog) {
-                    Intent accessibilityIntent = new Intent();
-                    accessibilityIntent.setAction(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                    startActivity(accessibilityIntent);
-                }
-            });
-            builder.show();
+            if (!isAccessibilityServiceEnabled(MainActivity.this, MyAccessibilityService.class)) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(getString(R.string.accessibilityservice_alert_title));
+                builder.setMessage(getString(R.string.accessibilityservice_alert_body));
+                builder.setPositiveButton(android.R.string.ok, null);
+                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @TargetApi(23)
+                    public void onDismiss(DialogInterface dialog) {
+                        Intent accessibilityIntent = new Intent();
+                        accessibilityIntent.setAction(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                        startActivity(accessibilityIntent);
+                    }
+                });
+                builder.show();
+            }
+
+            SharedPreferences.Editor editor = sharedPrefs.edit();
+            editor.putBoolean("FIRST_LAUNCH", false);
+            editor.apply();
         }
 
         // Daily Disclaimer Warning
@@ -1234,12 +1249,18 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             if (inPIP) {
                 count = Integer.parseInt(sharedPrefs.getString("prefPIPCellCount", "4"));
             }
+            boolean portrait = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
             switch (count) {
                 case 15:
                     if (gridChange) {
                         gridLayout.removeAllViews();
-                        gridLayout.setColumnCount(3);
-                        gridLayout.setRowCount(5);
+                        if (portrait) {
+                            gridLayout.setColumnCount(3);
+                            gridLayout.setRowCount(5);
+                        } else {
+                            gridLayout.setColumnCount(5);
+                            gridLayout.setRowCount(3);
+                        }
                     }
 
                     // Cell One
@@ -1277,8 +1298,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 case 12:
                     if (gridChange) {
                         gridLayout.removeAllViews();
-                        gridLayout.setColumnCount(3);
-                        gridLayout.setRowCount(4);
+                        if (portrait) {
+                            gridLayout.setColumnCount(3);
+                            gridLayout.setRowCount(4);
+                        } else {
+                            gridLayout.setColumnCount(4);
+                            gridLayout.setRowCount(3);
+                        }
                     }
                     // Cell One
                     setCellText(1, cell1Data);
@@ -1309,13 +1335,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 case 8:
                     if (gridChange) {
                         gridLayout.removeAllViews();
-                        if (getResources().getConfiguration().orientation == 2) {
-                            //Landscape
-                            gridLayout.setColumnCount(4);
-                            gridLayout.setRowCount(2);
-                        } else {
+                        if (portrait) {
                             gridLayout.setColumnCount(2);
                             gridLayout.setRowCount(4);
+                        } else {
+                            gridLayout.setColumnCount(4);
+                            gridLayout.setRowCount(2);
                         }
                     }
                     // Cell One
@@ -1339,13 +1364,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 case 4:
                     if (gridChange) {
                         gridLayout.removeAllViews();
-                        if (getResources().getConfiguration().orientation == 2) {
-                            //Landscape
-                            gridLayout.setColumnCount(2);
-                            gridLayout.setRowCount(2);
-                        } else {
+                        if (portrait) {
                             gridLayout.setColumnCount(1);
                             gridLayout.setRowCount(4);
+                        } else {
+                            gridLayout.setColumnCount(2);
+                            gridLayout.setRowCount(2);
                         }
                     }
                     // Cell One
@@ -1361,13 +1385,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 case 2:
                     if (gridChange) {
                         gridLayout.removeAllViews();
-                        if (getResources().getConfiguration().orientation == 2) {
-                            //Landscape
-                            gridLayout.setColumnCount(2);
-                            gridLayout.setRowCount(1);
-                        } else {
+                        if (portrait) {
                             gridLayout.setColumnCount(1);
                             gridLayout.setRowCount(2);
+                        } else {
+                            gridLayout.setColumnCount(2);
+                            gridLayout.setRowCount(1);
                         }
                     }
                     // Cell One
@@ -1432,6 +1455,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         String label = "";
         String value = getString(R.string.blank_field);
+        Drawable icon = null;
 
         switch (dataPoint){
             case 0:
@@ -1440,6 +1464,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 if(Data.getGear() != null){
                     value = Data.getGear();
                 }
+                icon = getResources().getDrawable(R.drawable.ic_cog);
                 break;
             case 1:
                 //Engine
@@ -1452,6 +1477,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Math.round(engineTemp));
                 }
+                icon = getResources().getDrawable(R.drawable.ic_engine);
                 break;
             case 2:
                 //Ambient
@@ -1464,6 +1490,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Math.round(ambientTemp));
                 }
+                icon = getResources().getDrawable(R.drawable.ic_thermometer_half);
                 break;
             case 3:
                 //FrontTire
@@ -1482,6 +1509,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Utils.oneDigit.format(rdcFront));
                 }
+                icon = getResources().getDrawable(R.drawable.ic_tire_alert);
                 break;
             case 4:
                 //RearTire
@@ -1500,6 +1528,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Utils.oneDigit.format(rdcRear));
                 }
+                icon = getResources().getDrawable(R.drawable.ic_tire_alert);
                 break;
             case 5:
                 //Odometer
@@ -1519,6 +1548,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Double voltage = Data.getvoltage();
                     value = String.valueOf(Utils.oneDigit.format(voltage));
                 }
+                icon = getResources().getDrawable(R.drawable.ic_car_battery);
                 break;
             case 7:
                 //Throttle
@@ -1562,6 +1592,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = Utils.oneDigit.format(trip1);
                 }
+                icon = getResources().getDrawable(R.drawable.ic_route);
                 break;
             case 12:
                 //Trip 2
@@ -1573,6 +1604,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = Utils.oneDigit.format(trip2);
                 }
+                icon = getResources().getDrawable(R.drawable.ic_route);
                 break;
             case 13:
                 //Trip Auto
@@ -1584,6 +1616,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = Utils.oneDigit.format(tripauto);
                 }
+                icon = getResources().getDrawable(R.drawable.ic_road);
                 break;
             case 14:
                 //Speed
@@ -1595,6 +1628,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Math.round(speed));
                 }
+                icon = getResources().getDrawable(R.drawable.ic_tachometer_alt);
                 break;
             case 15:
                 //Average Speed
@@ -1617,6 +1651,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Utils.oneDigit.format(currentConsumption));
                 }
+                icon = getResources().getDrawable(R.drawable.ic_gas_pump);
                 break;
             case 17:
                 //Fuel Economy One
@@ -1628,6 +1663,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Utils.oneDigit.format(fuelEconomyOne));
                 }
+                icon = getResources().getDrawable(R.drawable.ic_gas_pump);
                 break;
             case 18:
                 //Fuel Economy Two
@@ -1639,6 +1675,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Utils.oneDigit.format(fuelEconomyTwo));
                 }
+                icon = getResources().getDrawable(R.drawable.ic_gas_pump);
                 break;
             case 19:
                 //Fuel Range
@@ -1650,6 +1687,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Math.round(fuelrange));
                 }
+                icon = getResources().getDrawable(R.drawable.ic_gas_pump);
                 break;
             case 20:
                 //Shifts
@@ -1658,6 +1696,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     int shifts = Data.getNumberOfShifts();
                     value = String.valueOf(shifts);
                 }
+                icon = getResources().getDrawable(R.drawable.ic_arrows_alt_v);
                 break;
             case 21:
                 //Lean Angle
@@ -1702,6 +1741,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = bearing;
                 }
+                icon = getResources().getDrawable(R.drawable.ic_compass);
                 break;
             case 24:
                 //time
@@ -1713,6 +1753,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = dateformat.format(Data.getTime());
                 }
+                icon = getResources().getDrawable(R.drawable.ic_clock);
                 break;
             case 25:
                 //barometric pressure
@@ -1732,6 +1773,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                 }
                 value = gpsSpeed;
+                icon = getResources().getDrawable(R.drawable.ic_tachometer_alt);
                 break;
             case 27:
                 //Altitude
@@ -1744,6 +1786,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                 }
                 value = altitude;
+                icon = getResources().getDrawable(R.drawable.ic_mountain);
                 break;
             case 28:
                 //Sunrise/Sunset
@@ -1752,6 +1795,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Calendar[] sunriseSunset = ca.rmen.sunrisesunset.SunriseSunset.getSunriseSunset(Calendar.getInstance(), Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
                     Date sunrise = sunriseSunset[0].getTime();
                     Date sunset = sunriseSunset[1].getTime();
+                    Date current = new Date();
                     SimpleDateFormat dateformat = new SimpleDateFormat("h:mm aa", Locale.getDefault());
                     if (!sharedPrefs.getString("prefTime", "0").equals("0")) {
                         dateformat = new SimpleDateFormat("HH:mm", Locale.getDefault());
@@ -1759,9 +1803,17 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     String sunriseString = dateformat.format(sunrise);
                     String sunsetString = dateformat.format(sunset);
                     value = sunriseString + "/" + sunsetString;
+
+                    if(current.compareTo(sunrise) > 0 && current.compareTo(sunset) < 0){
+                        icon = getResources().getDrawable(R.drawable.ic_sun);
+                    } else {
+                        icon = getResources().getDrawable(R.drawable.ic_moon);
+                    }
                 } else {
                     value = "No Fix";
+                    icon = getResources().getDrawable(R.drawable.ic_sun);
                 }
+
                 break;
             default:
 
@@ -1776,222 +1828,312 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 layout1 = findViewById(R.id.layout_1);
                 TextView textView1 = findViewById(R.id.textView1);
                 TextView textView1Label = findViewById(R.id.textView1label);
+                ImageView imageView1 = findViewById(R.id.imageView1);
                 layout1.setOnTouchListener(MainActivity.this);
                 layout1.setTag(cellNumber);
                 textView1.setTag(cellNumber);
                 textView1Label.setTag(cellNumber);
                 textView1Label.setText(label);
                 textView1.setText(value);
+                if (icon !=null) {
+                    imageView1.setImageDrawable(icon);
+                } else {
+                    imageView1.setImageResource(android.R.color.transparent);
+                }
                 break;
             case 2:
                 if (gridChange) {
                     View gridCell2 = layoutInflater.inflate(R.layout.layout_griditem2, gridLayout, false);
                     gridLayout.addView(gridCell2);
                 }
-                LinearLayout layout2 = findViewById(R.id.layout_2);
+                ConstraintLayout layout2 = findViewById(R.id.layout_2);
                 TextView textView2 = findViewById(R.id.textView2);
                 TextView textView2Label = findViewById(R.id.textView2label);
+                ImageView imageView2 = findViewById(R.id.imageView2);
                 layout2.setOnTouchListener(MainActivity.this);
                 layout2.setTag(cellNumber);
                 textView2.setTag(cellNumber);
                 textView2Label.setTag(cellNumber);
                 textView2Label.setText(label);
                 textView2.setText(value);
+                if (icon !=null) {
+                    imageView2.setImageDrawable(icon);
+                } else {
+                    imageView2.setImageResource(android.R.color.transparent);
+                }
                 break;
             case 3:
                 if (gridChange) {
                     View gridCell3 = layoutInflater.inflate(R.layout.layout_griditem3, gridLayout, false);
                     gridLayout.addView(gridCell3);
                 }
-                LinearLayout layout3 = findViewById(R.id.layout_3);
+                ConstraintLayout layout3 = findViewById(R.id.layout_3);
                 TextView textView3 = findViewById(R.id.textView3);
                 TextView textView3Label = findViewById(R.id.textView3label);
+                ImageView imageView3 = findViewById(R.id.imageView3);
                 layout3.setOnTouchListener(MainActivity.this);
                 layout3.setTag(cellNumber);
                 textView3.setTag(cellNumber);
                 textView3Label.setTag(cellNumber);
                 textView3Label.setText(label);
                 textView3.setText(value);
+                if (icon !=null) {
+                    imageView3.setImageDrawable(icon);
+                } else {
+                    imageView3.setImageResource(android.R.color.transparent);
+                }
                 break;
             case 4:
                 if (gridChange) {
                     View gridCell4 = layoutInflater.inflate(R.layout.layout_griditem4, gridLayout, false);
                     gridLayout.addView(gridCell4);
                 }
-                LinearLayout layout4 = findViewById(R.id.layout_4);
+                ConstraintLayout layout4 = findViewById(R.id.layout_4);
                 TextView textView4 = findViewById(R.id.textView4);
                 TextView textView4Label = findViewById(R.id.textView4label);
+                ImageView imageView4 = findViewById(R.id.imageView4);
                 layout4.setOnTouchListener(MainActivity.this);
                 layout4.setTag(cellNumber);
                 textView4.setTag(cellNumber);
                 textView4Label.setTag(cellNumber);
                 textView4Label.setText(label);
                 textView4.setText(value);
+                if (icon !=null) {
+                    imageView4.setImageDrawable(icon);
+                } else {
+                    imageView4.setImageResource(android.R.color.transparent);
+                }
                 break;
             case 5:
                 if (gridChange) {
                     View gridCell5 = layoutInflater.inflate(R.layout.layout_griditem5, gridLayout, false);
                     gridLayout.addView(gridCell5);
                 }
-                LinearLayout layout5 = findViewById(R.id.layout_5);
+                ConstraintLayout layout5 = findViewById(R.id.layout_5);
                 TextView textView5 = findViewById(R.id.textView5);
                 TextView textView5Label = findViewById(R.id.textView5label);
+                ImageView imageView5 = findViewById(R.id.imageView5);
                 layout5.setOnTouchListener(MainActivity.this);
                 layout5.setTag(cellNumber);
                 textView5.setTag(cellNumber);
                 textView5Label.setTag(cellNumber);
                 textView5Label.setText(label);
                 textView5.setText(value);
+                if (icon !=null) {
+                    imageView5.setImageDrawable(icon);
+                } else {
+                    imageView5.setImageResource(android.R.color.transparent);
+                }
                 break;
             case 6:
                 if (gridChange) {
                     View gridCell6 = layoutInflater.inflate(R.layout.layout_griditem6, gridLayout, false);
                     gridLayout.addView(gridCell6);
                 }
-                LinearLayout layout6 = findViewById(R.id.layout_6);
+                ConstraintLayout layout6 = findViewById(R.id.layout_6);
                 TextView textView6 = findViewById(R.id.textView6);
                 TextView textView6Label = findViewById(R.id.textView6label);
+                ImageView imageView6 = findViewById(R.id.imageView6);
                 layout6.setOnTouchListener(MainActivity.this);
                 layout6.setTag(cellNumber);
                 textView6.setTag(cellNumber);
                 textView6Label.setTag(cellNumber);
                 textView6Label.setText(label);
                 textView6.setText(value);
+                if (icon !=null) {
+                    imageView6.setImageDrawable(icon);
+                } else {
+                    imageView6.setImageResource(android.R.color.transparent);
+                }
                 break;
             case 7:
                 if (gridChange) {
                     View gridCell7 = layoutInflater.inflate(R.layout.layout_griditem7, gridLayout, false);
                     gridLayout.addView(gridCell7);
                 }
-                LinearLayout layout7 = findViewById(R.id.layout_7);
+                ConstraintLayout layout7 = findViewById(R.id.layout_7);
                 TextView textView7 = findViewById(R.id.textView7);
                 TextView textView7Label = findViewById(R.id.textView7label);
+                ImageView imageView7 = findViewById(R.id.imageView7);
                 layout7.setOnTouchListener(MainActivity.this);
                 layout7.setTag(cellNumber);
                 textView7.setTag(cellNumber);
                 textView7Label.setTag(cellNumber);
                 textView7Label.setText(label);
                 textView7.setText(value);
+                if (icon !=null) {
+                    imageView7.setImageDrawable(icon);
+                } else {
+                    imageView7.setImageResource(android.R.color.transparent);
+                }
                 break;
             case 8:
                 if (gridChange) {
                     View gridCell8 = layoutInflater.inflate(R.layout.layout_griditem8, gridLayout, false);
                     gridLayout.addView(gridCell8);
                 }
-                LinearLayout layout8 = findViewById(R.id.layout_8);
+                ConstraintLayout layout8 = findViewById(R.id.layout_8);
                 TextView textView8 = findViewById(R.id.textView8);
                 TextView textView8Label = findViewById(R.id.textView8label);
+                ImageView imageView8 = findViewById(R.id.imageView8);
                 layout8.setOnTouchListener(MainActivity.this);
                 layout8.setTag(cellNumber);
                 textView8.setTag(cellNumber);
                 textView8Label.setTag(cellNumber);
                 textView8Label.setText(label);
                 textView8.setText(value);
+                if (icon !=null) {
+                    imageView8.setImageDrawable(icon);
+                } else {
+                    imageView8.setImageResource(android.R.color.transparent);
+                }
                 break;
             case 9:
                 if (gridChange) {
                     View gridCell9 = layoutInflater.inflate(R.layout.layout_griditem9, gridLayout, false);
                     gridLayout.addView(gridCell9);
                 }
-                LinearLayout layout9 = findViewById(R.id.layout_9);
+                ConstraintLayout layout9 = findViewById(R.id.layout_9);
                 TextView textView9 = findViewById(R.id.textView9);
                 TextView textView9Label = findViewById(R.id.textView9label);
+                ImageView imageView9 = findViewById(R.id.imageView9);
                 layout9.setOnTouchListener(MainActivity.this);
                 layout9.setTag(cellNumber);
                 textView9.setTag(cellNumber);
                 textView9Label.setTag(cellNumber);
                 textView9Label.setText(label);
                 textView9.setText(value);
+                if (icon !=null) {
+                    imageView9.setImageDrawable(icon);
+                } else {
+                    imageView9.setImageResource(android.R.color.transparent);
+                }
                 break;
             case 10:
                 if (gridChange) {
                     View gridCell10 = layoutInflater.inflate(R.layout.layout_griditem10, gridLayout, false);
                     gridLayout.addView(gridCell10);
                 }
-                LinearLayout layout10 = findViewById(R.id.layout_10);
+                ConstraintLayout layout10 = findViewById(R.id.layout_10);
                 TextView textView10 = findViewById(R.id.textView10);
                 TextView textView10Label = findViewById(R.id.textView10label);
+                ImageView imageView10 = findViewById(R.id.imageView10);
                 layout10.setOnTouchListener(MainActivity.this);
                 layout10.setTag(cellNumber);
                 textView10.setTag(cellNumber);
                 textView10Label.setTag(cellNumber);
                 textView10Label.setText(label);
                 textView10.setText(value);
+                if (icon !=null) {
+                    imageView10.setImageDrawable(icon);
+                } else {
+                    imageView10.setImageResource(android.R.color.transparent);
+                }
                 break;
             case 11:
                 if (gridChange) {
                     View gridCell11 = layoutInflater.inflate(R.layout.layout_griditem11, gridLayout, false);
                     gridLayout.addView(gridCell11);
                 }
-                LinearLayout layout11 = findViewById(R.id.layout_11);
+                ConstraintLayout layout11 = findViewById(R.id.layout_11);
                 TextView textView11 = findViewById(R.id.textView11);
                 TextView textView11Label = findViewById(R.id.textView11label);
+                ImageView imageView11 = findViewById(R.id.imageView11);
                 layout11.setOnTouchListener(MainActivity.this);
                 layout11.setTag(cellNumber);
                 textView11.setTag(cellNumber);
                 textView11Label.setTag(cellNumber);
                 textView11Label.setText(label);
                 textView11.setText(value);
+                if (icon !=null) {
+                    imageView11.setImageDrawable(icon);
+                } else {
+                    imageView11.setImageResource(android.R.color.transparent);
+                }
                 break;
             case 12:
                 if (gridChange) {
                     View gridCell12 = layoutInflater.inflate(R.layout.layout_griditem12, gridLayout, false);
                     gridLayout.addView(gridCell12);
                 }
-                LinearLayout layout12 = findViewById(R.id.layout_12);
+                ConstraintLayout layout12 = findViewById(R.id.layout_12);
                 TextView textView12 = findViewById(R.id.textView12);
                 TextView textView12Label = findViewById(R.id.textView12label);
+                ImageView imageView12 = findViewById(R.id.imageView12);
                 layout12.setOnTouchListener(MainActivity.this);
                 layout12.setTag(cellNumber);
                 textView12.setTag(cellNumber);
                 textView12Label.setTag(cellNumber);
                 textView12Label.setText(label);
                 textView12.setText(value);
+                if (icon !=null) {
+                    imageView12.setImageDrawable(icon);
+                } else {
+                    imageView12.setImageResource(android.R.color.transparent);
+                }
                 break;
             case 13:
                 if (gridChange) {
                     View gridCell13 = layoutInflater.inflate(R.layout.layout_griditem13, gridLayout, false);
                     gridLayout.addView(gridCell13);
                 }
-                LinearLayout layout13 = findViewById(R.id.layout_13);
+                ConstraintLayout layout13 = findViewById(R.id.layout_13);
                 TextView textView13 = findViewById(R.id.textView13);
                 TextView textView13Label = findViewById(R.id.textView13label);
+                ImageView imageView13 = findViewById(R.id.imageView13);
                 layout13.setOnTouchListener(MainActivity.this);
                 layout13.setTag(cellNumber);
                 textView13.setTag(cellNumber);
                 textView13Label.setTag(cellNumber);
                 textView13Label.setText(label);
                 textView13.setText(value);
+                if (icon !=null) {
+                    imageView13.setImageDrawable(icon);
+                } else {
+                    imageView13.setImageResource(android.R.color.transparent);
+                }
                 break;
             case 14:
                 if (gridChange) {
                     View gridCell14 = layoutInflater.inflate(R.layout.layout_griditem14, gridLayout, false);
                     gridLayout.addView(gridCell14);
                 }
-                LinearLayout layout14 = findViewById(R.id.layout_14);
+                ConstraintLayout layout14 = findViewById(R.id.layout_14);
                 TextView textView14 = findViewById(R.id.textView14);
                 TextView textView14Label = findViewById(R.id.textView14label);
+                ImageView imageView14 = findViewById(R.id.imageView14);
                 layout14.setOnTouchListener(MainActivity.this);
                 layout14.setTag(cellNumber);
                 textView14.setTag(cellNumber);
                 textView14Label.setTag(cellNumber);
                 textView14Label.setText(label);
                 textView14.setText(value);
+                if (icon !=null) {
+                    imageView14.setImageDrawable(icon);
+                } else {
+                    imageView14.setImageResource(android.R.color.transparent);
+                }
                 break;
             case 15:
                 if (gridChange) {
                     View gridCell15 = layoutInflater.inflate(R.layout.layout_griditem15, gridLayout, false);
                     gridLayout.addView(gridCell15);
                 }
-                LinearLayout layout15 = findViewById(R.id.layout_15);
+                ConstraintLayout layout15 = findViewById(R.id.layout_15);
                 TextView textView15 = findViewById(R.id.textView15);
                 TextView textView15Label = findViewById(R.id.textView15label);
+                ImageView imageView15 = findViewById(R.id.imageView15);
                 layout15.setOnTouchListener(MainActivity.this);
                 layout15.setTag(cellNumber);
                 textView15.setTag(cellNumber);
                 textView15Label.setTag(cellNumber);
                 textView15Label.setText(label);
                 textView15.setText(value);
+                if (icon !=null) {
+                    imageView15.setImageDrawable(icon);
+                } else {
+                    imageView15.setImageResource(android.R.color.transparent);
+                }
                 break;
             default:
                 break;
