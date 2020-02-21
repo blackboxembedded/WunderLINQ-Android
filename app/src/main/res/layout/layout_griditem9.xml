@@ -52,6 +52,8 @@
         android:id="@+id/imageView9"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="2dp"
         android:adjustViewBounds="true"
         android:cropToPadding="false"
         android:scaleType="fitCenter"

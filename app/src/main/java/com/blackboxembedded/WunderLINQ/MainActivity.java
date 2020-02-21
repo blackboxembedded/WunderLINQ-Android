@@ -1,9 +1,6 @@
 package com.blackboxembedded.WunderLINQ;
 
-import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AppOpsManager;
 import android.app.PictureInPictureParams;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -21,8 +18,8 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -67,10 +64,6 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
-import static android.app.AppOpsManager.MODE_ALLOWED;
-import static android.app.AppOpsManager.OPSTR_GET_USAGE_STATS;
-import static android.os.Process.myUid;
-
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
 
@@ -100,12 +93,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     public final static UUID UUID_MOTORCYCLE_SERVICE =
             UUID.fromString(GattAttributes.WUNDERLINQ_SERVICE);
 
-    private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
-    private static final int PERMISSION_REQUEST_CAMERA = 100;
-    private static final int PERMISSION_REQUEST_CALL_PHONE = 101;
-    private static final int PERMISSION_REQUEST_READ_CONTACTS = 102;
-    private static final int PERMISSION_REQUEST_WRITE_STORAGE = 112;
-    private static final int PERMISSION_REQUEST_RECORD_AUDIO = 122;
     private PopupMenu mPopupMenu;
     private Menu mMenu;
 
@@ -396,165 +383,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             return;
         }
 
-        // First run Dialog
-        if (sharedPrefs.getBoolean("FIRST_LAUNCH",true)){
-            //TODO: Nice pro
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                // Check Read Contacts permissions
-                if (this.checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED){
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle(getString(R.string.contacts_alert_title));
-                    builder.setMessage(getString(R.string.contacts_alert_body));
-                    builder.setPositiveButton(android.R.string.ok, null);
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @TargetApi(23)
-                        public void onDismiss(DialogInterface dialog) {
-                            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
-                        }
-                    });
-                    builder.show();
-                }
-                // Check Camera permissions
-                if (this.checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle(getString(R.string.camera_alert_title));
-                    builder.setMessage(getString(R.string.camera_alert_body));
-                    builder.setPositiveButton(android.R.string.ok, null);
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @TargetApi(23)
-                        public void onDismiss(DialogInterface dialog) {
-                            requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
-                        }
-                    });
-                    builder.show();
-                }
-                // Check Call phone permissions
-                if (this.checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle(getString(R.string.call_alert_title));
-                    builder.setMessage(getString(R.string.call_alert_body));
-                    builder.setPositiveButton(android.R.string.ok, null);
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @TargetApi(23)
-                        public void onDismiss(DialogInterface dialog) {
-                            requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, PERMISSION_REQUEST_CALL_PHONE);
-                        }
-                    });
-                    builder.show();
-                }
-                // Check Read Audio permissions
-                if (this.checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle(getString(R.string.record_audio_alert_title));
-                    builder.setMessage(getString(R.string.record_audio_alert_body));
-                    builder.setPositiveButton(android.R.string.ok, null);
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @TargetApi(23)
-                        public void onDismiss(DialogInterface dialog) {
-                            requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSION_REQUEST_RECORD_AUDIO);
-                        }
-                    });
-                    builder.show();
-                }
-                // Check Write permissions
-                if (this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle(getString(R.string.write_alert_title));
-                    builder.setMessage(getString(R.string.write_alert_body));
-                    builder.setPositiveButton(android.R.string.ok, null);
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @TargetApi(23)
-                        public void onDismiss(DialogInterface dialog) {
-                            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_WRITE_STORAGE);
-                        }
-                    });
-                    builder.show();
-                }
-                // Check Location permissions
-                if (this.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle(getString(R.string.location_alert_title));
-                    builder.setMessage(getString(R.string.location_alert_body));
-                    builder.setPositiveButton(android.R.string.ok, null);
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @TargetApi(23)
-                        public void onDismiss(DialogInterface dialog) {
-                            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_FINE_LOCATION);
-                        }
-                    });
-                    builder.show();
-                }
-                // Check overlay permissions
-                if (!Settings.canDrawOverlays(this)) {
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle(getString(R.string.overlay_alert_title));
-                    builder.setMessage(getString(R.string.overlay_alert_body));
-                    builder.setPositiveButton(android.R.string.ok, null);
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @TargetApi(23)
-                        public void onDismiss(DialogInterface dialog) {
-                            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                    Uri.parse("package:" + getPackageName()));
-                            startActivity(intent);
-                        }
-                    });
-                    builder.show();
-                }
-            }
-            // Check read notification permissions
-            if (Settings.Secure.getString(this.getContentResolver(),"enabled_notification_listeners") == null
-                    || !Settings.Secure.getString(this.getContentResolver(),"enabled_notification_listeners").contains(getApplicationContext().getPackageName())) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(getString(R.string.notification_alert_title));
-                builder.setMessage(getString(R.string.notification_alert_body));
-                builder.setPositiveButton(android.R.string.ok, null);
-                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @TargetApi(23)
-                    public void onDismiss(DialogInterface dialog) {
-                        startActivity(new Intent(
-                                "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
-                    }
-                });
-                builder.show();
-            }
-            //Check usage stats permissions
-            AppOpsManager appOps = (AppOpsManager) this.getSystemService(Context.APP_OPS_SERVICE);
-            int mode = appOps.checkOpNoThrow(OPSTR_GET_USAGE_STATS, myUid(), this.getPackageName());
-            if (mode != MODE_ALLOWED) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(getString(R.string.usagestats_alert_title));
-                builder.setMessage(getString(R.string.usagestats_alert_body));
-                builder.setPositiveButton(android.R.string.ok, null);
-                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @TargetApi(23)
-                    public void onDismiss(DialogInterface dialog) {
-                        startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-                    }
-                });
-                builder.show();
-            }
-
-            if (!isAccessibilityServiceEnabled(MainActivity.this, MyAccessibilityService.class)) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(getString(R.string.accessibilityservice_alert_title));
-                builder.setMessage(getString(R.string.accessibilityservice_alert_body));
-                builder.setPositiveButton(android.R.string.ok, null);
-                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @TargetApi(23)
-                    public void onDismiss(DialogInterface dialog) {
-                        Intent accessibilityIntent = new Intent();
-                        accessibilityIntent.setAction(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                        startActivity(accessibilityIntent);
-                    }
-                });
-                builder.show();
-            }
-
-            SharedPreferences.Editor editor = sharedPrefs.edit();
-            editor.putBoolean("FIRST_LAUNCH", false);
-            editor.apply();
-        }
-
         // Daily Disclaimer Warning
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         final String currentDate = sdf.format(new Date());
@@ -761,7 +589,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     case R.id.action_exit:
                         BluetoothLeService.clearNotifications();
                         stopService(bluetoothLeService);
-                        finishAndRemoveTask();
+                        finishAffinity();
+                        //finishAndRemoveTask();
                         break;
                 }
                 return true;
@@ -1477,7 +1306,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Math.round(engineTemp));
                 }
-                icon = getResources().getDrawable(R.drawable.ic_engine);
+                icon = getResources().getDrawable(R.drawable.ic_engine_temp);
                 break;
             case 2:
                 //Ambient
@@ -1494,6 +1323,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         ambientTemp = Utils.celsiusToFahrenheit(ambientTemp);
                     }
                     value = String.valueOf(Math.round(ambientTemp));
+                } else {
+                    icon = getResources().getDrawable(R.drawable.ic_thermometer_half);
                 }
 
                 break;
@@ -1514,7 +1345,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Utils.oneDigit.format(rdcFront));
                 }
-                icon = getResources().getDrawable(R.drawable.ic_tire_alert);
+                icon = getResources().getDrawable(R.drawable.ic_tire);
+                if (FaultStatus.getfrontTirePressureCriticalActive()){
+                    icon = getResources().getDrawable(R.drawable.ic_tire_alert);
+                    icon.setColorFilter(getResources().getColor(R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
+                }
                 break;
             case 4:
                 //RearTire
@@ -1533,7 +1368,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Utils.oneDigit.format(rdcRear));
                 }
-                icon = getResources().getDrawable(R.drawable.ic_tire_alert);
+                icon = getResources().getDrawable(R.drawable.ic_tire);
+                if (FaultStatus.getrearTirePressureCriticalActive()){
+                    icon = getResources().getDrawable(R.drawable.ic_tire_alert);
+                    icon.setColorFilter(getResources().getColor(R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
+                }
                 break;
             case 5:
                 //Odometer
@@ -1545,6 +1384,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Math.round(odometer));
                 }
+                icon = getResources().getDrawable(R.drawable.ic_dashboard_meter);
                 break;
             case 6:
                 //Voltage
@@ -1571,6 +1411,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Integer frontBrakes = Data.getFrontBrake();
                     value = String.valueOf(frontBrakes);
                 }
+                icon = getResources().getDrawable(R.drawable.ic_brakes);
                 break;
             case 9:
                 //Rear Brakes
@@ -1579,6 +1420,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Integer rearBrakes = Data.getRearBrake();
                     value = String.valueOf(rearBrakes);
                 }
+                icon = getResources().getDrawable(R.drawable.ic_brakes);
                 break;
             case 10:
                 //Ambient Light
@@ -1587,6 +1429,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Integer ambientLight = Data.getAmbientLight();
                     value = String.valueOf(ambientLight);
                 }
+                icon = getResources().getDrawable(R.drawable.ic_lightbulb);
                 break;
             case 11:
                 //Trip 1
@@ -1646,6 +1489,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Utils.oneDigit.format(avgspeed));
                 }
+                icon = getResources().getDrawable(R.drawable.ic_tachometer_alt);
                 break;
             case 16:
                 //Current Consumption
@@ -1711,7 +1555,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Double leanAngle = Data.getLeanAngle();
                     value = String.valueOf(Math.round(leanAngle));
                 }
-                icon = getResources().getDrawable(R.drawable.ic_ruler_combined);
+                icon = getResources().getDrawable(R.drawable.ic_angle);
                 break;
             case 22:
                 //g-force
@@ -1720,6 +1564,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Double gForce = Data.getGForce();
                     value = String.valueOf(Utils.oneDigit.format(gForce));
                 }
+                icon = getResources().getDrawable(R.drawable.ic_accelerometer);
                 break;
             case 23:
                 //bearing
@@ -1768,6 +1613,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 if (Data.getBarometricPressure() != null) {
                     value = String.valueOf(Math.round(Data.getBarometricPressure()));
                 }
+                icon = getResources().getDrawable(R.drawable.ic_barometer);
                 break;
             case 26:
                 //GPS Speed
@@ -2146,114 +1992,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 break;
         }
         drawingComplete = true;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (grantResults != null) {
-            switch (requestCode) {
-                case PERMISSION_REQUEST_CAMERA: {
-                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        Log.d(TAG, "Camera permission granted");
-                    } else {
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setTitle(getString(R.string.negative_alert_title));
-                        builder.setMessage(getString(R.string.negative_camera_alert_body));
-                        builder.setPositiveButton(android.R.string.ok, null);
-                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                            }
-                        });
-                        builder.show();
-                    }
-                }
-                case PERMISSION_REQUEST_CALL_PHONE: {
-                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        Log.d(TAG, "Call Phone permission granted");
-                    } else {
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setTitle(getString(R.string.negative_alert_title));
-                        builder.setMessage(getString(R.string.negative_call_alert_body));
-                        builder.setPositiveButton(android.R.string.ok, null);
-                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                            }
-                        });
-                        builder.show();
-                    }
-                }
-                case PERMISSION_REQUEST_READ_CONTACTS: {
-                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        Log.d(TAG, "Call Phone permission granted");
-                    } else {
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setTitle(getString(R.string.negative_alert_title));
-                        builder.setMessage(getString(R.string.negative_contacts_alert_body));
-                        builder.setPositiveButton(android.R.string.ok, null);
-                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                            }
-                        });
-                        builder.show();
-                    }
-                }
-                case PERMISSION_REQUEST_RECORD_AUDIO: {
-                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        Log.d(TAG, "Record Audio permission granted");
-                    } else {
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setTitle(getString(R.string.negative_alert_title));
-                        builder.setMessage(getString(R.string.negative_record_audio_alert_body));
-                        builder.setPositiveButton(android.R.string.ok, null);
-                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                            }
-                        });
-                        builder.show();
-                    }
-                }
-                case PERMISSION_REQUEST_WRITE_STORAGE: {
-                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        Log.d(TAG, "Write to storage permission granted");
-                    } else {
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setTitle(getString(R.string.negative_alert_title));
-                        builder.setMessage(getString(R.string.negative_write_alert_body));
-                        builder.setPositiveButton(android.R.string.ok, null);
-                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                            }
-                        });
-                        builder.show();
-                    }
-                }
-                case PERMISSION_REQUEST_FINE_LOCATION: {
-                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        Log.d(TAG, "coarse location permission granted");
-                    } else {
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setTitle(getString(R.string.negative_alert_title));
-                        builder.setMessage(getString(R.string.negative_location_alert_body));
-                        builder.setPositiveButton(android.R.string.ok, null);
-                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                            }
-                        });
-                        builder.show();
-                    }
-                }
-                default:
-                    Log.d(TAG, "Unknown Permissions Request Code");
-            }
-        }
-
     }
 
     @Override
