@@ -768,6 +768,8 @@
         <item name="3">1</item>
     </string-array>
     <string name="alerting_title">Alert Settings</string>
+    <string name="pref_notification_name">Enable fault notififcations</string>
+    <string name="pref_notification_summary">Enable or disable all alert notifications</string>
     <string name="pref_tpmsAlert_name">Custom Tire Pressure Threshold</string>
     <string name="pref_tpmsAlert_summary">Use a custom threshold for low tire pressure alerting</string>
     <string name="pref_tpmsAlertThreshold_name">Low Tire Pressure Threshold</string>

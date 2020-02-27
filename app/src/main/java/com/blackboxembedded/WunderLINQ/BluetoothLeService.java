@@ -1253,14 +1253,18 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                                     FaultStatus.setfrontTirePressureCriticalActive(true);
                                 }
                             }
-                            if (!(FaultStatus.getfrontTirePressureCriticalNotificationActive())) {
-                                updateNotification();
-                                FaultStatus.setfrontTirePressureCriticalNotificationActive(true);
+                            if (sharedPrefs.getBoolean("prefNotifications", true)) {
+                                if (!(FaultStatus.getfrontTirePressureCriticalNotificationActive())) {
+                                    updateNotification();
+                                    FaultStatus.setfrontTirePressureCriticalNotificationActive(true);
+                                }
                             }
                         } else {
-                            FaultStatus.setfrontTirePressureCriticalNotificationActive(false);
-                            if (FaultStatus.getfrontTirePressureCriticalNotificationActive()) {
-                                updateNotification();
+                            if (sharedPrefs.getBoolean("prefNotifications", true)) {
+                                FaultStatus.setfrontTirePressureCriticalNotificationActive(false);
+                                if (FaultStatus.getfrontTirePressureCriticalNotificationActive()) {
+                                    updateNotification();
+                                }
                             }
                         }
                     }
@@ -1288,14 +1292,18 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                                     FaultStatus.setrearTirePressureCriticalActive(true);
                                 }
                             }
-                            if (!(FaultStatus.getrearTirePressureCriticalNotificationActive())) {
-                                updateNotification();
-                                FaultStatus.setrearTirePressureCriticalNotificationActive(true);
+                            if (sharedPrefs.getBoolean("prefNotifications", true)) {
+                                if (!(FaultStatus.getrearTirePressureCriticalNotificationActive())) {
+                                    updateNotification();
+                                    FaultStatus.setrearTirePressureCriticalNotificationActive(true);
+                                }
                             }
                         } else {
-                            FaultStatus.setrearTirePressureCriticalNotificationActive(false);
-                            if (FaultStatus.getrearTirePressureCriticalNotificationActive()) {
-                                updateNotification();
+                            if (sharedPrefs.getBoolean("prefNotifications", true)) {
+                                FaultStatus.setrearTirePressureCriticalNotificationActive(false);
+                                if (FaultStatus.getrearTirePressureCriticalNotificationActive()) {
+                                    updateNotification();
+                                }
                             }
                         }
                     }
@@ -1309,13 +1317,15 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                             FaultStatus.setrearTirePressureWarningActive(false);
                             FaultStatus.setfrontTirePressureCriticalActive(false);
                             FaultStatus.setrearTirePressureCriticalActive(false);
-                            if (FaultStatus.getfrontTirePressureCriticalNotificationActive()) {
-                                updateNotification();
-                                FaultStatus.setfrontTirePressureCriticalNotificationActive(false);
-                            }
-                            if (FaultStatus.getrearTirePressureCriticalNotificationActive()) {
-                                updateNotification();
-                                FaultStatus.setrearTirePressureCriticalNotificationActive(false);
+                            if (sharedPrefs.getBoolean("prefNotifications", true)) {
+                                if (FaultStatus.getfrontTirePressureCriticalNotificationActive()) {
+                                    updateNotification();
+                                    FaultStatus.setfrontTirePressureCriticalNotificationActive(false);
+                                }
+                                if (FaultStatus.getrearTirePressureCriticalNotificationActive()) {
+                                    updateNotification();
+                                    FaultStatus.setrearTirePressureCriticalNotificationActive(false);
+                                }
                             }
                             break;
                         case 0xCA:
@@ -1323,13 +1333,15 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                             FaultStatus.setrearTirePressureWarningActive(true);
                             FaultStatus.setfrontTirePressureCriticalActive(false);
                             FaultStatus.setrearTirePressureCriticalActive(false);
-                            if (FaultStatus.getfrontTirePressureCriticalNotificationActive()) {
-                                updateNotification();
-                                FaultStatus.setfrontTirePressureCriticalNotificationActive(false);
-                            }
-                            if (FaultStatus.getrearTirePressureCriticalNotificationActive()) {
-                                updateNotification();
-                                FaultStatus.setrearTirePressureCriticalNotificationActive(false);
+                            if (sharedPrefs.getBoolean("prefNotifications", true)) {
+                                if (FaultStatus.getfrontTirePressureCriticalNotificationActive()) {
+                                    updateNotification();
+                                    FaultStatus.setfrontTirePressureCriticalNotificationActive(false);
+                                }
+                                if (FaultStatus.getrearTirePressureCriticalNotificationActive()) {
+                                    updateNotification();
+                                    FaultStatus.setrearTirePressureCriticalNotificationActive(false);
+                                }
                             }
                             break;
                         case 0xCB:
@@ -1337,13 +1349,15 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                             FaultStatus.setrearTirePressureWarningActive(true);
                             FaultStatus.setfrontTirePressureCriticalActive(false);
                             FaultStatus.setrearTirePressureCriticalActive(false);
-                            if (FaultStatus.getfrontTirePressureCriticalNotificationActive()) {
-                                updateNotification();
-                                FaultStatus.setfrontTirePressureCriticalNotificationActive(false);
-                            }
-                            if (FaultStatus.getrearTirePressureCriticalNotificationActive()) {
-                                updateNotification();
-                                FaultStatus.setrearTirePressureCriticalNotificationActive(false);
+                            if (sharedPrefs.getBoolean("prefNotifications", true)) {
+                                if (FaultStatus.getfrontTirePressureCriticalNotificationActive()) {
+                                    updateNotification();
+                                    FaultStatus.setfrontTirePressureCriticalNotificationActive(false);
+                                }
+                                if (FaultStatus.getrearTirePressureCriticalNotificationActive()) {
+                                    updateNotification();
+                                    FaultStatus.setrearTirePressureCriticalNotificationActive(false);
+                                }
                             }
                             break;
                         case 0xD1:
@@ -1351,13 +1365,15 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                             FaultStatus.setrearTirePressureWarningActive(false);
                             FaultStatus.setfrontTirePressureCriticalActive(true);
                             FaultStatus.setrearTirePressureCriticalActive(false);
-                            if (!(FaultStatus.getfrontTirePressureCriticalNotificationActive())) {
-                                updateNotification();
-                                FaultStatus.setfrontTirePressureCriticalNotificationActive(true);
-                            }
-                            if (FaultStatus.getrearTirePressureCriticalNotificationActive()) {
-                                updateNotification();
-                                FaultStatus.setrearTirePressureCriticalNotificationActive(false);
+                            if (sharedPrefs.getBoolean("prefNotifications", true)) {
+                                if (!(FaultStatus.getfrontTirePressureCriticalNotificationActive())) {
+                                    updateNotification();
+                                    FaultStatus.setfrontTirePressureCriticalNotificationActive(true);
+                                }
+                                if (FaultStatus.getrearTirePressureCriticalNotificationActive()) {
+                                    updateNotification();
+                                    FaultStatus.setrearTirePressureCriticalNotificationActive(false);
+                                }
                             }
                             break;
                         case 0xD2:
@@ -1365,13 +1381,15 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                             FaultStatus.setrearTirePressureWarningActive(false);
                             FaultStatus.setfrontTirePressureCriticalActive(false);
                             FaultStatus.setrearTirePressureCriticalActive(true);
-                            if (FaultStatus.getfrontTirePressureCriticalNotificationActive()) {
-                                updateNotification();
-                                FaultStatus.setfrontTirePressureCriticalNotificationActive(false);
-                            }
-                            if (!(FaultStatus.getrearTirePressureCriticalNotificationActive())) {
-                                updateNotification();
-                                FaultStatus.setrearTirePressureCriticalNotificationActive(true);
+                            if (sharedPrefs.getBoolean("prefNotifications", true)) {
+                                if (FaultStatus.getfrontTirePressureCriticalNotificationActive()) {
+                                    updateNotification();
+                                    FaultStatus.setfrontTirePressureCriticalNotificationActive(false);
+                                }
+                                if (!(FaultStatus.getrearTirePressureCriticalNotificationActive())) {
+                                    updateNotification();
+                                    FaultStatus.setrearTirePressureCriticalNotificationActive(true);
+                                }
                             }
                             break;
                         case 0xD3:
@@ -1379,10 +1397,12 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                             FaultStatus.setrearTirePressureWarningActive(false);
                             FaultStatus.setfrontTirePressureCriticalActive(true);
                             FaultStatus.setrearTirePressureCriticalActive(true);
-                            if (!(FaultStatus.getfrontTirePressureCriticalNotificationActive()) && !(FaultStatus.getrearTirePressureCriticalNotificationActive())) {
-                                updateNotification();
-                                FaultStatus.setfrontTirePressureCriticalNotificationActive(true);
-                                FaultStatus.setrearTirePressureCriticalNotificationActive(true);
+                            if (sharedPrefs.getBoolean("prefNotifications", true)) {
+                                if (!(FaultStatus.getfrontTirePressureCriticalNotificationActive()) && !(FaultStatus.getrearTirePressureCriticalNotificationActive())) {
+                                    updateNotification();
+                                    FaultStatus.setfrontTirePressureCriticalNotificationActive(true);
+                                    FaultStatus.setrearTirePressureCriticalNotificationActive(true);
+                                }
                             }
                             break;
                         default:
@@ -1390,13 +1410,15 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                             FaultStatus.setrearTirePressureWarningActive(false);
                             FaultStatus.setfrontTirePressureCriticalActive(false);
                             FaultStatus.setrearTirePressureCriticalActive(false);
-                            if (FaultStatus.getfrontTirePressureCriticalNotificationActive()) {
-                                updateNotification();
-                                FaultStatus.setfrontTirePressureCriticalNotificationActive(false);
-                            }
-                            if (FaultStatus.getrearTirePressureCriticalNotificationActive()) {
-                                updateNotification();
-                                FaultStatus.setrearTirePressureCriticalNotificationActive(false);
+                            if (sharedPrefs.getBoolean("prefNotifications", true)) {
+                                if (FaultStatus.getfrontTirePressureCriticalNotificationActive()) {
+                                    updateNotification();
+                                    FaultStatus.setfrontTirePressureCriticalNotificationActive(false);
+                                }
+                                if (FaultStatus.getrearTirePressureCriticalNotificationActive()) {
+                                    updateNotification();
+                                    FaultStatus.setrearTirePressureCriticalNotificationActive(false);
+                                }
                             }
                             break;
                     }
@@ -1611,13 +1633,15 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                         FaultStatus.setGeneralShowsYellowActive(false);
                         FaultStatus.setGeneralFlashingRedActive(false);
                         FaultStatus.setGeneralShowsRedActive(false);
-                        if(FaultStatus.getgeneralFlashingRedNotificationActive()) {
-                            updateNotification();
-                            FaultStatus.setGeneralFlashingRedNotificationActive(false);
-                        }
-                        if(FaultStatus.getgeneralShowsRedNotificationActive()) {
-                            updateNotification();
-                            FaultStatus.setGeneralShowsRedNotificationActive(false);
+                        if (sharedPrefs.getBoolean("prefNotifications", true)) {
+                            if (FaultStatus.getgeneralFlashingRedNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setGeneralFlashingRedNotificationActive(false);
+                            }
+                            if (FaultStatus.getgeneralShowsRedNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setGeneralShowsRedNotificationActive(false);
+                            }
                         }
                         break;
                     case 0x2:
@@ -1625,13 +1649,15 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                         FaultStatus.setGeneralShowsYellowActive(true);
                         FaultStatus.setGeneralFlashingRedActive(false);
                         FaultStatus.setGeneralShowsRedActive(false);
-                        if(FaultStatus.getgeneralFlashingRedNotificationActive()) {
-                            updateNotification();
-                            FaultStatus.setGeneralFlashingRedNotificationActive(false);
-                        }
-                        if(FaultStatus.getgeneralShowsRedNotificationActive()) {
-                            updateNotification();
-                            FaultStatus.setGeneralShowsRedNotificationActive(false);
+                        if (sharedPrefs.getBoolean("prefNotifications", true)) {
+                            if (FaultStatus.getgeneralFlashingRedNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setGeneralFlashingRedNotificationActive(false);
+                            }
+                            if (FaultStatus.getgeneralShowsRedNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setGeneralShowsRedNotificationActive(false);
+                            }
                         }
                         break;
                     case 0x4:
@@ -1639,13 +1665,15 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                         FaultStatus.setGeneralShowsYellowActive(false);
                         FaultStatus.setGeneralFlashingRedActive(true);
                         FaultStatus.setGeneralShowsRedActive(false);
-                        if(!(FaultStatus.getgeneralFlashingRedNotificationActive())) {
-                            updateNotification();
-                            FaultStatus.setGeneralFlashingRedNotificationActive(true);
-                        }
-                        if(FaultStatus.getgeneralShowsRedNotificationActive()) {
-                            updateNotification();
-                            FaultStatus.setGeneralShowsRedNotificationActive(false);
+                        if (sharedPrefs.getBoolean("prefNotifications", true)) {
+                            if (!(FaultStatus.getgeneralFlashingRedNotificationActive())) {
+                                updateNotification();
+                                FaultStatus.setGeneralFlashingRedNotificationActive(true);
+                            }
+                            if (FaultStatus.getgeneralShowsRedNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setGeneralShowsRedNotificationActive(false);
+                            }
                         }
                         break;
                     case 0x5:
@@ -1653,13 +1681,15 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                         FaultStatus.setGeneralShowsYellowActive(false);
                         FaultStatus.setGeneralFlashingRedActive(true);
                         FaultStatus.setGeneralShowsRedActive(false);
-                        if(!(FaultStatus.getgeneralFlashingRedNotificationActive())) {
-                            updateNotification();
-                            FaultStatus.setGeneralFlashingRedNotificationActive(true);
-                        }
-                        if(FaultStatus.getgeneralShowsRedNotificationActive()) {
-                            updateNotification();
-                            FaultStatus.setGeneralShowsRedNotificationActive(false);
+                        if (sharedPrefs.getBoolean("prefNotifications", true)) {
+                            if (!(FaultStatus.getgeneralFlashingRedNotificationActive())) {
+                                updateNotification();
+                                FaultStatus.setGeneralFlashingRedNotificationActive(true);
+                            }
+                            if (FaultStatus.getgeneralShowsRedNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setGeneralShowsRedNotificationActive(false);
+                            }
                         }
                         break;
                     case 0x6:
@@ -1667,13 +1697,15 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                         FaultStatus.setGeneralShowsYellowActive(true);
                         FaultStatus.setGeneralFlashingRedActive(true);
                         FaultStatus.setGeneralShowsRedActive(false);
-                        if(!(FaultStatus.getgeneralFlashingRedNotificationActive())) {
-                            updateNotification();
-                            FaultStatus.setGeneralFlashingRedNotificationActive(true);
-                        }
-                        if(FaultStatus.getgeneralShowsRedNotificationActive()) {
-                            updateNotification();
-                            FaultStatus.setGeneralShowsRedNotificationActive(false);
+                        if (sharedPrefs.getBoolean("prefNotifications", true)) {
+                            if (!(FaultStatus.getgeneralFlashingRedNotificationActive())) {
+                                updateNotification();
+                                FaultStatus.setGeneralFlashingRedNotificationActive(true);
+                            }
+                            if (FaultStatus.getgeneralShowsRedNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setGeneralShowsRedNotificationActive(false);
+                            }
                         }
                         break;
                     case 0x7:
@@ -1681,13 +1713,15 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                         FaultStatus.setGeneralShowsYellowActive(false);
                         FaultStatus.setGeneralFlashingRedActive(true);
                         FaultStatus.setGeneralShowsRedActive(false);
-                        if(!(FaultStatus.getgeneralFlashingRedNotificationActive())) {
-                            updateNotification();
-                            FaultStatus.setGeneralFlashingRedNotificationActive(true);
-                        }
-                        if(FaultStatus.getgeneralShowsRedNotificationActive()) {
-                            updateNotification();
-                            FaultStatus.setGeneralShowsRedNotificationActive(false);
+                        if (sharedPrefs.getBoolean("prefNotifications", true)) {
+                            if (!(FaultStatus.getgeneralFlashingRedNotificationActive())) {
+                                updateNotification();
+                                FaultStatus.setGeneralFlashingRedNotificationActive(true);
+                            }
+                            if (FaultStatus.getgeneralShowsRedNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setGeneralShowsRedNotificationActive(false);
+                            }
                         }
                         break;
                     case 0x8:
@@ -1695,13 +1729,15 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                         FaultStatus.setGeneralShowsYellowActive(false);
                         FaultStatus.setGeneralFlashingRedActive(false);
                         FaultStatus.setGeneralShowsRedActive(true);
-                        if(FaultStatus.getgeneralFlashingRedNotificationActive()) {
-                            updateNotification();
-                            FaultStatus.setGeneralFlashingRedNotificationActive(false);
-                        }
-                        if(!(FaultStatus.getgeneralShowsRedNotificationActive())) {
-                            updateNotification();
-                            FaultStatus.setGeneralShowsRedNotificationActive(true);
+                        if (sharedPrefs.getBoolean("prefNotifications", true)) {
+                            if (FaultStatus.getgeneralFlashingRedNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setGeneralFlashingRedNotificationActive(false);
+                            }
+                            if (!(FaultStatus.getgeneralShowsRedNotificationActive())) {
+                                updateNotification();
+                                FaultStatus.setGeneralShowsRedNotificationActive(true);
+                            }
                         }
                         break;
                     case 0x9:
@@ -1709,10 +1745,12 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                         FaultStatus.setGeneralShowsYellowActive(false);
                         FaultStatus.setGeneralFlashingRedActive(true);
                         FaultStatus.setGeneralShowsRedActive(true);
-                        if(!FaultStatus.getgeneralShowsRedNotificationActive() && !FaultStatus.getgeneralFlashingRedNotificationActive()) {
-                            updateNotification();
-                            FaultStatus.setGeneralFlashingRedNotificationActive(true);
-                            FaultStatus.setGeneralShowsRedNotificationActive(true);
+                        if (sharedPrefs.getBoolean("prefNotifications", true)) {
+                            if (!FaultStatus.getgeneralShowsRedNotificationActive() && !FaultStatus.getgeneralFlashingRedNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setGeneralFlashingRedNotificationActive(true);
+                                FaultStatus.setGeneralShowsRedNotificationActive(true);
+                            }
                         }
                         break;
                     case 0xA:
@@ -1720,13 +1758,15 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                         FaultStatus.setGeneralShowsYellowActive(true);
                         FaultStatus.setGeneralFlashingRedActive(false);
                         FaultStatus.setGeneralShowsRedActive(true);
-                        if(FaultStatus.getgeneralFlashingRedNotificationActive()) {
-                            updateNotification();
-                            FaultStatus.setGeneralFlashingRedNotificationActive(false);
-                        }
-                        if(!(FaultStatus.getgeneralShowsRedNotificationActive())) {
-                            updateNotification();
-                            FaultStatus.setGeneralShowsRedNotificationActive(true);
+                        if (sharedPrefs.getBoolean("prefNotifications", true)) {
+                            if (FaultStatus.getgeneralFlashingRedNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setGeneralFlashingRedNotificationActive(false);
+                            }
+                            if (!(FaultStatus.getgeneralShowsRedNotificationActive())) {
+                                updateNotification();
+                                FaultStatus.setGeneralShowsRedNotificationActive(true);
+                            }
                         }
                         break;
                     case 0xB:
@@ -1734,13 +1774,15 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                         FaultStatus.setGeneralShowsYellowActive(false);
                         FaultStatus.setGeneralFlashingRedActive(false);
                         FaultStatus.setGeneralShowsRedActive(true);
-                        if(FaultStatus.getgeneralFlashingRedNotificationActive()) {
-                            updateNotification();
-                            FaultStatus.setGeneralFlashingRedNotificationActive(false);
-                        }
-                        if(!(FaultStatus.getgeneralShowsRedNotificationActive())) {
-                            updateNotification();
-                            FaultStatus.setGeneralShowsRedNotificationActive(true);
+                        if (sharedPrefs.getBoolean("prefNotifications", true)) {
+                            if (FaultStatus.getgeneralFlashingRedNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setGeneralFlashingRedNotificationActive(false);
+                            }
+                            if (!(FaultStatus.getgeneralShowsRedNotificationActive())) {
+                                updateNotification();
+                                FaultStatus.setGeneralShowsRedNotificationActive(true);
+                            }
                         }
                         break;
                     case 0xD:
@@ -1748,13 +1790,15 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                         FaultStatus.setGeneralShowsYellowActive(false);
                         FaultStatus.setGeneralFlashingRedActive(false);
                         FaultStatus.setGeneralShowsRedActive(false);
-                        if(FaultStatus.getgeneralFlashingRedNotificationActive()) {
-                            updateNotification();
-                            FaultStatus.setGeneralFlashingRedNotificationActive(false);
-                        }
-                        if(FaultStatus.getgeneralShowsRedNotificationActive()) {
-                            updateNotification();
-                            FaultStatus.setGeneralShowsRedNotificationActive(false);
+                        if (sharedPrefs.getBoolean("prefNotifications", true)) {
+                            if (FaultStatus.getgeneralFlashingRedNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setGeneralFlashingRedNotificationActive(false);
+                            }
+                            if (FaultStatus.getgeneralShowsRedNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setGeneralShowsRedNotificationActive(false);
+                            }
                         }
                         break;
                     case 0xE:
@@ -1762,13 +1806,15 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                         FaultStatus.setGeneralShowsYellowActive(true);
                         FaultStatus.setGeneralFlashingRedActive(false);
                         FaultStatus.setGeneralShowsRedActive(false);
-                        if(FaultStatus.getgeneralFlashingRedNotificationActive()) {
-                            updateNotification();
-                            FaultStatus.setGeneralFlashingRedNotificationActive(false);
-                        }
-                        if(FaultStatus.getgeneralShowsRedNotificationActive()) {
-                            updateNotification();
-                            FaultStatus.setGeneralShowsRedNotificationActive(false);
+                        if (sharedPrefs.getBoolean("prefNotifications", true)) {
+                            if (FaultStatus.getgeneralFlashingRedNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setGeneralFlashingRedNotificationActive(false);
+                            }
+                            if (FaultStatus.getgeneralShowsRedNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setGeneralShowsRedNotificationActive(false);
+                            }
                         }
                         break;
                     default:
@@ -1776,13 +1822,15 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                         FaultStatus.setGeneralShowsYellowActive(false);
                         FaultStatus.setGeneralFlashingRedActive(false);
                         FaultStatus.setGeneralShowsRedActive(false);
-                        if(FaultStatus.getgeneralFlashingRedNotificationActive()) {
-                            updateNotification();
-                            FaultStatus.setGeneralFlashingRedNotificationActive(false);
-                        }
-                        if(FaultStatus.getgeneralShowsRedNotificationActive()) {
-                            updateNotification();
-                            FaultStatus.setGeneralShowsRedNotificationActive(false);
+                        if (sharedPrefs.getBoolean("prefNotifications", true)) {
+                            if (FaultStatus.getgeneralFlashingRedNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setGeneralFlashingRedNotificationActive(false);
+                            }
+                            if (FaultStatus.getgeneralShowsRedNotificationActive()) {
+                                updateNotification();
+                                FaultStatus.setGeneralShowsRedNotificationActive(false);
+                            }
                         }
                         break;
                 }

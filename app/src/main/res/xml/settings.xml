@@ -319,6 +319,13 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/alerting_title" >
         <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="prefNotifications"
+            android:summary="@string/pref_notification_summary"
+            android:title="@string/pref_notification_name" >
+        </CheckBoxPreference>
+        <CheckBoxPreference
+            android:dependency="prefNotifications"
             android:defaultValue="false"
             android:key="prefTPMSAlert"
             android:summary="@string/pref_tpmsAlert_summary"
