@@ -1241,19 +1241,16 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                                 // KPa
                                 if (pressureThreshold >= Utils.barTokPa(rdcFront)) {
                                     FaultStatus.setfrontTirePressureCriticalActive(true);
-                                    updateNotification();
                                 }
                             } else if (pressureFormat.contains("2")) {
                                 // Kg-f
                                 if (pressureThreshold >= Utils.barTokgf(rdcFront)) {
                                     FaultStatus.setfrontTirePressureCriticalActive(true);
-                                    updateNotification();
                                 }
                             } else if (pressureFormat.contains("3")) {
                                 // Psi
                                 if (pressureThreshold >= Utils.barToPsi(rdcFront)) {
                                     FaultStatus.setfrontTirePressureCriticalActive(true);
-                                    updateNotification();
                                 }
                             }
                             if (!(FaultStatus.getfrontTirePressureCriticalNotificationActive())) {

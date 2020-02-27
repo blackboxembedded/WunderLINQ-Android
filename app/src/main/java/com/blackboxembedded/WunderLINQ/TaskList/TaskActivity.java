@@ -97,6 +97,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
 
     private CountDownTimer cTimer = null;
 
+    private boolean timerRunning = false;
+
     private List<Integer> mapping;
 
     private boolean actionCamOnline = false;
@@ -374,15 +376,20 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
 
     //Start Timer to hide the ActionBar
     void startTimer() {
-        cTimer = new CountDownTimer(10000, 1000) {
-            public void onTick(long millisUntilFinished) {
-            }
-            public void onFinish() {
-                getSupportActionBar().hide();
-                updateOrientation(TaskActivity.this.getResources().getConfiguration().orientation);
-            }
-        };
-        cTimer.start();
+        if(!timerRunning) {
+            cTimer = new CountDownTimer(10000, 1000) {
+                public void onTick(long millisUntilFinished) {
+                }
+
+                public void onFinish() {
+                    getSupportActionBar().hide();
+                    updateOrientation(TaskActivity.this.getResources().getConfiguration().orientation);
+                    timerRunning = false;
+                }
+            };
+            timerRunning = true;
+            cTimer.start();
+        }
     }
 
     //Cancel Timer to hide the ActionBar
@@ -551,7 +558,6 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 //Navigation
                 Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
                 String url = "google.navigation://?free=1&mode=d&entry=fnls";
-                Log.d(TAG,"navApp: " + navApp);
                 if (navApp.equals("1")) {
                     // Android Default
                 } else if (navApp.equals("2")){

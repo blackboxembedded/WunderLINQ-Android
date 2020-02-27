@@ -60,6 +60,8 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
 
     private CountDownTimer cTimer = null;
 
+    private boolean timerRunning = false;
+
     private OnClickListener mClickListener = new OnClickListener() {
 
         @Override
@@ -419,14 +421,19 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
 
     //start timer function
     void startTimer() {
-        cTimer = new CountDownTimer(10000, 1000) {
-            public void onTick(long millisUntilFinished) {
-            }
-            public void onFinish() {
-                getSupportActionBar().hide();
-            }
-        };
-        cTimer.start();
+        if(!timerRunning) {
+            cTimer = new CountDownTimer(10000, 1000) {
+                public void onTick(long millisUntilFinished) {
+                }
+
+                public void onFinish() {
+                    getSupportActionBar().hide();
+                    timerRunning = false;
+                }
+            };
+            timerRunning = true;
+            cTimer.start();
+        }
     }
 
     //cancel timer

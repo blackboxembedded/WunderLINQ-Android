@@ -103,6 +103,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private boolean drawingComplete = true;
 
+    private boolean timerRunning = false;
+
     private CountDownTimer cTimer = null;
 
     @Override
@@ -164,66 +166,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
             @Override
             public void onSwipeUp() {
-                int currentCellCount = Integer.parseInt(sharedPrefs.getString("CELL_COUNT","15"));
-                //int maxCellCount = Integer.parseInt(sharedPrefs.getString("prefMaxCells","15"));
-                int nextCellCount = 1;
-                SharedPreferences.Editor editor = sharedPrefs.edit();
-                gridChange = true;
-                switch (currentCellCount){
-                    case 15:
-                        nextCellCount = 1;
-                        break;
-                    case 12:
-                        nextCellCount = 15;
-                        break;
-                    case 8:
-                        nextCellCount = 12;
-                        break;
-                    case 4:
-                        nextCellCount = 8;
-                        break;
-                    case 2:
-                        nextCellCount = 4;
-                        break;
-                    case 1:
-                        nextCellCount = 2;
-                        break;
-                }
-                editor.putString("CELL_COUNT", String.valueOf(nextCellCount));
-                editor.apply();
-                updateDisplay();
+                goUp();
             }
 
             @Override
             public void onSwipeDown() {
-                int currentCellCount = Integer.parseInt(sharedPrefs.getString("CELL_COUNT","15"));
-                //int maxCellCount = Integer.parseInt(sharedPrefs.getString("prefMaxCells","15"));
-                int nextCellCount = 1;
-                SharedPreferences.Editor editor = sharedPrefs.edit();
-                gridChange = true;
-                switch (currentCellCount){
-                    case 15:
-                        nextCellCount = 12;
-                        break;
-                    case 12:
-                        nextCellCount = 8;
-                        break;
-                    case 8:
-                        nextCellCount = 4;
-                        break;
-                    case 4:
-                        nextCellCount = 2;
-                        break;
-                    case 2:
-                        nextCellCount = 1;
-                        break;
-                    case 1:
-                        nextCellCount = 15;
-                        break;
-                }
-                editor.putString("CELL_COUNT", String.valueOf(nextCellCount));
-                editor.apply();
-                updateDisplay();
+                goDown();
             }
 
             @Override
@@ -800,17 +748,16 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
             switch (state) {
                 case BluetoothDevice.BOND_BONDING:
-                    Log.d("Bondind Status:", " Bonding...");
+                    Log.d("Bonding Status:", " Bonding...");
                     break;
 
                 case BluetoothDevice.BOND_BONDED:
-                    Log.d("Bondind Status:", "Bonded!!");
+                    Log.d("Bonding Status:", "Bonded!!");
                     setupBLE();
                     break;
 
                 case BluetoothDevice.BOND_NONE:
-                    Log.d("Bondind Status:", "Fail");
-
+                    Log.d("Bonding Status:", "Fail");
                     break;
             }
         }
@@ -1043,6 +990,39 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 setCellText(12, cell12Data);
                 gridChange = false;
                 break;
+            case 10:
+                if (gridChange) {
+                    gridLayout.removeAllViews();
+                    if (portrait) {
+                        gridLayout.setColumnCount(2);
+                        gridLayout.setRowCount(5);
+                    } else {
+                        gridLayout.setColumnCount(5);
+                        gridLayout.setRowCount(2);
+                    }
+                }
+                // Cell One
+                setCellText(1, cell1Data);
+                // Cell Two
+                setCellText(2, cell2Data);
+                // Cell Three
+                setCellText(3, cell3Data);
+                // Cell Four
+                setCellText(4, cell4Data);
+                // Cell Five
+                setCellText(5, cell5Data);
+                // Cell Six
+                setCellText(6, cell6Data);
+                // Cell Seven
+                setCellText(7, cell7Data);
+                // Cell Eight
+                setCellText(8, cell8Data);
+                // Cell Nine
+                setCellText(9, cell9Data);
+                // Cell Ten
+                setCellText(10, cell10Data);
+                gridChange = false;
+                break;
             case 8:
                 if (gridChange) {
                     gridLayout.removeAllViews();
@@ -1173,15 +1153,18 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             case 1:
                 //Engine
                 label = getString(R.string.engine_temp_label) + " (" + temperatureUnit + ")";
+                icon = getResources().getDrawable(R.drawable.ic_engine_temp);
                 if(Data.getEngineTemperature() != null ){
                     Double engineTemp = Data.getEngineTemperature();
+                    if (engineTemp >= 104.0){
+                        icon.setColorFilter(getResources().getColor(R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
+                    }
                     if (temperatureFormat.contains("1")) {
                         // F
                         engineTemp = Utils.celsiusToFahrenheit(engineTemp);
                     }
                     value = String.valueOf(Math.round(engineTemp));
                 }
-                icon = getResources().getDrawable(R.drawable.ic_engine_temp);
                 break;
             case 2:
                 //Ambient
@@ -1871,10 +1854,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        int currentCellCount = Integer.parseInt(sharedPrefs.getString("CELL_COUNT","15"));
-        int nextCellCount = 1;
-        SharedPreferences.Editor editor = sharedPrefs.edit();
-
         switch (keyCode) {
             case KeyEvent.KEYCODE_ESCAPE:
                 return true;
@@ -1885,56 +1864,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 goForward();
                 return true;
             case KeyEvent.KEYCODE_DPAD_UP:
-                gridChange = true;
-                switch (currentCellCount){
-                    case 15:
-                        nextCellCount = 1;
-                        break;
-                    case 12:
-                        nextCellCount = 15;
-                        break;
-                    case 8:
-                        nextCellCount = 12;
-                        break;
-                    case 4:
-                        nextCellCount = 8;
-                        break;
-                    case 2:
-                        nextCellCount = 4;
-                        break;
-                    case 1:
-                        nextCellCount = 2;
-                        break;
-                }
-                editor.putString("CELL_COUNT", String.valueOf(nextCellCount));
-                editor.apply();
-                updateDisplay();
+                goUp();
                 return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
-                gridChange = true;
-                switch (currentCellCount){
-                    case 15:
-                        nextCellCount = 12;
-                        break;
-                    case 12:
-                        nextCellCount = 8;
-                        break;
-                    case 8:
-                        nextCellCount = 4;
-                        break;
-                    case 4:
-                        nextCellCount = 2;
-                        break;
-                    case 2:
-                        nextCellCount = 1;
-                        break;
-                    case 1:
-                        nextCellCount = 15;
-                        break;
-                }
-                editor.putString("CELL_COUNT", String.valueOf(nextCellCount));
-                editor.apply();
-                updateDisplay();
+                goDown();
                 return true;
             default:
                 return super.onKeyUp(keyCode, event);
@@ -1964,14 +1897,19 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     //start timer function
     void startTimer() {
-        cTimer = new CountDownTimer(10000, 1000) {
-            public void onTick(long millisUntilFinished) {
-            }
-            public void onFinish() {
-                getSupportActionBar().hide();
-            }
-        };
-        cTimer.start();
+        if(!timerRunning) {
+            cTimer = new CountDownTimer(10000, 1000) {
+                public void onTick(long millisUntilFinished) {
+                }
+
+                public void onFinish() {
+                    getSupportActionBar().hide();
+                    timerRunning = false;
+                }
+            };
+            timerRunning = true;
+            cTimer.start();
+        }
     }
 
     //cancel timer
@@ -1990,5 +1928,73 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private void goBack(){
         Intent backIntent = new Intent(this, com.blackboxembedded.WunderLINQ.TaskList.TaskActivity.class);
         startActivity(backIntent);
+    }
+
+    //Go up - Change grid count
+    private void goUp(){
+        int currentCellCount = Integer.parseInt(sharedPrefs.getString("CELL_COUNT","15"));
+        int nextCellCount = 1;
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        gridChange = true;
+        switch (currentCellCount){
+            case 15:
+                nextCellCount = 1;
+                break;
+            case 12:
+                nextCellCount = 15;
+                break;
+            case 10:
+                nextCellCount = 12;
+                break;
+            case 8:
+                nextCellCount = 10;
+                break;
+            case 4:
+                nextCellCount = 8;
+                break;
+            case 2:
+                nextCellCount = 4;
+                break;
+            case 1:
+                nextCellCount = 2;
+                break;
+        }
+        editor.putString("CELL_COUNT", String.valueOf(nextCellCount));
+        editor.apply();
+        updateDisplay();
+    }
+
+    //Go down - Change grid count
+    private void goDown(){
+        int currentCellCount = Integer.parseInt(sharedPrefs.getString("CELL_COUNT","15"));
+        int nextCellCount = 1;
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        gridChange = true;
+        switch (currentCellCount){
+            case 15:
+                nextCellCount = 12;
+                break;
+            case 12:
+                nextCellCount = 10;
+                break;
+            case 10:
+                nextCellCount = 8;
+                break;
+            case 8:
+                nextCellCount = 4;
+                break;
+            case 4:
+                nextCellCount = 2;
+                break;
+            case 2:
+                nextCellCount = 1;
+                break;
+            case 1:
+                nextCellCount = 15;
+                break;
+        }
+        editor.putString("CELL_COUNT", String.valueOf(nextCellCount));
+        editor.apply();
+        updateDisplay();
     }
 }
