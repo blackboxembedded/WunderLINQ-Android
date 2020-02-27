@@ -14,7 +14,7 @@ public class TripListView extends ArrayAdapter {
     private final List<String> tripList;
     public TripListView(Activity context,
                         List<String> tripList) {
-        super(context, R.layout.list_trip, tripList);
+        super(context, R.layout.item_trip, tripList);
         this.context = context;
         this.tripList = tripList;
 
@@ -22,7 +22,7 @@ public class TripListView extends ArrayAdapter {
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        View rowView= inflater.inflate(R.layout.list_trip, null, true);
+        View rowView= inflater.inflate(R.layout.item_trip, null, true);
         TextView txtTitle = rowView.findViewById(R.id.tv_label);
 
         txtTitle.setText(tripList.get(position));

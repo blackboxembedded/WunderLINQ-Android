@@ -48,7 +48,7 @@ public class WaypointDatasource {
         return pageList;
     }
     // Add record to database
-    void addRecord(WaypointRecord record) {
+    public void addRecord(WaypointRecord record) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();

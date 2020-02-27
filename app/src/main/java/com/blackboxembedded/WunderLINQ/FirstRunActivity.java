@@ -47,7 +47,6 @@ public class FirstRunActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "FirstRun onCreate");
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -56,9 +55,7 @@ public class FirstRunActivity extends AppCompatActivity {
         if (!sharedPrefs.getBoolean("FIRST_LAUNCH",true)){
             startActivity(mainIntent);
         } else {
-
             setContentView(R.layout.activity_first_run);
-
             tvMessage = findViewById(R.id.tvMessage);
             Button button = findViewById(R.id.button);
             button.setOnClickListener(mClickListener);
@@ -309,7 +306,6 @@ public class FirstRunActivity extends AppCompatActivity {
                     Log.d(TAG, "Unknown Permissions Request Code");
             }
         }
-
     }
 
     public static boolean isAccessibilityServiceEnabled(Context context, Class<?> accessibilityService) {

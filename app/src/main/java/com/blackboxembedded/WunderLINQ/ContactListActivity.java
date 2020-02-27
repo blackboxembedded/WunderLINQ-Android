@@ -1,6 +1,7 @@
 package com.blackboxembedded.WunderLINQ;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -75,6 +76,7 @@ public class ContactListActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,8 +92,7 @@ public class ContactListActivity extends AppCompatActivity {
         contactList.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
             public void onSwipeRight() {
-                Intent backIntent = new Intent(ContactListActivity.this, TaskActivity.class);
-                startActivity(backIntent);
+                goBack();
             }
         });
 
@@ -163,8 +164,7 @@ public class ContactListActivity extends AppCompatActivity {
                 updateList();
             } else {
                 //GO Back
-                Intent backIntent = new Intent(ContactListActivity.this, TaskActivity.class);
-                startActivity(backIntent);
+                goBack();
             }
         }
     }
@@ -384,6 +384,11 @@ public class ContactListActivity extends AppCompatActivity {
         forwardButton.setVisibility(View.INVISIBLE);
     }
 
+    private void goBack(){
+        Intent backIntent = new Intent(ContactListActivity.this, com.blackboxembedded.WunderLINQ.TaskList.TaskActivity.class);
+        startActivity(backIntent);
+    }
+
     private View.OnClickListener mClickListener = new View.OnClickListener() {
 
         @Override
@@ -391,8 +396,7 @@ public class ContactListActivity extends AppCompatActivity {
             switch(v.getId()) {
                 case R.id.action_back:
                     // Go back
-                    Intent backIntent = new Intent(ContactListActivity.this, TaskActivity.class);
-                    startActivity(backIntent);
+                    goBack();
                     break;
             }
         }
@@ -403,8 +407,7 @@ public class ContactListActivity extends AppCompatActivity {
         Log.d(TAG, "Keycode: " + keyCode);
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_LEFT:
-                Intent backIntent = new Intent(ContactListActivity.this, TaskActivity.class);
-                startActivity(backIntent);
+                goBack();
                 return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
                 if ((contactList.getSelectedItemPosition() == (contacts.size() - 1)) && lastPosition == (contacts.size() - 1) ){

@@ -23,7 +23,7 @@ public class ContactListView extends ArrayAdapter<String>{
 
     public ContactListView(Activity context,
                            ArrayList<String> label, ArrayList<Drawable> icon) {
-        super(context, R.layout.list_task, label);
+        super(context, R.layout.item_contact, label);
         this.context = context;
         this.label = label;
         this.icon = icon;
@@ -32,7 +32,7 @@ public class ContactListView extends ArrayAdapter<String>{
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        View rowView= inflater.inflate(R.layout.list_task, null, true);
+        View rowView= inflater.inflate(R.layout.item_contact, null, true);
         TextView txtTitle = rowView.findViewById(R.id.tv_label);
         ImageView imageView = rowView.findViewById(R.id.iv_icon);
 

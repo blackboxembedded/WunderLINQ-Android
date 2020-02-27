@@ -15,7 +15,7 @@ public class WaypointListView extends ArrayAdapter {
 
     public WaypointListView(Activity context,
                             List<WaypointRecord> label) {
-        super(context, R.layout.list_waypoint, label);
+        super(context, R.layout.item_waypoint, label);
         this.context = context;
         this.label = label;
     }
@@ -23,7 +23,7 @@ public class WaypointListView extends ArrayAdapter {
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        View rowView= inflater.inflate(R.layout.list_waypoint, null, true);
+        View rowView= inflater.inflate(R.layout.item_waypoint, null, true);
         TextView txtTitle = rowView.findViewById(R.id.tv_label);
 
         WaypointRecord record = label.get(position);

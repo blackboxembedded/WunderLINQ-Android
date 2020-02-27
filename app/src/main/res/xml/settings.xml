@@ -14,12 +14,6 @@
             android:key="prefHomePhone" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/ui_title" >
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="prefMotorcycleData"
-            android:summary="@string/pref_motorcycledata_summary"
-            android:title="@string/pref_motorcycledata_name" >
-        </CheckBoxPreference>
         <PreferenceScreen
             android:key="prefScreenGrid"
             android:title="@string/pref_grid_settings_title"

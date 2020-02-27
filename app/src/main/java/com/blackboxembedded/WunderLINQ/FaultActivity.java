@@ -50,7 +50,7 @@ public class FaultActivity extends AppCompatActivity {
         faults = (new FaultStatus(this));
         faultListData = faults.getallActiveDesc();
 
-        faultList.setAdapter(new ArrayAdapter<String>(this, R.layout.list_fault,faultListData));
+        faultList.setAdapter(new ArrayAdapter<String>(this, R.layout.item_fault,faultListData));
 
         faultList.setTextFilterEnabled(true);
         faultList.setOnItemClickListener(new OnItemClickListener() {

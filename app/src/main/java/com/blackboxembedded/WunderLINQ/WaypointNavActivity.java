@@ -1,5 +1,6 @@
 package com.blackboxembedded.WunderLINQ;
 
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -58,6 +59,7 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
         }
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,8 +91,7 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
         waypointList.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
             public void onSwipeRight() {
-                Intent backIntent = new Intent(WaypointNavActivity.this, TaskActivity.class);
-                startActivity(backIntent);
+                goBack();
             }
         });
 
@@ -225,14 +226,18 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
         forwardButton.setVisibility(View.INVISIBLE);
     }
 
+    private void goBack(){
+        Intent backIntent = new Intent(WaypointNavActivity.this, com.blackboxembedded.WunderLINQ.TaskList.TaskActivity.class);
+        startActivity(backIntent);
+    }
+
     private View.OnClickListener mClickListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
             switch(v.getId()) {
                 case R.id.action_back:
-                    Intent backIntent = new Intent(WaypointNavActivity.this, TaskActivity.class);
-                    startActivity(backIntent);
+                    goBack();
                     break;
             }
         }
@@ -243,8 +248,7 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
         Log.d(TAG, "Keycode: " + keyCode);
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_LEFT:
-                Intent backIntent = new Intent(WaypointNavActivity.this, TaskActivity.class);
-                startActivity(backIntent);
+                goBack();
                 return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
                 if ((waypointList.getSelectedItemPosition() == (listValues.size() - 1)) && lastPosition == (listValues.size() - 1) ){

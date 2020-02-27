@@ -20,7 +20,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
 import android.provider.MediaStore;
-import androidx.core.app.NotificationCompat;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
@@ -29,6 +28,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+
+import androidx.core.app.NotificationCompat;
 
 import java.io.File;
 import java.util.Date;
@@ -106,7 +107,7 @@ public class VideoRecService extends Service implements SurfaceHolder.Callback {
             String bestProvider = locationManager.getBestProvider(criteria, false);
             location = locationManager.getLastKnownLocation(bestProvider);
         }
-
+        ((MyApplication) this.getApplication()).setVideoRecording(true);
     }
 
     // Method called right after Surface created (initializing and starting MediaRecorder)
@@ -162,8 +163,6 @@ public class VideoRecService extends Service implements SurfaceHolder.Callback {
 
         try { mediaRecorder.prepare(); } catch (Exception e) {}
         mediaRecorder.start();
-
-        ((MyApplication) this.getApplication()).setVideoRecording(true);
     }
 
     // Stop recording and remove SurfaceView
@@ -197,7 +196,6 @@ public class VideoRecService extends Service implements SurfaceHolder.Callback {
         getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
 
         ((MyApplication) this.getApplication()).setVideoRecording(false);
-
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.blackboxembedded.WunderLINQ;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -42,6 +43,7 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
 
     private String timestamp = "";
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -175,14 +177,17 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
         forwardButton.setVisibility(View.INVISIBLE);
     }
 
+    private void goBack(){
+        Intent backIntent = new Intent(WeatherMapActivity.this, com.blackboxembedded.WunderLINQ.TaskList.TaskActivity.class);
+        startActivity(backIntent);
+    }
     private View.OnClickListener mClickListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
             switch(v.getId()) {
                 case R.id.action_back:
-                    Intent backIntent = new Intent(WeatherMapActivity.this, TaskActivity.class);
-                    startActivity(backIntent);
+                    goBack();
                     break;
             }
         }
@@ -193,8 +198,7 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
         Log.d(TAG, "Keycode: " + keyCode);
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_LEFT:
-                Intent backIntent = new Intent(WeatherMapActivity.this, TaskActivity.class);
-                startActivity(backIntent);
+                goBack();
                 return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
                 //Zoom Out

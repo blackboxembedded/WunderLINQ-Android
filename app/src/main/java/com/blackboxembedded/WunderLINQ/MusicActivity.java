@@ -1,8 +1,8 @@
 package com.blackboxembedded.WunderLINQ;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -34,7 +33,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -43,7 +41,7 @@ import java.util.Set;
 
 public class MusicActivity extends AppCompatActivity implements View.OnTouchListener {
 
-    public final static String TAG = "WunderLINQ";
+    public final static String TAG = "MusicActivity";
 
     private ImageButton mPlayPauseButton;
     private TextView mArtistText;
@@ -57,8 +55,6 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
     private SharedPreferences sharedPrefs;
 
     private Handler mHandler = new Handler();
-
-    private boolean alertDiagUp = true;
 
     private GestureDetectorListener gestureDetector;
 
@@ -93,18 +89,15 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
                                 refreshMetaData();
                             }
                         } catch (NullPointerException e) {
-                            // Testing
                             Log.d(TAG,"NullPointerException: " + e.toString());
                         }
                     }
                     break;
                 case R.id.action_back:
-                    Intent backIntent = new Intent(MusicActivity.this, MainActivity.class);
-                    startActivity(backIntent);
+                    goBack();
                     break;
                 case R.id.action_forward:
-                    Intent forwardIntent = new Intent(MusicActivity.this, TaskActivity.class);
-                    startActivity(forwardIntent);
+                    goForward();
                     break;
             }
         }
@@ -120,6 +113,7 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         }
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,14 +160,12 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
 
             @Override
             public void onSwipeLeft() {
-                Intent backIntent = new Intent(MusicActivity.this, TaskActivity.class);
-                startActivity(backIntent);
+                goForward();
             }
 
             @Override
             public void onSwipeRight() {
-                Intent backIntent = new Intent(MusicActivity.this, MainActivity.class);
-                startActivity(backIntent);
+                goBack();
             }
         };
 
@@ -194,27 +186,6 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         mPlayPauseButton.setOnClickListener(mClickListener);
 
         showActionBar();
-
-        // Check if we have permissions
-        Set<String> packageNames = NotificationManagerCompat.getEnabledListenerPackages (this);
-        if (packageNames.contains(getApplicationContext().getPackageName()))
-        {
-            alertDiagUp = false;
-            MediaSessionManager mm = (MediaSessionManager) this.getSystemService(
-                    Context.MEDIA_SESSION_SERVICE);
-            List<MediaController> controllers = mm.getActiveSessions(
-                    new ComponentName(this, NotificationListener.class));
-            if (controllers.size() != 0 ) {
-                mHandler.post(mUpdateMetaData);
-            } else {
-                mTitleText.setText(R.string.not_found_media_player);
-                mAlbumText.setText(R.string.start_media_player);
-                mArtistText.setText("");
-            }
-        } else {
-            // Need permissions to read notifications
-            requestPermissions();
-        }
     }
 
     @Override
@@ -229,16 +200,24 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         mPlayPauseButton.setFocusable(true);
         mPlayPauseButton.requestFocus();
 
-        // Need permissions to read notifications
+        // Check if we have permissions to read notifications
         Set<String> packageNames = NotificationManagerCompat.getEnabledListenerPackages (this);
         if (packageNames.contains(getApplicationContext().getPackageName())) {
-            alertDiagUp = false;
-            mHandler.post(mUpdateMetaData);
-        } else {
-            // Need permissions to read notifications
-            if (!alertDiagUp) {
-                requestPermissions();
+            MediaSessionManager mm = (MediaSessionManager) this.getSystemService(
+                    Context.MEDIA_SESSION_SERVICE);
+            List<MediaController> controllers = mm.getActiveSessions(
+                    new ComponentName(this, NotificationListener.class));
+            if (controllers.size() != 0 ) {
+                mHandler.post(mUpdateMetaData);
+            } else {
+                mTitleText.setText(R.string.not_found_media_player);
+                mAlbumText.setText(R.string.start_media_player);
+                mArtistText.setText("");
             }
+        } else {
+            mTitleText.setText("");
+            mAlbumText.setText(R.string.toast_permission_denied);
+            mArtistText.setText("");
         }
 
         getSupportActionBar().show();
@@ -293,6 +272,18 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         forwardButton.setOnClickListener(mClickListener);
     }
 
+    //Go to next screen - Quick Tasks
+    private void goForward(){
+        Intent backIntent = new Intent(this, com.blackboxembedded.WunderLINQ.TaskList.TaskActivity.class);
+        startActivity(backIntent);
+    }
+
+    //Go back to last screen - Motorcycle Data
+    private void goBack(){
+        Intent backIntent = new Intent(this, MainActivity.class);
+        startActivity(backIntent);
+    }
+
     private Runnable mUpdateMetaData = new Runnable() {
         @Override
         public void run() {
@@ -301,105 +292,83 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         }
     };
 
-    private void requestPermissions(){
-        // Need permissions to read notifications
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.notification_alert_title));
-        builder.setMessage(getString(R.string.notification_alert_body));
-        builder.setPositiveButton(android.R.string.ok, null);
-        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            public void onDismiss(DialogInterface dialog) {
-                /*
-                getApplicationContext().startActivity(new Intent(
-                        "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
-                        */
-                startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
-            }
-        });
-        builder.show();
-    }
-
+    //Refresh media metadata on screen and update button status
     protected void refreshMetaData(){
-        // Check if we have permissions
-        if (Settings.Secure.getString(this.getContentResolver(),"enabled_notification_listeners").contains(getApplicationContext().getPackageName())) {
-            MediaSessionManager mm = (MediaSessionManager) this.getSystemService(
-                    Context.MEDIA_SESSION_SERVICE);
-            List<MediaController> controllers = mm.getActiveSessions(
-                    new ComponentName(this, NotificationListener.class));
-            if (controllers.size() != 0 ) {
-                controller = controllers.get(0);
-                controls = controller.getTransportControls();
-                PlaybackState playbackState = controller.getPlaybackState();
-                if (playbackState != null) {
-                    if (playbackState.getState() != PlaybackState.STATE_PLAYING) {
-                        mPlayPauseButton.setImageResource(R.drawable.ic_play);
-                    } else {
-                        mPlayPauseButton.setImageResource(R.drawable.ic_pause);
+        MediaSessionManager mm = (MediaSessionManager) this.getSystemService(
+                Context.MEDIA_SESSION_SERVICE);
+        List<MediaController> controllers = mm.getActiveSessions(
+                new ComponentName(this, NotificationListener.class));
+        if (controllers.size() != 0 ) {
+            controller = controllers.get(0);
+            controls = controller.getTransportControls();
+            PlaybackState playbackState = controller.getPlaybackState();
+            if (playbackState != null) {
+                if (playbackState.getState() != PlaybackState.STATE_PLAYING) {
+                    mPlayPauseButton.setImageResource(R.drawable.ic_play);
+                } else {
+                    mPlayPauseButton.setImageResource(R.drawable.ic_pause);
+                }
+            }
+
+            try {
+                MediaMetadata metaData = controller.getMetadata();
+
+                String metadataArtist = getString(R.string.unknown);
+                if (metaData.getString(MediaMetadata.METADATA_KEY_ARTIST) != null) {
+                    metadataArtist = metaData.getString(MediaMetadata.METADATA_KEY_ARTIST);
+                }
+                mArtistText.setText(metadataArtist);
+
+                String metadataAlbum = getString(R.string.unknown);
+                if (metaData.getString(MediaMetadata.METADATA_KEY_ALBUM) != null) {
+                    metadataAlbum = metaData.getString(MediaMetadata.METADATA_KEY_ALBUM);
+                }
+                mAlbumText.setText(metadataAlbum);
+
+                String metadataTitle = getString(R.string.unknown);
+                if (metaData.getString(MediaMetadata.METADATA_KEY_TITLE) != null) {
+                    metadataTitle = metaData.getString(MediaMetadata.METADATA_KEY_TITLE);
+                }
+                mTitleText.setText(metadataTitle);
+
+                if (metaData.getBitmap(MediaMetadata.METADATA_KEY_ART) != null) {
+                    mArtwork.setImageBitmap(scaleBitmap(metaData.getBitmap(MediaMetadata.METADATA_KEY_ART), 800, 800));
+                    mArtwork.clearColorFilter();
+                    mArtwork.setImageTintMode(null);
+                } else if (metaData.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART) != null) {
+                    mArtwork.setImageBitmap(scaleBitmap(metaData.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART), 800, 800));
+                    mArtwork.clearColorFilter();
+                    mArtwork.setImageTintMode(null);
+                } else {
+                    Log.d(TAG,"No art");
+                    Drawable drawable = getResources().getDrawable(R.drawable.ic_music_note);
+                    try {
+                        Bitmap bitmap;
+
+                        bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.RGB_565);
+
+                        Canvas canvas = new Canvas(bitmap);
+                        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+                        drawable.draw(canvas);
+
+                        mArtwork.setImageBitmap(scaleBitmap(bitmap, 800, 800));
+
+                        TypedValue typedValue = new TypedValue();
+                        getTheme().resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true);
+                        mArtwork.setColorFilter(typedValue.data);
+
+                    } catch (OutOfMemoryError e) {
+                        // Handle the error
+                        Log.d(TAG,"Error converting drawable to bitmap");
                     }
                 }
-
-                try {
-                    MediaMetadata metaData = controller.getMetadata();
-
-                    String metadataArtist = getString(R.string.unknown);
-                    if (metaData.getString(MediaMetadata.METADATA_KEY_ARTIST) != null) {
-                        metadataArtist = metaData.getString(MediaMetadata.METADATA_KEY_ARTIST);
-                    }
-                    mArtistText.setText(metadataArtist);
-
-                    String metadataAlbum = getString(R.string.unknown);
-                    if (metaData.getString(MediaMetadata.METADATA_KEY_ALBUM) != null) {
-                        metadataAlbum = metaData.getString(MediaMetadata.METADATA_KEY_ALBUM);
-                    }
-                    mAlbumText.setText(metadataAlbum);
-
-                    String metadataTitle = getString(R.string.unknown);
-                    if (metaData.getString(MediaMetadata.METADATA_KEY_TITLE) != null) {
-                        metadataTitle = metaData.getString(MediaMetadata.METADATA_KEY_TITLE);
-                    }
-                    mTitleText.setText(metadataTitle);
-
-                    if (metaData.getBitmap(MediaMetadata.METADATA_KEY_ART) != null) {
-                        mArtwork.setImageBitmap(scaleBitmap(metaData.getBitmap(MediaMetadata.METADATA_KEY_ART), 800, 800));
-                        mArtwork.clearColorFilter();
-                        mArtwork.setImageTintMode(null);
-                    } else if (metaData.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART) != null) {
-                        mArtwork.setImageBitmap(scaleBitmap(metaData.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART), 800, 800));
-                        mArtwork.clearColorFilter();
-                        mArtwork.setImageTintMode(null);
-                    } else {
-                        Log.d(TAG,"No art");
-                        Drawable drawable = getResources().getDrawable(R.drawable.ic_music_note);
-                        try {
-                            Bitmap bitmap;
-
-                            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.RGB_565);
-
-                            Canvas canvas = new Canvas(bitmap);
-                            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-                            drawable.draw(canvas);
-
-                            mArtwork.setImageBitmap(scaleBitmap(bitmap, 800, 800));
-
-                            TypedValue typedValue = new TypedValue();
-                            getTheme().resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true);
-                            mArtwork.setColorFilter(typedValue.data);
-
-                        } catch (OutOfMemoryError e) {
-                            // Handle the error
-                            Log.d(TAG,"Error converting drawable to bitmap");
-                        }
-                    }
-                } catch (NullPointerException e){
-                    Log.d(TAG,"Error: " + e.toString());
-                }
-            } else {
-                mArtistText.setText(R.string.not_found_media_player);
-                mTitleText.setText(R.string.start_media_player);
-                mAlbumText.setText("");
+            } catch (NullPointerException e){
+                Log.d(TAG,"Error: " + e.toString());
             }
         } else {
-            Log.d(TAG, "No permissions to control music player");
+            mArtistText.setText(R.string.not_found_media_player);
+            mTitleText.setText(R.string.start_media_player);
+            mAlbumText.setText("");
         }
     }
 
@@ -436,14 +405,12 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 mPlayPauseButton.setFocusable(true);
                 mPlayPauseButton.requestFocus();
-                Intent backIntent = new Intent(MusicActivity.this, MainActivity.class);
-                startActivity(backIntent);
+                goBack();
                 return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 mPlayPauseButton.setFocusable(true);
                 mPlayPauseButton.requestFocus();
-                Intent forwardIntent = new Intent(MusicActivity.this, TaskActivity.class);
-                startActivity(forwardIntent);
+                goForward();
                 return true;
             default:
                 return super.onKeyUp(keyCode, event);
