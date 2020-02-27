@@ -496,6 +496,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         }
 
         getSupportActionBar().show();
+        updateNightMode();
         updateDisplay();
         startTimer();
     }
@@ -610,37 +611,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             return;
         } else if (requestCode == SETTINGS_CHECK) {
             gridChange = true;
-
-            int currentNightMode = getResources().getConfiguration().uiMode
-                    & Configuration.UI_MODE_NIGHT_MASK;
-            int prefNightMode = Integer.parseInt(sharedPrefs.getString("prefNightModeCombo", "3"));
-
-            switch(prefNightMode){
-                case 0:
-                    //Off
-                    if(currentNightMode != Configuration.UI_MODE_NIGHT_NO){
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                        Log.d(TAG,"Setting NIGHT MODE OFF");
-                    }
-                    break;
-                case 1:
-                    //On
-                    if(currentNightMode != Configuration.UI_MODE_NIGHT_YES){
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                        Log.d(TAG,"Setting NIGHT MODE ON");
-                    }
-                    break;
-                case 3:
-                    //Android
-                    if(currentNightMode != Configuration.UI_MODE_NIGHT_UNDEFINED){
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                        Log.d(TAG,"Setting NIGHT MODE FOLLOW SYSTEM");
-                    }
-                    break;
-                default:
-                    //
-                    break;
-            }
+            updateNightMode();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -853,6 +824,40 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                 }
             }
+        }
+    }
+
+    //Update Nightmode
+    private void updateNightMode(){
+        int currentNightMode = getResources().getConfiguration().uiMode
+                & Configuration.UI_MODE_NIGHT_MASK;
+        int prefNightMode = Integer.parseInt(sharedPrefs.getString("prefNightModeCombo", "3"));
+
+        switch(prefNightMode){
+            case 0:
+                //Off
+                if(currentNightMode != Configuration.UI_MODE_NIGHT_NO){
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    Log.d(TAG,"Setting NIGHT MODE OFF");
+                }
+                break;
+            case 1:
+                //On
+                if(currentNightMode != Configuration.UI_MODE_NIGHT_YES){
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    Log.d(TAG,"Setting NIGHT MODE ON");
+                }
+                break;
+            case 3:
+                //Android
+                if(currentNightMode != Configuration.UI_MODE_NIGHT_UNDEFINED){
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                    Log.d(TAG,"Setting NIGHT MODE FOLLOW SYSTEM");
+                }
+                break;
+            default:
+                //
+                break;
         }
     }
 
