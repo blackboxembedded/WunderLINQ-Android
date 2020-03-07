@@ -298,8 +298,6 @@
     <string name="negative_contacts_alert_body">Η εφαρμογή δεν θα μπορεί να εμφανίσει ή να καλέσει επαφές, όσο δεν έχει εκχωρηθεί πρόσβαση στη λίστα επαφών.</string>
     <string name="call_alert_body">Παρακαλώ αποδεχτείτε πρόσβαση στο τηλέφωνό σας</string>
     <string name="call_alert_title">Το WunderLINQ χρειάζεται την άδειά σας για να πραγματοποιείτε τηλεφωνικές κλήσεις</string>
-    <string name="pref_motorcycledata_name">Απενεργοποίηση εμφάνισης δεδομένων απόδοσης</string>
-    <string name="pref_motorcycledata_summary">Ενεργοποιείστε για μοτοσυκλέτες που δεν έχουν δεδομένα απόδοσης.</string>
     <string name="pref_grid_settings_title">Παραμετροποίηση προβολής πλέγματος δεδομένων</string>
     <string name="pref_grid_settings_summary">Επιλέξτε ποια δεδομένα εμφανίζονται στα αντίστοιχα κελιά</string>
     <string name="thirteenth">Δέκατη-τρίτη</string>

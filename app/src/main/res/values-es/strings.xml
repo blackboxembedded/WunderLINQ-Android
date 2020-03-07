@@ -327,8 +327,6 @@
     <string name="negative_contacts_alert_body">Como el acceso a los contactos no se ha permitido, esta aplicación no podrá mostrar o llamar a sus contactos.</string>
     <string name="call_alert_body">Por favor, permita el acceso al uso de su teléfono</string>
     <string name="call_alert_title">WunderLINQ necesita permiso para usar su teléfono para hacer llamadas</string>
-    <string name="pref_motorcycledata_name">Deshabilitar la visualización de datos de rendimiento</string>
-    <string name="pref_motorcycledata_summary">Habilitar para las motos que no tienen datos de rendimiento.</string>
     <string name="pref_grid_settings_title">Personalización de la cuadrícula de datos</string>
     <string name="pref_grid_settings_summary">Personalizar qué datos se muestran y en qué celda</string>
     <string name="thirteenth">Décimo tercero</string>

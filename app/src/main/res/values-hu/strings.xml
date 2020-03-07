@@ -29,7 +29,6 @@
     <string name="second">Második</string>
     <string name="first">Első</string>
     <string name="pref_grid_settings_title">Egyéni adathálózat beállítások</string>
-    <string name="pref_motorcycledata_name">Teljesítménykijelzés tiltása</string>
     <string name="ui_title">Felhasználói felület</string>
     <string name="pref_homePhone_name">Kedvenc telefonszám</string>
     <string name="pref_homeAddress_name">Otthoni cím</string>
@@ -352,7 +351,6 @@
     <string name="sunrisesunset_header">Napfelkelte/napnyugta</string>
     <string name="pref_homeAddress_summary">Formátum: 12345 utcanév, város, állam 12345</string>
     <string name="pref_homePhone_summary">Formátum: 11234567890</string>
-    <string name="pref_motorcycledata_summary">Engedélyezés olyan teljesítményadatok nélküli motorokhoz.</string>
     <string name="pref_grid_settings_summary">Egyéni beállítás: mely adatpontok kerülnek kijelzésre és mely cellában</string>
     <string name="thirteenth">Tizenharmadik</string>
     <string name="fiftheenth">Tizenötödik</string>

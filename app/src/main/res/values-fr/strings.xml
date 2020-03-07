@@ -293,8 +293,6 @@
     <string name="negative_contacts_alert_body">L\'application ne pourra pas afficher ou téléphoner à vos contacts puisque l\'accès à ceux-ci n\'est pas permis.</string>
     <string name="call_alert_body">Merci d\'accorder l\'accès de faire des appels</string>
     <string name="call_alert_title">WunderLINQ requiert la permission de faire des appels</string>
-    <string name="pref_motorcycledata_name">Désactiver l\'affichage des données</string>
-    <string name="pref_motorcycledata_summary">Activer sur les téléphones qui n\'ont pas les performances requises.</string>
     <string name="pref_grid_settings_title">Personnalisation des grilles</string>
     <string name="pref_grid_settings_summary">Personnaliser quelles informations afficher dans chaque cellule</string>
     <string name="first">Première</string>

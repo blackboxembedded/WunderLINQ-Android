@@ -1212,6 +1212,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 if (FaultStatus.getfrontTirePressureCriticalActive()){
                     icon = getResources().getDrawable(R.drawable.ic_tire_alert);
                     icon.setColorFilter(getResources().getColor(R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
+                } else if (FaultStatus.getfrontTirePressureWarningActive()){
+                    icon = getResources().getDrawable(R.drawable.ic_tire_alert);
+                    icon.setColorFilter(getResources().getColor(R.color.yellow), PorterDuff.Mode.SRC_ATOP);
                 }
                 break;
             case 4:
@@ -1235,6 +1238,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 if (FaultStatus.getrearTirePressureCriticalActive()){
                     icon = getResources().getDrawable(R.drawable.ic_tire_alert);
                     icon.setColorFilter(getResources().getColor(R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
+                } else if (FaultStatus.getrearTirePressureWarningActive()){
+                    icon = getResources().getDrawable(R.drawable.ic_tire_alert);
+                    icon.setColorFilter(getResources().getColor(R.color.yellow), PorterDuff.Mode.SRC_ATOP);
                 }
                 break;
             case 5:

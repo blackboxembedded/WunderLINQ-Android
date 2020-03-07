@@ -297,8 +297,6 @@
     <string name="negative_contacts_alert_body">Ker dostop do stikov ni dovoljen, aplikacija ne more prikazati ali klicati stikov.</string>
     <string name="call_alert_body">Prosim dovolite uporabo telefona</string>
     <string name="call_alert_title">WunderLINQ potrebuje dovoljenje za uporabo telefona, da lahko izvaja klice</string>
-    <string name="pref_motorcycledata_name">Onemogoči prikaz podatkov</string>
-    <string name="pref_motorcycledata_summary">Omogoči za motorje ki ne podajajo vseh podatkov.</string>
     <string name="pref_grid_settings_title">Prilagajanje podatkovne mreže</string>
     <string name="pref_grid_settings_summary">Izberite katere podatke in v kateri celici jih želite prikazati</string>
     <string name="first">Prvi</string>

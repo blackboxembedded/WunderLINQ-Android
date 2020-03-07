@@ -57,7 +57,7 @@ public class AboutActivity extends AppCompatActivity {
 
         });
         TextView tvVersion = findViewById(R.id.tvVersion);
-        tvVersion.setText(getString(R.string.version_label) + " " + BuildConfig.VERSION_NAME);
+        tvVersion.setText(String.format("%s %s", getString(R.string.version_label), BuildConfig.VERSION_NAME));
         TextView tvCompany = findViewById(R.id.tvCompany);
         tvCompany.setMovementMethod(LinkMovementMethod.getInstance());
         Button btSendLogs = findViewById(R.id.btSendLogs);
@@ -86,7 +86,8 @@ public class AboutActivity extends AppCompatActivity {
                 Intent emailIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
                 // set the type to 'email'
                 emailIntent.setType("text/plain");
-                String to[] = {getString(R.string.sendlogs_email)};
+                String[] to;
+                to = new String[]{getString(R.string.sendlogs_email)};
                 emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
                 // the attachment
                 //has to be an ArrayList
@@ -130,8 +131,8 @@ public class AboutActivity extends AppCompatActivity {
     }
 
     private void showActionBar(){
-        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflator.inflate(R.layout.actionbar_nav, null);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.actionbar_nav, null);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled (false);
@@ -153,11 +154,9 @@ public class AboutActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            switch(v.getId()) {
-                case R.id.action_back:
+            if(v.getId() == R.id.action_back) {
                     Intent backIntent = new Intent(AboutActivity.this, MainActivity.class);
                     startActivity(backIntent);
-                    break;
             }
         }
     };

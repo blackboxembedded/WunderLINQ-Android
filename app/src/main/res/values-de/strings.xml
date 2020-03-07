@@ -277,8 +277,6 @@
     <string name="negative_contacts_alert_body">Weil Kontaktlistenzugriff nicht gewährt wurde, kann diese App bei eingehendem Anruf keine Kontaktdaten anzeigen oder ausgehende Anrufe tätigen.</string>
     <string name="call_alert_body">Bitte erlauben Sie den Zugriff auf Ihr Telefon</string>
     <string name="call_alert_title">WunderLINQ benötigt Zugriff auf Ihr Telefon um Anrufe zu tätigen</string>
-    <string name="pref_motorcycledata_name">Leistungsdaten-anzeige deaktivieren</string>
-    <string name="pref_motorcycledata_summary">Einschalten für Motorräder, die keine Datenanzeige ermöglichen.</string>
     <string name="pref_grid_settings_title">Anpassung der Datenfelder</string>
     <string name="pref_grid_settings_summary">Passen Sie an welche Datenfelder und in welcher Zelle diese angezeigt werden sollen</string>
     <string name="tripauto_label">Auto Fahrtaufzeichnung</string>

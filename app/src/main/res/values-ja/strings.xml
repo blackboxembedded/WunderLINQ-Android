@@ -31,7 +31,6 @@
     <string name="nav_app_google">Google Maps</string>
     <string name="pref_tasks_settings_title">クイックタスクのカスタム</string>
     <string name="pref_grid_settings_title">データグリッド表示カスタム</string>
-    <string name="pref_motorcycledata_name">パフォーマンスデータ表示をやめる</string>
     <string name="ui_title">ユーザーインターフェイス</string>
     <string name="pref_homePhone_name">お気に入りの電話番号</string>
     <string name="pref_homeAddress_name">自宅住所</string>
@@ -338,7 +337,6 @@
     <string name="barometricpressure_header">気圧</string>
     <string name="title_video_notification">ワンダーリンク動画撮影</string>
     <string name="pref_tasks_settings_summary">タスク表示のカスタム</string>
-    <string name="pref_motorcycledata_summary">不足しているパフォーマンスデータを有効にする。</string>
     <string name="pref_grid_settings_summary">データ表示のカスタム</string>
     <string name="nav_app_default">アンドロイドデフォルト</string>
     <string name="pref_contacts_filter_title">連絡先ディスプレイ</string>
