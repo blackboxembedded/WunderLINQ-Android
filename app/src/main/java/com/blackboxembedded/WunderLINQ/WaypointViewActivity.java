@@ -249,6 +249,10 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
             String latlon[] = record.getData().split(",");
             //navUrl = "com.sygic.aura://coordinate|"  + latlon[1] + "|" + latlon[0] + "|show&&&back_button|com.blackboxembedded.wunderlinq";
             navUrl = "com.sygic.aura://coordinate|"  + latlon[1] + "|" + latlon[0] + "|show";
+        } else if (navApp.equals("9")) {
+            //Kurviger
+            navUrl = "https://kurviger.de/en?point="  + record.getData() + "&locale=en" +"&vehicle=motorycycle"
+                    + "weighting=fastest" + "use_miles=true";
         }
         if (!navApp.equals("6")) {
             try {
@@ -317,6 +321,10 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
                 String latlon[] = record.getData().split(",");
                 navUrl = "com.sygic.aura://coordinate|"  + latlon[1] + "|" + latlon[0] + "|drive";
                 //navUrl = "com.sygic.aura://coordinate|"  + latlon[1] + "|" + latlon[0] + "|drive&&&back_button|com.blackboxembedded.wunderlinq";
+            } else if (navApp.equals("9")) {
+                //Kurviger
+                navUrl = "https://kurviger.de/en?point="  + record.getData() + "&locale=en" +"&vehicle=motorycycle"
+                        + "weighting=fastest" + "use_miles=true";
             }
             if (!navApp.equals("6")) {
                 try {

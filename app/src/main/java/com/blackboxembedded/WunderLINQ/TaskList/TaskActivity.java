@@ -590,6 +590,13 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                     //Sygic
                     //https://www.sygic.com/developers/professional-navigation-sdk/android/api-examples/custom-url
                     url = "com.sygic.aura://";
+                } else if (navApp.equals("9")) {
+                    //Kurviger
+                    navIntent = getPackageManager().getLaunchIntentForPackage("gr.talent.kurviger.pro");
+                    if (navIntent == null) {
+                        navIntent = getPackageManager().getLaunchIntentForPackage("gr.talent.kurviger");
+                    }
+                    url = "";
                 }
                 try {
                     navIntent.setData(Uri.parse(url));
@@ -662,6 +669,10 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                                         //Sygic
                                         //https://www.sygic.com/developers/professional-navigation-sdk/android/api-examples/custom-url
                                         navUrl = "com.sygic.aura://coordinate|"  + location.longitude + "|" + location.latitude + "|drive";
+                                    } else if (navApp.equals("9")) {
+                                        //Kurviger
+                                        navUrl = "https://kurviger.de/en?point="  + location.latitude + "," + location.longitude+"&vehicle=motorycycle"
+                                                + "weighting=fastest";
                                     }
                                     Log.d(TAG,"NavURL: " + navUrl);
                                     if (!navApp.equals("6")) {
