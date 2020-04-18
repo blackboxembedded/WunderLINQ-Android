@@ -63,10 +63,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.RecyclerViewHo
     public void onBindViewHolder(RecyclerViewHolder holder, final int position) {
 
         MenuItem data_provider = dataSource.get(position);
-
+        holder.menuIcon.setImageResource(data_provider.getImage());
         if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            final Drawable rotatedDrawable = getRotateDrawable(context.getDrawable(data_provider.getImage()), 270.0f);
-            holder.menuIcon.setImageDrawable(rotatedDrawable);
+            holder.menuIcon.setRotation(270.0f);
             holder.menuItem.setText("");
         } else {
             holder.menuIcon.setImageResource(data_provider.getImage());
