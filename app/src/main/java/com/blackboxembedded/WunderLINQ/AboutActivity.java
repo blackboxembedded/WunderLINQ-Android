@@ -101,6 +101,7 @@ public class AboutActivity extends AppCompatActivity {
                 // the mail subject
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sendlogs_subject));
                 emailIntent.putExtra(Intent.EXTRA_TEXT, "App Version: " + BuildConfig.VERSION_NAME + "\n"
+                        + "Firmware Version: " + Data.getFirmwareVersion() + "\n"
                         + "Android Version: " + Build.VERSION.RELEASE + "\n"
                         + "Manufacturer, Model: " + Build.MANUFACTURER + ", " + Build.MODEL + "\n"
                         + getString(R.string.sendlogs_body));
