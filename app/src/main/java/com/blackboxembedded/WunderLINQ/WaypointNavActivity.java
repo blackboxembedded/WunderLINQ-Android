@@ -171,8 +171,10 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
                     if (!navApp.equals("6")) {
                         try {
                             navIntent.setData(Uri.parse(navUrl));
-                            if (android.os.Build.VERSION.SDK_INT >= 24) {
-                                navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                            if (sharedPrefs.getBoolean("prefPIP", false)) {
+                                if (android.os.Build.VERSION.SDK_INT >= 24) {
+                                    navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                                }
                             }
                             startActivity(navIntent);
                         } catch (ActivityNotFoundException ex) {

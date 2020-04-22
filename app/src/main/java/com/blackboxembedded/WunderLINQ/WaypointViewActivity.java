@@ -56,6 +56,8 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
 
     private String navApp;
 
+    private SharedPreferences sharedPrefs;
+
     @Override
     public void osmandMissing() {
         //OsmAndMissingDialogFragment().show(supportFragmentManager, null);
@@ -67,6 +69,8 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
 
         AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
         setContentView(R.layout.activity_waypoint_view);
+
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         showActionBar();
         TextView tvDate = findViewById(R.id.tvDate);
@@ -257,8 +261,10 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
         if (!navApp.equals("6")) {
             try {
                 navIntent.setData(Uri.parse(navUrl));
-                if (android.os.Build.VERSION.SDK_INT >= 24) {
-                    navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                if (sharedPrefs.getBoolean("prefPIP", false)) {
+                    if (android.os.Build.VERSION.SDK_INT >= 24) {
+                        navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                    }
                 }
                 startActivity(navIntent);
             } catch (ActivityNotFoundException ex) {
@@ -329,8 +335,10 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
             if (!navApp.equals("6")) {
                 try {
                     navIntent.setData(Uri.parse(navUrl));
-                    if (android.os.Build.VERSION.SDK_INT >= 24) {
-                        navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                    if (sharedPrefs.getBoolean("prefPIP", false)) {
+                        if (android.os.Build.VERSION.SDK_INT >= 24) {
+                            navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                        }
                     }
                     startActivity(navIntent);
                 } catch (ActivityNotFoundException ex) {

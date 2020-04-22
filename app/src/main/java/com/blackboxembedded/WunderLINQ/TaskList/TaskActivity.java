@@ -600,8 +600,10 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 }
                 try {
                     navIntent.setData(Uri.parse(url));
-                    if (android.os.Build.VERSION.SDK_INT >= 24) {
-                        navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                    if (sharedPrefs.getBoolean("prefPIP", false)) {
+                        if (android.os.Build.VERSION.SDK_INT >= 24) {
+                            navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                        }
                     }
                     startActivity(navIntent);
                 } catch ( ActivityNotFoundException ex  ) {
@@ -678,8 +680,10 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                                     if (!navApp.equals("6")) {
                                         try {
                                             homeNavIntent.setData(Uri.parse(navUrl));
-                                            if (android.os.Build.VERSION.SDK_INT >= 24) {
-                                                homeNavIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                                            if (sharedPrefs.getBoolean("prefPIP", false)) {
+                                                if (android.os.Build.VERSION.SDK_INT >= 24) {
+                                                    homeNavIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                                                }
                                             }
                                             startActivity(homeNavIntent);
                                         } catch (ActivityNotFoundException ex) {
