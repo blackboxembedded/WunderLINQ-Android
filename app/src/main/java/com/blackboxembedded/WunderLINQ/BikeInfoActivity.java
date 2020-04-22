@@ -103,14 +103,17 @@ public class BikeInfoActivity extends AppCompatActivity {
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
 
         if (Data.getFirmwareVersion() == null) {
+            Log.d(TAG, "UData.getFirmwareVersion() == null");
             if (characteristic != null) {
                 // Get Version
+                Log.d(TAG, "Get Version");
                 byte[] getVersionCmd = {0x57, 0x52, 0x56};
                 characteristic.setValue(getVersionCmd);
                 BluetoothLeService.writeCharacteristic(characteristic);
             }
         } else {
             if (Data.getFirmwareVersion() >= 1.8) {
+                Log.d(TAG, "UData.getFirmwareVersion() >= 1.8");
                 tvResetHeader.setVisibility(View.VISIBLE);
                 spReset.setVisibility(View.VISIBLE);
                 tvResetLabel.setVisibility(View.VISIBLE);
