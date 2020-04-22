@@ -600,8 +600,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 }
                 try {
                     navIntent.setData(Uri.parse(url));
-                    if (sharedPrefs.getBoolean("prefPIP", false)) {
-                        if (android.os.Build.VERSION.SDK_INT >= 24) {
+                    if (android.os.Build.VERSION.SDK_INT >= 24) {
+                        if (isInMultiWindowMode()) {
                             navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
                         }
                     }
@@ -680,8 +680,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                                     if (!navApp.equals("6")) {
                                         try {
                                             homeNavIntent.setData(Uri.parse(navUrl));
-                                            if (sharedPrefs.getBoolean("prefPIP", false)) {
-                                                if (android.os.Build.VERSION.SDK_INT >= 24) {
+                                            if (android.os.Build.VERSION.SDK_INT >= 24) {
+                                                if (isInMultiWindowMode()) {
                                                     homeNavIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
                                                 }
                                             }

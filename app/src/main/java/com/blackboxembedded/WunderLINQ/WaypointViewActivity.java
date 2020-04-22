@@ -261,8 +261,8 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
         if (!navApp.equals("6")) {
             try {
                 navIntent.setData(Uri.parse(navUrl));
-                if (sharedPrefs.getBoolean("prefPIP", false)) {
-                    if (android.os.Build.VERSION.SDK_INT >= 24) {
+                if (android.os.Build.VERSION.SDK_INT >= 24) {
+                    if (isInMultiWindowMode()) {
                         navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
                     }
                 }
@@ -335,8 +335,8 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
             if (!navApp.equals("6")) {
                 try {
                     navIntent.setData(Uri.parse(navUrl));
-                    if (sharedPrefs.getBoolean("prefPIP", false)) {
-                        if (android.os.Build.VERSION.SDK_INT >= 24) {
+                    if (android.os.Build.VERSION.SDK_INT >= 24) {
+                        if (isInMultiWindowMode()) {
                             navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
                         }
                     }
