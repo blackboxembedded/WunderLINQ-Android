@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/WunderLINQ.iml" filepath="$PROJECT_DIR$/WunderLINQ.iml" group="WunderLINQ" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="WunderLINQ/app" />
+      <module fileurl="file://$PROJECT_DIR$/WunderLINQ-Android.iml" filepath="$PROJECT_DIR$/WunderLINQ-Android.iml" group="WunderLINQ-Android" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="WunderLINQ-Android/app" />
     </modules>
   </component>
 </project>
