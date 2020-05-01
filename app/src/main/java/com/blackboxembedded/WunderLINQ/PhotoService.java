@@ -1,3 +1,20 @@
+/*
+WunderLINQ Client Application
+Copyright (C) 2020  Keith Conger, Black Box Embedded, LLC
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
 package com.blackboxembedded.WunderLINQ;
 
 import android.Manifest;
@@ -56,17 +73,8 @@ import java.util.concurrent.TimeUnit;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static java.lang.Math.abs;
 
-/*
-Reference: http://stackoverflow.com/questions/28003186/capture-picture-without-preview-using-camera2-api
-
-Problem
-   1.  BufferQueue has been abandoned  from ImageCapture
-
-*/
 public class PhotoService extends Service {
     protected static final String TAG = "PhotoService";
-
-    private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
 
     private static Location location;
 
