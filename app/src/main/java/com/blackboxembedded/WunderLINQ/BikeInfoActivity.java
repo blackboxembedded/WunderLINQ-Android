@@ -113,7 +113,7 @@ public class BikeInfoActivity extends AppCompatActivity {
             }
         } else {
             if (Data.getFirmwareVersion() >= 1.8) {
-                Log.d(TAG, "UData.getFirmwareVersion() >= 1.8");
+                Log.d(TAG, "Data.getFirmwareVersion() >= 1.8");
                 tvResetHeader.setVisibility(View.VISIBLE);
                 spReset.setVisibility(View.VISIBLE);
                 tvResetLabel.setVisibility(View.VISIBLE);

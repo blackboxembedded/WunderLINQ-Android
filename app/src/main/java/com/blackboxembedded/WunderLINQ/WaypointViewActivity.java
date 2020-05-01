@@ -192,7 +192,6 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
 
     // Delete button press
     public void onClickDelete(View view) {
-        // Display dialog text here......
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.delete_waypoint_alert_title));
         builder.setMessage(getString(R.string.delete_waypoint_alert_body));
@@ -314,7 +313,6 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
                 String location[] = record.getData().split(",");
                 Double latitude =  Double.parseDouble(location[0]);
                 Double longitude =  Double.parseDouble(location[1]);
-                //navUrl = "osmand.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
                 OsmAndHelper osmAndHelper = new OsmAndHelper(WaypointViewActivity.this, OsmAndHelper.REQUEST_OSMAND_API, WaypointViewActivity.this);
                 osmAndHelper.navigate("Start",currentLocation.getLatitude(),currentLocation.getLongitude(),"Destination",latitude,longitude,"motorcycle", true);
             } else if (navApp.equals("7")){
@@ -326,7 +324,6 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
                 //https://www.sygic.com/developers/professional-navigation-sdk/android/api-examples/custom-url
                 String latlon[] = record.getData().split(",");
                 navUrl = "com.sygic.aura://coordinate|"  + latlon[1] + "|" + latlon[0] + "|drive";
-                //navUrl = "com.sygic.aura://coordinate|"  + latlon[1] + "|" + latlon[0] + "|drive&&&back_button|com.blackboxembedded.wunderlinq";
             } else if (navApp.equals("9")) {
                 //Kurviger
                 navUrl = "https://kurviger.de/en?point="  + record.getData() + "&locale=en" +"&vehicle=motorycycle"

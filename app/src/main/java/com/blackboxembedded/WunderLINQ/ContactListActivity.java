@@ -176,7 +176,6 @@ public class ContactListActivity extends AppCompatActivity {
             //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
         } else {
             // Android version is lesser than 6.0 or the permission is already granted.
-
             String sortOrder = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
             ContentResolver cr = getContentResolver();
             Cursor cursor;

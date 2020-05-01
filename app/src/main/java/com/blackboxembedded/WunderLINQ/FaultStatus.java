@@ -685,13 +685,6 @@ public class FaultStatus extends ContextWrapper {
 
     // Utility functions
     public static void clear(){
-        // Debug Faults
-        /*
-        uartOverflowActive = false;
-        uartFrameActive = false;
-        uartLogicActive = false;
-        */
-
         // Motorcycle Faults
         absSelfDiagActive = false;
         absDeactivatedActive = false;

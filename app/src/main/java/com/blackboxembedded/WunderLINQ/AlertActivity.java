@@ -1,5 +1,6 @@
 package com.blackboxembedded.WunderLINQ;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -53,10 +54,9 @@ public class AlertActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alert);
         View view = findViewById(R.id.layout_alert);
@@ -174,8 +174,6 @@ public class AlertActivity extends AppCompatActivity {
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setCustomView(v);
-
-
         navbarTitle = findViewById(R.id.action_title);
         navbarTitle.setText(title);
 

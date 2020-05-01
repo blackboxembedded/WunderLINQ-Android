@@ -45,11 +45,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -59,14 +55,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Service for managing connection and data communication with a GATT server
@@ -627,7 +615,6 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 characteristic.getUuid().toString());
 
         if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_MESSAGE_CHARACTERISTIC)) {
-            // For all other profiles, writes the data formatted in HEX.
             final byte[] data = characteristic.getValue();
             if (data != null) {
                 if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
@@ -635,26 +622,7 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                     if (debugLogger == null) {
                         debugLogger = new Logger();
                     }
-                    try {
-                        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-                        byte[] iv = "abcdefghijklmnop".getBytes("UTF-8");
-                        IvParameterSpec ivParameterSpec;
-                        ivParameterSpec = new IvParameterSpec(iv);
-                        byte[] encoded = "wTKkVwtrBbrZKmYj".getBytes("UTF-8");
-                        SecretKey secretKey = new SecretKeySpec(encoded, "AES");
-                        cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivParameterSpec);
-
-                        debugLogger.write(Utils.ByteArraytoHexNoDelim(cipher.doFinal(data)));
-                    } catch (NoSuchAlgorithmException
-                            | NoSuchPaddingException
-                            | InvalidAlgorithmParameterException
-                            | UnsupportedEncodingException
-                            | InvalidKeyException
-                            | BadPaddingException
-                            | IllegalBlockSizeException e){
-                        e.printStackTrace();
-
-                    }
+                    debugLogger.write(Utils.ByteArraytoHexNoDelim(data));
                 } else {
                     if (debugLogger != null) {
                         debugLogger.shutdown();
@@ -2415,13 +2383,6 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         PendingResult<Status> pendingResult = LocationServices.FusedLocationApi

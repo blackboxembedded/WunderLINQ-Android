@@ -4,17 +4,15 @@ public class WaypointRecord {
 
     public final static String TAG = "WaypointRecord";
 
-    //private variables
     int _id;
     String _date;
     String _data;
     String _label;
 
-    // Empty constructor
     public WaypointRecord(){
 
     }
-    // Constructor
+
     public WaypointRecord(String date, String data, String label) {
         this._date = date;
         this._data = data;
@@ -51,7 +49,6 @@ public class WaypointRecord {
         return this._label;
     }
 
-    // Will be used by the ArrayAdapter in the ListView
     @Override
     public String toString() {
         return _date + "    " + _data ;

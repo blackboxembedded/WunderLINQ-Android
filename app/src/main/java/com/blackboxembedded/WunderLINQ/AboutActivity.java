@@ -65,7 +65,7 @@ public class AboutActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                // save logcat in file
+                //Save logcat to file
                 File root = new File(Environment.getExternalStorageDirectory(), "/WunderLINQ/debug/");
                 if(!root.exists()){
                     if(!root.mkdirs()){
@@ -82,23 +82,19 @@ public class AboutActivity extends AppCompatActivity {
                 }
 
                 File debugFile = new File(MyApplication.getContext().getCacheDir(), "/tmp/dbg");
-                //send file using email
+                //Send file(s) using email
                 Intent emailIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-                // set the type to 'email'
                 emailIntent.setType("text/plain");
                 String[] to;
                 to = new String[]{getString(R.string.sendlogs_email)};
                 emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
-                // the attachment
-                //has to be an ArrayList
                 ArrayList<Uri> uris = new ArrayList<>();
                 if(debugFile.exists()){
                     uris.add(FileProvider.getUriForFile(AboutActivity.this, "com.blackboxembedded.wunderlinq.fileprovider", debugFile));
                 }
-                //convert from paths to Android friendly Parcelable Uri's
+                //Convert from paths to Android friendly Parcelable Uri's
                 uris.add(FileProvider.getUriForFile(AboutActivity.this, "com.blackboxembedded.wunderlinq.fileprovider", outputFile));
                 emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
-                // the mail subject
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sendlogs_subject));
                 emailIntent.putExtra(Intent.EXTRA_TEXT, "App Version: " + BuildConfig.VERSION_NAME + "\n"
                         + "Firmware Version: " + Data.getFirmwareVersion() + "\n"

@@ -1458,7 +1458,6 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         }
 
         recyclerView.clearFocus();
-        //recyclerView.setBackgroundColor(getResources().getColor(R.color.black));
         clTasks.clearFocus();
     }
 

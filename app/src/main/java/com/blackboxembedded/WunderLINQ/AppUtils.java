@@ -39,5 +39,4 @@ public class AppUtils {
         configuration.densityDpi = (int) context.getResources().getDisplayMetrics().xdpi;
         context.getResources().updateConfiguration(configuration, metrics);
     }
-
 }

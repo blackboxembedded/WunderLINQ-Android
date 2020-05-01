@@ -2,9 +2,6 @@ package com.blackboxembedded.WunderLINQ.TaskList;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,18 +91,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.RecyclerViewHo
         return dataSource.size();
     }
 
-    private Drawable getRotateDrawable(final Drawable d, final float angle) {
-        final Drawable[] arD = { d };
-        return new LayerDrawable(arD) {
-            @Override
-            public void draw(final Canvas canvas) {
-                canvas.save();
-                canvas.rotate(angle, d.getIntrinsicWidth() / 2, d.getIntrinsicHeight() / 2);
-                super.draw(canvas);
-                canvas.restore();
-            }
-        };
-    }
 }
 
 class MenuItem {
