@@ -1,4 +1,4 @@
-#WunderLINQ Android App
+# WunderLINQ Android App
 
 The WunderLINQ app is for use with the [WunderLINQ Hardware](https://www.wunderlinq.com)
 
@@ -12,10 +12,10 @@ decode performance and fault data.
 1. Clone the project and open in Android Studio
 
 2. Create an xml resource file called res/values/secrets.xml with your own Google Maps API key in it, like so:
-
-    <?xml version="1.0" encoding="utf-8"?>
-    <resources>
-        <string name="google_maps_api_key" translatable="false">YOUR_API_KEY_HERE</string>
-    </resources>
-
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="google_maps_api_key" translatable="false">YOUR_API_KEY_HERE</string>
+</resources>
+```
 3. Build and Run
