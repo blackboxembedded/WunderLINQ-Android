@@ -180,10 +180,14 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
                         String latlon[] = record.getData().split(",");
                         navUrl = "com.sygic.aura://coordinate|"  + latlon[1] + "|" + latlon[0] + "|drive";
                         //navUrl = "com.sygic.aura://coordinate|"  + latlon[1] + "|" + latlon[0] + "|drive&&&back_button|com.blackboxembedded.wunderlinq";
-                    }  else if (navApp.equals("9")) {
+                    } else if (navApp.equals("9")) {
                         //Kurviger
                         navUrl = "https://kurviger.de/en?point="  + record.getData() + "&locale=en" +"&vehicle=motorycycle"
                                 + "weighting=fastest" + "use_miles=true";
+                    } else if (navApp.equals("10")){
+                        //TomTom GO
+                        navIntent.setPackage("com.tomtom.gplay.navapp");
+                        navUrl = "geo:" + record.getData();
                     }
                     if (!navApp.equals("6")) {
                         try {

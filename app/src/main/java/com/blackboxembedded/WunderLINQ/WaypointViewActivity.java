@@ -272,6 +272,10 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
             //Kurviger
             navUrl = "https://kurviger.de/en?point="  + record.getData() + "&locale=en" +"&vehicle=motorycycle"
                     + "weighting=fastest" + "use_miles=true";
+        } else if (navApp.equals("10")){
+            //TomTom GO
+            navIntent.setPackage("com.tomtom.gplay.navapp");
+            navUrl = "geo:" + record.getData();
         }
         if (!navApp.equals("6")) {
             try {
@@ -344,6 +348,10 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
                 //Kurviger
                 navUrl = "https://kurviger.de/en?point="  + record.getData() + "&locale=en" +"&vehicle=motorycycle"
                         + "weighting=fastest" + "use_miles=true";
+            } else if (navApp.equals("10")){
+                //TomTom GO
+                navIntent.setPackage("com.tomtom.gplay.navapp");
+                navUrl = "geo:" + record.getData();
             }
             if (!navApp.equals("6")) {
                 try {

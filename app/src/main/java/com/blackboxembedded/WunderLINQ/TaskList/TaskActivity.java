@@ -614,6 +614,10 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                         navIntent = getPackageManager().getLaunchIntentForPackage("gr.talent.kurviger");
                     }
                     url = "";
+                } else if (navApp.equals("10")){
+                    //TomTom GO
+                    navIntent = getPackageManager().getLaunchIntentForPackage("com.tomtom.gplay.navapp");
+                    url = "";
                 }
                 try {
                     navIntent.setData(Uri.parse(url));
@@ -690,10 +694,13 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                                         navUrl = "com.sygic.aura://coordinate|"  + location.longitude + "|" + location.latitude + "|drive";
                                     } else if (navApp.equals("9")) {
                                         //Kurviger
-                                        navUrl = "https://kurviger.de/en?point="  + location.latitude + "," + location.longitude+"&vehicle=motorycycle"
+                                        navUrl = "https://kurviger.de/en?point="  + location.latitude + "," + location.longitude + "&vehicle=motorycycle"
                                                 + "weighting=fastest";
+                                    } else if (navApp.equals("10")){
+                                        //TomTom GO
+                                        homeNavIntent.setPackage("com.tomtom.gplay.navapp");
+                                        navUrl = "geo:" + location.latitude + "," + location.longitude;
                                     }
-                                    Log.d(TAG,"NavURL: " + navUrl);
                                     if (!navApp.equals("6")) {
                                         try {
                                             homeNavIntent.setData(Uri.parse(navUrl));
