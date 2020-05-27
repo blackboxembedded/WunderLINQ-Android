@@ -407,4 +407,5 @@
     <string name="addwaypoint_view_title">Ajouter un point de contrôle</string>
     <string name="config_reset_label">Réinitialiser les paramètres</string>
     <string name="fw_version_label">Version du microcode</string>
+    <string name="nav_app_tomtomgo">TomTom GO</string>
 </resources>
