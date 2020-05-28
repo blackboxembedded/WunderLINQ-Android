@@ -611,6 +611,7 @@
     <string name="nav_app_sygic">Sygic</string>
     <string name="nav_app_kurviger">Kurviger</string>
     <string name="nav_app_tomtomgo">TomTom GO</string>
+    <string name="nav_app_bmwconnectedride">BMW Motorrad Connected</string>
     <string-array name="nav_apps_array" translatable="false">
         <item name="1">@string/nav_app_default</item>
         <item name="2">@string/nav_app_google</item>
@@ -622,6 +623,7 @@
         <item name="8">@string/nav_app_sygic</item>
         <item name="9">@string/nav_app_kurviger</item>
         <item name="10">@string/nav_app_tomtomgo</item>
+        <item name="11">@string/nav_app_bmwconnectedride</item>
     </string-array>
     <string-array name="nav_apps_arrayValues" translatable="false">
         <item name="1">1</item>
@@ -634,6 +636,7 @@
         <item name="8">8</item>
         <item name="9">9</item>
         <item name="10">10</item>
+        <item name="11">11</item>
     </string-array>
     <string name="pref_contacts_filter_title">Contacts Display</string>
     <string name="contacts_filter_favorites">Favorites</string>

@@ -24,6 +24,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
@@ -617,6 +619,13 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 } else if (navApp.equals("10")){
                     //TomTom GO
                     navIntent = getPackageManager().getLaunchIntentForPackage("com.tomtom.gplay.navapp");
+                    url = "";
+                } else if (navApp.equals("11")){
+                    //BMW ConnectedRide
+                    String discoveredApp = installedApps("com.bmw.ConnectedRide");
+                    if (!discoveredApp.equals("")) {
+                        navIntent = getPackageManager().getLaunchIntentForPackage(discoveredApp);
+                    }
                     url = "";
                 }
                 try {
@@ -1577,6 +1586,23 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         }
 
         return p1;
+    }
+
+    //Looks for a partial string and returns the first package name that matches
+    public String installedApps(String app) {
+        List<PackageInfo> packList = getPackageManager().getInstalledPackages(0);
+        for (int i=0; i < packList.size(); i++)
+        {
+            PackageInfo packInfo = packList.get(i);
+            if (  (packInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0)
+            {
+                String packageName = packInfo.packageName;
+                if (packageName.contains(app)){
+                    return packageName;
+                }
+            }
+        }
+        return "";
     }
 }
 
