@@ -38,8 +38,8 @@
     <string name="engine_temp_label">Temp moteur</string>
     <string name="ambient_temp_label">Temp ambiante</string>
     <string name="odometer_label">Odomètre</string>
-    <string name="trip1_label">Voyage 1</string>
-    <string name="trip2_label">Voyage 2</string>
+    <string name="trip1_label">Trajet 1</string>
+    <string name="trip2_label">Trajet 2</string>
     <string name="gear_label">Vitesse</string>
     <!-- Data Menu -->
     <!-- Other Menu -->
@@ -104,10 +104,10 @@
     <string name="waypoint_view_waypoint_label">Emplacement</string>
     <string name="waypoint_view_share_label">Partager via</string>
     <!-- TripsActivity -->
-    <string name="trips_title">Voyages sauvegardés</string>
+    <string name="trips_title">Trajets sauvegardés</string>
     <!-- TripViewActivity -->
-    <string name="trip_view_title">Voyage</string>
-    <string name="trip_view_trip_label">WunderLINQ Journal de voyage</string>
+    <string name="trip_view_title">Trajet</string>
+    <string name="trip_view_trip_label">WunderLINQ Journal de trajet</string>
     <string name="trip_view_waypoint_start_label">Début</string>
     <string name="trip_view_waypoint_end_label">Fin</string>
     <string name="trip_view_share_label">Partager</string>
@@ -149,9 +149,9 @@
     <string name="task_title_selfie">Égoportrait</string>
     <string name="task_title_start_record">Démarrer enr. vidéo</string>
     <string name="task_title_stop_record">Arrêt enr. vidéo</string>
-    <string name="task_title_start_trip">Démarrer enr. voyage</string>
-    <string name="task_title_stop_trip">Arrêt enr. voyage</string>
-    <string name="title_logging_notification">Enregistrement de voyage WunderLINQ actif</string>
+    <string name="task_title_start_trip">Démarrer enr. trajet</string>
+    <string name="task_title_stop_trip">Arrêt enr. trajet</string>
+    <string name="title_logging_notification">Enregistrement de trajets WunderLINQ actif</string>
     <string name="task_title_waypoint">Enregistrer emplacement</string>
     <string name="task_title_waypoint_nav">itinéraire vers emplacement</string>
     <string name="task_title_voicecontrol">Assistant vocal</string>
@@ -207,9 +207,9 @@
     <string name="shifts_header">Changement de vitesse</string>
     <string name="vin_header">VIN</string>
     <string name="ambientlight_header">Lumière ambiante</string>
-    <string name="tripone_header">Voyage1</string>
-    <string name="triptwo_header">Voyage2</string>
-    <string name="tripauto_header">voyage Auto</string>
+    <string name="tripone_header">Trajet 1</string>
+    <string name="triptwo_header">Trajet 2</string>
+    <string name="tripauto_header">Trajet Auto</string>
     <string name="speed_header">Vitesse</string>
     <string name="avgspeed_header">Vitesse moyenne</string>
     <string name="cconsumption_header">Consommation actuelle</string>
@@ -245,12 +245,12 @@
     <string name="pressuref_kgf">Kg-f</string>
     <string name="pressuref_psi">psi</string>
     <string name="pref_orientation_name">Verrouillage de l\'orientation</string>
-    <string name="orientation_a">Arrêt</string>
+    <string name="orientation_a">Aucun</string>
     <string name="orientation_l">Paysage</string>
     <string name="orientation_p">Portrait</string>
     <string name="orientation_rl">Paysage inversé</string>
     <string name="pref_brightness_name">Luminosité de l\'affichage</string>
-    <string name="pref_brightness_summary">Augmenter la luminosité au max.</string>
+    <string name="pref_brightness_summary">Régler la luminosité à sa valeur maximale</string>
     <string name="pref_nightMode_name">Mode de nuit</string>
     <string name="pref_nightMode_summary">Thème de l\'interface utilisateur</string>
     <string name="off">Arrêt</string>
@@ -261,7 +261,7 @@
     <string name="alerting_title">Réglages d\'alertes</string>
     <string name="pref_tpmsAlert_name">Niveau de pression des pneus personnalisé</string>
     <string name="pref_tpmsAlert_summary">Utiliser un niveau personnalisé pour la basse pression des pneus</string>
-    <string name="pref_tpmsAlertThreshold_name">Limite inférieur de pression des pneus</string>
+    <string name="pref_tpmsAlertThreshold_name">Limite inférieure de pression des pneus</string>
     <string name="pref_tpmsAlertThreshold_summary">Spécifiez un nombre basé sur votre unité de mesure sélectionnée</string>
     <string name="pref_fuelAlert_name">Assistance carburant</string>
     <string name="pref_fuelAlert_summary">Proposer l\'itinéraire vers la station la plus proche en cas de niveau de carburant bas</string>
@@ -310,8 +310,8 @@
     <string name="twelfth">Douzième</string>
     <string name="thirteenth">Treizième</string>
     <string name="fourteenth">Quatorzième</string>
-    <string name="fiftheenth">Fifteenth</string>Quinzième/string&gt;
-    <string name="tripauto_label">Voy Auto</string>
+    <string name="fiftheenth">Quinzième</string>Quinzième/string&gt;
+    <string name="tripauto_label">Trajet Auto</string>
     <string name="voltage_label">Voltage</string>
     <string name="throttle_label">Gas</string>
     <string name="frontbrakes_label">Freins avants</string>
@@ -338,11 +338,11 @@
     <string name="experimental_title">Fonctions expérimentales</string>
     <string name="pref_taskswitcher_name">Activer le basculement de tâche</string>
     <string name="pref_taskswitcher_summary">Lorsque la molette est tenue à gauche, le gestionnaire de tâches est affiché.  Utilisez seulement si ça ne fonctionne pas comme fonction retour</string>
-    <string name="accessibilityservice_alert_title">WunderLINQ requiert l\'execution d\'un service d\'accessibilité</string>
+    <string name="accessibilityservice_alert_title">WunderLINQ requiert l’exécution d\'un service d\'accessibilité</string>
     <string name="accessibilityservice_alert_body">WunderLINQ utilise le service d\'accessibilité pour activer l\'application en vignette.</string>
     <string name="leanangle_header">Angle d\'inclinaison</string>
     <string name="gforce_header">Force G</string>
-    <string name="geodata_label">Voyages &amp; Destinations</string>
+    <string name="geodata_label">Trajets &amp; Destinations</string>
     <string name="bearing_header">Boussole</string>
     <string name="nav_app_default">Par défaut</string>
     <string name="nav_app_google">Google Maps</string>
