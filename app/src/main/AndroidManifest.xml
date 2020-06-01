@@ -37,7 +37,8 @@
         android:showOnLockScreen="true"
         android:supportsRtl="true"
         android:theme="@style/WLQTheme"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true">
 
         <!-- Work Around for GMaps crash https://issuetracker.google.com/issues/79478779 -->
         <uses-library
