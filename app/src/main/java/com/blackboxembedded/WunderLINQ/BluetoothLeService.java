@@ -1451,10 +1451,12 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 Data.setGear(gear);
 
                 // Throttle Position
-                int minPosition = 36;
-                int maxPosition = 236;
-                double throttlePosition = (((data[3] & 0xFF) - minPosition) * 100) / (maxPosition - minPosition);
-                Data.setThrottlePosition(throttlePosition);
+                if ((data[3] & 0xFF) != 0xFF) {
+                    int minPosition = 36;
+                    int maxPosition = 236;
+                    double throttlePosition = (((data[3] & 0xFF) - minPosition) * 100) / (maxPosition - minPosition);
+                    Data.setThrottlePosition(throttlePosition);
+                }
 
                 // Engine Temperature
                 if ((data[4] & 0xFF) != 0xFF) {
@@ -2339,8 +2341,10 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 break;
             case 0x0a:
                 //Log.d(TAG, "Message ID 10");
-                double odometer = Utils.bytesToInt(data[3],data[2],data[1]);
-                Data.setOdometer(odometer);
+                if ((data[3] & 0xFF) != 0xFF && (data[2] & 0xFF) != 0xFF && (data[1] & 0xFF) != 0xFF) {
+                    double odometer = Utils.bytesToInt(data[3], data[2], data[1]);
+                    Data.setOdometer(odometer);
+                }
 
                 if ((data[6] & 0xFF) != 0xFF && (data[5] & 0xFF) != 0xFF && (data[4] & 0xFF) != 0xFF) {
                     double tripAuto = Utils.bytesToInt(data[6], data[5], data[4]) / 10.0;
