@@ -387,8 +387,8 @@
     <string name="pref_bearing_override_summary">Utiliser la direction du GPS plutôt que la boussole magnétique.</string>
     <string name="pref_bearing_override_name">Direction</string>
     <string name="pref_notification_summary">Activer ou désactiver toutes les notifications d\'alerte</string>
-    <string name="pref_notification_name">Activer les notifications d\'erreur</string>
-    <string name="timef_24h">24h</string>
+    <string name="pref_notification_name">Activer les notifications d\'erreurs</string>
+    <string name="timef_24h"></string>
     <string name="nav_app_kurviger">Kurviger</string>
     <string name="nav_app_sygic">Sygic</string>
     <string name="nav_app_mapfactor">Mapfactor Navigator</string>
