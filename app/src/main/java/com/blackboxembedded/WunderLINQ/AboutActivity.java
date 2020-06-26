@@ -41,7 +41,10 @@ import androidx.core.content.FileProvider;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class AboutActivity extends AppCompatActivity {
 
@@ -82,6 +85,11 @@ public class AboutActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
+                // Get current date
+                Calendar cal = Calendar.getInstance();
+                Date date = cal.getTime();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-HH:mm");
+                String curdatetime = formatter.format(date);
                 //Save logcat to file
                 File root = new File(Environment.getExternalStorageDirectory(), "/WunderLINQ/debug/");
                 if(!root.exists()){
@@ -112,7 +120,7 @@ public class AboutActivity extends AppCompatActivity {
                 //Convert from paths to Android friendly Parcelable Uri's
                 uris.add(FileProvider.getUriForFile(AboutActivity.this, "com.blackboxembedded.wunderlinq.fileprovider", outputFile));
                 emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sendlogs_subject));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sendlogs_subject) + " " + curdatetime);
                 emailIntent.putExtra(Intent.EXTRA_TEXT, "App Version: " + BuildConfig.VERSION_NAME + "\n"
                         + "Firmware Version: " + Data.getFirmwareVersion() + "\n"
                         + "Android Version: " + Build.VERSION.RELEASE + "\n"
