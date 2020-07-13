@@ -627,6 +627,13 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                         navIntent = getPackageManager().getLaunchIntentForPackage(discoveredApp);
                     }
                     url = "";
+                } else if (navApp.equals("12")){
+                    //Calimoto
+                    String discoveredApp = installedApps("com.calimoto.calimoto");
+                    if (!discoveredApp.equals("")) {
+                        navIntent = getPackageManager().getLaunchIntentForPackage(discoveredApp);
+                    }
+                    url = "";
                 }
                 try {
                     navIntent.setData(Uri.parse(url));
