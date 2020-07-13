@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -40,6 +41,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
@@ -54,7 +56,12 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
 
     public final static String TAG = "WeatherActivity";
     private GoogleMap mMap;
+    private Marker mMarker;
+    private TileOverlay tileOverlay;
     private SharedPreferences sharedPrefs;
+
+    private Handler handler = new Handler();
+    private int delay = 60 * 1000;
 
     private int currentZoom = 10;
 
@@ -89,12 +96,6 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
 
         showActionBar();
 
-
-        long l = System.currentTimeMillis();
-        l -= l % (10*60*1000);
-        long unixtime = l / 1000L;
-        timestamp = String.valueOf(unixtime);
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -114,6 +115,7 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
     @Override
     public void onPause() {
         super.onPause();
+        handler.removeCallbacksAndMessages(null);
     }
 
     @Override
@@ -148,11 +150,12 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        Log.d(TAG,"onMapReady()");
         // Move the camera
         if (Data.getLastLocation() != null) {
             LatLng location = new LatLng(Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
-            mMap.addMarker(new MarkerOptions().position(location));
+            MarkerOptions mMarkerOptions= new MarkerOptions().position(location);
+            mMarker = mMap.addMarker(mMarkerOptions);
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, currentZoom));
         }
         TileProvider tileProvider = new UrlTileProvider(256, 256) {
@@ -161,8 +164,12 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
 
                 /* Define the URL pattern for the tile images */
                 //https://www.rainviewer.com/api.html
+                long l = System.currentTimeMillis();
+                l -= l % (10*60*1000);
+                long unixtime = l / 1000L;
+                timestamp = String.valueOf(unixtime);
                 String s = String.format(Locale.US, "https://tilecache.rainviewer.com/v2/radar/%s/256/%d/%d/%d/4/1_1.png", timestamp, zoom, x, y);
-
+                Log.d(TAG,s);
                 try {
                     return new URL(s);
                 } catch (MalformedURLException e) {
@@ -171,8 +178,26 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
             }
         };
 
-        TileOverlay tileOverlay = mMap.addTileOverlay(new TileOverlayOptions()
+        tileOverlay = mMap.addTileOverlay(new TileOverlayOptions()
                 .tileProvider(tileProvider));
+
+        handler.postDelayed(new Runnable(){
+            public void run(){
+                Log.d(TAG,"Updating marker");
+                // This portion of code runs each 10s.
+                long l = System.currentTimeMillis();
+                l -= l % (10*60*1000);
+                long unixtime = l / 1000L;
+                timestamp = String.valueOf(unixtime);
+                if (Data.getLastLocation() != null) {
+                    LatLng location = new LatLng(Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
+                    mMarker.setPosition(location);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, currentZoom));
+                    tileOverlay.clearTileCache();
+                }
+                handler.postDelayed(this, delay);
+            }
+        }, delay);
     }
 
     private void showActionBar(){
