@@ -71,6 +71,7 @@ public class FirstRunActivity extends AppCompatActivity {
 
         if (!sharedPrefs.getBoolean("FIRST_LAUNCH",true)){
             startActivity(mainIntent);
+            finish();
         } else {
             setContentView(R.layout.activity_first_run);
             tvMessage = findViewById(R.id.tvMessage);
@@ -208,9 +209,11 @@ public class FirstRunActivity extends AppCompatActivity {
                             editor.putBoolean("FIRST_LAUNCH", false);
                             editor.apply();
                             startActivity(mainIntent);
+                            finish();
                             break;
                         default:
                             startActivity(mainIntent);
+                            finish();
                             break;
                     }
                     break;
