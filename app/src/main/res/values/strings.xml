@@ -127,7 +127,7 @@
     <string name="version_label">Version:</string>
     <string name="btn_sendlogs_title">Send Logs</string>
     <string name="sendlogs_email" translatable="false">support@blackboxembedded.com</string>
-    <string name="sendlogs_subject" translatable="false">WunderLINQ Debug Logs</string>
+    <string name="sendlogs_subject" translatable="false">WunderLINQ Android Debug Logs</string>
     <string name="sendlogs_body">Please describe your problem below:\n</string>
     <string name="sendlogs_intent_title">Send Logs…</string>
     <string name="credits_label">Credits</string>
