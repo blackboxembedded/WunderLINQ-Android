@@ -10,8 +10,7 @@
     <string name="record_audio_alert_title">WunderLINQ requiert l\'accès au microphone</string>
     <string name="record_audio_alert_body">WinderLINQ requiert l\'accès à votre microphone pour enregistrer l\'audio dans les vidéos.</string>
     <string name="location_alert_title">WunderLINQ requiert votre position</string>
-    <string name="location_alert_body">WunderLINQ doit avoir accès à votre emplacement pour en permettre l\'enregistrement en arrière-plan.
-\nCette permission est également utilisée pour les données telles que l\'altitude, la vitesse et la direction.</string>
+    <string name="location_alert_body">WunderLINQ doit avoir accès à votre emplacement pour en permettre l\'enregistrement en arrière-plan. Cette permission est également utilisée pour les données telles que l\'altitude, la vitesse et la direction.</string>
     <string name="write_alert_title">WunderLINQ requiert l\'accès au stockage</string>
     <string name="write_alert_body">WunderLINQ requiert l\'accès à l\'écriture de fichiers pour l\'enregistrement des trajets et de photos.</string>
     <string name="overlay_alert_title">WunderLINQ requiert la permission de superposition d\'écran</string>
@@ -278,7 +277,7 @@
     <string name="wwtype_label">Type de molette</string>
     <string name="sensitivity_label">Sensibilité de la molette</string>
     <string name="config_write_label">Enregistrer réglages</string>
-    <string name="hwsave_alert_title">Attention!</string>
+    <string name="hwsave_alert_title">Attention !</string>
     <string name="hwsave_alert_body">Après la sauvegarde de vos réglages matériels, le WunderLINQ sera instable et nécessitera d\'être retiré et remis dans son support.</string>
     <string name="hwsave_alert_btn_ok">Continuer</string>
     <string name="hwsave_alert_btn_cancel">Annuler</string>
@@ -323,7 +322,7 @@
     <string name="fueleconomyone_label">Economie 1</string>
     <string name="fueleconomytwo_label">Economie 2</string>
     <string name="fuelrange_label">Dist. Est.</string>
-    <string name="accessibility_explanation">"Ceci est requis pour le fonctionnement du mode multifenêtre.  Lorsque non activé, certaines fonctions de WunderLINQ ne fonctionneront pas."</string>
+    <string name="accessibility_explanation">Ceci est requis pour le fonctionnement du mode multifenêtre. Lorsque non activé, certaines fonctions de WunderLINQ ne fonctionneront pas.</string>
     <string name="splitscreen_label">Activer écran partagé</string>
     <string name="delete_waypoint_alert_title">Attention!</string>
     <string name="delete_waypoint_alert_body">Effacer destination?</string>
@@ -388,7 +387,7 @@
     <string name="pref_bearing_override_name">Direction</string>
     <string name="pref_notification_summary">Activer ou désactiver toutes les notifications d\'alerte</string>
     <string name="pref_notification_name">Activer les notifications d\'erreurs</string>
-    <string name="timef_24h"></string>
+    <string name="timef_24h">24h</string>
     <string name="nav_app_kurviger">Kurviger</string>
     <string name="nav_app_sygic">Sygic</string>
     <string name="nav_app_mapfactor">Mapfactor Navigator</string>
@@ -410,4 +409,8 @@
     <string name="nav_app_tomtomgo">TomTom GO</string>
     <string name="system_default">Défaut du système</string>
     <string name="nav_app_bmwconnectedride">BMW Motorrad Connecté</string>
+    <string name="title_activity_first_run">FirstRunActivity</string>
+    <string name="nav_app_calimoto">Calimoto</string>
+    <string name="addwaypoint_view_tv_search_label">Emplacement ou adresse</string>
+    <string name="sendlogs_subject" translatable="false">Journaux de débogage WunderINQ pour Android</string>
 </resources>
