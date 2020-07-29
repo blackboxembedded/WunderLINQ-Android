@@ -62,6 +62,7 @@ public class LoggingService extends Service {
     String pressureFormat = "";
     String temperatureFormat = "";
     String distanceFormat = "";
+    String consumptionFormat = "";
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -197,13 +198,20 @@ public class LoggingService extends Service {
                 String distanceUnit = "km";
                 String heightUnit = "m";
                 String distanceTimeUnit = "kmh";
-                String consumptionUnit = "L/100";
                 distanceFormat = sharedPrefs.getString("prefDistance", "0");
                 if (distanceFormat.contains("1")) {
                     distanceUnit = "mi";
                     heightUnit = "ft";
                     distanceTimeUnit = "mph";
-                    consumptionUnit = "mpg"; // 282.5 / (L/100)
+                }
+                String consumptionUnit = "L/100";
+                consumptionFormat = sharedPrefs.getString("prefConsumption", "0");
+                if (consumptionFormat.contains("1")) {
+                    consumptionUnit = "mpg";
+                } else if (consumptionFormat.contains("2")) {
+                    consumptionUnit = "mpg";
+                } else if (consumptionFormat.contains("3")) {
+                    consumptionUnit = "km/L";
                 }
                 String voltageUnit = "V";
                 String throttleUnit = "%";
@@ -350,20 +358,32 @@ public class LoggingService extends Service {
                     }
                     Double currentConsumption = Data.getCurrentConsumption();
                     if (Data.getCurrentConsumption() != null){
-                        if (distanceFormat.contains("1")) {
+                        if (consumptionFormat.contains("1")) {
                             currentConsumption = Utils.l100Tompg(currentConsumption);
+                        } else if (consumptionFormat.contains("2")) {
+                            currentConsumption = Utils.l100Tompgi(currentConsumption);
+                        } else if (consumptionFormat.contains("3")) {
+                            currentConsumption = Utils.l100Tokml(currentConsumption);
                         }
                     }
                     Double fuelEconomyOne = Data.getFuelEconomyOne();
                     if (Data.getFuelEconomyOne() != null){
-                        if (distanceFormat.contains("1")) {
+                        if (consumptionFormat.contains("1")) {
                             fuelEconomyOne = Utils.l100Tompg(fuelEconomyOne);
+                        } else if (consumptionFormat.contains("2")) {
+                            fuelEconomyOne = Utils.l100Tompgi(fuelEconomyOne);
+                        } else if (consumptionFormat.contains("3")) {
+                            fuelEconomyOne = Utils.l100Tokml(fuelEconomyOne);
                         }
                     }
                     Double fuelEconomyTwo = Data.getFuelEconomyTwo();
                     if (Data.getFuelEconomyTwo() != null){
-                        if (distanceFormat.contains("1")) {
+                        if (consumptionFormat.contains("1")) {
                             fuelEconomyTwo = Utils.l100Tompg(fuelEconomyTwo);
+                        } else if (consumptionFormat.contains("2")) {
+                            fuelEconomyTwo  = Utils.l100Tompgi(fuelEconomyTwo);
+                        } else if (consumptionFormat.contains("3")) {
+                            fuelEconomyTwo  = Utils.l100Tokml(fuelEconomyTwo);
                         }
                     }
                     Double fuelRange = Data.getFuelRange();

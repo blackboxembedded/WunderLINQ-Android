@@ -158,13 +158,15 @@ public class AboutActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-        if(Data.getFirmwareVersion() == null && characteristic != null) {
+        if(Data.getFirmwareVersion() == null) {
             Log.d(TAG, "Sending get fw version command");
             // Get Version
             byte[] getVersionCmd = {0x57, 0x52, 0x56};
             BluetoothGattCharacteristic characteristic = MainActivity.gattCommandCharacteristic;
-            characteristic.setValue(getVersionCmd);
-            BluetoothLeService.writeCharacteristic(characteristic);
+            if (characteristic != null) {
+                characteristic.setValue(getVersionCmd);
+                BluetoothLeService.writeCharacteristic(characteristic);
+            }
         }
     }
 

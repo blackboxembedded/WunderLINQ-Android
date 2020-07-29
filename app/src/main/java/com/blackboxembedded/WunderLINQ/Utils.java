@@ -108,6 +108,14 @@ public class Utils {
     public static double l100Tompg(double l100){
         return 235.215 / l100;
     }
+    // L/100 to MPG Imperial
+    public static double l100Tompgi(double l100){
+        return (235.215 / l100) * 1.20095;
+    }
+    // L/100 to km/L
+    public static double l100Tokml(double l100){
+        return l100 / 100;
+    }
 
     //format to 1 decimal place
     public static DecimalFormat oneDigit = new DecimalFormat("###0.0");

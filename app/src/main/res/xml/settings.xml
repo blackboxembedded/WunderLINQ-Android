@@ -273,6 +273,14 @@
             android:defaultValue="0"
             />
         <ListPreference
+            android:key="prefConsumption"
+            android:title="@string/pref_consumption_name"
+            android:summary="%s"
+            android:entries="@array/consumption_array"
+            android:entryValues="@array/consumption_arrayValues"
+            android:defaultValue="0"
+            />
+        <ListPreference
             android:key="prefBearing"
             android:title="@string/pref_bearing_name"
             android:summary="%s"
