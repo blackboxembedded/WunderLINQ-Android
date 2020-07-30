@@ -384,7 +384,7 @@
     <string name="firstrun_end">Merci d\'avoir acheté WunderLINQ ! Rouler en toute sécurité.</string>
     <string name="firstrun_start">WunderLINQ nécessite de nombreuses autorisations pour activer toutes les fonctionnalités intéressantes de l\'application. Sur les prochains écrans, nous expliquerons la nécessité de chaque demande d\'autorisation. Ces écrans ne vous seront présentés qu\'une seule fois. Si vous souhaitez activer certaines autorisations par la suite, vous devrez accéder aux paramètres Android et les activer.</string>
     <string name="pref_bearing_override_summary">Utiliser la direction du GPS plutôt que la boussole magnétique.</string>
-    <string name="pref_bearing_override_name">Direction</string>
+    <string name="pref_bearing_override_name">Orientation GPS</string>
     <string name="pref_notification_summary">Activer ou désactiver toutes les notifications d\'alerte</string>
     <string name="pref_notification_name">Activer les notifications d\'erreurs</string>
     <string name="timef_24h">24h</string>
@@ -413,4 +413,9 @@
     <string name="nav_app_calimoto">Calimoto</string>
     <string name="addwaypoint_view_tv_search_label">Emplacement ou adresse</string>
     <string name="sendlogs_subject" translatable="false">Journaux de débogage WunderINQ pour Android</string>
+    <string name="consumption_km">km/L</string>
+    <string name="consumption_gallon_imperial">mpg (impérial)</string>
+    <string name="consumption_gallon_us">mpg(US)</string>
+    <string name="consumption_hundred_km">L/100</string>
+    <string name="pref_consumption_name">Unité de consommation</string>
 </resources>
