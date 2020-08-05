@@ -4,13 +4,13 @@
     <string name="main_title">Motorrad</string>
     <!-- Permission Requests -->
     <string name="camera_alert_title">WunderLINQ benötigt Zugriff auf Ihre Kamera</string>
-    <string name="camera_alert_body">Bitte erlauben Sie den Zugriff auf die Kamera</string>
+    <string name="camera_alert_body">WunderLINQ nutzt Zugriff auf die Kamera, um Fotos und Videos aufzunehmen.</string>
     <string name="contacts_alert_title">WunderLINQ benötigt Zugriff auf Ihre Kontakte</string>
-    <string name="contacts_alert_body">Bitte erlauben Sie den Lesezugriff auf die Kontakte</string>
+    <string name="contacts_alert_body">WunderLINQ nutzt Zugriff auf Deine Kontakte, um sie anzurufen.</string>
     <string name="record_audio_alert_title">WunderLINQ benötigt Zugriff auf Ihr Mikrofon</string>
-    <string name="record_audio_alert_body">Bitte erlauben Sie den Zugriff auf das Mikrofon</string>
+    <string name="record_audio_alert_body">WunderLINQ benutzt Zugriff auf das Mikrofon für den Ton bei Videoaufnahmen.</string>
     <string name="location_alert_title">WunderLINQ benötigt Zugriff auf Ihren Standort</string>
-    <string name="location_alert_body">Bitte erlauben Sie den Zugriff auf Standortdaten</string>
+    <string name="location_alert_body">WunderLINQ benutzt Standortdaten für die Aufzeichnung von Spuren (Tracks) und Daten wie Höhe, GPS-Geschwindigkeit und Richtung.</string>
     <string name="write_alert_title">WunderLINQ benötigt Schreibzugriff</string>
     <string name="write_alert_body">Bitte erlauben Sie Schreibzugriff</string>
     <string name="overlay_alert_title">WunderLINQ benötigt Überlagerungsrecht</string>
@@ -156,7 +156,7 @@
     <string name="pref_tempf_name">Einheit Temperatur</string>
     <string name="tempf_c">Celsius</string>
     <string name="tempf_f">Fahrenheit</string>
-    <string name="pref_distance_name">Einheit Länge</string>
+    <string name="pref_distance_name">Einheit Entfernung</string>
     <string name="distance_m">Metrisch</string>
     <string name="distance_i">Imperial</string>
     <string name="pref_bearing_name">Einheit Richtung</string>
@@ -275,7 +275,7 @@
     <string name="negative_record_audio_alert_body">Weil Audiodatenzugriff nicht gewährt wurde, kann diese App keine Videos aufnehmen.</string>
     <string name="negative_call_alert_body">Weil Telefonzugriff nicht gewährt wurde, kann diese App keine Anrufe tätigen.</string>
     <string name="negative_contacts_alert_body">Weil Kontaktlistenzugriff nicht gewährt wurde, kann diese App bei eingehendem Anruf keine Kontaktdaten anzeigen oder ausgehende Anrufe tätigen.</string>
-    <string name="call_alert_body">Bitte erlauben Sie den Zugriff auf Ihr Telefon</string>
+    <string name="call_alert_body">WunderLINQ benutzt Zugriff auf Dein Telefon, um Anrufe zu tätigen.</string>
     <string name="call_alert_title">WunderLINQ benötigt Zugriff auf Ihr Telefon um Anrufe zu tätigen</string>
     <string name="pref_grid_settings_title">Anpassung der Datenfelder</string>
     <string name="pref_grid_settings_summary">Passen Sie an welche Datenfelder und in welcher Zelle diese angezeigt werden sollen</string>
@@ -307,7 +307,7 @@
     <string name="pref_taskswitcher_name">Task-Manager aktivieren</string>
     <string name="pref_taskswitcher_summary">Das Rad nach Rechts gedrückt öffnet den Task-Manager, nur aktivieren wenn es nicht als Zurück-Knopf konfiguriert ist</string>
     <string name="accessibilityservice_alert_title">WunderLINQ benötigt den Zugriffs-Hilfsservice</string>
-    <string name="accessibilityservice_alert_body">"Bitte schalten Sie den WunderLINQ Zugriffs-Hilfsservice ein."</string>
+    <string name="accessibilityservice_alert_body">WunderLINQ verwendet den Zugriffs-Hilfsservice, um Bild-in-Bild zu ermöglichen.</string>
     <string name="leanangle_header">Neigungswinkel</string>
     <string name="gforce_header">Beschleunigungskraft</string>
     <string name="geodata_label">Aufzeichnungen &amp; Wegpunkte</string>
@@ -363,4 +363,12 @@
     <string name="pref_photopreview_summary">Zeigt das Foto nach Aufnahme an</string>
     <string name="btn_logging_notification_stop">Aufnahme-Stop</string>
     <string name="pref_actioncam_title">Action-Kamera</string>
+    <string name="pref_notification_name">Fehlermeldungen aktivieren</string>
+    <string name="consumption_km">km/L</string>
+    <string name="consumption_gallon_imperial">mpg(Imperial)</string>
+    <string name="consumption_gallon_us">mpg(US)</string>
+    <string name="consumption_hundred_km">L/100km</string>
+    <string name="pref_consumption_name">Einheit Verbrauch</string>
+    <string name="firstrun_end">Vielen Dank, dass Du WunderLINQ gekauft hast! Wir wünschen Dir eine sichere Fahrt.</string>
+    <string name="firstrun_start">WunderLINQ benötigt einige Zugriffsrechte, um all die coolen Funktionen der App zu ermöglichen. Auf den nächsten Seiten erklären wir, wofür sie im Einzelnen erforderlich sind. Wir zeigen diese Erklärungsseiten nur einmalig. Zur späteren Freischaltung einzelner Zugriffsrechte kannst Du die Android Einstellungen benutzen.</string>
 </resources>
