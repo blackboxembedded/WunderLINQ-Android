@@ -392,10 +392,10 @@
     <string name="nav_app_sygic">Sygic</string>
     <string name="nav_app_mapfactor">Mapfactor Navigator</string>
     <string name="toast_permission_denied">Les autorisations requises pour cette tâche n\'ont pas été accordées.</string>
-    <string name="toast_waypoint_error">Latitude &amp; Longitude requises</string>
+    <string name="toast_waypoint_error">Latitude &amp; Longitude requise</string>
     <string name="addwaypoint_view_search_hint">Saisissez l\'adresse</string>
     <string name="addwaypoint_view_bt_search">Chercher</string>
-    <string name="reset_header">Réinitialisation des données</string>
+    <string name="reset_header">Réinitialisation des données de l\'ordinateur de bord</string>
     <string name="too_many_pairings_alert_body">Plus d\'un appareil WunderLINQ est couplé. Retirez les anciens appareils dans vos paramètres Bluetooth.</string>
     <string name="too_many_pairings_alert_title">Plusieurs appareils WunderLINQ couplés</string>
     <string name="no_pairing_alert_body">Aucun appareil WunderLINQ couplé. Veuillez vous connecter à votre WunderLINQ dans vos paramètres Bluetooth.</string>
