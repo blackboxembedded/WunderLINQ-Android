@@ -838,6 +838,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         }
                     } else if (UUID.fromString(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC).equals(gattCharacteristic.getUuid())){
                         gattCommandCharacteristic = gattCharacteristic;
+                        // Read config
+                        byte[] getConfigCmd = {0x57,0x52,0x57,0x0D,0x0A};
+                        if (gattCommandCharacteristic != null) {
+                            Log.d(TAG, "Sending get config command");
+                            gattCommandCharacteristic.setValue(getConfigCmd);
+                            BluetoothLeService.writeCharacteristic(gattCommandCharacteristic);
+                        }
                     }
                 }
             }

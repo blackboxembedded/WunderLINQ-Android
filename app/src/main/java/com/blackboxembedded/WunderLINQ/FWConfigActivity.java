@@ -44,8 +44,6 @@ public class FWConfigActivity extends AppCompatActivity {
 
     private final static String TAG = "FWConfigActvity";
 
-    BluetoothGattCharacteristic characteristic;
-
     private TextView fwVersionTV;
     private TextView wwModeLabelTV;
     private Spinner wwModeSpinner;
@@ -129,17 +127,7 @@ public class FWConfigActivity extends AppCompatActivity {
 
         showActionBar();
 
-        if(Data.getFirmwareVersion() != null) {
-            fwVersionTV.setText(getString(R.string.fw_version_label) + " " + Data.getFirmwareVersion());
-        }
-
-        characteristic = MainActivity.gattCommandCharacteristic;
-        if (characteristic != null) {
-            // Read config
-            byte[] readWLQConfigCmd = {0x57, 0x52, 0x57, 0x0D, 0x0A};
-            characteristic.setValue(readWLQConfigCmd);
-            BluetoothLeService.writeCharacteristic(characteristic);
-        }
+        updateDisplay();
     }
     @Override
     public void recreate() {
@@ -150,13 +138,18 @@ public class FWConfigActivity extends AppCompatActivity {
     protected void onResume() {
         Log.d(TAG, "In onResume");
         super.onResume();
+
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-        if ((characteristic != null) & (Data.getFirmwareVersion() == null)) {
-            // Get Version
-            byte[] getVersionCmd = {0x57, 0x52, 0x56};
-            characteristic.setValue(getVersionCmd);
-            BluetoothLeService.writeCharacteristic(characteristic);
+
+        // Read config
+        byte[] getConfigCmd = {0x57,0x52,0x57,0x0D,0x0A};
+        if (MainActivity.gattCommandCharacteristic != null) {
+            Log.d(TAG, "Sending get config command");
+            MainActivity.gattCommandCharacteristic.setValue(getConfigCmd);
+            BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
         }
+
+        updateDisplay();
     }
 
     @Override
@@ -187,8 +180,8 @@ public class FWConfigActivity extends AppCompatActivity {
                                     byte[] defaultConfig = {0x57,0x57,0x43,0x41,0x32,0x01,0x04,0x04,(byte)0xFE,(byte)0xFC,0x4F,0x28,0x0F,0x04,
                                             0x04,(byte)0xFD,(byte)0xFC,0x50,0x29,0x0F,0x04,0x06,0x00,0x00,0x00,0x00,0x34,0x02,0x01,0x01,0x65,
                                             0x55,0x4F,0x28,0x07,0x01,0x01,(byte)0x95,0x55,0x50,0x29,0x07,0x01,0x01,0x56,0x59,0x52,0x51,0x0D,0x0A};
-                                    characteristic.setValue(defaultConfig);
-                                    BluetoothLeService.writeCharacteristic(characteristic);
+                                    MainActivity.gattCommandCharacteristic.setValue(defaultConfig);
+                                    BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
                                     finish();
                                 }
                             });
@@ -224,20 +217,20 @@ public class FWConfigActivity extends AppCompatActivity {
                                             char sensOne = sensitivityChar[0];
                                             if (sensitivityChar.length == 1) {
                                                 byte[] writeSensitivityCmd = {0x57, 0x57, 0x43, 0x53, wwMode, 0x45, (byte) sensOne, 0x0D, 0x0A};
-                                                characteristic.setValue(writeSensitivityCmd);
+                                                MainActivity.gattCommandCharacteristic.setValue(writeSensitivityCmd);
                                             } else {
                                                 char sensTwo = sensitivityChar[1];
                                                 byte[] writeSensitivityCmd = {0x57, 0x57, 0x43, 0x53, wwMode, 0x45, (byte) sensOne, (byte) sensTwo, 0x0D, 0x0A};
-                                                characteristic.setValue(writeSensitivityCmd);
+                                                MainActivity.gattCommandCharacteristic.setValue(writeSensitivityCmd);
                                             }
-                                            BluetoothLeService.writeCharacteristic(characteristic);
+                                            BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
                                         }
                                     } else {
                                         Log.d(TAG,"Setting Mode");
                                         // Write mode
                                         byte[] writeConfigCmd = {0x57, 0x57, 0x53, 0x53, wwMode, 0x0D, 0x0A};
-                                        characteristic.setValue(writeConfigCmd);
-                                        BluetoothLeService.writeCharacteristic(characteristic);
+                                        MainActivity.gattCommandCharacteristic.setValue(writeConfigCmd);
+                                        BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
                                     }
                                     finish();
                                 }
@@ -280,6 +273,40 @@ public class FWConfigActivity extends AppCompatActivity {
         forwardButton.setVisibility(View.INVISIBLE);
     }
 
+    private void updateDisplay(){
+        if (Data.getFirmwareMode() != 0x00 && Data.getFirmwareSensitivity() != 0x00) {
+            byte mode = Data.getFirmwareMode();
+            currentConfig = mode;
+            byte sensitivity = Data.getFirmwareSensitivity();
+            currentSensitivity = sensitivity;
+            if (mode == 0x32) {
+                wwModeLabelTV.setVisibility(View.VISIBLE);
+                wwModeSpinner.setVisibility(View.VISIBLE);
+                wwModeSpinner.setSelection(0);
+                sensitivitySeekBar.setMax(30);
+                sensitivityLLayout.setVisibility(View.VISIBLE);
+                sensitivitySeekBar.setVisibility(View.VISIBLE);
+                sensitivitySeekBar.setProgress(sensitivity);
+                writeBtn.setVisibility(View.VISIBLE);
+            } else if (mode == 0x34) {
+                wwModeLabelTV.setVisibility(View.VISIBLE);
+                wwModeSpinner.setVisibility(View.VISIBLE);
+                wwModeSpinner.setSelection(1);
+                sensitivitySeekBar.setMax(20);
+                sensitivityLLayout.setVisibility(View.VISIBLE);
+                sensitivitySeekBar.setVisibility(View.VISIBLE);
+                sensitivitySeekBar.setProgress(sensitivity);
+                writeBtn.setVisibility(View.VISIBLE);
+            } else {
+                // Corrupt Config
+                resetBtn.setVisibility(View.VISIBLE);
+            }
+        }
+        if (Data.getFirmwareVersion() != null) {
+            fwVersionTV.setText(getString(R.string.fw_version_label) + " " + Data.getFirmwareVersion());
+        }
+    }
+
     // Handles various events fired by the Service.
     // ACTION_WRITE_SUCCESS: received when write is successful
     // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read
@@ -292,53 +319,9 @@ public class FWConfigActivity extends AppCompatActivity {
                 Bundle bd = intent.getExtras();
                 if(bd != null){
                     if(bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE).contains(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC)) {
-                        byte[] data = bd.getByteArray(BluetoothLeService.EXTRA_BYTE_VALUE);
-                        Log.d(TAG, "UUID: " + bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE) + " DATA: " + Utils.ByteArraytoHex(data));
-                        if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x57)) {
-                            byte mode = data[26];
-                            currentConfig = mode;
-                            byte sensitivity = data[34];
-                            currentSensitivity = sensitivity;
-                            if (mode == 0x32) {
-                                wwModeLabelTV.setVisibility(View.VISIBLE);
-                                wwModeSpinner.setVisibility(View.VISIBLE);
-                                wwModeSpinner.setSelection(0);
-                                sensitivitySeekBar.setMax(30);
-                                sensitivityLLayout.setVisibility(View.VISIBLE);
-                                sensitivitySeekBar.setVisibility(View.VISIBLE);
-                                sensitivitySeekBar.setProgress(sensitivity);
-                                writeBtn.setVisibility(View.VISIBLE);
-                            } else if (mode == 0x34){
-                                wwModeLabelTV.setVisibility(View.VISIBLE);
-                                wwModeSpinner.setVisibility(View.VISIBLE);
-                                wwModeSpinner.setSelection(1);
-                                sensitivitySeekBar.setMax(20);
-                                sensitivityLLayout.setVisibility(View.VISIBLE);
-                                sensitivitySeekBar.setVisibility(View.VISIBLE);
-                                sensitivitySeekBar.setProgress(sensitivity);
-                                writeBtn.setVisibility(View.VISIBLE);
-                            } else {
-                                // Corrupt Config
-                                resetBtn.setVisibility(View.VISIBLE);
-                            }
-
-                            if(Data.getFirmwareVersion() == null) {
-                                // Get Version
-                                byte[] getVersionCmd = {0x57, 0x52, 0x56};
-                                characteristic.setValue(getVersionCmd);
-                                BluetoothLeService.writeCharacteristic(characteristic);
-                            }
-                        } else if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x56)){
-                            String version = data[3] + "." + data[4];
-                            Data.setFirmwareVersion(Double.parseDouble(version));
-                            fwVersionTV.setText(getString(R.string.fw_version_label) + " " + version);
-                        }
-
+                        updateDisplay();
                     }
                 }
-            } else if(BluetoothLeService.ACTION_WRITE_SUCCESS.equals(action)){
-                Log.d(TAG,"Write Success Received");
-                BluetoothLeService.readCharacteristic(characteristic);
             }
         }
     };
@@ -346,7 +329,6 @@ public class FWConfigActivity extends AppCompatActivity {
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
-        intentFilter.addAction(BluetoothLeService.ACTION_WRITE_SUCCESS);
         return intentFilter;
     }
 }

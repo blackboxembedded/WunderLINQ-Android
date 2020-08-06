@@ -17,11 +17,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ;
 
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
@@ -52,8 +49,6 @@ import java.util.Date;
 public class AboutActivity extends AppCompatActivity {
 
     private final static String TAG = "AboutActivity";
-
-    BluetoothGattCharacteristic characteristic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,8 +140,6 @@ public class AboutActivity extends AppCompatActivity {
         tvCredits.setMovementMethod(new ScrollingMovementMethod());
 
         showActionBar();
-
-        characteristic = MainActivity.gattCommandCharacteristic;
     }
 
     @Override
@@ -157,15 +150,12 @@ public class AboutActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
         if(Data.getFirmwareVersion() == null) {
-            Log.d(TAG, "Sending get fw version command");
-            // Get Version
-            byte[] getVersionCmd = {0x57, 0x52, 0x56};
-            BluetoothGattCharacteristic characteristic = MainActivity.gattCommandCharacteristic;
-            if (characteristic != null) {
-                characteristic.setValue(getVersionCmd);
-                BluetoothLeService.writeCharacteristic(characteristic);
+            byte[] getConfigCmd = {0x57,0x52,0x57,0x0D,0x0A};
+            if (MainActivity.gattCommandCharacteristic != null) {
+                Log.d(TAG, "Sending get config command");
+                MainActivity.gattCommandCharacteristic.setValue(getConfigCmd);
+                BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
             }
         }
     }
@@ -174,11 +164,6 @@ public class AboutActivity extends AppCompatActivity {
     protected void onDestroy() {
         Log.d(TAG,"In onDestroy");
         super.onDestroy();
-        try {
-            unregisterReceiver(mGattUpdateReceiver);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
     }
 
     private void showActionBar(){
@@ -211,39 +196,4 @@ public class AboutActivity extends AppCompatActivity {
             }
         }
     };
-
-    // Handles various events fired by the Service.
-    // ACTION_WRITE_SUCCESS: received when write is successful
-    // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read
-    //                        or notification operations.
-    private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-            if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-                Bundle bd = intent.getExtras();
-                if(bd != null){
-                    if(bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE).contains(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC)) {
-                        byte[] data = bd.getByteArray(BluetoothLeService.EXTRA_BYTE_VALUE);
-                        Log.d(TAG, "UUID: " + bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE) + " DATA: " + Utils.ByteArraytoHex(data));
-                        if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x56)){
-                            String version = data[3] + "." + data[4];
-                            Data.setFirmwareVersion(Double.parseDouble(version));
-                        }
-
-                    }
-                }
-            } else if(BluetoothLeService.ACTION_WRITE_SUCCESS.equals(action)){
-                Log.d(TAG,"Write Success Received");
-                BluetoothLeService.readCharacteristic(characteristic);
-            }
-        }
-    };
-
-    private static IntentFilter makeGattUpdateIntentFilter() {
-        final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
-        intentFilter.addAction(BluetoothLeService.ACTION_WRITE_SUCCESS);
-        return intentFilter;
-    }
 }

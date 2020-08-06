@@ -282,26 +282,34 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
 
                 //Send time to cluster
                 if (MainActivity.gattCommandCharacteristic != null) {
-                    BluetoothGattCharacteristic characteristic = MainActivity.gattCommandCharacteristic;
-                    //Get Current Time
-                    Date date = new Date();
-                    Calendar calendar = new GregorianCalendar();
-                    calendar.setTime(date);
-                    int year = calendar.get(Calendar.YEAR);
-                    //Add one to month {0 - 11}
-                    int month = calendar.get(Calendar.MONTH) + 1;
-                    int day = calendar.get(Calendar.DAY_OF_MONTH);
-                    int hour = calendar.get(Calendar.HOUR_OF_DAY);
-                    int minute = calendar.get(Calendar.MINUTE);
-                    int second = calendar.get(Calendar.SECOND);
-                    int yearByte = (year >> 4);
-                    byte yearLByte = (byte) year;
-                    int yearNibble = (yearLByte & 0x0F);
-                    byte monthNibble = (byte) month;
-                    int monthYearByte = ((yearNibble & 0x0F) << 4 | (monthNibble & 0x0F));
-                    byte[] setClusterClock = {0x57, 0x57, 0x44, 0x43, (byte) second, (byte) minute, (byte) hour, (byte) day, (byte) monthYearByte, (byte) yearByte};
-                    characteristic.setValue(setClusterClock);
-                    writeCharacteristic(characteristic);
+                    if (Data.getFirmwareVersion() == null){
+                        // Read config
+                        byte[] getConfigCmd = {0x57,0x52,0x57,0x0D,0x0A};
+                        Log.d(TAG, "Sending get config command");
+                        MainActivity.gattCommandCharacteristic.setValue(getConfigCmd);
+                        BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
+                    } else {
+                        BluetoothGattCharacteristic characteristic = MainActivity.gattCommandCharacteristic;
+                        //Get Current Time
+                        Date date = new Date();
+                        Calendar calendar = new GregorianCalendar();
+                        calendar.setTime(date);
+                        int year = calendar.get(Calendar.YEAR);
+                        //Add one to month {0 - 11}
+                        int month = calendar.get(Calendar.MONTH) + 1;
+                        int day = calendar.get(Calendar.DAY_OF_MONTH);
+                        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                        int minute = calendar.get(Calendar.MINUTE);
+                        int second = calendar.get(Calendar.SECOND);
+                        int yearByte = (year >> 4);
+                        byte yearLByte = (byte) year;
+                        int yearNibble = (yearLByte & 0x0F);
+                        byte monthNibble = (byte) month;
+                        int monthYearByte = ((yearNibble & 0x0F) << 4 | (monthNibble & 0x0F));
+                        byte[] setClusterClock = {0x57, 0x57, 0x44, 0x43, (byte) second, (byte) minute, (byte) hour, (byte) day, (byte) monthYearByte, (byte) yearByte};
+                        characteristic.setValue(setClusterClock);
+                        writeCharacteristic(characteristic);
+                    }
                 }
 
             }
@@ -586,7 +594,20 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 characteristic, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 Intent intent = new Intent(ACTION_WRITE_SUCCESS);
-                intent.putExtra("ACTION_WRITE_SUCCESS", "" + status);
+                Bundle mBundle = new Bundle();
+                // Putting the byte value read for GATT Db
+                final byte[] data = characteristic.getValue();
+                mBundle.putByteArray(EXTRA_BYTE_VALUE,
+                        data);
+                mBundle.putString(EXTRA_BYTE_UUID_VALUE,
+                        characteristic.getUuid().toString());
+                mBundle.putString("ACTION_WRITE_SUCCESS",
+                        "" + status);
+                intent.putExtras(mBundle);
+                if (characteristic.getUuid().toString().contains(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC)){
+                    readCharacteristic(MainActivity.gattCommandCharacteristic);
+                }
+
                 MyApplication.getContext().sendBroadcast(intent);
             } else {
                 Intent intent = new Intent(ACTION_GATT_CHARACTERISTIC_ERROR);
@@ -626,13 +647,13 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
         final Intent intent = new Intent(BluetoothLeService.ACTION_DATA_AVAILABLE);
         Bundle mBundle = new Bundle();
         // Putting the byte value read for GATT Db
+        final byte[] data = characteristic.getValue();
         mBundle.putByteArray(EXTRA_BYTE_VALUE,
-                characteristic.getValue());
+                data);
         mBundle.putString(EXTRA_BYTE_UUID_VALUE,
                 characteristic.getUuid().toString());
 
         if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_MESSAGE_CHARACTERISTIC)) {
-            final byte[] data = characteristic.getValue();
             if (data != null) {
                 if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
                     // Log data
@@ -726,6 +747,21 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                      */
                     intent.putExtras(mBundle);
                     MyApplication.getContext().sendBroadcast(intent);
+                }
+            }
+        } else if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_COMMAND_CHARACTERISTIC)){
+            if (data != null) {
+                //Read Config
+                if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x57)){
+                    String version = data[9] + "." + data[10];
+                    Data.setFirmwareVersion(Double.parseDouble(version));
+                    if(Data.getFirmwareMode() != data[26]
+                    || Data.getFirmwareSensitivity() != data[34]) {
+                        Data.setFirmwareMode(data[26]);
+                        Data.setFirmwareSensitivity(data[34]);
+                        intent.putExtras(mBundle);
+                        MyApplication.getContext().sendBroadcast(intent);
+                    }
                 }
             }
         } else {
