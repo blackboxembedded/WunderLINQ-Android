@@ -830,5 +830,4 @@
         <item name="2">1</item>
         <item name="3">2</item>
     </string-array>
-    <string name="title_activity_first_run">FirstRunActivity</string>
 </resources>
