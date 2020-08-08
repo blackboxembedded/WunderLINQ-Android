@@ -371,4 +371,7 @@
     <string name="pref_consumption_name">Einheit Verbrauch</string>
     <string name="firstrun_end">Vielen Dank, dass Du WunderLINQ gekauft hast! Wir wünschen Dir eine sichere Fahrt.</string>
     <string name="firstrun_start">WunderLINQ benötigt einige Zugriffsrechte, um all die coolen Funktionen der App zu ermöglichen. Auf den nächsten Seiten erklären wir, wofür sie im Einzelnen erforderlich sind. Wir zeigen diese Erklärungsseiten nur einmalig. Zur späteren Freischaltung einzelner Zugriffsrechte kannst Du die Android Einstellungen benutzen.</string>
+    <string name="pref_bearing_override_summary">Verwende GPS Richtung anstelle des magnetischen Kompasses.</string>
+    <string name="pref_bearing_override_name">GPS Richtung</string>
+    <string name="system_default">Standardeinstellung</string>
 </resources>
