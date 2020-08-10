@@ -266,7 +266,7 @@
     <string name="pref_fuelAlert_summary">Proposer l\'itinéraire vers la station la plus proche en cas de niveau de carburant bas</string>
     <string name="advanced_settings_title">Réglages avancés</string>
     <string name="btn_sendlogs_title">Envoyer les journaux</string>
-    <string name="sendlogs_body">Entrez une description du problème ci-dessous:
+    <string name="sendlogs_body">Entrez une description du problème ci-dessous :
 \n</string>
     <string name="sendlogs_intent_title">Envoyer les journaux…</string>
     <string name="hw_settings_title">WunderLINQ réglages matériels</string>
@@ -392,7 +392,7 @@
     <string name="nav_app_sygic">Sygic</string>
     <string name="nav_app_mapfactor">Mapfactor Navigator</string>
     <string name="toast_permission_denied">Les autorisations requises pour cette tâche n\'ont pas été accordées.</string>
-    <string name="toast_waypoint_error">Latitude &amp; Longitude requise</string>
+    <string name="toast_waypoint_error">Latitude &amp; Longitude requises</string>
     <string name="addwaypoint_view_search_hint">Saisissez l\'adresse</string>
     <string name="addwaypoint_view_bt_search">Chercher</string>
     <string name="reset_header">Réinitialisation des données de l\'ordinateur de bord</string>
@@ -407,7 +407,7 @@
     <string name="config_reset_label">Réinitialiser les paramètres</string>
     <string name="fw_version_label">Version du microcode</string>
     <string name="nav_app_tomtomgo">TomTom GO</string>
-    <string name="system_default">Défaut du système</string>
+    <string name="system_default">Paramètres par défaut</string>
     <string name="nav_app_bmwconnectedride">BMW Motorrad Connecté</string>
     <string name="title_activity_first_run">FirstRunActivity</string>
     <string name="nav_app_calimoto">Calimoto</string>
