@@ -143,9 +143,11 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
         });
 
         // Add a marker and move the camera
-        LatLng location = new LatLng(Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
-        googleMap.addMarker(new MarkerOptions().position(location));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,15));
+        if(Data.getLastLocation() != null) {
+            LatLng location = new LatLng(Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
+            googleMap.addMarker(new MarkerOptions().position(location));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
+        }
     }
 
     private View.OnClickListener mClickListener = new View.OnClickListener() {
