@@ -47,6 +47,7 @@ public class BTConnectReceiver extends BroadcastReceiver {
         if (sharedPrefs.getBoolean("prefAutoLaunch",true)) {
 
             if (intent.getAction().equals("android.bluetooth.device.action.ACL_CONNECTED")) {
+                Log.d(TAG, "android.bluetooth.device.action.ACL_CONNECTED!");
                 // Get the BluetoothDevice object from the Intent
                 BluetoothDevice device = intent
                         .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);

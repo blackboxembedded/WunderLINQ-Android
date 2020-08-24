@@ -301,6 +301,7 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                         int hour = calendar.get(Calendar.HOUR_OF_DAY);
                         int minute = calendar.get(Calendar.MINUTE);
                         int second = calendar.get(Calendar.SECOND);
+                        Log.d(TAG, "Sending hour as: " + hour);
                         int yearByte = (year >> 4);
                         byte yearLByte = (byte) year;
                         int yearNibble = (yearLByte & 0x0F);
