@@ -14,6 +14,11 @@
             android:key="prefHomePhone" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/ui_title" >
+        <com.rarepebble.colorpicker.ColorPreference
+            android:key="prefHighlightColor"
+            android:title="@string/pref_highlightColor_title"
+            android:defaultValue="#0059ff"
+            />
         <PreferenceScreen
             android:key="prefScreenGrid"
             android:title="@string/pref_grid_settings_title"

@@ -19,6 +19,8 @@ package com.blackboxembedded.WunderLINQ.TaskList;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blackboxembedded.WunderLINQ.R;
@@ -97,7 +100,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.RecyclerViewHo
         });
 
         if(selected == position){
-            holder.menuIcon.setBackground(context.getDrawable(R.drawable.icon_highlight));
+            int highlightColor = PreferenceManager.getDefaultSharedPreferences(context).getInt("prefHighlightColor", R.color.colorAccent);
+            GradientDrawable shape = new GradientDrawable();
+            shape.setShape(GradientDrawable.OVAL);
+            shape.setColor(highlightColor);
+            shape.setStroke(3, highlightColor);
+            holder.menuIcon.setBackground(shape);
         } else {
             holder.menuIcon.setBackgroundColor(context.getColor(R.color.clear));
         }

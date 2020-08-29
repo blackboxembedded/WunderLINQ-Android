@@ -455,6 +455,7 @@
     <string name="pref_homePhone_name">Favorite Phone Number</string>
     <string name="pref_homePhone_summary">Format: 11234567890</string>
     <string name="ui_title">User Interface</string>
+    <string name="pref_highlightColor_title">Highlight Color</string>
     <string name="pref_grid_settings_title">Data Grid Customization</string>
     <string name="pref_grid_settings_summary">Customize which data points to display and in which cell</string>
     <string name="first">First</string>

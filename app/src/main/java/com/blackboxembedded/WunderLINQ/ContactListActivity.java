@@ -30,6 +30,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -155,6 +156,9 @@ public class ContactListActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+
+        int highlightColor = androidx.preference.PreferenceManager.getDefaultSharedPreferences(this).getInt("prefHighlightColor", R.color.colorAccent);
+        contactList.setSelector(new ColorDrawable(highlightColor));
     }
 
     @Override

@@ -25,6 +25,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -217,6 +218,8 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
     @Override
     public void onResume() {
         super.onResume();
+        int highlightColor = androidx.preference.PreferenceManager.getDefaultSharedPreferences(this).getInt("prefHighlightColor", R.color.colorAccent);
+        waypointList.setSelector(new ColorDrawable(highlightColor));
     }
 
     @Override

@@ -36,6 +36,7 @@ dependencies {
     })
     implementation 'androidx.wear:wear:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.preference:preference:1.1.1'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0'
     implementation 'com.google.android.material:material:1.2.0'
@@ -52,5 +53,6 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'ca.rmen:lib-sunrise-sunset:1.1.1'
+    implementation 'com.rarepebble:colorpicker:3.0.1'
     testImplementation 'junit:junit:4.12'
 }
