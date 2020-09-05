@@ -7,8 +7,8 @@ android {
         applicationId "com.blackboxembedded.WunderLINQ"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 116
-        versionName "2.08"
+        versionCode 117
+        versionName "2.09"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

@@ -1396,9 +1396,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 label = getString(R.string.cconsumption_label) + " (" + consumptionUnit + ")";
                 if(Data.getCurrentConsumption() != null){
                     Double currentConsumption = Data.getCurrentConsumption();
-                    if (distanceFormat.contains("1")) {
-                        currentConsumption = Utils.l100Tompg(currentConsumption);
-                    }
                     if (consumptionFormat.contains("1")) {
                         currentConsumption = Utils.l100Tompg(currentConsumption);
                     } else if (consumptionFormat.contains("2")) {
