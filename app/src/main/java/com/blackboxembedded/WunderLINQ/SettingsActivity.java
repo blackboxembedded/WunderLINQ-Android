@@ -59,14 +59,12 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCreate(final Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.settings);
-
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-            EditTextPreference addressPref = (EditTextPreference) findPreference("prefHomeAddress");
+            EditTextPreference addressPref = findPreference("prefHomeAddress");
             addressPref.setSummary(sharedPrefs.getString("prefHomeAddress",getString(R.string.pref_homeAddress_summary)));
 
-            EditTextPreference favNumberPref = (EditTextPreference) findPreference("prefHomePhone");
+            EditTextPreference favNumberPref = findPreference("prefHomePhone");
             favNumberPref.setSummary(sharedPrefs.getString("prefHomePhone",getString(R.string.pref_homePhone_summary)));
 
             if (Build.VERSION.SDK_INT < 26) {
