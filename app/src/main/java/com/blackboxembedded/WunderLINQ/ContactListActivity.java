@@ -52,7 +52,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -243,18 +242,13 @@ public class ContactListActivity extends AppCompatActivity {
                                     Log.d(TAG, "Adding Contact");
                                     contacts.add(displayName + " (" + typeIDtoString(Integer.parseInt(phoneType)) + ")");
                                     phoneNumbers.add(normalNum);
-                                    Drawable photo;
-                                    photo = getResources().getDrawable(R.drawable.ic_default_contact, getTheme());
-
+                                    Drawable photo = null;
                                     if (photoURI != null) {
-
                                         try {
                                             Bitmap photoBitmap = MediaStore.Images.Media
                                                     .getBitmap(getContentResolver(),
                                                             Uri.parse(photoURI));
                                             photo = new BitmapDrawable(getResources(), photoBitmap);
-                                        } catch (FileNotFoundException e) {
-                                            e.printStackTrace();
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }

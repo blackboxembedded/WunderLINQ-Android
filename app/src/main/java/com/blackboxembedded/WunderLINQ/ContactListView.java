@@ -17,10 +17,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ;
 
-/**
- * Created by keithconger on 9/5/17.
- */
-
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -54,8 +50,8 @@ public class ContactListView extends ArrayAdapter<String>{
         ImageView imageView = rowView.findViewById(R.id.iv_icon);
 
         txtTitle.setText(label.get(position));
-        imageView.setImageDrawable(icon.get(position));
-        if( imageView.getDrawable().getConstantState() != context.getResources().getDrawable( R.drawable.ic_default_contact).getConstantState()){
+        if (icon.get(position) != null) {
+            imageView.setImageDrawable(icon.get(position));
             imageView.setImageTintMode(null);
         }
 
