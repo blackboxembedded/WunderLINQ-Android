@@ -1298,7 +1298,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             case 8:
                 //Front Brakes
                 label = getString(R.string.frontbrakes_label);
-                if(Data.getFrontBrake() != null){
+                if((Data.getFrontBrake() != null) && (Data.getFrontBrake() != 0)){
                     Integer frontBrakes = Data.getFrontBrake();
                     value = String.valueOf(frontBrakes);
                 }
@@ -1307,7 +1307,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             case 9:
                 //Rear Brakes
                 label = getString(R.string.rearbrakes_label);
-                if(Data.getRearBrake() != null){
+                if((Data.getRearBrake() != null) && (Data.getFrontBrake() != 0)){
                     Integer rearBrakes = Data.getRearBrake();
                     value = String.valueOf(rearBrakes);
                 }
