@@ -70,7 +70,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.gridlayout.widget.GridLayout;
 
 import java.text.SimpleDateFormat;
@@ -92,7 +94,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private ImageButton faultButton;
     private ImageButton btButton;
     private GridLayout gridLayout;
-    private ConstraintLayout layout1;
 
     private SharedPreferences sharedPrefs;
 
@@ -422,11 +423,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                             if (!isInMultiWindowMode()) {
                                 if (isAccessibilityServiceEnabled(MainActivity.this, MyAccessibilityService.class)) {
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                        Intent accessibilityService = new Intent(MainActivity.this, MyAccessibilityService.class);
-                                        accessibilityService.putExtra("command", 1);
-                                        startService(accessibilityService);
-                                    }
+                                    Intent accessibilityService = new Intent(MainActivity.this, MyAccessibilityService.class);
+                                    accessibilityService.putExtra("command", 1);
+                                    startService(accessibilityService);
                                 } else {
                                     Intent accessibilityIntent = new Intent();
                                     accessibilityIntent.setAction(Settings.ACTION_ACCESSIBILITY_SETTINGS);
@@ -645,9 +644,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 finish();
             }
             // Automatically connects to the device upon successful start-up initialization.
-            if (mBluetoothLeService.mConnectionState == BluetoothLeService.STATE_DISCONNECTED) {
+            if (BluetoothLeService.mConnectionState == BluetoothLeService.STATE_DISCONNECTED) {
                 Log.d(TAG, "In onServiceConnected Disconnected, Connecting...");
-                mBluetoothLeService.connect(mDeviceAddress, getString(R.string.device_name));
+                BluetoothLeService.connect(mDeviceAddress, getString(R.string.device_name));
             }
         }
 
@@ -696,11 +695,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         }
                     });
             builder.show();
-            return;
         } else if (wlqCnt == 1){
             Log.d(TAG, "Connecting to Address: " + mDeviceAddress);
             bindService(bluetoothLeService, mServiceConnection, BIND_AUTO_CREATE);
-            return;
         } else if (wlqCnt > 1){
             Log.d(TAG, "Too many WunderLINQ pairings: " + wlqCnt);
             // Display dialog text here......
@@ -725,7 +722,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         }
                     });
             builder.show();
-            return;
         }
     }
 
@@ -763,27 +759,27 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             final String action = intent.getAction();
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 Log.d(TAG,"GATT_CONNECTED");
-                mBluetoothLeService.discoverServices();
+                BluetoothLeService.discoverServices();
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 Log.d(TAG,"GATT_DISCONNECTED");
                 //Data.clear();
                 if (!sharedPrefs.getBoolean("prefMotorcycleData", false)){
                     updateDisplay();
                 }
-                btButton.setColorFilter(getResources().getColor(R.color.motorrad_red));
+                btButton.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.motorrad_red));
                 btButton.setEnabled(true);
                 mMenu.findItem(R.id.action_hwsettings).setVisible(false);
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 Log.d(TAG,"GATT_SERVICE_DISCOVERED");
-                checkGattServices(mBluetoothLeService.getSupportedGattServices());
-                btButton.setColorFilter(getResources().getColor(R.color.motorrad_blue));
+                checkGattServices(BluetoothLeService.getSupportedGattServices());
+                btButton.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.motorrad_blue));
                 btButton.setEnabled(false);
                 mMenu.findItem(R.id.action_hwsettings).setVisible(true);
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 Bundle bd = intent.getExtras();
                 if(bd != null) {
                     if (bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE).contains(GattAttributes.WUNDERLINQ_MESSAGE_CHARACTERISTIC)) {
-                        btButton.setColorFilter(getResources().getColor(R.color.motorrad_blue));
+                        btButton.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.motorrad_blue));
                         btButton.setEnabled(false);
                         mMenu.findItem(R.id.action_hwsettings).setVisible(true);
                     }
@@ -825,26 +821,24 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                             // If there is an active notification on a characteristic, clear
                             // it first so it doesn't update the data field on the user interface.
                             if (mNotifyCharacteristic != null) {
-                                mBluetoothLeService.setCharacteristicNotification(
+                                BluetoothLeService.setCharacteristicNotification(
                                         mNotifyCharacteristic, false);
                                 mNotifyCharacteristic = null;
                             }
-                            mBluetoothLeService.readCharacteristic(gattCharacteristic);
+                            BluetoothLeService.readCharacteristic(gattCharacteristic);
                         }
                         if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
                             mNotifyCharacteristic = gattCharacteristic;
-                            mBluetoothLeService.setCharacteristicNotification(
+                            BluetoothLeService.setCharacteristicNotification(
                                     gattCharacteristic, true);
                         }
                     } else if (UUID.fromString(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC).equals(gattCharacteristic.getUuid())){
                         gattCommandCharacteristic = gattCharacteristic;
                         // Read config
                         byte[] getConfigCmd = {0x57,0x52,0x57,0x0D,0x0A};
-                        if (gattCommandCharacteristic != null) {
-                            Log.d(TAG, "Sending get config command");
-                            gattCommandCharacteristic.setValue(getConfigCmd);
-                            BluetoothLeService.writeCharacteristic(gattCommandCharacteristic);
-                        }
+                        Log.d(TAG, "Sending get config command");
+                        gattCommandCharacteristic.setValue(getConfigCmd);
+                        BluetoothLeService.writeCharacteristic(gattCommandCharacteristic);
                     }
                 }
             }
@@ -891,9 +885,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         gridLayout = findViewById(R.id.gridLayout);
 
         //Check for active faults
-        FaultStatus faults;
-        faults = (new FaultStatus(this));
-        ArrayList<String> faultListData = faults.getallActiveDesc();
+        ArrayList<String> faultListData = FaultStatus.getallActiveDesc();
         if (!faultListData.isEmpty()) {
             faultButton.setVisibility(View.VISIBLE);
         } else {
@@ -931,8 +923,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         // Cell Fifteen
         Integer cell15Data = Integer.parseInt(sharedPrefs.getString("prefCellFifteen", "15"));
 
-        int currentCellCount = Integer.parseInt(sharedPrefs.getString("CELL_COUNT", "15"));
-        int count = currentCellCount;
+        int count = Integer.parseInt(sharedPrefs.getString("CELL_COUNT", "15"));
         if (inPIP) {
             count = Integer.parseInt(sharedPrefs.getString("prefPIPCellCount", "4"));
         }
@@ -1184,16 +1175,16 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 if(Data.getGear() != null){
                     value = Data.getGear();
                 }
-                icon = getResources().getDrawable(R.drawable.ic_cog);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_cog);
                 break;
             case 1:
                 //Engine
                 label = getString(R.string.engine_temp_label) + " (" + temperatureUnit + ")";
-                icon = getResources().getDrawable(R.drawable.ic_engine_temp);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_engine_temp);
                 if(Data.getEngineTemperature() != null ){
-                    Double engineTemp = Data.getEngineTemperature();
+                    double engineTemp = Data.getEngineTemperature();
                     if (engineTemp >= 104.0){
-                        icon.setColorFilter(getResources().getColor(R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
+                        icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
                     }
                     if (temperatureFormat.contains("1")) {
                         // F
@@ -1206,11 +1197,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 //Ambient
                 label = getString(R.string.ambient_temp_label) + " (" + temperatureUnit + ")";
                 if(Data.getAmbientTemperature() != null ){
-                    Double ambientTemp = Data.getAmbientTemperature();
+                    double ambientTemp = Data.getAmbientTemperature();
                     if(ambientTemp <= 0){
-                        icon = getResources().getDrawable(R.drawable.ic_snowflake);
+                        icon = AppCompatResources.getDrawable(this, R.drawable.ic_snowflake);
                     } else {
-                        icon = getResources().getDrawable(R.drawable.ic_thermometer_half);
+                        icon = AppCompatResources.getDrawable(this, R.drawable.ic_thermometer_half);
                     }
                     if (temperatureFormat.contains("1")) {
                         // F
@@ -1218,7 +1209,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Math.round(ambientTemp));
                 } else {
-                    icon = getResources().getDrawable(R.drawable.ic_thermometer_half);
+                    icon = AppCompatResources.getDrawable(this, R.drawable.ic_thermometer_half);
                 }
 
                 break;
@@ -1226,7 +1217,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 //FrontTire
                 label = getString(R.string.frontpressure_header) + " (" + pressureUnit + ")";
                 if(Data.getFrontTirePressure() != null){
-                    Double rdcFront = Data.getFrontTirePressure();
+                    double rdcFront = Data.getFrontTirePressure();
                     if (pressureFormat.contains("1")) {
                         // KPa
                         rdcFront = Utils.barTokPa(rdcFront);
@@ -1239,20 +1230,20 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Utils.oneDigit.format(rdcFront));
                 }
-                icon = getResources().getDrawable(R.drawable.ic_tire);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_tire);
                 if (FaultStatus.getfrontTirePressureCriticalActive()){
-                    icon = getResources().getDrawable(R.drawable.ic_tire_alert);
-                    icon.setColorFilter(getResources().getColor(R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
+                    icon = AppCompatResources.getDrawable(this, R.drawable.ic_tire_alert);
+                    icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
                 } else if (FaultStatus.getfrontTirePressureWarningActive()){
-                    icon = getResources().getDrawable(R.drawable.ic_tire_alert);
-                    icon.setColorFilter(getResources().getColor(R.color.yellow), PorterDuff.Mode.SRC_ATOP);
+                    icon = AppCompatResources.getDrawable(this, R.drawable.ic_tire_alert);
+                    icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
                 }
                 break;
             case 4:
                 //RearTire
                 label = getString(R.string.rearpressure_header) + " (" + pressureUnit + ")";
                 if(Data.getRearTirePressure() != null){
-                    Double rdcRear = Data.getRearTirePressure();
+                    double rdcRear = Data.getRearTirePressure();
                     if (pressureFormat.contains("1")) {
                         // KPa
                         rdcRear = Utils.barTokPa(rdcRear);
@@ -1265,26 +1256,26 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Utils.oneDigit.format(rdcRear));
                 }
-                icon = getResources().getDrawable(R.drawable.ic_tire);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_tire);
                 if (FaultStatus.getrearTirePressureCriticalActive()){
-                    icon = getResources().getDrawable(R.drawable.ic_tire_alert);
-                    icon.setColorFilter(getResources().getColor(R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
+                    icon = AppCompatResources.getDrawable(this, R.drawable.ic_tire_alert);
+                    icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
                 } else if (FaultStatus.getrearTirePressureWarningActive()){
-                    icon = getResources().getDrawable(R.drawable.ic_tire_alert);
-                    icon.setColorFilter(getResources().getColor(R.color.yellow), PorterDuff.Mode.SRC_ATOP);
+                    icon = AppCompatResources.getDrawable(this, R.drawable.ic_tire_alert);
+                    icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
                 }
                 break;
             case 5:
                 //Odometer
                 label = getString(R.string.odometer_label) + " (" + distanceUnit + ")";
                 if(Data.getOdometer() != null){
-                    Double odometer = Data.getOdometer();
+                    double odometer = Data.getOdometer();
                     if (distanceFormat.contains("1")) {
                         odometer = Utils.kmToMiles(odometer);
                     }
                     value = String.valueOf(Math.round(odometer));
                 }
-                icon = getResources().getDrawable(R.drawable.ic_dashboard_meter);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_dashboard_meter);
                 break;
             case 6:
                 //Voltage
@@ -1293,7 +1284,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Double voltage = Data.getvoltage();
                     value = String.valueOf(Utils.oneDigit.format(voltage));
                 }
-                icon = getResources().getDrawable(R.drawable.ic_car_battery);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_car_battery);
                 break;
             case 7:
                 //Throttle
@@ -1302,7 +1293,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Double throttlePosition = Data.getThrottlePosition();
                     value = String.valueOf(Math.round(throttlePosition));
                 }
-                icon = getResources().getDrawable(R.drawable.ic_signature);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_signature);
                 break;
             case 8:
                 //Front Brakes
@@ -1311,7 +1302,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Integer frontBrakes = Data.getFrontBrake();
                     value = String.valueOf(frontBrakes);
                 }
-                icon = getResources().getDrawable(R.drawable.ic_brakes);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_brakes);
                 break;
             case 9:
                 //Rear Brakes
@@ -1320,7 +1311,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Integer rearBrakes = Data.getRearBrake();
                     value = String.valueOf(rearBrakes);
                 }
-                icon = getResources().getDrawable(R.drawable.ic_brakes);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_brakes);
                 break;
             case 10:
                 //Ambient Light
@@ -1329,73 +1320,73 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Integer ambientLight = Data.getAmbientLight();
                     value = String.valueOf(ambientLight);
                 }
-                icon = getResources().getDrawable(R.drawable.ic_lightbulb);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_lightbulb);
                 break;
             case 11:
                 //Trip 1
                 label = getString(R.string.trip1_label) + " (" + distanceUnit + ")";
                 if(Data.getTripOne() != null) {
-                    Double trip1 = Data.getTripOne();
+                    double trip1 = Data.getTripOne();
                     if (distanceFormat.contains("1")) {
                         trip1 = Utils.kmToMiles(trip1);
                     }
                     value = Utils.oneDigit.format(trip1);
                 }
-                icon = getResources().getDrawable(R.drawable.ic_suitcase);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_suitcase);
                 break;
             case 12:
                 //Trip 2
                 label = getString(R.string.trip2_label) + " (" + distanceUnit + ")";
                 if(Data.getTripTwo() != null){
-                    Double trip2 = Data.getTripTwo();
+                    double trip2 = Data.getTripTwo();
                     if (distanceFormat.contains("1")) {
                         trip2 = Utils.kmToMiles(trip2);
                     }
                     value = Utils.oneDigit.format(trip2);
                 }
-                icon = getResources().getDrawable(R.drawable.ic_suitcase);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_suitcase);
                 break;
             case 13:
                 //Trip Auto
                 label = getString(R.string.tripauto_label) + " (" + distanceUnit + ")";
                 if(Data.getTripAuto() != null){
-                    Double tripauto = Data.getTripAuto();
+                    double tripauto = Data.getTripAuto();
                     if (distanceFormat.contains("1")) {
                         tripauto = Utils.kmToMiles(tripauto);
                     }
                     value = Utils.oneDigit.format(tripauto);
                 }
-                icon = getResources().getDrawable(R.drawable.ic_suitcase);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_suitcase);
                 break;
             case 14:
                 //Speed
                 label = getString(R.string.speed_label) + " (" + distanceTimeUnit + ")";
                 if(Data.getSpeed() != null){
-                    Double speed = Data.getSpeed();
+                    double speed = Data.getSpeed();
                     if (distanceFormat.contains("1")) {
                         speed = Utils.kmToMiles(speed);
                     }
                     value = String.valueOf(Math.round(speed));
                 }
-                icon = getResources().getDrawable(R.drawable.ic_tachometer_alt);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_tachometer_alt);
                 break;
             case 15:
                 //Average Speed
                 label = getString(R.string.avgspeed_label) + " (" + distanceTimeUnit + ")";
                 if(Data.getAvgSpeed() != null){
-                    Double avgspeed = Data.getAvgSpeed();
+                    double avgspeed = Data.getAvgSpeed();
                     if (distanceFormat.contains("1")) {
                         avgspeed = Utils.kmToMiles(avgspeed);
                     }
                     value = String.valueOf(Utils.oneDigit.format(avgspeed));
                 }
-                icon = getResources().getDrawable(R.drawable.ic_tachometer_alt);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_tachometer_alt);
                 break;
             case 16:
                 //Current Consumption
                 label = getString(R.string.cconsumption_label) + " (" + consumptionUnit + ")";
                 if(Data.getCurrentConsumption() != null){
-                    Double currentConsumption = Data.getCurrentConsumption();
+                    double currentConsumption = Data.getCurrentConsumption();
                     if (consumptionFormat.contains("1")) {
                         currentConsumption = Utils.l100Tompg(currentConsumption);
                     } else if (consumptionFormat.contains("2")) {
@@ -1405,13 +1396,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Utils.oneDigit.format(currentConsumption));
                 }
-                icon = getResources().getDrawable(R.drawable.ic_gas_pump);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_gas_pump);
                 break;
             case 17:
                 //Fuel Economy One
                 label = getString(R.string.fueleconomyone_label) + " (" + consumptionUnit + ")";
                 if(Data.getFuelEconomyOne() != null){
-                    Double fuelEconomyOne = Data.getFuelEconomyOne();
+                    double fuelEconomyOne = Data.getFuelEconomyOne();
                     if (consumptionFormat.contains("1")) {
                         fuelEconomyOne = Utils.l100Tompg(fuelEconomyOne);
                     } else if (consumptionFormat.contains("2")) {
@@ -1421,13 +1412,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Utils.oneDigit.format(fuelEconomyOne));
                 }
-                icon = getResources().getDrawable(R.drawable.ic_gas_pump);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_gas_pump);
                 break;
             case 18:
                 //Fuel Economy Two
                 label = getString(R.string.fueleconomytwo_label) + " (" + consumptionUnit + ")";
                 if(Data.getFuelEconomyTwo() != null){
-                    Double fuelEconomyTwo = Data.getFuelEconomyTwo();
+                    double fuelEconomyTwo = Data.getFuelEconomyTwo();
                     if (consumptionFormat.contains("1")) {
                         fuelEconomyTwo = Utils.l100Tompg(fuelEconomyTwo);
                     } else if (consumptionFormat.contains("2")) {
@@ -1437,19 +1428,19 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Utils.oneDigit.format(fuelEconomyTwo));
                 }
-                icon = getResources().getDrawable(R.drawable.ic_gas_pump);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_gas_pump);
                 break;
             case 19:
                 //Fuel Range
                 label = getString(R.string.fuelrange_label) + " (" + distanceUnit + ")";
                 if(Data.getFuelRange() != null){
-                    Double fuelrange = Data.getFuelRange();
+                    double fuelrange = Data.getFuelRange();
                     if (distanceFormat.contains("1")) {
                         fuelrange = Utils.kmToMiles(fuelrange);
                     }
                     value = String.valueOf(Math.round(fuelrange));
                 }
-                icon = getResources().getDrawable(R.drawable.ic_gas_pump);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_gas_pump);
                 break;
             case 20:
                 //Shifts
@@ -1458,7 +1449,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     int shifts = Data.getNumberOfShifts();
                     value = String.valueOf(shifts);
                 }
-                icon = getResources().getDrawable(R.drawable.ic_arrows_alt_v);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_arrows_alt_v);
                 break;
             case 21:
                 //Lean Angle
@@ -1467,7 +1458,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Double leanAngle = Data.getLeanAngle();
                     value = String.valueOf(Math.round(leanAngle));
                 }
-                icon = getResources().getDrawable(R.drawable.ic_angle);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_angle);
                 break;
             case 22:
                 //g-force
@@ -1476,7 +1467,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Double gForce = Data.getGForce();
                     value = String.valueOf(Utils.oneDigit.format(gForce));
                 }
-                icon = getResources().getDrawable(R.drawable.ic_accelerometer);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_accelerometer);
                 break;
             case 23:
                 //bearing
@@ -1505,7 +1496,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = bearing;
                 }
-                icon = getResources().getDrawable(R.drawable.ic_compass);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_compass);
                 break;
             case 24:
                 //time
@@ -1517,7 +1508,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = dateformat.format(Data.getTime());
                 }
-                icon = getResources().getDrawable(R.drawable.ic_clock);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_clock);
                 break;
             case 25:
                 //barometric pressure
@@ -1525,7 +1516,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 if (Data.getBarometricPressure() != null) {
                     value = String.valueOf(Math.round(Data.getBarometricPressure()));
                 }
-                icon = getResources().getDrawable(R.drawable.ic_barometer);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_barometer);
                 break;
             case 26:
                 //GPS Speed
@@ -1538,7 +1529,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                 }
                 value = gpsSpeed;
-                icon = getResources().getDrawable(R.drawable.ic_tachometer_alt);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_tachometer_alt);
                 break;
             case 27:
                 //Altitude
@@ -1551,7 +1542,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                 }
                 value = altitude;
-                icon = getResources().getDrawable(R.drawable.ic_mountain);
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_mountain);
                 break;
             case 28:
                 //Sunrise/Sunset
@@ -1570,13 +1561,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     value = sunriseString + "/" + sunsetString;
 
                     if(current.compareTo(sunrise) > 0 && current.compareTo(sunset) < 0){
-                        icon = getResources().getDrawable(R.drawable.ic_sun);
+                        icon = AppCompatResources.getDrawable(this, R.drawable.ic_sun);
                     } else {
-                        icon = getResources().getDrawable(R.drawable.ic_moon);
+                        icon = AppCompatResources.getDrawable(this, R.drawable.ic_moon);
                     }
                 } else {
                     value = "No Fix";
-                    icon = getResources().getDrawable(R.drawable.ic_sun);
+                    icon = AppCompatResources.getDrawable(this, R.drawable.ic_sun);
                 }
 
                 break;
@@ -1590,7 +1581,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     View gridCell1 = layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false);
                     gridLayout.addView(gridCell1);
                 }
-                layout1 = findViewById(R.id.layout_1);
+                ConstraintLayout layout1 = findViewById(R.id.layout_1);
                 TextView textView1 = findViewById(R.id.textView1);
                 TextView textView1Label = findViewById(R.id.textView1label);
                 ImageView imageView1 = findViewById(R.id.imageView1);
