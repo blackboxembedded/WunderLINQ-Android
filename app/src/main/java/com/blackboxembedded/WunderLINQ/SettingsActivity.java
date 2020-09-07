@@ -17,12 +17,21 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
@@ -31,21 +40,73 @@ import androidx.preference.PreferenceManager;
 
 import com.rarepebble.colorpicker.ColorPreference;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity implements PreferenceFragmentCompat.OnPreferenceStartScreenCallback {
 
     private final static String TAG = "SettingsActivity";
+
+    private static PreferenceScreen root;
+    private static PreferenceScreen last;
+
+    ImageButton backButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportFragmentManager().beginTransaction().replace(android.R.id.content, new UserSettingActivityFragment()).commit();
+        showActionBar();
     }
+
+    @Override
+    public boolean onPreferenceStartScreen(PreferenceFragmentCompat caller, PreferenceScreen pref) {
+        caller.setPreferenceScreen(pref);
+        last = pref;
+        //backButton.setVisibility(View.VISIBLE);
+        return true;
+    }
+
+    private void showActionBar(){
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.actionbar_nav, null);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setDisplayShowHomeEnabled (false);
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setCustomView(v);
+
+        TextView navbarTitle;
+        navbarTitle = findViewById(R.id.action_title);
+        navbarTitle.setText(R.string.appsettings_label);
+
+        backButton = findViewById(R.id.action_back);
+        ImageButton forwardButton = findViewById(R.id.action_forward);
+        backButton.setOnClickListener(mClickListener);
+        forwardButton.setVisibility(View.INVISIBLE);
+    }
+
+    private View.OnClickListener mClickListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            if(v.getId() == R.id.action_back) {
+                Log.d(TAG, "last.getKey() == " + last.getKey());
+                if (last.getKey().equals("prefScreenRoot")) {
+                    onBackPressed();
+                } else {
+                    getSupportFragmentManager().beginTransaction().replace(android.R.id.content, new UserSettingActivityFragment()).commit();
+                    last = root;
+                }
+            }
+        }
+    };
 
     public static class UserSettingActivityFragment extends PreferenceFragmentCompat implements OnSharedPreferenceChangeListener
     {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.settings);
+            root = this.getPreferenceScreen();
+            last = root;
         }
 
         @Override
@@ -67,7 +128,7 @@ public class SettingsActivity extends AppCompatActivity {
             EditTextPreference favNumberPref = findPreference("prefHomePhone");
             favNumberPref.setSummary(sharedPrefs.getString("prefHomePhone",getString(R.string.pref_homePhone_summary)));
 
-            if (Build.VERSION.SDK_INT < 26) {
+            if (Build.VERSION.SDK_INT >= 24) {
                 PreferenceScreen preferenceScreen = getPreferenceScreen();
                 Preference pipPreference = findPreference("prefPIP");
                 Preference pipOrientationPreference = findPreference("prefPIPorientation");
@@ -99,6 +160,15 @@ public class SettingsActivity extends AppCompatActivity {
 
             EditTextPreference favNumberPref = (EditTextPreference) findPreference("prefHomePhone");
             favNumberPref.setSummary(sharedPreferences.getString("prefHomePhone",getString(R.string.pref_homePhone_summary)));
+        }
+
+        @Override
+        public Fragment getCallbackFragment() {
+            return this;
+        }
+
+        public void goToRoot(){
+            setPreferenceScreen(root);
         }
     }
 }
