@@ -8,12 +8,12 @@
             android:layout_width="match_parent"
             android:layout_height="90dp"
             android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:gravity="center_vertical"
-            android:text="test label"
+            android:text=""
             android:textAppearance="@android:style/TextAppearance.Material.Large"
             android:textColor="?attr/taskTextColor"
             android:textStyle="bold"
             android:textSize="20sp"/>
-
     </TableRow>
 </TableLayout>

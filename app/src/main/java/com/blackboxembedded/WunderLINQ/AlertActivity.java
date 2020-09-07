@@ -56,8 +56,6 @@ public class AlertActivity extends AppCompatActivity {
     ActionBar actionBar;
     ImageView backgroundImageView;
 
-    private SharedPreferences sharedPrefs;
-
     private Handler handler;
     private Runnable runnable;
 
@@ -87,7 +85,7 @@ public class AlertActivity extends AppCompatActivity {
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         String orientation = sharedPrefs.getString("prefOrientation", "0");
         if (!orientation.equals("0")){
             if(orientation.equals("1")){

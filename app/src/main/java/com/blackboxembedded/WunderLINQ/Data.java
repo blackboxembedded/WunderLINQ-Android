@@ -21,10 +21,6 @@ import android.location.Location;
 
 import java.util.Date;
 
-/**
- * Created by keithconger on 9/10/17.
- */
-
 public class Data {
     // Last Message
     private static byte[] lastMessage;

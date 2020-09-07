@@ -51,7 +51,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import java.util.List;
 import java.util.Set;
@@ -68,8 +70,6 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
 
     private MediaController.TransportControls controls;
     private MediaController controller;
-
-    private SharedPreferences sharedPrefs;
 
     private Handler mHandler = new Handler();
 
@@ -137,7 +137,7 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         String orientation = sharedPrefs.getString("prefOrientation", "0");
         if (!orientation.equals("0")){
@@ -360,7 +360,7 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
                     mArtwork.setImageTintMode(null);
                 } else {
                     Log.d(TAG,"No art");
-                    Drawable drawable = getResources().getDrawable(R.drawable.ic_music_note);
+                    Drawable drawable = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_music_note);
                     try {
                         Bitmap bitmap;
 

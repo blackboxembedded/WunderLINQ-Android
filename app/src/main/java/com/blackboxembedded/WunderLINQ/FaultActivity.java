@@ -46,7 +46,6 @@ public class FaultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         ListView faultList;
-        FaultStatus faults;
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -64,8 +63,7 @@ public class FaultActivity extends AppCompatActivity {
             }
         });
 
-        faults = (new FaultStatus(this));
-        faultListData = faults.getallActiveDesc();
+        faultListData = FaultStatus.getallActiveDesc();
 
         faultList.setAdapter(new ArrayAdapter<String>(this, R.layout.item_fault,faultListData));
 

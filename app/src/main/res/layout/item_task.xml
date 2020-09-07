@@ -14,7 +14,7 @@
         android:layout_height="100dp"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:tint="?attr/iconTintColor"
+        app:tint="?attr/iconTintColor"
         tools:ignore="HardcodedText"/>
 
     <TextView

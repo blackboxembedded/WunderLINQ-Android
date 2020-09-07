@@ -17,16 +17,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ;
 
-/**
- * Created by keithconger on 7/22/17.
- */
-
 import java.util.HashMap;
 import java.util.UUID;
 
-/**
- * This class includes a small subset of standard GATT attributes for demonstration purposes.
- */
 public class GattAttributes {
     private static HashMap<String, String> attributes = new HashMap();
     private static HashMap<UUID, String> attributesUUID = new HashMap<UUID, String>();

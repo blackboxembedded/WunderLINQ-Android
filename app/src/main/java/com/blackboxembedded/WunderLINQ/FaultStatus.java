@@ -22,10 +22,6 @@ import android.content.ContextWrapper;
 
 import java.util.ArrayList;
 
-/**
- * Created by keithconger on 12/29/17.
- */
-
 public class FaultStatus extends ContextWrapper {
 
     // Motorcycle faults

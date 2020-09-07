@@ -120,7 +120,7 @@ public class BikeInfoActivity extends AppCompatActivity {
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
 
         if (Data.getFirmwareVersion() == null) {
-            Log.d(TAG, "UData.getFirmwareVersion() == null");
+            Log.d(TAG, "Data.getFirmwareVersion() == null");
             if (characteristic != null) {
                 // Get Version
                 Log.d(TAG, "Get Version");

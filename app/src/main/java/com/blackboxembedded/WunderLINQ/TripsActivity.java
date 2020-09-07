@@ -127,13 +127,13 @@ public class TripsActivity extends AppCompatActivity {
                 Log.d(TAG,"Unable to create directory: " + root);
             }
         }
-        File list[] = root.listFiles();
+        File[] list = root.listFiles();
         myList = new ArrayList<String>();
         if (list != null ) {
             Arrays.sort(list, Collections.reverseOrder());
 
-            for (int i = 0; i < list.length; i++) {
-                myList.add(list[i].getName());
+            for (File file : list) {
+                myList.add(file.getName());
             }
         }
         if (myList.size() > 0 ) {

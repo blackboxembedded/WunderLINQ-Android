@@ -54,11 +54,9 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
 
     private GoogleMap googleMap;
     private EditText etSearch;
-    private Button btSearch;
     private EditText etLatitude;
     private EditText etLongitude;
     private EditText etLabel;
-    private Button btSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,12 +65,12 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
         showActionBar();
 
         etSearch = findViewById(R.id.etSearch);
-        btSearch = findViewById(R.id.btSearch);
+        Button btSearch = findViewById(R.id.btSearch);
         btSearch.setOnClickListener(mClickListener);
         etLatitude = findViewById(R.id.etLatitude);
         etLongitude = findViewById(R.id.etLongitude);
         etLabel = findViewById(R.id.etLabel);
-        btSave = findViewById(R.id.btSave);
+        Button btSave = findViewById(R.id.btSave);
         btSave.setOnClickListener(mClickListener);
 
         etLatitude.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -190,7 +188,7 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
     }
 
     private void lookupGeoCode(){
-        if(!etSearch.getText().equals("")){
+        if(!etSearch.getText().toString().equals("")){
             Geocoder coder = new Geocoder(this);
             List<Address> address;
 
@@ -220,7 +218,7 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
     }
 
     private void saveWaypoint(){
-        if(!etLatitude.getText().equals("") && !etLongitude.getText().equals("")) {
+        if(!etLatitude.getText().toString().equals("") && !etLongitude.getText().toString().equals("")) {
             // Get current date/time
             Calendar cal = Calendar.getInstance();
             Date date = cal.getTime();

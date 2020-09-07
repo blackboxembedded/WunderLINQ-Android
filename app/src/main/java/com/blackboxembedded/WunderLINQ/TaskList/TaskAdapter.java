@@ -19,7 +19,6 @@ package com.blackboxembedded.WunderLINQ.TaskList;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;

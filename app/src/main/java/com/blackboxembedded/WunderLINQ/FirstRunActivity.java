@@ -95,10 +95,8 @@ public class FirstRunActivity extends AppCompatActivity {
                             // Read Contacts permission
                             tvMessage.setText(getString(R.string.camera_alert_body));
 
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                if (getApplication().checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-                                    requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
-                                }
+                            if (getApplication().checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                                requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
                             }
 
                             step = step + 1;
@@ -107,68 +105,62 @@ public class FirstRunActivity extends AppCompatActivity {
                             // Camera permission
                             tvMessage.setText(getString(R.string.call_alert_body));
 
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                if (getApplication().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                                    requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
-                                }
+                            if (getApplication().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                                requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
                             }
+
                             step = step + 1;
                             break;
                         case 3:
                             // Call phone permission
                             tvMessage.setText(getString(R.string.record_audio_alert_body));
 
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                if (getApplication().checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                                    requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, PERMISSION_REQUEST_CALL_PHONE);
-                                }
+                            if (getApplication().checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, PERMISSION_REQUEST_CALL_PHONE);
                             }
+
                             step = step + 1;
                             break;
                         case 4:
                             // Read Audio permission
                             tvMessage.setText(getString(R.string.write_alert_body));
 
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                if (getApplication().checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                                    requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSION_REQUEST_RECORD_AUDIO);
-                                }
+                            if (getApplication().checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                                requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSION_REQUEST_RECORD_AUDIO);
                             }
+
                             step = step + 1;
                             break;
                         case 5:
                             // Write storage permission
                             tvMessage.setText(getString(R.string.location_alert_body));
 
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                if (getApplication().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_WRITE_STORAGE);
-                                }
+                            if (getApplication().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_WRITE_STORAGE);
                             }
+
                             step = step + 1;
                             break;
                         case 6:
                             // Location permission
                             tvMessage.setText(getString(R.string.overlay_alert_body));
 
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                if (getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_FINE_LOCATION);
-                                }
+                            if (getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_FINE_LOCATION);
                             }
+
                             step = step + 1;
                             break;
                         case 7:
                             // Overlay permission
                             tvMessage.setText(getString(R.string.notification_alert_body));
 
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                if (!Settings.canDrawOverlays(getApplication())) {
-                                    Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                            Uri.parse("package:" + getPackageName()));
-                                    startActivity(intent);
-                                }
+                            if (!Settings.canDrawOverlays(getApplication())) {
+                                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                        Uri.parse("package:" + getPackageName()));
+                                startActivity(intent);
                             }
+
                             step = step + 1;
                             break;
                         case 8:
@@ -180,6 +172,7 @@ public class FirstRunActivity extends AppCompatActivity {
                                 startActivity(new Intent(
                                         "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
                             }
+
                             step = step + 1;
                             break;
                         case 9:
@@ -191,6 +184,7 @@ public class FirstRunActivity extends AppCompatActivity {
                             if (mode != MODE_ALLOWED) {
                                 startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
                             }
+
                             step = step + 1;
                             break;
                         case 10:
@@ -202,6 +196,7 @@ public class FirstRunActivity extends AppCompatActivity {
                                 accessibilityIntent.setAction(Settings.ACTION_ACCESSIBILITY_SETTINGS);
                                 startActivity(accessibilityIntent);
                             }
+
                             step = step + 1;
                             break;
                         case 11:
@@ -224,107 +219,105 @@ public class FirstRunActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (grantResults != null) {
-            switch (requestCode) {
-                case PERMISSION_REQUEST_CAMERA: {
-                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        Log.d(TAG, "Camera permission granted");
-                    } else {
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setTitle(getString(R.string.negative_alert_title));
-                        builder.setMessage(getString(R.string.negative_camera_alert_body));
-                        builder.setPositiveButton(android.R.string.ok, null);
-                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                            }
-                        });
-                        builder.show();
-                    }
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CAMERA: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "Camera permission granted");
+                } else {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.negative_alert_title));
+                    builder.setMessage(getString(R.string.negative_camera_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
                 }
-                case PERMISSION_REQUEST_CALL_PHONE: {
-                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        Log.d(TAG, "Call Phone permission granted");
-                    } else {
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setTitle(getString(R.string.negative_alert_title));
-                        builder.setMessage(getString(R.string.negative_call_alert_body));
-                        builder.setPositiveButton(android.R.string.ok, null);
-                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                            }
-                        });
-                        builder.show();
-                    }
-                }
-                case PERMISSION_REQUEST_READ_CONTACTS: {
-                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        Log.d(TAG, "Call Phone permission granted");
-                    } else {
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setTitle(getString(R.string.negative_alert_title));
-                        builder.setMessage(getString(R.string.negative_contacts_alert_body));
-                        builder.setPositiveButton(android.R.string.ok, null);
-                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                            }
-                        });
-                        builder.show();
-                    }
-                }
-                case PERMISSION_REQUEST_RECORD_AUDIO: {
-                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        Log.d(TAG, "Record Audio permission granted");
-                    } else {
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setTitle(getString(R.string.negative_alert_title));
-                        builder.setMessage(getString(R.string.negative_record_audio_alert_body));
-                        builder.setPositiveButton(android.R.string.ok, null);
-                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                            }
-                        });
-                        builder.show();
-                    }
-                }
-                case PERMISSION_REQUEST_WRITE_STORAGE: {
-                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        Log.d(TAG, "Write to storage permission granted");
-                    } else {
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setTitle(getString(R.string.negative_alert_title));
-                        builder.setMessage(getString(R.string.negative_write_alert_body));
-                        builder.setPositiveButton(android.R.string.ok, null);
-                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                            }
-                        });
-                        builder.show();
-                    }
-                }
-                case PERMISSION_REQUEST_FINE_LOCATION: {
-                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        Log.d(TAG, "coarse location permission granted");
-                    } else {
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setTitle(getString(R.string.negative_alert_title));
-                        builder.setMessage(getString(R.string.negative_location_alert_body));
-                        builder.setPositiveButton(android.R.string.ok, null);
-                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                            }
-                        });
-                        builder.show();
-                    }
-                }
-                default:
-                    Log.d(TAG, "Unknown Permissions Request Code");
             }
+            case PERMISSION_REQUEST_CALL_PHONE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "Call Phone permission granted");
+                } else {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.negative_alert_title));
+                    builder.setMessage(getString(R.string.negative_call_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
+                }
+            }
+            case PERMISSION_REQUEST_READ_CONTACTS: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "Call Phone permission granted");
+                } else {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.negative_alert_title));
+                    builder.setMessage(getString(R.string.negative_contacts_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
+                }
+            }
+            case PERMISSION_REQUEST_RECORD_AUDIO: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "Record Audio permission granted");
+                } else {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.negative_alert_title));
+                    builder.setMessage(getString(R.string.negative_record_audio_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
+                }
+            }
+            case PERMISSION_REQUEST_WRITE_STORAGE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "Write to storage permission granted");
+                } else {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.negative_alert_title));
+                    builder.setMessage(getString(R.string.negative_write_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
+                }
+            }
+            case PERMISSION_REQUEST_FINE_LOCATION: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "coarse location permission granted");
+                } else {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.negative_alert_title));
+                    builder.setMessage(getString(R.string.negative_location_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
+                }
+            }
+            default:
+                Log.d(TAG, "Unknown Permissions Request Code");
         }
     }
 

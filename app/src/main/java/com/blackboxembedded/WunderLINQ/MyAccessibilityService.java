@@ -19,6 +19,7 @@ package com.blackboxembedded.WunderLINQ;
 
 import android.accessibilityservice.AccessibilityService;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
@@ -48,7 +49,9 @@ public class MyAccessibilityService extends AccessibilityService {
                 int command = intent.getIntExtra("command", 1);
                 switch (command) {
                     case 1:
-                        performGlobalAction(GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN);
+                        if (Build.VERSION.SDK_INT >= 24) {
+                            performGlobalAction(GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN);
+                        }
                         break;
                     case 2:
                         performGlobalAction(GLOBAL_ACTION_RECENTS);

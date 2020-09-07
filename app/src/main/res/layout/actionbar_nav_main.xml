@@ -11,7 +11,7 @@
         android:src="@drawable/ic_chevron_left"
         android:tint="?attr/iconTintColor"
         android:paddingTop="4dp"
-        android:layout_alignParentLeft="true"/>
+        android:layout_alignParentStart="true"/>
 
     <ImageButton
         android:id="@+id/action_connect"
@@ -20,7 +20,7 @@
         android:background="@null"
         android:scaleType="centerInside"
         android:src="@drawable/ic_bluetooth"
-        android:layout_toRightOf="@+id/action_back"
+        android:layout_toEndOf="@+id/action_back"
         android:paddingLeft="10dp"
         android:paddingTop="4dp"/>
 
@@ -31,7 +31,7 @@
         android:background="@null"
         android:scaleType="centerInside"
         android:src="@drawable/ic_warning"
-        android:layout_toRightOf="@+id/action_connect"
+        android:layout_toEndOf="@+id/action_connect"
         android:paddingLeft="10dp"
         android:paddingTop="4dp"/>
 
@@ -43,8 +43,8 @@
         android:scaleType="centerInside"
         android:src="@drawable/ic_bars"
         android:tint="?attr/iconTintColor"
-        android:layout_toLeftOf="@+id/action_forward"
-        android:paddingRight="25dp"
+        android:layout_toStartOf="@+id/action_forward"
+        android:paddingRight="10dp"
         android:paddingTop="4dp"/>
 
     <ImageButton
@@ -56,16 +56,15 @@
         android:src="@drawable/ic_chevron_right"
         android:tint="?attr/iconTintColor"
         android:paddingTop="4dp"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentEnd="true"/>
 
     <TextView
         android:id="@+id/action_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/action_settings"
         android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:text="Title"
+        android:text=""
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="?attr/primaryTextColor"/>

@@ -17,19 +17,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -42,13 +40,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.List;
+import com.google.android.gms.maps.model.LatLng;
 
-import static android.content.Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT;
+import java.util.List;
 
 public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelper.OnOsmandMissingListener {
 
@@ -128,83 +127,30 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
             public void onItemClick (AdapterView < ? > adapter, View view, int position, long arg){
                 lastPosition = position;
                 WaypointRecord record = (WaypointRecord) waypointList.getItemAtPosition(position);
-                String navApp = sharedPrefs.getString("prefNavApp", "1");
-                Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                String navUrl = "google.navigation:q=" + record.getData() + "&navigate=yes";
-                // Get location
-                // Get the location manager
-                LocationManager locationManager = (LocationManager)
-                        WaypointNavActivity.this.getSystemService(LOCATION_SERVICE);
-                Criteria criteria = new Criteria();
-                try {
-                    String bestProvider = locationManager.getBestProvider(criteria, false);
-                    Log.d(TAG,"Trying Best Provider: " + bestProvider);
-                    Location currentLocation = locationManager.getLastKnownLocation(bestProvider);
-                    if (navApp.equals("1")) {
-                        // Android Default
-                        // Nothing to do
-                    } else if (navApp.equals("2")){
-                        //Google Maps
-                        navIntent.setPackage("com.google.android.apps.maps");
-                    } else if (navApp.equals("3")){
-                        //Locus Maps
-                        navIntent.setPackage("menion.android.locus.pro");
-                        navIntent.setData(Uri.parse(navUrl));
-                        if(!isCallable(navIntent)){
-                            Log.d(TAG,"Locus Maps Pro Not Installed");
-                            navIntent.setPackage("menion.android.locus");
-                        }
-                    } else if (navApp.equals("4")){
-                        //Waze
-                        navUrl = "https://www.waze.com/ul?ll=" + record.getData() + "&navigate=yes&zoom=17";
-                    } else if (navApp.equals("5")){
-                        //Maps.me
-                        navUrl = "https://dlink.maps.me/route?sll=" + String.valueOf(currentLocation.getLatitude()) + ","
-                                + String.valueOf(currentLocation.getLongitude()) + "&saddr="
-                                + getString(R.string.trip_view_waypoint_start_label) + "&dll="
-                                + record.getData() + "&daddr=" + record.getLabel() + "&type=vehicle&back_url=wunderlinq://datagrid";
-                    } else if (navApp.equals("6")){
-                        // OsmAnd
-                        String location[] = record.getData().split(",");
-                        Double latitude =  Double.parseDouble(location[0]);
-                        Double longitude =  Double.parseDouble(location[1]);
-                        //navUrl = "osmand.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
-                        OsmAndHelper osmAndHelper = new OsmAndHelper(WaypointNavActivity.this, OsmAndHelper.REQUEST_OSMAND_API, WaypointNavActivity.this);
-                        osmAndHelper.navigate("Start",currentLocation.getLatitude(),currentLocation.getLongitude(),"Destination",latitude,longitude,"motorcycle", true);
-                    } else if (navApp.equals("7")){
-                        //Mapfactor Navigator
-                        navIntent.setPackage("com.mapfactor.navigator");
-                        navUrl = "http://maps.google.com/maps?f=d&daddr=@"  + record.getData() + "&navigate=yes";
-                    } else if (navApp.equals("8")) {
-                        //Sygic
-                        //https://www.sygic.com/developers/professional-navigation-sdk/android/api-examples/custom-url
-                        String latlon[] = record.getData().split(",");
-                        navUrl = "com.sygic.aura://coordinate|"  + latlon[1] + "|" + latlon[0] + "|drive";
-                        //navUrl = "com.sygic.aura://coordinate|"  + latlon[1] + "|" + latlon[0] + "|drive&&&back_button|com.blackboxembedded.wunderlinq";
-                    } else if (navApp.equals("9")) {
-                        //Kurviger
-                        navUrl = "https://kurviger.de/en?point="  + record.getData() + "&locale=en" +"&vehicle=motorycycle"
-                                + "weighting=fastest" + "use_miles=true";
-                    } else if (navApp.equals("10")){
-                        //TomTom GO
-                        navIntent.setPackage("com.tomtom.gplay.navapp");
-                        navUrl = "geo:" + record.getData();
+
+                // Check Location permissions
+                if (getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(WaypointNavActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
+                } else {
+                    // Get the location manager
+                    LocationManager locationManager = (LocationManager)
+                            WaypointNavActivity.this.getSystemService(LOCATION_SERVICE);
+                    Criteria criteria = new Criteria();
+                    try {
+                        // Get location
+                        String bestProvider = locationManager.getBestProvider(criteria, false);
+                        Location currentLocation = locationManager.getLastKnownLocation(bestProvider);
+
+                        String[] latlon = record.getData().split(",");
+                        LatLng location = new LatLng(Double.parseDouble(latlon[0]),Double.parseDouble(latlon[1]));
+                                Location destination = new Location(LocationManager.GPS_PROVIDER);
+                        destination.setLatitude(location.latitude);
+                        destination.setLongitude(location.longitude);
+
+                        NavAppHelper.navigateTo(WaypointNavActivity.this, currentLocation, destination);
+                    } catch (SecurityException|NullPointerException e) {
+                        e.printStackTrace();
                     }
-                    if (!navApp.equals("6")) {
-                        try {
-                            navIntent.setData(Uri.parse(navUrl));
-                            if (android.os.Build.VERSION.SDK_INT >= 24) {
-                                if (isInMultiWindowMode()) {
-                                    navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
-                                }
-                            }
-                            startActivity(navIntent);
-                        } catch (ActivityNotFoundException ex) {
-                            // Add Alert
-                        }
-                    }
-                } catch (SecurityException|NullPointerException e) {
-                    e.printStackTrace();
                 }
             }
         });
@@ -295,13 +241,5 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
             default:
                 return super.onKeyUp(keyCode, event);
         }
-    }
-
-    private boolean isCallable(Intent intent) {
-        List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent,
-
-                PackageManager.MATCH_DEFAULT_ONLY);
-
-        return list.size() > 0;
     }
 }

@@ -104,7 +104,7 @@ public class VideoRecService extends Service implements SurfaceHolder.Callback {
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT
         );
-        layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
+        layoutParams.gravity = Gravity.START | Gravity.TOP;
         windowManager.addView(surfaceView, layoutParams);
         surfaceView.getHolder().addCallback(this);
 
@@ -133,7 +133,6 @@ public class VideoRecService extends Service implements SurfaceHolder.Callback {
 
         WindowManager windowService = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         int rotation = 0;
-
         switch (windowService.getDefaultDisplay().getRotation()) {
             case Surface.ROTATION_0:
                 Log.d(TAG,"Rotation 0");
@@ -178,7 +177,9 @@ public class VideoRecService extends Service implements SurfaceHolder.Callback {
         }
         mediaRecorder.setOutputFile(recordingFile.getPath());
 
-        try { mediaRecorder.prepare(); } catch (Exception e) {}
+        try { mediaRecorder.prepare(); } catch (Exception e) {
+            Log.d(TAG,"Exception: " + e.toString());
+        }
         mediaRecorder.start();
     }
 
@@ -191,7 +192,7 @@ public class VideoRecService extends Service implements SurfaceHolder.Callback {
                 mediaRecorder.reset();
                 mediaRecorder.release();
             } catch (RuntimeException e) {
-
+                Log.d(TAG,"RuntimeException: " + e.toString());
             }
         }
 

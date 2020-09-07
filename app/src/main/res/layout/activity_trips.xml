@@ -11,5 +11,4 @@
         android:gravity="center"
         android:background="?attr/backgroundColor"
         android:listSelector="?attr/itemHighlight"/>
-
 </LinearLayout>

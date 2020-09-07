@@ -48,18 +48,14 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
 import java.lang.reflect.Method;
@@ -75,10 +71,9 @@ import java.util.UUID;
 
 /**
  * Service for managing connection and data communication with a GATT server
- * hosted on a given BlueTooth LE device.
+ * hosted on a given Bluetooth LE device.
  */
-public class BluetoothLeService extends Service implements LocationListener, GoogleApiClient
-        .ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class BluetoothLeService extends Service {
 
     private final static String TAG = "BluetoothLeService";
 
@@ -110,9 +105,6 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
     private long darkTimer = 0;
     private long lightTimer = 0;
 
-    int xAxis = SensorManager.AXIS_X;
-    int yAxis = SensorManager.AXIS_Z;
-
     /*
      * time smoothing constant for low-pass filter
      * 0 ≤ alpha ≤ 1 ; a smaller value basically means more smoothing
@@ -124,8 +116,8 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
     float[] mGeomagnetic = new float[3];
     float[] mAcceleration = new float[3];
 
-    LocationRequest locationRequest;
-    GoogleApiClient googleApiClient;
+    private FusedLocationProviderClient mFusedLocationClient;
+    private LocationRequest mLocationRequest;
 
     private int lastDirection;
 
@@ -158,14 +150,14 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
             "com.example.bluetooth.le.ACTION_GATT_CHARACTERISTIC_ERROR";
     public final static String ACTION_GATT_SERVICE_DISCOVERY_UNSUCCESSFUL =
             "com.example.bluetooth.le.ACTION_GATT_SERVICE_DISCOVERY_UNSUCCESSFUL";
-    public final static String ACTION_PAIR_REQUEST =
-            "android.bluetooth.device.action.PAIRING_REQUEST";
-    public final static String ACTION_WRITE_COMPLETED =
-            "android.bluetooth.device.action.ACTION_WRITE_COMPLETED";
     public final static String ACTION_WRITE_FAILED =
             "android.bluetooth.device.action.ACTION_WRITE_FAILED";
     public final static String ACTION_WRITE_SUCCESS =
             "android.bluetooth.device.action.ACTION_WRITE_SUCCESS";
+    private final static String ACTION_GATT_DISCONNECTING =
+            "com.example.bluetooth.le.ACTION_GATT_DISCONNECTING";
+    private final static String ACTION_PAIRING_REQUEST =
+            "com.example.bluetooth.le.PAIRING_REQUEST";
 
     public static final String EXTRA_BYTE_VALUE = "com.blackboxembedded.wunderlinq.backgroundservices." +
             "EXTRA_BYTE_VALUE";
@@ -179,10 +171,6 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
     public static final int STATE_CONNECTING = 1;
     public static final int STATE_CONNECTED = 2;
     public static final int STATE_DISCONNECTING = 4;
-    private final static String ACTION_GATT_DISCONNECTING =
-            "com.example.bluetooth.le.ACTION_GATT_DISCONNECTING";
-    private final static String ACTION_PAIRING_REQUEST =
-            "com.example.bluetooth.le.PAIRING_REQUEST";
     private static final int STATE_BONDED = 5;
 
     /**
@@ -194,8 +182,7 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
     /**
      * Disable/enable notification
      */
-    public static ArrayList<BluetoothGattCharacteristic> mEnabledCharacteristics =
-            new ArrayList<BluetoothGattCharacteristic>();
+    public static ArrayList<BluetoothGattCharacteristic> mEnabledCharacteristics = new ArrayList<>();
 
     public static boolean mDisableNotificationFlag = false;
 
@@ -231,6 +218,21 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
 
     }
 
+    LocationCallback mLocationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            List<Location> locationList = locationResult.getLocations();
+            if (locationList.size() > 0) {
+                //The last location in the list is the newest
+                Location location = locationList.get(locationList.size() - 1);
+                Data.setLastLocation(location);
+                if (sharedPrefs.getBoolean("prefBearingOverride", false) && location.hasBearing()) {
+                    Data.setBearing((int)location.getBearing());
+                }
+            }
+        }
+    };
+
     @Override
     public void onCreate() {
         Log.d(TAG,"In onCreate");
@@ -261,14 +263,12 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
         sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         // Location stuff
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         createLocationRequest();
-
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-        googleApiClient.connect();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null /* Looper */);
+        }
 
         Timer t = new Timer();
         t.scheduleAtFixedRate(new TimerTask()
@@ -356,7 +356,6 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
         sensorManager.unregisterListener(sensorEventListener, lightSensor);
 
         stopLocationUpdates();
-        googleApiClient.disconnect();
     }
 
     // Listens for sensor events
@@ -375,7 +374,7 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 float[] mRotationMatrix = new float[9];
                 float[] mRotationFixMatrix = new float[9];
                 float[] orientation = new float[3];
-                Double leanAngle = 0.0;
+                double leanAngle = 0.0;
                 SensorManager.getRotationMatrixFromVector(mRotationMatrix, event.values);
                 int rotation = MyApplication.getContext().getResources().getConfiguration().orientation;
                 if(rotation == 1) { // Default display rotation is portrait
@@ -388,8 +387,6 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                     leanAngle = ((orientation[2] * 180) / Math.PI) + 90;
                 }
                 Data.setLeanAngle(leanAngle);
-                //final Intent intent = new Intent(BluetoothLeService.ACTION_DATA_AVAILABLE);
-                //MyApplication.getContext().sendBroadcast(intent);
             } else if (event.sensor.getType() == Sensor.TYPE_GRAVITY) {
                 mGravity = event.values.clone();
             } else if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
@@ -438,9 +435,9 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 }
             }
             if (mGravity != null && mGeomagnetic != null) {
-                float R[] = new float[9];
-                float I[] = new float[9];
-                float remappedR[] = new float[9];
+                float[] R = new float[9];
+                float[] I = new float[9];
+                float[] remappedR = new float[9];
                 boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
                 if (success) {
                     float orientation[] = new float[3];
@@ -668,7 +665,7 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                     }
                 }
                 //Check if message changed
-                Boolean process = false;
+                boolean process = false;
                 switch (data[0]){
                     case 0x00:
                         if(!Arrays.equals(lastMessage00, data)){
@@ -1188,62 +1185,22 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 // ABS Fault
                 int absValue = (data[3] & 0xFF) & 0x0f; // the lowest 4 bits
                 switch (absValue){
-                    case 0x2:
+                    case 0x2: case 0x5: case 0x6: case 0x7: case 0xA: case 0xD: case 0xE:
                         FaultStatus.setAbsSelfDiagActive(false);
                         FaultStatus.setAbsDeactivatedActive(false);
                         FaultStatus.setabsErrorActive(true);
                         break;
-                    case 0x3:
+                    case 0x3: case 0xB:
                         FaultStatus.setAbsSelfDiagActive(true);
                         FaultStatus.setAbsDeactivatedActive(false);
                         FaultStatus.setabsErrorActive(false);
-                        break;
-                    case 0x5:
-                        FaultStatus.setAbsSelfDiagActive(false);
-                        FaultStatus.setAbsDeactivatedActive(false);
-                        FaultStatus.setabsErrorActive(true);
-                        break;
-                    case 0x6:
-                        FaultStatus.setAbsSelfDiagActive(false);
-                        FaultStatus.setAbsDeactivatedActive(false);
-                        FaultStatus.setabsErrorActive(true);
-                        break;
-                    case 0x7:
-                        FaultStatus.setAbsSelfDiagActive(false);
-                        FaultStatus.setAbsDeactivatedActive(false);
-                        FaultStatus.setabsErrorActive(true);
                         break;
                     case 0x8:
                         FaultStatus.setAbsSelfDiagActive(false);
                         FaultStatus.setAbsDeactivatedActive(true);
                         FaultStatus.setabsErrorActive(false);
                         break;
-                    case 0xA:
-                        FaultStatus.setAbsSelfDiagActive(false);
-                        FaultStatus.setAbsDeactivatedActive(false);
-                        FaultStatus.setabsErrorActive(true);
-                        break;
-                    case 0xB:
-                        FaultStatus.setAbsSelfDiagActive(true);
-                        FaultStatus.setAbsDeactivatedActive(false);
-                        FaultStatus.setabsErrorActive(false);
-                        break;
-                    case 0xD:
-                        FaultStatus.setAbsSelfDiagActive(false);
-                        FaultStatus.setAbsDeactivatedActive(false);
-                        FaultStatus.setabsErrorActive(true);
-                        break;
-                    case 0xE:
-                        FaultStatus.setAbsSelfDiagActive(false);
-                        FaultStatus.setAbsDeactivatedActive(false);
-                        FaultStatus.setabsErrorActive(true);
-                        break;
-                    case 0xF:
-                        FaultStatus.setAbsSelfDiagActive(false);
-                        FaultStatus.setAbsDeactivatedActive(false);
-                        FaultStatus.setabsErrorActive(false);
-                        break;
-                    default:
+                    case 0xF: default:
                         FaultStatus.setAbsSelfDiagActive(false);
                         FaultStatus.setAbsDeactivatedActive(false);
                         FaultStatus.setabsErrorActive(false);
@@ -1490,7 +1447,7 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 if ((data[3] & 0xFF) != 0xFF) {
                     int minPosition = 36;
                     int maxPosition = 236;
-                    double throttlePosition = (((data[3] & 0xFF) - minPosition) * 100) / (maxPosition - minPosition);
+                    double throttlePosition = (((data[3] & 0xFF) - minPosition) * 100.0) / (maxPosition - minPosition);
                     Data.setThrottlePosition(throttlePosition);
                 }
 
@@ -1503,77 +1460,29 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 // ASC Fault
                 int ascValue = ((data[5] & 0xFF)  >> 4) & 0x0f; // the highest 4 bits.
                 switch (ascValue){
-                    case 0x1:
+                    case 0x1: case 0x9:
                         FaultStatus.setAscSelfDiagActive(false);
                         FaultStatus.setAscInterventionActive(true);
                         FaultStatus.setAscDeactivatedActive(false);
                         FaultStatus.setascErrorActive(false);
                         break;
-                    case 0x2:
+                    case 0x2: case 0x5: case 0x6: case 0x7: case 0xA: case 0xD: case 0xE:
                         FaultStatus.setAscSelfDiagActive(false);
                         FaultStatus.setAscInterventionActive(false);
                         FaultStatus.setAscDeactivatedActive(false);
                         FaultStatus.setascErrorActive(true);
                         break;
-                    case 0x3:
+                    case 0x3: case 0xB:
                         FaultStatus.setAscSelfDiagActive(true);
                         FaultStatus.setAscInterventionActive(false);
                         FaultStatus.setAscDeactivatedActive(false);
                         FaultStatus.setascErrorActive(false);
-                        break;
-                    case 0x5:
-                        FaultStatus.setAscSelfDiagActive(false);
-                        FaultStatus.setAscInterventionActive(false);
-                        FaultStatus.setAscDeactivatedActive(false);
-                        FaultStatus.setascErrorActive(true);
-                        break;
-                    case 0x6:
-                        FaultStatus.setAscSelfDiagActive(false);
-                        FaultStatus.setAscInterventionActive(false);
-                        FaultStatus.setAscDeactivatedActive(false);
-                        FaultStatus.setascErrorActive(true);
-                        break;
-                    case 0x7:
-                        FaultStatus.setAscSelfDiagActive(false);
-                        FaultStatus.setAscInterventionActive(false);
-                        FaultStatus.setAscDeactivatedActive(false);
-                        FaultStatus.setascErrorActive(true);
                         break;
                     case 0x8:
                         FaultStatus.setAscSelfDiagActive(false);
                         FaultStatus.setAscInterventionActive(false);
                         FaultStatus.setAscDeactivatedActive(true);
                         FaultStatus.setascErrorActive(false);
-                        break;
-                    case 0x9:
-                        FaultStatus.setAscSelfDiagActive(false);
-                        FaultStatus.setAscInterventionActive(true);
-                        FaultStatus.setAscDeactivatedActive(false);
-                        FaultStatus.setascErrorActive(false);
-                        break;
-                    case 0xA:
-                        FaultStatus.setAscSelfDiagActive(false);
-                        FaultStatus.setAscInterventionActive(false);
-                        FaultStatus.setAscDeactivatedActive(false);
-                        FaultStatus.setascErrorActive(true);
-                        break;
-                    case 0xB:
-                        FaultStatus.setAscSelfDiagActive(true);
-                        FaultStatus.setAscInterventionActive(false);
-                        FaultStatus.setAscDeactivatedActive(false);
-                        FaultStatus.setascErrorActive(false);
-                        break;
-                    case 0xD:
-                        FaultStatus.setAscSelfDiagActive(false);
-                        FaultStatus.setAscInterventionActive(false);
-                        FaultStatus.setAscDeactivatedActive(false);
-                        FaultStatus.setascErrorActive(true);
-                        break;
-                    case 0xE:
-                        FaultStatus.setAscSelfDiagActive(false);
-                        FaultStatus.setAscInterventionActive(false);
-                        FaultStatus.setAscDeactivatedActive(false);
-                        FaultStatus.setascErrorActive(true);
                         break;
                     default:
                         FaultStatus.setAscSelfDiagActive(false);
@@ -1586,16 +1495,7 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 //Oil Fault
                 int oilValue = (data[5] & 0xFF) & 0x0f; // the lowest 4 bits
                 switch (oilValue){
-                    case 0x2:
-                        FaultStatus.setOilLowActive(true);
-                        break;
-                    case 0x6:
-                        FaultStatus.setOilLowActive(true);
-                        break;
-                    case 0xA:
-                        FaultStatus.setOilLowActive(true);
-                        break;
-                    case 0xE:
+                    case 0x2: case 0x6: case 0xA: case 0xE:
                         FaultStatus.setOilLowActive(true);
                         break;
                     default:
@@ -1627,19 +1527,7 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 // Fuel Fault
                 int fuelValue = ((data[5] & 0xFF)  >> 4) & 0x0f; // the highest 4 bits.
                 switch (fuelValue){
-                    case 0x2:
-                        FaultStatus.setfuelFaultActive(true);
-                        fuelAlert();
-                        break;
-                    case 0x6:
-                        FaultStatus.setfuelFaultActive(true);
-                        fuelAlert();
-                        break;
-                    case 0xA:
-                        FaultStatus.setfuelFaultActive(true);
-                        fuelAlert();
-                        break;
-                    case 0xE:
+                    case 0x2: case 0x6: case 0xA: case 0xE:
                         FaultStatus.setfuelFaultActive(true);
                         fuelAlert();
                         break;
@@ -1651,7 +1539,7 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 // General Fault
                 int generalFault = (data[5] & 0xFF) & 0x0f; // the lowest 4 bits
                 switch (generalFault){
-                    case 0x1:
+                    case 0x1: case 0xD:
                         FaultStatus.setGeneralFlashingYellowActive(true);
                         FaultStatus.setGeneralShowsYellowActive(false);
                         FaultStatus.setGeneralFlashingRedActive(false);
@@ -1667,7 +1555,7 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                             }
                         }
                         break;
-                    case 0x2:
+                    case 0x2: case 0xE:
                         FaultStatus.setGeneralFlashingYellowActive(false);
                         FaultStatus.setGeneralShowsYellowActive(true);
                         FaultStatus.setGeneralFlashingRedActive(false);
@@ -1683,7 +1571,7 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                             }
                         }
                         break;
-                    case 0x4:
+                    case 0x4: case 0x7:
                         FaultStatus.setGeneralFlashingYellowActive(false);
                         FaultStatus.setGeneralShowsYellowActive(false);
                         FaultStatus.setGeneralFlashingRedActive(true);
@@ -1731,23 +1619,7 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                             }
                         }
                         break;
-                    case 0x7:
-                        FaultStatus.setGeneralFlashingYellowActive(false);
-                        FaultStatus.setGeneralShowsYellowActive(false);
-                        FaultStatus.setGeneralFlashingRedActive(true);
-                        FaultStatus.setGeneralShowsRedActive(false);
-                        if (sharedPrefs.getBoolean("prefNotifications", true)) {
-                            if (!(FaultStatus.getgeneralFlashingRedNotificationActive())) {
-                                updateNotification();
-                                FaultStatus.setGeneralFlashingRedNotificationActive(true);
-                            }
-                            if (FaultStatus.getgeneralShowsRedNotificationActive()) {
-                                updateNotification();
-                                FaultStatus.setGeneralShowsRedNotificationActive(false);
-                            }
-                        }
-                        break;
-                    case 0x8:
+                    case 0x8: case 0xB:
                         FaultStatus.setGeneralFlashingYellowActive(false);
                         FaultStatus.setGeneralShowsYellowActive(false);
                         FaultStatus.setGeneralFlashingRedActive(false);
@@ -1792,54 +1664,6 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                             }
                         }
                         break;
-                    case 0xB:
-                        FaultStatus.setGeneralFlashingYellowActive(false);
-                        FaultStatus.setGeneralShowsYellowActive(false);
-                        FaultStatus.setGeneralFlashingRedActive(false);
-                        FaultStatus.setGeneralShowsRedActive(true);
-                        if (sharedPrefs.getBoolean("prefNotifications", true)) {
-                            if (FaultStatus.getgeneralFlashingRedNotificationActive()) {
-                                updateNotification();
-                                FaultStatus.setGeneralFlashingRedNotificationActive(false);
-                            }
-                            if (!(FaultStatus.getgeneralShowsRedNotificationActive())) {
-                                updateNotification();
-                                FaultStatus.setGeneralShowsRedNotificationActive(true);
-                            }
-                        }
-                        break;
-                    case 0xD:
-                        FaultStatus.setGeneralFlashingYellowActive(true);
-                        FaultStatus.setGeneralShowsYellowActive(false);
-                        FaultStatus.setGeneralFlashingRedActive(false);
-                        FaultStatus.setGeneralShowsRedActive(false);
-                        if (sharedPrefs.getBoolean("prefNotifications", true)) {
-                            if (FaultStatus.getgeneralFlashingRedNotificationActive()) {
-                                updateNotification();
-                                FaultStatus.setGeneralFlashingRedNotificationActive(false);
-                            }
-                            if (FaultStatus.getgeneralShowsRedNotificationActive()) {
-                                updateNotification();
-                                FaultStatus.setGeneralShowsRedNotificationActive(false);
-                            }
-                        }
-                        break;
-                    case 0xE:
-                        FaultStatus.setGeneralFlashingYellowActive(false);
-                        FaultStatus.setGeneralShowsYellowActive(true);
-                        FaultStatus.setGeneralFlashingRedActive(false);
-                        FaultStatus.setGeneralShowsRedActive(false);
-                        if (sharedPrefs.getBoolean("prefNotifications", true)) {
-                            if (FaultStatus.getgeneralFlashingRedNotificationActive()) {
-                                updateNotification();
-                                FaultStatus.setGeneralFlashingRedNotificationActive(false);
-                            }
-                            if (FaultStatus.getgeneralShowsRedNotificationActive()) {
-                                updateNotification();
-                                FaultStatus.setGeneralShowsRedNotificationActive(false);
-                            }
-                        }
-                        break;
                     default:
                         FaultStatus.setGeneralFlashingYellowActive(false);
                         FaultStatus.setGeneralShowsYellowActive(false);
@@ -1875,44 +1699,16 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                     // LAMPF 1
                     int lampfOneValue = ((data[3] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
                     switch (lampfOneValue) {
-                        case 0x1:
+                        case 0x1: case 0x5: case 0x9: case 0xD:
                             FaultStatus.setAddFrontLightOneActive(true);
                             FaultStatus.setAddFrontLightTwoActive(false);
                             break;
-                        case 0x2:
+                        case 0x2: case 0x6: case 0xA: case 0xE:
                             FaultStatus.setAddFrontLightOneActive(false);
                             FaultStatus.setAddFrontLightTwoActive(true);
                             break;
-                        case 0x3:
+                        case 0x3: case 0xB:
                             FaultStatus.setAddFrontLightOneActive(true);
-                            FaultStatus.setAddFrontLightTwoActive(true);
-                            break;
-                        case 0x5:
-                            FaultStatus.setAddFrontLightOneActive(true);
-                            FaultStatus.setAddFrontLightTwoActive(false);
-                            break;
-                        case 0x6:
-                            FaultStatus.setAddFrontLightOneActive(false);
-                            FaultStatus.setAddFrontLightTwoActive(true);
-                            break;
-                        case 0x9:
-                            FaultStatus.setAddFrontLightOneActive(true);
-                            FaultStatus.setAddFrontLightTwoActive(false);
-                            break;
-                        case 0xA:
-                            FaultStatus.setAddFrontLightOneActive(false);
-                            FaultStatus.setAddFrontLightTwoActive(true);
-                            break;
-                        case 0xB:
-                            FaultStatus.setAddFrontLightOneActive(true);
-                            FaultStatus.setAddFrontLightTwoActive(true);
-                            break;
-                        case 0xD:
-                            FaultStatus.setAddFrontLightOneActive(true);
-                            FaultStatus.setAddFrontLightTwoActive(false);
-                            break;
-                        case 0xE:
-                            FaultStatus.setAddFrontLightOneActive(false);
                             FaultStatus.setAddFrontLightTwoActive(true);
                             break;
                         default:
@@ -1925,72 +1721,37 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 if (((data[4] & 0xFF) != 0xFF) ) {
                     int lampfTwoHighValue = ((data[4] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
                     switch (lampfTwoHighValue) {
-                        case 0x1:
+                        case 0x1: case 0x9:
                             FaultStatus.setDaytimeRunningActive(true);
                             FaultStatus.setfrontLeftSignalActive(false);
                             FaultStatus.setfrontRightSignalActive(false);
                             break;
-                        case 0x2:
+                        case 0x2: case 0xA:
                             FaultStatus.setDaytimeRunningActive(false);
                             FaultStatus.setfrontLeftSignalActive(true);
                             FaultStatus.setfrontRightSignalActive(false);
                             break;
-                        case 0x3:
+                        case 0x3: case 0xB:
                             FaultStatus.setDaytimeRunningActive(true);
                             FaultStatus.setfrontLeftSignalActive(true);
                             FaultStatus.setfrontRightSignalActive(false);
                             break;
-                        case 0x4:
+                        case 0x4: case 0xC:
                             FaultStatus.setDaytimeRunningActive(false);
                             FaultStatus.setfrontLeftSignalActive(false);
                             FaultStatus.setfrontRightSignalActive(true);
                             break;
-                        case 0x5:
+                        case 0x5: case 0xD:
                             FaultStatus.setDaytimeRunningActive(true);
                             FaultStatus.setfrontLeftSignalActive(false);
                             FaultStatus.setfrontRightSignalActive(true);
                             break;
-                        case 0x6:
+                        case 0x6: case 0xE:
                             FaultStatus.setDaytimeRunningActive(false);
                             FaultStatus.setfrontLeftSignalActive(true);
                             FaultStatus.setfrontRightSignalActive(true);
                             break;
-                        case 0x7:
-                            FaultStatus.setDaytimeRunningActive(true);
-                            FaultStatus.setfrontLeftSignalActive(true);
-                            FaultStatus.setfrontRightSignalActive(true);
-                            break;
-                        case 0x9:
-                            FaultStatus.setDaytimeRunningActive(true);
-                            FaultStatus.setfrontLeftSignalActive(false);
-                            FaultStatus.setfrontRightSignalActive(false);
-                            break;
-                        case 0xA:
-                            FaultStatus.setDaytimeRunningActive(false);
-                            FaultStatus.setfrontLeftSignalActive(true);
-                            FaultStatus.setfrontRightSignalActive(false);
-                            break;
-                        case 0xB:
-                            FaultStatus.setDaytimeRunningActive(true);
-                            FaultStatus.setfrontLeftSignalActive(true);
-                            FaultStatus.setfrontRightSignalActive(false);
-                            break;
-                        case 0xC:
-                            FaultStatus.setDaytimeRunningActive(false);
-                            FaultStatus.setfrontLeftSignalActive(false);
-                            FaultStatus.setfrontRightSignalActive(true);
-                            break;
-                        case 0xD:
-                            FaultStatus.setDaytimeRunningActive(true);
-                            FaultStatus.setfrontLeftSignalActive(false);
-                            FaultStatus.setfrontRightSignalActive(true);
-                            break;
-                        case 0xE:
-                            FaultStatus.setDaytimeRunningActive(false);
-                            FaultStatus.setfrontLeftSignalActive(true);
-                            FaultStatus.setfrontRightSignalActive(true);
-                            break;
-                        case 0xF:
+                        case 0x7: case 0xF:
                             FaultStatus.setDaytimeRunningActive(true);
                             FaultStatus.setfrontLeftSignalActive(true);
                             FaultStatus.setfrontRightSignalActive(true);
@@ -2106,29 +1867,9 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 if (((data[5] & 0xFF) != 0xFF) ) {
                     int lampfThreeHighValue = ((data[5] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
                     switch (lampfThreeHighValue) {
-                        case 0x1:
+                        case 0x1: case 0x3: case 0x5: case 0x7: case 0x9: case 0xB: case 0xD: case 0xF:
                             FaultStatus.setrearRightSignalActive(true);
                             break;
-                        case 0x3:
-                            FaultStatus.setrearRightSignalActive(true);
-                            break;
-                        case 0x5:
-                            FaultStatus.setrearRightSignalActive(true);
-                            break;
-                        case 0x7:
-                            FaultStatus.setrearRightSignalActive(true);
-                            break;
-                        case 0x9:
-                            FaultStatus.setrearRightSignalActive(true);
-                            break;
-                        case 0xB:
-                            FaultStatus.setrearRightSignalActive(true);
-                            break;
-                        case 0xD:
-                            FaultStatus.setrearRightSignalActive(true);
-                            break;
-                        case 0xF:
-                            FaultStatus.setrearRightSignalActive(true);
                         default:
                             FaultStatus.setrearRightSignalActive(false);
                             break;
@@ -2159,7 +1900,7 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                             FaultStatus.setBrakeLightActive(false);
                             FaultStatus.setLicenseLightActive(true);
                             break;
-                        case 0x5:
+                        case 0x5: case 0xC:
                             FaultStatus.setrearLeftSignalActive(true);
                             FaultStatus.setRearLightActive(false);
                             FaultStatus.setBrakeLightActive(false);
@@ -2195,12 +1936,6 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                             FaultStatus.setBrakeLightActive(true);
                             FaultStatus.setLicenseLightActive(false);
                             break;
-                        case 0xC:
-                            FaultStatus.setrearLeftSignalActive(true);
-                            FaultStatus.setRearLightActive(false);
-                            FaultStatus.setBrakeLightActive(false);
-                            FaultStatus.setLicenseLightActive(true);
-                            break;
                         case 0xD:
                             FaultStatus.setrearLeftSignalActive(true);
                             FaultStatus.setRearLightActive(true);
@@ -2232,26 +1967,9 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
                 if (((data[6] & 0xFF) != 0xFF) ) {
                     int lampfFourHighValue = ((data[6] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
                     switch (lampfFourHighValue) {
-                        case 0x1:
+                        case 0x1: case 0x3: case 0x5: case 0x9: case 0xB: case 0xD: case 0xF:
                             FaultStatus.setRearFogLightActive(true);
                             break;
-                        case 0x3:
-                            FaultStatus.setRearFogLightActive(true);
-                            break;
-                        case 0x5:
-                            FaultStatus.setRearFogLightActive(true);
-                            break;
-                        case 0x9:
-                            FaultStatus.setRearFogLightActive(true);
-                            break;
-                        case 0xB:
-                            FaultStatus.setRearFogLightActive(true);
-                            break;
-                        case 0xD:
-                            FaultStatus.setRearFogLightActive(true);
-                            break;
-                        case 0xF:
-                            FaultStatus.setRearFogLightActive(true);
                         default:
                             FaultStatus.setRearFogLightActive(false);
                             break;
@@ -2424,62 +2142,21 @@ public class BluetoothLeService extends Service implements LocationListener, Goo
 
     private int filterChange(int newDir){
         int change = newDir - lastDirection;
-        int circularChange = newDir-(lastDirection+360);
-        int smallestChange;
-        if(Math.abs(change) < Math.abs(circularChange)){
-            smallestChange = change;
-        }
-        else{
-            smallestChange = circularChange;
-        }
-        smallestChange = Math.max(Math.min(change,3),-3);
-        return lastDirection+smallestChange;
-    }
-
-    protected void startLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        PendingResult<Status> pendingResult = LocationServices.FusedLocationApi
-                .requestLocationUpdates(googleApiClient, locationRequest, this);
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        Data.setLastLocation(location);
-        if (sharedPrefs.getBoolean("prefBearingOverride", false) && location.hasBearing()) {
-            Data.setBearing((int)location.getBearing());
-        }
+        int smallestChange = Math.max(Math.min(change,3),-3);
+        return lastDirection + smallestChange;
     }
 
     protected void stopLocationUpdates() {
-        if (googleApiClient.isConnected()) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(
-                    googleApiClient, this);
+        //stop location updates when Activity is no longer active
+        if (mFusedLocationClient != null) {
+            mFusedLocationClient.removeLocationUpdates(mLocationCallback);
         }
     }
 
     protected void createLocationRequest() {
-        locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(1000);
-        locationRequest.setFastestInterval(1000);
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        startLocationUpdates();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(1000);
+        mLocationRequest.setFastestInterval(1000);
     }
 }

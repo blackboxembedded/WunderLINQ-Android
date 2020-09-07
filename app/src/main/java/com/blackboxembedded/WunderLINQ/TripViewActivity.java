@@ -92,7 +92,6 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
         if (extras != null) {
             updateListing();
             String fileName = extras.getString("FILE");
-            Log.d(TAG,fileName);
             index = tripFileList.indexOf(fileName);
             file = new File(Environment.getExternalStorageDirectory(), "/WunderLINQ/logs/" + fileName);
 
@@ -216,8 +215,8 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 }
 
                 if (speeds.size() > 0){
-                    Double avgSpeed = 0.0;
-                    for (Double speed : speeds) {
+                    double avgSpeed = 0.0;
+                    for (double speed : speeds) {
                         avgSpeed = avgSpeed + speed;
                     }
                     avgSpeed = avgSpeed / speeds.size();
@@ -238,9 +237,9 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 }
                 tvBrakes.setText(frontBrakeText + "/" + rearBrakeText);
 
-                Double avgEngineTemp = 0.0;
+                double avgEngineTemp = 0.0;
                 if (engineTemps.size() > 0) {
-                    for (Double engineTemp : engineTemps) {
+                    for (double engineTemp : engineTemps) {
                         avgEngineTemp = avgEngineTemp + engineTemp;
                     }
                     avgEngineTemp = avgEngineTemp / ambientTemps.size();
@@ -251,9 +250,9 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 }
                 tvEngine.setText(Utils.oneDigit.format(minEngineTemp) + "/" + Utils.oneDigit.format(avgEngineTemp) + "/" + Utils.oneDigit.format(maxEngineTemp) + " (" + temperatureUnit + ")");
 
-                Double avgAmbientTemp = 0.0;
+                double avgAmbientTemp = 0.0;
                 if (ambientTemps.size() > 0) {
-                    for (Double ambientTemp : ambientTemps) {
+                    for (double ambientTemp : ambientTemps) {
                         avgAmbientTemp = avgAmbientTemp + ambientTemp;
                     }
                     avgAmbientTemp = avgAmbientTemp / ambientTemps.size();
@@ -274,7 +273,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 // Calculate Duration
                 if (startTime != null && endTime != null) {
                     long[] duration = Utils.calculateDuration(startTime, endTime);
-                    tvDuration.setText( String.valueOf(String.valueOf(duration[2])) + " " + getString(R.string.hours) + ", " + String.valueOf(duration[1]) + " " + getString(R.string.minutes) + ", " + String.valueOf(duration[0]) + " " + getString(R.string.seconds));
+                    tvDuration.setText( String.valueOf(duration[2]) + " " + getString(R.string.hours) + ", " + String.valueOf(duration[1]) + " " + getString(R.string.minutes) + ", " + String.valueOf(duration[0]) + " " + getString(R.string.seconds));
                 }
 
             } catch (IOException e){
@@ -410,11 +409,11 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 Log.d(TAG,"Unable to create directory: " + root);
             }
         }
-        File list[] = root.listFiles();
+        File[] list = root.listFiles();
         if (list != null ) {
             Arrays.sort(list, Collections.reverseOrder());
-            for (int i = 0; i < list.length; i++) {
-                tripFileList.add(list[i].getName());
+            for (File value : list) {
+                tripFileList.add(value.getName());
             }
         }
     }

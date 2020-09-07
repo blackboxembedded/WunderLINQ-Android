@@ -19,15 +19,11 @@ package com.blackboxembedded.WunderLINQ.TaskList;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.hardware.camera2.CameraCharacteristics;
 import android.location.Address;
@@ -36,7 +32,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
@@ -67,6 +62,7 @@ import com.blackboxembedded.WunderLINQ.LoggingService;
 import com.blackboxembedded.WunderLINQ.MainActivity;
 import com.blackboxembedded.WunderLINQ.MusicActivity;
 import com.blackboxembedded.WunderLINQ.MyApplication;
+import com.blackboxembedded.WunderLINQ.NavAppHelper;
 import com.blackboxembedded.WunderLINQ.OsmAndHelper;
 import com.blackboxembedded.WunderLINQ.PhotoService;
 import com.blackboxembedded.WunderLINQ.R;
@@ -99,8 +95,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.content.Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT;
 
 public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOsmandMissingListener {
 
@@ -571,100 +565,25 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
 
     //Task Actions
     private void executeTask(int taskID){
-        String navApp = sharedPrefs.getString("prefNavApp", "1");
+        //String navApp = sharedPrefs.getString("prefNavApp", "1");
         switch (mapping.get(taskID)){
             case 0:
-                //Navigation
-                Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                String url = "google.navigation://?free=1&mode=d&entry=fnls";
-                if (navApp.equals("1")) {
-                    // Android Default
-                } else if (navApp.equals("2")){
-                    //Google Maps
-                    navIntent.setPackage("com.google.android.apps.maps");
-                    url = "google.navigation://?free=1&mode=d&entry=fnls";
-                } else if (navApp.equals("3")){
-                    //Locus Maps
-                    url = "http://link.locusmap.eu";
-                    navIntent.setPackage("menion.android.locus.pro");
-                    navIntent.setData(Uri.parse(url));
-                    if(!isCallable(navIntent)){
-                        Log.d(TAG,"Locus Maps Pro Not Installed");
-                        navIntent.setPackage("menion.android.locus");
-                    }
-                } else if (navApp.equals("4")){
-                    //Waze
-                    url = "https://waze.com/ul";
-                } else if (navApp.equals("5")){
-                    //Maps.me
-                    url = "https://dlink.maps.me/?back_url=wunderlinq://datagrid";
-                } else if (navApp.equals("6")){
-                    // OsmAnd
-                    url = "http://osmand.net/go";
-                } else if (navApp.equals("7")){
-                    //Mapfactor Navigator
-                    navIntent.setPackage("com.mapfactor.navigator");
-                    url = "http://maps.google.com/maps";
-                } else if (navApp.equals("8")) {
-                    //Sygic
-                    //https://www.sygic.com/developers/professional-navigation-sdk/android/api-examples/custom-url
-                    url = "com.sygic.aura://";
-                } else if (navApp.equals("9")) {
-                    //Kurviger
-                    navIntent = getPackageManager().getLaunchIntentForPackage("gr.talent.kurviger.pro");
-                    if (navIntent == null) {
-                        navIntent = getPackageManager().getLaunchIntentForPackage("gr.talent.kurviger");
-                    }
-                    url = "";
-                } else if (navApp.equals("10")){
-                    //TomTom GO
-                    navIntent = getPackageManager().getLaunchIntentForPackage("com.tomtom.gplay.navapp");
-                    url = "";
-                } else if (navApp.equals("11")){
-                    //BMW ConnectedRide
-                    String discoveredApp = installedApps("com.bmw.ConnectedRide");
-                    if (!discoveredApp.equals("")) {
-                        navIntent = getPackageManager().getLaunchIntentForPackage(discoveredApp);
-                    }
-                    url = "";
-                } else if (navApp.equals("12")){
-                    //Calimoto
-                    String discoveredApp = installedApps("com.calimoto.calimoto");
-                    if (!discoveredApp.equals("")) {
-                        navIntent = getPackageManager().getLaunchIntentForPackage(discoveredApp);
-                    }
-                    url = "";
-                }
-                try {
-                    navIntent.setData(Uri.parse(url));
-                    if (android.os.Build.VERSION.SDK_INT >= 24) {
-                        if (isInMultiWindowMode()) {
-                            navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
-                        }
-                    }
-                    startActivity(navIntent);
-                } catch ( ActivityNotFoundException ex  ) {
-                }
+                //Open Navigation App
+                NavAppHelper.open(this);
                 break;
             case 1:
                 //Navigate Home
                 String address = sharedPrefs.getString("prefHomeAddress","");
                 if (!address.equals("")) {
                     LatLng location = getLocationFromAddress(TaskActivity.this, address);
+                    Location destination = new Location(LocationManager.GPS_PROVIDER);
+                    destination.setLatitude(location.latitude);
+                    destination.setLongitude(location.longitude);
                     if (location != null) {
-                        // Get location
-                        boolean locationWPPerms = false;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            // Check Location permissions
-                            if (getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                                Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
-                            } else {
-                                locationWPPerms = true;
-                            }
+                        // Check Location permissions
+                        if (getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                         } else {
-                            locationWPPerms = true;
-                        }
-                        if (locationWPPerms) {
                             try {
                                 // Get the location manager
                                 LocationManager locationManager = (LocationManager)
@@ -674,70 +593,14 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                                     String bestProvider = locationManager.getBestProvider(criteria, false);
                                     Log.d(TAG,"Trying Best Provider: " + bestProvider);
                                     Location currentLocation = locationManager.getLastKnownLocation(bestProvider);
-                                    Intent homeNavIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                                    String navUrl = "google.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
-                                    if (navApp.equals("1")){
-                                        // Android Default or Google Maps
-                                        // Nothing to do
-                                    } else if (navApp.equals("2")){
-                                        homeNavIntent.setPackage("com.google.android.apps.maps");
-                                    } else if (navApp.equals("3")){
-                                        //Locus Maps
-                                        homeNavIntent.setPackage("menion.android.locus.pro");
-                                        homeNavIntent.setData(Uri.parse(navUrl));
-                                        if(!isCallable(homeNavIntent)){
-                                            Log.d(TAG,"Locus Maps Pro Not Installed");
-                                            homeNavIntent.setPackage("menion.android.locus");
-                                        }
-                                    } else if (navApp.equals("4")){
-                                        //Waze
-                                        navUrl = "https://www.waze.com/ul?ll=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes&zoom=17";
-                                    } else if (navApp.equals("5")){
-                                        //Maps.me
-                                        navUrl = "https://dlink.maps.me/route?sll=" + String.valueOf(currentLocation.getLatitude()) + "," + String.valueOf(currentLocation.getLongitude()) + "&saddr=Start&dll=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&daddr=Home&type=vehicle&back_url=wunderlinq://datagrid";
-                                    } else if (navApp.equals("6")){
-                                        //OsmAnd
-                                        //navUrl = "osmand.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
-                                        OsmAndHelper osmAndHelper = new OsmAndHelper(TaskActivity.this, OsmAndHelper.REQUEST_OSMAND_API, TaskActivity.this);
-                                        osmAndHelper.navigate("Start",currentLocation.getLatitude(),currentLocation.getLongitude(),"Destination",location.latitude,location.longitude,"motorcycle", true);
-                                    } else if (navApp.equals("7")){
-                                        //Mapfactor Navigator
-                                        homeNavIntent.setPackage("com.mapfactor.navigator");
-                                        navUrl = "http://maps.google.com/maps?f=d&daddr=@"  + location.latitude + "," + location.longitude + "&navigate=yes";
-                                    } else if (navApp.equals("8")) {
-                                        //Sygic
-                                        //https://www.sygic.com/developers/professional-navigation-sdk/android/api-examples/custom-url
-                                        navUrl = "com.sygic.aura://coordinate|"  + location.longitude + "|" + location.latitude + "|drive";
-                                    } else if (navApp.equals("9")) {
-                                        //Kurviger
-                                        navUrl = "https://kurviger.de/en?point="  + location.latitude + "," + location.longitude + "&vehicle=motorycycle"
-                                                + "weighting=fastest";
-                                    } else if (navApp.equals("10")){
-                                        //TomTom GO
-                                        homeNavIntent.setPackage("com.tomtom.gplay.navapp");
-                                        navUrl = "geo:" + location.latitude + "," + location.longitude;
-                                    }
-                                    if (!navApp.equals("6")) {
-                                        try {
-                                            homeNavIntent.setData(Uri.parse(navUrl));
-                                            if (android.os.Build.VERSION.SDK_INT >= 24) {
-                                                if (isInMultiWindowMode()) {
-                                                    homeNavIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
-                                                }
-                                            }
-                                            startActivity(homeNavIntent);
-                                        } catch (ActivityNotFoundException ex) {
-                                            // Add Alert
-                                        }
-                                    }
+
+                                    NavAppHelper.navigateTo(this, currentLocation, destination);
                                 } catch (NullPointerException e) {
                                     e.printStackTrace();
                                 }
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
-                        } else {
-                            Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                         }
                     } else {
                         Toast.makeText(TaskActivity.this, R.string.geocode_error, Toast.LENGTH_LONG).show();
@@ -748,19 +611,9 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 break;
             case 2:
                 //Call Favorite Number
-                boolean callPerms = false;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (getApplication().checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                        Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
-                    } else {
-                        // Android version is lesser than 6.0 or the permission is already granted.
-                        callPerms = true;
-                    }
-                }  else {
-                    // Android version is lesser than 6.0 or the permission is already granted.
-                    callPerms = true;
-                }
-                if (callPerms) {
+                if (getApplication().checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
+                } else {
                     String phonenumber = sharedPrefs.getString("prefHomePhone", "");
                     if (!phonenumber.equals("")) {
                         Intent callHomeIntent = new Intent(Intent.ACTION_CALL);
@@ -769,22 +622,14 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                     } else {
                         Toast.makeText(TaskActivity.this, R.string.toast_phone_not_set, Toast.LENGTH_LONG).show();
                     }
-                } else {
-                    Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 }
                 break;
             case 3:
                 //Call Contact
                 // Check Read Contacts permissions
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (getApplication().checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-                        Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
-                    } else {
-                        // Android version is lesser than 6.0 or the permission is already granted.
-                        Intent forwardIntent = new Intent(TaskActivity.this, ContactListActivity.class);
-                        startActivity(forwardIntent);
-                    }
-                }  else {
+                if (getApplication().checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
+                } else {
                     // Android version is lesser than 6.0 or the permission is already granted.
                     Intent forwardIntent = new Intent(TaskActivity.this, ContactListActivity.class);
                     startActivity(forwardIntent);
@@ -793,19 +638,10 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             case 4:
                 //Take photo
                 Log.d(TAG,"Take Rear Photo");
-                boolean cameraPerms = false;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    // Check Camera permissions
-                    if (getApplication().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                            || getApplication().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
-                    } else {
-                        cameraPerms = true;
-                    }
+                if (getApplication().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                        || getApplication().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
-                    cameraPerms = true;
-                }
-                if (cameraPerms){
                     Intent photoIntent = new Intent(TaskActivity.this, PhotoService.class);
                     photoIntent.putExtra("camera", CameraCharacteristics.LENS_FACING_BACK);
                     startService(photoIntent);
@@ -814,19 +650,11 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             case 5:
                 //Take selfie
                 Log.d(TAG,"Take Front Photo");
-                boolean selfieCameraPerms = false;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    // Check Camera permissions
-                    if (getApplication().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                            || getApplication().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
-                    } else {
-                        selfieCameraPerms = true;
-                    }
+                // Check Camera permissions
+                if (getApplication().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                        || getApplication().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
-                    selfieCameraPerms = true;
-                }
-                if (selfieCameraPerms){
                     Intent photoIntent = new Intent(TaskActivity.this, PhotoService.class);
                     photoIntent.putExtra("camera",CameraCharacteristics.LENS_FACING_FRONT);
                     startService(photoIntent);
@@ -834,21 +662,13 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 break;
             case 6:
                 //Record Video
-                boolean videoPerms = false;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    // Check Camera permissions
-                    if (getApplication().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                            || getApplication().checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
-                            || getApplication().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                            || !Settings.canDrawOverlays(TaskActivity.this)){
-                        Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
-                    } else {
-                        videoPerms = true;
-                    }
+                // Check Camera permissions
+                if (getApplication().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                        || getApplication().checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
+                        || getApplication().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                        || !Settings.canDrawOverlays(TaskActivity.this)){
+                    Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
-                    videoPerms = true;
-                }
-                if(videoPerms){
                     if (((MyApplication) TaskActivity.this.getApplication()).getVideoRecording()){
                         stopService(new Intent(TaskActivity.this, VideoRecService.class));
                         ((MyApplication) this.getApplication()).setVideoRecording(false);
@@ -861,19 +681,11 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 break;
             case 7:
                 //Trip Log
-                boolean locationLogPerms = false;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    // Check Write permissions
-                    if (getApplication().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                            || getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
-                    } else {
-                        locationLogPerms = true;
-                    }
+                // Check Write permissions
+                if (getApplication().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                        || getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
-                    locationLogPerms = true;
-                }
-                if (locationLogPerms){
                     if (((MyApplication) TaskActivity.this.getApplication()).getTripRecording()){
                         stopService(new Intent(TaskActivity.this, LoggingService.class));
                         ((MyApplication) this.getApplication()).setTripRecording(false);
@@ -886,19 +698,10 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 break;
             case 8:
                 //Waypoint
-                // Get location
-                boolean locationWPPerms = false;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    // Check Location permissions
-                    if (getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
-                    } else {
-                        locationWPPerms = true;
-                    }
+                // Check Location permissions
+                if (getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
-                    locationWPPerms = true;
-                }
-                if (locationWPPerms) {
                     try {
                         // Get the location manager
                         double lat;
@@ -961,7 +764,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             case 13:
                 //ActionCam Video Control
                 if (actionCamOnline) {
-                    Integer actionCamEnabled = Integer.parseInt(sharedPrefs.getString("prefActionCam", "0"));
+                    int actionCamEnabled = Integer.parseInt(sharedPrefs.getString("prefActionCam", "0"));
                     switch (actionCamEnabled) {
                         case 1:
                             //GoPro Hero3
@@ -1193,7 +996,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
 
     //Check ActionCam Status
     private void updateActionCamStatus(){
-        Integer actionCamEnabled = Integer.parseInt(sharedPrefs.getString("prefActionCam", "0"));
+        int actionCamEnabled = Integer.parseInt(sharedPrefs.getString("prefActionCam", "0"));
         switch (actionCamEnabled){
             case 1:
                 //GoPro Hero3
@@ -1506,11 +1309,10 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         //From http://www.jibble.org/wake-on-lan/WakeOnLan.java
 
         String ipStr = "10.5.5.9";
-        String macStr = macAddress;
         int port = 80;
 
         try {
-            byte[] macBytes = getMacBytes(macStr);
+            byte[] macBytes = getMacBytes(macAddress);
             byte[] bytes = new byte[6 + 16 * macBytes.length];
             for (int i = 0; i < 6; i++) {
                 bytes[i] = (byte) 0xff;
@@ -1564,12 +1366,6 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         return ret;
     }
 
-    private boolean isCallable(Intent intent) {
-        List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent,
-                PackageManager.MATCH_DEFAULT_ONLY);
-        return list.size() > 0;
-    }
-
     public LatLng getLocationFromAddress(Context context, String strAddress) {
 
         Geocoder coder = new Geocoder(context);
@@ -1593,23 +1389,6 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         }
 
         return p1;
-    }
-
-    //Looks for a partial string and returns the first package name that matches
-    public String installedApps(String app) {
-        List<PackageInfo> packList = getPackageManager().getInstalledPackages(0);
-        for (int i=0; i < packList.size(); i++)
-        {
-            PackageInfo packInfo = packList.get(i);
-            if (  (packInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0)
-            {
-                String packageName = packInfo.packageName;
-                if (packageName.contains(app)){
-                    return packageName;
-                }
-            }
-        }
-        return "";
     }
 }
 
