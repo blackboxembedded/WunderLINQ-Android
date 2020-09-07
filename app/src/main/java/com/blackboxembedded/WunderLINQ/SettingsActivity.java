@@ -18,7 +18,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package com.blackboxembedded.WunderLINQ;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Build;
@@ -155,11 +154,15 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
         {
-            EditTextPreference addressPref = (EditTextPreference) findPreference("prefHomeAddress");
-            addressPref.setSummary(sharedPreferences.getString("prefHomeAddress",getString(R.string.pref_homeAddress_summary)));
+            if(key.equals("prefHomeAddress")) {
+                EditTextPreference addressPref = (EditTextPreference) findPreference("prefHomeAddress");
+                addressPref.setSummary(sharedPreferences.getString("prefHomeAddress", getString(R.string.pref_homeAddress_summary)));
+            }
 
-            EditTextPreference favNumberPref = (EditTextPreference) findPreference("prefHomePhone");
-            favNumberPref.setSummary(sharedPreferences.getString("prefHomePhone",getString(R.string.pref_homePhone_summary)));
+            if(key.equals("prefHomePhone")) {
+                EditTextPreference favNumberPref = (EditTextPreference) findPreference("prefHomePhone");
+                favNumberPref.setSummary(sharedPreferences.getString("prefHomePhone", getString(R.string.pref_homePhone_summary)));
+            }
         }
 
         @Override
