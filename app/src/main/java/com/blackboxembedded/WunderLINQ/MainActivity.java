@@ -395,7 +395,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         mPopupMenu = new PopupMenu(this, menuButton);
         MenuInflater menuOtherInflater = mPopupMenu.getMenuInflater();
-        menuOtherInflater.inflate(R.menu.menu, mPopupMenu.getMenu());
+        menuOtherInflater.inflate(R.menu.menu_main, mPopupMenu.getMenu());
         mMenu = mPopupMenu.getMenu();
         mMenu.findItem(R.id.action_hwsettings).setVisible(false);
         mPopupMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {

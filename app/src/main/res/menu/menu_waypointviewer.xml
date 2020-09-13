@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_open"
+        android:title="@string/waypoint_view_bt_open"
+        app:showAsAction="always|withText"/>
+    <item android:id="@+id/action_navigate"
+        android:title="@string/waypoint_view_bt_navigate"
+        app:showAsAction="always|withText"/>
+    <item android:id="@+id/action_share_original"
+        android:title="@string/share"
+        app:showAsAction="always|withText"/>
+    <item android:id="@+id/action_share_gpx"
+        android:title="@string/share_gpx"
+        app:showAsAction="always|withText"/>
+    <item android:id="@+id/action_delete"
+        android:title="@string/delete"
+        app:showAsAction="always|withText"/>
+</menu>

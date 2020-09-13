@@ -830,4 +830,8 @@
         <item name="2">1</item>
         <item name="3">2</item>
     </string-array>
+
+    <string name="share">Share</string>
+    <string name="share_gpx">Share GPX</string>
+    <string name="delete">Delete</string>
 </resources>

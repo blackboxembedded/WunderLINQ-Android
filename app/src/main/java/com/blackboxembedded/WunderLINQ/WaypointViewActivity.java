@@ -25,20 +25,26 @@ import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -48,14 +54,23 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
+
+import io.jenetics.jpx.GPX;
+import io.jenetics.jpx.WayPoint;
 
 public class WaypointViewActivity extends AppCompatActivity implements OnMapReadyCallback  {
 
     public final static String TAG = "WptViewActivity";
 
+    private PopupMenu mPopupMenu;
+
     private EditText etLabel;
 
+    private String recordID;
     private WaypointDatasource datasource;
     private List<WaypointRecord> allWaypoints;
     private WaypointRecord record;
@@ -87,6 +102,7 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
                     WaypointDatasource datasource = new WaypointDatasource(WaypointViewActivity.this);
                     datasource.open();
                     datasource.addLabel(record.getID(), etLabel.getText().toString());
+                    record = datasource.returnRecord(recordID);
                     datasource.close();
                     return true;
                 }
@@ -96,7 +112,7 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            String recordID = extras.getString("RECORD_ID");
+            recordID = extras.getString("RECORD_ID");
 
             // Open database
             datasource = new WaypointDatasource(this);
@@ -169,7 +185,7 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
 
     private void showActionBar(){
         LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflator.inflate(R.layout.actionbar_nav, null);
+        View v = inflator.inflate(R.layout.actionbar_nav_menu, null);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled (false);
@@ -182,13 +198,40 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
         navbarTitle.setText(R.string.waypoint_view_title);
 
         ImageButton backButton = findViewById(R.id.action_back);
-        ImageButton forwardButton = findViewById(R.id.action_forward);
+        ImageButton menuButton = findViewById(R.id.action_menu);
         backButton.setOnClickListener(mClickListener);
-        forwardButton.setVisibility(View.INVISIBLE);
+        menuButton.setOnClickListener(mClickListener);
+
+        mPopupMenu = new PopupMenu(this, menuButton);
+        MenuInflater menuOtherInflater = mPopupMenu.getMenuInflater();
+        menuOtherInflater.inflate(R.menu.menu_waypointviewer, mPopupMenu.getMenu());
+        mPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch(item.getItemId()) {
+                    case R.id.action_open:
+                        open();
+                        break;
+                    case R.id.action_navigate:
+                        navigate();
+                        break;
+                    case R.id.action_share_original:
+                        share("\"text/plain\"", Uri.parse("http://maps.google.com/maps?saddr=" + lat + "," + lon), false);
+                        break;
+                    case R.id.action_share_gpx:
+                        exportGPX();
+                        break;
+                    case R.id.action_delete:
+                        delete();
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
     // Delete button press
-    public void onClickDelete(View view) {
+    public void delete() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.delete_waypoint_alert_title));
         builder.setMessage(getString(R.string.delete_waypoint_alert_body));
@@ -207,8 +250,8 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
         builder.show();
     }
 
-    // Open button press
-    public void onClickOpen(View view) {
+    // Open In Map app
+    public void open() {
         //Open waypoint in map app
         String[] latlon = record.getData().split(",");
         LatLng location = new LatLng(Double.parseDouble(latlon[0]), Double.parseDouble(latlon[1]));
@@ -220,7 +263,7 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
     }
 
     // Navigate
-    public void onClickNav(View view) {
+    public void navigate() {
         //Navigation
         // Check Location permissions
         if (getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -249,15 +292,52 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
     }
 
     // Export button press
-    public void onClickShare(View view) {
-        String uri = "http://maps.google.com/maps?saddr=" +lat+","+lon;
-
+    public void share(String type, Uri uri, boolean stream) {
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-        sharingIntent.setType("text/plain");
+        sharingIntent.setType(type);
         String ShareSub = getString(R.string.waypoint_view_waypoint_label);
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, ShareSub);
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, uri);
+        if (stream){
+            sharingIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        } else {
+            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, uri.toString());
+        }
+
         startActivity(Intent.createChooser(sharingIntent, getString(R.string.waypoint_view_share_label)));
+    }
+
+    // Export GPX button press
+    public void exportGPX() {
+        try {
+            File root = new File(MyApplication.getContext().getCacheDir(), "/tmp/");
+            if(!root.exists()){
+                if(!root.mkdirs()){
+                    Log.d(TAG,"Unable to create directory: " + root);
+                }
+            }
+            if(root.canWrite()){
+                String label = getString(R.string.waypoint_view_waypoint_label);
+                if (!record.getLabel().equals("")){
+                    label = record.getLabel();
+                }
+                File gpxFile = new File( root, label + ".gpx" );
+                if (gpxFile.exists())
+                    gpxFile.delete();
+                while(!gpxFile.exists())
+                    gpxFile.createNewFile();
+                FileOutputStream gpxOutStream = new FileOutputStream(gpxFile);
+
+                final GPX gpx = GPX.builder()
+                        .addWayPoint(WayPoint.builder().lat(lat).lon(lon).build())
+                        .build();
+                GPX.write(gpx, gpxOutStream);
+                Uri uri = FileProvider.getUriForFile(this, "com.blackboxembedded.wunderlinq.fileprovider", gpxFile);
+                share("application/gpx+xml", uri, true);
+            }
+
+        } catch (IOException e){
+            Log.d(TAG,"Exception creating GPX: " + e.toString());
+        }
     }
 
     private View.OnClickListener mClickListener = new View.OnClickListener() {
@@ -268,6 +348,9 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
                 case R.id.action_back:
                     Intent backIntent = new Intent(WaypointViewActivity.this, WaypointActivity.class);
                     startActivity(backIntent);
+                    break;
+                case R.id.action_menu:
+                    mPopupMenu.show();
                     break;
             }
         }

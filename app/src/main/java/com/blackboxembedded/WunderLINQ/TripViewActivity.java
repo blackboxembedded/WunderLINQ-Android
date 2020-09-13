@@ -26,8 +26,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
@@ -49,6 +52,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.opencsv.CSVReader;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -60,13 +64,19 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import io.jenetics.jpx.GPX;
+import io.jenetics.jpx.TrackSegment;
+import io.jenetics.jpx.WayPoint;
+
 public class TripViewActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final String TAG = "TripViewActivity";
 
-    private List<LatLng> routePoints;
+    private PopupMenu mPopupMenu;
 
+    private List<LatLng> routePoints;
     private ArrayList tripFileList = new ArrayList<String>();
+    private String fileName;
     private File file;
     private int index;
 
@@ -91,7 +101,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             updateListing();
-            String fileName = extras.getString("FILE");
+            fileName = extras.getString("FILE");
             index = tripFileList.indexOf(fileName);
             file = new File(Environment.getExternalStorageDirectory(), "/WunderLINQ/logs/" + fileName);
 
@@ -146,72 +156,70 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                         distanceUnit = nextLine[10].substring(nextLine[10].indexOf("(") + 1, nextLine[10].indexOf(")"));
                         temperatureUnit = nextLine[6].substring(nextLine[6].indexOf("(") + 1, nextLine[6].indexOf(")"));
                         speedUnit = nextLine[4].substring(nextLine[4].indexOf("(") + 1, nextLine[4].indexOf(")"));
-                    }
-                    lineNumber = lineNumber + 1;
-                    try {
-                        if (lineNumber == 2) {
-                            startTime = df.parse(nextLine[0]);
-                        } else {
-                            endTime = df.parse(nextLine[0]);
-                        }
-                    } catch (ParseException e){
-                        e.printStackTrace();
-                    }
-
-                    if((lineNumber > 1) && (!nextLine[1].equals("No Fix") && (!nextLine[2].equals("No Fix")))) {
-                        LatLng location = new LatLng(Double.parseDouble(nextLine[1]), Double.parseDouble(nextLine[2]));
-                        routePoints.add(location);
-                        speeds.add(Double.parseDouble(nextLine[4]));
-                        if (maxSpeed == null || maxSpeed < Double.parseDouble(nextLine[4])){
-                            maxSpeed = Double.parseDouble(nextLine[4]);
-                        }
-                    }
-                    if (lineNumber > 1) {
-                        if (!nextLine[6].equals("null")){
-                            engineTemps.add(Double.parseDouble(nextLine[6]));
-                            if (maxEngineTemp == null || maxEngineTemp < Double.parseDouble(nextLine[6])){
-                                maxEngineTemp = Double.parseDouble(nextLine[6]);
+                    } else {
+                        try {
+                            if (lineNumber == 1) {
+                                startTime = df.parse(nextLine[0]);
+                            } else {
+                                endTime = df.parse(nextLine[0]);
                             }
-                            if (minEngineTemp == null || minEngineTemp > Double.parseDouble(nextLine[6])){
-                                minEngineTemp = Double.parseDouble(nextLine[6]);
+                        } catch (ParseException e){
+                            e.printStackTrace();
+                        }
+                        if((lineNumber > 1) && (!nextLine[1].equals("No Fix") && (!nextLine[2].equals("No Fix")))) {
+                            LatLng location = new LatLng(Double.parseDouble(nextLine[1]), Double.parseDouble(nextLine[2]));
+                            routePoints.add(location);
+                            speeds.add(Double.parseDouble(nextLine[4]));
+                            if (maxSpeed == null || maxSpeed < Double.parseDouble(nextLine[4])){
+                                maxSpeed = Double.parseDouble(nextLine[4]);
                             }
                         }
-                        if (!nextLine[7].equals("null")){
-                            ambientTemps.add(Double.parseDouble(nextLine[7]));
-                            if (maxAmbientTemp == null || maxAmbientTemp < Double.parseDouble(nextLine[7])){
-                                maxAmbientTemp = Double.parseDouble(nextLine[7]);
+                        if (lineNumber > 1) {
+                            if (!nextLine[6].equals("null")){
+                                engineTemps.add(Double.parseDouble(nextLine[6]));
+                                if (maxEngineTemp == null || maxEngineTemp < Double.parseDouble(nextLine[6])){
+                                    maxEngineTemp = Double.parseDouble(nextLine[6]);
+                                }
+                                if (minEngineTemp == null || minEngineTemp > Double.parseDouble(nextLine[6])){
+                                    minEngineTemp = Double.parseDouble(nextLine[6]);
+                                }
                             }
-                            if (minAmbientTemp == null || minAmbientTemp > Double.parseDouble(nextLine[7])){
-                                minAmbientTemp = Double.parseDouble(nextLine[7]);
+                            if (!nextLine[7].equals("null")){
+                                ambientTemps.add(Double.parseDouble(nextLine[7]));
+                                if (maxAmbientTemp == null || maxAmbientTemp < Double.parseDouble(nextLine[7])){
+                                    maxAmbientTemp = Double.parseDouble(nextLine[7]);
+                                }
+                                if (minAmbientTemp == null || minAmbientTemp > Double.parseDouble(nextLine[7])){
+                                    minAmbientTemp = Double.parseDouble(nextLine[7]);
+                                }
+                            }
+                            if (!nextLine[10].equals("null")){
+                                if (endOdometer == null || endOdometer < Double.parseDouble(nextLine[10])){
+                                    endOdometer = Double.parseDouble(nextLine[10]);
+                                }
+                                if (startOdometer == null || startOdometer > Double.parseDouble(nextLine[10])){
+                                    startOdometer = Double.parseDouble(nextLine[10]);
+                                }
+                            }
+                            if (!nextLine[13].equals("null")){
+                                if (endFrontBrakeCnt == null || endFrontBrakeCnt < Double.parseDouble(nextLine[13])){
+                                    endFrontBrakeCnt = Integer.parseInt(nextLine[13]);
+                                }
+                            }
+                            if (!nextLine[14].equals("null")){
+                                if (endRearBrakeCnt == null || endRearBrakeCnt < Double.parseDouble(nextLine[14])){
+                                    endRearBrakeCnt = Integer.parseInt(nextLine[14]);
+                                }
+                            }
+                            if (!nextLine[15].equals("null")){
+                                if (endShiftCnt == null || endShiftCnt < Double.parseDouble(nextLine[15])){
+                                    endShiftCnt = Integer.parseInt(nextLine[15]);
+                                }
                             }
                         }
-                        if (!nextLine[10].equals("null")){
-                            if (endOdometer == null || endOdometer < Double.parseDouble(nextLine[10])){
-                                endOdometer = Double.parseDouble(nextLine[10]);
-                            }
-                            if (startOdometer == null || startOdometer > Double.parseDouble(nextLine[10])){
-                                startOdometer = Double.parseDouble(nextLine[10]);
-                            }
-                        }
-                        if (!nextLine[13].equals("null")){
-                            if (endFrontBrakeCnt == null || endFrontBrakeCnt < Double.parseDouble(nextLine[13])){
-                                endFrontBrakeCnt = Integer.parseInt(nextLine[13]);
-                            }
-                        }
-                        if (!nextLine[14].equals("null")){
-                            if (endRearBrakeCnt == null || endRearBrakeCnt < Double.parseDouble(nextLine[14])){
-                                endRearBrakeCnt = Integer.parseInt(nextLine[14]);
-                            }
-                        }
-                        if (!nextLine[15].equals("null")){
-                            if (endShiftCnt == null || endShiftCnt < Double.parseDouble(nextLine[15])){
-                                endShiftCnt = Integer.parseInt(nextLine[15]);
-                            }
-                        }
-                    }
-                    if(lineNumber == 2){
                         tvDate.setText(nextLine[0]);
                     }
+                    lineNumber = lineNumber + 1;
                 }
 
                 if (speeds.size() > 0){
@@ -277,7 +285,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 }
 
             } catch (IOException e){
-
+                Log.d(TAG,"Exception reading CSV: " + e.toString());
             }
 
             if (routePoints.size() > 0) {
@@ -329,7 +337,6 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
         LatLngBounds bounds = builder.build();
         int padding = 100; // offset from edges of the map in pixels
         final CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-        //map.moveCamera(cu);
         map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override
             public void onMapLoaded() {
@@ -338,8 +345,50 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
         });
     }
 
-    // Delete button press
-    public void onClickDelete(View view) {
+    private void showActionBar(){
+        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflator.inflate(R.layout.actionbar_nav_menu, null);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setDisplayShowHomeEnabled (false);
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setCustomView(v);
+
+        TextView navbarTitle;
+        navbarTitle = findViewById(R.id.action_title);
+        navbarTitle.setText(R.string.trip_view_title);
+
+        ImageButton backButton = findViewById(R.id.action_back);
+        ImageButton menuButton = findViewById(R.id.action_menu);
+        backButton.setOnClickListener(mClickListener);
+        menuButton.setOnClickListener(mClickListener);
+
+        mPopupMenu = new PopupMenu(this, menuButton);
+        MenuInflater menuOtherInflater = mPopupMenu.getMenuInflater();
+        menuOtherInflater.inflate(R.menu.menu_tripviewer, mPopupMenu.getMenu());
+        mPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch(item.getItemId()) {
+                    case R.id.action_share_original:
+                        Uri uri = FileProvider.getUriForFile(TripViewActivity.this, "com.blackboxembedded.wunderlinq.fileprovider", file);
+                        share("text/csv", uri);
+                        break;
+                    case R.id.action_share_gpx:
+                        exportGPX();
+                        break;
+                    case R.id.action_delete:
+                        delete();
+                        break;
+                }
+                return true;
+            }
+        });
+    }
+
+    // Delete file
+    public void delete() {
         // Display dialog text here......
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.delete_trip_alert_title));
@@ -358,35 +407,62 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
         builder.show();
     }
 
-    // Export button press
-    public void onClickShare(View view) {
-        Uri uri = FileProvider.getUriForFile(this, "com.blackboxembedded.wunderlinq.fileprovider", file);
+    // Share file
+    public void share(String type, Uri uri) {
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-        sharingIntent.setType("text/csv");
+        sharingIntent.setType(type);
         String ShareSub = getString(R.string.trip_view_trip_label);
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, ShareSub);
         sharingIntent.putExtra(Intent.EXTRA_STREAM, uri);
         startActivity(Intent.createChooser(sharingIntent, getString(R.string.trip_view_share_label)));
     }
 
-    private void showActionBar(){
-        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflator.inflate(R.layout.actionbar_nav, null);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setDisplayShowHomeEnabled (false);
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setCustomView(v);
+    // Export GPX button press
+    public void exportGPX() {
+        try {
+            File root = new File(MyApplication.getContext().getCacheDir(), "/tmp/");
+            if(!root.exists()){
+                if(!root.mkdirs()){
+                    Log.d(TAG,"Unable to create directory: " + root);
+                }
+            }
+            if(root.canWrite()){
+                File gpxFile = new File( root, fileName + ".gpx" );
+                if (gpxFile.exists())
+                    gpxFile.delete();
+                while(!gpxFile.exists())
+                    gpxFile.createNewFile();
+                FileOutputStream gpxOutStream = new FileOutputStream(gpxFile);
 
-        TextView navbarTitle;
-        navbarTitle = findViewById(R.id.action_title);
-        navbarTitle.setText(R.string.trip_view_title);
+                CSVReader reader = new CSVReader(new FileReader(file));
+                TrackSegment.Builder segment = TrackSegment.builder();
 
-        ImageButton backButton = findViewById(R.id.action_back);
-        ImageButton forwardButton = findViewById(R.id.action_forward);
-        backButton.setOnClickListener(mClickListener);
-        forwardButton.setVisibility(View.INVISIBLE);
+                List<String[]> myEntries = reader.readAll();
+                int lineNumber = 0;
+                for (String[] nextLine : myEntries) {
+                    if ((lineNumber > 1) && (!nextLine[1].equals("No Fix") && (!nextLine[2].equals("No Fix")))) {
+                        Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ").parse(nextLine[0]);
+                        double lat = Double.parseDouble(nextLine[1]);
+                        double lon = Double.parseDouble(nextLine[1]);
+                        double elevation = Double.parseDouble(nextLine[3]);
+                        double speed = Double.parseDouble(nextLine[4]);
+                        final WayPoint point = WayPoint.builder()
+                                .lat(lat).lon(lon).time(date.getTime()).ele(elevation).speed(speed)
+                                .build();
+                        segment.addPoint(point);
+                    }
+                    lineNumber = lineNumber +1;
+                }
+                final GPX gpx = GPX.builder().addTrack(track -> track.addSegment(segment.build())).build();
+                GPX.write(gpx, gpxOutStream);
+                Uri uri = FileProvider.getUriForFile(this, "com.blackboxembedded.wunderlinq.fileprovider", gpxFile);
+
+                share("application/gpx+xml", uri);
+            }
+
+        } catch (IOException | ParseException e){
+            Log.d(TAG,"Exception creating GPX: " + e.toString());
+        }
     }
 
     private View.OnClickListener mClickListener = new View.OnClickListener() {
@@ -397,6 +473,9 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 case R.id.action_back:
                     Intent backIntent = new Intent(TripViewActivity.this, TripsActivity.class);
                     startActivity(backIntent);
+                    break;
+                case R.id.action_menu:
+                    mPopupMenu.show();
                     break;
             }
         }

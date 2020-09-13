@@ -23,3 +23,7 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# The following rules are needed to make JPX work
+-keep class javax.xml.stream.** { *; }
+-keep class com.bea.xml.stream.** { *; }

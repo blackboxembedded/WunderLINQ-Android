@@ -1084,11 +1084,15 @@ public class BluetoothLeService extends Service {
             case 0x00:
                 //Log.d(TAG, "Message ID 0");
                 byte[] vinValue = new byte[7];
+                int sum = 0;
                 for (int x = 1; x <= 7; x++){
                     vinValue[x - 1] = data[x];
+                    sum = sum + data[x];
                 }
-                String vin = new String(vinValue);
-                Data.setVin(vin);
+                if (sum > 0) {
+                    String vin = new String(vinValue);
+                    Data.setVin(vin);
+                }
 
                 break;
             case 0x01:
