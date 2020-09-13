@@ -453,7 +453,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                     }
                     lineNumber = lineNumber +1;
                 }
-                final GPX gpx = GPX.builder().addTrack(track -> track.addSegment(segment.build())).build();
+                final GPX gpx = GPX.builder().creator(getString(R.string.app_name)).addTrack(track -> track.addSegment(segment.build())).build();
                 GPX.write(gpx, gpxOutStream);
                 Uri uri = FileProvider.getUriForFile(this, "com.blackboxembedded.wunderlinq.fileprovider", gpxFile);
 

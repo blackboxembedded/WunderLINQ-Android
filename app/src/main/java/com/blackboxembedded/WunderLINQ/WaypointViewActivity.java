@@ -339,7 +339,7 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
                 }
 
                 final GPX gpx = GPX.builder()
-                        .addWayPoint(WayPoint.builder().lat(lat).lon(lon).time(date.getTime()).cmt(label).build())
+                        .creator(getString(R.string.app_name)).addWayPoint(WayPoint.builder().lat(lat).lon(lon).time(date.getTime()).cmt(label).build())
                         .build();
                 GPX.write(gpx, gpxOutStream);
                 Uri uri = FileProvider.getUriForFile(this, "com.blackboxembedded.wunderlinq.fileprovider", gpxFile);
