@@ -107,7 +107,16 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".AddWaypointActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="content" />
+                <data android:host="*" />
+                <data android:mimeType="application/gpx+xml" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".WaypointViewActivity"
             android:screenOrientation="portrait">

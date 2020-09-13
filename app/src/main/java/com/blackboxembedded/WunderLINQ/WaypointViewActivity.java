@@ -57,6 +57,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import io.jenetics.jpx.GPX;
@@ -326,9 +330,16 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
                 while(!gpxFile.exists())
                     gpxFile.createNewFile();
                 FileOutputStream gpxOutStream = new FileOutputStream(gpxFile);
+                Calendar cal = Calendar.getInstance();
+                Date date = cal.getTime();
+                try {
+                    date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ").parse(record.getDate());
+                } catch (ParseException e){
+                    Log.d(TAG, "Exception parsing a date: " + e.toString());
+                }
 
                 final GPX gpx = GPX.builder()
-                        .addWayPoint(WayPoint.builder().lat(lat).lon(lon).build())
+                        .addWayPoint(WayPoint.builder().lat(lat).lon(lon).time(date.getTime()).cmt(label).build())
                         .build();
                 GPX.write(gpx, gpxOutStream);
                 Uri uri = FileProvider.getUriForFile(this, "com.blackboxembedded.wunderlinq.fileprovider", gpxFile);

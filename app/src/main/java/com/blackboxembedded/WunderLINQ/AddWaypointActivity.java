@@ -17,11 +17,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ;
 
+import android.annotation.SuppressLint;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +39,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
@@ -44,13 +50,20 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import io.jenetics.jpx.GPX;
+
 public class AddWaypointActivity extends AppCompatActivity implements OnMapReadyCallback {
+
+    public final static String TAG = "AddWaypointActivity";
 
     private GoogleMap googleMap;
     private EditText etSearch;
@@ -119,6 +132,116 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
         if (Data.getLastLocation() != null) {
             etLatitude.setText(String.valueOf(Data.getLastLocation().getLatitude()));
             etLongitude.setText(String.valueOf(Data.getLastLocation().getLongitude()));
+        }
+
+        Intent intent = getIntent();
+        if (intent != null){
+            final Uri uri = intent.getData();
+            if (uri != null){
+                String scheme = uri.getScheme();
+                if (ContentResolver.SCHEME_FILE.equals(scheme)){
+                    final File file = new File(uri.getPath());
+                    new AlertDialog.Builder(this)
+                            .setTitle(getString(R.string.gpx_import_alert_title))
+                            .setMessage(getString(R.string.gpx_import_alert_body))
+                            .setPositiveButton(getString(R.string.alert_btn_ok), new DialogInterface.OnClickListener()
+                            {
+                                @SuppressLint("NewApi")
+                                @Override
+                                public void onClick(DialogInterface dialog, int which){
+                                    InputStream is;
+
+                                    try {
+                                        is = new FileInputStream(new File(file.getAbsolutePath()));
+                                        // Open database
+                                        WaypointDatasource datasource = new WaypointDatasource(AddWaypointActivity.this);
+                                        datasource.open();
+                                        GPX.read(is).getWayPoints().forEach(e -> {
+                                            String waypoint = e.getLatitude().toString() + "," + e.getLongitude().toString();
+                                            String label = "";
+                                            if (e.getComment().isPresent()){
+                                                label = e.getComment().get();
+                                            }
+
+                                            // Get current date/time
+                                            Calendar cal = Calendar.getInstance();
+                                            Date date = cal.getTime();
+                                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ");
+                                            String time = formatter.format(date);
+                                            if (e.getTime().isPresent()){
+                                                date = Date.from(e.getTime().get().toInstant());
+                                                time = formatter.format(date);
+                                            }
+                                            WaypointRecord record = new WaypointRecord(time, waypoint, label);
+                                            datasource.addRecord(record);
+
+                                            LatLng latLong = new LatLng(e.getLatitude().doubleValue(), e.getLongitude().doubleValue());
+                                            etLatitude.setText(String.valueOf(e.getLatitude().doubleValue()));
+                                            etLongitude.setText(String.valueOf(e.getLongitude().doubleValue()));
+                                            etLabel.setText(label);
+                                            googleMap.clear();
+                                            googleMap.addMarker(new MarkerOptions().position(latLong));
+                                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLong,15));
+                                        });
+                                        datasource.close();
+                                    } catch (IOException e){
+                                        Log.e(TAG, e.toString());
+                                    }
+
+                                }
+                            }).setNegativeButton(getString(R.string.cancel), null).show();
+                } else if (ContentResolver.SCHEME_CONTENT.equals(scheme)){
+                    final ContentResolver resolver = getContentResolver();
+
+                    new AlertDialog.Builder(this)
+                            .setTitle(getString(R.string.gpx_import_alert_title))
+                            .setMessage(getString(R.string.gpx_import_alert_body))
+                            .setPositiveButton(getString(R.string.alert_btn_ok), new DialogInterface.OnClickListener()
+                            {
+                                @SuppressLint("NewApi")
+                                @Override
+                                public void onClick(DialogInterface dialog, int which){
+                                    InputStream is;
+                                    try {
+                                        is = resolver.openInputStream(uri);
+                                        // Open database
+                                        WaypointDatasource datasource = new WaypointDatasource(AddWaypointActivity.this);
+                                        datasource.open();
+                                        GPX.read(is).getWayPoints().forEach(e -> {
+                                            String waypoint = e.getLatitude().toString() + "," + e.getLongitude().toString();
+                                            String label = "";
+                                            if (e.getComment().isPresent()){
+                                                label = e.getComment().get();
+                                            }
+
+                                            // Get current date/time
+                                            Calendar cal = Calendar.getInstance();
+                                            Date date = cal.getTime();
+                                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ");
+                                            String time = formatter.format(date);
+                                            if (e.getTime().isPresent()){
+                                                date = Date.from(e.getTime().get().toInstant());
+                                                time = formatter.format(date);
+                                            }
+                                            WaypointRecord record = new WaypointRecord(time, waypoint, label);
+                                            datasource.addRecord(record);
+
+                                            LatLng latLong = new LatLng(e.getLatitude().doubleValue(), e.getLongitude().doubleValue());
+                                            etLatitude.setText(String.valueOf(e.getLatitude().doubleValue()));
+                                            etLongitude.setText(String.valueOf(e.getLongitude().doubleValue()));
+                                            etLabel.setText(label);
+                                            googleMap.clear();
+                                            googleMap.addMarker(new MarkerOptions().position(latLong));
+                                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLong,15));
+                                        });
+                                        datasource.close();
+                                    } catch (IOException e){
+                                        Log.e(TAG, e.toString());
+                                    }
+                                }
+                            }).setNegativeButton(getString(R.string.cancel), null).show();
+                }
+            }
         }
     }
 
