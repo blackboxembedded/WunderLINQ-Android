@@ -1565,11 +1565,20 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     } else {
                         icon = AppCompatResources.getDrawable(this, R.drawable.ic_moon);
                     }
+
                 } else {
                     value = "No Fix";
                     icon = AppCompatResources.getDrawable(this, R.drawable.ic_sun);
                 }
 
+                break;
+            case 29:
+                //RPM
+                label = getString(R.string.rpm_header);
+                if (Data.getRPM() > 0){
+                    value = String.valueOf(Data.getRPM());
+                }
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_tachometer_alt);
                 break;
             default:
 

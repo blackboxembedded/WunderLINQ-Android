@@ -442,6 +442,7 @@
     <string name="bearing_header">Bearing</string>
     <string name="barometricpressure_header">Barometric Pressure</string>
     <string name="sunrisesunset_header">Sunrise/Sunset</string>
+    <string name="rpm_header">RPM</string>
     <!-- VideoRecService -->
     <string name="title_video_notification">WunderLINQ recording video</string>
     <!-- WeatherMapActivity -->
@@ -518,6 +519,7 @@
         <item name="27">@string/gpsspeed_header</item>
         <item name="28">@string/altitude_header</item>
         <item name="29">@string/sunrisesunset_header</item>
+        <item name="30">@string/rpm_header</item>
     </string-array>
     <string-array name="dataPoints_arrayValues" translatable="false">
         <item name="1">0</item>
@@ -549,6 +551,7 @@
         <item name="27">26</item>
         <item name="28">27</item>
         <item name="29">28</item>
+        <item name="30">29</item>
     </string-array>
     <string name="pref_tasks_settings_title">Quick Task Customization</string>
     <string name="pref_tasks_settings_summary">Customize which tasks to display and in which order</string>

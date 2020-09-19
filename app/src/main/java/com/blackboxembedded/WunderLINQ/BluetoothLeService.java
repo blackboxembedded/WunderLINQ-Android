@@ -1408,6 +1408,11 @@ public class BluetoothLeService extends Service {
                 break;
             case 0x06:
                 //Log.d(TAG, "Message ID 6");
+                //RPM
+                int rpm = (((data[1] & 0xFF) + (((data[2] & 0xFF) & 0x0f) * 255)) * 5);
+                Data.setRPM(rpm);
+
+                //Gear
                 String gear;
                 int gearValue = ((data[2] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
                 switch (gearValue) {

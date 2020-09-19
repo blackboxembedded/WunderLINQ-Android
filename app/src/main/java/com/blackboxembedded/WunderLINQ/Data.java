@@ -148,6 +148,15 @@ public class Data {
         Data.numberOfShifts = shifts;
     }
 
+    // RPM
+    private static Integer rpm = 0;
+    public static Integer getRPM() {
+        return rpm;
+    }
+    public static void setRPM(Integer rpm){
+        Data.rpm = rpm;
+    }
+
     // Gear
     private static String gear;
     public static String getGear() {

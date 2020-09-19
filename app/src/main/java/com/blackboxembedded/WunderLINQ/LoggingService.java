@@ -246,7 +246,8 @@ public class LoggingService extends Service {
                         MyApplication.getContext().getResources().getString(R.string.leanangle_header) + "," +
                         MyApplication.getContext().getResources().getString(R.string.gforce_header) + "," +
                         MyApplication.getContext().getResources().getString(R.string.bearing_header) + "," +
-                        MyApplication.getContext().getResources().getString(R.string.barometricpressure_header) + "(mBar)" +
+                        MyApplication.getContext().getResources().getString(R.string.barometricpressure_header) + "(mBar)" + "," +
+                        MyApplication.getContext().getResources().getString(R.string.rpm_header) +
                         "\n";
 
                 File logFile = new File( root, filename + curdatetime + ".csv" );
@@ -428,7 +429,7 @@ public class LoggingService extends Service {
                             + trip2 + "," + tripAuto + "," + speed + "," + avgSpeed + ","
                             + currentConsumption + "," + fuelEconomyOne + "," + fuelEconomyTwo + ","
                             + fuelRange + "," + Data.getLeanAngle() + "," + Data.getGForce() + ","
-                            + bearing + "," + Data.getBarometricPressure() + "\n");
+                            + bearing + "," + Data.getBarometricPressure() + "," + Data.getRPM() +"\n");
                     outFile.flush();
                     handler.postDelayed(runnable, loggingInterval);
                 }
