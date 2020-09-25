@@ -1580,6 +1580,15 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 }
                 icon = AppCompatResources.getDrawable(this, R.drawable.ic_tachometer_alt);
                 break;
+            case 30:
+                //Lean Angle Bike
+                label = getString(R.string.leanangle_bike_header);
+                if(Data.getLeanAngleBike() != null){
+                    Double leanAngleBike = Data.getLeanAngleBike();
+                    value = String.valueOf(Math.round(leanAngleBike));
+                }
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_angle);
+                break;
             default:
 
                 break;

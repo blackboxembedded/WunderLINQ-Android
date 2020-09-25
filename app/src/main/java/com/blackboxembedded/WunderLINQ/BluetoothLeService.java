@@ -666,6 +666,7 @@ public class BluetoothLeService extends Service {
                 }
                 //Check if message changed
                 boolean process = false;
+
                 switch (data[0]){
                     case 0x00:
                         if(!Arrays.equals(lastMessage00, data)){
@@ -1161,6 +1162,17 @@ public class BluetoothLeService extends Service {
                 break;
             case 0x05:
                 //Log.d(TAG, "Message ID 5");
+                // Lean Angle
+                int lowNibble = (data[2] & 0xFF) & 0x0f;
+                double leanAngleBike = Utils.bytesToInt12((byte)lowNibble, data[1]);
+                double leanAngleBikeFixed;
+                if(leanAngleBike >= 2048){
+                    leanAngleBikeFixed = leanAngleBike - 2048;
+                } else {
+                    leanAngleBikeFixed = (2048 - leanAngleBike) * -1.0;
+                }
+                Data.setLeanAngleBike(leanAngleBikeFixed * 0.045);
+
                 // Brakes
                 int brakes = ((data[2] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
                 if(prevBrakeValue == 0){
@@ -2105,12 +2117,12 @@ public class BluetoothLeService extends Service {
             case 0x0a:
                 //Log.d(TAG, "Message ID 10");
                 if ((data[3] & 0xFF) != 0xFF && (data[2] & 0xFF) != 0xFF && (data[1] & 0xFF) != 0xFF) {
-                    double odometer = Utils.bytesToInt(data[3], data[2], data[1]);
+                    double odometer = Utils.bytesToInt16(data[3], data[2], data[1]);
                     Data.setOdometer(odometer);
                 }
 
                 if ((data[6] & 0xFF) != 0xFF && (data[5] & 0xFF) != 0xFF && (data[4] & 0xFF) != 0xFF) {
-                    double tripAuto = Utils.bytesToInt(data[6], data[5], data[4]) / 10.0;
+                    double tripAuto = Utils.bytesToInt16(data[6], data[5], data[4]) / 10.0;
                     Data.setTripAuto(tripAuto);
                 }
                 break;
@@ -2135,16 +2147,16 @@ public class BluetoothLeService extends Service {
             case 0x0c:
                 //Log.d(TAG, "Message ID 12");
                 if ((data[3] & 0xFF) != 0xFF && (data[2] & 0xFF) != 0xFF && (data[1] & 0xFF) != 0xFF) {
-                    double trip1 = Utils.bytesToInt(data[3], data[2], data[1]) / 10.0;
+                    double trip1 = Utils.bytesToInt16(data[3], data[2], data[1]) / 10.0;
                     Data.setTripOne(trip1);
                 }
                 if ((data[6] & 0xFF) != 0xFF && (data[5] & 0xFF) != 0xFF && (data[4] & 0xFF) != 0xFF) {
-                    double trip2 = Utils.bytesToInt(data[6], data[5], data[4]) / 10.0;
+                    double trip2 = Utils.bytesToInt16(data[6], data[5], data[4]) / 10.0;
                     Data.setTripTwo(trip2);
                 }
                 break;
             default:
-                //Log.d(TAG, "Unknown Message ID: " + String.format("%02x", msgID));
+                Log.d(TAG, "Unknown Message ID: " + String.format("%02x", msgID));
                 break;
         }
     }

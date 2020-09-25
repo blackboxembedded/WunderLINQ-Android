@@ -310,6 +310,15 @@ public class Data {
         Data.barometricPressure = barometricPressure;
     }
 
+    // Lean Angle
+    private static Double leanAngleBike;
+    public static Double getLeanAngleBike() {
+        return leanAngleBike;
+    }
+    public static void setLeanAngleBike(Double leanAngleBike){
+        Data.leanAngleBike = leanAngleBike;
+    }
+
     // WunderLINQ Config
     // Firmware version
     private static Double firmwareVersion;

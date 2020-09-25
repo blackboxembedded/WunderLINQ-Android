@@ -47,8 +47,12 @@ public class Utils {
         return "";
     }
 
-    public static int bytesToInt(byte a, byte b, byte c) {
+    public static int bytesToInt16(byte a, byte b, byte c) {
         return (a & 0xFF) << 16 | (b & 0xFF) << 8 | (c & 0xFF);
+    }
+
+    public static int bytesToInt12(byte a, byte b) {
+        return (a & 0xFF) << 8 | (b & 0xFF);
     }
 
     // Take two dates and calulate the duration in hours, min, sec

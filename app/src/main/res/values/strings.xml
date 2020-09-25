@@ -437,12 +437,13 @@
     <string name="fueleconomyone_header">Fuel Economy 1</string>
     <string name="fueleconomytwo_header">Fuel Economy 2</string>
     <string name="fuelrange_header">Fuel Range</string>
-    <string name="leanangle_header">Lean Angle</string>
+    <string name="leanangle_header">Lean Angle Mobile</string>
     <string name="gforce_header">g-force</string>
     <string name="bearing_header">Bearing</string>
     <string name="barometricpressure_header">Barometric Pressure</string>
     <string name="sunrisesunset_header">Sunrise/Sunset</string>
     <string name="rpm_header">RPM</string>
+    <string name="leanangle_bike_header">Lean Angle</string>
     <!-- VideoRecService -->
     <string name="title_video_notification">WunderLINQ recording video</string>
     <!-- WeatherMapActivity -->
@@ -520,6 +521,7 @@
         <item name="28">@string/altitude_header</item>
         <item name="29">@string/sunrisesunset_header</item>
         <item name="30">@string/rpm_header</item>
+        <item name="31">@string/leanangle_bike_header</item>
     </string-array>
     <string-array name="dataPoints_arrayValues" translatable="false">
         <item name="1">0</item>
