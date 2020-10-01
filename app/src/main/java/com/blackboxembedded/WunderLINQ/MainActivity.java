@@ -1984,6 +1984,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     //Go to next screen - Quick Tasks
     private void goForward(){
         Intent backIntent = new Intent(this, MusicActivity.class);
+        if (sharedPrefs.getBoolean("prefDisplayDash", false)) {
+            backIntent = new Intent(this, DashActivity.class);
+        }
         startActivity(backIntent);
     }
 

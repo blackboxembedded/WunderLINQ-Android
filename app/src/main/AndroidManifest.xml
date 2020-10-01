@@ -158,6 +158,10 @@
             android:screenOrientation="portrait" />
         <activity android:name=".WeatherMapActivity" />
 
+        <activity
+            android:name=".DashActivity"
+            android:screenOrientation="sensorLandscape" />
+
         <service
             android:name=".NotificationListener"
             android:enabled="true"

@@ -245,6 +245,11 @@
                 android:defaultValue="12"
                 />
         </PreferenceScreen>
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="prefDisplayDash"
+            android:title="@string/pref_display_dashboard_name" >
+        </CheckBoxPreference>
         <ListPreference
             android:key="prefContactsFilter"
             android:title="@string/pref_contacts_filter_title"

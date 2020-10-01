@@ -458,6 +458,7 @@
     <string name="pref_homePhone_summary">Format: 11234567890</string>
     <string name="ui_title">User Interface</string>
     <string name="pref_highlightColor_title">Highlight Color</string>
+    <string name="pref_display_dashboard_name">Enable Dashboard Screen</string>
     <string name="pref_grid_settings_title">Data Grid Customization</string>
     <string name="pref_grid_settings_summary">Customize which data points to display and in which cell</string>
     <string name="first">First</string>
@@ -554,6 +555,7 @@
         <item name="28">27</item>
         <item name="29">28</item>
         <item name="30">29</item>
+        <item name="31">30</item>
     </string-array>
     <string name="pref_tasks_settings_title">Quick Task Customization</string>
     <string name="pref_tasks_settings_summary">Customize which tasks to display and in which order</string>
@@ -843,4 +845,12 @@
 
     <string name="gpx_import_alert_title">GPX Import</string>
     <string name="gpx_import_alert_body">Import waypoints from GPX?</string>
+
+    <string name="dash_title">Dashboard</string>
+    <string name="dash_ambient_label">Air:</string>
+    <string name="dash_engine_label">Eng:</string>
+    <string name="dash_range_label">Range:</string>
+    <string name="dash_rdcf_label">F:</string>
+    <string name="dash_rdcr_label">R:</string>
+
 </resources>

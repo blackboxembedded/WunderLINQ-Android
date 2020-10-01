@@ -68,6 +68,8 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
     private TextView mAlbumText;
     private ImageView mArtwork;
 
+    private SharedPreferences sharedPrefs;
+
     private MediaController.TransportControls controls;
     private MediaController controller;
 
@@ -137,7 +139,7 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         String orientation = sharedPrefs.getString("prefOrientation", "0");
         if (!orientation.equals("0")){
@@ -300,6 +302,9 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
     //Go back to last screen - Motorcycle Data
     private void goBack(){
         Intent backIntent = new Intent(this, MainActivity.class);
+        if (sharedPrefs.getBoolean("prefDisplayDash", false)) {
+            backIntent = new Intent(this, DashActivity.class);
+        }
         startActivity(backIntent);
     }
 
