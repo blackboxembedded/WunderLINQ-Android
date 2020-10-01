@@ -1163,15 +1163,17 @@ public class BluetoothLeService extends Service {
             case 0x05:
                 //Log.d(TAG, "Message ID 5");
                 // Lean Angle
-                int lowNibble = (data[2] & 0xFF) & 0x0f;
-                double leanAngleBike = Utils.bytesToInt12((byte)lowNibble, data[1]);
-                double leanAngleBikeFixed;
-                if(leanAngleBike >= 2048){
-                    leanAngleBikeFixed = leanAngleBike - 2048;
-                } else {
-                    leanAngleBikeFixed = (2048 - leanAngleBike) * -1.0;
+                if((((data[2] & 0xFF) & 0x0f) != 0xF) && (data[1] & 0xFF) != 0xFF){
+                    int lowNibble = (data[2] & 0xFF) & 0x0f;
+                    double leanAngleBike = Utils.bytesToInt12((byte)lowNibble, data[1]);
+                    double leanAngleBikeFixed;
+                    if(leanAngleBike >= 2048){
+                        leanAngleBikeFixed = leanAngleBike - 2048;
+                    } else {
+                        leanAngleBikeFixed = (2048 - leanAngleBike) * -1.0;
+                    }
+                    Data.setLeanAngleBike(leanAngleBikeFixed * 0.045);
                 }
-                Data.setLeanAngleBike(leanAngleBikeFixed * 0.045);
 
                 // Brakes
                 int brakes = ((data[2] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
