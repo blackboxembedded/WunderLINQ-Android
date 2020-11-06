@@ -643,15 +643,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 Log.d(TAG, "Unable to initialize Bluetooth");
                 finish();
             }
-            // Automatically connects to the device upon successful start-up initialization.
-            if (BluetoothLeService.mConnectionState == BluetoothLeService.STATE_DISCONNECTED) {
-                Log.d(TAG, "In onServiceConnected Disconnected, Connecting...");
-                BluetoothLeService.connect(mDeviceAddress, getString(R.string.device_name));
-            }
+            BluetoothLeService.connect(mDeviceAddress, getString(R.string.device_name));
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
+            Log.d(TAG, "In onServiceDisconnected");
             mBluetoothLeService = null;
         }
     };

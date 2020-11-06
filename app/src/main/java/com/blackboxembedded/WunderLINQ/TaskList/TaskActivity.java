@@ -565,7 +565,6 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
 
     //Task Actions
     private void executeTask(int taskID){
-        //String navApp = sharedPrefs.getString("prefNavApp", "1");
         switch (mapping.get(taskID)){
             case 0:
                 //Open Navigation App
