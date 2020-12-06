@@ -416,7 +416,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         startActivityForResult(settingsIntent, SETTINGS_CHECK);
                         break;
                     case R.id.action_hwsettings:
-                        Intent hwSettingsIntent = new Intent(MainActivity.this, FWConfigActivity.class);
+                        Intent hwSettingsIntent = new Intent(MainActivity.this, HWSettingsActivity.class);
                         startActivity(hwSettingsIntent);
                         break;
                     case R.id.action_enter_splitscreen:

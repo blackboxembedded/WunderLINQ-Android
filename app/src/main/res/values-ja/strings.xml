@@ -156,7 +156,7 @@
     <string name="hwsave_alert_btn_cancel">キャンセル</string>
     <string name="hwsave_alert_body">ハードウェアセッティングを変更すると動作が不安定になります。　クレードルから一度外してリセットして下さい.</string>
     <string name="hwsave_alert_title">警告！</string>
-    <string name="wwMode3">Custom</string>
+    <string name="keymode_custom_label">Custom</string>
     <string name="wwMode2">RT/K1600</string>
     <string name="wwMode1">Full</string>
     <string name="gear_header">ギア</string>
@@ -217,7 +217,6 @@
     <string name="fault_TIRERCF">Rear Tire Pressure Critical</string>
     <string name="vin_header">VIN</string>
     <string name="config_write_label">Save Settings</string>
-    <string name="sensitivity_label">Hold Sensitivity</string>
     <string name="hwsave_alert_btn_ok">Continue</string>
     <string name="fault_TIREFCF">Front Tire Pressure Critical</string>
     <string name="fault_TIRERWF">Rear Tire Pressure Warning</string>

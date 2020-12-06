@@ -280,7 +280,6 @@
     <string name="hwsettings_label">Ρυθμίσεις συσκευής</string>
     <string name="fw_config_title">Ρυθμίσεις συσκευής WunderLINQ</string>
     <string name="wwtype_label">Τύπος περιστροφ. δαχτυλίου</string>
-    <string name="sensitivity_label">Ευαισθησία αγγίγματος</string>
     <string name="config_write_label">Αποθήκευση ρυθμίσεων</string>
     <string name="hwsave_alert_title">Προειδοποίηση!</string>
     <string name="hwsave_alert_body">Μετά την αποθήκευση των νέων ρυθμίσεων συσκευής, η συσκευή WunderLINQ θα είναι ασταθής και θα πρέπει να αφαιρεθεί και να εγκατασταθεί ξανά στη βάση.</string>
@@ -344,7 +343,7 @@
     <string name="auto">Αυτόματο</string>
     <string name="wwMode1">Πλήρης</string>
     <string name="wwMode2">RT/K1600</string>
-    <string name="wwMode3">Προσαρμοσμένο</string>
+    <string name="keymode_custom_label">Προσαρμοσμένο</string>
     <string name="waypoints_nav_title">Προορισμοί</string>
     <string name="toast_waypoint_saved">Ο προορισμός αποθηκεύτηκε</string>
     <string name="geocode_error">Πρόβλημα προσδιορισμού γεωγραφικού στίγματος</string>

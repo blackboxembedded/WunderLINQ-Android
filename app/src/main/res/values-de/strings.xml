@@ -260,7 +260,6 @@
     <string name="hwsettings_label">Geräte-Einstellungen</string>
     <string name="fw_config_title">WunderLINQ Einstellungen</string>
     <string name="wwtype_label">Scrollrad Typ</string>
-    <string name="sensitivity_label">Halte-Empfindlichkeit</string>
     <string name="config_write_label">Einstellungen speichern</string>
     <string name="hwsave_alert_title">Warnung!</string>
     <string name="hwsave_alert_body">Nach dem Speichern von Einstellungen kann das WunderLINQ Gerät u.U. unstabil laufen, bitte entfernen Sie es aus der Halterung und setzen Sie es neu ein.</string>
@@ -329,7 +328,7 @@
     <string name="auto">Auto</string>
     <string name="wwMode1">Normal</string>
     <string name="wwMode2">RT/K1600</string>
-    <string name="wwMode3">Individuell</string>
+    <string name="keymode_custom_label">Individuell</string>
     <string name="waypoints_nav_title">Wegpunkte</string>
     <string name="toast_waypoint_saved">Wegpunkt gespeichert</string>
     <string name="geocode_error">Problem: Geocode kann nicht gefunden werden</string>

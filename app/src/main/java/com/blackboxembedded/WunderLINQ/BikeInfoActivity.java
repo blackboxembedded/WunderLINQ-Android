@@ -100,7 +100,7 @@ public class BikeInfoActivity extends AppCompatActivity {
         }
 
         characteristic = MainActivity.gattCommandCharacteristic;
-        if ((characteristic != null) & (Data.getFirmwareVersion() == null)) {
+        if ((characteristic != null) & (FWConfig.firmwareVersion == null)) {
             // Get Version
             byte[] getVersionCmd = {0x57, 0x52, 0x56};
             characteristic.setValue(getVersionCmd);
@@ -119,7 +119,7 @@ public class BikeInfoActivity extends AppCompatActivity {
 
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
 
-        if (Data.getFirmwareVersion() == null) {
+        if (FWConfig.firmwareVersion == null) {
             Log.d(TAG, "Data.getFirmwareVersion() == null");
             if (characteristic != null) {
                 // Get Version
@@ -129,7 +129,7 @@ public class BikeInfoActivity extends AppCompatActivity {
                 BluetoothLeService.writeCharacteristic(characteristic);
             }
         } else {
-            if (Data.getFirmwareVersion() >= 1.8) {
+            if (Double.parseDouble(FWConfig.firmwareVersion) >= 1.8) {
                 Log.d(TAG, "Data.getFirmwareVersion() >= 1.8");
                 tvResetHeader.setVisibility(View.VISIBLE);
                 spReset.setVisibility(View.VISIBLE);
@@ -224,9 +224,7 @@ public class BikeInfoActivity extends AppCompatActivity {
                         byte[] data = bd.getByteArray(BluetoothLeService.EXTRA_BYTE_VALUE);
                         Log.d(TAG, "UUID: " + bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE) + " DATA: " + Utils.ByteArraytoHex(data));
                         if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x56)){
-                            String version = data[3] + "." + data[4];
-                            Data.setFirmwareVersion(Double.parseDouble(version));
-                            if (Double.parseDouble(version) >=1.8) {
+                            if (Double.parseDouble(FWConfig.firmwareVersion) >=1.8) {
                                 tvResetHeader.setVisibility(View.VISIBLE);
                                 spReset.setVisibility(View.VISIBLE);
                                 tvResetLabel.setVisibility(View.VISIBLE);

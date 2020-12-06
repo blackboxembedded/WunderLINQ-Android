@@ -122,7 +122,7 @@ public class AboutActivity extends AppCompatActivity {
                 emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sendlogs_subject) + " " + curdatetime);
                 emailIntent.putExtra(Intent.EXTRA_TEXT, "App Version: " + BuildConfig.VERSION_NAME + "\n"
-                        + "Firmware Version: " + Data.getFirmwareVersion() + "\n"
+                        + "Firmware Version: " + FWConfig.firmwareVersion + "\n"
                         + "Android Version: " + Build.VERSION.RELEASE + "\n"
                         + "Manufacturer, Model: " + Build.MANUFACTURER + ", " + Build.MODEL + "\n"
                         + getString(R.string.sendlogs_body));
@@ -150,7 +150,7 @@ public class AboutActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if(Data.getFirmwareVersion() == null) {
+        if(FWConfig.firmwareVersion == null) {
             byte[] getConfigCmd = {0x57,0x52,0x57,0x0D,0x0A};
             if (MainActivity.gattCommandCharacteristic != null) {
                 Log.d(TAG, "Sending get config command");

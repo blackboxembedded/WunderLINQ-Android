@@ -275,7 +275,6 @@
     <string name="hwsettings_label">Régl. matériels</string>
     <string name="fw_config_title">Régl. WunderLINQ</string>
     <string name="wwtype_label">Type de molette</string>
-    <string name="sensitivity_label">Sensibilité de la molette</string>
     <string name="config_write_label">Enregistrer réglages</string>
     <string name="hwsave_alert_title">Attention !</string>
     <string name="hwsave_alert_body">Après la sauvegarde de vos réglages matériels, le WunderLINQ sera instable et nécessitera d\'être retiré et remis dans son support.</string>
@@ -349,7 +348,7 @@
     <string name="nav_app_waze">Waze</string>
     <string name="wwMode1">Complet</string>
     <string name="wwMode2">RT/K1600</string>
-    <string name="wwMode3">Personnalisé</string>
+    <string name="keymode_custom_label">Personnalisé</string>
     <string name="waypoints_nav_title">Destinations</string>
     <string name="toast_waypoint_saved">Destination sauvegardée</string>
     <string name="geocode_error">Un problème est survenu lors de la validation de l\'emplacement.</string>

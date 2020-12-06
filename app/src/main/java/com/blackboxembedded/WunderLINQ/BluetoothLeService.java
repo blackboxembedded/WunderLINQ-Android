@@ -282,11 +282,10 @@ public class BluetoothLeService extends Service {
 
                 //Send time to cluster
                 if (MainActivity.gattCommandCharacteristic != null) {
-                    if (Data.getFirmwareVersion() == null){
+                    if (FWConfig.firmwareVersion == null){
                         // Read config
-                        byte[] getConfigCmd = {0x57,0x52,0x57,0x0D,0x0A};
                         Log.d(TAG, "Sending get config command");
-                        MainActivity.gattCommandCharacteristic.setValue(getConfigCmd);
+                        MainActivity.gattCommandCharacteristic.setValue(FWConfig.GET_CONFIG_CMD);
                         BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
                     } else {
                         BluetoothGattCharacteristic characteristic = MainActivity.gattCommandCharacteristic;
@@ -751,12 +750,8 @@ public class BluetoothLeService extends Service {
             if (data != null) {
                 //Read Config
                 if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x57)){
-                    String version = data[9] + "." + data[10];
-                    Data.setFirmwareVersion(Double.parseDouble(version));
-                    if(Data.getFirmwareMode() != data[26]
-                    || Data.getFirmwareSensitivity() != data[34]) {
-                        Data.setFirmwareMode(data[26]);
-                        Data.setFirmwareSensitivity(data[34]);
+                    if (!Arrays.equals(FWConfig.wunderLINQConfig, data)){
+                        new FWConfig(data);
                         intent.putExtras(mBundle);
                         MyApplication.getContext().sendBroadcast(intent);
                     }
@@ -992,6 +987,7 @@ public class BluetoothLeService extends Service {
             body.append(MyApplication.getContext().getResources().getString(R.string.fault_TIREFCF)).append("\n");
         }
         if(FaultStatus.getrearTirePressureCriticalActive()){
+            Log.d(TAG,"Using fault_TIRERCF) string");
             body.append(MyApplication.getContext().getResources().getString(R.string.fault_TIRERCF)).append("\n");
         }
         if(FaultStatus.getgeneralFlashingRedActive()){
@@ -1001,7 +997,7 @@ public class BluetoothLeService extends Service {
             body.append(MyApplication.getContext().getResources().getString(R.string.fault_GENWARNSHRED)).append("\n");
         }
         if(!body.toString().equals("")){
-            showNotification(MyApplication.getContext(),MyApplication.getContext().getResources().getString(R.string.fault_title),body.toString());
+            showNotification(MyApplication.getContext(), MyApplication.getContext().getResources().getString(R.string.fault_title), body.toString());
         } else {
             Log.d(TAG,"Clearing notification");
             clearNotifications();
