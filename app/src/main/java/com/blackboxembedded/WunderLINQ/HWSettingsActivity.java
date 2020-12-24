@@ -118,89 +118,110 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
 
     @Override
     public void onItemClick(View view, int position) {
-        Intent intent = new Intent(HWSettingsActivity.this, HWSettingsActionActivity.class);
-        intent.putExtra("ACTIONID", adapter.getActionID(position));
-        startActivity(intent);
+        int actionID = adapter.getActionID(position);
+        if (actionID != -1) {
+            Intent intent = new Intent(HWSettingsActivity.this, HWSettingsActionActivity.class);
+            intent.putExtra("ACTIONID", actionID);
+            startActivity(intent);
+        }
     }
 
     private final View.OnClickListener mClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.btnHWConfig) {
-                if (hwConfigBtn.getText().equals(getString(R.string.reset_btn_label))) {
-                    resetHWConfig();
-                } else if (hwConfigBtn.getText().equals(getString(R.string.customize_btn_label))) {
-                    // Set to Customize Mode
-                    if (Double.parseDouble(WLQ.firmwareVersion) >= 2.0) {
-                        if (WLQ.keyMode != WLQ.keyMode_custom) {
-                            try {
-                                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                                outputStream.write(WLQ.WRITE_MODE_CMD);
-                                outputStream.write(WLQ.keyMode_custom);
-                                outputStream.write(WLQ.CMD_EOM);
-                                byte[] writeModeCmd = outputStream.toByteArray();
-                                MainActivity.gattCommandCharacteristic.setValue(writeModeCmd);
-                                BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
-                            } catch (IOException e) {
-                                Log.d(TAG, e.toString());
+                // Display dialog
+                final AlertDialog.Builder resetBuilder = new AlertDialog.Builder(HWSettingsActivity.this);
+                resetBuilder.setTitle(getString(R.string.hwsave_alert_title));
+                resetBuilder.setMessage(getString(R.string.hwsave_alert_body));
+                resetBuilder.setPositiveButton(R.string.hwsave_alert_btn_ok,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (hwConfigBtn.getText().equals(getString(R.string.reset_btn_label))) {
+                                    resetHWConfig();
+                                } else if (hwConfigBtn.getText().equals(getString(R.string.customize_btn_label))) {
+                                    // Set to Customize Mode
+                                    if (Double.parseDouble(WLQ.firmwareVersion) >= 2.0) {
+                                        if (WLQ.keyMode != WLQ.keyMode_custom) {
+                                            try {
+                                                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                                                outputStream.write(WLQ.WRITE_MODE_CMD);
+                                                outputStream.write(WLQ.keyMode_custom);
+                                                outputStream.write(WLQ.CMD_EOM);
+                                                byte[] writeModeCmd = outputStream.toByteArray();
+                                                MainActivity.gattCommandCharacteristic.setValue(writeModeCmd);
+                                                BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
+                                            } catch (IOException e) {
+                                                Log.d(TAG, e.toString());
+                                            }
+                                        }
+                                    }
+                                } else if (hwConfigBtn.getText().equals(getString(R.string.default_btn_label))) {
+                                    // Set to Default Mode
+                                    if (Double.parseDouble(WLQ.firmwareVersion) >= 2.0) {
+                                        if (WLQ.keyMode != WLQ.keyMode_default) {
+                                            try {
+                                                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                                                outputStream.write(WLQ.WRITE_MODE_CMD);
+                                                outputStream.write(WLQ.keyMode_default);
+                                                outputStream.write(WLQ.CMD_EOM);
+                                                byte[] writeModeCmd = outputStream.toByteArray();
+                                                MainActivity.gattCommandCharacteristic.setValue(writeModeCmd);
+                                                BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
+                                            } catch (IOException e) {
+                                                Log.d(TAG, e.toString());
+                                            }
+                                        }
+                                    }
+                                } else if (hwConfigBtn.getText().equals(getString(R.string.config_write_label))) {
+                                    // Set Config Changes
+                                    setHWConfig();
+                                } else if (hwConfigBtn.getText().equals(getString(R.string.wwMode1))) {
+                                    // Set to full Mode
+                                    if (Double.parseDouble(WLQ.firmwareVersion) < 2.0) {
+                                        if (WLQ.wheelMode != WLQ.wheelMode_full) {
+                                            try {
+                                                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                                                outputStream.write(WLQ.WRITE_MODE_CMD);
+                                                outputStream.write(WLQ.wheelMode_full);
+                                                outputStream.write(WLQ.CMD_EOM);
+                                                byte[] writeModeCmd = outputStream.toByteArray();
+                                                MainActivity.gattCommandCharacteristic.setValue(writeModeCmd);
+                                                BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
+                                            } catch (IOException e) {
+                                                Log.d(TAG, e.toString());
+                                            }
+                                        }
+                                    }
+                                } else if (hwConfigBtn.getText().equals(getString(R.string.wwMode2))) {
+                                    // Set to full Mode
+                                    if (Double.parseDouble(WLQ.firmwareVersion) < 2.0) {
+                                        if (WLQ.wheelMode != WLQ.wheelMode_rtk) {
+                                            try {
+                                                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                                                outputStream.write(WLQ.WRITE_MODE_CMD);
+                                                outputStream.write(WLQ.wheelMode_rtk);
+                                                outputStream.write(WLQ.CMD_EOM);
+                                                byte[] writeModeCmd = outputStream.toByteArray();
+                                                MainActivity.gattCommandCharacteristic.setValue(writeModeCmd);
+                                                BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
+                                            } catch (IOException e) {
+                                                Log.d(TAG, e.toString());
+                                            }
+                                        }
+                                    }
+                                }
                             }
-                        }
-                    }
-                } else if (hwConfigBtn.getText().equals(getString(R.string.default_btn_label))) {
-                    // Set to Default Mode
-                    if (Double.parseDouble(WLQ.firmwareVersion) >= 2.0) {
-                        if (WLQ.keyMode != WLQ.keyMode_default) {
-                            try {
-                                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                                outputStream.write(WLQ.WRITE_MODE_CMD);
-                                outputStream.write(WLQ.keyMode_default);
-                                outputStream.write(WLQ.CMD_EOM);
-                                byte[] writeModeCmd = outputStream.toByteArray();
-                                MainActivity.gattCommandCharacteristic.setValue(writeModeCmd);
-                                BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
-                            } catch (IOException e) {
-                                Log.d(TAG, e.toString());
+                        });
+                resetBuilder.setNegativeButton(R.string.hwsave_alert_btn_cancel,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
                             }
-                        }
-                    }
-                } else if (hwConfigBtn.getText().equals(getString(R.string.config_write_label))) {
-                    // Set Config Changes
-                    setHWConfig();
-                } else if (hwConfigBtn.getText().equals(getString(R.string.wwMode1))) {
-                    // Set to full Mode
-                    if (Double.parseDouble(WLQ.firmwareVersion) < 2.0) {
-                        if (WLQ.wheelMode != WLQ.wheelMode_full) {
-                            try {
-                                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                                outputStream.write(WLQ.WRITE_MODE_CMD);
-                                outputStream.write(WLQ.wheelMode_full);
-                                outputStream.write(WLQ.CMD_EOM);
-                                byte[] writeModeCmd = outputStream.toByteArray();
-                                MainActivity.gattCommandCharacteristic.setValue(writeModeCmd);
-                                BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
-                            } catch (IOException e) {
-                                Log.d(TAG, e.toString());
-                            }
-                        }
-                    }
-                } else if (hwConfigBtn.getText().equals(getString(R.string.wwMode2))) {
-                    // Set to full Mode
-                    if (Double.parseDouble(WLQ.firmwareVersion) < 2.0) {
-                        if (WLQ.wheelMode != WLQ.wheelMode_rtk) {
-                            try {
-                                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                                outputStream.write(WLQ.WRITE_MODE_CMD);
-                                outputStream.write(WLQ.wheelMode_rtk);
-                                outputStream.write(WLQ.CMD_EOM);
-                                byte[] writeModeCmd = outputStream.toByteArray();
-                                MainActivity.gattCommandCharacteristic.setValue(writeModeCmd);
-                                BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
-                            } catch (IOException e) {
-                                Log.d(TAG, e.toString());
-                            }
-                        }
-                    }
-                }
+                        });
+                resetBuilder.show();
             } else if (v.getId() == R.id.action_back) {
                 // Go back
                 Intent backIntent = new Intent(HWSettingsActivity.this, MainActivity.class);
@@ -319,48 +340,32 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
     }
 
     private void resetHWConfig(){
-        // Display dialog
-        final AlertDialog.Builder resetBuilder = new AlertDialog.Builder(HWSettingsActivity.this);
-        resetBuilder.setTitle(getString(R.string.hwsave_alert_title));
-        resetBuilder.setMessage(getString(R.string.hwsave_alert_body));
-        resetBuilder.setPositiveButton(R.string.hwsave_alert_btn_ok,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            if (Double.parseDouble(WLQ.firmwareVersion) >= 2.0) {
-                                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                                outputStream.write(WLQ.WRITE_CONFIG_CMD);
-                                outputStream.write(WLQ.defaultConfig2);
-                                outputStream.write(WLQ.CMD_EOM);
-                                byte[] writeConfigCmd = outputStream.toByteArray();
-                                Log.d(TAG, "Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
-                                MainActivity.gattCommandCharacteristic.setValue(writeConfigCmd);
-                                BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
-                            } else {
-                                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                                outputStream.write(WLQ.WRITE_CONFIG_CMD);
-                                outputStream.write(WLQ.defaultConfig2);
-                                outputStream.write(WLQ.CMD_EOM);
-                                byte[] writeConfigCmd = outputStream.toByteArray();
-                                Log.d(TAG, "Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
-                                MainActivity.gattCommandCharacteristic.setValue(writeConfigCmd);
-                                BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
-                            }
-                        } catch (IOException e) {
-                            Log.d(TAG, e.toString());
-                        }
-                        finish();
-                    }
-                });
-        resetBuilder.setNegativeButton(R.string.hwsave_alert_btn_cancel,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-        resetBuilder.show();
+        try {
+            if (WLQ.firmwareVersion != null) {
+                if (Double.parseDouble(WLQ.firmwareVersion) >= 2.0) {
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    outputStream.write(WLQ.WRITE_CONFIG_CMD);
+                    outputStream.write(WLQ.defaultConfig2);
+                    outputStream.write(WLQ.CMD_EOM);
+                    byte[] writeConfigCmd = outputStream.toByteArray();
+                    Log.d(TAG, "Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
+                    MainActivity.gattCommandCharacteristic.setValue(writeConfigCmd);
+                    BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
+                } else {
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    outputStream.write(WLQ.WRITE_CONFIG_CMD);
+                    outputStream.write(WLQ.defaultConfig2);
+                    outputStream.write(WLQ.CMD_EOM);
+                    byte[] writeConfigCmd = outputStream.toByteArray();
+                    Log.d(TAG, "Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
+                    MainActivity.gattCommandCharacteristic.setValue(writeConfigCmd);
+                    BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
+                }
+            }
+        } catch (IOException e) {
+            Log.d(TAG, e.toString());
+        }
+        finish();
     }
 
     private void setHWConfig(){
@@ -419,7 +424,6 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                 }
             }
         }
-
     }
 
     // Handles various events fired by the Service.

@@ -11,11 +11,13 @@
         android:id="@+id/tvActionLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/rtk_page_label"
+        android:text=""
         android:textColor="?attr/primaryTextColor"
-        android:textSize="25sp"
+        android:textSize="32sp"
         android:textStyle="bold"
         android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -25,6 +27,8 @@
         android:layout_height="wrap_content"
         android:entries="@array/hid_type_names_array"
         android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvActionLabel"/>
@@ -34,6 +38,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:entries="@array/hid_keyboard_usage_table_names_array"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,6 +51,8 @@
         android:layout_height="wrap_content"
         android:entries="@array/hid_keyboard_modifier_usage_table_names_array"
         android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spKey"/>

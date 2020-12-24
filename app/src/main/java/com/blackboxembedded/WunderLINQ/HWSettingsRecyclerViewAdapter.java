@@ -21,9 +21,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.model.GPConstants;
 
 import java.util.ArrayList;
 
@@ -62,11 +65,13 @@ public class HWSettingsRecyclerViewAdapter extends RecyclerView.Adapter<HWSettin
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        LinearLayout actionLL;
         TextView actionLabelTV;
         TextView actionKeyTV;
 
         ViewHolder(View itemView) {
             super(itemView);
+            actionLL = itemView.findViewById(R.id.llAction);
             actionLabelTV = itemView.findViewById(R.id.tvActionLabel);
             actionKeyTV = itemView.findViewById(R.id.tvActionKey);
             itemView.setOnClickListener(this);

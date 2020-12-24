@@ -67,7 +67,7 @@ public class MultiSpinner extends androidx.appcompat.widget.AppCompatSpinner {
 
         // display new text
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
-                android.R.layout.simple_spinner_item,
+                R.layout.item_hwsettings_spinners,
                 new String[] { spinnerBuffer.toString() });
         setAdapter(adapter);
 
