@@ -49,6 +49,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
 
     private ArrayAdapter<String>  usb;
     private ArrayAdapter<Integer>  sensitivity;
+    private ArrayAdapter<String>  types;
     private ArrayAdapter<String>  keyboard;
     private ArrayAdapter<String>  consumer;
 
@@ -74,14 +75,16 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         cancelBT = findViewById(R.id.btCancel);
 
         usb = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, new String[]{getResources().getString(R.string.usbcontrol_on_label),
+                R.layout.item_hwsettings_spinners, new String[]{getResources().getString(R.string.usbcontrol_on_label),
                 getResources().getString(R.string.usbcontrol_engine_label),
                 getResources().getString(R.string.usbcontrol_off_label)});
 
+        types = new ArrayAdapter<String>(this,
+                R.layout.item_hwsettings_spinners, getResources().getStringArray(R.array.hid_type_names_array));
         keyboard = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.hid_keyboard_usage_table_names_array));
+                R.layout.item_hwsettings_spinners, getResources().getStringArray(R.array.hid_keyboard_usage_table_names_array));
         consumer = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.hid_consumer_usage_table_names_array));
+                R.layout.item_hwsettings_spinners, getResources().getStringArray(R.array.hid_consumer_usage_table_names_array));
 
         actionTypeSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -309,7 +312,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 intArray[i] = i + 1;
             }
             sensitivity = new ArrayAdapter<Integer>(this,
-                    android.R.layout.simple_spinner_item, intArray);
+                    R.layout.item_hwsettings_spinners, intArray);
             actionTypeSP.setAdapter(sensitivity);
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
@@ -321,12 +324,13 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 intArray[i] = i + 1;
             }
             sensitivity = new ArrayAdapter<Integer>(this,
-                    android.R.layout.simple_spinner_item, intArray);
+                    R.layout.item_hwsettings_spinners, intArray);
             actionTypeSP.setAdapter(sensitivity);
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
             actionTypeSP.setSelection(WLQ.fullSensitivity - 1);
         } else {    // Keys
+            actionTypeSP.setAdapter(types);
             actionTypeSP.setSelection(WLQ.getActionKeyType(actionID));
             updateModifierSpinner1(WLQ.getActionKeyModifiers(actionID));
             if(WLQ.getActionKeyType(actionID) == WLQ.KEYBOARD_HID){
