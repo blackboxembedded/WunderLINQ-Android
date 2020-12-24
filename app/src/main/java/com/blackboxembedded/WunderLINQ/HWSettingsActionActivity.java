@@ -38,19 +38,17 @@ public class HWSettingsActionActivity extends AppCompatActivity {
 
     private final static String TAG = "HWSettingsActionAct";
 
-    private int action = 0;
+    private int actionID = -1;
 
-    private TextView action1LabelTV;
-    private TextView action2LabelTV;
-    private Spinner action1TypeSP;
-    private Spinner action2TypeSP;
-    private Spinner action1KeySP;
-    private Spinner action2KeySP;
-    private MultiSpinner action1ModifiersSP;
-    private MultiSpinner action2ModifiersSP;
+    private TextView actionLabelTV;
+    private Spinner actionTypeSP;
+    private Spinner actionKeySP;
+    private MultiSpinner actionModifiersSP;
     private Button saveBT;
     private Button cancelBT;
 
+    private ArrayAdapter<String>  usb;
+    private ArrayAdapter<Integer>  sensitivity;
     private ArrayAdapter<String>  keyboard;
     private ArrayAdapter<String>  consumer;
 
@@ -64,44 +62,84 @@ public class HWSettingsActionActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            action = extras.getInt("ACTION");
-            Log.d(TAG,"Editing Action: " + action);
+            actionID = extras.getInt("ACTIONID");
+            Log.d(TAG,"Editing Action: " + actionID);
         }
 
-        action1LabelTV = findViewById(R.id.tvAction1Label);
-        action2LabelTV = findViewById(R.id.tvAction2Label);
-        action1TypeSP = findViewById(R.id.spType1);
-        action2TypeSP = findViewById(R.id.spType2);
-        action1KeySP = findViewById(R.id.spKey1);
-        action2KeySP = findViewById(R.id.spKey2);
-        action1ModifiersSP = findViewById(R.id.msModifiers1);
-        action2ModifiersSP = findViewById(R.id.msModifiers2);
+        actionLabelTV = findViewById(R.id.tvActionLabel);
+        actionTypeSP = findViewById(R.id.spType);
+        actionKeySP = findViewById(R.id.spKey);
+        actionModifiersSP = findViewById(R.id.msModifiers);
         saveBT = findViewById(R.id.btSave);
         cancelBT = findViewById(R.id.btCancel);
+
+        usb = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, new String[]{getResources().getString(R.string.usbcontrol_on_label),
+                getResources().getString(R.string.usbcontrol_engine_label),
+                getResources().getString(R.string.usbcontrol_off_label)});
 
         keyboard = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.hid_keyboard_usage_table_names_array));
         consumer = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.hid_consumer_usage_table_names_array));
 
-        action1TypeSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        actionTypeSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                if (pos == 0){
-                    action1KeySP.setVisibility(View.INVISIBLE);
-                    action1ModifiersSP.setVisibility(View.INVISIBLE);
-                } else if (pos == 1){
-                    action1KeySP.setVisibility(View.VISIBLE);
-                    action1ModifiersSP.setVisibility(View.VISIBLE);
-                    int position = action1KeySP.getSelectedItemPosition();
-                    action1KeySP.setAdapter(keyboard);
-                    action1KeySP.setSelection(position);
-                } else if (pos == 2){
-                    action1KeySP.setVisibility(View.VISIBLE);
-                    action1ModifiersSP.setVisibility(View.INVISIBLE);
-                    int position = action1KeySP.getSelectedItemPosition();
-                    action1KeySP.setAdapter(consumer);
-                    action1KeySP.setSelection(position);
+                if (actionID == WLQ.USB){
+                    if((pos == 0) && (WLQ.USBVinThreshold == 0x0000)){
+                        saveBT.setVisibility(View.INVISIBLE);
+                    } else if((pos == 1) && (WLQ.USBVinThreshold != 0x0000) && (WLQ.USBVinThreshold != 0xFFFF)){
+                        saveBT.setVisibility(View.INVISIBLE);
+                    } else if((pos == 2) && (WLQ.USBVinThreshold == 0xFFFF)){
+                        saveBT.setVisibility(View.INVISIBLE);
+                    } else {
+                        saveBT.setVisibility(View.VISIBLE);
+                    }
+                } else if (actionID == WLQ.RTKDoublePressSensitivity){
+                    if ((pos + 1) == WLQ.RTKSensitivity){
+                        saveBT.setVisibility(View.INVISIBLE);
+                    } else {
+                        saveBT.setVisibility(View.VISIBLE);
+                    }
+                } else if (actionID == WLQ.fullLongPressSensitivity){
+                    if ((pos + 1) == WLQ.fullSensitivity){
+                        saveBT.setVisibility(View.INVISIBLE);
+                    } else {
+                        saveBT.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    if (pos == WLQ.UNDEFINED){
+                        actionKeySP.setVisibility(View.INVISIBLE);
+                        actionModifiersSP.setVisibility(View.INVISIBLE);
+                        if(WLQ.getActionKeyType(actionID) == WLQ.UNDEFINED){
+                            saveBT.setVisibility(View.INVISIBLE);
+                        } else {
+                            saveBT.setVisibility(View.VISIBLE);
+                        }
+                    } else if (pos == WLQ.KEYBOARD_HID){
+                        actionKeySP.setVisibility(View.VISIBLE);
+                        actionModifiersSP.setVisibility(View.VISIBLE);
+                        int position = actionKeySP.getSelectedItemPosition();
+                        actionKeySP.setAdapter(keyboard);
+                        actionKeySP.setSelection(position);
+                        if(WLQ.getActionKeyType(actionID) == WLQ.KEYBOARD_HID){
+                            saveBT.setVisibility(View.INVISIBLE);
+                        } else {
+                            saveBT.setVisibility(View.VISIBLE);
+                        }
+                    } else if (pos == WLQ.CONSUMER_HID){
+                        actionKeySP.setVisibility(View.VISIBLE);
+                        actionModifiersSP.setVisibility(View.INVISIBLE);
+                        int position = actionKeySP.getSelectedItemPosition();
+                        actionKeySP.setAdapter(consumer);
+                        actionKeySP.setSelection(position);
+                        if(WLQ.getActionKeyType(actionID) == WLQ.CONSUMER_HID){
+                            saveBT.setVisibility(View.INVISIBLE);
+                        } else {
+                            saveBT.setVisibility(View.VISIBLE);
+                        }
+                    }
                 }
             }
 
@@ -111,24 +149,57 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             }
         });
 
-        action2TypeSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        actionKeySP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                if (pos == 0){
-                    action2KeySP.setVisibility(View.INVISIBLE);
-                    action2ModifiersSP.setVisibility(View.INVISIBLE);
-                } else if (pos == 1){
-                    action2KeySP.setVisibility(View.VISIBLE);
-                    action2ModifiersSP.setVisibility(View.VISIBLE);
-                    int position = action2KeySP.getSelectedItemPosition();
-                    action2KeySP.setAdapter(keyboard);
-                    action2KeySP.setSelection(position);
-                } else if (pos == 2){
-                    action2KeySP.setVisibility(View.VISIBLE);
-                    action2ModifiersSP.setVisibility(View.INVISIBLE);
-                    int position = action2KeySP.getSelectedItemPosition();
-                    action2KeySP.setAdapter(consumer);
-                    action2KeySP.setSelection(position);
+                if (actionID == WLQ.USB){
+
+                } else if (actionID == WLQ.RTKDoublePressSensitivity){
+
+                } else if (actionID == WLQ.fullLongPressSensitivity){
+
+                } else {
+                    if (actionTypeSP.getSelectedItemPosition() == WLQ.KEYBOARD_HID) {
+                        if (WLQ.getActionKeyType(actionID) == WLQ.KEYBOARD_HID) {
+                            if (pos == KeyboardHID.getKeyboardKeyPositionByCode(WLQ.getActionKey(actionID))) {
+                                saveBT.setVisibility(View.INVISIBLE);
+                            } else {
+                                saveBT.setVisibility(View.VISIBLE);
+                            }
+                        } else {
+                            saveBT.setVisibility(View.VISIBLE);
+                        }
+                    } else if (actionTypeSP.getSelectedItemPosition() == WLQ.CONSUMER_HID) {
+                        if (WLQ.getActionKeyType(actionID) == WLQ.CONSUMER_HID) {
+                            if (pos == KeyboardHID.getConsumerKeyPositionByCode(WLQ.getActionKey(actionID))) {
+                                saveBT.setVisibility(View.INVISIBLE);
+                            } else {
+                                saveBT.setVisibility(View.VISIBLE);
+                            }
+                        } else {
+                            saveBT.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        actionModifiersSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
+                if (actionID == WLQ.USB){
+
+                } else if (actionID == WLQ.RTKDoublePressSensitivity){
+
+                } else if (actionID == WLQ.fullLongPressSensitivity){
+
+                } else {
+                    saveBT.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -140,6 +211,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
 
         saveBT.setOnClickListener(mClickListener);
         cancelBT.setOnClickListener(mClickListener);
+        saveBT.setVisibility(View.INVISIBLE);
 
         showActionBar();
 
@@ -151,42 +223,46 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         public void onClick(View v) {
             if (v.getId() == R.id.action_back) {
                 // Go back
-                Intent backIntent = new Intent(HWSettingsActionActivity.this, HWSettingsCustomizeActivity.class);
+                Intent backIntent = new Intent(HWSettingsActionActivity.this, HWSettingsActivity.class);
                 startActivity(backIntent);
             } else if (v.getId() == R.id.btSave) {
-                Intent backIntent = new Intent(HWSettingsActionActivity.this, HWSettingsCustomizeActivity.class);
-                byte[] changes = {0x00,0x00,0x00,0x00,0x00,0x00};
-                changes[0] = (byte)action1TypeSP.getSelectedItemPosition();
-                if (changes[0] == FWConfig.KEYBOARD_HID) {
-                    changes[2] = Integer.decode(getResources().getStringArray(R.array.hid_keyboard_usage_table_codes_array)[action1KeySP.getSelectedItemPosition()]).byteValue();
-                    int i = -1;
-                    for (boolean cc: action1ModifiersSP.selected) {
-                        i++;
-                        if (cc) {
-                            changes[1] = (byte) (Integer.decode(getResources().getStringArray(R.array.hid_keyboard_modifier_usage_table_codes_array)[i]).byteValue() + changes[1]);
-                        }
+                if (actionID == WLQ.USB){
+                    if(actionTypeSP.getSelectedItemPosition() == 0){
+                        WLQ.tempConfig[WLQ.USBVinThresholdHigh_INDEX] = 0x00;
+                        WLQ.tempConfig[WLQ.USBVinThresholdLow_INDEX] = 0x00;
+                    } else if(actionTypeSP.getSelectedItemPosition() == 1){
+                        WLQ.tempConfig[WLQ.USBVinThresholdHigh_INDEX] = 0x02;
+                        WLQ.tempConfig[WLQ.USBVinThresholdLow_INDEX] = (byte)0xBC;
+                    } else if(actionTypeSP.getSelectedItemPosition() == 2){
+                        WLQ.tempConfig[WLQ.USBVinThresholdHigh_INDEX] = (byte)0xFF;
+                        WLQ.tempConfig[WLQ.USBVinThresholdLow_INDEX] = (byte)0xFF;
                     }
-                } else if (changes[0] == FWConfig.CONSUMER_HID) {
-                    changes[2] = Integer.decode(getResources().getStringArray(R.array.hid_consumer_usage_table_codes_array)[action1KeySP.getSelectedItemPosition()]).byteValue();
-                }
-                changes[3] = (byte)action2TypeSP.getSelectedItemPosition();
-                if (changes[3] == FWConfig.KEYBOARD_HID) {
-                    changes[5] = Integer.decode(getResources().getStringArray(R.array.hid_keyboard_usage_table_codes_array)[action2KeySP.getSelectedItemPosition()]).byteValue();
-                    int i = -1;
-                    for (boolean cc: action2ModifiersSP.selected) {
-                        i++;
-                        if (cc) {
-                            changes[4] = (byte) (Integer.decode(getResources().getStringArray(R.array.hid_keyboard_modifier_usage_table_codes_array)[i]).byteValue() + changes[4]);
+                } else if (actionID == WLQ.RTKDoublePressSensitivity){
+                    WLQ.tempConfig[WLQ.RTKSensitivity_INDEX] = (byte)(actionTypeSP.getSelectedItemPosition() + 1);
+                } else if (actionID == WLQ.fullLongPressSensitivity){
+                    WLQ.tempConfig[WLQ.fullSensitivity_INDEX] = (byte)(actionTypeSP.getSelectedItemPosition() + 1);
+                } else {
+                    byte type = (byte)actionTypeSP.getSelectedItemPosition();
+                    byte key = 0x00;
+                    byte modifiers = 0x00;
+                    if (type == WLQ.KEYBOARD_HID) {
+                        key = Integer.decode(getResources().getStringArray(R.array.hid_keyboard_usage_table_codes_array)[actionKeySP.getSelectedItemPosition()]).byteValue();
+                        int i = -1;
+                        for (boolean cc: actionModifiersSP.selected) {
+                            i++;
+                            if (cc) {
+                                modifiers = (byte) (Integer.decode(getResources().getStringArray(R.array.hid_keyboard_modifier_usage_table_codes_array)[i]).byteValue() + modifiers);
+                            }
                         }
+                    } else if (type == WLQ.CONSUMER_HID) {
+                        key = Integer.decode(getResources().getStringArray(R.array.hid_consumer_usage_table_codes_array)[actionKeySP.getSelectedItemPosition()]).byteValue();
                     }
-                } else if (changes[3] == FWConfig.CONSUMER_HID) {
-                    changes[5] = Integer.decode(getResources().getStringArray(R.array.hid_consumer_usage_table_codes_array)[action2KeySP.getSelectedItemPosition()]).byteValue();
+                    WLQ.setActionKey(actionID, type, modifiers, key);
                 }
-                backIntent.putExtra("ACTION", action);
-                backIntent.putExtra("UPDATES", changes);
+                Intent backIntent = new Intent(HWSettingsActionActivity.this, HWSettingsActivity.class);
                 startActivity(backIntent);
             } else if (v.getId() == R.id.btCancel) {
-                Intent backIntent = new Intent(HWSettingsActionActivity.this, HWSettingsCustomizeActivity.class);
+                Intent backIntent = new Intent(HWSettingsActionActivity.this, HWSettingsActivity.class);
                 startActivity(backIntent);
             }
         }
@@ -203,7 +279,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         actionBar.setCustomView(v);
 
         TextView navbarTitle = findViewById(R.id.action_title);
-        navbarTitle.setText(getString(R.string.keymode_custom_title));
+        navbarTitle.setText(WLQ.getActionName(actionID));
 
         ImageButton backButton = findViewById(R.id.action_back);
         backButton.setOnClickListener(mClickListener);
@@ -213,360 +289,86 @@ public class HWSettingsActionActivity extends AppCompatActivity {
     }
 
     private void updateDisplay(){
-        if (action == FWConfig.RTKPage){
-            action1LabelTV.setText(getString(R.string.rtk_page_label));
-            action1TypeSP.setSelection(FWConfig.RTKPagePressKeyType);
-            updateModifierSpinner1(FWConfig.RTKPagePressKeyModifier);
-            if(FWConfig.RTKPagePressKeyType == FWConfig.KEYBOARD_HID){
-                action1KeySP.setAdapter(keyboard);
-                action1KeySP.setSelection(getKeyboardKeyByCode(FWConfig.RTKPagePressKey));
-                action1ModifiersSP.setVisibility(View.VISIBLE);
-            } else if(FWConfig.RTKPagePressKeyType == FWConfig.CONSUMER_HID){
-                action1KeySP.setAdapter(consumer);
-                action1KeySP.setSelection(getConsumerKeyByCode(FWConfig.RTKPagePressKey));
-                action1ModifiersSP.setVisibility(View.INVISIBLE);
+        saveBT.setVisibility(View.INVISIBLE);
+        actionLabelTV.setText(WLQ.getActionName(actionID));
+        if (actionID ==  WLQ.USB){ //USB
+            actionTypeSP.setAdapter(usb);
+            actionKeySP.setVisibility(View.INVISIBLE);
+            actionModifiersSP.setVisibility(View.INVISIBLE);
+            if(WLQ.USBVinThreshold == 0x0000){
+                actionTypeSP.setSelection(0);
+            } else if(WLQ.USBVinThreshold == 0xFFFF){
+                actionTypeSP.setSelection(2);
+            } else if(WLQ.USBVinThreshold != 0xFFFF && WLQ.USBVinThreshold != 0x0000){
+                actionTypeSP.setSelection(1);
             }
-            action2LabelTV.setText(getString(R.string.rtk_page_label) + " " + getString(R.string.rtk_double_press_label));
-            action2TypeSP.setSelection(FWConfig.RTKPageDoublePressKeyType);
-            updateModifierSpinner2(FWConfig.RTKPageDoublePressKeyModifier);
-            if(FWConfig.RTKPageDoublePressKeyType == FWConfig.KEYBOARD_HID){
-                action2KeySP.setAdapter(keyboard);
-                action2KeySP.setSelection(getKeyboardKeyByCode(FWConfig.RTKPageDoublePressKey));
-                action2ModifiersSP.setVisibility(View.VISIBLE);
-            } else if(FWConfig.RTKPageDoublePressKeyType == FWConfig.CONSUMER_HID){
-                action2KeySP.setAdapter(consumer);
-                action2KeySP.setSelection(getConsumerKeyByCode(FWConfig.RTKPageDoublePressKey));
-                action2ModifiersSP.setVisibility(View.INVISIBLE);
+        } else if (actionID == WLQ.RTKDoublePressSensitivity){  //RTK Sensitivity
+            int RTKSensitivityMax = 20;
+            Integer[] intArray = new Integer[RTKSensitivityMax];
+            for(int i = 0; i < RTKSensitivityMax; i++) {
+                intArray[i] = i + 1;
             }
-        } else if (action == FWConfig.RTKZoomPlus){
-            action1LabelTV.setText(getString(R.string.rtk_zoomp_label));
-            action1TypeSP.setSelection(FWConfig.RTKZoomPPressKeyType);
-            updateModifierSpinner1(FWConfig.RTKZoomPPressKeyModifier);
-            if(FWConfig.RTKZoomPPressKeyType == FWConfig.KEYBOARD_HID){
-                action1KeySP.setAdapter(keyboard);
-                action1KeySP.setSelection(getKeyboardKeyByCode(FWConfig.RTKZoomPPressKey));
-                action1ModifiersSP.setVisibility(View.VISIBLE);
-            } else if(FWConfig.RTKZoomPPressKeyType == FWConfig.CONSUMER_HID){
-                action1KeySP.setAdapter(consumer);
-                action1KeySP.setSelection(getConsumerKeyByCode(FWConfig.RTKZoomPPressKey));
-                action1ModifiersSP.setVisibility(View.INVISIBLE);
+            sensitivity = new ArrayAdapter<Integer>(this,
+                    android.R.layout.simple_spinner_item, intArray);
+            actionTypeSP.setAdapter(sensitivity);
+            actionKeySP.setVisibility(View.INVISIBLE);
+            actionModifiersSP.setVisibility(View.INVISIBLE);
+            actionTypeSP.setSelection(WLQ.RTKSensitivity - 1);
+        } else if (actionID == WLQ.fullLongPressSensitivity){  //Full Sensitivity
+            int fullSensitivityMax = 30;
+            Integer[] intArray = new Integer[fullSensitivityMax];
+            for(int i = 0; i < fullSensitivityMax; i++) {
+                intArray[i] = i + 1;
             }
-            action2LabelTV.setText(getString(R.string.rtk_zoomp_label) + " " + getString(R.string.rtk_double_press_label));
-            action2TypeSP.setSelection(FWConfig.RTKZoomPDoublePressKeyType);
-            updateModifierSpinner2(FWConfig.RTKZoomPDoublePressKeyModifier);
-            if(FWConfig.RTKZoomPDoublePressKeyType == FWConfig.KEYBOARD_HID){
-                action2KeySP.setAdapter(keyboard);
-                action2KeySP.setSelection(getKeyboardKeyByCode(FWConfig.RTKZoomPDoublePressKey));
-                action2ModifiersSP.setVisibility(View.VISIBLE);
-            } else if(FWConfig.RTKZoomPDoublePressKeyType == FWConfig.CONSUMER_HID){
-                action2KeySP.setAdapter(consumer);
-                action2KeySP.setSelection(getConsumerKeyByCode(FWConfig.RTKZoomPDoublePressKey));
-                action2ModifiersSP.setVisibility(View.INVISIBLE);
-            }
-        } else if (action == FWConfig.RTKZoomMinus){
-            action1LabelTV.setText(getString(R.string.rtk_zoomm_label));
-            action1TypeSP.setSelection(FWConfig.RTKZoomMPressKeyType);
-            updateModifierSpinner1(FWConfig.RTKZoomMPressKeyModifier);
-            if(FWConfig.RTKZoomMPressKeyType == FWConfig.KEYBOARD_HID){
-                action1KeySP.setAdapter(keyboard);
-                action1KeySP.setSelection(getKeyboardKeyByCode(FWConfig.RTKZoomMPressKey));
-                action1ModifiersSP.setVisibility(View.VISIBLE);
-            } else if(FWConfig.RTKZoomMPressKeyType == FWConfig.CONSUMER_HID){
-                action1KeySP.setAdapter(consumer);
-                action1KeySP.setSelection(getConsumerKeyByCode(FWConfig.RTKZoomMPressKey));
-                action1ModifiersSP.setVisibility(View.INVISIBLE);
-            }
-            action2LabelTV.setText(getString(R.string.rtk_zoomm_label) + " " + getString(R.string.rtk_double_press_label));
-            action2TypeSP.setSelection(FWConfig.RTKZoomMDoublePressKeyType);
-            updateModifierSpinner2(FWConfig.RTKZoomMDoublePressKeyModifier);
-            if(FWConfig.RTKZoomMDoublePressKeyType == FWConfig.KEYBOARD_HID){
-                action2KeySP.setAdapter(keyboard);
-                action2KeySP.setSelection(getKeyboardKeyByCode(FWConfig.RTKZoomMDoublePressKey));
-                action2ModifiersSP.setVisibility(View.VISIBLE);
-            } else if(FWConfig.RTKZoomMDoublePressKeyType == FWConfig.CONSUMER_HID){
-                action2KeySP.setAdapter(consumer);
-                action2KeySP.setSelection(getConsumerKeyByCode(FWConfig.RTKZoomMDoublePressKey));
-                action2ModifiersSP.setVisibility(View.INVISIBLE);
-            }
-        } else if (action == FWConfig.RTKSpeak){
-            action1LabelTV.setText(getString(R.string.rtk_speak_label));
-            action1TypeSP.setSelection(FWConfig.RTKSpeakPressKeyType);
-            updateModifierSpinner1(FWConfig.RTKSpeakPressKeyModifier);
-            if(FWConfig.RTKSpeakPressKeyType == FWConfig.KEYBOARD_HID){
-                action1KeySP.setAdapter(keyboard);
-                action1KeySP.setSelection(getKeyboardKeyByCode(FWConfig.RTKSpeakPressKey));
-                action1ModifiersSP.setVisibility(View.VISIBLE);
-            } else if(FWConfig.RTKSpeakPressKeyType == FWConfig.CONSUMER_HID){
-                action1KeySP.setAdapter(consumer);
-                action1KeySP.setSelection(getConsumerKeyByCode(FWConfig.RTKSpeakPressKey));
-                action1ModifiersSP.setVisibility(View.INVISIBLE);
-            }
-            action2LabelTV.setText(getString(R.string.rtk_speak_label) + " " + getString(R.string.rtk_double_press_label));
-            action2TypeSP.setSelection(FWConfig.RTKSpeakDoublePressKeyType);
-            updateModifierSpinner2(FWConfig.RTKSpeakDoublePressKeyModifier);
-            if(FWConfig.RTKSpeakDoublePressKeyType == FWConfig.KEYBOARD_HID){
-                action2KeySP.setAdapter(keyboard);
-                action2KeySP.setSelection(getKeyboardKeyByCode(FWConfig.RTKSpeakDoublePressKey));
-                action2ModifiersSP.setVisibility(View.VISIBLE);
-            } else if(FWConfig.RTKSpeakDoublePressKeyType == FWConfig.CONSUMER_HID){
-                action2KeySP.setAdapter(consumer);
-                action2KeySP.setSelection(getConsumerKeyByCode(FWConfig.RTKSpeakDoublePressKey));
-                action2ModifiersSP.setVisibility(View.INVISIBLE);
-            }
-        } else if (action == FWConfig.RTKMute){
-            action1LabelTV.setText(getString(R.string.rtk_mute_label));
-            action1TypeSP.setSelection(FWConfig.RTKMutePressKeyType);
-            updateModifierSpinner1(FWConfig.RTKMutePressKeyModifier);
-            if(FWConfig.RTKMutePressKeyType == FWConfig.KEYBOARD_HID){
-                action1KeySP.setAdapter(keyboard);
-                action1KeySP.setSelection(getKeyboardKeyByCode(FWConfig.RTKMutePressKey));
-                action1ModifiersSP.setVisibility(View.VISIBLE);
-            } else if(FWConfig.RTKMutePressKeyType == FWConfig.CONSUMER_HID){
-                action1KeySP.setAdapter(consumer);
-                action1KeySP.setSelection(getConsumerKeyByCode(FWConfig.RTKMutePressKey));
-                action1ModifiersSP.setVisibility(View.INVISIBLE);
-            }
-            action2LabelTV.setText(getString(R.string.rtk_mute_label) + " " + getString(R.string.rtk_double_press_label));
-            action2TypeSP.setSelection(FWConfig.RTKMuteDoublePressKeyType);
-            updateModifierSpinner2(FWConfig.RTKMuteDoublePressKeyModifier);
-            if(FWConfig.RTKMuteDoublePressKeyType == FWConfig.KEYBOARD_HID){
-                action2KeySP.setAdapter(keyboard);
-                action2KeySP.setSelection(getKeyboardKeyByCode(FWConfig.RTKMuteDoublePressKey));
-                action2ModifiersSP.setVisibility(View.VISIBLE);
-            } else if(FWConfig.RTKMuteDoublePressKeyType == FWConfig.CONSUMER_HID){
-                action2KeySP.setAdapter(consumer);
-                action2KeySP.setSelection(getConsumerKeyByCode(FWConfig.RTKMuteDoublePressKey));
-                action2ModifiersSP.setVisibility(View.INVISIBLE);
-            }
-        } else if (action == FWConfig.RTKDisplayOff){
-            action1LabelTV.setText(getString(R.string.rtk_display_label));
-            action1TypeSP.setSelection(FWConfig.RTKDisplayPressKeyType);
-            updateModifierSpinner1(FWConfig.RTKDisplayPressKeyModifier);
-            if(FWConfig.RTKDisplayPressKeyType == FWConfig.KEYBOARD_HID){
-                action1KeySP.setAdapter(keyboard);
-                action1KeySP.setSelection(getKeyboardKeyByCode(FWConfig.RTKDisplayPressKey));
-                action1ModifiersSP.setVisibility(View.VISIBLE);
-            } else if(FWConfig.RTKDisplayPressKeyType == FWConfig.CONSUMER_HID){
-                action1KeySP.setAdapter(consumer);
-                action1KeySP.setSelection(getConsumerKeyByCode(FWConfig.RTKDisplayPressKey));
-                action1ModifiersSP.setVisibility(View.INVISIBLE);
-            }
-            action2LabelTV.setText(getString(R.string.rtk_display_label) + " " + getString(R.string.rtk_double_press_label));
-            action2TypeSP.setSelection(FWConfig.RTKDisplayDoublePressKeyType);
-            updateModifierSpinner2(FWConfig.RTKDisplayDoublePressKeyModifier);
-            if(FWConfig.RTKDisplayDoublePressKeyType == FWConfig.KEYBOARD_HID){
-                action2KeySP.setAdapter(keyboard);
-                action2KeySP.setSelection(getKeyboardKeyByCode(FWConfig.RTKDisplayDoublePressKey));
-                action2ModifiersSP.setVisibility(View.VISIBLE);
-            } else if(FWConfig.RTKDisplayDoublePressKeyType == FWConfig.CONSUMER_HID){
-                action2KeySP.setAdapter(consumer);
-                action2KeySP.setSelection(getConsumerKeyByCode(FWConfig.RTKDisplayDoublePressKey));
-                action2ModifiersSP.setVisibility(View.INVISIBLE);
-            }
-        } else if (action == FWConfig.fullScrollUp){
-            action1LabelTV.setText(getString(R.string.full_scroll_up_label));
-            action1TypeSP.setSelection(FWConfig.fullScrollUpKeyType);
-            updateModifierSpinner1(FWConfig.fullScrollUpKeyModifier);
-            if(FWConfig.fullScrollUpKeyType == FWConfig.KEYBOARD_HID){
-                action1KeySP.setAdapter(keyboard);
-                action1KeySP.setSelection(getKeyboardKeyByCode(FWConfig.fullScrollUpKey));
-                action1ModifiersSP.setVisibility(View.VISIBLE);
-            } else if(FWConfig.fullScrollUpKeyType == FWConfig.CONSUMER_HID){
-                action1KeySP.setAdapter(consumer);
-                action1KeySP.setSelection(getConsumerKeyByCode(FWConfig.fullScrollUpKey));
-                action1ModifiersSP.setVisibility(View.INVISIBLE);
-            }
-            action2LabelTV.setVisibility(View.INVISIBLE);
-            action2TypeSP.setVisibility(View.INVISIBLE);
-            action2KeySP.setVisibility(View.INVISIBLE);
-            action2ModifiersSP.setVisibility(View.INVISIBLE);
-        } else if (action == FWConfig.fullScrollDown){
-            action1LabelTV.setText(getString(R.string.full_scroll_down_label));
-            action1TypeSP.setSelection(FWConfig.fullScrollDownKeyType);
-            updateModifierSpinner1(FWConfig.fullScrollDownKeyModifier);
-            if(FWConfig.fullScrollDownKeyType == FWConfig.KEYBOARD_HID){
-                action1KeySP.setAdapter(keyboard);
-                action1KeySP.setSelection(getKeyboardKeyByCode(FWConfig.fullScrollDownKey));
-                action1ModifiersSP.setVisibility(View.VISIBLE);
-            } else if(FWConfig.fullScrollDownKeyType == FWConfig.CONSUMER_HID){
-                action1KeySP.setAdapter(consumer);
-                action1KeySP.setSelection(getConsumerKeyByCode(FWConfig.fullScrollDownKey));
-                action1ModifiersSP.setVisibility(View.INVISIBLE);
-            }
-            action2LabelTV.setVisibility(View.INVISIBLE);
-            action2TypeSP.setVisibility(View.INVISIBLE);
-            action2KeySP.setVisibility(View.INVISIBLE);
-            action2ModifiersSP.setVisibility(View.INVISIBLE);
-        } else if (action == FWConfig.fullToggleRight){
-            action1LabelTV.setText(getString(R.string.full_toggle_right_label));
-            action1TypeSP.setSelection(FWConfig.fullRightPressKeyType);
-            updateModifierSpinner1(FWConfig.fullRightPressKeyModifier);
-            if(FWConfig.fullRightPressKeyType == FWConfig.KEYBOARD_HID){
-                action1KeySP.setAdapter(keyboard);
-                action1KeySP.setSelection(getKeyboardKeyByCode(FWConfig.fullRightPressKey));
-                action1ModifiersSP.setVisibility(View.VISIBLE);
-            } else if(FWConfig.fullRightPressKeyType == FWConfig.CONSUMER_HID){
-                action1KeySP.setAdapter(consumer);
-                action1KeySP.setSelection(getConsumerKeyByCode(FWConfig.fullRightPressKey));
-                action1ModifiersSP.setVisibility(View.INVISIBLE);
-            }
-            action2LabelTV.setText(getString(R.string.full_toggle_right_label) + " " + getString(R.string.full_long_press_label));
-            action2TypeSP.setSelection(FWConfig.fullRightLongPressKeyType);
-            updateModifierSpinner2(FWConfig.fullRightLongPressKeyModifier);
-            if(FWConfig.fullRightLongPressKeyType == FWConfig.KEYBOARD_HID){
-                action2KeySP.setAdapter(keyboard);
-                action2KeySP.setSelection(getKeyboardKeyByCode(FWConfig.fullRightLongPressKey));
-                action2ModifiersSP.setVisibility(View.VISIBLE);
-            } else if(FWConfig.fullRightLongPressKeyType == FWConfig.CONSUMER_HID){
-                action2KeySP.setAdapter(consumer);
-                action2KeySP.setSelection(getConsumerKeyByCode(FWConfig.fullRightLongPressKey));
-                action2ModifiersSP.setVisibility(View.VISIBLE);
-            }
-        } else if (action == FWConfig.fullToggleLeft){
-            action1LabelTV.setText(getString(R.string.full_toggle_left_label));
-            action1TypeSP.setSelection(FWConfig.fullLeftPressKeyType);
-            updateModifierSpinner1(FWConfig.fullLeftPressKeyModifier);
-            if(FWConfig.fullLeftPressKeyType == FWConfig.KEYBOARD_HID){
-                action1KeySP.setAdapter(keyboard);
-                action1KeySP.setSelection(getKeyboardKeyByCode(FWConfig.fullLeftPressKey));
-                action1ModifiersSP.setVisibility(View.VISIBLE);
-            } else if(FWConfig.fullLeftPressKeyType == FWConfig.CONSUMER_HID){
-                action1KeySP.setAdapter(consumer);
-                action1KeySP.setSelection(getConsumerKeyByCode(FWConfig.fullLeftPressKey));
-                action1ModifiersSP.setVisibility(View.INVISIBLE);
-            }
-            action2LabelTV.setText(getString(R.string.full_toggle_left_label) + " " + getString(R.string.full_long_press_label));
-            action2TypeSP.setSelection(FWConfig.fullLeftLongPressKeyType);
-            updateModifierSpinner2(FWConfig.fullLeftLongPressKeyModifier);
-            if(FWConfig.fullLeftLongPressKeyType == FWConfig.KEYBOARD_HID){
-                action2KeySP.setAdapter(keyboard);
-                action2KeySP.setSelection(getKeyboardKeyByCode(FWConfig.fullLeftLongPressKey));
-                action2ModifiersSP.setVisibility(View.VISIBLE);
-            } else if(FWConfig.fullLeftLongPressKeyType == FWConfig.CONSUMER_HID){
-                action2KeySP.setAdapter(consumer);
-                action2KeySP.setSelection(getConsumerKeyByCode(FWConfig.fullLeftLongPressKey));
-                action2ModifiersSP.setVisibility(View.INVISIBLE);
-            }
-        } else if (action == FWConfig.fullSignalCancel){
-            action1LabelTV.setText(getString(R.string.full_signal_cancel_label));
-            action1TypeSP.setSelection(FWConfig.fullSignalPressKeyType);
-            updateModifierSpinner1(FWConfig.fullSignalPressKeyModifier);
-            if(FWConfig.fullSignalPressKeyType == FWConfig.KEYBOARD_HID){
-                action1KeySP.setSelection(getKeyboardKeyByCode(FWConfig.fullSignalPressKey));
-                action1KeySP.setAdapter(keyboard);
-                action1ModifiersSP.setVisibility(View.VISIBLE);
-            } else if(FWConfig.fullSignalPressKeyType == FWConfig.CONSUMER_HID){
-                action1KeySP.setAdapter(consumer);
-                action1KeySP.setSelection(getConsumerKeyByCode(FWConfig.fullSignalPressKey));
-                action1ModifiersSP.setVisibility(View.INVISIBLE);
-            }
-
-            action2LabelTV.setText(getString(R.string.full_signal_cancel_label) + " " + getString(R.string.full_long_press_label));
-            action2TypeSP.setSelection(FWConfig.fullSignalLongPressKeyType);
-            updateModifierSpinner2(FWConfig.fullSignalLongPressKeyModifier);
-            if(FWConfig.fullSignalLongPressKeyType == FWConfig.KEYBOARD_HID){
-                action2KeySP.setAdapter(keyboard);
-                action2KeySP.setSelection(getKeyboardKeyByCode(FWConfig.fullSignalLongPressKey));
-                action2ModifiersSP.setVisibility(View.VISIBLE);
-            } else if(FWConfig.fullSignalLongPressKeyType == FWConfig.CONSUMER_HID){
-                action2KeySP.setAdapter(consumer);
-                action2KeySP.setSelection(getConsumerKeyByCode(FWConfig.fullSignalLongPressKey));
-                action2ModifiersSP.setVisibility(View.INVISIBLE);
+            sensitivity = new ArrayAdapter<Integer>(this,
+                    android.R.layout.simple_spinner_item, intArray);
+            actionTypeSP.setAdapter(sensitivity);
+            actionKeySP.setVisibility(View.INVISIBLE);
+            actionModifiersSP.setVisibility(View.INVISIBLE);
+            actionTypeSP.setSelection(WLQ.fullSensitivity - 1);
+        } else {    // Keys
+            actionTypeSP.setSelection(WLQ.getActionKeyType(actionID));
+            updateModifierSpinner1(WLQ.getActionKeyModifiers(actionID));
+            if(WLQ.getActionKeyType(actionID) == WLQ.KEYBOARD_HID){
+                actionKeySP.setAdapter(keyboard);
+                actionKeySP.setSelection(KeyboardHID.getKeyboardKeyPositionByCode(WLQ.getActionKey(actionID)));
+                actionModifiersSP.setVisibility(View.VISIBLE);
+            } else if(WLQ.getActionKeyType(actionID) == WLQ.CONSUMER_HID){
+                actionKeySP.setAdapter(consumer);
+                actionKeySP.setSelection(KeyboardHID.getConsumerKeyPositionByCode(WLQ.getActionKey(actionID)));
+                actionModifiersSP.setVisibility(View.INVISIBLE);
             }
         }
-    }
-
-    private int getKeyboardKeyByCode(byte code) {
-        int i = -1;
-        for (String cc: getResources().getStringArray(R.array.hid_keyboard_usage_table_codes_array)) {
-            i++;
-            if (Integer.decode(cc) == (code & 0xFF))
-                break;
-        }
-        return i;
-    }
-
-    private int getConsumerKeyByCode(byte code) {
-        int i = -1;
-        for (String cc: getResources().getStringArray(R.array.hid_consumer_usage_table_codes_array)) {
-            i++;
-            if (Integer.decode(cc) == (code & 0xFF))
-                break;
-        }
-        return i;
-    }
-
-    private int getModifierKeyByCode(byte code) {
-        int i = -1;
-        for (String cc: getResources().getStringArray(R.array.hid_keyboard_modifier_usage_table_codes_array)) {
-            i++;
-            if (Integer.decode(cc) == (code & 0xFF))
-                break;
-        }
-        return i;
-    }
-
-    private static boolean isSet(byte value, byte bit){
-       return ( (value & bit) == bit );
     }
 
     private void updateModifierSpinner1(byte mask){
         if (mask != 0x00) {
-            if (isSet(mask, (byte)0x01)) {
-                action1ModifiersSP.selected[getModifierKeyByCode((byte) 0x01)] = true;
+            if (Utils.isSet(mask, (byte)0x01)) {
+                actionModifiersSP.selected[KeyboardHID.getModifierKeyPositionByCode((byte) 0x01)] = true;
             }
-            if (isSet(mask, (byte)0x02)) {
-                action1ModifiersSP.selected[getModifierKeyByCode((byte) 0x02)] = true;
+            if (Utils.isSet(mask, (byte)0x02)) {
+                actionModifiersSP.selected[KeyboardHID.getModifierKeyPositionByCode((byte) 0x02)] = true;
             }
-            if (isSet(mask, (byte)0x04)) {
-                action1ModifiersSP.selected[getModifierKeyByCode((byte) 0x04)] = true;
+            if (Utils.isSet(mask, (byte)0x04)) {
+                actionModifiersSP.selected[KeyboardHID.getModifierKeyPositionByCode((byte) 0x04)] = true;
             }
-            if (isSet(mask, (byte)0x08)) {
-                action1ModifiersSP.selected[getModifierKeyByCode((byte) 0x08)] = true;
+            if (Utils.isSet(mask, (byte)0x08)) {
+                actionModifiersSP.selected[KeyboardHID.getModifierKeyPositionByCode((byte) 0x08)] = true;
             }
-            if (isSet(mask, (byte)0x10)) {
-                action1ModifiersSP.selected[getModifierKeyByCode((byte) 0x10)] = true;
+            if (Utils.isSet(mask, (byte)0x10)) {
+                actionModifiersSP.selected[KeyboardHID.getModifierKeyPositionByCode((byte) 0x10)] = true;
             }
-            if (isSet(mask, (byte)0x20)) {
-                action1ModifiersSP.selected[getModifierKeyByCode((byte) 0x20)] = true;
+            if (Utils.isSet(mask, (byte)0x20)) {
+                actionModifiersSP.selected[KeyboardHID.getModifierKeyPositionByCode((byte) 0x20)] = true;
             }
-            if (isSet(mask, (byte)0x40)) {
-                action1ModifiersSP.selected[getModifierKeyByCode((byte) 0x40)] = true;
+            if (Utils.isSet(mask, (byte)0x40)) {
+                actionModifiersSP.selected[KeyboardHID.getModifierKeyPositionByCode((byte) 0x40)] = true;
             }
-            if (isSet(mask, (byte)0x80)) {
-                action1ModifiersSP.selected[getModifierKeyByCode((byte) 0x80)] = true;
+            if (Utils.isSet(mask, (byte)0x80)) {
+                actionModifiersSP.selected[KeyboardHID.getModifierKeyPositionByCode((byte) 0x80)] = true;
             }
-            action1ModifiersSP.updateText();
+            actionModifiersSP.updateText();
         }
     }
 
-    private void updateModifierSpinner2(byte mask){
-        if (mask != 0x00) {
-            if (isSet(mask, (byte)0x01)) {
-                action2ModifiersSP.selected[getModifierKeyByCode((byte) 0x01)] = true;
-            }
-            if (isSet(mask, (byte)0x02)) {
-                action2ModifiersSP.selected[getModifierKeyByCode((byte) 0x02)] = true;
-            }
-            if (isSet(mask, (byte)0x04)) {
-                action2ModifiersSP.selected[getModifierKeyByCode((byte) 0x04)] = true;
-            }
-            if (isSet(mask, (byte)0x08)) {
-                action2ModifiersSP.selected[getModifierKeyByCode((byte) 0x08)] = true;
-            }
-            if (isSet(mask, (byte)0x10)) {
-                action2ModifiersSP.selected[getModifierKeyByCode((byte) 0x10)] = true;
-            }
-            if (isSet(mask, (byte)0x20)) {
-                action2ModifiersSP.selected[getModifierKeyByCode((byte) 0x20)] = true;
-            }
-            if (isSet(mask, (byte)0x40)) {
-                action2ModifiersSP.selected[getModifierKeyByCode((byte) 0x40)] = true;
-            }
-            if (isSet(mask, (byte)0x80)) {
-                action2ModifiersSP.selected[getModifierKeyByCode((byte) 0x80)] = true;
-            }
-            action2ModifiersSP.updateText();
-        }
-    }
 }

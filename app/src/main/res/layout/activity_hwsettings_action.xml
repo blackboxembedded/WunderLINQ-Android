@@ -8,7 +8,7 @@
     android:background="?attr/backgroundColor">
 
     <TextView
-        android:id="@+id/tvAction1Label"
+        android:id="@+id/tvActionLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/rtk_page_label"
@@ -20,76 +20,34 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <Spinner
-        android:id="@+id/spType1"
+        android:id="@+id/spType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:entries="@array/hid_type_names_array"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAction1Label"/>
+        app:layout_constraintTop_toBottomOf="@+id/tvActionLabel"/>
 
     <Spinner
-        android:id="@+id/spKey1"
+        android:id="@+id/spKey"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:entries="@array/hid_keyboard_usage_table_names_array"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spType1"/>
+        app:layout_constraintTop_toBottomOf="@+id/spType"/>
 
     <com.blackboxembedded.WunderLINQ.MultiSpinner
-        android:id="@+id/msModifiers1"
+        android:id="@+id/msModifiers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:entries="@array/hid_keyboard_modifier_usage_table_names_array"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spKey1"/>
-
-    <TextView
-        android:id="@+id/tvAction2Label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/rtk_page_label"
-        android:textColor="?attr/primaryTextColor"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/msModifiers1"/>
-
-    <Spinner
-        android:id="@+id/spType2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:entries="@array/hid_type_names_array"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAction2Label"/>
-
-    <Spinner
-        android:id="@+id/spKey2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:entries="@array/hid_keyboard_usage_table_names_array"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spType2"/>
-
-    <com.blackboxembedded.WunderLINQ.MultiSpinner
-        android:id="@+id/msModifiers2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:entries="@array/hid_keyboard_modifier_usage_table_names_array"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spKey2"/>
+        app:layout_constraintTop_toBottomOf="@+id/spKey"/>
 
     <Button
         android:id="@+id/btSave"

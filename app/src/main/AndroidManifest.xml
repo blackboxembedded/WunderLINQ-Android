@@ -39,7 +39,6 @@
         android:supportsRtl="true"
         android:theme="@style/WLQTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".HWSettingsUSBActivity"></activity>
         <activity android:name=".HWSettingsActionActivity" /> <!-- Work Around for GMaps crash https://issuetracker.google.com/issues/79478779 -->
         <uses-library
             android:name="org.apache.http.legacy"
@@ -155,9 +154,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".HWSettingsActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".HWSettingsCustomizeActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".WeatherMapActivity" />
         <activity

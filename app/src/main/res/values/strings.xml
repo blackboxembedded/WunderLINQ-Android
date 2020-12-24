@@ -851,6 +851,7 @@
     <string name="dash_rdcr_label">R:</string>
 
     <string name="customize_btn_label">Customize</string>
+    <string name="default_btn_label">Default Mode</string>
     <string name="keymode_label">Key Mode</string>
     <string name="keymode_default_label">Default</string>
     <string name="keymode_custom_label">Custom</string>
@@ -872,16 +873,25 @@
     <string name="full_scroll_up_label">Scroll Up</string>
     <string name="full_scroll_down_label">Scroll Down</string>
     <string name="full_toggle_right_label">Wheel Right</string>
+    <string name="full_toggle_right_long_label">Wheel Right Long Press</string>
     <string name="full_toggle_left_label">Wheel Left</string>
+    <string name="full_toggle_left_long_label">Wheel Left Long Press</string>
     <string name="full_signal_cancel_label">Signal Cancel</string>
+    <string name="full_signal_cancel_long_label">Signal Cancel Long Press</string>
     <string name="full_long_press_label">Long Press</string>
 
     <string name="rtk_page_label">Page</string>
+    <string name="rtk_page_double_label">Page Double Press</string>
     <string name="rtk_zoomp_label">Zoom+</string>
+    <string name="rtk_zoomp_double_label">Zoom+ Double Press</string>
     <string name="rtk_zoomm_label">Zoom-</string>
+    <string name="rtk_zoomm_double_label">Zoom- Double Press</string>
     <string name="rtk_speak_label">Speak</string>
+    <string name="rtk_speak_double_label">Speak Double Press</string>
     <string name="rtk_mute_label">Mute</string>
+    <string name="rtk_mute_double_label">Mute Double Press</string>
     <string name="rtk_display_label">Display Off</string>
+    <string name="rtk_display_double_label">Display Double Press</string>
     <string name="rtk_double_press_label">Double Press</string>
 
     <string name="hid_0x00_label">Not Set</string>
@@ -1003,7 +1013,7 @@
     <string name="keyboard_hid_0x47_label">Keyboard Scroll Lock</string>
     <string name="keyboard_hid_0x48_label">Keyboard Pause</string>
     <string name="keyboard_hid_0x49_label">Keyboard Insert</string>
-    <string name="keyboard_hid_0xaA_label">Keyboard Home</string>
+    <string name="keyboard_hid_0x4A_label">Keyboard Home</string>
     <string name="keyboard_hid_0x4B_label">Keyboard PageUp</string>
     <string name="keyboard_hid_0x4C_label">Keyboard Delete Forward</string>
     <string name="keyboard_hid_0x4D_label">Keyboard End</string>
@@ -1175,7 +1185,7 @@
         <item>@string/keyboard_hid_0x47_label</item>
         <item>@string/keyboard_hid_0x48_label</item>
         <item>@string/keyboard_hid_0x49_label</item>
-        <item>@string/keyboard_hid_0xaA_label</item>
+        <item>@string/keyboard_hid_0x4A_label</item>
         <item>@string/keyboard_hid_0x4B_label</item>
         <item>@string/keyboard_hid_0x4C_label</item>
         <item>@string/keyboard_hid_0x4D_label</item>

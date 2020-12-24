@@ -282,10 +282,10 @@ public class BluetoothLeService extends Service {
 
                 //Send time to cluster
                 if (MainActivity.gattCommandCharacteristic != null) {
-                    if (FWConfig.firmwareVersion == null){
+                    if (WLQ.firmwareVersion == null){
                         // Read config
                         Log.d(TAG, "Sending get config command");
-                        MainActivity.gattCommandCharacteristic.setValue(FWConfig.GET_CONFIG_CMD);
+                        MainActivity.gattCommandCharacteristic.setValue(WLQ.GET_CONFIG_CMD);
                         BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
                     } else {
                         BluetoothGattCharacteristic characteristic = MainActivity.gattCommandCharacteristic;
@@ -750,8 +750,8 @@ public class BluetoothLeService extends Service {
             if (data != null) {
                 //Read Config
                 if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x57)){
-                    if (!Arrays.equals(FWConfig.wunderLINQConfig, data)){
-                        new FWConfig(data);
+                    if (!Arrays.equals(WLQ.wunderLINQConfig, data)){
+                        new WLQ(data);
                         intent.putExtras(mBundle);
                         MyApplication.getContext().sendBroadcast(intent);
                     }
