@@ -306,8 +306,8 @@ public class BluetoothLeService extends Service {
                         byte monthNibble = (byte) month;
                         int monthYearByte = ((yearNibble & 0x0F) << 4 | (monthNibble & 0x0F));
                         byte[] setClusterClock = {0x57, 0x57, 0x44, 0x43, (byte) second, (byte) minute, (byte) hour, (byte) day, (byte) monthYearByte, (byte) yearByte};
-                        //characteristic.setValue(setClusterClock);
-                        //writeCharacteristic(characteristic);
+                        characteristic.setValue(setClusterClock);
+                        writeCharacteristic(characteristic);
                     }
                 }
 
