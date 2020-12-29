@@ -89,7 +89,13 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         actionTypeSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                if (actionID == WLQ.USB){
+                if (actionID == WLQ.OldSensitivity){
+                    if ((pos + 1) == WLQ.sensitivity){
+                        saveBT.setVisibility(View.INVISIBLE);
+                    } else {
+                        saveBT.setVisibility(View.VISIBLE);
+                    }
+                } else if (actionID == WLQ.USB){
                     if((pos == 0) && (WLQ.USBVinThreshold == 0x0000)){
                         saveBT.setVisibility(View.INVISIBLE);
                     } else if((pos == 1) && (WLQ.USBVinThreshold != 0x0000) && (WLQ.USBVinThreshold != 0xFFFF)){
@@ -155,7 +161,9 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         actionKeySP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                if (actionID == WLQ.USB){
+                if (actionID == WLQ.OldSensitivity){
+
+                } else if (actionID == WLQ.USB){
 
                 } else if (actionID == WLQ.RTKDoublePressSensitivity){
 
@@ -195,7 +203,9 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         actionModifiersSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                if (actionID == WLQ.USB){
+                if (actionID == WLQ.OldSensitivity){
+
+                } else if (actionID == WLQ.USB){
 
                 } else if (actionID == WLQ.RTKDoublePressSensitivity){
 
@@ -229,7 +239,9 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 Intent backIntent = new Intent(HWSettingsActionActivity.this, HWSettingsActivity.class);
                 startActivity(backIntent);
             } else if (v.getId() == R.id.btSave) {
-                if (actionID == WLQ.USB){
+                if (actionID == WLQ.OldSensitivity){
+                    WLQ.tempSensitivity = (byte)(actionTypeSP.getSelectedItemPosition() + 1);
+                } else if (actionID == WLQ.USB){
                     if(actionTypeSP.getSelectedItemPosition() == 0){
                         WLQ.tempConfig[WLQ.USBVinThresholdHigh_INDEX] = 0x00;
                         WLQ.tempConfig[WLQ.USBVinThresholdLow_INDEX] = 0x00;
@@ -294,7 +306,33 @@ public class HWSettingsActionActivity extends AppCompatActivity {
     private void updateDisplay(){
         saveBT.setVisibility(View.INVISIBLE);
         actionLabelTV.setText(WLQ.getActionName(actionID));
-        if (actionID ==  WLQ.USB){ //USB
+        if (actionID == WLQ.OldSensitivity){
+            if(WLQ.wheelMode == WLQ.wheelMode_rtk){
+                int RTKSensitivityMax = 20;
+                Integer[] intArray = new Integer[RTKSensitivityMax];
+                for(int i = 0; i < RTKSensitivityMax; i++) {
+                    intArray[i] = i + 1;
+                }
+                sensitivity = new ArrayAdapter<Integer>(this,
+                        R.layout.item_hwsettings_spinners, intArray);
+                actionTypeSP.setAdapter(sensitivity);
+                actionKeySP.setVisibility(View.INVISIBLE);
+                actionModifiersSP.setVisibility(View.INVISIBLE);
+                actionTypeSP.setSelection(WLQ.sensitivity - 1);
+            } else if(WLQ.wheelMode == WLQ.wheelMode_full){
+                int fullSensitivityMax = 30;
+                Integer[] intArray = new Integer[fullSensitivityMax];
+                for(int i = 0; i < fullSensitivityMax; i++) {
+                    intArray[i] = i + 1;
+                }
+                sensitivity = new ArrayAdapter<Integer>(this,
+                        R.layout.item_hwsettings_spinners, intArray);
+                actionTypeSP.setAdapter(sensitivity);
+                actionKeySP.setVisibility(View.INVISIBLE);
+                actionModifiersSP.setVisibility(View.INVISIBLE);
+                actionTypeSP.setSelection(WLQ.sensitivity - 1);
+            }
+        } else if (actionID ==  WLQ.USB){ //USB
             actionTypeSP.setAdapter(usb);
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);

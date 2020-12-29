@@ -112,7 +112,7 @@
     <string name="config_reset_label">Reset Settings</string>
     <string name="config_write_label">Save Settings</string>
     <string name="hwsave_alert_title">Warning!</string>
-    <string name="hwsave_alert_body">After saving new hardware settings, the WunderLINQ hardware will become unstable and will need to be removed and reinstalled into the cradle.</string>
+    <string name="hwsave_alert_body">After saving new hardware settings, the WunderLINQ hardware will become unstable and will need to be removed and reinstalled into the cradle.\n  Key mapping changes can impact app navigation with the wheel.</string>
     <string name="hwsave_alert_btn_ok">Continue</string>
     <string name="hwsave_alert_btn_cancel">Cancel</string>
     <!-- AboutActivity -->
@@ -867,6 +867,7 @@
     </string-array>
 
     <string name="keymode_custom_title">Key Customization</string>
+    <string name="sensitivity_label">Sensitivity</string>
     <string name="long_press_label">Long Press Sensitivity</string>
     <string name="double_press_label">Double Press Sensitivity</string>
 

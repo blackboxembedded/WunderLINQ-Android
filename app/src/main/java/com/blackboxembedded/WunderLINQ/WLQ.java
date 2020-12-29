@@ -79,6 +79,7 @@ public class WLQ {
     public static byte CONSUMER_HID = 0x02;
     public static byte UNDEFINED = 0x00;
 
+    public static final int OldSensitivity = 0;
     public static final int USB = 1;
     public static final int RTKDoublePressSensitivity = 2;
     public static final int fullLongPressSensitivity = 3;
@@ -323,6 +324,8 @@ public class WLQ {
 
     public static String getActionName(int id){
         switch (id){
+            case OldSensitivity:
+                return MyApplication.getContext().getString(R.string.sensitivity_label);
             case USB:
                 return MyApplication.getContext().getString(R.string.usb_threshold_label);
             case RTKDoublePressSensitivity:
@@ -377,6 +380,8 @@ public class WLQ {
 
     public static String getActionValue(int id){
         switch (id){
+            case OldSensitivity:
+                return String.valueOf(sensitivity);
             case USB:
                 if (USBVinThreshold == 0x0000){
                     return MyApplication.getContext().getString(R.string.usbcontrol_on_label);

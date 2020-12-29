@@ -119,10 +119,20 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
     @Override
     public void onItemClick(View view, int position) {
         int actionID = adapter.getActionID(position);
-        if (actionID != -1) {
-            Intent intent = new Intent(HWSettingsActivity.this, HWSettingsActionActivity.class);
-            intent.putExtra("ACTIONID", actionID);
-            startActivity(intent);
+        if (Double.parseDouble(WLQ.firmwareVersion) >= 2.0) {
+            if (WLQ.keyMode == WLQ.keyMode_custom) {
+                if (actionID != -1) {
+                    Intent intent = new Intent(HWSettingsActivity.this, HWSettingsActionActivity.class);
+                    intent.putExtra("ACTIONID", actionID);
+                    startActivity(intent);
+                }
+            }
+        } else {
+            if (actionID == WLQ.OldSensitivity) {
+                Intent intent = new Intent(HWSettingsActivity.this, HWSettingsActionActivity.class);
+                intent.putExtra("ACTIONID", actionID);
+                startActivity(intent);
+            }
         }
     }
 
@@ -152,6 +162,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                                 byte[] writeModeCmd = outputStream.toByteArray();
                                                 MainActivity.gattCommandCharacteristic.setValue(writeModeCmd);
                                                 BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
+                                                Log.d(TAG,"Setting Mode: Custom");
                                             } catch (IOException e) {
                                                 Log.d(TAG, e.toString());
                                             }
@@ -212,6 +223,10 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                         }
                                     }
                                 }
+
+                                Intent backIntent = new Intent(HWSettingsActivity.this, MainActivity.class);
+                                backIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(backIntent);
                             }
                         });
                 resetBuilder.setNegativeButton(R.string.hwsave_alert_btn_cancel,
@@ -309,7 +324,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                     // Customize
                     if (WLQ.wheelMode == WLQ.wheelMode_full) {
                         hwKeyModeTV.setText(getString(R.string.wwtype_label) + " " + getString(R.string.wwMode1));
-                        actionItems.add(new ActionItem(WLQ.fullLongPressSensitivity,getString(R.string.long_press_label),String.valueOf(WLQ.sensitivity)));
+                        actionItems.add(new ActionItem(WLQ.OldSensitivity,getString(R.string.long_press_label),WLQ.getActionValue(WLQ.OldSensitivity)));
                         actionItems.add(new ActionItem(-1,getString(R.string.full_scroll_up_label),getString(R.string.keyboard_hid_0x52_label)));
                         actionItems.add(new ActionItem(-1,getString(R.string.full_scroll_down_label),getString(R.string.keyboard_hid_0x51_label)));
                         actionItems.add(new ActionItem(-1,getString(R.string.full_toggle_right_label),getString(R.string.keyboard_hid_0x4F_label)));
@@ -320,7 +335,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                         hwConfigBtn.setText(getString(R.string.wwMode2));
                     } else {
                         hwKeyModeTV.setText(getString(R.string.wwtype_label) + " " + getString(R.string.wwMode2));
-                        actionItems.add(new ActionItem(WLQ.RTKDoublePressSensitivity,getString(R.string.double_press_label),String.valueOf(WLQ.sensitivity)));
+                        actionItems.add(new ActionItem(WLQ.OldSensitivity,getString(R.string.double_press_label),WLQ.getActionValue(WLQ.OldSensitivity)));
                         actionItems.add(new ActionItem(-1,getString(R.string.rtk_page_label),getString(R.string.keyboard_hid_0x4F_label)));
                         actionItems.add(new ActionItem(-1,getString(R.string.rtk_page_double_label),getString(R.string.keyboard_hid_0x28_label)));
                         actionItems.add(new ActionItem(-1,getString(R.string.rtk_zoomp_label),getString(R.string.keyboard_hid_0x52_label)));
@@ -329,6 +344,10 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                         actionItems.add(new ActionItem(-1,getString(R.string.rtk_speak_double_label),getString(R.string.keyboard_hid_0x29_label)));
                         actionItems.add(new ActionItem(-1,getString(R.string.rtk_display_label),getString(R.string.consumer_hid_0xB8_label)));
                         hwConfigBtn.setText(getString(R.string.wwMode1));
+                    }
+                    if(WLQ.sensitivity != WLQ.tempSensitivity){
+                        Log.d(TAG,"New Sensitivity found");
+                        hwConfigBtn.setText(getString(R.string.config_write_label));
                     }
                 } else {
                     // Corrupt Config
@@ -382,7 +401,6 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                         Log.d(TAG, "Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
                         MainActivity.gattCommandCharacteristic.setValue(writeConfigCmd);
                         BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
-                        finish();
                     } catch (IOException e) {
                         Log.d(TAG, e.toString());
                     }
@@ -415,7 +433,6 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                             MainActivity.gattCommandCharacteristic.setValue(writeSensitivityCmd);
                         }
                         BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
-                        finish();
                     } catch (IOException e){
                         Log.d(TAG,e.toString());
                     }
