@@ -861,7 +861,7 @@
     <string name="usb_threshold_label">USB Port Control</string>
     <string name="usbcontrol_on_label">Always On</string>
     <string name="usbcontrol_engine_label">On Engine</string>
-    <string name="usbcontrol_off_label">Off</string>
+    <string name="usbcontrol_off_label">Always Off</string>
     <string-array name="usbcontrol_names_array" translatable="false">
         <item>@string/usbcontrol_on_label</item>
         <item>@string/usbcontrol_engine_label</item>

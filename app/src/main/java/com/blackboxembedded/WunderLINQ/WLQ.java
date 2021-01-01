@@ -253,7 +253,9 @@ public class WLQ {
 
         if (Double.parseDouble(firmwareVersion) >= 2.0) {
             keyMode = bytes[keyMode_INDEX];
-            USBVinThreshold =  ((flashConfig[USBVinThresholdHigh_INDEX] & 0xFF) >> 8) | (flashConfig[USBVinThresholdLow_INDEX] & 0xFF);
+            USBVinThreshold =  ((flashConfig[USBVinThresholdHigh_INDEX] & 0xFF) << 8) | (flashConfig[USBVinThresholdLow_INDEX] & 0xFF);
+            //USBVinThreshold =  ((flashConfig[USBVinThresholdHigh_INDEX] & 0xFF) >> 8) | (flashConfig[USBVinThresholdLow_INDEX] & 0xFF);
+            Log.d("WLQ", "USBVinThreshold Value: " + USBVinThreshold);
             RTKSensitivity = flashConfig[RTKSensitivity_INDEX];
             RTKPagePressKeyType = flashConfig[RTKPagePressKeyType_INDEX];
             RTKPagePressKeyModifier = flashConfig[RTKPagePressKeyModifier_INDEX];
