@@ -328,7 +328,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                 if (Double.parseDouble(WLQ.firmwareVersion) >= 2.0) {
                                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                                     outputStream.write(WLQ.WRITE_CONFIG_CMD);
-                                    outputStream.write(WLQ.keyMode_default);
+                                    outputStream.write(WLQ.defaultConfig2);
                                     outputStream.write(WLQ.CMD_EOM);
                                     byte[] writeConfigCmd = outputStream.toByteArray();
                                     Log.d(TAG, "Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
