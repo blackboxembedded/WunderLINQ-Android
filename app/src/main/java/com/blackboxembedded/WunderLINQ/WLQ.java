@@ -239,13 +239,15 @@ public class WLQ {
         wunderLINQConfig = new byte[bytes.length];
         System.arraycopy(bytes, 0, wunderLINQConfig, 0, bytes.length);
 
+        Log.d("WLQ", "wunderLINQConfig: " + Utils.ByteArraytoHex(wunderLINQConfig));
+
         flashConfig = new byte[configFlashSize];
         System.arraycopy(bytes, 26, flashConfig, 0, configFlashSize);
 
         tempConfig = new byte[flashConfig.length];
         System.arraycopy(flashConfig, 0, tempConfig, 0, flashConfig.length);
 
-        Log.d("FWConfig", "flashConfig: " + Utils.ByteArraytoHex(flashConfig));
+        Log.d("WLQ", "flashConfig: " + Utils.ByteArraytoHex(flashConfig));
 
         firmwareVersion = bytes[firmwareVersionMajor_INDEX] + "." + bytes[firmwareVersionMinor_INDEX];
 
@@ -401,8 +403,9 @@ public class WLQ {
                     return(KeyboardHID.getConsumerKeyByCode(WLQ.RTKPagePressKey));
                 } else if (WLQ.RTKPagePressKeyType == WLQ.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
+                } else {
+                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
-                break;
             case RTKPageDoublePress:
                 if (WLQ.RTKPageDoublePressKeyType == WLQ.KEYBOARD_HID) {
                     return(KeyboardHID.getKeyboardKeyByCode(WLQ.RTKPageDoublePressKey));
@@ -410,8 +413,9 @@ public class WLQ {
                     return(KeyboardHID.getConsumerKeyByCode(WLQ.RTKPageDoublePressKey));
                 } else if (WLQ.RTKPageDoublePressKeyType == WLQ.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
+                } else {
+                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
-                break;
             case RTKZoomPlus:
                 if (WLQ.RTKZoomPPressKeyType == WLQ.KEYBOARD_HID) {
                     return(KeyboardHID.getKeyboardKeyByCode(WLQ.RTKZoomPPressKey));
@@ -419,8 +423,9 @@ public class WLQ {
                     return(KeyboardHID.getConsumerKeyByCode(WLQ.RTKZoomPPressKey));
                 } else if (WLQ.RTKZoomPPressKeyType == WLQ.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
+                } else {
+                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
-                break;
             case RTKZoomPlusDoublePress:
                 if (WLQ.RTKZoomPDoublePressKeyType == WLQ.KEYBOARD_HID) {
                     return(KeyboardHID.getKeyboardKeyByCode(WLQ.RTKZoomPDoublePressKey));
@@ -428,8 +433,9 @@ public class WLQ {
                     return(KeyboardHID.getConsumerKeyByCode(WLQ.RTKZoomPDoublePressKey));
                 } else if (WLQ.RTKZoomPDoublePressKeyType == WLQ.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
+                } else {
+                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
-                break;
             case RTKZoomMinus:
                 if(WLQ.RTKZoomMPressKeyType == WLQ.KEYBOARD_HID){
                     return(KeyboardHID.getKeyboardKeyByCode(WLQ.RTKZoomMPressKey));
@@ -437,8 +443,9 @@ public class WLQ {
                     return(KeyboardHID.getConsumerKeyByCode(WLQ.RTKZoomMPressKey));
                 } else if (WLQ.RTKZoomMPressKeyType == WLQ.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
+                } else {
+                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
-                break;
             case RTKZoomMinusDoublePress:
                 if(WLQ.RTKZoomMDoublePressKeyType == WLQ.KEYBOARD_HID){
                     return(KeyboardHID.getKeyboardKeyByCode(WLQ.RTKZoomMDoublePressKey));
@@ -446,8 +453,9 @@ public class WLQ {
                     return(KeyboardHID.getConsumerKeyByCode(WLQ.RTKZoomMDoublePressKey));
                 } else if (WLQ.RTKZoomMDoublePressKeyType == WLQ.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
+                } else {
+                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
-                break;
             case RTKSpeak:
                 if(WLQ.RTKSpeakPressKeyType == WLQ.KEYBOARD_HID){
                     return(KeyboardHID.getKeyboardKeyByCode(WLQ.RTKSpeakPressKey));
@@ -455,8 +463,9 @@ public class WLQ {
                     return(KeyboardHID.getConsumerKeyByCode(WLQ.RTKSpeakPressKey));
                 } else if (WLQ.RTKSpeakPressKeyType == WLQ.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
+                } else {
+                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
-                break;
             case RTKSpeakDoublePress:
                 if(WLQ.RTKSpeakDoublePressKeyType == WLQ.KEYBOARD_HID){
                     return(KeyboardHID.getKeyboardKeyByCode(WLQ.RTKSpeakDoublePressKey));
@@ -464,8 +473,9 @@ public class WLQ {
                     return(KeyboardHID.getConsumerKeyByCode(WLQ.RTKSpeakDoublePressKey));
                 } else if (WLQ.RTKSpeakDoublePressKeyType == WLQ.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
+                } else {
+                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
-                break;
             case RTKMute:
                 if(WLQ.RTKMutePressKeyType == WLQ.KEYBOARD_HID){
                     return(KeyboardHID.getKeyboardKeyByCode(WLQ.RTKMutePressKey));
@@ -473,8 +483,9 @@ public class WLQ {
                     return(KeyboardHID.getConsumerKeyByCode(WLQ.RTKMutePressKey));
                 } else if (WLQ.RTKMutePressKeyType == WLQ.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
+                } else {
+                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
-                break;
             case RTKMuteDoublePress:
                 if(WLQ.RTKMuteDoublePressKeyType == WLQ.KEYBOARD_HID){
                     return(KeyboardHID.getKeyboardKeyByCode(WLQ.RTKMuteDoublePressKey));
@@ -482,8 +493,9 @@ public class WLQ {
                     return(KeyboardHID.getConsumerKeyByCode(WLQ.RTKMuteDoublePressKey));
                 } else if (WLQ.RTKMuteDoublePressKeyType == WLQ.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
+                } else {
+                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
-                break;
             case RTKDisplayOff:
                 if(WLQ.RTKDisplayPressKeyType == WLQ.KEYBOARD_HID){
                     return(KeyboardHID.getKeyboardKeyByCode(WLQ.RTKDisplayPressKey));
@@ -491,8 +503,9 @@ public class WLQ {
                     return(KeyboardHID.getConsumerKeyByCode(WLQ.RTKDisplayPressKey));
                 } else if (WLQ.RTKDisplayPressKeyType == WLQ.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
+                } else {
+                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
-                break;
             case RTKDisplayOffDoublePress:
                 if(WLQ.RTKDisplayDoublePressKeyType == WLQ.KEYBOARD_HID){
                     return(KeyboardHID.getKeyboardKeyByCode(WLQ.RTKDisplayDoublePressKey));
@@ -500,8 +513,9 @@ public class WLQ {
                     return(KeyboardHID.getConsumerKeyByCode(WLQ.RTKDisplayDoublePressKey));
                 } else if (WLQ.RTKDisplayDoublePressKeyType == WLQ.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
+                } else {
+                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
-                break;
             case fullScrollUp:
                 if(WLQ.fullScrollUpKeyType == WLQ.KEYBOARD_HID){
                     return(KeyboardHID.getKeyboardKeyByCode(WLQ.fullScrollUpKey));
@@ -509,8 +523,9 @@ public class WLQ {
                     return(KeyboardHID.getConsumerKeyByCode(WLQ.fullScrollUpKey));
                 } else if(WLQ.fullScrollUpKeyType == WLQ.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
+                } else {
+                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
-                break;
             case fullScrollDown:
                 if(WLQ.fullScrollDownKeyType == WLQ.KEYBOARD_HID){
                     return(KeyboardHID.getKeyboardKeyByCode(WLQ.fullScrollDownKey));
@@ -518,8 +533,9 @@ public class WLQ {
                     return(KeyboardHID.getConsumerKeyByCode(WLQ.fullScrollDownKey));
                 } else if(WLQ.fullScrollDownKeyType == WLQ.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
+                } else {
+                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
-                break;
             case fullToggleRight:
                 if(WLQ.fullRightPressKeyType == WLQ.KEYBOARD_HID){
                     return(KeyboardHID.getKeyboardKeyByCode(WLQ.fullRightPressKey));
@@ -527,8 +543,9 @@ public class WLQ {
                     return(KeyboardHID.getConsumerKeyByCode(WLQ.fullRightPressKey));
                 } else if(WLQ.fullRightPressKeyType == WLQ.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
+                } else {
+                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
-                break;
             case fullToggleRightLongPress:
                 if(WLQ.fullRightLongPressKeyType == WLQ.KEYBOARD_HID){
                     return(KeyboardHID.getKeyboardKeyByCode(WLQ.fullRightLongPressKey));
@@ -536,8 +553,9 @@ public class WLQ {
                     return(KeyboardHID.getConsumerKeyByCode(WLQ.fullRightLongPressKey));
                 } else if(WLQ.fullRightLongPressKeyType == WLQ.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
+                } else {
+                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
-                break;
             case fullToggleLeft:
                 if(WLQ.fullLeftPressKeyType == WLQ.KEYBOARD_HID){
                     return(KeyboardHID.getKeyboardKeyByCode(WLQ.fullLeftPressKey));
@@ -545,8 +563,9 @@ public class WLQ {
                     return(KeyboardHID.getConsumerKeyByCode(WLQ.fullLeftPressKey));
                 } else if(WLQ.fullLeftPressKeyType == WLQ.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
+                } else {
+                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
-                break;
             case fullToggleLeftLongPress:
                 if(WLQ.fullLeftLongPressKeyType == WLQ.KEYBOARD_HID){
                     return(KeyboardHID.getKeyboardKeyByCode(WLQ.fullLeftLongPressKey));
@@ -554,8 +573,9 @@ public class WLQ {
                     return(KeyboardHID.getConsumerKeyByCode(WLQ.fullLeftLongPressKey));
                 } else if(WLQ.fullLeftLongPressKeyType == WLQ.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
+                } else {
+                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
-                break;
             case fullSignalCancel:
                 if(WLQ.fullSignalPressKeyType == WLQ.KEYBOARD_HID){
                     return(KeyboardHID.getKeyboardKeyByCode(WLQ.fullSignalPressKey));
@@ -563,8 +583,9 @@ public class WLQ {
                     return(KeyboardHID.getConsumerKeyByCode(WLQ.fullSignalPressKey));
                 } else if(WLQ.fullSignalPressKeyType == WLQ.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
+                } else {
+                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
-                break;
             case fullSignalCancelLongPress:
                 if(WLQ.fullSignalLongPressKeyType == WLQ.KEYBOARD_HID){
                     return(KeyboardHID.getKeyboardKeyByCode(WLQ.fullSignalLongPressKey));
@@ -572,13 +593,13 @@ public class WLQ {
                     return(KeyboardHID.getConsumerKeyByCode(WLQ.fullSignalLongPressKey));
                 } else if(WLQ.fullSignalLongPressKeyType == WLQ.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
+                } else {
+                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
-                break;
             default:
                 Log.d(TAG, "Unknown ActionID");
                 return "";
         }
-        return "";
     }
 
     public static byte getActionKeyType(int id){
