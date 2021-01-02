@@ -396,27 +396,15 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                 if(WLQ.sensitivity != WLQ.tempSensitivity){
                                     // Write sensitivity
                                     char[] sensitivityChar = String.valueOf(WLQ.tempSensitivity).toCharArray();
-                                    char sensOne = sensitivityChar[0];
                                     try {
                                         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                                         outputStream.write(WLQ.WRITE_SENSITIVITY_CMD);
-                                        if (sensitivityChar.length == 1) {
-                                            outputStream.write(WLQ.wheelMode);
-                                            outputStream.write(0x45);
-                                            outputStream.write((byte) sensOne);
-                                            outputStream.write(WLQ.CMD_EOM);
-                                            byte[] writeSensitivityCmd = outputStream.toByteArray();
-                                            MainActivity.gattCommandCharacteristic.setValue(writeSensitivityCmd);
-                                        } else {
-                                            char sensTwo = sensitivityChar[1];
-                                            outputStream.write(WLQ.wheelMode);
-                                            outputStream.write(0x45);
-                                            outputStream.write((byte) sensOne);
-                                            outputStream.write((byte) sensTwo);
-                                            outputStream.write(WLQ.CMD_EOM);
-                                            byte[] writeSensitivityCmd = outputStream.toByteArray();
-                                            MainActivity.gattCommandCharacteristic.setValue(writeSensitivityCmd);
-                                        }
+                                        outputStream.write(WLQ.wheelMode);
+                                        outputStream.write(0x45);
+                                        outputStream.write(new String(sensitivityChar).getBytes());
+                                        outputStream.write(WLQ.CMD_EOM);
+                                        byte[] writeSensitivityCmd = outputStream.toByteArray();
+                                        MainActivity.gattCommandCharacteristic.setValue(writeSensitivityCmd);
                                         BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
                                     } catch (IOException e){
                                         Log.d(TAG,e.toString());
