@@ -36,6 +36,7 @@ public class WLQ {
     public static byte[] WRITE_CONFIG_CMD = {0x57, 0x57, 0x43, 0x41};
     public static byte[] WRITE_MODE_CMD = {0x57, 0x57, 0x53, 0x53};
     public static byte[] WRITE_SENSITIVITY_CMD = {0x57, 0x57, 0x43, 0x53};
+    public static byte[] SET_CLUSTER_CLOCK_CMD = {0x57, 0x57, 0x44, 0x43};
     public static byte[] CMD_EOM = {0x0D, 0x0A};
 
     //FW <2.0
@@ -254,8 +255,6 @@ public class WLQ {
         if (Double.parseDouble(firmwareVersion) >= 2.0) {
             keyMode = bytes[keyMode_INDEX];
             USBVinThreshold =  ((flashConfig[USBVinThresholdHigh_INDEX] & 0xFF) << 8) | (flashConfig[USBVinThresholdLow_INDEX] & 0xFF);
-            //USBVinThreshold =  ((flashConfig[USBVinThresholdHigh_INDEX] & 0xFF) >> 8) | (flashConfig[USBVinThresholdLow_INDEX] & 0xFF);
-            Log.d("WLQ", "USBVinThreshold Value: " + USBVinThreshold);
             RTKSensitivity = flashConfig[RTKSensitivity_INDEX];
             RTKPagePressKeyType = flashConfig[RTKPagePressKeyType_INDEX];
             RTKPagePressKeyModifier = flashConfig[RTKPagePressKeyModifier_INDEX];
