@@ -282,13 +282,13 @@ public class BluetoothLeService extends Service {
 
                 //Send time to cluster
                 if (MainActivity.gattCommandCharacteristic != null) {
+                    BluetoothGattCharacteristic characteristic = MainActivity.gattCommandCharacteristic;
                     if (WLQ.firmwareVersion == null){
                         // Read config
                         Log.d(TAG, "Sending get config command");
-                        MainActivity.gattCommandCharacteristic.setValue(WLQ.GET_CONFIG_CMD);
-                        BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
+                        characteristic.setValue(WLQ.GET_CONFIG_CMD);
+                        writeCharacteristic(characteristic);
                     } else {
-                        BluetoothGattCharacteristic characteristic = MainActivity.gattCommandCharacteristic;
                         //Get Current Time
                         Date date = new Date();
                         Calendar calendar = new GregorianCalendar();
@@ -305,9 +305,22 @@ public class BluetoothLeService extends Service {
                         int yearNibble = (yearLByte & 0x0F);
                         byte monthNibble = (byte) month;
                         int monthYearByte = ((yearNibble & 0x0F) << 4 | (monthNibble & 0x0F));
-                        byte[] setClusterClock = {0x57, 0x57, 0x44, 0x43, (byte) second, (byte) minute, (byte) hour, (byte) day, (byte) monthYearByte, (byte) yearByte};
-                        characteristic.setValue(setClusterClock);
-                        writeCharacteristic(characteristic);
+                        try {
+                            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                            outputStream.write(WLQ.SET_CLUSTER_CLOCK_CMD);
+                            outputStream.write((byte) second);
+                            outputStream.write((byte) minute);
+                            outputStream.write((byte) hour);
+                            outputStream.write((byte) day);
+                            outputStream.write((byte) monthYearByte);
+                            outputStream.write((byte) yearByte);
+                            outputStream.write(WLQ.CMD_EOM);
+                            byte[] setClusterClock = outputStream.toByteArray();
+                            characteristic.setValue(setClusterClock);
+                            writeCharacteristic(characteristic);
+                        } catch (IOException e) {
+                            Log.d(TAG, e.toString());
+                        }
                     }
                 }
 
