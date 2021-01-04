@@ -506,9 +506,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             } else {
                 Log.d(TAG,"Running in the emulator");
             }
-        } else {
-            Log.d(TAG,"mBluetoothLeService is NOT null");
-            //mBluetoothLeService.connect(mDeviceAddress,getString(R.string.device_name));
         }
 
         getSupportActionBar().show();
@@ -830,9 +827,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     } else if (UUID.fromString(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC).equals(gattCharacteristic.getUuid())){
                         gattCommandCharacteristic = gattCharacteristic;
                         // Read config
-                        Log.d(TAG, "Sending get config command");
-                        gattCommandCharacteristic.setValue(WLQ.GET_CONFIG_CMD);
-                        BluetoothLeService.writeCharacteristic(gattCommandCharacteristic);
+                        BluetoothLeService.writeCharacteristic(gattCommandCharacteristic, WLQ.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
                     }
                 }
             }

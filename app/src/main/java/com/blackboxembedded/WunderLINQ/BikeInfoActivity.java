@@ -45,10 +45,15 @@ public class BikeInfoActivity extends AppCompatActivity {
 
     BluetoothGattCharacteristic characteristic;
 
+    private TextView tvVIN;
+    private TextView tvNextServiceDate;
+    private TextView tvNextService;
     private TextView tvResetHeader;
     private Spinner spReset;
     private TextView tvResetLabel;
     private Button btReset;
+
+    private SharedPreferences sharedPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +63,7 @@ public class BikeInfoActivity extends AppCompatActivity {
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         View view = findViewById(R.id.clBikeInfo);
         view.setOnTouchListener(new OnSwipeTouchListener(this) {
@@ -71,46 +76,21 @@ public class BikeInfoActivity extends AppCompatActivity {
 
         showActionBar();
 
-        TextView tvVIN = findViewById(R.id.tvVINValue);
-        TextView tvNextServiceDate = findViewById(R.id.tvNextServiceDateValue);
-        TextView tvNextService = findViewById(R.id.tvNextServiceValue);
+        tvVIN = findViewById(R.id.tvVINValue);
+        tvNextServiceDate = findViewById(R.id.tvNextServiceDateValue);
+        tvNextService = findViewById(R.id.tvNextServiceValue);
         tvResetHeader = findViewById(R.id.tvResetHeader);
         tvResetLabel = findViewById(R.id.tvResetLabel);
         spReset = findViewById(R.id.spReset);
         btReset = findViewById(R.id.btReset);
         btReset.setOnClickListener(mClickListener);
 
-        if (Data.getVin() != null){
-            tvVIN.setText(Data.getVin());
-        }
-
-        if (Data.getNextServiceDate() != null){
-            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-            String dateString = format.format(Data.getNextServiceDate());
-            tvNextServiceDate.setText(dateString);
-        }
-
-        if (Data.getNextService() != null){
-            String distanceFormat = sharedPrefs.getString("prefDistance", "0");
-            String nextService = Data.getNextService() + "(km)";
-            if (distanceFormat.contains("1")) {
-                nextService = Math.round(Utils.kmToMiles(Data.getNextService())) + "(mi)";
-            }
-            tvNextService.setText(nextService);
-        }
-
         characteristic = MainActivity.gattCommandCharacteristic;
         if ((characteristic != null) & (WLQ.firmwareVersion == null)) {
-            // Get Version
-            byte[] getVersionCmd = {0x57, 0x52, 0x56};
-            characteristic.setValue(getVersionCmd);
-            BluetoothLeService.writeCharacteristic(characteristic);
+            // Get Config
+            BluetoothLeService.writeCharacteristic(characteristic, WLQ.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
         }
-    }
-
-    @Override
-    public void recreate() {
-        super.recreate();
+        updateDisplay();
     }
 
     @Override
@@ -120,23 +100,12 @@ public class BikeInfoActivity extends AppCompatActivity {
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
 
         if (WLQ.firmwareVersion == null) {
-            Log.d(TAG, "Data.getFirmwareVersion() == null");
             if (characteristic != null) {
-                // Get Version
-                Log.d(TAG, "Get Version");
-                byte[] getVersionCmd = {0x57, 0x52, 0x56};
-                characteristic.setValue(getVersionCmd);
-                BluetoothLeService.writeCharacteristic(characteristic);
-            }
-        } else {
-            if (Double.parseDouble(WLQ.firmwareVersion) >= 1.8) {
-                Log.d(TAG, "Data.getFirmwareVersion() >= 1.8");
-                tvResetHeader.setVisibility(View.VISIBLE);
-                spReset.setVisibility(View.VISIBLE);
-                tvResetLabel.setVisibility(View.VISIBLE);
-                btReset.setVisibility(View.VISIBLE);
+                // Get Config
+                BluetoothLeService.writeCharacteristic(characteristic, WLQ.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
             }
         }
+        updateDisplay();
     }
 
     @Override
@@ -181,33 +150,57 @@ public class BikeInfoActivity extends AppCompatActivity {
                 case R.id.btReset:
                     switch(spReset.getSelectedItemPosition()){
                         case 0: // Reset Cluster Average Speed
-                            byte[] rstClusterSpeedCmd = {0x57, 0x57, 0x44, 0x52, 0x53};
-                            characteristic.setValue(rstClusterSpeedCmd);
+                            BluetoothLeService.writeCharacteristic(characteristic, WLQ.RESET_CLUSTER_SPEED_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
                             break;
                         case 1: // Reset Cluster Economy 1
-                            byte[] rstClusterEcono1 = {0x57, 0x57, 0x44, 0x52, 0x45, 0x01};
-                            characteristic.setValue(rstClusterEcono1);
+                            BluetoothLeService.writeCharacteristic(characteristic, WLQ.RESET_CLUSTER_ECONO1_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
                             break;
                         case 2: // Reset Cluster Economy 2
-                            byte[] rstClusterEcono2 = {0x57, 0x57, 0x44, 0x52, 0x45, 0x02};
-                            characteristic.setValue(rstClusterEcono2);
+                            BluetoothLeService.writeCharacteristic(characteristic, WLQ.RESET_CLUSTER_ECONO2_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
                             break;
                         case 3: // Reset Cluster Trip 1
-                            byte[] rstClusterTrip1 = {0x57, 0x57, 0x44, 0x52, 0x54, 0x01};
-                            characteristic.setValue(rstClusterTrip1);
+                            BluetoothLeService.writeCharacteristic(characteristic, WLQ.RESET_CLUSTER_TRIP1_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
                             break;
                         case 4: // Reset Cluster Trip 2
-                            byte[] rstClusterTrip2 = {0x57, 0x57, 0x44, 0x52, 0x54, 0x02};
-                            characteristic.setValue(rstClusterTrip2);
+                            BluetoothLeService.writeCharacteristic(characteristic, WLQ.RESET_CLUSTER_TRIP2_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
                             break;
                         default:
                             break;
                     }
-                    BluetoothLeService.writeCharacteristic(characteristic);
                     break;
             }
         }
     };
+
+    private void updateDisplay(){
+        if (WLQ.firmwareVersion != null) {
+            if (Double.parseDouble(WLQ.firmwareVersion) >= 1.8) {
+                tvResetHeader.setVisibility(View.VISIBLE);
+                spReset.setVisibility(View.VISIBLE);
+                tvResetLabel.setVisibility(View.VISIBLE);
+                btReset.setVisibility(View.VISIBLE);
+            }
+        }
+
+        if (Data.getVin() != null){
+            tvVIN.setText(Data.getVin());
+        }
+
+        if (Data.getNextServiceDate() != null){
+            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+            String dateString = format.format(Data.getNextServiceDate());
+            tvNextServiceDate.setText(dateString);
+        }
+
+        if (Data.getNextService() != null){
+            String distanceFormat = sharedPrefs.getString("prefDistance", "0");
+            String nextService = Data.getNextService() + "(km)";
+            if (distanceFormat.contains("1")) {
+                nextService = Math.round(Utils.kmToMiles(Data.getNextService())) + "(mi)";
+            }
+            tvNextService.setText(nextService);
+        }
+    }
 
     // Handles various events fired by the Service.
     // ACTION_WRITE_SUCCESS: received when write is successful
@@ -221,22 +214,9 @@ public class BikeInfoActivity extends AppCompatActivity {
                 Bundle bd = intent.getExtras();
                 if(bd != null){
                     if(bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE).contains(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC)) {
-                        byte[] data = bd.getByteArray(BluetoothLeService.EXTRA_BYTE_VALUE);
-                        Log.d(TAG, "UUID: " + bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE) + " DATA: " + Utils.ByteArraytoHex(data));
-                        if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x56)){
-                            if (Double.parseDouble(WLQ.firmwareVersion) >=1.8) {
-                                tvResetHeader.setVisibility(View.VISIBLE);
-                                spReset.setVisibility(View.VISIBLE);
-                                tvResetLabel.setVisibility(View.VISIBLE);
-                                btReset.setVisibility(View.VISIBLE);
-                            }
-                        }
-
+                        updateDisplay();
                     }
                 }
-            } else if(BluetoothLeService.ACTION_WRITE_SUCCESS.equals(action)){
-                Log.d(TAG,"Write Success Received");
-                BluetoothLeService.readCharacteristic(characteristic);
             }
         }
     };
@@ -244,7 +224,6 @@ public class BikeInfoActivity extends AppCompatActivity {
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
-        intentFilter.addAction(BluetoothLeService.ACTION_WRITE_SUCCESS);
         return intentFilter;
     }
 }

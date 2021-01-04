@@ -151,11 +151,8 @@ public class AboutActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         if(WLQ.firmwareVersion == null) {
-            byte[] getConfigCmd = {0x57,0x52,0x57,0x0D,0x0A};
             if (MainActivity.gattCommandCharacteristic != null) {
-                Log.d(TAG, "Sending get config command");
-                MainActivity.gattCommandCharacteristic.setValue(getConfigCmd);
-                BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
+                BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, WLQ.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
             }
         }
     }
