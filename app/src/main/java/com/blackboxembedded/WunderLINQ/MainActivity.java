@@ -416,7 +416,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         startActivityForResult(settingsIntent, SETTINGS_CHECK);
                         break;
                     case R.id.action_hwsettings:
-                        Intent hwSettingsIntent = new Intent(MainActivity.this, FWConfigActivity.class);
+                        Intent hwSettingsIntent = new Intent(MainActivity.this, HWSettingsActivity.class);
                         startActivity(hwSettingsIntent);
                         break;
                     case R.id.action_enter_splitscreen:
@@ -506,9 +506,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             } else {
                 Log.d(TAG,"Running in the emulator");
             }
-        } else {
-            Log.d(TAG,"mBluetoothLeService is NOT null");
-            //mBluetoothLeService.connect(mDeviceAddress,getString(R.string.device_name));
         }
 
         getSupportActionBar().show();
@@ -798,12 +795,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     private void checkGattServices(List<BluetoothGattService> gattServices) {
-        Log.d(TAG,"In checkGattServices");
         if (gattServices == null) return;
         String uuid;
         // Loops through available GATT Services.
         for (BluetoothGattService gattService : gattServices) {
-            Log.d(TAG,"In checkGattServices: for loop");
             if (UUID_MOTORCYCLE_SERVICE.equals(gattService.getUuid())){
                 uuid = gattService.getUuid().toString();
                 Log.d(TAG,"Motorcycle Service Found: " + uuid);
@@ -832,10 +827,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     } else if (UUID.fromString(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC).equals(gattCharacteristic.getUuid())){
                         gattCommandCharacteristic = gattCharacteristic;
                         // Read config
-                        byte[] getConfigCmd = {0x57,0x52,0x57,0x0D,0x0A};
-                        Log.d(TAG, "Sending get config command");
-                        gattCommandCharacteristic.setValue(getConfigCmd);
-                        BluetoothLeService.writeCharacteristic(gattCommandCharacteristic);
+                        BluetoothLeService.writeCharacteristic(gattCommandCharacteristic, WLQ.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
                     }
                 }
             }

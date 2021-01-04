@@ -278,7 +278,7 @@
     <string name="nav_app_osmand">OsmAnd</string>
     <string name="vin_label">VIN</string>
     <string name="fuelrange_label">Bereik (km)</string>
-    <string name="wwMode3">Algemeen</string>
+    <string name="keymode_custom_label">Algemeen</string>
     <string name="hwsave_alert_btn_cancel">Cancel</string>
     <string name="delete_bt">Verwijderen</string>
 </resources>

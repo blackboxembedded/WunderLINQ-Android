@@ -122,7 +122,7 @@ public class AboutActivity extends AppCompatActivity {
                 emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sendlogs_subject) + " " + curdatetime);
                 emailIntent.putExtra(Intent.EXTRA_TEXT, "App Version: " + BuildConfig.VERSION_NAME + "\n"
-                        + "Firmware Version: " + Data.getFirmwareVersion() + "\n"
+                        + "Firmware Version: " + WLQ.firmwareVersion + "\n"
                         + "Android Version: " + Build.VERSION.RELEASE + "\n"
                         + "Manufacturer, Model: " + Build.MANUFACTURER + ", " + Build.MODEL + "\n"
                         + getString(R.string.sendlogs_body));
@@ -150,12 +150,9 @@ public class AboutActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if(Data.getFirmwareVersion() == null) {
-            byte[] getConfigCmd = {0x57,0x52,0x57,0x0D,0x0A};
+        if(WLQ.firmwareVersion == null) {
             if (MainActivity.gattCommandCharacteristic != null) {
-                Log.d(TAG, "Sending get config command");
-                MainActivity.gattCommandCharacteristic.setValue(getConfigCmd);
-                BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
+                BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, WLQ.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
             }
         }
     }

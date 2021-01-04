@@ -319,33 +319,6 @@ public class Data {
         Data.leanAngleBike = leanAngleBike;
     }
 
-    // WunderLINQ Config
-    // Firmware version
-    private static Double firmwareVersion;
-    public static Double getFirmwareVersion() {
-        return firmwareVersion;
-    }
-    public static void setFirmwareVersion(Double firmwareVersion){
-        Data.firmwareVersion = firmwareVersion;
-    }
-    // Wheel Mode
-    private static byte mode = 0x00;
-    public static byte getFirmwareMode() {
-        return mode;
-    }
-    public static void setFirmwareMode(byte mode){
-        Data.mode = mode;
-    }
-
-    // Double or long press sensitivity
-    private static byte sensitivity = 0x00;
-    public static byte getFirmwareSensitivity() {
-        return sensitivity;
-    }
-    public static void setFirmwareSensitivity(byte sensitivity){
-        Data.sensitivity = sensitivity;
-    }
-
     // Utility functions
     public static void clear(){
         Data.lastLocation = null;

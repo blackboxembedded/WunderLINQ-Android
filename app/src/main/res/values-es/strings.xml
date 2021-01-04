@@ -308,7 +308,6 @@
     <string name="hwsettings_label">Ajustes del dispositivo (hardware)</string>
     <string name="fw_config_title">Ajustes de WunderLINQ</string>
     <string name="wwtype_label">Tipo de rueda</string>
-    <string name="sensitivity_label">Sensitividad de Mantener (Hold)</string>
     <string name="config_write_label">Ajustes de Guardar (Save)</string>
     <string name="hwsave_alert_title">¡Aviso!</string>
     <string name="hwsave_alert_body">Después de almacenar nuevos ajustes del hardware, el hardware WunderLINQ será inestable y necesitará ser extraído y, a continuación, repuesto de nuevo en su ubicación (cuna predisposición del GPS).</string>
@@ -371,7 +370,7 @@
     <string name="nav_app_waze">Waze</string>
     <string name="wwMode1">Completa (Full)</string>
     <string name="wwMode2">RT/K1600</string>
-    <string name="wwMode3">Personalizados</string>
+    <string name="keymode_custom_label">Personalizados</string>
     <string name="waypoints_nav_title">Puntos de ruta (Waypoints)</string>
     <string name="toast_waypoint_saved">Waypoint guardado</string>
     <string name="geocode_error">Hay un problema buscando un geocode</string>

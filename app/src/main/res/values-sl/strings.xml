@@ -279,7 +279,6 @@
     <string name="hwsettings_label">Nastavitve naprave</string>
     <string name="fw_config_title">WunderLINQ nastavitve</string>
     <string name="wwtype_label">Vrsta kolesa</string>
-    <string name="sensitivity_label">Občutljivost dotika</string>
     <string name="config_write_label">Shrani nastavitve</string>
     <string name="hwsave_alert_title">Pozor!</string>
     <string name="hwsave_alert_body">Po novih nastavitvah postane naprava WunderLINQ nestabilna. Napravo je potrebno odstraniti z nosilca in jo ponovno namestiti.</string>
@@ -349,7 +348,7 @@
     <string name="bearing_header">Smer</string>
     <string name="wwMode1">Polno</string>
     <string name="wwMode2">RT/K1600</string>
-    <string name="wwMode3">Po meri</string>
+    <string name="keymode_custom_label">Po meri</string>
     <string name="waypoints_nav_title">Kažipoti</string>
     <string name="toast_waypoint_saved">Kažipot shranjen</string>
     <string name="geocode_error">Napaka pri iskanju geokode</string>

@@ -180,8 +180,7 @@
     <string name="hwsave_alert_body">Az új eszközbeállítások mentése után a WunderLINQ eszköz instabillá válhat ezért el kell távolítani és újra behelyezni a tartóba.</string>
     <string name="hwsave_alert_title">Figyelem!</string>
     <string name="config_write_label">Beállítások mentése</string>
-    <string name="sensitivity_label">Érzékenység</string>
-    <string name="wwMode3">Egyedi</string>
+    <string name="keymode_custom_label">Egyedi</string>
     <string name="wwMode2">RT/K1600</string>
     <string name="wwMode1">Teljes</string>
     <string name="wwtype_label">Keréktípus</string>

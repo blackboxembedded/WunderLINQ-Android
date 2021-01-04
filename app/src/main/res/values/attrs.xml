@@ -14,4 +14,7 @@
         <attr name="wunderLINQLogo" format="integer"/>
         <attr name="gridViewBorder" format="integer"/>
     </declare-styleable>
+    <declare-styleable name="MultiSpinner">
+        <attr name="android:entries" />
+    </declare-styleable>
 </resources>

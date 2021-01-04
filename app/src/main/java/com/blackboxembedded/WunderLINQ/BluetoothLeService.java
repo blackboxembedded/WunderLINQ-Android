@@ -44,6 +44,7 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Binder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -58,6 +59,8 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,9 +68,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Service for managing connection and data communication with a GATT server
@@ -79,6 +85,20 @@ public class BluetoothLeService extends Service {
 
     int mStartMode;       // indicates how to behave if the service is killed
     boolean mAllowRebind; // indicates whether onRebind should be used
+
+    private static final Queue<Runnable> commandQueue = new ConcurrentLinkedQueue<>();
+    private static Handler bleHandler = new Handler();
+    private static volatile boolean commandQueueBusy = false;
+    private static boolean isRetrying;
+    private static int nrTries;
+    // Maximum number of retries of commands
+    private static final int MAX_TRIES = 2;
+    private static byte[] currentWriteBytes;
+    public enum WriteType {
+        WITH_RESPONSE,
+        WITHOUT_RESPONSE,
+        SIGNED
+    }
 
     private static Logger debugLogger = null;
 
@@ -282,14 +302,13 @@ public class BluetoothLeService extends Service {
 
                 //Send time to cluster
                 if (MainActivity.gattCommandCharacteristic != null) {
-                    if (Data.getFirmwareVersion() == null){
+                    BluetoothGattCharacteristic characteristic = MainActivity.gattCommandCharacteristic;
+                    if (WLQ.firmwareVersion == null){
                         // Read config
-                        byte[] getConfigCmd = {0x57,0x52,0x57,0x0D,0x0A};
                         Log.d(TAG, "Sending get config command");
-                        MainActivity.gattCommandCharacteristic.setValue(getConfigCmd);
-                        BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic);
+                        //characteristic.setValue(WLQ.GET_CONFIG_CMD);
+                        writeCharacteristic(characteristic,WLQ.GET_CONFIG_CMD,WriteType.WITH_RESPONSE);
                     } else {
-                        BluetoothGattCharacteristic characteristic = MainActivity.gattCommandCharacteristic;
                         //Get Current Time
                         Date date = new Date();
                         Calendar calendar = new GregorianCalendar();
@@ -306,9 +325,21 @@ public class BluetoothLeService extends Service {
                         int yearNibble = (yearLByte & 0x0F);
                         byte monthNibble = (byte) month;
                         int monthYearByte = ((yearNibble & 0x0F) << 4 | (monthNibble & 0x0F));
-                        byte[] setClusterClock = {0x57, 0x57, 0x44, 0x43, (byte) second, (byte) minute, (byte) hour, (byte) day, (byte) monthYearByte, (byte) yearByte};
-                        characteristic.setValue(setClusterClock);
-                        writeCharacteristic(characteristic);
+                        try {
+                            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                            outputStream.write(WLQ.SET_CLUSTER_CLOCK_CMD);
+                            outputStream.write((byte) second);
+                            outputStream.write((byte) minute);
+                            outputStream.write((byte) hour);
+                            outputStream.write((byte) day);
+                            outputStream.write((byte) monthYearByte);
+                            outputStream.write((byte) yearByte);
+                            outputStream.write(WLQ.CMD_EOM);
+                            byte[] setClusterClock = outputStream.toByteArray();
+                            writeCharacteristic(characteristic, setClusterClock, WriteType.WITH_RESPONSE);
+                        } catch (IOException e) {
+                            Log.d(TAG, e.toString());
+                        }
                     }
                 }
 
@@ -582,8 +613,7 @@ public class BluetoothLeService extends Service {
         @Override
         public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor,
                                      int status) {
-            String dataLog = "Read response received";
-            Log.d(TAG,dataLog);
+            Log.d(TAG, "onDescriptorRead");
         }
 
         @Override
@@ -602,29 +632,35 @@ public class BluetoothLeService extends Service {
                         "" + status);
                 intent.putExtras(mBundle);
                 if (characteristic.getUuid().toString().contains(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC)){
-                    readCharacteristic(MainActivity.gattCommandCharacteristic);
+                    if(characteristic.getValue() != null) {
+                        if (characteristic.getValue()[0] == WLQ.SET_CLUSTER_CLOCK_CMD[0]
+                                && characteristic.getValue()[1] == WLQ.SET_CLUSTER_CLOCK_CMD[1]
+                                && characteristic.getValue()[2] == WLQ.SET_CLUSTER_CLOCK_CMD[2]
+                                && characteristic.getValue()[3] == WLQ.SET_CLUSTER_CLOCK_CMD[3]) {
+                            //Log.d(TAG,"Cluster Clock Command");
+                        } else {
+                            readCharacteristic(characteristic);
+                        }
+                    }
                 }
+                MyApplication.getContext().sendBroadcast(intent);
 
-                MyApplication.getContext().sendBroadcast(intent);
-            } else {
-                Intent intent = new Intent(ACTION_GATT_CHARACTERISTIC_ERROR);
-                intent.putExtra("EXTRA_CHARACTERISTIC_ERROR_MESSAGE", "" + status);
-                MyApplication.getContext().sendBroadcast(intent);
+                completedCommand();
             }
         }
 
         @Override
         public void onCharacteristicRead(BluetoothGatt gatt,
                                          BluetoothGattCharacteristic characteristic, int status) {
-            // GATT Characteristic read
-            if (status == BluetoothGatt.GATT_SUCCESS) {
-                broadcastNotifyUpdate(characteristic);
-            } else {
-                if (status == BluetoothGatt.GATT_INSUFFICIENT_AUTHENTICATION
-                        || status == BluetoothGatt.GATT_INSUFFICIENT_ENCRYPTION) {
-                    bondDevice();
-                }
+            // Perform some checks on the status field
+            if (status != BluetoothGatt.GATT_SUCCESS) {
+                Log.d(TAG, String.format(Locale.ENGLISH,"ERROR: Read failed for characteristic: %s, status %d", characteristic.getUuid(), status));
+                completedCommand();
+                return;
             }
+
+            broadcastNotifyUpdate(characteristic);
+            completedCommand();
         }
 
         @Override
@@ -635,7 +671,6 @@ public class BluetoothLeService extends Service {
     };
 
     private static void broadcastConnectionUpdate(final String action) {
-        Log.d(TAG,"Action: " + action);
         final Intent intent = new Intent(action);
         MyApplication.getContext().sendBroadcast(intent);
     }
@@ -751,12 +786,8 @@ public class BluetoothLeService extends Service {
             if (data != null) {
                 //Read Config
                 if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x57)){
-                    String version = data[9] + "." + data[10];
-                    Data.setFirmwareVersion(Double.parseDouble(version));
-                    if(Data.getFirmwareMode() != data[26]
-                    || Data.getFirmwareSensitivity() != data[34]) {
-                        Data.setFirmwareMode(data[26]);
-                        Data.setFirmwareSensitivity(data[34]);
+                    if (!Arrays.equals(WLQ.wunderLINQConfig, data)){
+                        new WLQ(data);
                         intent.putExtras(mBundle);
                         MyApplication.getContext().sendBroadcast(intent);
                     }
@@ -849,31 +880,108 @@ public class BluetoothLeService extends Service {
      *
      * @param characteristic The characteristic to read from.
      */
-    public static void readCharacteristic(
-            BluetoothGattCharacteristic characteristic) {
-        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            return;
+    public static boolean readCharacteristic(final BluetoothGattCharacteristic characteristic) {
+        if(mBluetoothGatt == null) {
+            Log.e(TAG, "ERROR: Gatt is 'null', ignoring read request");
+            return false;
         }
-        mBluetoothGatt.readCharacteristic(characteristic);
+
+        // Check if characteristic is valid
+        if(characteristic == null) {
+            Log.e(TAG, "ERROR: Characteristic is 'null', ignoring read request");
+            return false;
+        }
+
+        // Check if this characteristic actually has READ property
+        if((characteristic.getProperties() & BluetoothGattCharacteristic.PROPERTY_READ) == 0 ) {
+            Log.e(TAG, "ERROR: Characteristic cannot be read");
+            return false;
+        }
+
+        // Enqueue the read command now that all checks have been passed
+        boolean result = commandQueue.add(new Runnable() {
+            @Override
+            public void run() {
+                if(!mBluetoothGatt.readCharacteristic(characteristic)) {
+                    Log.e(TAG, String.format("ERROR: readCharacteristic failed for characteristic: %s", characteristic.getUuid()));
+                    completedCommand();
+                } else {
+                    Log.d(TAG, String.format("Reading characteristic <%s>", characteristic.getUuid()));
+                    nrTries++;
+                }
+            }
+        });
+
+        if(result) {
+            nextCommand();
+        } else {
+            Log.e(TAG, "ERROR: Could not enqueue read characteristic command");
+        }
+        return result;
     }
 
-    /**
-     * Writes the characteristic value to the given characteristic.
-     *
-     * @param characteristic the characteristic to write to
-     * @return true if request has been sent
-     */
-    public static final boolean writeCharacteristic(final BluetoothGattCharacteristic characteristic) {
-        final BluetoothGatt gatt = mBluetoothGatt;
-        if (gatt == null || characteristic == null)
-            return false;
+    public static boolean writeCharacteristic(final BluetoothGattCharacteristic characteristic, final byte[] value, final WriteType writeType) {
 
-        // Check characteristic property
-        final int properties = characteristic.getProperties();
-        if ((properties & (BluetoothGattCharacteristic.PROPERTY_WRITE | BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE)) == 0)
+        if (!isConnected()) {
+            Log.d(TAG, "Hardware Not Connected");
             return false;
+        }
 
-        return gatt.writeCharacteristic(characteristic);
+        // Copy the value to avoid race conditions
+        final byte[] bytesToWrite = copyOf(value);
+
+        // Check if this characteristic actually supports this writeType
+        int writeProperty;
+        final int writeTypeInternal;
+        switch (writeType) {
+            case WITH_RESPONSE:
+                writeProperty = BluetoothGattCharacteristic.PROPERTY_WRITE;
+                writeTypeInternal = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
+                break;
+            case WITHOUT_RESPONSE:
+                writeProperty = BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE;
+                writeTypeInternal = BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE;
+                break;
+            case SIGNED:
+                writeProperty = BluetoothGattCharacteristic.PROPERTY_SIGNED_WRITE;
+                writeTypeInternal = BluetoothGattCharacteristic.WRITE_TYPE_SIGNED;
+                break;
+            default:
+                writeProperty = 0;
+                writeTypeInternal = 0;
+                break;
+        }
+        if ((characteristic.getProperties() & writeProperty) == 0) {
+            Log.d(TAG, "Characteristic does not support writeType");
+            return false;
+        }
+
+        boolean result = commandQueue.add(new Runnable() {
+            @Override
+            public void run() {
+                if (isConnected()) {
+                    currentWriteBytes = bytesToWrite;
+                    characteristic.setWriteType(writeTypeInternal);
+                    characteristic.setValue(bytesToWrite);
+                    if (!mBluetoothGatt.writeCharacteristic(characteristic)) {
+                        Log.d(TAG, String.format("writeCharacteristic failed for characteristic: %s", characteristic.getUuid()));
+                        completedCommand();
+                    } else {
+                        Log.d(TAG, String.format("Writing <%s> to characteristic <%s>", Utils.ByteArraytoHex(bytesToWrite), characteristic.getUuid()));
+                        nrTries++;
+                    }
+                } else {
+                    completedCommand();
+                }
+            }
+        });
+
+        if (result) {
+            nextCommand();
+        } else {
+            Log.d(TAG, "Could not enqueue write characteristic command");
+        }
+        return result;
     }
 
     /**
@@ -992,6 +1100,7 @@ public class BluetoothLeService extends Service {
             body.append(MyApplication.getContext().getResources().getString(R.string.fault_TIREFCF)).append("\n");
         }
         if(FaultStatus.getrearTirePressureCriticalActive()){
+            Log.d(TAG,"Using fault_TIRERCF) string");
             body.append(MyApplication.getContext().getResources().getString(R.string.fault_TIRERCF)).append("\n");
         }
         if(FaultStatus.getgeneralFlashingRedActive()){
@@ -1001,7 +1110,7 @@ public class BluetoothLeService extends Service {
             body.append(MyApplication.getContext().getResources().getString(R.string.fault_GENWARNSHRED)).append("\n");
         }
         if(!body.toString().equals("")){
-            showNotification(MyApplication.getContext(),MyApplication.getContext().getResources().getString(R.string.fault_title),body.toString());
+            showNotification(MyApplication.getContext(), MyApplication.getContext().getResources().getString(R.string.fault_title), body.toString());
         } else {
             Log.d(TAG,"Clearing notification");
             clearNotifications();
@@ -2181,5 +2290,68 @@ public class BluetoothLeService extends Service {
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(1000);
         mLocationRequest.setFastestInterval(1000);
+    }
+
+    private static boolean isConnected() {
+        return mBluetoothGatt != null && mConnectionState == BluetoothProfile.STATE_CONNECTED;
+    }
+
+    private static byte[] copyOf(byte[] source) {
+        return (source == null) ? new byte[0] : Arrays.copyOf(source, source.length);
+    }
+
+    private static void nextCommand() {
+        // If there is still a command being executed then bail out
+        if(commandQueueBusy) {
+            return;
+        }
+
+        // Check if we still have a valid gatt object
+        if (mBluetoothGatt == null) {
+            Log.d(TAG, "ERROR: GATT is 'null' for peripheral, clearing command queue");
+            commandQueue.clear();
+            commandQueueBusy = false;
+            return;
+        }
+
+        // Execute the next command in the queue
+        if (commandQueue.size() > 0) {
+            final Runnable bluetoothCommand = commandQueue.peek();
+            commandQueueBusy = true;
+            nrTries = 0;
+
+            bleHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        bluetoothCommand.run();
+                    } catch (Exception ex) {
+                        Log.d(TAG, "ERROR: Command exception for device");
+                    }
+                }
+            });
+        }
+    }
+
+    private static void completedCommand() {
+        commandQueueBusy = false;
+        isRetrying = false;
+        commandQueue.poll();
+        nextCommand();
+    }
+
+    private static void retryCommand() {
+        commandQueueBusy = false;
+        Runnable currentCommand = commandQueue.peek();
+        if(currentCommand != null) {
+            if (nrTries >= MAX_TRIES) {
+                // Max retries reached, give up on this one and proceed
+                Log.v(TAG, "Max number of tries reached");
+                commandQueue.poll();
+            } else {
+                isRetrying = true;
+            }
+        }
+        nextCommand();
     }
 }
