@@ -575,10 +575,10 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 String address = sharedPrefs.getString("prefHomeAddress","");
                 if (!address.equals("")) {
                     LatLng location = getLocationFromAddress(TaskActivity.this, address);
-                    Location destination = new Location(LocationManager.GPS_PROVIDER);
-                    destination.setLatitude(location.latitude);
-                    destination.setLongitude(location.longitude);
                     if (location != null) {
+                        Location destination = new Location(LocationManager.GPS_PROVIDER);
+                        destination.setLatitude(location.latitude);
+                        destination.setLongitude(location.longitude);
                         // Check Location permissions
                         if (getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                             Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
