@@ -397,4 +397,13 @@
     <string name="too_many_pairings_alert_title">Več povezanih WunderLINQ naprav</string>
     <string name="no_pairing_alert_body">WunderLINQ ni povezan. Povežite ga v Bluetooth nastavitvah.</string>
     <string name="no_pairing_alert_title">WunderLINQ ni povezan</string>
+    <string name="rpm_header">Obr/min</string>
+    <string name="pref_highlightColor_title">Barva poudarka</string>
+    <string name="pref_consumption_name">Enota za porabo</string>
+    <string name="pref_display_dashboard_name">Omogoči armaturo na zaslonu</string>
+    <string name="consumption_hundred_km">L/100</string>
+    <string name="consumption_gallon_us">mpg(ZDA)</string>
+    <string name="consumption_gallon_imperial">mpg(kopenska)</string>
+    <string name="consumption_km">km/L</string>
+    <string name="pref_notification_name">Omogočite opozorila napak</string>
 </resources>
