@@ -156,6 +156,7 @@ public class PhotoService extends Service {
             mCameraOpenCloseLock.release();
             mCameraDevice = cameraDevice;
             createCameraPreviewSession();
+            //mCameraOpenCloseLock.release();
         }
 
         @Override

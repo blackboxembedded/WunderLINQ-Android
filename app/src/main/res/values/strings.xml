@@ -456,6 +456,7 @@
     <string name="ui_title">User Interface</string>
     <string name="pref_highlightColor_title">Highlight Color</string>
     <string name="pref_display_dashboard_name">Enable Dashboard Screen</string>
+    <string name="pref_dashboard_gps_speed_name">Dashboard GPS Speed</string>
     <string name="pref_grid_settings_title">Data Grid Customization</string>
     <string name="pref_grid_settings_summary">Customize which data points to display and in which cell</string>
     <string name="first">First</string>
