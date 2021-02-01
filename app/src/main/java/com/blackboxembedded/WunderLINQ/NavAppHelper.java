@@ -46,7 +46,7 @@ public class NavAppHelper {
                 break;
             case "2": //Google Maps
                 navIntent.setPackage("com.google.android.apps.maps");
-                url = "google.navigation://?free=1&mode=d&entry=fnls";
+                url = "";
                 break;
             case "3": //Locus Maps
                 url = "http://link.locusmap.eu";
