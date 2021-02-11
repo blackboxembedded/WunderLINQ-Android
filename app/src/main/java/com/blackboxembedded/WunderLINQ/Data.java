@@ -319,6 +319,15 @@ public class Data {
         Data.leanAngleBike = leanAngleBike;
     }
 
+    // Rear Speed
+    private static Double rearSpeed;
+    public static Double getRearSpeed() {
+        return rearSpeed;
+    }
+    public static void setRearSpeed(Double rearSpeed){
+        Data.rearSpeed = rearSpeed;
+    }
+
     // Utility functions
     public static void clear(){
         Data.lastLocation = null;
@@ -347,5 +356,7 @@ public class Data {
         Data.gForce = null;
         Data.bearing = null;
         Data.barometricPressure = null;
+        Data.leanAngleBike = null;
+        Data.rearSpeed = null;
     }
 }

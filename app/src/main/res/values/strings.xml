@@ -441,6 +441,7 @@
     <string name="sunrisesunset_header">Sunrise/Sunset</string>
     <string name="rpm_header">RPM</string>
     <string name="leanangle_bike_header">Lean Angle</string>
+    <string name="rearwheel_speed_header">Rear Wheel Speed</string>
     <!-- VideoRecService -->
     <string name="title_video_notification">WunderLINQ recording video</string>
     <!-- WeatherMapActivity -->
@@ -456,7 +457,7 @@
     <string name="ui_title">User Interface</string>
     <string name="pref_highlightColor_title">Highlight Color</string>
     <string name="pref_display_dashboard_name">Enable Dashboard Screen</string>
-    <string name="pref_dashboard_gps_speed_name">Dashboard GPS Speed</string>
+    <string name="pref_dashboard_speedsource_name">Dashboard Speed Source</string>
     <string name="pref_grid_settings_title">Data Grid Customization</string>
     <string name="pref_grid_settings_summary">Customize which data points to display and in which cell</string>
     <string name="first">First</string>
@@ -521,6 +522,7 @@
         <item name="29">@string/sunrisesunset_header</item>
         <item name="30">@string/rpm_header</item>
         <item name="31">@string/leanangle_bike_header</item>
+        <item name="32">@string/rearwheel_speed_header</item>
     </string-array>
     <string-array name="dataPoints_arrayValues" translatable="false">
         <item name="1">0</item>
@@ -554,6 +556,7 @@
         <item name="29">28</item>
         <item name="30">29</item>
         <item name="31">30</item>
+        <item name="32">31</item>
     </string-array>
     <string name="pref_tasks_settings_title">Quick Task Customization</string>
     <string name="pref_tasks_settings_summary">Customize which tasks to display and in which order</string>
@@ -810,6 +813,16 @@
     <string name="pref_fuelAlert_summary">Prompt to route to nearest fuel station when low fuel fault is present</string>
     <string name="debug_settings_title">Debug Settings</string>
     <string name="advanced_settings_title">Advanced Settings</string>
+    <string-array name="dashSpeedSources_array" translatable="false">
+        <item name="1">@string/speed_header</item>
+        <item name="2">@string/rearwheel_speed_header</item>
+        <item name="3">@string/gpsspeed_header</item>
+    </string-array>
+    <string-array name="dashSpeedSources_arrayValues" translatable="false">
+        <item name="1">0</item>
+        <item name="2">1</item>
+        <item name="3">2</item>
+    </string-array>
     <string name="pref_bearing_override_name">GPS Bearing</string>
     <string name="pref_bearing_override_summary">Use GPS Bearing instead of magnetic compass.</string>
     <string name="pref_photopreview_name">Photo Preview</string>

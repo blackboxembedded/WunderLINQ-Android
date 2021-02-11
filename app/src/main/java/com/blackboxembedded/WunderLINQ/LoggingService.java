@@ -249,6 +249,7 @@ public class LoggingService extends Service {
                         MyApplication.getContext().getResources().getString(R.string.barometricpressure_header) + "(mBar)" + "," +
                         MyApplication.getContext().getResources().getString(R.string.rpm_header) + "," +
                         MyApplication.getContext().getResources().getString(R.string.leanangle_bike_header) +
+                        MyApplication.getContext().getResources().getString(R.string.rearwheel_speed_header) +
                         "\n";
 
                 File logFile = new File( root, filename + curdatetime + ".csv" );
@@ -352,6 +353,12 @@ public class LoggingService extends Service {
                             speed = Utils.kmToMiles(speed);
                         }
                     }
+                    Double rearWheelSpeed = Data.getRearSpeed();
+                    if (Data.getRearSpeed() != null){
+                        if (distanceFormat.contains("1")) {
+                            rearWheelSpeed = Utils.kmToMiles(rearWheelSpeed);
+                        }
+                    }
                     Double avgSpeed = Data.getAvgSpeed();
                     if (Data.getAvgSpeed() != null){
                         if (distanceFormat.contains("1")) {
@@ -431,7 +438,7 @@ public class LoggingService extends Service {
                             + currentConsumption + "," + fuelEconomyOne + "," + fuelEconomyTwo + ","
                             + fuelRange + "," + Data.getLeanAngle() + "," + Data.getGForce() + ","
                             + bearing + "," + Data.getBarometricPressure() + "," + Data.getRPM() + ","
-                            + Data.getLeanAngleBike() + "\n");
+                            + Data.getLeanAngleBike() + "," + rearWheelSpeed + "\n");
                     outFile.flush();
                     handler.postDelayed(runnable, loggingInterval);
                 }

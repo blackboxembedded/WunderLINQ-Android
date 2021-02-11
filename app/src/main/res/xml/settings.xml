@@ -250,11 +250,6 @@
             android:key="prefDisplayDash"
             android:title="@string/pref_display_dashboard_name" >
         </CheckBoxPreference>
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="prefDashSpeedGPS"
-            android:title="@string/pref_dashboard_gps_speed_name" >
-        </CheckBoxPreference>
         <ListPreference
             android:key="prefContactsFilter"
             android:title="@string/pref_contacts_filter_title"
@@ -369,6 +364,14 @@
         </CheckBoxPreference>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/advanced_settings_title" >
+        <ListPreference
+            android:key="prefDashSpeedSource"
+            android:title="@string/pref_dashboard_speedsource_name"
+            android:summary="%s"
+            android:entries="@array/dashSpeedSources_array"
+            android:entryValues="@array/dashSpeedSources_arrayValues"
+            android:defaultValue="1">
+        </ListPreference>
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="prefBearingOverride"

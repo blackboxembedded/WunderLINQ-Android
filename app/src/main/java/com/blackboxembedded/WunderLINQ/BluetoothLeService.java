@@ -1229,6 +1229,13 @@ public class BluetoothLeService extends Service {
                         RTholdStartTime = null;
                     }
                 }
+
+                //Rear Speed
+                if ((data[3] & 0xFF) != 0xFF && (data[4] & 0xFF) != 0xFF) {
+                    double rearSpeed = ((data[3] & 0xFF) | (((data[4] & 0xFF) & 0x0f) << 8)) * 0.14;
+                    Data.setRearSpeed(rearSpeed);
+                }
+
                 //Fuel Range
                 if ((data[4] & 0xFF) != 0xFF && (data[5] & 0xFF) != 0xFF) {
                     double fuelRange = (((data[4] & 0xFF) >> 4) & 0x0f) + (((data[5] & 0xFF) & 0x0f) * 16) + ((((data[5] & 0xFF) >> 4) & 0x0f) * 256);

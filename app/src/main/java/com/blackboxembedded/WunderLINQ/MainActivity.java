@@ -1578,6 +1578,18 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 }
                 icon = AppCompatResources.getDrawable(this, R.drawable.ic_angle);
                 break;
+            case 31:
+                //Rear Wheel Speed
+                label = getString(R.string.rearwheel_speed_header) + " (" + distanceTimeUnit + ")";
+                if(Data.getRearSpeed() != null){
+                    double speed = Data.getRearSpeed();
+                    if (distanceFormat.contains("1")) {
+                        speed = Utils.kmToMiles(speed);
+                    }
+                    value = String.valueOf(Math.round(speed));
+                }
+                icon = AppCompatResources.getDrawable(this, R.drawable.ic_tachometer_alt);
+                break;
             default:
 
                 break;

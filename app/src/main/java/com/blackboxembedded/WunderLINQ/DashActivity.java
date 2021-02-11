@@ -351,6 +351,38 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
                                         node.setTextContent(distanceTimeUnit);
                                         break;
                                     case "tspanSpeed":
+                                        String speedSource = sharedPrefs.getString("prefDashSpeedSource", "0");
+                                        if (speedSource.contains("0")) {
+                                            if (Data.getSpeed() != null) {
+                                                double speed = Data.getSpeed();
+                                                if (distanceFormat.contains("1")) {
+                                                    speed = Utils.kmToMiles(speed);
+                                                }
+                                                node.setTextContent(String.valueOf(Math.round(speed)));
+                                            } else {
+                                                node.setTextContent("-");
+                                            }
+                                        } else if (speedSource.contains("1")) {
+                                            if (Data.getRearSpeed() != null) {
+                                                double speed = Data.getRearSpeed();
+                                                if (distanceFormat.contains("1")) {
+                                                    speed = Utils.kmToMiles(speed);
+                                                }
+                                                node.setTextContent(String.valueOf(Math.round(speed)));
+                                            } else {
+                                                node.setTextContent("-");
+                                            }
+                                        } else if (speedSource.contains("2")) {
+                                            if (Data.getLastLocation() != null) {
+                                                double speed = (Data.getLastLocation().getSpeed() * 3.6);
+                                                if (distanceFormat.contains("1")) {
+                                                    speed = Utils.kmToMiles(speed);
+                                                }
+                                                node.setTextContent(String.valueOf(Math.round(speed)));
+                                            } else {
+                                                node.setTextContent("-");
+                                            }
+                                        }
                                         if (sharedPrefs.getBoolean("prefDashSpeedGPS", false)) {
                                             if (Data.getLastLocation() != null) {
                                                 double speed = (Data.getLastLocation().getSpeed() * 3.6);
