@@ -1,2 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="firstrun_end">Dziękujemy Ci za zakup WunderLINQ. Jedź bezpiecznie i LWG.</string>
+    <string name="accessibilityservice_alert_title">WunderLINQ wymaga uruchomienia usługi Accessibility Service</string>
+    <string name="accessibilityservice_alert_body">Aplikacja WunderLINQ potrzebuje Accessibility Service do włączenia opcji obraz-w-obrazie.</string>
+    <string name="camera_alert_body">Żebyś mógł robić zdjęcia i nagrywać video z poziomu aplikacji WunderLINQ.</string>
+    <string name="call_alert_body">Żebyś mógł wykonywać połączenia z poziomu aplikacji WunderLINQ.</string>
+    <string name="contacts_alert_title">Potrzebujemy zezwolenia na dostęp do Twoich kontaktów</string>
+    <string name="record_audio_alert_body">Więc potrzebujemy dostęp do mikrofonu.</string>
+    <string name="location_alert_title">A teraz dostęp do Twojej lokalizacji</string>
+    <string name="write_alert_title">I także musimy mieć zgodę na dostęp do zapisywania danych na telefonie</string>
+    <string name="record_audio_alert_title">WunderLINQ wymaga dostępu do nagrywania audio</string>
+    <string name="notification_alert_title">WunderLINQ potrzebuje też zezwolenia na wyświetlanie powiadomień</string>
+    <string name="notification_alert_body">Po to żebyś mógł z tego poziomu kontrolować np. odtwarzacz muzyki.</string>
+    <string name="negative_alert_title">Funkcjonalność ograniczona</string>
+    <string name="negative_write_alert_body">Dopóki nie przyznasz uprawnień do zapisywania danych nie będziemy dla Ciebie mogli nic zachować.</string>
+    <string name="negative_camera_alert_body">Nieprzyznanie dostępu do aparatu\? Proste. Nie będziesz mógł robić zdjęć i nagrywać filmów z poziomu appki.</string>
+    <string name="negative_call_alert_body">Nie przyznasz uprawnień do połączeń telefonicznych\? Ok. Ale wtedy nigdzie z poziomu appki się nie dodzwonisz.</string>
+    <string name="negative_microphone_alert_body">Nie masz zamiaru nagrywać audio z poziomu appki\? Nie dawaj zezwolenia w uprawnieniach.</string>
+    <string name="usagestats_alert_title">WunderLINQ wymaga uprawnień do statystyk użycia</string>
+    <string name="main_title">Motocykl</string>
+    <string name="firstrun_start">WunderLINQ wymaga przyznania uprawnień systemowych żeby mógł w pełni pokazać swoje możliwości. Na kolejnych ekranach wytłumaczymy Ci do czego i dlaczego potrzebujemy mieć dostęp. Ten ekran zobaczysz tylko raz. Jeśli będziesz chciał przyznać uprawnienia później to będziesz to musiał już zrobić z ustawień telefonu.</string>
+    <string name="camera_alert_title">Potrzebujemy dostępu do Twojego aparatu</string>
+    <string name="call_alert_title">Potrzebujemy również zgody na dostęp do używania telefonu</string>
+    <string name="contacts_alert_body">Żebyś z poziomu aplikacji WunderLINQ mógł wybrać kontakt, do którego chcesz zadzwonić .</string>
+    <string name="location_alert_body">WunderLINQ potrzebuje wiedzieć gdzie jesteś żeby mógł dla Ciebie nagrywać przebieg trasy. Położenie, kierunek, wysokość npm, prędkość itd.</string>
+    <string name="write_alert_body">Żebyśmy dla Ciebie mogli zapisać dane z trasy, nagrania, zdjęcia, filmy itd.</string>
+    <string name="overlay_alert_title">Aplikacja WunderLINQ wymaga także zezwolenia dla usługi \"Wyświetlaj nad innymi oknami\"</string>
+    <string name="overlay_alert_body">Żeby nagrywać filmy w tle.</string>
+    <string name="negative_location_alert_body">Dopóki nie przyznasz aplikacji dostępu do lokalizacji to nie będziemy mogli dla Ciebie zapisywać przebiegu trasy.</string>
+    <string name="negative_contacts_alert_body">Nie chcesz dzwonić do wybranego kontaktu z poziomu appki\? Odmów uprawnień. Ale warto dać uprawnienia. Ułatwia życie.</string>
+    <string name="negative_record_audio_alert_body">Dzięki uprawnieniom do nagrywania będziesz mógł się cieszyć wspomnieniami z trasy.</string>
+    <string name="usagestats_alert_body">A WunderLINQ potrzebuje tego żeby móc się automatycznie uruchamiać kiedy się połączy z urządzeniem.</string>
+</resources>
