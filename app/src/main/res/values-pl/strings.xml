@@ -3,8 +3,8 @@
     <string name="firstrun_end">Dziękujemy Ci za zakup WunderLINQ. Jedź bezpiecznie i LWG.</string>
     <string name="accessibilityservice_alert_title">WunderLINQ wymaga uruchomienia usługi Accessibility Service</string>
     <string name="accessibilityservice_alert_body">Aplikacja WunderLINQ potrzebuje Accessibility Service do włączenia opcji obraz-w-obrazie.</string>
-    <string name="camera_alert_body">Żebyś mógł robić zdjęcia i nagrywać video z poziomu aplikacji WunderLINQ.</string>
-    <string name="call_alert_body">Żebyś mógł wykonywać połączenia z poziomu aplikacji WunderLINQ.</string>
+    <string name="camera_alert_body">Potrzebujemy uprawnień do aparatu.</string>
+    <string name="call_alert_body">Potrzebujemy uprawnień do wykonywania połączeń.</string>
     <string name="contacts_alert_title">Potrzebujemy zezwolenia na dostęp do Twoich kontaktów</string>
     <string name="record_audio_alert_body">Więc potrzebujemy dostęp do mikrofonu.</string>
     <string name="location_alert_title">A teraz dostęp do Twojej lokalizacji</string>
@@ -22,7 +22,7 @@
     <string name="firstrun_start">WunderLINQ wymaga przyznania uprawnień systemowych żeby mógł w pełni pokazać swoje możliwości. Na kolejnych ekranach wytłumaczymy Ci do czego i dlaczego potrzebujemy mieć dostęp. Ten ekran zobaczysz tylko raz. Jeśli będziesz chciał przyznać uprawnienia później to będziesz to musiał już zrobić z ustawień telefonu.</string>
     <string name="camera_alert_title">Potrzebujemy dostępu do Twojego aparatu</string>
     <string name="call_alert_title">Potrzebujemy również zgody na dostęp do używania telefonu</string>
-    <string name="contacts_alert_body">Żebyś z poziomu aplikacji WunderLINQ mógł wybrać kontakt, do którego chcesz zadzwonić .</string>
+    <string name="contacts_alert_body">Potrzebujemy uprawnień do listy kontaktów.</string>
     <string name="location_alert_body">WunderLINQ potrzebuje wiedzieć gdzie jesteś żeby mógł dla Ciebie nagrywać przebieg trasy. Położenie, kierunek, wysokość npm, prędkość itd.</string>
     <string name="write_alert_body">Żebyśmy dla Ciebie mogli zapisać dane z trasy, nagrania, zdjęcia, filmy itd.</string>
     <string name="overlay_alert_title">Aplikacja WunderLINQ wymaga także zezwolenia dla usługi \"Wyświetlaj nad innymi oknami\"</string>
@@ -40,10 +40,10 @@
     <string name="rdc_rear_label">Tylne koło</string>
     <string name="engine_temp_label">Temperatura silnika</string>
     <string name="ambient_temp_label">Temperatura otoczenia</string>
-    <string name="odometer_label">Licznik</string>
+    <string name="odometer_label">Przebieg</string>
     <string name="trip1_label">Trasa 1</string>
     <string name="trip2_label">Trasa 2</string>
-    <string name="tripauto_label">Przebieg automatyczny</string>
+    <string name="tripauto_label">Trasa Auto</string>
     <string name="voltage_label">Napięcie</string>
     <string name="throttle_label">Gaz</string>
     <string name="gear_label">Bieg</string>
@@ -143,7 +143,7 @@
     <string name="seconds">s</string>
     <string name="delete_trip_alert_title">Uwaga!</string>
     <string name="delete_trip_alert_body">Skasować zapis trasy\?</string>
-    <string name="cancel_bt">Porzuć</string>
+    <string name="cancel_bt">Odrzuć</string>
     <string name="north">Płn</string>
     <string name="north_west">Płn/Zach</string>
     <string name="north_east">Płn/Wsch</string>
@@ -203,10 +203,10 @@
     <string name="compass_title">Kompas</string>
     <string name="not_found_media_player">Nie znaleziono uruchomionego odtwarzacza mediów</string>
     <string name="task_title_selfie">Strzel selfiaka</string>
-    <string name="task_title_waypoint_nav">Prowadź do punktu przelotowego</string>
+    <string name="task_title_waypoint_nav">Kieruj do punktu przelotowego</string>
     <string name="task_title_homescreen">Ekran domowy</string>
-    <string name="task_title_actioncam_start_video">Rozpocznij NagrywanieKamerą</string>
-    <string name="task_title_actioncam_stop_video">Zatrzymaj NagrywanieKamerą</string>
+    <string name="task_title_actioncam_start_video">Uruchom nagrywanie kamery</string>
+    <string name="task_title_actioncam_stop_video">Zatrzymaj nagrywanie kamery</string>
     <string name="task_title_weathermap">Mapa pogody</string>
     <string name="toast_actioncam_notconnected">Kamera nie podłączona</string>
     <string name="toast_actioncam_notset">Zmień ustawienia Kamery w ustawieniach aplikacji</string>
@@ -253,7 +253,7 @@
     <string name="rearpressure_header">Ciśnienie w kole tylnym</string>
     <string name="odometer_header">Przebieg</string>
     <string name="voltage_header">Napięcie</string>
-    <string name="frontbrakes_header">Przednie hamulce</string>
+    <string name="frontbrakes_header">Przedni hamulec</string>
     <string name="rearbrakes_header">Tylny hamulec</string>
     <string name="shifts_header">Zmiany biegów</string>
     <string name="vin_header">VIN</string>
@@ -276,9 +276,9 @@
     <string name="info_title">Informacje osobiste</string>
     <string name="pref_homeAddress_name">Adres domowy</string>
     <string name="pref_homeAddress_summary">Format: 12345 Ulica, Miasto, Województwo 12345</string>
-    <string name="pref_homePhone_name">Ulubiony kontakt</string>
-    <string name="ui_title">Interfejs użytkownika</string>
-    <string name="pref_highlightColor_title">Kolor podświetlenia</string>
+    <string name="pref_homePhone_name">Ulubiony numer telefonu</string>
+    <string name="ui_title">Panel użytkownika</string>
+    <string name="pref_highlightColor_title">Kolor podkreślenia</string>
     <string name="throttle_header">Pozycja rollgazu</string>
     <string name="fueleconomyone_header">Ekonomia 1</string>
     <string name="leanangle_header">Kąt przechyłu</string>
@@ -374,7 +374,7 @@
     <string name="share">Udostępnij</string>
     <string name="share_gpx">Udostępnij plik GPX</string>
     <string name="delete">Usuń</string>
-    <string name="cancel">Porzuć</string>
+    <string name="cancel">Odrzuć</string>
     <string name="gpx_import_alert_title">Import pliku GPX</string>
     <string name="gpx_import_alert_body">Wgrać punkty przelotowe z pliku GPX\?</string>
     <string name="dash_title">Kokpit</string>
