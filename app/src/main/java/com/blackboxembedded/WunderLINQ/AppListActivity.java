@@ -214,7 +214,6 @@ public class AppListActivity extends AppCompatActivity {
                     appinfo.label = ri.loadLabel(packageManager);
                     appinfo.name = ri.activityInfo.packageName;
                     appinfo.icon = ri.activityInfo.loadIcon(packageManager);
-                    Log.d(TAG, "name: " + ri.activityInfo.packageName);
                     apps.add(appinfo);
                 }
             }
