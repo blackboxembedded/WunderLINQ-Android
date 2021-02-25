@@ -56,6 +56,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.wear.widget.WearableLinearLayoutManager;
 import androidx.wear.widget.WearableRecyclerView;
 
+import com.blackboxembedded.WunderLINQ.AppListActivity;
 import com.blackboxembedded.WunderLINQ.ContactListActivity;
 import com.blackboxembedded.WunderLINQ.GridOnSwipeTouchListener;
 import com.blackboxembedded.WunderLINQ.LoggingService;
@@ -445,7 +446,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 getResources().getString(R.string.task_title_settings),
                 getResources().getString(R.string.task_title_homescreen),
                 goProVideoTaskText,
-                getResources().getString(R.string.task_title_weathermap)
+                getResources().getString(R.string.task_title_weathermap),
+                getResources().getString(R.string.task_title_applauncher)
         };
         int numTasks = taskTitles.length;
         int[] iconId = new int[numTasks];
@@ -464,6 +466,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         iconId[12] = R.drawable.ic_android;
         iconId[13] = R.drawable.ic_action_camera;
         iconId[14] = R.drawable.ic_cloud_sun;
+        iconId[15] = R.drawable.ic_android;
 
         mapping = new ArrayList<>();
         menuItems.clear();
@@ -987,6 +990,11 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 //Weather Map
                 Intent weatherIntent = new Intent(TaskActivity.this, WeatherMapActivity.class);
                 startActivity(weatherIntent);
+                break;
+            case 15:
+                //App Launcher
+                Intent appListIntent = new Intent(TaskActivity.this, AppListActivity.class);
+                startActivity(appListIntent);
                 break;
             default:
                 break;

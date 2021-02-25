@@ -39,6 +39,7 @@
         android:supportsRtl="true"
         android:theme="@style/WLQTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".AppListActivity"></activity>
         <activity android:name=".HWSettingsActionActivity" /> <!-- Work Around for GMaps crash https://issuetracker.google.com/issues/79478779 -->
         <uses-library
             android:name="org.apache.http.legacy"
