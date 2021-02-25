@@ -18,22 +18,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package com.blackboxembedded.WunderLINQ;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.Manifest;
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -45,7 +38,6 @@ import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,8 +99,6 @@ public class AppListActivity extends AppCompatActivity {
         showActionBar();
 
         loadApps();
-
-        updateList();
     }
 
     @Override
@@ -147,7 +137,6 @@ public class AppListActivity extends AppCompatActivity {
     }
 
     private View.OnClickListener mClickListener = new View.OnClickListener() {
-
         @Override
         public void onClick(View v) {
             switch(v.getId()) {
@@ -195,7 +184,6 @@ public class AppListActivity extends AppCompatActivity {
                 AppListActivity.this.startActivity(intent);
             }
         });
-
     }
 
     private void loadApps() {
@@ -204,7 +192,6 @@ public class AppListActivity extends AppCompatActivity {
                 packageManager = getPackageManager();
             if (apps == null) {
                 apps = new ArrayList<AppInfo>();
-
                 Intent i = new Intent(Intent.ACTION_MAIN, null);
                 i.addCategory(Intent.CATEGORY_LAUNCHER);
 
@@ -217,7 +204,6 @@ public class AppListActivity extends AppCompatActivity {
                     apps.add(appinfo);
                 }
             }
-
         } catch (Exception ex) {
             Log.e(TAG, ex.getMessage().toString() + " loadApps");
         }
