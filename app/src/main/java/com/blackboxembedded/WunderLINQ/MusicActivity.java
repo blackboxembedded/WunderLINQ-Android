@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -121,6 +122,13 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
                 case R.id.action_forward:
                     goForward();
                     break;
+                case R.id.album_art:
+                    if (controller != null) {
+                        PackageManager packageManager = getPackageManager();
+                        Intent intent = packageManager.getLaunchIntentForPackage(controller.getPackageName());
+                        startActivity(intent);
+                    }
+                    break;
                 case R.id.album_text:
                     if (Settings.Secure.getString(getApplication().getContentResolver(),"enabled_notification_listeners") == null
                         || !Settings.Secure.getString(getApplication().getContentResolver(),"enabled_notification_listeners").contains(getApplicationContext().getPackageName())) {
@@ -212,6 +220,7 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         mPrevButton.setOnClickListener(mClickListener);
         mNextButton.setOnClickListener(mClickListener);
         mPlayPauseButton.setOnClickListener(mClickListener);
+        mArtwork.setOnClickListener(mClickListener);
         mAlbumText.setOnClickListener(mClickListener);
 
         showActionBar();
