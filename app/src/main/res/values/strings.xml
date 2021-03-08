@@ -348,6 +348,7 @@
     <string name="not_found_media_player">No running media player found</string>
     <string name="start_media_player">Start a compatible media player</string>
     <string name="unknown">Unknown</string>
+    <string name="touch_here">Touch Here for Permisson</string>
     <!-- TaskActivity -->
     <string name="quicktask_title">Quick Tasks</string>
     <string name="task_title_navigation">Navigation</string>

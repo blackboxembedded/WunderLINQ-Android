@@ -37,6 +37,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -119,6 +120,12 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
                     break;
                 case R.id.action_forward:
                     goForward();
+                    break;
+                case R.id.album_text:
+                    if (Settings.Secure.getString(getApplication().getContentResolver(),"enabled_notification_listeners") == null
+                        || !Settings.Secure.getString(getApplication().getContentResolver(),"enabled_notification_listeners").contains(getApplicationContext().getPackageName())) {
+                        startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+                    }
                     break;
             }
         }
@@ -205,6 +212,7 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         mPrevButton.setOnClickListener(mClickListener);
         mNextButton.setOnClickListener(mClickListener);
         mPlayPauseButton.setOnClickListener(mClickListener);
+        mAlbumText.setOnClickListener(mClickListener);
 
         showActionBar();
     }
@@ -236,9 +244,9 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
                 mArtistText.setText("");
             }
         } else {
+            mArtistText.setText(R.string.toast_permission_denied);
             mTitleText.setText("");
-            mAlbumText.setText(R.string.toast_permission_denied);
-            mArtistText.setText("");
+            mAlbumText.setText(R.string.touch_here);
         }
 
         getSupportActionBar().show();
@@ -336,7 +344,7 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
 
             try {
                 MediaMetadata metaData = controller.getMetadata();
-
+                Log.d(TAG,"Package Name: " + controller.getPackageName());
                 String metadataArtist = getString(R.string.unknown);
                 if (metaData.getString(MediaMetadata.METADATA_KEY_ARTIST) != null) {
                     metadataArtist = metaData.getString(MediaMetadata.METADATA_KEY_ARTIST);
