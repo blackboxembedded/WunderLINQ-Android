@@ -417,7 +417,28 @@ public class BluetoothLeService extends Service {
                     SensorManager.getOrientation(mRotationFixMatrix, orientation);
                     leanAngle = ((orientation[2] * 180) / Math.PI) + 90;
                 }
-                Data.setLeanAngle(leanAngle);
+                //Filter out impossible values, max sport bike lean is +/-60
+                if ((leanAngle >= -60.0) && (leanAngle <= 60.0)) {
+                    Data.setLeanAngle(leanAngle);
+                    //Store Max L and R lean angle
+                    if (leanAngle > 0) {
+                        if (Data.getLeanAngleMaxR() != null) {
+                            if (leanAngle > Data.getLeanAngleMaxR()) {
+                                Data.setLeanAngleMaxR(leanAngle);
+                            }
+                        } else {
+                            Data.setLeanAngleMaxR(leanAngle);
+                        }
+                    } else if (leanAngle < 0) {
+                        if (Data.getLeanAngleMaxL() != null) {
+                            if (Math.abs(leanAngle) > Data.getLeanAngleMaxL()) {
+                                Data.setLeanAngleMaxL(Math.abs(leanAngle));
+                            }
+                        } else {
+                            Data.setLeanAngleMaxL(Math.abs(leanAngle));
+                        }
+                    }
+                }
             } else if (event.sensor.getType() == Sensor.TYPE_GRAVITY) {
                 mGravity = event.values.clone();
             } else if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
@@ -1100,7 +1121,6 @@ public class BluetoothLeService extends Service {
             body.append(MyApplication.getContext().getResources().getString(R.string.fault_TIREFCF)).append("\n");
         }
         if(FaultStatus.getrearTirePressureCriticalActive()){
-            Log.d(TAG,"Using fault_TIRERCF) string");
             body.append(MyApplication.getContext().getResources().getString(R.string.fault_TIRERCF)).append("\n");
         }
         if(FaultStatus.getgeneralFlashingRedActive()){
@@ -1288,7 +1308,26 @@ public class BluetoothLeService extends Service {
                     } else {
                         leanAngleBikeFixed = (2048 - leanAngleBike) * -1.0;
                     }
-                    Data.setLeanAngleBike(leanAngleBikeFixed * 0.045);
+                    leanAngleBikeFixed = leanAngleBikeFixed * 0.045;
+                    Data.setLeanAngleBike(leanAngleBikeFixed);
+                    //Store Max L and R lean angle
+                    if(leanAngleBikeFixed > 0){
+                        if (Data.getLeanAngleMaxR() != null) {
+                            if (leanAngleBikeFixed > Data.getLeanAngleMaxR()) {
+                                Data.setLeanAngleMaxR(leanAngleBikeFixed);
+                            }
+                        } else {
+                            Data.setLeanAngleMaxR(leanAngleBikeFixed);
+                        }
+                    } else if(leanAngleBikeFixed < 0){
+                        if (Data.getLeanAngleMaxL() != null) {
+                            if (Math.abs(leanAngleBikeFixed) > Data.getLeanAngleMaxL()) {
+                                Data.setLeanAngleMaxL(Math.abs(leanAngleBikeFixed));
+                            }
+                        } else {
+                            Data.setLeanAngleMaxL(Math.abs(leanAngleBikeFixed));
+                        }
+                    }
                 }
 
                 // Brakes
@@ -2299,7 +2338,7 @@ public class BluetoothLeService extends Service {
         mLocationRequest.setFastestInterval(1000);
     }
 
-    private static boolean isConnected() {
+    public static boolean isConnected() {
         return mBluetoothGatt != null && mConnectionState == BluetoothProfile.STATE_CONNECTED;
     }
 

@@ -274,6 +274,22 @@ public class Data {
         Data.leanAngle = leanAngle;
     }
 
+    // Lean Angle Max
+    private static Double leanAngleMaxL;
+    public static Double getLeanAngleMaxL() {
+        return leanAngleMaxL;
+    }
+    public static void setLeanAngleMaxL(Double leanAngleMaxL){
+        Data.leanAngleMaxL = leanAngleMaxL;
+    }
+    private static Double leanAngleMaxR;
+    public static Double getLeanAngleMaxR() {
+        return leanAngleMaxR;
+    }
+    public static void setLeanAngleMaxR(Double leanAngleMaxR){
+        Data.leanAngleMaxR = leanAngleMaxR;
+    }
+
     // g-force
     private static Double gForce;
     public static Double getGForce() {
@@ -310,13 +326,29 @@ public class Data {
         Data.barometricPressure = barometricPressure;
     }
 
-    // Lean Angle
+    // Lean Angle Bike
     private static Double leanAngleBike;
     public static Double getLeanAngleBike() {
         return leanAngleBike;
     }
     public static void setLeanAngleBike(Double leanAngleBike){
         Data.leanAngleBike = leanAngleBike;
+    }
+
+    // Lean Angle Bike Max
+    private static Double leanAngleBikeMaxL;
+    public static Double getLeanAngleBikeMaxL() {
+        return leanAngleBikeMaxL;
+    }
+    public static void setLeanAngleBikeMaxL(Double leanAngleBikeMaxL){
+        Data.leanAngleBikeMaxL = leanAngleBikeMaxL;
+    }
+    private static Double leanAngleBikeMaxR;
+    public static Double getLeanAngleBikeMaxR() {
+        return leanAngleBikeMaxR;
+    }
+    public static void setLeanAngleBikeMaxR(Double leanAngleBikeMaxR){
+        Data.leanAngleBikeMaxR = leanAngleBikeMaxR;
     }
 
     // Rear Speed
