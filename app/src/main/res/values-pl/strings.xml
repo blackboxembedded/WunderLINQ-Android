@@ -735,4 +735,6 @@
     <string name="consumer_hid_0x87_label">Wybór Mediów</string>
     <string name="consumer_hid_0x90_label">Wybierz Wiadomości</string>
     <string name="consumer_hid_0x9A_label">Wybierz Dom</string>
+    <string name="task_title_applauncher">App Launcher</string>
+    <string name="applist_title">Aplikacje</string>
 </resources>
