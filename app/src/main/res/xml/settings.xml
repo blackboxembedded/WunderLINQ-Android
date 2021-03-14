@@ -251,6 +251,14 @@
             android:title="@string/pref_display_dashboard_name" >
         </CheckBoxPreference>
         <ListPreference
+            android:key="prefRPMMax"
+            android:title="@string/pref_rpmmax_name"
+            android:summary="%s"
+            android:entries="@array/rpmmax_array"
+            android:entryValues="@array/rpmmax_arrayValues"
+            android:defaultValue="0"
+            />
+        <ListPreference
             android:key="prefContactsFilter"
             android:title="@string/pref_contacts_filter_title"
             android:summary="%s"

@@ -24,8 +24,8 @@ public class MyApplication extends Application {
 
     private static Context mContext;
 
-    private boolean videoRecording;
-    private boolean tripRecording;
+    private static boolean videoRecording;
+    private static boolean tripRecording;
 
     @Override
     public void onCreate() {
@@ -37,17 +37,17 @@ public class MyApplication extends Application {
         return mContext;
     }
 
-    public boolean getVideoRecording() {
+    public static boolean getVideoRecording() {
         return videoRecording;
     }
-    public void setVideoRecording(boolean videoRecording) {
-        this.videoRecording = videoRecording;
+    public static void setVideoRecording(boolean videoRecording) {
+        MyApplication.videoRecording = videoRecording;
     }
 
-    public boolean getTripRecording() {
+    public static boolean getTripRecording() {
         return tripRecording;
     }
-    public void setTripRecording(boolean tripRecording) {
-        this.tripRecording = tripRecording;
+    public static void setTripRecording(boolean tripRecording) {
+       MyApplication.tripRecording = tripRecording;
     }
 }

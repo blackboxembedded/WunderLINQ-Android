@@ -54,7 +54,6 @@
     </string>
     <string name="disclaimer_ok">I agree</string>
     <string name="disclaimer_quit">Quit</string>
-    <!-- BLE Stuff Below -->
     <string name="bt_not_supported">BLE is not supported</string>
     <string name="rdc_front_label">Front Tire</string>
     <string name="rdc_rear_label">Rear Tire</string>
@@ -462,6 +461,17 @@
     <string name="pref_highlightColor_title">Highlight Color</string>
     <string name="pref_display_dashboard_name">Enable Dashboard Screen</string>
     <string name="pref_dashboard_speedsource_name">Dashboard Speed Source</string>
+    <string name="pref_rpmmax_name">Max RPM</string>
+    <string name="rpmmax_10k">10000</string>
+    <string name="rpmmax_15k">15000</string>
+    <string-array name="rpmmax_array" translatable="false">
+        <item name="1">@string/rpmmax_10k</item>
+        <item name="2">@string/rpmmax_15k</item>
+    </string-array>
+    <string-array name="rpmmax_arrayValues" translatable="false">
+        <item name="1">0</item>
+        <item name="2">1</item>
+    </string-array>
     <string name="pref_grid_settings_title">Data Grid Customization</string>
     <string name="pref_grid_settings_summary">Customize which data points to display and in which cell</string>
     <string name="first">First</string>
@@ -863,12 +873,21 @@
     <string name="gpx_import_alert_title">GPX Import</string>
     <string name="gpx_import_alert_body">Import waypoints from GPX?</string>
 
+    <!-- DashActivity -->
     <string name="dash_title">Dashboard</string>
-    <string name="dash_ambient_label">Air:</string>
-    <string name="dash_engine_label">Eng:</string>
-    <string name="dash_range_label">Range:</string>
-    <string name="dash_rdcf_label">F:</string>
-    <string name="dash_rdcr_label">R:</string>
+    <string name="dash_odometer_label">Odo</string>
+    <string name="dash_trip1_label">Trip1</string>
+    <string name="dash_trip2_label">Trip2</string>
+    <string name="dash_tripauto_label">TripA</string>
+    <string name="dash_avgspeed_label">AVG</string>
+    <string name="dash_cconsumption_label">CONS</string>
+    <string name="dash_fueleconomyone_label">Econo1</string>
+    <string name="dash_fueleconomytwo_label">Econo2</string>
+    <string name="dash_ambient_label">Air</string>
+    <string name="dash_engine_label">Eng</string>
+    <string name="dash_range_label">Range</string>
+    <string name="dash_rdcf_label">F</string>
+    <string name="dash_rdcr_label">R</string>
 
     <string name="customize_btn_label">Customize</string>
     <string name="default_btn_label">Default Mode</string>
