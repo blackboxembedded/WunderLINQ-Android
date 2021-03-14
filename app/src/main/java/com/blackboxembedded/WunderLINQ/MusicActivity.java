@@ -357,7 +357,6 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
 
             try {
                 MediaMetadata metaData = controller.getMetadata();
-                Log.d(TAG,"Package Name: " + controller.getPackageName());
                 String metadataArtist = getString(R.string.unknown);
                 if (metaData.getString(MediaMetadata.METADATA_KEY_ARTIST) != null) {
                     metadataArtist = metaData.getString(MediaMetadata.METADATA_KEY_ARTIST);
