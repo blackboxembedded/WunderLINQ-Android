@@ -101,20 +101,7 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
                     }
                     break;
                 case R.id.play_pause_button:
-                    if (controller != null) {
-                        PlaybackState playbackState = controller.getPlaybackState();
-                        try {
-                            if (playbackState.getState() != PlaybackState.STATE_PLAYING) {
-                                controls.play();
-                                refreshMetaData();
-                            } else {
-                                controls.pause();
-                                refreshMetaData();
-                            }
-                        } catch (NullPointerException e) {
-                            Log.d(TAG,"NullPointerException: " + e.toString());
-                        }
-                    }
+                    playBack();
                     break;
                 case R.id.action_back:
                     goBack();
@@ -325,6 +312,23 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         startActivity(backIntent);
     }
 
+    void playBack(){
+        if (controller != null) {
+            PlaybackState playbackState = controller.getPlaybackState();
+            try {
+                if (playbackState.getState() != PlaybackState.STATE_PLAYING) {
+                    controls.play();
+                    refreshMetaData();
+                } else {
+                    controls.pause();
+                    refreshMetaData();
+                }
+            } catch (NullPointerException e) {
+                Log.d(TAG,"NullPointerException: " + e.toString());
+            }
+        }
+    }
+
     private Runnable mUpdateMetaData = new Runnable() {
         @Override
         public void run() {
@@ -425,8 +429,12 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        Log.d(TAG, "Keycode: " + keyCode);
         switch (keyCode) {
+            case KeyEvent.KEYCODE_ENTER:
+                playBack();
+                mPlayPauseButton.setFocusable(true);
+                mPlayPauseButton.requestFocus();
+                return true;
             case KeyEvent.KEYCODE_DPAD_UP:
                 if (controller != null) {
                     controls.skipToNext();
