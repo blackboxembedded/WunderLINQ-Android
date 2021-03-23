@@ -67,7 +67,9 @@ public class SportDashboard {
     private static String heightUnit = "m";
     private static String distanceTimeUnit = "KMH";
     private static String consumptionUnit = "L/100";
-    private static boolean fifteenK = false;
+
+    private static boolean twelveK = false;
+    private static boolean tenK = false;
 
     public static SVG updateDashboard(int infoLine){
         try {
@@ -108,14 +110,16 @@ public class SportDashboard {
             } else if (consumptionFormat.contains("3")) {
                 consumptionUnit = "kmL";
             }
-            if (sharedPrefs.getString("prefRPMMax", "0").equals("1")){
-                fifteenK = true;
+            if (sharedPrefs.getString("prefRPMMax", "0").equals("0")){
+                tenK = true;
+            } else if (sharedPrefs.getString("prefRPMMax", "0").equals("1")){
+                twelveK = true;
             }
 
             //Speed Label
             doc.getElementById("speedUnit").setTextContent(distanceTimeUnit);
             //RPM Digits For GS
-            if (!fifteenK){
+            if (tenK){
                 doc.getElementById("rpmDialDigit1").setTextContent("2");
                 doc.getElementById("rpmDialDigit2").setTextContent("3");
                 doc.getElementById("rpmDialDigit3").setTextContent("4");
@@ -125,6 +129,16 @@ public class SportDashboard {
                 doc.getElementById("rpmDialDigit7").setTextContent("8");
                 doc.getElementById("rpmDialDigit8").setTextContent("9");
                 doc.getElementById("rpmDialDigit9").setTextContent("10");
+            } else if(twelveK){
+                doc.getElementById("rpmDialDigit1").setTextContent("2");
+                doc.getElementById("rpmDialDigit2").setTextContent("4");
+                doc.getElementById("rpmDialDigit3").setTextContent("6");
+                doc.getElementById("rpmDialDigit4").setTextContent("7");
+                doc.getElementById("rpmDialDigit5").setTextContent("8");
+                doc.getElementById("rpmDialDigit6").setTextContent("9");
+                doc.getElementById("rpmDialDigit7").setTextContent("10");
+                doc.getElementById("rpmDialDigit8").setTextContent("11");
+                doc.getElementById("rpmDialDigit9").setTextContent("12");
             }
 
             //Icons
@@ -277,7 +291,7 @@ public class SportDashboard {
             }
             //RPM Dial
             if (Data.getRPM() != null) {
-                if (!fifteenK) {
+                if (tenK) {
                     if (Data.getRPM() >= 0) {
                         doc.getElementById("rpmTick1").setAttribute("style", "display:inline");
                     }
@@ -784,6 +798,516 @@ public class SportDashboard {
                         doc.getElementById("rpmNeedle65").setAttribute("style", "display:inline");
                     }
                     if (Data.getRPM() >= 10000) {
+                        doc.getElementById("rpmNeedle66").setAttribute("style", "display:inline");
+                    }
+                } else if (twelveK) {
+                    if (Data.getRPM() >= 0) {
+                        doc.getElementById("rpmTick1").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 154) {
+                        doc.getElementById("rpmTick2").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 308) {
+                        doc.getElementById("rpmTick3").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 462) {
+                        doc.getElementById("rpmTick4").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 616) {
+                        doc.getElementById("rpmTick5").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 770) {
+                        doc.getElementById("rpmTick6").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 924) {
+                        doc.getElementById("rpmTick7").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 1078) {
+                        doc.getElementById("rpmTick8").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 1232) {
+                        doc.getElementById("rpmTick9").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 1386) {
+                        doc.getElementById("rpmTick10").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 1540) {
+                        doc.getElementById("rpmTick11").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 1694) {
+                        doc.getElementById("rpmTick12").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 1848) {
+                        doc.getElementById("rpmTick13").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 2000) {
+                        doc.getElementById("rpmTick14").setAttribute("style", "display:inline");
+                    }
+
+                    if (Data.getRPM() >= 2167) {
+                        doc.getElementById("rpmTick15").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 2167) {
+                        doc.getElementById("rpmTick16").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 2334) {
+                        doc.getElementById("rpmTick17").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 2501) {
+                        doc.getElementById("rpmTick18").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 2668) {
+                        doc.getElementById("rpmTick19").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 2835) {
+                        doc.getElementById("rpmTick20").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 3002) {
+                        doc.getElementById("rpmTick21").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 3169) {
+                        doc.getElementById("rpmTick22").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 3503) {
+                        doc.getElementById("rpmTick23").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 3670) {
+                        doc.getElementById("rpmTick24").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 3837) {
+                        doc.getElementById("rpmTick25").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 4000) {
+                        doc.getElementById("rpmTick26").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 4154) {
+                        doc.getElementById("rpmTick27").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 4308) {
+                        doc.getElementById("rpmTick28").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 4462) {
+                        doc.getElementById("rpmTick29").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 4616) {
+                        doc.getElementById("rpmTick30").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 4770) {
+                        doc.getElementById("rpmTick31").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 4924) {
+                        doc.getElementById("rpmTick32").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 5078) {
+                        doc.getElementById("rpmTick33").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 5232) {
+                        doc.getElementById("rpmTick34").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 5386) {
+                        doc.getElementById("rpmTick35").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 5540) {
+                        doc.getElementById("rpmTick36").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 5694) {
+                        doc.getElementById("rpmTick37").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 5848) {
+                        doc.getElementById("rpmTick38").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 6000) {
+                        doc.getElementById("rpmTick39").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 6077) {
+                        doc.getElementById("rpmTick40").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 6154) {
+                        doc.getElementById("rpmTick41").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 6231) {
+                        doc.getElementById("rpmTick42").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 6308) {
+                        doc.getElementById("rpmTick43").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 6385) {
+                        doc.getElementById("rpmTick44").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 6462) {
+                        doc.getElementById("rpmTick45").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 6539) {
+                        doc.getElementById("rpmTick46").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 6616) {
+                        doc.getElementById("rpmTick47").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 6693) {
+                        doc.getElementById("rpmTick48").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 6770) {
+                        doc.getElementById("rpmTick49").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 6847) {
+                        doc.getElementById("rpmTick50").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 6924) {
+                        doc.getElementById("rpmTick51").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 7000) {
+                        doc.getElementById("rpmTick52").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 7083) {
+                        doc.getElementById("rpmTick53").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 7166) {
+                        doc.getElementById("rpmTick54").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 7249) {
+                        doc.getElementById("rpmTick55").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 7332) {
+                        doc.getElementById("rpmTick56").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 7415) {
+                        doc.getElementById("rpmTick57").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 7498) {
+                        doc.getElementById("rpmTick58").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 7581) {
+                        doc.getElementById("rpmTick59").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 7664) {
+                        doc.getElementById("rpmTick60").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 7747) {
+                        doc.getElementById("rpmTick61").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 7830) {
+                        doc.getElementById("rpmTick62").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 7913) {
+                        doc.getElementById("rpmTick63").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 8000) {
+                        doc.getElementById("rpmTick64").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 8077) {
+                        doc.getElementById("rpmTick65").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 8154) {
+                        doc.getElementById("rpmTick66").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 8231) {
+                        doc.getElementById("rpmTick67").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 8308) {
+                        doc.getElementById("rpmTick68").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 8385) {
+                        doc.getElementById("rpmTick69").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 8462) {
+                        doc.getElementById("rpmTick70").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 8539) {
+                        doc.getElementById("rpmTick71").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 8616) {
+                        doc.getElementById("rpmTick72").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 8693) {
+                        doc.getElementById("rpmTick73").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 8770) {
+                        doc.getElementById("rpmTick74").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 8847) {
+                        doc.getElementById("rpmTick75").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 8924) {
+                        doc.getElementById("rpmTick76").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 9000) {
+                        doc.getElementById("rpmTick77").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 9083) {
+                        doc.getElementById("rpmTick78").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 9166) {
+                        doc.getElementById("rpmTick79").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 9249) {
+                        doc.getElementById("rpmTick80").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 9332) {
+                        doc.getElementById("rpmTick81").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 9415) {
+                        doc.getElementById("rpmTick82").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 9498) {
+                        doc.getElementById("rpmTick83").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 9581) {
+                        doc.getElementById("rpmTick84").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 9664) {
+                        doc.getElementById("rpmTick85").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 9747) {
+                        doc.getElementById("rpmTick86").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 9830) {
+                        doc.getElementById("rpmTick87").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 9913) {
+                        doc.getElementById("rpmTick88").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 10000) {
+                        doc.getElementById("rpmTick89").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 10083) {
+                        doc.getElementById("rpmTick90").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 10166) {
+                        doc.getElementById("rpmTick91").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 10249) {
+                        doc.getElementById("rpmTick92").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 10332) {
+                        doc.getElementById("rpmTick93").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 10415) {
+                        doc.getElementById("rpmTick94").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 10498) {
+                        doc.getElementById("rpmTick95").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 10581) {
+                        doc.getElementById("rpmTick96").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 10664) {
+                        doc.getElementById("rpmTick97").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 10747) {
+                        doc.getElementById("rpmTick98").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 10830) {
+                        doc.getElementById("rpmTick99").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 10913) {
+                        doc.getElementById("rpmTick100").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 11000) {
+                        doc.getElementById("rpmTick101").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 11066) {
+                        doc.getElementById("rpmTick102").setAttribute("style", "display:inline");
+                    }
+                    // Needle
+                    if ((Data.getRPM() >= 0) && (Data.getRPM() <= 249)){
+                        doc.getElementById("rpmNeedle0").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 250) && (Data.getRPM() <=499)){
+                        doc.getElementById("rpmNeedle1").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 500) && (Data.getRPM() <= 749)){
+                        doc.getElementById("rpmNeedle2").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 750) && (Data.getRPM() <= 999)){
+                        doc.getElementById("rpmNeedle3").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 1000) && (Data.getRPM() <= 1249)){
+                        doc.getElementById("rpmNeedle4").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 1250) && (Data.getRPM() <= 1499)){
+                        doc.getElementById("rpmNeedle5").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 1500) && (Data.getRPM() <= 1749)){
+                        doc.getElementById("rpmNeedle6").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 1750) && (Data.getRPM() <= 1999)){
+                        doc.getElementById("rpmNeedle7").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 2000) && (Data.getRPM() <= 2286)) {
+                        doc.getElementById("rpmNeedle8").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 2287) && (Data.getRPM() <= 2573)) {
+                        doc.getElementById("rpmNeedle9").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 2574) && (Data.getRPM() <= 2860)) {
+                        doc.getElementById("rpmNeedle10").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 2861) && (Data.getRPM() <= 3147)) {
+                        doc.getElementById("rpmNeedle11").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 3148) && (Data.getRPM() <= 3434)) {
+                        doc.getElementById("rpmNeedle12").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 3435) && (Data.getRPM() <= 3721)) {
+                        doc.getElementById("rpmNeedle13").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 3722) && (Data.getRPM() <= 3999)) {
+                        doc.getElementById("rpmNeedle14").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 4000) && (Data.getRPM() <= 4249)) {
+                        doc.getElementById("rpmNeedle15").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 4250) && (Data.getRPM() <= 4499)) {
+                        doc.getElementById("rpmNeedle16").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 4500) && (Data.getRPM() <= 4749)) {
+                        doc.getElementById("rpmNeedle17").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 4750) && (Data.getRPM() <= 4999)) {
+                        doc.getElementById("rpmNeedle18").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 5000) && (Data.getRPM() <= 5249)) {
+                        doc.getElementById("rpmNeedle19").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 5250) && (Data.getRPM() <= 5499)) {
+                        doc.getElementById("rpmNeedle20").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 5500) && (Data.getRPM() <= 5749)) {
+                        doc.getElementById("rpmNeedle21").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 5750) && (Data.getRPM() <= 6000)) {
+                        doc.getElementById("rpmNeedle22").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 6001) && (Data.getRPM() <= 6124)) {
+                        doc.getElementById("rpmNeedle23").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 6125) && (Data.getRPM() <= 6249)) {
+                        doc.getElementById("rpmNeedle24").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 6250) && (Data.getRPM() <= 6374)) {
+                        doc.getElementById("rpmNeedle25").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 6375) && (Data.getRPM() <= 6499)) {
+                        doc.getElementById("rpmNeedle26").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 6500) && (Data.getRPM() <=6674)) {
+                        doc.getElementById("rpmNeedle27").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 6750) && (Data.getRPM() <= 6874)) {
+                        doc.getElementById("rpmNeedle28").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 6875) && (Data.getRPM() <= 6999)) {
+                        doc.getElementById("rpmNeedle29").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 7000) && (Data.getRPM() <= 7124)) {
+                        doc.getElementById("rpmNeedle30").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 7125) && (Data.getRPM() <= 7249)) {
+                        doc.getElementById("rpmNeedle31").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 7250) && (Data.getRPM() <= 7374)) {
+                        doc.getElementById("rpmNeedle32").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 7375) && (Data.getRPM() <= 7499)) {
+                        doc.getElementById("rpmNeedle33").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 7500) && (Data.getRPM() <= 7624)) {
+                        doc.getElementById("rpmNeedle34").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 7625) && (Data.getRPM() <= 7749)) {
+                        doc.getElementById("rpmNeedle35").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 7750) && (Data.getRPM() <= 7874)) {
+                        doc.getElementById("rpmNeedle36").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 7875) && (Data.getRPM() <= 8000)) {
+                        doc.getElementById("rpmNeedle37").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 8001) && (Data.getRPM() <= 6142)) {
+                        doc.getElementById("rpmNeedle38").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 6143) && (Data.getRPM() <= 6285)) {
+                        doc.getElementById("rpmNeedle39").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 6286) && (Data.getRPM() <= 6428)) {
+                        doc.getElementById("rpmNeedle40").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 6429) && (Data.getRPM() <= 6571)) {
+                        doc.getElementById("rpmNeedle41").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 6572) && (Data.getRPM() <= 6714)) {
+                        doc.getElementById("rpmNeedle42").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 6715) && (Data.getRPM() <= 6857)) {
+                        doc.getElementById("rpmNeedle43").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 6858) && (Data.getRPM() <= 6999)) {
+                        doc.getElementById("rpmNeedle44").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 9000) && (Data.getRPM() <= 9142)) {
+                        doc.getElementById("rpmNeedle45").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 9143) && (Data.getRPM() <= 9285)) {
+                        doc.getElementById("rpmNeedle46").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 9286) && (Data.getRPM() <= 9428)) {
+                        doc.getElementById("rpmNeedle47").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 9429) && (Data.getRPM() <= 9571)) {
+                        doc.getElementById("rpmNeedle48").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 9572) && (Data.getRPM() <= 9714)) {
+                        doc.getElementById("rpmNeedle49").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 9715) && (Data.getRPM() <= 9857)) {
+                        doc.getElementById("rpmNeedle50").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 9858) && (Data.getRPM() <= 9999)) {
+                        doc.getElementById("rpmNeedle51").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 10000) && (Data.getRPM() <= 10142)) {
+                        doc.getElementById("rpmNeedle52").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 10143) && (Data.getRPM() <= 10285)) {
+                        doc.getElementById("rpmNeedle53").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 10286) && (Data.getRPM() <= 10428)) {
+                        doc.getElementById("rpmNeedle54").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 10429) && (Data.getRPM() <= 10571)) {
+                        doc.getElementById("rpmNeedle55").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 10572) && (Data.getRPM() <= 10714)) {
+                        doc.getElementById("rpmNeedle56").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 10715) && (Data.getRPM() <= 10857)) {
+                        doc.getElementById("rpmNeedle57").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 10858) && (Data.getRPM() <= 10999)) {
+                        doc.getElementById("rpmNeedle58").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 11000) && (Data.getRPM() <= 11143)) {
+                        doc.getElementById("rpmNeedle59").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 11144) && (Data.getRPM() <= 11287)) {
+                        doc.getElementById("rpmNeedle60").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 11288) && (Data.getRPM() <= 11431)) {
+                        doc.getElementById("rpmNeedle61").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 11432) && (Data.getRPM() <= 11575)) {
+                        doc.getElementById("rpmNeedle62").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 11576) && (Data.getRPM() <= 11719)) {
+                        doc.getElementById("rpmNeedle63").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 11720) && (Data.getRPM() <= 11863)) {
+                        doc.getElementById("rpmNeedle64").setAttribute("style", "display:inline");
+                    }
+                    if ((Data.getRPM() >= 11864) && (Data.getRPM() <= 11999)) {
+                        doc.getElementById("rpmNeedle65").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 12000) {
                         doc.getElementById("rpmNeedle66").setAttribute("style", "display:inline");
                     }
                 } else {

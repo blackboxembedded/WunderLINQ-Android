@@ -66,6 +66,8 @@ public class StandardDashboard {
     private static String heightUnit = "m";
     private static String distanceTimeUnit = "KMH";
     private static String consumptionUnit = "L/100";
+
+    private static boolean twelveK = false;
     private static boolean fifteenK = false;
 
     public static SVG updateDashboard(int infoLine){
@@ -108,6 +110,8 @@ public class StandardDashboard {
                 consumptionUnit = "kmL";
             }
             if (sharedPrefs.getString("prefRPMMax", "0").equals("1")){
+                twelveK = true;
+            } else if (sharedPrefs.getString("prefRPMMax", "0").equals("2")){
                 fifteenK = true;
             }
 
@@ -125,7 +129,18 @@ public class StandardDashboard {
             //Speed Label
             doc.getElementById("speedLabel").setTextContent(distanceTimeUnit);
             //RPM Digits For Sport Bikes
-            if (fifteenK){
+            if (twelveK) {
+                doc.getElementById("rpmDialDigit1").setTextContent("2");
+                doc.getElementById("rpmDialDigit2").setTextContent("4");
+                doc.getElementById("rpmDialDigit3").setTextContent("5");
+                doc.getElementById("rpmDialDigit4").setTextContent("6");
+                doc.getElementById("rpmDialDigit5").setTextContent("7");
+                doc.getElementById("rpmDialDigit6").setTextContent("8");
+                doc.getElementById("rpmDialDigit7").setTextContent("9");
+                doc.getElementById("rpmDialDigit8").setTextContent("10");
+                doc.getElementById("rpmDialDigit9").setTextContent("11");
+                doc.getElementById("rpmDialDigit10").setTextContent("12");
+            } else if (fifteenK){
                 doc.getElementById("rpmDialDigit1").setTextContent("2");
                 doc.getElementById("rpmDialDigit2").setTextContent("4");
                 doc.getElementById("rpmDialDigit3").setTextContent("6");
@@ -355,7 +370,98 @@ public class StandardDashboard {
 
             //RPM Gauge
             if (Data.getRPM() != null) {
-                if (fifteenK) {
+                if(twelveK) {
+                    if (Data.getRPM() >= 666) {
+                        doc.getElementById("rpm333").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 1333) {
+                        doc.getElementById("rpm666").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 2000) {
+                        doc.getElementById("rpm1000").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 2666) {
+                        doc.getElementById("rpm1333").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 3333) {
+                        doc.getElementById("rpm1666").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 4000) {
+                        doc.getElementById("rpm2000").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 4333) {
+                        doc.getElementById("rpm2333").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 4666) {
+                        doc.getElementById("rpm2666").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 5000) {
+                        doc.getElementById("rpm3000").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 5333) {
+                        doc.getElementById("rpm3333").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 5666) {
+                        doc.getElementById("rpm3666").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 6000) {
+                        doc.getElementById("rpm4000").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 6333) {
+                        doc.getElementById("rpm4333").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 6666) {
+                        doc.getElementById("rpm4666").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 7000) {
+                        doc.getElementById("rpm5000").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 7333) {
+                        doc.getElementById("rpm5333").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 7666) {
+                        doc.getElementById("rpm5666").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 8000) {
+                        doc.getElementById("rpm6000").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 8333) {
+                        doc.getElementById("rpm6333").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 8666) {
+                        doc.getElementById("rpm6666").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 9000) {
+                        doc.getElementById("rpm7000").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 9333) {
+                        doc.getElementById("rpm7333").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 9666) {
+                        doc.getElementById("rpm7666").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 10000) {
+                        doc.getElementById("rpm8000").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 10333) {
+                        doc.getElementById("rpm8333").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 10666) {
+                        doc.getElementById("rpm8666").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 11000) {
+                        doc.getElementById("rpm9000").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 11333) {
+                        doc.getElementById("rpm9333").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 11666) {
+                        doc.getElementById("rpm9666").setAttribute("style", "display:inline");
+                    }
+                    if (Data.getRPM() >= 12000) {
+                        doc.getElementById("rpm10000").setAttribute("style", "display:inline");
+                    }
+                }else if (fifteenK) {
                     if (Data.getRPM() >= 666) {
                         doc.getElementById("rpm333").setAttribute("style", "display:inline");
                     }
