@@ -199,6 +199,11 @@ public class StandardDashboard {
                             fuelrange = Utils.kmToMiles(fuelrange);
                         }
                         doc.getElementById("dataValue").setTextContent(String.valueOf(Math.round(fuelrange)) + " " + distanceUnit);
+                        if (FaultStatus.getfuelFaultActive()) {
+                            doc.getElementById("dataValue").setAttribute("style",
+                                    doc.getElementById("dataValue").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
+                            );
+                        }
                     }
                     break;
                 default:
@@ -263,20 +268,6 @@ public class StandardDashboard {
                 if (Data.getEngineTemperature() >= 104.0) {
                     doc.getElementById("engineTemp").setAttribute("style",
                             doc.getElementById("engineTemp").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
-                    );
-                }
-            }
-            //Range
-            if (Data.getFuelRange() != null) {
-                double fuelrange = Data.getFuelRange();
-                if (distanceFormat.contains("1")) {
-                    distanceUnit = "mls";
-                    fuelrange = Utils.kmToMiles(fuelrange);
-                }
-                doc.getElementById("dataValue").setTextContent(Utils.oneDigit.format(fuelrange) + distanceUnit);
-                if (FaultStatus.getfuelFaultActive()) {
-                    doc.getElementById("dataValue").setAttribute("style",
-                            doc.getElementById("dataValue").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
                     );
                 }
             }
