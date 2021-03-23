@@ -174,33 +174,28 @@ public class SportDashboard {
             }
             //Speed
             String speedSource = sharedPrefs.getString("prefDashSpeedSource", "0");
-            String speedValue = null;
+            Double speed = null;
             if (speedSource.contains("0")) {
                 if (Data.getSpeed() != null) {
-                    double speed = Data.getSpeed();
-                    if (distanceFormat.contains("1")) {
-                        speed = Utils.kmToMiles(speed);
-                    }
-                    speedValue = String.valueOf(Math.round(speed));
+                    speed = Data.getSpeed();
                 }
             } else if (speedSource.contains("1")) {
                 if (Data.getRearSpeed() != null) {
-                    double speed = Data.getRearSpeed();
-                    if (distanceFormat.contains("1")) {
-                        speed = Utils.kmToMiles(speed);
-                    }
-                    speedValue = String.valueOf(Math.round(speed));
+                    speed = Data.getRearSpeed();
                 }
             } else if (speedSource.contains("2")) {
                 if (Data.getLastLocation() != null) {
-                    double speed = (Data.getLastLocation().getSpeed() * 3.6);
-                    if (distanceFormat.contains("1")) {
-                        speed = Utils.kmToMiles(speed);
-                    }
-                    speedValue = String.valueOf(Math.round(speed));
+                    speed = (Data.getLastLocation().getSpeed() * 3.6);
                 }
             }
-            if (speedValue != null){
+            if (speed != null){
+                if (distanceFormat.contains("1")) {
+                    speed = Utils.kmToMiles(speed);
+                }
+                String speedValue = String.valueOf(Math.round(speed));
+                if (speed < 10) {
+                    speedValue = String.format("%02d", Math.round(speed));
+                }
                 doc.getElementById("speed").setTextContent(speedValue);
             }
             //Gear
