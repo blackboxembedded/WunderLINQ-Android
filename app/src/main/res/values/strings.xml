@@ -860,7 +860,7 @@
     <string-array name="actioncam_array">
         <item name="1">None</item>
         <item name="2">Hero3</item>
-        <item name="3">Hero4 or Newer</item>
+        <item name="3">Hero4 - Hero8</item>
     </string-array>
     <string-array name="actioncam_arrayValues" translatable="false">
         <item name="1">0</item>
