@@ -35,6 +35,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blackboxembedded.WunderLINQ.SVGDashboards.ADVDashboard;
 import com.blackboxembedded.WunderLINQ.SVGDashboards.SportDashboard;
 import com.blackboxembedded.WunderLINQ.SVGDashboards.StandardDashboard;
 import com.caverock.androidsvg.SVG;
@@ -210,7 +211,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     void nextDashboard(){
-        if (currentDashboard == 2){
+        if (currentDashboard == 3){
             currentDashboard = 1;
         } else {
             currentDashboard = currentDashboard + 1;
@@ -290,8 +291,10 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
 
                     if (currentDashboard == 1){
                         svg = StandardDashboard.updateDashboard(currentInfoLine);
-                    } else {
+                    } else if (currentDashboard == 2){
                         svg = SportDashboard.updateDashboard(currentInfoLine);
+                    } else if (currentDashboard == 3){
+                        svg = ADVDashboard.updateDashboard(currentInfoLine);
                     }
                     svg.registerExternalFileResolver(svgFileResolver);
 
