@@ -170,13 +170,16 @@ public class ADVDashboard {
 
             //Data Label
             switch (infoLine){
-                case 1://Trip1
+                case 1://Altitude
+                    doc.getElementById("dataLabel").setTextContent(MyApplication.getContext().getString(R.string.dash_altitude_label));
+                    break;
+                case 2://Trip1
                     doc.getElementById("dataLabel").setTextContent(MyApplication.getContext().getString(R.string.dash_trip1_label));
                     break;
-                case 2://Trip2
+                case 3://Trip2
                     doc.getElementById("dataLabel").setTextContent(MyApplication.getContext().getString(R.string.dash_trip2_label));
                     break;
-                case 3://Range
+                case 4://Range
                     doc.getElementById("dataLabel").setTextContent(MyApplication.getContext().getString(R.string.dash_range_label));
                     break;
                 default:
@@ -184,7 +187,16 @@ public class ADVDashboard {
             }
             //Data Value
             switch (infoLine){
-                case 1://Trip1
+                case 1://Altitude
+                    if (Data.getLastLocation() != null){
+                        double altitude = Data.getLastLocation().getAltitude();
+                        if (distanceFormat.contains("1")) {
+                            altitude = Utils.mToFeet(altitude);
+                        }
+                        doc.getElementById("dataValue").setTextContent(String.valueOf(Math.round(altitude)));
+                    }
+                    break;
+                case 2://Trip1
                     if (Data.getTripOne() != null) {
                         if(Data.getTripOne() != null) {
                             double trip1 = Data.getTripOne();
@@ -195,7 +207,7 @@ public class ADVDashboard {
                         }
                     }
                     break;
-                case 2://Trip2
+                case 3://Trip2
                     if (Data.getTripTwo() != null) {
                         if(Data.getTripTwo() != null) {
                             double trip2 = Data.getTripTwo();
@@ -206,7 +218,7 @@ public class ADVDashboard {
                         }
                     }
                     break;
-                case 3://Range
+                case 4://Range
                     if(Data.getFuelRange() != null){
                         double fuelrange = Data.getFuelRange();
                         if (distanceFormat.contains("1")) {
@@ -220,7 +232,10 @@ public class ADVDashboard {
             }
             //Data Unit
             switch (infoLine){
-                case 1: case 2: case 3://Trip1/2 Range
+                case 1://Altitude
+                    doc.getElementById("dataUnit").setTextContent(heightUnit);
+                    break;
+                case 2: case 3: case 4://Trip1/2 Range
                     doc.getElementById("dataUnit").setTextContent(distanceUnit);
                     break;
                 default:

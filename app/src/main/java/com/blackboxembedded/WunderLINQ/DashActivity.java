@@ -220,7 +220,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     void nextInfoLine(){
-        if (currentInfoLine == 3){
+        if (currentInfoLine == 4){
             currentInfoLine = 1;
         } else {
             currentInfoLine = currentInfoLine + 1;
@@ -230,7 +230,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
 
     void prevInfoLine(){
         if (currentInfoLine == 1){
-            currentInfoLine = 3;
+            currentInfoLine = 4;
         } else {
             currentInfoLine = currentInfoLine - 1;
         }

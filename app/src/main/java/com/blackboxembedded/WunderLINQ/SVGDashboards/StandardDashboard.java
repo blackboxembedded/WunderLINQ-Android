@@ -165,6 +165,9 @@ public class StandardDashboard {
                 case 3://Range
                     doc.getElementById("dataLabel").setTextContent(MyApplication.getContext().getString(R.string.dash_range_label) + ": ");
                     break;
+                case 4://Altitude
+                    doc.getElementById("dataLabel").setTextContent(MyApplication.getContext().getString(R.string.dash_altitude_label) + ": ");
+                    break;
                 default:
                     break;
             }
@@ -204,6 +207,15 @@ public class StandardDashboard {
                                     doc.getElementById("dataValue").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
                             );
                         }
+                    }
+                    break;
+                case 4://Altitude
+                    if (Data.getLastLocation() != null){
+                        double altitude = Data.getLastLocation().getAltitude();
+                        if (distanceFormat.contains("1")) {
+                            altitude = Utils.mToFeet(altitude);
+                        }
+                        doc.getElementById("dataValue").setTextContent(String.valueOf(Math.round(altitude) + " " + heightUnit));
                     }
                     break;
                 default:

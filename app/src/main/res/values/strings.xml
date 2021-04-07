@@ -891,6 +891,7 @@
     <string name="dash_range_label">Range</string>
     <string name="dash_rdcf_label">F</string>
     <string name="dash_rdcr_label">R</string>
+    <string name="dash_altitude_label">ALT</string>
 
     <string name="customize_btn_label">Customize</string>
     <string name="default_btn_label">Default Mode</string>

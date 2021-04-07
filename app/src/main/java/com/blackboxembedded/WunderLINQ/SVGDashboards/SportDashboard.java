@@ -237,6 +237,9 @@ public class SportDashboard {
                 case 3://Range
                     doc.getElementById("dataLabel").setTextContent(MyApplication.getContext().getString(R.string.dash_range_label));
                     break;
+                case 4://Altitude
+                    doc.getElementById("dataLabel").setTextContent(MyApplication.getContext().getString(R.string.dash_altitude_label));
+                    break;
                 default:
                     break;
             }
@@ -273,6 +276,15 @@ public class SportDashboard {
                         doc.getElementById("dataValue").setTextContent(String.valueOf(Math.round(fuelrange)));
                     }
                     break;
+                case 4://Altitude
+                    if (Data.getLastLocation() != null){
+                        double altitude = Data.getLastLocation().getAltitude();
+                        if (distanceFormat.contains("1")) {
+                            altitude = Utils.mToFeet(altitude);
+                        }
+                        doc.getElementById("dataValue").setTextContent(String.valueOf(Math.round(altitude)));
+                    }
+                    break;
                 default:
                     break;
             }
@@ -280,6 +292,9 @@ public class SportDashboard {
             switch (infoLine){
                 case 1: case 2: case 3://Trip1/2 Range
                     doc.getElementById("dataUnit").setTextContent(distanceUnit);
+                    break;
+                case 4: //Altitude
+                    doc.getElementById("dataUnit").setTextContent(heightUnit);
                     break;
                 default:
                     break;
