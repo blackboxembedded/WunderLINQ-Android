@@ -262,7 +262,8 @@
     <string name="wwtype_label">Scrollrad Typ</string>
     <string name="config_write_label">Einstellungen speichern</string>
     <string name="hwsave_alert_title">Warnung!</string>
-    <string name="hwsave_alert_body">Nach dem Speichern von Einstellungen kann das WunderLINQ Gerät u.U. unstabil laufen, bitte entfernen Sie es aus der Halterung und setzen Sie es neu ein.</string>
+    <string name="hwsave_alert_body">Nach dem Speichern von Einstellungen kann das WunderLINQ Gerät u.U. unstabil laufen, bitte entfernen Sie es aus der Halterung und setzen Sie es neu ein.
+\nÄnderungen in der Tastenzuordnung kann die Navigation in der App mit Hilfe des Rades beeinflussen.</string>
     <string name="hwsave_alert_btn_ok">Weiter</string>
     <string name="hwsave_alert_btn_cancel">Abbrechen</string>
     <string name="version_label">Version:</string>
@@ -398,4 +399,16 @@
     <string name="addwaypoint_view_title">Wegpunkt hinzufügen</string>
     <string name="config_reset_label">Einstellungen zurücksetzen</string>
     <string name="fw_version_label">Firmware-Version</string>
+    <string name="rpm_header">Drehzahl</string>
+    <string name="task_title_applauncher">App Launcher</string>
+    <string name="leanangle_bike_header">Schräglage</string>
+    <string name="rearwheel_speed_header">Geschwindigkeit am Hinterrad</string>
+    <string name="pref_dashboard_speedsource_name">Quelle Geschwindigkeit Armaturenbrett</string>
+    <string name="touch_here">Zur Freigabe hier drücken</string>
+    <string name="applist_title">Apps</string>
+    <string name="pref_display_dashboard_name">Armaturenbrett freigeben</string>
+    <string name="pref_rpmmax_name">Max Drehzahl</string>
+    <string name="rpmmax_10k">10000</string>
+    <string name="rpmmax_12k">12000</string>
+    <string name="rpmmax_15k">15000</string>
 </resources>
