@@ -21,8 +21,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -45,6 +47,8 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
 
     public final static String TAG = "DashActivity";
 
+    private SharedPreferences sharedPrefs;
+
     private SVGImageView dashboardView;
     private SVG svg;
     private SvgFileResolver svgFileResolver;
@@ -53,6 +57,8 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
     private boolean timerRunning = false;
     private boolean dashUpdateRunning = false;
 
+    private int numDashboard = 3;
+    private int numInfoLine = 4;
     private int currentDashboard = 1;
     private int currentInfoLine = 1;
 
@@ -60,6 +66,8 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash);
+
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -109,7 +117,16 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
         getSupportActionBar().show();
         startTimer();
+        currentDashboard = sharedPrefs.getInt("lastDashboard",1);
         updateDashboard();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        editor.putInt("lastDashboard", currentDashboard);
+        editor.apply();
     }
 
     @Override
@@ -193,6 +210,9 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
             case KeyEvent.KEYCODE_ENTER:
                 nextDashboard();
                 return true;
+            case KeyEvent.KEYCODE_ESCAPE:
+                prevDashboard();
+                return true;
             case KeyEvent.KEYCODE_DPAD_UP:
                 nextInfoLine();
                 return true;
@@ -211,7 +231,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     void nextDashboard(){
-        if (currentDashboard == 3){
+        if (currentDashboard == numDashboard){
             currentDashboard = 1;
         } else {
             currentDashboard = currentDashboard + 1;
@@ -219,8 +239,17 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
         updateDashboard();
     }
 
+    void prevDashboard(){
+        if (currentDashboard == 1){
+            currentDashboard = numDashboard;
+        } else {
+            currentDashboard = currentDashboard - 1;
+        }
+        updateDashboard();
+    }
+
     void nextInfoLine(){
-        if (currentInfoLine == 4){
+        if (currentInfoLine == numInfoLine){
             currentInfoLine = 1;
         } else {
             currentInfoLine = currentInfoLine + 1;
@@ -230,7 +259,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
 
     void prevInfoLine(){
         if (currentInfoLine == 1){
-            currentInfoLine = 4;
+            currentInfoLine = numInfoLine;
         } else {
             currentInfoLine = currentInfoLine - 1;
         }
