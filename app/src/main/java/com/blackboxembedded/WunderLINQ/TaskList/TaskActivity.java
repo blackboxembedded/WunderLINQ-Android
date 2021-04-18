@@ -447,7 +447,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 getResources().getString(R.string.task_title_homescreen),
                 goProVideoTaskText,
                 getResources().getString(R.string.task_title_weathermap),
-                getResources().getString(R.string.task_title_applauncher)
+                getResources().getString(R.string.task_title_applauncher),
+                getResources().getString(R.string.task_title_roadbook)
         };
         int numTasks = taskTitles.length;
         int[] iconId = new int[numTasks];
@@ -467,6 +468,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         iconId[13] = R.drawable.ic_action_camera;
         iconId[14] = R.drawable.ic_cloud_sun;
         iconId[15] = R.drawable.ic_android;
+        iconId[16] = R.drawable.ic_roadbook;
 
         mapping = new ArrayList<>();
         menuItems.clear();
@@ -995,6 +997,10 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 //App Launcher
                 Intent appListIntent = new Intent(TaskActivity.this, AppListActivity.class);
                 startActivity(appListIntent);
+                break;
+            case 16:
+                //Open Road Book App
+                NavAppHelper.roadbook(this);
                 break;
             default:
                 break;

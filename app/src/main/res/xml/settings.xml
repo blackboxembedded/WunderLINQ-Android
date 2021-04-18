@@ -413,6 +413,14 @@
                 android:defaultValue="1"
                 />
             <ListPreference
+                android:key="prefRoadBookApp"
+                android:title="@string/pref_roadbook_app_title"
+                android:summary="%s"
+                android:entries="@array/roadbook_apps_array"
+                android:entryValues="@array/roadbook_apps_arrayValues"
+                android:defaultValue="1"
+                />
+            <ListPreference
                 android:key="prefActionCam"
                 android:title="@string/pref_actioncam_title"
                 android:summary="%s"

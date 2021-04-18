@@ -233,6 +233,28 @@ public class NavAppHelper {
         }
     }
 
+    static public void roadbook(Activity activity){
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        String roadbookApp = sharedPrefs.getString("prefRoadBookApp", "1");
+        Intent roadbookIntent = new Intent(android.content.Intent.ACTION_VIEW);
+        String url = "rabbitrally://app?back_url=wunderlinq://quicktasks";
+        switch (roadbookApp){
+            default: case "1": //Android Default or Google Maps
+                //Nothing to do
+                break;
+        }
+        try {
+            roadbookIntent.setData(Uri.parse(url));
+            if (android.os.Build.VERSION.SDK_INT >= 24) {
+                if (activity.isInMultiWindowMode()) {
+                    roadbookIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                }
+            }
+            activity.startActivity(roadbookIntent);
+        } catch ( ActivityNotFoundException ex  ) {
+        }
+    }
+
     static private boolean isCallable(Activity activity, Intent intent) {
         List<ResolveInfo> list = activity.getPackageManager().queryIntentActivities(intent,
                 PackageManager.MATCH_DEFAULT_ONLY);

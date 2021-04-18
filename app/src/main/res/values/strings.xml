@@ -369,6 +369,7 @@
     <string name="task_title_actioncam_stop_video">Stop ActionCam Recording</string>
     <string name="task_title_weathermap">Weather Map</string>
     <string name="task_title_applauncher">App Launcher</string>
+    <string name="task_title_roadbook">Road Book</string>
     <string name="toast_actioncam_notconnected">ActionCam Not Connected</string>
     <string name="toast_actioncam_notset">Set ActionCam type in the app settings</string>
     <string name="task_title_empty">Empty</string>
@@ -606,7 +607,8 @@
         <item name="14">@string/task_title_actioncam_start_video</item>
         <item name="15">@string/task_title_weathermap</item>
         <item name="16">@string/task_title_applauncher</item>
-        <item name="17">@string/task_title_empty</item>
+        <item name="17">@string/task_title_roadbook</item>
+        <item name="18">@string/task_title_empty</item>
     </string-array>
     <string-array name="tasks_arrayValues" translatable="false">
         <item name="1">0</item>
@@ -626,6 +628,7 @@
         <item name="15">14</item>
         <item name="16">15</item>
         <item name="17">16</item>
+        <item name="18">17</item>
     </string-array>
     <string name="pref_nav_app_title">Navigation App</string>
     <string name="nav_app_default">Android Default</string>
@@ -667,6 +670,14 @@
         <item name="10">10</item>
         <item name="11">11</item>
         <item name="12">12</item>
+    </string-array>
+    <string name="pref_roadbook_app_title">Roadbook App</string>
+    <string name="roadbook_app_rabbitrally">Rabbit Rally</string>
+    <string-array name="roadbook_apps_array" translatable="false">
+        <item name="1">@string/roadbook_app_rabbitrally</item>
+    </string-array>
+    <string-array name="roadbook_apps_arrayValues" translatable="false">
+        <item name="1">1</item>
     </string-array>
     <string name="pref_contacts_filter_title">Contacts Display</string>
     <string name="contacts_filter_favorites">Favorites</string>
