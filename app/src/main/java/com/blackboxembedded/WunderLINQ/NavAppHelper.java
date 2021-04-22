@@ -73,11 +73,8 @@ public class NavAppHelper {
                 //https://www.sygic.com/developers/professional-navigation-sdk/android/api-examples/custom-url
                 url = "com.sygic.aura://";
                 break;
-            case "9": //Kurviger
-                navIntent = activity.getPackageManager().getLaunchIntentForPackage("gr.talent.kurviger.pro");
-                if (navIntent == null) {
-                    navIntent = activity.getPackageManager().getLaunchIntentForPackage("gr.talent.kurviger");
-                }
+            case "9": //Kurviger 2
+                navIntent = activity.getPackageManager().getLaunchIntentForPackage("gr.talent.kurviger");
                 url = "";
                 break;
             case "10": //TomTom GO
@@ -96,6 +93,10 @@ public class NavAppHelper {
                 if (!discoveredCalimotoApp.equals("")) {
                     navIntent = activity.getPackageManager().getLaunchIntentForPackage(discoveredCalimotoApp);
                 }
+                url = "";
+                break;
+            case "13": //Kurviger 1 Pro
+                navIntent = activity.getPackageManager().getLaunchIntentForPackage("gr.talent.kurviger.pro");
                 url = "";
                 break;
         }
@@ -148,13 +149,19 @@ public class NavAppHelper {
                 //https://www.sygic.com/developers/professional-navigation-sdk/android/api-examples/custom-url
                 navUrl = "com.sygic.aura://coordinate|"  + String.valueOf(end.getLongitude()) + "|" + String.valueOf(end.getLatitude()) + "|drive";
                 break;
-            case "9": //Kurviger
+            case "9": //Kurviger 2
+                homeNavIntent.setPackage("gr.talent.kurviger");
                 navUrl = "https://kurviger.de/en?point="  + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&vehicle=motorycycle"
                         + "weighting=fastest";
                 break;
             case "10": //TomTom GO
                 homeNavIntent.setPackage("com.tomtom.gplay.navapp");
                 navUrl = "geo:" + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude());
+                break;
+            case "13": //Kurviger 1 Pro
+                homeNavIntent.setPackage("gr.talent.kurviger.pro");
+                navUrl = "https://kurviger.de/en?point="  + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&vehicle=motorycycle"
+                        + "weighting=fastest";
                 break;
         }
         if (!navApp.equals("6")) {
@@ -209,13 +216,19 @@ public class NavAppHelper {
                 //https://www.sygic.com/developers/professional-navigation-sdk/android/api-examples/custom-url
                 navUrl = "com.sygic.aura://coordinate|"  + String.valueOf(waypoint.getLongitude()) + "|" + String.valueOf(waypoint.getLatitude()) + "|show";
                 break;
-            case "9": //Kurviger
+            case "9": //Kurviger 2
+                navIntent.setPackage("gr.talent.kurviger");
                 navUrl = "https://kurviger.de/en?point="  + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&locale=en" +"&vehicle=motorycycle"
                         + "weighting=fastest" + "use_miles=true";
                 break;
             case "10": //TomTom GO
                 navIntent.setPackage("com.tomtom.gplay.navapp");
                 navUrl = "geo:" + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude());
+                break;
+            case "13": //Kurviger 1 Pro
+                navIntent.setPackage("gr.talent.kurviger.pro");
+                navUrl = "https://kurviger.de/en?point="  + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&locale=en" +"&vehicle=motorycycle"
+                        + "weighting=fastest" + "use_miles=true";
                 break;
         }
         if (!navApp.equals("6")) {
