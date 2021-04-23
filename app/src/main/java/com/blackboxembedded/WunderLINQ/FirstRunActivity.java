@@ -235,6 +235,7 @@ public class FirstRunActivity extends AppCompatActivity {
                     });
                     builder.show();
                 }
+                break;
             }
             case PERMISSION_REQUEST_CALL_PHONE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -251,6 +252,7 @@ public class FirstRunActivity extends AppCompatActivity {
                     });
                     builder.show();
                 }
+                break;
             }
             case PERMISSION_REQUEST_READ_CONTACTS: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -267,6 +269,7 @@ public class FirstRunActivity extends AppCompatActivity {
                     });
                     builder.show();
                 }
+                break;
             }
             case PERMISSION_REQUEST_RECORD_AUDIO: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -283,6 +286,7 @@ public class FirstRunActivity extends AppCompatActivity {
                     });
                     builder.show();
                 }
+                break;
             }
             case PERMISSION_REQUEST_WRITE_STORAGE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -299,6 +303,7 @@ public class FirstRunActivity extends AppCompatActivity {
                     });
                     builder.show();
                 }
+                break;
             }
             case PERMISSION_REQUEST_FINE_LOCATION: {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -315,9 +320,11 @@ public class FirstRunActivity extends AppCompatActivity {
                     });
                     builder.show();
                 }
+                break;
             }
             default:
                 Log.d(TAG, "Unknown Permissions Request Code");
+                break;
         }
     }
 

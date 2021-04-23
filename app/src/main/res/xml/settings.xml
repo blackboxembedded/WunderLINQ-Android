@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="prefScreenRoot">
+    <Preference android:title="Privacy" >
+        <intent android:action="com.blackboxembedded.WunderLINQ.PermissionsActivity"
+            />
+    </Preference>
     <PreferenceCategory android:title="@string/info_title" >
         <EditTextPreference
             android:title="@string/pref_homeAddress_name"

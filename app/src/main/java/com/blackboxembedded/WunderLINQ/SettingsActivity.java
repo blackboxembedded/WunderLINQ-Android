@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package com.blackboxembedded.WunderLINQ;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Build;
@@ -59,7 +60,6 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
     public boolean onPreferenceStartScreen(PreferenceFragmentCompat caller, PreferenceScreen pref) {
         caller.setPreferenceScreen(pref);
         last = pref;
-        //backButton.setVisibility(View.VISIBLE);
         return true;
     }
 
@@ -90,7 +90,8 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
             if(v.getId() == R.id.action_back) {
                 Log.d(TAG, "last.getKey() == " + last.getKey());
                 if (last.getKey().equals("prefScreenRoot")) {
-                    onBackPressed();
+                    Intent backIntent = new Intent(SettingsActivity.this, MainActivity.class);
+                    startActivity(backIntent);
                 } else {
                     getSupportFragmentManager().beginTransaction().replace(android.R.id.content, new UserSettingActivityFragment()).commit();
                     last = root;

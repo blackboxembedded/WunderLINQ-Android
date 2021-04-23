@@ -882,6 +882,19 @@
         <item name="3">2</item>
     </string-array>
 
+    <!-- PermissionsActivity -->
+    <string name="permissions_title">Permissions</string>
+    <string name="permission_location_label">Location</string>
+    <string name="permission_contacts_label">Contacts</string>
+    <string name="permission_microphone_label">Microphone</string>
+    <string name="permission_camera_label">Camera</string>
+    <string name="permission_storagewrite_label">Write to Storage</string>
+    <string name="permission_phone_label">Phone</string>
+    <string name="permission_notification_label">Notification Access</string>
+    <string name="permission_overlays_label">Draw Overlays</string>
+    <string name="permission_usagestats_label">Usage Stats</string>
+    <string name="permission_accessbility_label">Accessibility Service</string>
+
     <string name="share">Share</string>
     <string name="share_gpx">Share GPX</string>
     <string name="delete">Delete</string>

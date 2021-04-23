@@ -39,6 +39,12 @@
         android:supportsRtl="true"
         android:theme="@style/WLQTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".PermissionsActivity">
+            <intent-filter>
+                <action android:name="com.blackboxembedded.WunderLINQ.PermissionsActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".AppListActivity" />
         <activity android:name=".HWSettingsActionActivity" /> <!-- Work Around for GMaps crash https://issuetracker.google.com/issues/79478779 -->
         <uses-library
@@ -160,6 +166,7 @@
         <activity
             android:name=".DashActivity"
             android:screenOrientation="sensorLandscape" />
+
         <service
             android:name=".NotificationListener"
             android:enabled="true"
