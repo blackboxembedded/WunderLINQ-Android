@@ -1,71 +1,81 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <ImageButton
         android:id="@+id/action_back"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:background="@null"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_chevron_left"
-        android:tint="?attr/iconTintColor"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
         android:paddingTop="4dp"
-        android:layout_alignParentStart="true"/>
+        android:paddingBottom="4dp"
+        android:layout_alignParentStart="true"
+        android:background="@null"
+        android:src="@drawable/ic_chevron_left"
+        android:tint="?attr/iconTintColor" />
 
     <ImageButton
         android:id="@+id/action_connect"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:background="@null"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_bluetooth"
-        android:layout_toEndOf="@+id/action_back"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
         android:paddingLeft="10dp"
-        android:paddingTop="4dp"/>
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:background="@null"
+        android:src="@drawable/ic_bluetooth"
+        android:layout_toEndOf="@+id/action_back"/>
 
     <ImageButton
         android:id="@+id/action_faults"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:background="@null"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_warning"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
         android:layout_toEndOf="@+id/action_connect"
+        android:background="@null"
         android:paddingLeft="10dp"
-        android:paddingTop="4dp"/>
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:src="@drawable/ic_warning" />
 
     <ImageButton
         android:id="@+id/action_menu"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
         android:background="@null"
-        android:scaleType="centerInside"
         android:src="@drawable/ic_bars"
         android:tint="?attr/iconTintColor"
         android:layout_toStartOf="@+id/action_forward"
         android:paddingRight="10dp"
-        android:paddingTop="4dp"/>
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"/>
 
     <ImageButton
         android:id="@+id/action_forward"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
         android:background="@null"
-        android:scaleType="centerInside"
         android:src="@drawable/ic_chevron_right"
         android:tint="?attr/iconTintColor"
         android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         android:layout_alignParentEnd="true"/>
 
     <TextView
         android:id="@+id/action_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:text=""
-        android:textSize="24sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         android:textColor="?attr/primaryTextColor"/>
 </RelativeLayout>

@@ -1,11 +1,12 @@
 <resources>
-
     <style name="WLQTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="WLQTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="WLQTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+    </style>
 
-    <style name="WLQTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="WLQTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
+    </style>
 </resources>

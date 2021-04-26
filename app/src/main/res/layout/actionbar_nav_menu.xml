@@ -4,36 +4,41 @@
 
     <ImageButton
         android:id="@+id/action_back"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
         android:background="@null"
-        android:scaleType="centerInside"
         android:src="@drawable/ic_chevron_left"
         android:tint="?attr/iconTintColor"
         android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         android:layout_alignParentStart="true"
         android:focusable="false"/>
 
     <ImageButton
         android:id="@+id/action_menu"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:padding="10dp"
         android:layout_alignParentEnd="true"
         android:background="@null"
         android:focusable="false"
         android:paddingTop="4dp"
-        android:scaleType="centerInside"
+        android:paddingBottom="4dp"
         android:src="@drawable/ic_bars"
         android:tint="?attr/iconTintColor" />
 
     <TextView
         android:id="@+id/action_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:text=""
-        android:textSize="24sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         android:textColor="?attr/primaryTextColor"/>
 </RelativeLayout>

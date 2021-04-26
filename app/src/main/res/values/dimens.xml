@@ -17,6 +17,8 @@
     <dimen name="hrm_measurement_body_sensor_textsize">25sp</dimen>
     <dimen name="div_measurement_textsize">15sp</dimen>
 
+    <dimen name="actionbar_height">48dp</dimen>
+
     <dimen name="find_textsize">20sp</dimen>
 
 
