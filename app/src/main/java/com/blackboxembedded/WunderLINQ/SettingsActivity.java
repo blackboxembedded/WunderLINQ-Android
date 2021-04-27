@@ -32,6 +32,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
@@ -102,6 +103,52 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
 
     public static class UserSettingActivityFragment extends PreferenceFragmentCompat implements OnSharedPreferenceChangeListener
     {
+        EditTextPreference addressPref;
+        EditTextPreference favNumberPref;
+        ListPreference prefCellOne;
+        ListPreference prefCellTwo;
+        ListPreference prefCellThree;
+        ListPreference prefCellFour;
+        ListPreference prefCellFive;
+        ListPreference prefCellSix;
+        ListPreference prefCellSeven;
+        ListPreference prefCellEight;
+        ListPreference prefCellNine;
+        ListPreference prefCellTen;
+        ListPreference prefCellEleven;
+        ListPreference prefCellTwelve;
+        ListPreference prefCellThirteen;
+        ListPreference prefCellFourteen;
+        ListPreference prefCellFifteen;
+        ListPreference prefQuickTaskOne;
+        ListPreference prefQuickTaskTwo;
+        ListPreference prefQuickTaskThree;
+        ListPreference prefQuickTaskFour;
+        ListPreference prefQuickTaskFive;
+        ListPreference prefQuickTaskSix;
+        ListPreference prefQuickTaskSeven;
+        ListPreference prefQuickTaskEight;
+        ListPreference prefQuickTaskNine;
+        ListPreference prefQuickTaskTen;
+        ListPreference prefQuickTaskEleven;
+        ListPreference prefQuickTaskTwelve;
+        ListPreference prefRPMMax;
+        ListPreference prefContactsFilter;
+        ListPreference prefPressureF;
+        ListPreference prefTempF;
+        ListPreference prefDistance;
+        ListPreference prefConsumption;
+        ListPreference prefBearing;
+        ListPreference prefTime;
+        ListPreference prefOrientation;
+        ListPreference prefNightModeCombo;
+        ListPreference prefDashSpeedSource;
+        ListPreference prefNavApp;
+        ListPreference prefRoadBookApp;
+        ListPreference prefActionCam;
+        ListPreference prefPIPorientation;
+        ListPreference prefPIPCellCount;
+
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.settings);
@@ -120,13 +167,98 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
         public void onCreate(final Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);
-            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-            EditTextPreference addressPref = findPreference("prefHomeAddress");
-            addressPref.setSummary(sharedPrefs.getString("prefHomeAddress",getString(R.string.pref_homeAddress_summary)));
-
-            EditTextPreference favNumberPref = findPreference("prefHomePhone");
-            favNumberPref.setSummary(sharedPrefs.getString("prefHomePhone",getString(R.string.pref_homePhone_summary)));
+            addressPref = findPreference("prefHomeAddress");
+            addressPref.setSummary(sharedPreferences.getString("prefHomeAddress",getString(R.string.pref_homeAddress_summary)));
+            favNumberPref = findPreference("prefHomePhone");
+            favNumberPref.setSummary(sharedPreferences.getString("prefHomePhone",getString(R.string.pref_homePhone_summary)));
+            prefCellOne = findPreference("prefCellOne");
+            prefCellOne.setSummary(prefCellOne.getEntry());
+            prefCellTwo = findPreference("prefCellTwo");
+            prefCellTwo.setSummary(prefCellTwo.getEntry());
+            prefCellThree = findPreference("prefCellThree");
+            prefCellThree.setSummary(prefCellThree.getEntry());
+            prefCellFour = findPreference("prefCellFour");
+            prefCellFour.setSummary(prefCellFour.getEntry());
+            prefCellFive = findPreference("prefCellFive");
+            prefCellFive.setSummary(prefCellFive.getEntry());
+            prefCellSix = findPreference("prefCellSix");
+            prefCellSix.setSummary(prefCellSix.getEntry());
+            prefCellSeven = findPreference("prefCellSeven");
+            prefCellSeven.setSummary(prefCellSeven.getEntry());
+            prefCellEight = findPreference("prefCellEight");
+            prefCellEight.setSummary(prefCellEight.getEntry());
+            prefCellNine = findPreference("prefCellNine");
+            prefCellNine.setSummary(prefCellNine.getEntry());
+            prefCellTen = findPreference("prefCellTen");
+            prefCellTen.setSummary(prefCellTen.getEntry());
+            prefCellEleven = findPreference("prefCellEleven");
+            prefCellEleven.setSummary(prefCellEleven.getEntry());
+            prefCellTwelve = findPreference("prefCellTwelve");
+            prefCellTwelve.setSummary(prefCellTwelve.getEntry());
+            prefCellThirteen = findPreference("prefCellThirteen");
+            prefCellThirteen.setSummary(prefCellThirteen.getEntry());
+            prefCellFourteen = findPreference("prefCellFourteen");
+            prefCellFourteen.setSummary(prefCellFourteen.getEntry());
+            prefCellFifteen = findPreference("prefCellFifteen");
+            prefCellFifteen.setSummary(prefCellFifteen.getEntry());
+            prefQuickTaskOne = findPreference("prefQuickTaskOne");
+            prefQuickTaskOne.setSummary(prefQuickTaskOne.getEntry());
+            prefQuickTaskTwo = findPreference("prefQuickTaskTwo");
+            prefQuickTaskTwo.setSummary(prefQuickTaskTwo.getEntry());
+            prefQuickTaskThree = findPreference("prefQuickTaskThree");
+            prefQuickTaskThree.setSummary(prefQuickTaskThree.getEntry());
+            prefQuickTaskFour = findPreference("prefQuickTaskFour");
+            prefQuickTaskFour.setSummary(prefQuickTaskFour.getEntry());
+            prefQuickTaskFive = findPreference("prefQuickTaskFive");
+            prefQuickTaskFive.setSummary(prefQuickTaskFive.getEntry());
+            prefQuickTaskSix = findPreference("prefQuickTaskSix");
+            prefQuickTaskSix.setSummary(prefQuickTaskSix.getEntry());
+            prefQuickTaskSeven = findPreference("prefQuickTaskSeven");
+            prefQuickTaskSeven.setSummary(prefQuickTaskSeven.getEntry());
+            prefQuickTaskEight = findPreference("prefQuickTaskEight");
+            prefQuickTaskEight.setSummary(prefQuickTaskEight.getEntry());
+            prefQuickTaskNine = findPreference("prefQuickTaskNine");
+            prefQuickTaskNine.setSummary(prefQuickTaskNine.getEntry());
+            prefQuickTaskTen = findPreference("prefQuickTaskTen");
+            prefQuickTaskTen.setSummary(prefQuickTaskTen.getEntry());
+            prefQuickTaskEleven = findPreference("prefQuickTaskEleven");
+            prefQuickTaskEleven.setSummary(prefQuickTaskEleven.getEntry());
+            prefQuickTaskTwelve = findPreference("prefQuickTaskTwelve");
+            prefQuickTaskTwelve.setSummary(prefQuickTaskTwelve.getEntry());
+            prefRPMMax = findPreference("prefRPMMax");
+            prefRPMMax.setSummary(prefRPMMax.getEntry());
+            prefContactsFilter = findPreference("prefContactsFilter");
+            prefContactsFilter.setSummary(prefContactsFilter.getEntry());
+            prefPressureF = findPreference("prefPressureF");
+            prefPressureF.setSummary(prefPressureF.getEntry());
+            prefTempF = findPreference("prefTempF");
+            prefTempF.setSummary(prefTempF.getEntry());
+            prefDistance = findPreference("prefDistance");
+            prefDistance.setSummary(prefDistance.getEntry());
+            prefConsumption = findPreference("prefConsumption");
+            prefConsumption.setSummary(prefConsumption.getEntry());
+            prefBearing = findPreference("prefBearing");
+            prefBearing.setSummary(prefBearing.getEntry());
+            prefTime = findPreference("prefTime");
+            prefTime.setSummary(prefTime.getEntry());
+            prefOrientation = findPreference("prefOrientation");
+            prefOrientation.setSummary(prefOrientation.getEntry());
+            prefNightModeCombo = findPreference("prefNightModeCombo");
+            prefNightModeCombo.setSummary(prefNightModeCombo.getEntry());
+            prefDashSpeedSource = findPreference("prefDashSpeedSource");
+            prefDashSpeedSource.setSummary(prefDashSpeedSource.getEntry());
+            prefNavApp = findPreference("prefNavApp");
+            prefNavApp.setSummary(prefNavApp.getEntry());
+            prefRoadBookApp = findPreference("prefRoadBookApp");
+            prefRoadBookApp.setSummary(prefRoadBookApp.getEntry());
+            prefActionCam = findPreference("prefActionCam");
+            prefActionCam.setSummary(prefActionCam.getEntry());
+            prefPIPorientation = findPreference("prefPIPorientation");
+            prefPIPorientation.setSummary(prefPIPorientation.getEntry());
+            prefPIPCellCount = findPreference("prefPIPCellCount");
+            prefPIPCellCount.setSummary(prefPIPCellCount.getEntry());
 
             if (Build.VERSION.SDK_INT >= 24) {
                 PreferenceScreen preferenceScreen = getPreferenceScreen();
@@ -156,13 +288,139 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
         {
             if(key.equals("prefHomeAddress")) {
-                EditTextPreference addressPref = (EditTextPreference) findPreference("prefHomeAddress");
-                addressPref.setSummary(sharedPreferences.getString("prefHomeAddress", getString(R.string.pref_homeAddress_summary)));
+                addressPref.setSummary(sharedPreferences.getString(key, getString(R.string.pref_homeAddress_summary)));
             }
-
             if(key.equals("prefHomePhone")) {
-                EditTextPreference favNumberPref = (EditTextPreference) findPreference("prefHomePhone");
-                favNumberPref.setSummary(sharedPreferences.getString("prefHomePhone", getString(R.string.pref_homePhone_summary)));
+                favNumberPref.setSummary(sharedPreferences.getString(key, getString(R.string.pref_homePhone_summary)));
+            }
+            if (key.equals("prefCellOne")){
+                prefCellOne.setSummary(prefCellOne.getEntry());
+            }
+            if (key.equals("prefCellOne")){
+                prefCellTwo.setSummary(prefCellTwo.getEntry());
+            }
+            if (key.equals("prefCellOne")){
+                prefCellThree.setSummary(prefCellThree.getEntry());
+            }
+            if (key.equals("prefCellOne")){
+                prefCellFour.setSummary(prefCellFour.getEntry());
+            }
+            if (key.equals("prefCellOne")){
+                prefCellFive.setSummary(prefCellFive.getEntry());
+            }
+            if (key.equals("prefCellOne")){
+                prefCellSix.setSummary(prefCellSix.getEntry());
+            }
+            if (key.equals("prefCellOne")){
+                prefCellSeven.setSummary(prefCellSeven.getEntry());
+            }
+            if (key.equals("prefCellOne")){
+                prefCellEight.setSummary(prefCellEight.getEntry());
+            }
+            if (key.equals("prefCellOne")){
+                prefCellNine.setSummary(prefCellNine.getEntry());
+            }
+            if (key.equals("prefCellOne")){
+                prefCellTen.setSummary(prefCellTen.getEntry());
+            }
+            if (key.equals("prefCellOne")){
+                prefCellEleven.setSummary(prefCellEleven.getEntry());
+            }
+            if (key.equals("prefCellOne")){
+                prefCellTwelve.setSummary(prefCellTwelve.getEntry());
+            }
+            if (key.equals("prefCellOne")){
+                prefCellThirteen.setSummary(prefCellThirteen.getEntry());
+            }
+            if (key.equals("prefCellOne")){
+                prefCellFourteen.setSummary(prefCellFourteen.getEntry());
+            }
+            if (key.equals("prefCellFifteen")){
+                prefCellFifteen.setSummary(prefCellFifteen.getEntry());
+            }
+            if (key.equals("prefQuickTaskOne")){
+                prefQuickTaskOne.setSummary(prefQuickTaskOne.getEntry());
+            }
+            if (key.equals("prefQuickTaskTwo")){
+                prefQuickTaskTwo.setSummary(prefQuickTaskTwo.getEntry());
+            }
+            if (key.equals("prefQuickTaskThree")){
+                prefQuickTaskThree.setSummary(prefQuickTaskThree.getEntry());
+            }
+            if (key.equals("prefQuickTaskFour")){
+                prefQuickTaskFour.setSummary(prefQuickTaskFour.getEntry());
+            }
+            if (key.equals("prefQuickTaskFive")){
+                prefQuickTaskFive.setSummary(prefQuickTaskFive.getEntry());
+            }
+            if (key.equals("prefQuickTaskSix")){
+                prefQuickTaskSix.setSummary(prefQuickTaskSix.getEntry());
+            }
+            if (key.equals("prefQuickTaskSeven")){
+                prefQuickTaskSeven.setSummary(prefQuickTaskSeven.getEntry());
+            }
+            if (key.equals("prefQuickTaskEight")){
+                prefQuickTaskEight.setSummary(prefQuickTaskEight.getEntry());
+            }
+            if (key.equals("prefQuickTaskNine")){
+                prefQuickTaskNine.setSummary(prefQuickTaskNine.getEntry());
+            }
+            if (key.equals("prefQuickTaskTen")){
+                prefQuickTaskTen.setSummary(prefQuickTaskTen.getEntry());
+            }
+            if (key.equals("prefQuickTaskEleven")){
+                prefQuickTaskEleven.setSummary(prefQuickTaskEleven.getEntry());
+            }
+            if (key.equals("prefQuickTaskTwelve")){
+                prefQuickTaskTwelve.setSummary(prefQuickTaskTwelve.getEntry());
+            }
+            if (key.equals("prefRPMMax")){
+                prefRPMMax.setSummary(prefRPMMax.getEntry());
+            }
+            if (key.equals("prefContactsFilter")){
+                prefContactsFilter.setSummary(prefContactsFilter.getEntry());
+            }
+            if (key.equals("prefPressureF")){
+                prefPressureF.setSummary(prefPressureF.getEntry());
+            }
+            if (key.equals("prefTempF")){
+                prefTempF.setSummary(prefTempF.getEntry());
+            }
+            if (key.equals("prefDistance")){
+                prefDistance.setSummary(prefDistance.getEntry());
+            }
+            if (key.equals("prefConsumption")){
+                prefConsumption.setSummary(prefConsumption.getEntry());
+            }
+            if (key.equals("prefBearing")){
+                prefBearing.setSummary(prefBearing.getEntry());
+            }
+            if (key.equals("prefTime")){
+                prefTime.setSummary(prefTime.getEntry());
+            }
+            if (key.equals("prefOrientation")){
+                prefOrientation.setSummary(prefOrientation.getEntry());
+            }
+            if (key.equals("prefNightModeCombo")){
+                prefNightModeCombo.setSummary(prefNightModeCombo.getEntry());
+            }
+            if (key.equals("prefDashSpeedSource")){
+                prefDashSpeedSource.setSummary(prefDashSpeedSource.getEntry());
+            }
+            if (key.equals("prefNavApp")){
+                prefNavApp.setSummary(prefNavApp.getEntry());
+            }
+            if (key.equals("prefRoadBookApp")){
+                prefRoadBookApp.setSummary(prefRoadBookApp.getEntry());
+            }
+            if (key.equals("prefActionCam")){
+                prefActionCam.setSummary(prefActionCam.getEntry());
+            }
+            if (key.equals("prefPIPorientation")){
+                prefPIPorientation.setSummary(prefPIPorientation.getEntry());
+            }
+            if (key.equals("prefPIPCellCount")){
+                prefPIPCellCount.setSummary(prefPIPCellCount.getEntry());
             }
         }
 
