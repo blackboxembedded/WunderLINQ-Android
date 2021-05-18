@@ -104,13 +104,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private BluetoothLeService mBluetoothLeService;
     private BluetoothGattCharacteristic mNotifyCharacteristic;
     public static BluetoothGattCharacteristic gattCommandCharacteristic;
+    public static BluetoothGattCharacteristic gattHWCharacteristic;
     List<BluetoothGattCharacteristic> gattCharacteristics;
     private String mDeviceAddress;
     private static final int REQUEST_ENABLE_BT = 1;
     private static final int SETTINGS_CHECK = 10;
-
-    public final static UUID UUID_MOTORCYCLE_SERVICE =
-            UUID.fromString(GattAttributes.WUNDERLINQ_SERVICE);
 
     private PopupMenu mPopupMenu;
     private Menu mMenu;
@@ -799,9 +797,22 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         String uuid;
         // Loops through available GATT Services.
         for (BluetoothGattService gattService : gattServices) {
-            if (UUID_MOTORCYCLE_SERVICE.equals(gattService.getUuid())){
+            if (UUIDDatabase.UUID_DEVICE_INFORMATION_SERVICE.equals(gattService.getUuid())){
                 uuid = gattService.getUuid().toString();
-                Log.d(TAG,"Motorcycle Service Found: " + uuid);
+                Log.d(TAG,"Device Information Service Found: " + uuid);
+                gattCharacteristics = gattService.getCharacteristics();
+                // Loops through available Characteristics.
+                for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
+                    uuid = gattCharacteristic.getUuid().toString();
+                    if (UUID.fromString(GattAttributes.HARDWARE_REVISION_STRING).equals(gattCharacteristic.getUuid())){
+                        Log.d(TAG, "HW Revision Characteristic Found: " + uuid);
+                        gattHWCharacteristic = gattCharacteristic;
+                        BluetoothLeService.readCharacteristic(gattHWCharacteristic);
+                    }
+                }
+            } else if (UUIDDatabase.UUID_WUNDERLINQ_SERVICE.equals(gattService.getUuid())){
+                uuid = gattService.getUuid().toString();
+                Log.d(TAG,"WunderLINQ Service Found: " + uuid);
                 gattCharacteristics = gattService.getCharacteristics();
                 // Loops through available Characteristics.
                 for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {

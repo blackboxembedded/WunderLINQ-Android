@@ -92,6 +92,13 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
 
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
 
+        // Read HW Version
+        if (WLQ.hardwareVersion == null) {
+            if (MainActivity.gattHWCharacteristic != null) {
+                BluetoothLeService.readCharacteristic(MainActivity.gattCommandCharacteristic);
+            }
+        }
+
         // Read config
         if (MainActivity.gattCommandCharacteristic != null) {
             BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, WLQ.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
@@ -321,7 +328,15 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                 if (Double.parseDouble(WLQ.firmwareVersion) >= 2.0) {
                                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                                     outputStream.write(WLQ.WRITE_CONFIG_CMD);
-                                    outputStream.write(WLQ.defaultConfig2);
+                                    if (WLQ.hardwareVersion != null){
+                                        if(WLQ.hardwareVersion.equals(WLQ.hardwareVersion1)){
+                                            outputStream.write(WLQ.defaultConfig2HW1);
+                                        } else {
+                                            outputStream.write(WLQ.defaultConfig2);
+                                        }
+                                    } else {
+                                        outputStream.write(WLQ.defaultConfig2);
+                                    }
                                     outputStream.write(WLQ.CMD_EOM);
                                     byte[] writeConfigCmd = outputStream.toByteArray();
                                     Log.d(TAG, "Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));

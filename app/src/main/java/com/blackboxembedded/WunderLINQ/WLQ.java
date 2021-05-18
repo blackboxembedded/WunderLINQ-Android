@@ -27,7 +27,13 @@ public class WLQ {
     public static byte[] flashConfig;
     public static byte[] tempConfig;
     public static String firmwareVersion;
+    public static String hardwareVersion;
+
     public static int USBVinThreshold;
+
+    public static String hardwareVersion1 = "2PCB1.9 10/18";
+    public static String hardwareVersion2 = "1PCB2.0 12/19";
+    public static String hardwareVersion2_1 = "2PCB2.2 081920";
 
     public static int firmwareVersionMajor_INDEX = 9;
     public static int firmwareVersionMinor_INDEX = 10;
@@ -77,6 +83,21 @@ public class WLQ {
             0x01, 0x00, 0x50, 0x01, 0x00, 0x29, // Left Toggle
             0x01, 0x00, 0x52, 0x01, 0x00, 0x51, // Scroll
             0x02, 0x00, (byte) 0xB8, 0x02, 0x00, (byte) 0xE2}; // Signal Cancel
+
+    public static byte[] defaultConfig2HW1 = {
+            0x00, 0x00, // USB Input Voltage threshold
+            0x07, // RT/K Start // Sensitivity
+            0x01, 0x00, 0x4F, 0x01, 0x00, 0x28, // Menu
+            0x01, 0x00, 0x52, 0x00, 0x00, 0x00, // Zoom+
+            0x01, 0x00, 0x51, 0x00, 0x00, 0x00, // Zoom-
+            0x01, 0x00, 0x50, 0x01, 0x00, 0x29, // Speak
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // Mute
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // Display
+            0x11, // Full Start // Sensitivity
+            0x01, 0x00, 0x4F, 0x01, 0x00, 0x28, // Right Toggle
+            0x01, 0x00, 0x50, 0x01, 0x00, 0x29, // Left Toggle
+            0x01, 0x00, 0x52, 0x01, 0x00, 0x51, // Scroll
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; // Signal Cancel
 
     public static byte keyMode_default = 0x00;
     public static byte keyMode_custom = 0x01;

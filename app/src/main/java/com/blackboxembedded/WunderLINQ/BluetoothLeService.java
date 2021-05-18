@@ -803,16 +803,21 @@ public class BluetoothLeService extends Service {
                     MyApplication.getContext().sendBroadcast(intent);
                 }
             }
-        } else if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_COMMAND_CHARACTERISTIC)){
+        } else if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_COMMAND_CHARACTERISTIC)) {
             if (data != null) {
                 //Read Config
-                if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x57)){
-                    if (!Arrays.equals(WLQ.wunderLINQConfig, data)){
+                if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x57)) {
+                    if (!Arrays.equals(WLQ.wunderLINQConfig, data)) {
                         new WLQ(data);
                         intent.putExtras(mBundle);
                         MyApplication.getContext().sendBroadcast(intent);
                     }
                 }
+            }
+        } else if (characteristic.getUuid().equals(UUIDDatabase.UUID_HARDWARE_REVISION_STRING)) {
+            if (data != null) {
+                WLQ.hardwareVersion = characteristic.getStringValue(0);
+                Log.d(TAG, "HW String Value: " + characteristic.getStringValue(0));
             }
         } else {
             /*

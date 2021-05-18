@@ -371,14 +371,19 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             actionTypeSP.setAdapter(types);
             actionTypeSP.setSelection(WLQ.getActionKeyType(actionID));
             updateModifierSpinner1(WLQ.getActionKeyModifiers(actionID));
-            if(WLQ.getActionKeyType(actionID) == WLQ.KEYBOARD_HID){
+            if (WLQ.getActionKeyType(actionID) == WLQ.KEYBOARD_HID) {
                 actionKeySP.setAdapter(keyboard);
                 actionKeySP.setSelection(KeyboardHID.getKeyboardKeyPositionByCode(WLQ.getActionKey(actionID)));
                 actionModifiersSP.setVisibility(View.VISIBLE);
-            } else if(WLQ.getActionKeyType(actionID) == WLQ.CONSUMER_HID){
+            } else if (WLQ.getActionKeyType(actionID) == WLQ.CONSUMER_HID) {
                 actionKeySP.setAdapter(consumer);
                 actionKeySP.setSelection(KeyboardHID.getConsumerKeyPositionByCode(WLQ.getActionKey(actionID)));
                 actionModifiersSP.setVisibility(View.INVISIBLE);
+            }
+            if (WLQ.hardwareVersion != null) {
+                if (WLQ.hardwareVersion.equals(WLQ.hardwareVersion1)){
+                    actionTypeSP.setVisibility(View.INVISIBLE);
+                }
             }
         }
     }
