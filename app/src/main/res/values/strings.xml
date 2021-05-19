@@ -977,10 +977,9 @@
         <item>@string/hid_consumer_label</item>
     </string-array>
 
-    <string-array name="hid_type_array" translatable="false">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
+    <string-array name="hw1_hid_type_names_array" translatable="false">
+        <item>@string/hid_0x00_label</item>
+        <item>@string/hid_keyboard_label</item>
     </string-array>
 
     <string name="keyboard_hid_modifier_0x01_label">Keyboard LeftControl</string>

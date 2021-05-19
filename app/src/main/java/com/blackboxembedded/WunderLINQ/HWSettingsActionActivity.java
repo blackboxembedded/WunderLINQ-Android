@@ -47,11 +47,11 @@ public class HWSettingsActionActivity extends AppCompatActivity {
     private Button saveBT;
     private Button cancelBT;
 
-    private ArrayAdapter<String>  usb;
-    private ArrayAdapter<Integer>  sensitivity;
-    private ArrayAdapter<String>  types;
-    private ArrayAdapter<String>  keyboard;
-    private ArrayAdapter<String>  consumer;
+    private ArrayAdapter<String> usb;
+    private ArrayAdapter<Integer> sensitivity;
+    private ArrayAdapter<String> types;
+    private ArrayAdapter<String> keyboard;
+    private ArrayAdapter<String> consumer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -368,8 +368,19 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             actionModifiersSP.setVisibility(View.INVISIBLE);
             actionTypeSP.setSelection(WLQ.fullSensitivity - 1);
         } else {    // Keys
+            if (WLQ.hardwareVersion != null) {
+                if (WLQ.hardwareVersion.equals(WLQ.hardwareVersion1)){
+                    types = new ArrayAdapter<String>(this,
+                            R.layout.item_hwsettings_spinners, getResources().getStringArray(R.array.hw1_hid_type_names_array));
+                }
+            }
             actionTypeSP.setAdapter(types);
-            actionTypeSP.setSelection(WLQ.getActionKeyType(actionID));
+            if (WLQ.getActionKeyType(actionID) >= types.getCount()){
+                actionTypeSP.setSelection(0);
+            } else {
+                actionTypeSP.setSelection(WLQ.getActionKeyType(actionID));
+            }
+
             updateModifierSpinner1(WLQ.getActionKeyModifiers(actionID));
             if (WLQ.getActionKeyType(actionID) == WLQ.KEYBOARD_HID) {
                 actionKeySP.setAdapter(keyboard);
@@ -379,11 +390,6 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 actionKeySP.setAdapter(consumer);
                 actionKeySP.setSelection(KeyboardHID.getConsumerKeyPositionByCode(WLQ.getActionKey(actionID)));
                 actionModifiersSP.setVisibility(View.INVISIBLE);
-            }
-            if (WLQ.hardwareVersion != null) {
-                if (WLQ.hardwareVersion.equals(WLQ.hardwareVersion1)){
-                    actionTypeSP.setVisibility(View.INVISIBLE);
-                }
             }
         }
     }
