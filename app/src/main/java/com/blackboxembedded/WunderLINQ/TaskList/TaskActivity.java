@@ -69,6 +69,7 @@ import com.blackboxembedded.WunderLINQ.PhotoService;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.SettingsActivity;
 import com.blackboxembedded.WunderLINQ.VideoRecService;
+import com.blackboxembedded.WunderLINQ.VolumeActivity;
 import com.blackboxembedded.WunderLINQ.WaypointDatasource;
 import com.blackboxembedded.WunderLINQ.WaypointNavActivity;
 import com.blackboxembedded.WunderLINQ.WaypointRecord;
@@ -448,7 +449,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 goProVideoTaskText,
                 getResources().getString(R.string.task_title_weathermap),
                 getResources().getString(R.string.task_title_applauncher),
-                getResources().getString(R.string.task_title_roadbook)
+                getResources().getString(R.string.task_title_roadbook),
+                getResources().getString(R.string.task_title_systemvolume)
         };
         int numTasks = taskTitles.length;
         int[] iconId = new int[numTasks];
@@ -469,6 +471,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         iconId[14] = R.drawable.ic_cloud_sun;
         iconId[15] = R.drawable.ic_android;
         iconId[16] = R.drawable.ic_roadbook;
+        iconId[17] = R.drawable.ic_volume_up;
 
         mapping = new ArrayList<>();
         menuItems.clear();
@@ -1001,6 +1004,11 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             case 16:
                 //Open Road Book App
                 NavAppHelper.roadbook(this);
+                break;
+            case 17:
+                //Open System Volume Control
+                Intent volumeIntent = new Intent(TaskActivity.this, VolumeActivity.class);
+                startActivity(volumeIntent);
                 break;
             default:
                 break;

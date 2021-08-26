@@ -39,9 +39,13 @@
         android:supportsRtl="true"
         android:theme="@style/WLQTheme"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".VolumeActivity"
+            android:exported="true" />
         <activity android:name=".PermissionsActivity">
             <intent-filter>
                 <action android:name="com.blackboxembedded.WunderLINQ.PermissionsActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
