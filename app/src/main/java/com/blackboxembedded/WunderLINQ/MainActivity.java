@@ -280,7 +280,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         registerReceiver(mBondingBroadcast,new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
 
         bluetoothLeService = new Intent(MainActivity.this, BluetoothLeService.class);
-        startService(bluetoothLeService);
     }
 
     private void showCellSelector(int cell){
@@ -494,6 +493,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     protected void onResume() {
         Log.d(TAG,"In onResume");
         super.onResume();
+        startService(bluetoothLeService);
+
         registerReceiver(mBondingBroadcast,new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
         if (mBluetoothLeService == null) {
