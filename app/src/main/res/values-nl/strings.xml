@@ -198,7 +198,7 @@
     <!-- VideoRecService -->
     <string name="title_video_notification">WunderLINQ opnemen video</string>
     <!-- SettingsActivity -->
-    <string name="title_activity_settings"></string>
+    <string name="title_activity_settings"/>
     <!-- Preference strings -->
     <string name="info_title">Persoonlijke Informatie</string>
     <string name="pref_homeAddress_name">Thuis Adres</string>
@@ -244,11 +244,11 @@
     <string name="btn_sendlogs_title">Stuur Logbestanden</string>
     <string name="sendlogs_body">Beschrijf uw problem hieronder:</string>
     <string name="sendlogs_intent_title">Stuur Logbestanden...</string>
-    <string name="negative_contacts_alert_body"></string>
+    <string name="negative_contacts_alert_body"/>
     <string name="tripauto_label">Trip Auto</string>
     <string name="voltage_label">Voltage</string>
     <string name="throttle_label">Throttle</string>
-    <string name="task_title_settings">Settings</string>
+    <string name="task_title_settings">Instellingen</string>
     <string name="hours">h</string>
     <string name="minutes">m</string>
     <string name="seconds">s</string>
@@ -262,7 +262,7 @@
     <string name="east">E</string>
     <string name="waypoint_view_bt_navigate">Navigate</string>
     <string name="version_label">Version:</string>
-    <string name="config_write_label"></string>
+    <string name="config_write_label"/>
     <string name="fueleconomytwo_label">Gem. Gebruik 2 (L/100)</string>
     <string name="fueleconomyone_label">Gem. Gebruik 1 (L/100)</string>
     <string name="cconsumption_label">Consumption</string>
