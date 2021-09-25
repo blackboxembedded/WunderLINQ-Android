@@ -22,7 +22,7 @@
     <string name="negative_microphone_alert_body">Door geen microfoon toestemming, kan deze app geen video’s opnemen.</string>
     <string name="disclaimer_alert_title">WAARSCHUWING!</string>
     <string name="disclaimer_alert_body">.  Probeer geen route-informatie in te voeren of pas de WunderLINQ tijdens het rijden aan. Het niet volledig opletten van de werking van uw voertuig kan de dood, ernstig letsel of schade aan eigendommen tot gevolg hebben. U neemt de volledige verantwoordelijkheid en het risico op zich voor het gebruik van dit apparaat.</string>
-    <string name="disclaimer_ok">Accoord</string>
+    <string name="disclaimer_ok">Akkoord</string>
     <string name="disclaimer_quit">Stop</string>
     <!-- BLE Stuff Below -->
     <string name="bt_not_supported">BLE wordt niet ondersteund</string>
@@ -30,7 +30,7 @@
     <string name="rdc_rear_label">Achterwiel</string>
     <string name="engine_temp_label">Motor temperatuur</string>
     <string name="ambient_temp_label">Buiten temperatuur</string>
-    <string name="odometer_label">Kilometer teller</string>
+    <string name="odometer_label">Kilometerteller</string>
     <string name="trip1_label">Dagteller 1</string>
     <string name="trip2_label">Dagteller 2</string>
     <string name="gear_label">Versnelling</string>
@@ -42,7 +42,7 @@
     <string name="about_title">Over</string>
     <!-- FaultActivity -->
     <string name="title_activity_fault">Fout Melding</string>
-    <string name="fault_title">Actieve fout meldingen</string>
+    <string name="fault_title">Actieve foutmeldingen</string>
     <string name="notification_channel">Actieve fout meldingen</string>
     <!-- Fault strings -->
     <string name="fault_ABSSLF">ABS zelf-diagnose niet compleet</string>
@@ -53,11 +53,11 @@
     <string name="fault_ASCERR">ASC storing</string>
     <string name="fault_ASCDAC">ASC gedeactivated</string>
     <string name="fault_FUELF">Tank bijna leeg</string>
-    <string name="fault_LAMPAFL1">koplamp 1</string>
+    <string name="fault_LAMPAFL1">Koplamp 1</string>
     <string name="fault_LAMPAFL2">Koplamp 2</string>
     <string name="fault_LAMPDAY">Dagrijverlichting</string>
     <string name="fault_LAMPFLI">Richtingaanwijzer links voor</string>
-    <string name="fault_LAMPFRI">Richtingaanwijzer rechts voor</string>
+    <string name="fault_LAMPFRI">Richtingaanwijzer rechtsvoor</string>
     <string name="fault_LAMPRLI">Richtingaanwijzer links achter</string>
     <string name="fault_LAMPRRI">Richtingaanwijzer rechts achter</string>
     <string name="fault_LAMPFPK1">Parkeerlicht 1</string>
@@ -74,17 +74,17 @@
     <string name="fault_ICEWARN">Vorst waarschuwing</string>
     <string name="fault_GENWARNFSYLW">Algemeen waarschuwings lamp knippert geel</string>
     <string name="fault_GENWARNSHYLW"> Algemeen waarschuwings lamp brandt geel</string>
-    <string name="fault_GENWARNFSRED">Algemeen waarsschuwings lamp knippert rood</string>
-    <string name="fault_GENWARNSHRED">Algemeen waarschuwings lamp brandt rood</string>
-    <string name="fault_OILLOW">Motorolie nivo te laag</string>
+    <string name="fault_GENWARNFSRED">Algemeen waarschuwingslamp knippert rood</string>
+    <string name="fault_GENWARNSHRED">Algemeen waarschuwingslamp brandt rood</string>
+    <string name="fault_OILLOW">Motorolieniveau te laag</string>
     <string name="fault_TIREFWF">Voorwiel bandenspanning te laag</string>
     <string name="fault_TIRERWF">Achterwiel bandenspanning te laag</string>
     <string name="fault_TIREFCF">Voorwiel bandenspanning gevaarlijk</string>
     <string name="fault_TIRERCF">Achterwiel bandenspanning gevaarlijk</string>
     <!-- WaypointActivity -->
-    <string name="waypoint_title">Route punten opgeslagen</string>
+    <string name="waypoint_title">Routepunten opgeslagen</string>
     <!-- WaypointViewActivity -->
-    <string name="waypoint_view_title">Route punt opgeslagen</string>
+    <string name="waypoint_view_title">Routepunt opgeslagen</string>
     <string name="waypoint_view_tv_date_label">Datum opgeslagen</string>
     <string name="waypoint_view_tv_lat_label">Breedtegraad</string>
     <string name="waypoint_view_tv_lon_label">Lengtegraad</string>
@@ -104,11 +104,11 @@
     <string name="trip_view_waypoint_end_label">Einde</string>
     <string name="trip_view_share_label">Delen</string>
     <string name="trip_view_tv_distance">Afstand</string>
-    <string name="trip_view_tv_duration">gereden tijd</string>
+    <string name="trip_view_tv_duration">Gereden tijd</string>
     <string name="trip_view_tv_speed">Snelheid (Gem/Max)</string>
     <string name="trip_view_tv_shifts">Schakelingen versnelilng</string>
     <string name="trip_view_tv_brakes">Remmen (Voor/Achter)</string>
-    <string name="trip_view_tv_ambient">Omgevings Temp (Min/Gem/Max)</string>
+    <string name="trip_view_tv_ambient">Omgevingstemperatuur (Min/Gem/Max)</string>
     <string name="trip_view_tv_engine">Motor Temp (Min/Gem/Max)</string>
     <!-- CompassActivity -->
     <string name="compass_title">Compas</string>
@@ -136,7 +136,7 @@
     <string name="task_title_waypoint">Route Punt Opslaan</string>
     <string name="task_title_waypoint_nav">Navigeer naar Route Punt</string>
     <string name="task_title_voicecontrol">Voice Assistant</string>
-    <string name="toast_address_not_set">Geen Huis Adres in instelling gevonden</string>
+    <string name="toast_address_not_set">Geen Huis Adres in instellingen gevonden</string>
     <string name="toast_phone_not_set">Geen Favoriet Nummer in instellingen gevonden</string>
     <string name="toast_photo_taken">Foto Gemaakt!</string>
     <!-- ContactListActivity -->
@@ -165,7 +165,7 @@
     <!-- AlertActivity -->
     <string name="alert_btn_ok">OK</string>
     <string name="alert_btn_close">Sluiten</string>
-    <string name="alert_title_fuel">laag brandstof peil</string>
+    <string name="alert_title_fuel">Laag brandstofniveau</string>
     <string name="alert_label_fuel">Route naar dichtbijzijnde tankstation?</string>
     <!-- LoggingService -->
     <string name="time_header">Tijd</string>
@@ -178,7 +178,7 @@
     <string name="ambienttemp_header">Omgevings Temperature (C)</string>
     <string name="frontpressure_header">Voorwiel Bandenspaaning (bar)</string>
     <string name="rearpressure_header">Achterwiel Bandenspanning (bar)</string>
-    <string name="odometer_header">Kilometer teller (km)</string>
+    <string name="odometer_header">Kilometerteller (km)</string>
     <string name="voltage_header">Voltage (V)</string>
     <string name="throttle_header">Gashandel Positie (%)</string>
     <string name="frontbrakes_header">Voor Rem</string>
@@ -240,7 +240,7 @@
     <string name="pref_fuelAlert_name">Lage Brandstof</string>
     <string name="pref_fuelAlert_summary">Bereken route naar dichts bij zijnde tankstation bij laag brandstof waarschuwing</string>
     <string name="debug_settings_title">Instellen Voorkeuren</string>
-    <string name="advanced_settings_title">Geavanveerde Instellingen</string>
+    <string name="advanced_settings_title">Geavanceerde Instellingen</string>
     <string name="btn_sendlogs_title">Stuur Logbestanden</string>
     <string name="sendlogs_body">Beschrijf uw problem hieronder:</string>
     <string name="sendlogs_intent_title">Stuur Logbestanden...</string>
@@ -270,7 +270,7 @@
     <string name="ambientlight_label">Achtergrond Licht</string>
     <string name="rearbrakes_label">Achter Rem</string>
     <string name="frontbrakes_label">Voor Rem</string>
-    <string name="cancel_bt">Cancel</string>
+    <string name="cancel_bt">Annuleren</string>
     <string name="experimental_title">Experimental Features</string>
     <string name="wwMode2">RT/K1600</string>
     <string name="waypoints_nav_title">Waypoints</string>
@@ -281,4 +281,22 @@
     <string name="keymode_custom_label">Algemeen</string>
     <string name="hwsave_alert_btn_cancel">Cancel</string>
     <string name="delete_bt">Verwijderen</string>
+    <string name="weathermap_title">Weerkaart</string>
+    <string name="roadbook_app_rabbitrally">Rabbit Rally</string>
+    <string name="task_title_actioncam_start_video">Start ActionCam Opname</string>
+    <string name="task_title_actioncam_stop_video">Stop ActionCam Opname</string>
+    <string name="task_title_weathermap">Weerkaart</string>
+    <string name="task_title_empty">Leeg</string>
+    <string name="delete_waypoint_alert_title">Waarschuwing!</string>
+    <string name="delete_trip_alert_title">Waarschuwing!</string>
+    <string name="delete_trip_alert_body">Verwijder Trip Log\?</string>
+    <string name="delete_waypoint_alert_body">Verwijder Routepunt\?</string>
+    <string name="task_title_roadbook">Wegenkaart</string>
+    <string name="task_title_systemvolume">Volume</string>
+    <string name="toast_actioncam_notconnected">ActionCam niet verbonden</string>
+    <string name="alert_title_photopreview">Foto Voorbeeld</string>
+    <string name="dash_title">Dashboard</string>
+    <string name="cancel">Annuleren</string>
+    <string name="pref_actioncam_title">Action Camera</string>
+    <string name="share_gpx">Deel GPX</string>
 </resources>
