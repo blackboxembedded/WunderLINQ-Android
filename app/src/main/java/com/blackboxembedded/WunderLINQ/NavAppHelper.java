@@ -99,6 +99,9 @@ public class NavAppHelper {
                 navIntent = activity.getPackageManager().getLaunchIntentForPackage("gr.talent.kurviger.pro");
                 url = "";
                 break;
+            case "14": //CoPilot GPS
+                url = "copilot://&EnableCustomButton=true&AppLaunchBundleID=com.blackboxembedded.WunderLINQ";
+                break;
         }
         try {
             navIntent.setData(Uri.parse(url));
@@ -162,6 +165,11 @@ public class NavAppHelper {
                 homeNavIntent.setPackage("gr.talent.kurviger.pro");
                 navUrl = "https://kurviger.de/en?point="  + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&vehicle=motorycycle"
                         + "weighting=fastest";
+                break;
+            case "14": //CoPilot GPS
+                //https://developer.trimblemaps.com/copilot-navigation/v10-19/feature-guide/advanced-features/url-launch/#send-stops
+                navUrl = "copilot://options?type=STOPS&stop=Start||||||" + String.valueOf(start.getLatitude()) + "|" + String.valueOf(start.getLongitude()) + "&stop=Stop||||||" + String.valueOf(end.getLatitude()) + "|" + String.valueOf(end.getLongitude())
+                        + "&EnableCustomButton=true&AppLaunchBundleID=com.blackboxembedded.WunderLINQ";
                 break;
         }
         if (!navApp.equals("6")) {
@@ -229,6 +237,10 @@ public class NavAppHelper {
                 navIntent.setPackage("gr.talent.kurviger.pro");
                 navUrl = "https://kurviger.de/en?point="  + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&locale=en" +"&vehicle=motorycycle"
                         + "weighting=fastest" + "use_miles=true";
+                break;
+            case "14": //CoPilot GPS
+                navUrl = "copilot://mydestination?type=LOCATION&action=VIEW&lat=" + String.valueOf(waypoint.getLatitude()) + "&long=" + String.valueOf(waypoint.getLongitude())
+                        + "&EnableCustomButton=true&AppLaunchBundleID=com.blackboxembedded.WunderLINQ";
                 break;
         }
         if (!navApp.equals("6")) {
