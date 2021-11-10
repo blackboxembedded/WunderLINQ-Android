@@ -49,6 +49,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.MapsInitializer.Renderer;
+import com.google.android.gms.maps.OnMapsSdkInitializedCallback;
+
 import com.opencsv.CSVReader;
 
 import java.io.File;
@@ -68,7 +72,7 @@ import io.jenetics.jpx.GPX;
 import io.jenetics.jpx.TrackSegment;
 import io.jenetics.jpx.WayPoint;
 
-public class TripViewActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class TripViewActivity extends AppCompatActivity implements OnMapReadyCallback, OnMapsSdkInitializedCallback {
 
     private static final String TAG = "TripViewActivity";
 
@@ -289,6 +293,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
             }
 
             if (routePoints.size() > 0) {
+                MapsInitializer.initialize(getApplicationContext(), Renderer.LATEST, this);
                 FragmentManager myFragmentManager = getSupportFragmentManager();
                 SupportMapFragment mapFragment = (SupportMapFragment) myFragmentManager.findFragmentById(R.id.map);
                 mapFragment.getMapAsync(this);
@@ -305,6 +310,18 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onMapsSdkInitialized(MapsInitializer.Renderer renderer) {
+        switch (renderer) {
+            case LATEST:
+                Log.d(TAG, "The latest version of the renderer is used.");
+                break;
+            case LEGACY:
+                Log.d(TAG, "The legacy version of the renderer is used.");
+                break;
+        }
     }
 
     @Override

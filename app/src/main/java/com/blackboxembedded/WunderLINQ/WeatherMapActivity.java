@@ -38,6 +38,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -47,12 +48,15 @@ import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
 import com.google.android.gms.maps.model.UrlTileProvider;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.MapsInitializer.Renderer;
+import com.google.android.gms.maps.OnMapsSdkInitializedCallback;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Locale;
 
-public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyCallback, OnMapsSdkInitializedCallback {
 
     public final static String TAG = "WeatherActivity";
     private GoogleMap mMap;
@@ -97,6 +101,7 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
         showActionBar();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        MapsInitializer.initialize(getApplicationContext(), Renderer.LATEST, this);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -135,6 +140,18 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
+    }
+
+    @Override
+    public void onMapsSdkInitialized(MapsInitializer.Renderer renderer) {
+        switch (renderer) {
+            case LATEST:
+                Log.d(TAG, "The latest version of the renderer is used.");
+                break;
+            case LEGACY:
+                Log.d(TAG, "The legacy version of the renderer is used.");
+                break;
         }
     }
 

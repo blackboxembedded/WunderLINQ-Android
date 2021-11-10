@@ -53,6 +53,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.MapsInitializer.Renderer;
+import com.google.android.gms.maps.OnMapsSdkInitializedCallback;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -66,7 +69,7 @@ import java.util.List;
 import io.jenetics.jpx.GPX;
 import io.jenetics.jpx.WayPoint;
 
-public class WaypointViewActivity extends AppCompatActivity implements OnMapReadyCallback  {
+public class WaypointViewActivity extends AppCompatActivity implements OnMapReadyCallback, OnMapsSdkInitializedCallback {
 
     public final static String TAG = "WptViewActivity";
 
@@ -158,6 +161,7 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
             tvLongitude.setText(latlong[1]);
             etLabel.setText(record.getLabel());
 
+            MapsInitializer.initialize(getApplicationContext(), Renderer.LATEST, this);
             FragmentManager myFragmentManager = getSupportFragmentManager();
             SupportMapFragment mapFragment = (SupportMapFragment) myFragmentManager.findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
@@ -172,6 +176,18 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onMapsSdkInitialized(MapsInitializer.Renderer renderer) {
+        switch (renderer) {
+            case LATEST:
+                Log.d(TAG, "The latest version of the renderer is used.");
+                break;
+            case LEGACY:
+                Log.d(TAG, "The legacy version of the renderer is used.");
+                break;
+        }
     }
 
     @Override
