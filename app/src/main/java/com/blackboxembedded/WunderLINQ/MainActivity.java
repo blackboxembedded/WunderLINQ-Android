@@ -656,7 +656,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         if (!pairedDevices.isEmpty()) {
             for (BluetoothDevice devices : pairedDevices) {
                 if (devices.getName() != null) {
-                    if (devices.getName().equals(getString(R.string.device_name))) {
+                    if (devices.getName().startsWith(getString(R.string.device_name))) {
                         wlqCnt = wlqCnt + 1;
                         Log.d(TAG, "Previously Paired WunderLINQ: " + devices.getAddress());
                         mDeviceAddress = devices.getAddress();
