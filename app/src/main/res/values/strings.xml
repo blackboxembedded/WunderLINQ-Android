@@ -3,6 +3,7 @@
     <string name="app_name" translatable="false">WunderLINQ</string>
     <string name="product" translatable="false">WunderLINQ</string>
     <string name="company_name" translatable="false">Black Box Embedded, LLC</string>
+    <!-- <string name="device_name" translatable="false">WunderLINQ</string> -->
     <string name="device_name" translatable="false">WunderLINQ</string>
     <!-- FirstRunActivity -->
     <string name="firstrun_start">The WunderLINQ requires a lot of permissions to enable all the cool features the app provides.  On the next few screens we will explain the need for each permission request.
