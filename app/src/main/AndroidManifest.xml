@@ -12,7 +12,7 @@
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"  />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -236,12 +236,14 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <receiver android:name=".BTConnectReceiver">
+        <receiver android:name=".BTConnectReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".LoggingNotificationReceiver">
+        <receiver android:name=".LoggingNotificationReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="RESUME_ACTION" />
                 <action android:name="STOP_ACTION" />
