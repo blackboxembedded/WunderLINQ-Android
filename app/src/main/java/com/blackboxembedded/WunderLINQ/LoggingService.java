@@ -160,7 +160,7 @@ public class LoggingService extends Service {
         Log.d(TAG, "In LoggingService()");
 
         try {
-            File root = new File(Environment.getExternalStorageDirectory(), "/WunderLINQ/logs/");
+            File root = new File(MyApplication.getContext().getExternalFilesDir(null), "/logs/");
             if(!root.exists()){
                 if(!root.mkdirs()){
                     Log.d(TAG,"Unable to create directory: " + root);

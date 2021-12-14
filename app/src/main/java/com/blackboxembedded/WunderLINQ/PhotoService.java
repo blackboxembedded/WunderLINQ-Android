@@ -746,14 +746,9 @@ public class PhotoService extends Service {
     }
 
     public static boolean storeGeoCoordsToImage(File imagePath, Location location) {
-
         // Avoid NullPointer
         if (imagePath == null || location == null) return false;
-
-        // If we use Location.convert(), we do not have to worry about absolute values.
-
         try {
-            // c&p and adapted from @Fabyen (sorry for being lazy)
             ExifInterface exif = new ExifInterface(imagePath.getAbsolutePath());
             exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE,  getLatGeoCoordinates(location));
             exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, location.getLatitude() < 0 ? "S" : "N");
@@ -762,12 +757,10 @@ public class PhotoService extends Service {
             Log.d(TAG,exif.toString());
             exif.saveAttributes();
         } catch (IOException e) {
-            // do something
             e.printStackTrace();
             return false;
         }
 
-        // Data was likely written. For sure no NullPointer.
         return true;
     }
 

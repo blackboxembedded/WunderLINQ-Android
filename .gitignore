@@ -30,7 +30,8 @@ build/
 .navigation
 captures/
 output.json 
-
+app/release
+app/debug
 #NDK
 obj/
 .externalNativeBuild

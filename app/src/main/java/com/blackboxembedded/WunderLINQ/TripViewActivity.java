@@ -107,7 +107,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
             updateListing();
             fileName = extras.getString("FILE");
             index = tripFileList.indexOf(fileName);
-            file = new File(Environment.getExternalStorageDirectory(), "/WunderLINQ/logs/" + fileName);
+            file = new File(this.getExternalFilesDir(null), "/logs/" + fileName);
 
             View view = findViewById(R.id.layout_trip_view);
             view.setOnTouchListener(new OnSwipeTouchListener(this) {

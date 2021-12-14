@@ -26,8 +26,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -42,6 +42,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import static android.app.AppOpsManager.MODE_ALLOWED;
 import static android.app.AppOpsManager.OPSTR_GET_USAGE_STATS;
 import static android.os.Process.myUid;
+
+import org.apache.commons.io.FileUtils;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class FirstRunActivity extends AppCompatActivity {
 
@@ -68,6 +74,25 @@ public class FirstRunActivity extends AppCompatActivity {
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         mainIntent = new Intent(FirstRunActivity.this, MainActivity.class);
+
+        //Migrate Data for targeting API31
+        if (!sharedPrefs.getBoolean("API31_MIGRATION",false)){
+            Log.d(TAG,"Migrating data to new directory");
+            File root = new File(Environment.getExternalStorageDirectory(), "/WunderLINQ/logs");
+            if(root.exists()){
+                Log.d(TAG,"Old Directory Found: " + root.toString());
+                File destination = new File(this.getExternalFilesDir(null), "/");
+                try {
+                    Log.d(TAG,"Source: " + root.toString() + " Destination: " + destination.toString());
+                    moveDirectory(root, destination);
+                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                    editor.putBoolean("API31_MIGRATION", true);
+                    editor.apply();
+                } catch (IOException e) {
+                    Log.d(TAG, "Trouble migrating user files to new directory: " + e.toString());
+                }
+            }
+        }
 
         if (!sharedPrefs.getBoolean("FIRST_LAUNCH",true)){
             startActivity(mainIntent);
@@ -326,6 +351,10 @@ public class FirstRunActivity extends AppCompatActivity {
                 Log.d(TAG, "Unknown Permissions Request Code");
                 break;
         }
+    }
+
+    public void moveDirectory(File source, File destination) throws IOException {
+        FileUtils.copyDirectoryToDirectory(source, destination);
     }
 
     public static boolean isAccessibilityServiceEnabled(Context context, Class<?> accessibilityService) {

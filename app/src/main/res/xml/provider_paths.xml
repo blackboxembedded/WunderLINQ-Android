@@ -1,4 +1,11 @@
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
-    <external-path name="wunderlinq" path="WunderLINQ" />
-    <cache-path name="cache" path="tmp" />
+    <external-path
+        name="external"
+        path="." />
+    <external-files-path
+        name="external_files"
+        path="." />
+    <cache-path
+        name="cache"
+        path="." />
 </paths>

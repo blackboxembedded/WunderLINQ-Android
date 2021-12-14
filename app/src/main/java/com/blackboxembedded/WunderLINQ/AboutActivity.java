@@ -23,7 +23,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
@@ -91,14 +90,14 @@ public class AboutActivity extends AppCompatActivity {
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-HH:mm");
                 String curdatetime = formatter.format(date);
                 //Save logcat to file
-                File root = new File(Environment.getExternalStorageDirectory(), "/WunderLINQ/debug/");
+                File root = new File(MyApplication.getContext().getExternalFilesDir(null), "/debug/");
                 if(!root.exists()){
                     if(!root.mkdirs()){
                         Log.d(TAG,"Unable to create directory: " + root);
                     }
                 }
-                File outputFile = new File(Environment.getExternalStorageDirectory(),
-                        "/WunderLINQ/debug/logcat.txt");
+                File outputFile = new File(MyApplication.getContext().getExternalFilesDir(null),
+                        "/debug/logcat.txt");
                 try {
                     Runtime.getRuntime().exec(
                             "logcat -f " + outputFile.getAbsolutePath());
@@ -106,7 +105,7 @@ public class AboutActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                File debugFile = new File(MyApplication.getContext().getCacheDir(), "/tmp/dbg");
+                File debugFile = new File(MyApplication.getContext().getExternalFilesDir(null), "/debug/dbg");
                 //Send file(s) using email
                 Intent emailIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
                 emailIntent.setType("text/plain");

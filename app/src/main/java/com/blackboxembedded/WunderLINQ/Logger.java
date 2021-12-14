@@ -34,7 +34,7 @@ class Logger {
     private static void initialize()
     {
         try {
-            File root = new File(MyApplication.getContext().getCacheDir(), "/tmp/");
+            File root = new File(MyApplication.getContext().getExternalFilesDir(null), "/debug");
             if(!root.exists()){
                 if(!root.mkdirs()){
                     Log.d(TAG,"Unable to create directory: " + root);
