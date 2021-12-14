@@ -64,7 +64,6 @@ import com.google.android.gms.location.LocationServices;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
@@ -89,7 +88,6 @@ public class BluetoothLeService extends Service {
     private static int nrTries;
     // Maximum number of retries of commands
     private static final int MAX_TRIES = 2;
-    private static byte[] currentWriteBytes;
     public enum WriteType {
         WITH_RESPONSE,
         WITHOUT_RESPONSE,
@@ -130,17 +128,6 @@ public class BluetoothLeService extends Service {
     private LocationRequest mLocationRequest;
 
     private int lastDirection;
-
-    private static byte[] lastMessage00 = new byte[8];
-    private static byte[] lastMessage01 = new byte[8];
-    private static byte[] lastMessage05 = new byte[8];
-    private static byte[] lastMessage06 = new byte[8];
-    private static byte[] lastMessage07 = new byte[8];
-    private static byte[] lastMessage08 = new byte[8];
-    private static byte[] lastMessage09 = new byte[8];
-    private static byte[] lastMessage0A = new byte[8];
-    private static byte[] lastMessage0B = new byte[8];
-    private static byte[] lastMessage0C = new byte[8];
 
     /**
      * GATT Status constants
@@ -635,81 +622,13 @@ public class BluetoothLeService extends Service {
                         debugLogger = null;
                     }
                 }
-
-                //Check if message changed
-                boolean process = false;
-                switch (data[0]){
-                    case 0x00:
-                        if(!Arrays.equals(lastMessage00, data)){
-                            lastMessage00 = data;
-                            process = true;
-                        }
-                        break;
-                    case 0x01:
-                        if(!Arrays.equals(lastMessage01, data)){
-                            lastMessage01 = data;
-                            process = true;
-                        }
-                        break;
-                    case 0x05:
-                        if(!Arrays.equals(lastMessage05, data)){
-                            lastMessage05 = data;
-                            process = true;
-                        }
-                        break;
-                    case 0x06:
-                        if(!Arrays.equals(lastMessage06, data)){
-                            lastMessage06 = data;
-                            process = true;
-                        }
-                        break;
-                    case 0x07:
-                        if(!Arrays.equals(lastMessage07, data)){
-                            lastMessage07 = data;
-                            process = true;
-                        }
-                        break;
-                    case 0x08:
-                        if(!Arrays.equals(lastMessage08, data)){
-                            lastMessage08 = data;
-                            process = true;
-                        }
-                        break;
-                    case 0x09:
-                        if(!Arrays.equals(lastMessage09, data)){
-                            lastMessage09 = data;
-                            process = true;
-                        }
-                        break;
-                    case 0x0a:
-                        if(!Arrays.equals(lastMessage0A, data)){
-                            lastMessage0A = data;
-                            process = true;
-                        }
-                        break;
-                    case 0x0b:
-                        if(!Arrays.equals(lastMessage0B, data)){
-                            lastMessage0B = data;
-                            process = true;
-                        }
-                        break;
-                    case 0x0c:
-                        if(!Arrays.equals(lastMessage0C, data)){
-                            lastMessage0C = data;
-                            process = true;
-                        }
-                        break;
-                }
-
-                if(process) {
-                    LINbus.parseLINMessage(data);
-                    /*
-                     * Sending the broad cast so that it can be received on registered
-                     * receivers
-                     */
-                    intent.putExtras(mBundle);
-                    MyApplication.getContext().sendBroadcast(intent);
-                }
+                LINbus.parseLINMessage(data);
+                /*
+                 * Sending the broad cast so that it can be received on registered
+                 * receivers
+                 */
+                intent.putExtras(mBundle);
+                MyApplication.getContext().sendBroadcast(intent);
             }
         } else if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_CANMESSAGE_CHARACTERISTIC)) {
             if (data != null) {
@@ -803,8 +722,6 @@ public class BluetoothLeService extends Service {
             String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
                     "Disconnection request sent";
             Log.d(TAG,dataLog);
-            //Data.clear();
-            //FaultStatus.clear();
             clearNotifications();
             close();
         }
@@ -916,7 +833,6 @@ public class BluetoothLeService extends Service {
             @Override
             public void run() {
                 if (isConnected()) {
-                    currentWriteBytes = bytesToWrite;
                     characteristic.setWriteType(writeTypeInternal);
                     characteristic.setValue(bytesToWrite);
                     if (!mBluetoothGatt.writeCharacteristic(characteristic)) {
