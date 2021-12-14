@@ -282,7 +282,6 @@
     <string name="pref_autoNightModeDelay_name">Automatikus éjszakai mód</string>
     <string name="pref_autoNightModeDelay_summary">Az automatikus éjszakai mód késleltetése másodpercben</string>
     <string name="experimental_title">Kísérleti funkciók</string>
-    <string name="pref_taskswitcher_name">A feladatváltó engedélyezése</string>
     <string name="pref_pip_name">Kép a képben mód engedélyezése</string>
     <string name="pref_pip_summary">Ha kilépünk az applikációból, az adathálózatot egy lebegő ablakba minimalizálja. Csak Android 8.0 felett</string>
     <string name="pref_piporientation_name">Kép a képben orientáció</string>
@@ -313,7 +312,6 @@
     <string name="sendlogs_intent_title">Elküldöttek…</string>
     <string name="notification_alert_body">A WunderLINQ hozzáférést kér az értesítésekhez, hogy vezérelni tudja a zenelejátszót.</string>
     <string name="contacts_filter_favorites">Kedvencek</string>
-    <string name="pref_taskswitcher_summary">Ha a görgetőkereket balra tartod, csak akkor hozza fel a feladatváltót, ha nem ez a vissza funkció</string>
     <string name="pref_tpmsAlert_summary">Használj egyéni határértéket az alacsony nyomású figyelmeztetéshez</string>
     <string name="next_service_date_label">Következő szerviz időpontja</string>
     <string name="waypoint_view_label_hint">Úti pont elnevezése</string>

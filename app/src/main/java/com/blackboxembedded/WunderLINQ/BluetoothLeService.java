@@ -53,25 +53,21 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
+import com.blackboxembedded.WunderLINQ.protocols.CANbus;
+import com.blackboxembedded.WunderLINQ.protocols.LINbus;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -102,15 +98,9 @@ public class BluetoothLeService extends Service {
 
     private static Logger debugLogger = null;
 
-    private static boolean fuelAlertSent = false;
-    private static int prevBrakeValue = 0;
+    public static boolean fuelAlertSent = false;
 
     private static SharedPreferences sharedPrefs;
-
-    private static Date holdStartTime;
-    private static boolean holdStart = false;
-    private static Date RTholdStartTime;
-    private static boolean RTholdStart = false;
 
     private SensorManager sensorManager;
     private Sensor accelerometer;
@@ -140,6 +130,17 @@ public class BluetoothLeService extends Service {
     private LocationRequest mLocationRequest;
 
     private int lastDirection;
+
+    private static byte[] lastMessage00 = new byte[8];
+    private static byte[] lastMessage01 = new byte[8];
+    private static byte[] lastMessage05 = new byte[8];
+    private static byte[] lastMessage06 = new byte[8];
+    private static byte[] lastMessage07 = new byte[8];
+    private static byte[] lastMessage08 = new byte[8];
+    private static byte[] lastMessage09 = new byte[8];
+    private static byte[] lastMessage0A = new byte[8];
+    private static byte[] lastMessage0B = new byte[8];
+    private static byte[] lastMessage0C = new byte[8];
 
     /**
      * GATT Status constants
@@ -620,7 +621,7 @@ public class BluetoothLeService extends Service {
         mBundle.putString(EXTRA_BYTE_UUID_VALUE,
                 characteristic.getUuid().toString());
 
-        if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_MESSAGE_CHARACTERISTIC)) {
+        if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_LINMESSAGE_CHARACTERISTIC)) {
             if (data != null) {
                 if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
                     // Log data
@@ -634,7 +635,97 @@ public class BluetoothLeService extends Service {
                         debugLogger = null;
                     }
                 }
-                parseMessage(data);
+
+                //Check if message changed
+                boolean process = false;
+                switch (data[0]){
+                    case 0x00:
+                        if(!Arrays.equals(lastMessage00, data)){
+                            lastMessage00 = data;
+                            process = true;
+                        }
+                        break;
+                    case 0x01:
+                        if(!Arrays.equals(lastMessage01, data)){
+                            lastMessage01 = data;
+                            process = true;
+                        }
+                        break;
+                    case 0x05:
+                        if(!Arrays.equals(lastMessage05, data)){
+                            lastMessage05 = data;
+                            process = true;
+                        }
+                        break;
+                    case 0x06:
+                        if(!Arrays.equals(lastMessage06, data)){
+                            lastMessage06 = data;
+                            process = true;
+                        }
+                        break;
+                    case 0x07:
+                        if(!Arrays.equals(lastMessage07, data)){
+                            lastMessage07 = data;
+                            process = true;
+                        }
+                        break;
+                    case 0x08:
+                        if(!Arrays.equals(lastMessage08, data)){
+                            lastMessage08 = data;
+                            process = true;
+                        }
+                        break;
+                    case 0x09:
+                        if(!Arrays.equals(lastMessage09, data)){
+                            lastMessage09 = data;
+                            process = true;
+                        }
+                        break;
+                    case 0x0a:
+                        if(!Arrays.equals(lastMessage0A, data)){
+                            lastMessage0A = data;
+                            process = true;
+                        }
+                        break;
+                    case 0x0b:
+                        if(!Arrays.equals(lastMessage0B, data)){
+                            lastMessage0B = data;
+                            process = true;
+                        }
+                        break;
+                    case 0x0c:
+                        if(!Arrays.equals(lastMessage0C, data)){
+                            lastMessage0C = data;
+                            process = true;
+                        }
+                        break;
+                }
+
+                if(process) {
+                    LINbus.parseLINMessage(data);
+                    /*
+                     * Sending the broad cast so that it can be received on registered
+                     * receivers
+                     */
+                    intent.putExtras(mBundle);
+                    MyApplication.getContext().sendBroadcast(intent);
+                }
+            }
+        } else if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_CANMESSAGE_CHARACTERISTIC)) {
+            if (data != null) {
+                if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
+                    // Log data
+                    if (debugLogger == null) {
+                        debugLogger = new Logger();
+                    }
+                    debugLogger.write(Utils.ByteArraytoHexNoDelim(data));
+                } else {
+                    if (debugLogger != null) {
+                        debugLogger.shutdown();
+                        debugLogger = null;
+                    }
+                }
+                CANbus.parseCANMessage(data);
                 /*
                  * Sending the broad cast so that it can be received on registered
                  * receivers
@@ -1033,7 +1124,7 @@ public class BluetoothLeService extends Service {
         notificationManager.cancelAll();
     }
 
-    static private void fuelAlert(){
+    static public void fuelAlert(){
         if (sharedPrefs.getBoolean("prefFuelAlert", false)) {
             if (!fuelAlertSent) {
                 fuelAlertSent = true;
@@ -1048,95 +1139,6 @@ public class BluetoothLeService extends Service {
         } else {
             fuelAlertSent = false;
         }
-    }
-
-    private static void parseMessage(byte[] data){
-        //Log.d(TAG,"MSG");
-        Data.setLastMessage(data);
-        //uint32 id = (message[0]<<3) + (message[1]>>5)
-        int msgID = ((data[0] & 0xFF)<<3) + ((data[1] & 0xFF)>>5);
-
-        Log.d(TAG,"CANID: " + msgID + "  CANMSG: " + Utils.ByteArraytoHexNoDelim(data));
-
-        switch (msgID){
-            case 268:
-                int rpm = (((data[4] & 0xFF) + (((data[5] & 0xFF) & 0x0f) * 255)) * 5);
-                Data.setRPM(rpm);
-                break;
-            case 272:
-                int minPosition = 36;
-                int maxPosition = 236;
-                double throttlePosition = (((data[7] & 0xFF) - minPosition) * 100.0) / (maxPosition - minPosition);
-                Data.setThrottlePosition(throttlePosition);
-                break;
-            case 700:
-                // Engine Temperature
-                if ((data[4] & 0xFF) != 0xFF) {
-                    double engineTemp = ((data[4] & 0xFF) * 0.75) - 25;
-                    Data.setEngineTemperature(engineTemp);
-                }
-                //Gear
-                String gear;
-                int gearValue = ((data[7] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
-                switch (gearValue) {
-                    case 0x1:
-                        gear = "1";
-                        break;
-                    case 0x2:
-                        gear = "N";
-                        break;
-                    case 0x4:
-                        gear = "2";
-                        break;
-                    case 0x7:
-                        gear = "3";
-                        break;
-                    case 0x8:
-                        gear = "4";
-                        break;
-                    case 0xB:
-                        gear = "5";
-                        break;
-                    case 0xD:
-                        gear = "6";
-                        break;
-                    case 0xF:
-                        // Inbetween Gears
-                        gear = "-";
-                        break;
-                    default:
-                        gear = "-";
-                        Log.d(TAG, "Unknown gear value");
-                }
-                if(Data.getGear() != null) {
-                    if (!Data.getGear().equals(gear) && !gear.equals("-")) {
-                        Data.setNumberOfShifts(Data.getNumberOfShifts() + 1);
-                    }
-                }
-                Data.setGear(gear);
-                break;
-            case 720:
-                //Ambient Temp
-                double ambientTemp = ((data[4] & 0xFF) * 0.50) - 40;
-                Data.setAmbientTemperature(ambientTemp);
-                if(ambientTemp <= 0.0){
-                    FaultStatus.seticeWarnActive(true);
-                } else {
-                    FaultStatus.seticeWarnActive(false);
-                }
-                break;
-            case 1023:
-                // Ambient Light - Not Confirmed
-                int ambientLightValue = (data[3] & 0xFF) & 0x0f; // the lowest 4 bits
-                Data.setAmbientLight(ambientLightValue);
-                // Odometer
-                double odometer = Utils.bytesToInt16(data[9], data[8], data[7]);
-                Data.setOdometer(odometer);
-                break;
-            default:
-                break;
-        }
-
     }
 
     private int filterChange(int newDir){

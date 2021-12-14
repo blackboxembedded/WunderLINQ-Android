@@ -771,7 +771,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 Bundle bd = intent.getExtras();
                 if(bd != null) {
-                    if (bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE).contains(GattAttributes.WUNDERLINQ_MESSAGE_CHARACTERISTIC)) {
+                    if (bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE).contains(GattAttributes.WUNDERLINQ_LINMESSAGE_CHARACTERISTIC)
+                    || bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE).contains(GattAttributes.WUNDERLINQ_CANMESSAGE_CHARACTERISTIC)) {
                         btButton.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.motorrad_blue));
                         btButton.setEnabled(false);
                         mMenu.findItem(R.id.action_hwsettings).setVisible(true);
@@ -819,7 +820,24 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
                     uuid = gattCharacteristic.getUuid().toString();
                     Log.d(TAG,"Characteristic Found: " + uuid);
-                    if (UUID.fromString(GattAttributes.WUNDERLINQ_MESSAGE_CHARACTERISTIC).equals(gattCharacteristic.getUuid())) {
+                    if (UUID.fromString(GattAttributes.WUNDERLINQ_LINMESSAGE_CHARACTERISTIC).equals(gattCharacteristic.getUuid())) {
+                        int charaProp = gattCharacteristic.getProperties();
+                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
+                            // If there is an active notification on a characteristic, clear
+                            // it first so it doesn't update the data field on the user interface.
+                            if (mNotifyCharacteristic != null) {
+                                BluetoothLeService.setCharacteristicNotification(
+                                        mNotifyCharacteristic, false);
+                                mNotifyCharacteristic = null;
+                            }
+                            BluetoothLeService.readCharacteristic(gattCharacteristic);
+                        }
+                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
+                            mNotifyCharacteristic = gattCharacteristic;
+                            BluetoothLeService.setCharacteristicNotification(
+                                    gattCharacteristic, true);
+                        }
+                    } else if (UUID.fromString(GattAttributes.WUNDERLINQ_CANMESSAGE_CHARACTERISTIC).equals(gattCharacteristic.getUuid())) {
                         int charaProp = gattCharacteristic.getProperties();
                         if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
                             // If there is an active notification on a characteristic, clear

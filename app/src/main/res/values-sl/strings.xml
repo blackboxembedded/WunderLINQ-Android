@@ -338,8 +338,6 @@
     <string name="delete_bt">Izbriši</string>
     <string name="cancel_bt">Prekliči</string>
     <string name="experimental_title">Poskusne funkcije</string>
-    <string name="pref_taskswitcher_name">Omogoči upravitelj opravil</string>
-    <string name="pref_taskswitcher_summary">Če držite kolesce v levo, prikliče upravitelja opravil. Omogočite le če ne deluje kot gumb nazaj</string>
     <string name="accessibilityservice_alert_title">WunderLINQ mora zagnati pripomoček za osebe s posebnimi potrebami</string>
     <string name="accessibilityservice_alert_body">Omogočite WunderLINQ pripomoček za osebe s posebnimi potrebami.</string>
     <string name="leanangle_header">Kot nagiba</string>

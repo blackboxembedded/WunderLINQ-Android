@@ -343,7 +343,6 @@
     <string name="contacts_filter_all">すべて</string>
     <string name="orientation_rl">ランドスケープ反転</string>
     <string name="pref_brightness_name">ディスプレー明度</string>
-    <string name="pref_taskswitcher_summary">コントローラーを左に倒し続けるとタスクスイッチャーを起動する。（黒ボタンとして使われていない場合）</string>
     <string name="pref_brightness_summary">ディスプレー明度を最大にする。</string>
     <string name="pref_nightMode_summary">ユーザーインターフェイス色</string>
     <string name="on">オン</string>
@@ -351,7 +350,6 @@
     <string name="pref_autoNightModeDelay_name">オートナイトモードディレイ</string>
     <string name="pref_autoNightModeDelay_summary">オートナイトモードディレイを数秒にする</string>
     <string name="experimental_title">実験的な機能</string>
-    <string name="pref_taskswitcher_name">タスクスイッチャーを有効にする</string>
     <string name="pref_pip_name">ピクチャーインピクチャーモードを有効にする</string>
     <string name="pref_tpmsAlertThreshold_summary">タイヤ空気圧単位に会わせた数字を入力</string>
     <string name="pref_fuelAlert_name">燃料補給ルート</string>

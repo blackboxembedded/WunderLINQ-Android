@@ -334,8 +334,6 @@
     <string name="pref_piporientation_name">Orientation mortaise</string>
     <string name="pref_pipgrid_name">Nombre de cellules en mortaise</string>
     <string name="experimental_title">Fonctions expérimentales</string>
-    <string name="pref_taskswitcher_name">Activer le basculement de tâche</string>
-    <string name="pref_taskswitcher_summary">Lorsque la molette est tenue à gauche, le gestionnaire de tâches est affiché.  Utilisez seulement si ça ne fonctionne pas comme fonction retour</string>
     <string name="accessibilityservice_alert_title">WunderLINQ requiert l’exécution d\'un service d\'accessibilité</string>
     <string name="accessibilityservice_alert_body">WunderLINQ utilise le service d\'accessibilité pour activer l\'application en vignette.</string>
     <string name="leanangle_header">Angle d\'inclinaison</string>

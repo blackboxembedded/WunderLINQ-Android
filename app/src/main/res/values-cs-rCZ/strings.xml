@@ -338,8 +338,6 @@
     <string name="delete_bt">Smazat</string>
     <string name="cancel_bt">Zrušít</string>
     <string name="experimental_title">Experimentální funkce</string>
-    <string name="pref_taskswitcher_name">Povolit přepínání aplikací</string>
-    <string name="pref_taskswitcher_summary">Podržení ovladače vlevo vyvolá seznam aktivních aplikací. Použijte pouze pokud nefunguje krok zpět.</string>
     <string name="accessibilityservice_alert_title">WunderLINQ vyžaduje přístup k Accessibility Service</string>
     <string name="accessibilityservice_alert_body">"Udělte prosím oprávnění pro přístup k Accessibilty Service."</string>
     <string name="leanangle_header">Úhel náklonu</string>
