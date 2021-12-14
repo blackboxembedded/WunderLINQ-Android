@@ -29,12 +29,10 @@ public class MyAccessibilityService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
-
     }
 
     @Override
     public void onInterrupt() {
-
     }
 
     @Override

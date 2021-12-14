@@ -327,8 +327,6 @@
     <string name="delete_bt">Διαγραφή</string>
     <string name="cancel_bt">Ακύρωση</string>
     <string name="experimental_title">Πειραματικά χαρακτηριστικά</string>
-    <string name="pref_taskswitcher_name">Ενεργοποίηση εναλλαγής δραστηριοτήτων</string>
-    <string name="pref_taskswitcher_summary">Όταν η ροδέλα πλοήγησης κρατιέται αριστερά εμφανίζει την εναλλαγή διεργασιών. Ενεργοποιήστε μόνο αν δεν λειτουργεί σαν κουμπί επιστροφής</string>
     <string name="accessibilityservice_alert_title">Το WunderLINQ χρειάζεται να εκτελέση την υπηρεσία προσβασιμότητας</string>
     <string name="accessibilityservice_alert_body">Η εφαρμογή WunderLINQ χρησιμοποιεί την υπηρεσία προσβασιμότητας για να ενεργοποιήσει την παράθεση εφαρμογών μέσω της ίδιας της εφαρμογής.</string>
     <string name="leanangle_header">Γωνία κλίσης κινητού</string>

@@ -396,12 +396,6 @@
     <PreferenceCategory android:title="@string/experimental_title" >
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="prefTaskSwitcher"
-            android:summary="@string/pref_taskswitcher_summary"
-            android:title="@string/pref_taskswitcher_name" >
-        </CheckBoxPreference>
-        <CheckBoxPreference
-            android:defaultValue="false"
             android:key="prefPIP"
             android:summary="@string/pref_pip_summary"
             android:title="@string/pref_pip_name" >
