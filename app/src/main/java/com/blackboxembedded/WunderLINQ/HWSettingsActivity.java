@@ -38,6 +38,14 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
+import com.blackboxembedded.WunderLINQ.comms.BLE.GattAttributes;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_BASE;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_C;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -92,16 +100,16 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
 
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
 
+        // Read config
+        if (MainActivity.gattCommandCharacteristic != null) {
+            BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, WLQ_BASE.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+        }
+
         // Read HW Version
-        if (WLQ.hardwareVersion == null) {
+        if (Data.hardwareVersion == null) {
             if (MainActivity.gattHWCharacteristic != null) {
                 BluetoothLeService.readCharacteristic(MainActivity.gattCommandCharacteristic);
             }
-        }
-
-        // Read config
-        if (MainActivity.gattCommandCharacteristic != null) {
-            BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, WLQ.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
         }
 
         updateDisplay();
@@ -120,16 +128,8 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
     @Override
     public void onItemClick(View view, int position) {
         int actionID = adapter.getActionID(position);
-        if (Double.parseDouble(WLQ.firmwareVersion) >= 2.0) {
-            if (WLQ.keyMode == WLQ.keyMode_custom) {
-                if (actionID != -1) {
-                    Intent intent = new Intent(HWSettingsActivity.this, HWSettingsActionActivity.class);
-                    intent.putExtra("ACTIONID", actionID);
-                    startActivity(intent);
-                }
-            }
-        } else {
-            if (actionID == WLQ.OldSensitivity) {
+        if (Data.wlq.getKeyMode() == Data.wlq.KEYMODE_CUSTOM()) {
+            if (actionID != -1) {
                 Intent intent = new Intent(HWSettingsActivity.this, HWSettingsActionActivity.class);
                 intent.putExtra("ACTIONID", actionID);
                 startActivity(intent);
@@ -145,35 +145,17 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                     resetHWConfig();
                 } else if (hwConfigBtn.getText().equals(getString(R.string.customize_btn_label))) {
                     // Set to Customize Mode
-                    if (Double.parseDouble(WLQ.firmwareVersion) >= 2.0) {
-                        if (WLQ.keyMode != WLQ.keyMode_custom) {
-                            setHWMode(WLQ.keyMode_custom);
-                        }
+                    if (Data.wlq.getKeyMode() != Data.wlq.KEYMODE_CUSTOM()) {
+                        setHWMode(Data.wlq.KEYMODE_CUSTOM());
                     }
                 } else if (hwConfigBtn.getText().equals(getString(R.string.default_btn_label))) {
                     // Set to Default Mode
-                    if (Double.parseDouble(WLQ.firmwareVersion) >= 2.0) {
-                        if (WLQ.keyMode != WLQ.keyMode_default) {
-                            setHWMode(WLQ.keyMode_default);
-                        }
+                    if (Data.wlq.getKeyMode() != Data.wlq.KEYMODE_DEFAULT()) {
+                        setHWMode(Data.wlq.KEYMODE_DEFAULT());
                     }
                 } else if (hwConfigBtn.getText().equals(getString(R.string.config_write_label))) {
                     // Set Config Changes
                     setHWConfig();
-                } else if (hwConfigBtn.getText().equals(getString(R.string.wwMode1))) {
-                    // Set to full Mode
-                    if (Double.parseDouble(WLQ.firmwareVersion) < 2.0) {
-                        if (WLQ.wheelMode != WLQ.wheelMode_full) {
-                            setHWMode(WLQ.wheelMode_full);
-                        }
-                    }
-                } else if (hwConfigBtn.getText().equals(getString(R.string.wwMode2))) {
-                    // Set to full Mode
-                    if (Double.parseDouble(WLQ.firmwareVersion) < 2.0) {
-                        if (WLQ.wheelMode != WLQ.wheelMode_rtk) {
-                            setHWMode(WLQ.wheelMode_rtk);
-                        }
-                    }
                 }
             } else if (v.getId() == R.id.action_reset) {
                 // Reset
@@ -208,108 +190,111 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
 
     private void updateDisplay(){
         actionItems.clear();
-        if (WLQ.firmwareVersion != null) {
-            fwVersionTV.setText(getString(R.string.fw_version_label) + " " + WLQ.firmwareVersion);
-            if (Double.parseDouble(WLQ.firmwareVersion) >= 2.0) {
-                if (WLQ.keyMode == WLQ.keyMode_default || WLQ.keyMode == WLQ.keyMode_custom) {
-                    //Check for config from FW 1.x
-                    if(WLQ.flashConfig[0] == WLQ.defaultConfig1[0] &&
-                            WLQ.flashConfig[1] == WLQ.defaultConfig1[1] &&
-                            WLQ.flashConfig[2] == WLQ.defaultConfig1[2] &&
-                            WLQ.flashConfig[3] == WLQ.defaultConfig1[3]){
-                        // Corrupt Config
-                        hwKeyModeTV.setText(getString(R.string.corrupt_config_label));
-                        hwKeyModeTV.setVisibility(View.VISIBLE);
-                        hwConfigBtn.setText(getString(R.string.reset_btn_label));
-                    } else {
-                        actionItems.add(new ActionItem(WLQ.USB,getString(R.string.usb_threshold_label),WLQ.getActionValue(WLQ.USB))); // USB
-                        actionItems.add(new ActionItem(-1,getString(R.string.wwMode1),"")); //Full
-                        actionItems.add(new ActionItem(WLQ.fullLongPressSensitivity,getString(R.string.long_press_label),WLQ.getActionValue(WLQ.fullLongPressSensitivity)));
-                        actionItems.add(new ActionItem(WLQ.fullScrollUp,getString(R.string.full_scroll_up_label),WLQ.getActionValue(WLQ.fullScrollUp)));
-                        actionItems.add(new ActionItem(WLQ.fullScrollDown,getString(R.string.full_scroll_down_label),WLQ.getActionValue(WLQ.fullScrollDown)));
-                        actionItems.add(new ActionItem(WLQ.fullToggleRight,getString(R.string.full_toggle_right_label),WLQ.getActionValue(WLQ.fullToggleRight)));
-                        actionItems.add(new ActionItem(WLQ.fullToggleRightLongPress,getString(R.string.full_toggle_right_long_label),WLQ.getActionValue(WLQ.fullToggleRightLongPress)));
-                        actionItems.add(new ActionItem(WLQ.fullToggleLeft,getString(R.string.full_toggle_left_label),WLQ.getActionValue(WLQ.fullToggleLeft)));
-                        actionItems.add(new ActionItem(WLQ.fullToggleLeftLongPress,getString(R.string.full_toggle_left_long_label),WLQ.getActionValue(WLQ.fullToggleLeftLongPress)));
-                        actionItems.add(new ActionItem(WLQ.fullSignalCancel,getString(R.string.full_signal_cancel_label),WLQ.getActionValue(WLQ.fullSignalCancel)));
-                        actionItems.add(new ActionItem(WLQ.fullSignalCancelLongPress,getString(R.string.full_signal_cancel_long_label),WLQ.getActionValue(WLQ.fullSignalCancelLongPress)));
-                        actionItems.add(new ActionItem(-1,getString(R.string.wwMode2),""));  //RTK1600
-                        actionItems.add(new ActionItem(WLQ.RTKDoublePressSensitivity,getString(R.string.double_press_label),WLQ.getActionValue(WLQ.RTKDoublePressSensitivity)));
-                        actionItems.add(new ActionItem(WLQ.RTKPage,getString(R.string.rtk_page_label),WLQ.getActionValue(WLQ.RTKPage)));
-                        actionItems.add(new ActionItem(WLQ.RTKPageDoublePress,getString(R.string.rtk_page_double_label),WLQ.getActionValue(WLQ.RTKPageDoublePress)));
-                        actionItems.add(new ActionItem(WLQ.RTKZoomPlus,getString(R.string.rtk_zoomp_label),WLQ.getActionValue(WLQ.RTKZoomPlus)));
-                        actionItems.add(new ActionItem(WLQ.RTKZoomPlusDoublePress,getString(R.string.rtk_zoomp_double_label),WLQ.getActionValue(WLQ.RTKZoomPlusDoublePress)));
-                        actionItems.add(new ActionItem(WLQ.RTKZoomMinus,getString(R.string.rtk_zoomm_label),WLQ.getActionValue(WLQ.RTKZoomMinus)));
-                        actionItems.add(new ActionItem(WLQ.RTKZoomMinusDoublePress,getString(R.string.rtk_zoomm_double_label),WLQ.getActionValue(WLQ.RTKZoomMinusDoublePress)));
-                        actionItems.add(new ActionItem(WLQ.RTKSpeak,getString(R.string.rtk_speak_label),WLQ.getActionValue(WLQ.RTKSpeak)));
-                        actionItems.add(new ActionItem(WLQ.RTKSpeakDoublePress,getString(R.string.rtk_speak_double_label),WLQ.getActionValue(WLQ.RTKSpeakDoublePress)));
-                        actionItems.add(new ActionItem(WLQ.RTKMute,getString(R.string.rtk_mute_label),WLQ.getActionValue(WLQ.RTKMute)));
-                        actionItems.add(new ActionItem(WLQ.RTKMuteDoublePress,getString(R.string.rtk_mute_double_label),WLQ.getActionValue(WLQ.RTKMuteDoublePress)));
-                        actionItems.add(new ActionItem(WLQ.RTKDisplayOff,getString(R.string.rtk_display_label),WLQ.getActionValue(WLQ.RTKDisplayOff)));
-                        actionItems.add(new ActionItem(WLQ.RTKDisplayOffDoublePress,getString(R.string.rtk_display_double_label),WLQ.getActionValue(WLQ.RTKDisplayOffDoublePress)));
+        if (Data.wlq != null) {
+            if (Data.wlq.getHardwareType() == 1) {
+                if (Data.wlq.getFirmwareVersion() != null) {
+                    fwVersionTV.setText(getString(R.string.fw_version_label) + " " + Data.wlq.getFirmwareVersion());
+                    if (Double.parseDouble(Data.wlq.getFirmwareVersion()) >= 2.0) {
+                        if (Data.wlq.getKeyMode() == Data.wlq.KEYMODE_DEFAULT() || Data.wlq.getKeyMode() == Data.wlq.KEYMODE_CUSTOM()) {
+                            actionItems.add(new ActionItem(WLQ_N.USB, getString(R.string.usb_threshold_label), Data.wlq.getActionValue(WLQ_N.USB))); // USB
+                            actionItems.add(new ActionItem(-1, getString(R.string.wwMode1), "")); //Full
+                            actionItems.add(new ActionItem(WLQ_N.fullLongPressSensitivity, getString(R.string.long_press_label), Data.wlq.getActionValue(WLQ_N.fullLongPressSensitivity)));
+                            actionItems.add(new ActionItem(WLQ_N.fullScrollUp, getString(R.string.full_scroll_up_label), Data.wlq.getActionValue(WLQ_N.fullScrollUp)));
+                            actionItems.add(new ActionItem(WLQ_N.fullScrollDown, getString(R.string.full_scroll_down_label), Data.wlq.getActionValue(WLQ_N.fullScrollDown)));
+                            actionItems.add(new ActionItem(WLQ_N.fullToggleRight, getString(R.string.full_toggle_right_label), Data.wlq.getActionValue(WLQ_N.fullToggleRight)));
+                            actionItems.add(new ActionItem(WLQ_N.fullToggleRightLongPress, getString(R.string.full_toggle_right_long_label), Data.wlq.getActionValue(WLQ_N.fullToggleRightLongPress)));
+                            actionItems.add(new ActionItem(WLQ_N.fullToggleLeft, getString(R.string.full_toggle_left_label), Data.wlq.getActionValue(WLQ_N.fullToggleLeft)));
+                            actionItems.add(new ActionItem(WLQ_N.fullToggleLeftLongPress, getString(R.string.full_toggle_left_long_label), Data.wlq.getActionValue(WLQ_N.fullToggleLeftLongPress)));
+                            actionItems.add(new ActionItem(WLQ_N.fullSignalCancel, getString(R.string.full_signal_cancel_label), Data.wlq.getActionValue(WLQ_N.fullSignalCancel)));
+                            actionItems.add(new ActionItem(WLQ_N.fullSignalCancelLongPress, getString(R.string.full_signal_cancel_long_label), Data.wlq.getActionValue(WLQ_N.fullSignalCancelLongPress)));
+                            actionItems.add(new ActionItem(-1, getString(R.string.wwMode2), ""));  //RTK1600
+                            actionItems.add(new ActionItem(WLQ_N.RTKDoublePressSensitivity, getString(R.string.double_press_label), Data.wlq.getActionValue(WLQ_N.RTKDoublePressSensitivity)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKPage, getString(R.string.rtk_page_label), Data.wlq.getActionValue(WLQ_N.RTKPage)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKPageDoublePress, getString(R.string.rtk_page_double_label), Data.wlq.getActionValue(WLQ_N.RTKPageDoublePress)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKZoomPlus, getString(R.string.rtk_zoomp_label), Data.wlq.getActionValue(WLQ_N.RTKZoomPlus)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKZoomPlusDoublePress, getString(R.string.rtk_zoomp_double_label), Data.wlq.getActionValue(WLQ_N.RTKZoomPlusDoublePress)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKZoomMinus, getString(R.string.rtk_zoomm_label), Data.wlq.getActionValue(WLQ_N.RTKZoomMinus)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKZoomMinusDoublePress, getString(R.string.rtk_zoomm_double_label), Data.wlq.getActionValue(WLQ_N.RTKZoomMinusDoublePress)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKSpeak, getString(R.string.rtk_speak_label), Data.wlq.getActionValue(WLQ_N.RTKSpeak)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKSpeakDoublePress, getString(R.string.rtk_speak_double_label), Data.wlq.getActionValue(WLQ_N.RTKSpeakDoublePress)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKMute, getString(R.string.rtk_mute_label), Data.wlq.getActionValue(WLQ_N.RTKMute)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKMuteDoublePress, getString(R.string.rtk_mute_double_label), Data.wlq.getActionValue(WLQ_N.RTKMuteDoublePress)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKDisplayOff, getString(R.string.rtk_display_label), Data.wlq.getActionValue(WLQ_N.RTKDisplayOff)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKDisplayOffDoublePress, getString(R.string.rtk_display_double_label), Data.wlq.getActionValue(WLQ_N.RTKDisplayOffDoublePress)));
 
-                        hwKeyModeTV.setVisibility(View.VISIBLE);
-                        if (WLQ.keyMode == WLQ.keyMode_default) {
-                            hwKeyModeTV.setText(getString(R.string.keymode_label) + " " + getString(R.string.keymode_default_label));
-                            hwConfigBtn.setText(getString(R.string.customize_btn_label));
-                            resetButton.setVisibility(View.INVISIBLE);
-                        } else if (WLQ.keyMode == WLQ.keyMode_custom){
-                            resetButton.setVisibility(View.VISIBLE);
-                            hwKeyModeTV.setText(getString(R.string.keymode_label) + " " + getString(R.string.keymode_custom_label));
-                            if (!Arrays.equals(WLQ.flashConfig, WLQ.tempConfig)) {
-                                Log.d(TAG,"New Config found");
-                                Log.d(TAG, "tempConfig: " + Utils.ByteArraytoHex(WLQ.tempConfig));
-                                hwConfigBtn.setText(getString(R.string.config_write_label));
-                            } else {
-                                hwConfigBtn.setText(getString(R.string.default_btn_label));
+                            hwKeyModeTV.setVisibility(View.VISIBLE);
+                            if (Data.wlq.getKeyMode() == Data.wlq.KEYMODE_DEFAULT()) {
+                                hwKeyModeTV.setText(getString(R.string.keymode_label) + " " + getString(R.string.keymode_default_label));
+                                hwConfigBtn.setText(getString(R.string.customize_btn_label));
+                                resetButton.setVisibility(View.INVISIBLE);
+                            } else if (Data.wlq.getKeyMode() == Data.wlq.KEYMODE_CUSTOM()) {
+                                resetButton.setVisibility(View.VISIBLE);
+                                hwKeyModeTV.setText(getString(R.string.keymode_label) + " " + getString(R.string.keymode_custom_label));
+                                if (!Arrays.equals(Data.wlq.getConfig(), Data.wlq.getTempConfig())) {
+                                    Log.d(TAG, "New Config found");
+                                    Log.d(TAG, "tempConfig: " + Utils.ByteArraytoHex(Data.wlq.getTempConfig()));
+                                    hwConfigBtn.setText(getString(R.string.config_write_label));
+                                } else {
+                                    hwConfigBtn.setText(getString(R.string.default_btn_label));
+                                }
                             }
+                        } else {
+                            // Corrupt Config
+                            hwKeyModeTV.setVisibility(View.INVISIBLE);
+                            hwConfigBtn.setText(getString(R.string.reset_btn_label));
+                        }
+                    } else {
+                        //Only provide settings for up to date firmware
+                        // Needs upgrade to >= 2.0
+                        hwKeyModeTV.setVisibility(View.INVISIBLE);
+                        hwConfigBtn.setText("WunderLINQ-DFU");
+                    }
+                    hwConfigBtn.setVisibility(View.VISIBLE);
+                }
+            } else if (Data.wlq.getHardwareType() == 2) {
+                if (Data.wlq.getKeyMode() == Data.wlq.KEYMODE_DEFAULT() || Data.wlq.getKeyMode() == Data.wlq.KEYMODE_CUSTOM()) {
+                    actionItems.add(new ActionItem(WLQ_C.longPressSensitivity, getString(R.string.long_press_label), Data.wlq.getActionValue(WLQ_C.longPressSensitivity)));
+                    actionItems.add(new ActionItem(WLQ_C.wheelScrollUp, getString(R.string.full_scroll_up_label), Data.wlq.getActionValue(WLQ_C.wheelScrollUp)));
+                    actionItems.add(new ActionItem(WLQ_C.wheelScrollDown, getString(R.string.full_scroll_down_label), Data.wlq.getActionValue(WLQ_C.wheelScrollDown)));
+                    actionItems.add(new ActionItem(WLQ_C.wheelToggleRight, getString(R.string.full_toggle_right_label), Data.wlq.getActionValue(WLQ_C.wheelToggleRight)));
+                    actionItems.add(new ActionItem(WLQ_C.wheelToggleRightLongPress, getString(R.string.full_toggle_right_long_label), Data.wlq.getActionValue(WLQ_C.wheelToggleRightLongPress)));
+                    actionItems.add(new ActionItem(WLQ_C.wheelToggleLeft, getString(R.string.full_toggle_left_label), Data.wlq.getActionValue(WLQ_C.wheelToggleLeft)));
+                    actionItems.add(new ActionItem(WLQ_C.wheelToggleLeftLongPress, getString(R.string.full_toggle_left_long_label), Data.wlq.getActionValue(WLQ_C.wheelToggleLeftLongPress)));
+                    actionItems.add(new ActionItem(WLQ_C.menuUp, getString(R.string.full_menu_up_label), Data.wlq.getActionValue(WLQ_C.menuUp)));
+                    actionItems.add(new ActionItem(WLQ_C.menuUpLongPress, getString(R.string.full_menu_up_long_label), Data.wlq.getActionValue(WLQ_C.menuUpLongPress)));
+                    actionItems.add(new ActionItem(WLQ_C.menuDown, getString(R.string.full_menu_down_label), Data.wlq.getActionValue(WLQ_C.menuDown)));
+                    actionItems.add(new ActionItem(WLQ_C.menuDownLongPress, getString(R.string.full_menu_down_long_label), Data.wlq.getActionValue(WLQ_C.menuDownLongPress)));
+
+                    hwKeyModeTV.setVisibility(View.VISIBLE);
+                    if (Data.wlq.getKeyMode() == Data.wlq.KEYMODE_DEFAULT()) {
+                        hwKeyModeTV.setText(getString(R.string.keymode_label) + " " + getString(R.string.keymode_default_label));
+                        hwConfigBtn.setText(getString(R.string.customize_btn_label));
+                        resetButton.setVisibility(View.INVISIBLE);
+                    } else if (Data.wlq.getKeyMode() == Data.wlq.KEYMODE_CUSTOM()) {
+                        resetButton.setVisibility(View.VISIBLE);
+                        hwKeyModeTV.setText(getString(R.string.keymode_label) + " " + getString(R.string.keymode_custom_label));
+                        if (!Arrays.equals(Data.wlq.getConfig(), Data.wlq.getTempConfig())) {
+                            Log.d(TAG, "New Config found");
+                            Log.d(TAG, "Config: " + Utils.ByteArraytoHex(Data.wlq.getConfig()));
+                            Log.d(TAG, "tempConfig: " + Utils.ByteArraytoHex(Data.wlq.getTempConfig()));
+                            hwConfigBtn.setText(getString(R.string.config_write_label));
+                        } else {
+                            hwConfigBtn.setText(getString(R.string.default_btn_label));
                         }
                     }
-
-
-
                 } else {
                     // Corrupt Config
                     hwKeyModeTV.setVisibility(View.INVISIBLE);
                     hwConfigBtn.setText(getString(R.string.reset_btn_label));
                 }
-            } else {
-                hwKeyModeTV.setVisibility(View.VISIBLE);
-                if (WLQ.wheelMode == WLQ.wheelMode_full || WLQ.wheelMode == WLQ.wheelMode_rtk) {
-                    // Customize
-                    if (WLQ.wheelMode == WLQ.wheelMode_full) {
-                        hwKeyModeTV.setText(getString(R.string.wwtype_label) + " " + getString(R.string.wwMode1));
-                        actionItems.add(new ActionItem(WLQ.OldSensitivity,getString(R.string.long_press_label),WLQ.getActionValue(WLQ.OldSensitivity)));
-                        actionItems.add(new ActionItem(-1,getString(R.string.full_scroll_up_label),getString(R.string.keyboard_hid_0x52_label)));
-                        actionItems.add(new ActionItem(-1,getString(R.string.full_scroll_down_label),getString(R.string.keyboard_hid_0x51_label)));
-                        actionItems.add(new ActionItem(-1,getString(R.string.full_toggle_right_label),getString(R.string.keyboard_hid_0x4F_label)));
-                        actionItems.add(new ActionItem(-1,getString(R.string.full_toggle_right_long_label),getString(R.string.keyboard_hid_0x28_label)));
-                        actionItems.add(new ActionItem(-1,getString(R.string.full_toggle_left_label),getString(R.string.keyboard_hid_0x50_label)));
-                        actionItems.add(new ActionItem(-1,getString(R.string.full_toggle_left_long_label),getString(R.string.keyboard_hid_0x29_label)));
-                        actionItems.add(new ActionItem(-1,getString(R.string.full_signal_cancel_long_label),getString(R.string.consumer_hid_0xB8_label)));
-                        hwConfigBtn.setText(getString(R.string.wwMode2));
-                    } else {
-                        hwKeyModeTV.setText(getString(R.string.wwtype_label) + " " + getString(R.string.wwMode2));
-                        actionItems.add(new ActionItem(WLQ.OldSensitivity,getString(R.string.double_press_label),WLQ.getActionValue(WLQ.OldSensitivity)));
-                        actionItems.add(new ActionItem(-1,getString(R.string.rtk_page_label),getString(R.string.keyboard_hid_0x4F_label)));
-                        actionItems.add(new ActionItem(-1,getString(R.string.rtk_page_double_label),getString(R.string.keyboard_hid_0x28_label)));
-                        actionItems.add(new ActionItem(-1,getString(R.string.rtk_zoomp_label),getString(R.string.keyboard_hid_0x52_label)));
-                        actionItems.add(new ActionItem(-1,getString(R.string.rtk_zoomm_label),getString(R.string.keyboard_hid_0x51_label)));
-                        actionItems.add(new ActionItem(-1,getString(R.string.rtk_speak_label),getString(R.string.keyboard_hid_0x50_label)));
-                        actionItems.add(new ActionItem(-1,getString(R.string.rtk_speak_double_label),getString(R.string.keyboard_hid_0x29_label)));
-                        actionItems.add(new ActionItem(-1,getString(R.string.rtk_display_label),getString(R.string.consumer_hid_0xB8_label)));
-                        hwConfigBtn.setText(getString(R.string.wwMode1));
-                    }
-                    if(WLQ.sensitivity != WLQ.tempSensitivity){
-                        Log.d(TAG,"New Sensitivity found");
-                        hwConfigBtn.setText(getString(R.string.config_write_label));
-                    }
-                } else {
-                    // Corrupt Config
-                    hwConfigBtn.setText(getString(R.string.reset_btn_label));
-                }
+                hwConfigBtn.setVisibility(View.VISIBLE);
             }
-            hwConfigBtn.setVisibility(View.VISIBLE);
+        } else {
+            //TODO: Add No Config msg & get Config button
+            // Read config
+            if (MainActivity.gattCommandCharacteristic != null) {
+                BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, WLQ_BASE.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+            }
         }
     }
 
@@ -324,32 +309,28 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            if (WLQ.firmwareVersion != null) {
-                                if (Double.parseDouble(WLQ.firmwareVersion) >= 2.0) {
+                            if (Data.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
+                                if (Data.wlq.getHardwareVersion() != null) {
                                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                                    outputStream.write(WLQ.WRITE_CONFIG_CMD);
-                                    if (WLQ.hardwareVersion != null){
-                                        if(WLQ.hardwareVersion.equals(WLQ.hardwareVersion1)){
-                                            outputStream.write(WLQ.defaultConfig2HW1);
-                                        } else {
-                                            outputStream.write(WLQ.defaultConfig2);
-                                        }
+                                    outputStream.write(Data.wlq.WRITE_CONFIG_CMD());
+                                    if (Data.wlq.getHardwareVersion().equals(WLQ_N.hardwareVersion1)) {
+                                        outputStream.write(WLQ_N.defaultConfig2HW1);
                                     } else {
-                                        outputStream.write(WLQ.defaultConfig2);
+                                        outputStream.write(WLQ_N.defaultConfig2);
                                     }
-                                    outputStream.write(WLQ.CMD_EOM);
+                                    outputStream.write(Data.wlq.CMD_EOM());
                                     byte[] writeConfigCmd = outputStream.toByteArray();
-                                    Log.d(TAG, "Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
-                                    BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
-                                } else {
-                                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                                    outputStream.write(WLQ.WRITE_CONFIG_CMD);
-                                    outputStream.write(WLQ.defaultConfig1);
-                                    outputStream.write(WLQ.CMD_EOM);
-                                    byte[] writeConfigCmd = outputStream.toByteArray();
-                                    Log.d(TAG, "Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
+                                    Log.d(TAG, "Reset Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
                                     BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                                 }
+                            } else if (Data.wlq.getHardwareType() == WLQ.TYPE_COMMANDER) {
+                                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                                outputStream.write(Data.wlq.WRITE_CONFIG_CMD());
+                                outputStream.write(WLQ_C.defaultConfig);
+                                outputStream.write(Data.wlq.CMD_EOM());
+                                byte[] writeConfigCmd = outputStream.toByteArray();
+                                Log.d(TAG, "Reset Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
+                                BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                             }
                         } catch (IOException e) {
                             Log.d(TAG, e.toString());
@@ -380,36 +361,34 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (WLQ.firmwareVersion != null) {
-                            if (Double.parseDouble(WLQ.firmwareVersion) >= 2.0) {
-                                if (!Arrays.equals(WLQ.wunderLINQConfig, WLQ.tempConfig)) {
-                                    try {
-                                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                                        outputStream.write(WLQ.WRITE_CONFIG_CMD);
-                                        outputStream.write(WLQ.tempConfig);
-                                        outputStream.write(WLQ.CMD_EOM);
-                                        byte[] writeConfigCmd = outputStream.toByteArray();
-                                        BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic,writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
-                                    } catch (IOException e) {
-                                        Log.d(TAG, e.toString());
+                        if (Data.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
+                            if (Data.wlq.getFirmwareVersion() != null) {
+                                if (Double.parseDouble(Data.wlq.getFirmwareVersion()) >= 2.0) {
+                                    if (!Arrays.equals(Data.wlq.getConfig(), Data.wlq.getTempConfig())) {
+                                        try {
+                                            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                                            outputStream.write(Data.wlq.WRITE_CONFIG_CMD());
+                                            outputStream.write(Data.wlq.getTempConfig());
+                                            outputStream.write(Data.wlq.CMD_EOM());
+                                            byte[] writeConfigCmd = outputStream.toByteArray();
+                                            BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
+                                        } catch (IOException e) {
+                                            Log.d(TAG, e.toString());
+                                        }
                                     }
                                 }
-                            } else {
-                                if(WLQ.sensitivity != WLQ.tempSensitivity){
-                                    // Write sensitivity
-                                    char[] sensitivityChar = String.valueOf(WLQ.tempSensitivity).toCharArray();
-                                    try {
-                                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                                        outputStream.write(WLQ.WRITE_SENSITIVITY_CMD);
-                                        outputStream.write(WLQ.wheelMode);
-                                        outputStream.write(0x45);
-                                        outputStream.write(new String(sensitivityChar).getBytes());
-                                        outputStream.write(WLQ.CMD_EOM);
-                                        byte[] writeSensitivityCmd = outputStream.toByteArray();
-                                        BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, writeSensitivityCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
-                                    } catch (IOException e){
-                                        Log.d(TAG,e.toString());
-                                    }
+                            }
+                        } else if (Data.wlq.getHardwareType() == WLQ.TYPE_COMMANDER){
+                            if (!Arrays.equals(Data.wlq.getConfig(), Data.wlq.getTempConfig())) {
+                                try {
+                                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                                    outputStream.write(Data.wlq.WRITE_CONFIG_CMD());
+                                    outputStream.write(Data.wlq.getTempConfig());
+                                    outputStream.write(Data.wlq.CMD_EOM());
+                                    byte[] writeConfigCmd = outputStream.toByteArray();
+                                    BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
+                                } catch (IOException e) {
+                                    Log.d(TAG, e.toString());
                                 }
                             }
                         }
@@ -442,9 +421,9 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                     public void onClick(DialogInterface dialog, int which) {
                         try {
                             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                            outputStream.write(WLQ.WRITE_MODE_CMD);
+                            outputStream.write(Data.wlq.WRITE_MODE_CMD());
                             outputStream.write(mode);
-                            outputStream.write(WLQ.CMD_EOM);
+                            outputStream.write(Data.wlq.CMD_EOM());
                             byte[] writeConfigCmd = outputStream.toByteArray();
                             BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                         } catch (IOException e) {

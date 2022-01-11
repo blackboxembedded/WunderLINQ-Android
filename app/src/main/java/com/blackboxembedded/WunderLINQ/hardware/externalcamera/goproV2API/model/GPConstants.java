@@ -1,8 +1,8 @@
-package com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.model;
+package com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV2API.model;
 
 
-import com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiClient;
-import com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiBase;
+import com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV2API.ApiClient;
+import com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV2API.ApiBase;
 
 import retrofit2.Call;
 

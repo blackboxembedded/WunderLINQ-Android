@@ -195,8 +195,11 @@
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
+        <service android:name=".comms.Serial.SerialService"
+            android:enabled="true"
+            android:exported="true" />
         <service
-            android:name=".BluetoothLeService"
+            android:name=".comms.BLE.BluetoothLeService"
             android:enabled="true"
             android:exported="true" />
         <service
@@ -236,7 +239,7 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <receiver android:name=".BTConnectReceiver"
+        <receiver android:name=".comms.BLE.BTConnectReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />

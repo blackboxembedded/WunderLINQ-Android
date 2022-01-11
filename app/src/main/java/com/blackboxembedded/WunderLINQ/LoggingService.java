@@ -26,7 +26,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -35,6 +34,7 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 import com.blackboxembedded.WunderLINQ.TaskList.TaskActivity;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
 
 import java.io.File;
 import java.io.FileWriter;

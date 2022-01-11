@@ -1,4 +1,4 @@
-package com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.model;
+package com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV2API.model;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -74,9 +74,9 @@ import com.blackboxembedded.WunderLINQ.WaypointDatasource;
 import com.blackboxembedded.WunderLINQ.WaypointNavActivity;
 import com.blackboxembedded.WunderLINQ.WaypointRecord;
 import com.blackboxembedded.WunderLINQ.WeatherMapActivity;
-import com.blackboxembedded.WunderLINQ.externalcamera.goproV1API.ApiBase;
-import com.blackboxembedded.WunderLINQ.externalcamera.goproV1API.ApiClient;
-import com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.model.GoProResponse;
+import com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV1API.ApiBase;
+import com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV1API.ApiClient;
+import com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV2API.model.GoProResponse;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
@@ -914,7 +914,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                         case 2:
                             //GoPro Hero4+
                             if (actionCamRecording) {
-                                Call<GoProResponse> shutterCommand = com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.model.GPConstants.Commands.Shutter.stop;
+                                Call<GoProResponse> shutterCommand = com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV2API.model.GPConstants.Commands.Shutter.stop;
                                 shutterCommand.clone().enqueue(new Callback<GoProResponse>() {
                                     @Override
                                     public void onResponse(Call<GoProResponse> call, Response<GoProResponse> response) {
@@ -947,7 +947,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                                 });
 
                             } else {
-                                Call<GoProResponse> shutterCommand = com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.model.GPConstants.Commands.Shutter.shutter;
+                                Call<GoProResponse> shutterCommand = com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV2API.model.GPConstants.Commands.Shutter.shutter;
                                 shutterCommand.clone().enqueue(new Callback<GoProResponse>() {
                                     @Override
                                     public void onResponse(Call<GoProResponse> call, Response<GoProResponse> response) {
@@ -1021,7 +1021,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         switch (actionCamEnabled){
             case 1:
                 //GoPro Hero3
-                ApiClient GoProV1Api = com.blackboxembedded.WunderLINQ.externalcamera.goproV1API.ApiBase.getMainClient().create(ApiClient.class);
+                ApiClient GoProV1Api = com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV1API.ApiBase.getMainClient().create(ApiClient.class);
                 Call<ResponseBody> setting;
                 String actionCamPwd = sharedPrefs.getString("ACTIONCAM_GOPRO3_PWD","");
                 if (actionCamPwd.equals("")){
@@ -1177,7 +1177,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 break;
             case 2:
                 //GoPro Hero 4+
-                final com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiClient GoProV2Api = com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiBase.getMainClient().create(com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.ApiClient.class);
+                final com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV2API.ApiClient GoProV2Api = com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV2API.ApiBase.getMainClient().create(com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV2API.ApiClient.class);
                 Call<ResponseBody> goProV2Status = GoProV2Api.status();
                 goProV2Status.clone().enqueue(new Callback<ResponseBody>() {
                     @Override
@@ -1208,7 +1208,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                         //Keep Wifi from going to sleep
                         //"http://10.5.5.9/gp/gpControl/execute?p1=gpStream&a1=proto_v2&c1=restart"
                         //"http://10.5.5.9/gp/gpControl/execute?p1=gpStream&a1=proto_v2&c1=stop"
-                        Call<GoProResponse> restartCommand = com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.model.GPConstants.Commands.Stream.Restart;
+                        Call<GoProResponse> restartCommand = com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV2API.model.GPConstants.Commands.Stream.Restart;
                         restartCommand.clone().enqueue(new Callback<GoProResponse>() {
                             @Override
                             public void onResponse(Call<GoProResponse> call, Response<GoProResponse> response) {
@@ -1218,7 +1218,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                                         String responseMessage = response.message();
                                         Log.d(TAG,"GoPro Hero4+ Stream Restart Response: " + responseMessage);
                                         if(responseMessage.equals("OK")) {
-                                            Call<GoProResponse> stopCommand = com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.model.GPConstants.Commands.Stream.Stop;
+                                            Call<GoProResponse> stopCommand = com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV2API.model.GPConstants.Commands.Stream.Stop;
                                             stopCommand.clone().enqueue(new Callback<GoProResponse>() {
                                                 @Override
                                                 public void onResponse(Call<GoProResponse> call, Response<GoProResponse> response) {

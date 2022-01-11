@@ -27,7 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-class Logger {
+public class Logger {
     private static PrintWriter outFile = null;
     private static final String TAG = "WunderLINQ";
 

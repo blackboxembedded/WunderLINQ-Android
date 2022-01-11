@@ -15,19 +15,18 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-package com.blackboxembedded.WunderLINQ;
+package com.blackboxembedded.WunderLINQ.hardware.WLQ;
 
 import android.util.Log;
 
-public class WLQ {
+import com.blackboxembedded.WunderLINQ.KeyboardHID;
+import com.blackboxembedded.WunderLINQ.MyApplication;
+import com.blackboxembedded.WunderLINQ.R;
+import com.blackboxembedded.WunderLINQ.Utils;
 
-    public final static String TAG = "WLQ";
+public class WLQ_N extends WLQ_BASE {
 
-    public static byte[] wunderLINQConfig;
-    public static byte[] flashConfig;
-    public static byte[] tempConfig;
-    public static String firmwareVersion;
-    public static String hardwareVersion;
+    public final static String TAG = "WLQ_N";
 
     public static int USBVinThreshold;
 
@@ -35,39 +34,20 @@ public class WLQ {
     public static String hardwareVersion2 = "1PCB2.0 12/19";
     public static String hardwareVersion2_1 = "2PCB2.2 081920";
 
-    public static int firmwareVersionMajor_INDEX = 9;
-    public static int firmwareVersionMinor_INDEX = 10;
+    private static int firmwareVersionMajor_INDEX = 9;
+    private static int firmwareVersionMinor_INDEX = 10;
 
-    public static byte[] GET_CONFIG_CMD = {0x57, 0x52, 0x57, 0x0D, 0x0A};
-    public static byte[] WRITE_CONFIG_CMD = {0x57, 0x57, 0x43, 0x41};
-    public static byte[] WRITE_MODE_CMD = {0x57, 0x57, 0x53, 0x53};
-    public static byte[] WRITE_SENSITIVITY_CMD = {0x57, 0x57, 0x43, 0x53};
     public static byte[] SET_CLUSTER_CLOCK_CMD = {0x57, 0x57, 0x44, 0x43};
     public static byte[] RESET_CLUSTER_SPEED_CMD = {0x57, 0x57, 0x44, 0x52, 0x53};
     public static byte[] RESET_CLUSTER_ECONO1_CMD = {0x57, 0x57, 0x44, 0x52, 0x45, 0x01};
     public static byte[] RESET_CLUSTER_ECONO2_CMD = {0x57, 0x57, 0x44, 0x52, 0x45, 0x02};
     public static byte[] RESET_CLUSTER_TRIP1_CMD = {0x57, 0x57, 0x44, 0x52, 0x54, 0x01};
     public static byte[] RESET_CLUSTER_TRIP2_CMD = {0x57, 0x57, 0x44, 0x52, 0x54, 0x02};
-    public static byte[] CMD_EOM = {0x0D, 0x0A};
-
-    //FW <2.0
-    public static byte[] defaultConfig1 = {0x32, 0x01, 0x04, 0x04, (byte) 0xFE,
-            (byte) 0xFC, 0x4F, 0x28, 0x0F, 0x04, 0x04, (byte) 0xFD, (byte) 0xFC, 0x50, 0x29, 0x0F,
-            0x04, 0x06, 0x00, 0x00, 0x00, 0x00, 0x34, 0x02, 0x01, 0x01, 0x65, 0x55, 0x4F, 0x28,
-            0x07, 0x01, 0x01, (byte) 0x95, 0x55, 0x50, 0x29, 0x07, 0x01, 0x01, 0x56, 0x59, 0x52,
-            0x51};
-
-    public static byte wheelMode_full = 0x32;
-    public static byte wheelMode_rtk = 0x34;
 
     public static byte wheelMode;
     public static byte sensitivity;
     public static byte tempSensitivity;
 
-    public static int wheelMode_INDEX = 26;
-    public static int sensitivity_INDEX = 34;
-
-    //FW >=2.0
     public static int configFlashSize = 64;
     public static byte[] defaultConfig2 = {
             0x00, 0x00, // USB Input Voltage threshold
@@ -99,8 +79,8 @@ public class WLQ {
             0x01, 0x00, 0x52, 0x01, 0x00, 0x51, // Scroll
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; // Signal Cancel
 
-    public static byte keyMode_default = 0x00;
-    public static byte keyMode_custom = 0x01;
+    public static byte KEYMODE_DEFAULT = 0x00;
+    public static byte KEYMODE_CUSTOM = 0x01;
 
     public static byte KEYBOARD_HID = 0x01;
     public static byte CONSUMER_HID = 0x02;
@@ -197,6 +177,11 @@ public class WLQ {
     public static int fullSignalLongPressKeyModifier_INDEX = 62;
     public static int fullSignalLongPressKey_INDEX = 63;
 
+    private static byte[] wunderLINQConfig;
+    private static byte[] flashConfig;
+    private static byte[] tempConfig;
+    private static String firmwareVersion;
+    private static String hardwareVersion;
     public static byte keyMode;
     public static byte RTKSensitivity;
     public static byte RTKPagePressKeyType;
@@ -261,7 +246,7 @@ public class WLQ {
     public static byte fullSignalLongPressKeyModifier;
     public static byte fullSignalLongPressKey;
 
-    public WLQ(byte[] bytes) {
+    public WLQ_N(byte[] bytes) {
 
         wunderLINQConfig = new byte[bytes.length];
         System.arraycopy(bytes, 0, wunderLINQConfig, 0, bytes.length);
@@ -278,80 +263,75 @@ public class WLQ {
 
         firmwareVersion = bytes[firmwareVersionMajor_INDEX] + "." + bytes[firmwareVersionMinor_INDEX];
 
-        if (Double.parseDouble(firmwareVersion) >= 2.0) {
-            keyMode = bytes[keyMode_INDEX];
-            USBVinThreshold =  ((flashConfig[USBVinThresholdHigh_INDEX] & 0xFF) << 8) | (flashConfig[USBVinThresholdLow_INDEX] & 0xFF);
-            RTKSensitivity = flashConfig[RTKSensitivity_INDEX];
-            RTKPagePressKeyType = flashConfig[RTKPagePressKeyType_INDEX];
-            RTKPagePressKeyModifier = flashConfig[RTKPagePressKeyModifier_INDEX];
-            RTKPagePressKey = flashConfig[RTKPagePressKey_INDEX];
-            RTKPageDoublePressKeyType = flashConfig[RTKPageDoublePressKeyType_INDEX];
-            RTKPageDoublePressKeyModifier = flashConfig[RTKPageDoublePressKeyModifier_INDEX];
-            RTKPageDoublePressKey = flashConfig[RTKPageDoublePressKey_INDEX];
-            RTKZoomPPressKeyType = flashConfig[RTKZoomPPressKeyType_INDEX];
-            RTKZoomPPressKeyModifier = flashConfig[RTKZoomPPressKeyModifier_INDEX];
-            RTKZoomPPressKey = flashConfig[RTKZoomPPressKey_INDEX];
-            RTKZoomPDoublePressKeyType = flashConfig[RTKZoomPDoublePressKeyType_INDEX];
-            RTKZoomPDoublePressKeyModifier = flashConfig[RTKZoomPDoublePressKeyModifier_INDEX];
-            RTKZoomPDoublePressKey = flashConfig[RTKZoomPDoublePressKey_INDEX];
-            RTKZoomMPressKeyType = flashConfig[RTKZoomMPressKeyType_INDEX];
-            RTKZoomMPressKeyModifier = flashConfig[RTKZoomMPressKeyModifier_INDEX];
-            RTKZoomMPressKey = flashConfig[RTKZoomMPressKey_INDEX];
-            RTKZoomMDoublePressKeyType = flashConfig[RTKZoomMDoublePressKeyType_INDEX];
-            RTKZoomMDoublePressKeyModifier = flashConfig[RTKZoomMDoublePressKeyModifier_INDEX];
-            RTKZoomMDoublePressKey = flashConfig[RTKZoomMDoublePressKey_INDEX];
-            RTKSpeakPressKeyType = flashConfig[RTKSpeakPressKeyType_INDEX];
-            RTKSpeakPressKeyModifier = flashConfig[RTKSpeakPressKeyModifier_INDEX];
-            RTKSpeakPressKey = flashConfig[RTKSpeakPressKey_INDEX];
-            RTKSpeakDoublePressKeyType = flashConfig[RTKSpeakDoublePressKeyType_INDEX];
-            RTKSpeakDoublePressKeyModifier = flashConfig[RTKSpeakDoublePressKeyModifier_INDEX];
-            RTKSpeakDoublePressKey = flashConfig[RTKSpeakDoublePressKey_INDEX];
-            RTKMutePressKeyType = flashConfig[RTKMutePressKeyType_INDEX];
-            RTKMutePressKeyModifier = flashConfig[RTKMutePressKeyModifier_INDEX];
-            RTKMutePressKey = flashConfig[RTKMutePressKey_INDEX];
-            RTKMuteDoublePressKeyType = flashConfig[RTKMuteDoublePressKeyType_INDEX];
-            RTKMuteDoublePressKeyModifier = flashConfig[RTKMuteDoublePressKeyModifier_INDEX];
-            RTKMuteDoublePressKey = flashConfig[RTKMuteDoublePressKey_INDEX];
-            RTKDisplayPressKeyType = flashConfig[RTKDisplayPressKeyType_INDEX];
-            RTKDisplayPressKeyModifier = flashConfig[RTKDisplayPressKeyModifier_INDEX];
-            RTKDisplayPressKey = flashConfig[RTKDisplayPressKey_INDEX];
-            RTKDisplayDoublePressKeyType = flashConfig[RTKDisplayDoublePressKeyType_INDEX];
-            RTKDisplayDoublePressKeyModifier = flashConfig[RTKDisplayDoublePressKeyModifier_INDEX];
-            RTKDisplayDoublePressKey = flashConfig[RTKDisplayDoublePressKey_INDEX];
+        keyMode = bytes[keyMode_INDEX];
+        USBVinThreshold =  ((flashConfig[USBVinThresholdHigh_INDEX] & 0xFF) << 8) | (flashConfig[USBVinThresholdLow_INDEX] & 0xFF);
+        RTKSensitivity = flashConfig[RTKSensitivity_INDEX];
+        RTKPagePressKeyType = flashConfig[RTKPagePressKeyType_INDEX];
+        RTKPagePressKeyModifier = flashConfig[RTKPagePressKeyModifier_INDEX];
+        RTKPagePressKey = flashConfig[RTKPagePressKey_INDEX];
+        RTKPageDoublePressKeyType = flashConfig[RTKPageDoublePressKeyType_INDEX];
+        RTKPageDoublePressKeyModifier = flashConfig[RTKPageDoublePressKeyModifier_INDEX];
+        RTKPageDoublePressKey = flashConfig[RTKPageDoublePressKey_INDEX];
+        RTKZoomPPressKeyType = flashConfig[RTKZoomPPressKeyType_INDEX];
+        RTKZoomPPressKeyModifier = flashConfig[RTKZoomPPressKeyModifier_INDEX];
+        RTKZoomPPressKey = flashConfig[RTKZoomPPressKey_INDEX];
+        RTKZoomPDoublePressKeyType = flashConfig[RTKZoomPDoublePressKeyType_INDEX];
+        RTKZoomPDoublePressKeyModifier = flashConfig[RTKZoomPDoublePressKeyModifier_INDEX];
+        RTKZoomPDoublePressKey = flashConfig[RTKZoomPDoublePressKey_INDEX];
+        RTKZoomMPressKeyType = flashConfig[RTKZoomMPressKeyType_INDEX];
+        RTKZoomMPressKeyModifier = flashConfig[RTKZoomMPressKeyModifier_INDEX];
+        RTKZoomMPressKey = flashConfig[RTKZoomMPressKey_INDEX];
+        RTKZoomMDoublePressKeyType = flashConfig[RTKZoomMDoublePressKeyType_INDEX];
+        RTKZoomMDoublePressKeyModifier = flashConfig[RTKZoomMDoublePressKeyModifier_INDEX];
+        RTKZoomMDoublePressKey = flashConfig[RTKZoomMDoublePressKey_INDEX];
+        RTKSpeakPressKeyType = flashConfig[RTKSpeakPressKeyType_INDEX];
+        RTKSpeakPressKeyModifier = flashConfig[RTKSpeakPressKeyModifier_INDEX];
+        RTKSpeakPressKey = flashConfig[RTKSpeakPressKey_INDEX];
+        RTKSpeakDoublePressKeyType = flashConfig[RTKSpeakDoublePressKeyType_INDEX];
+        RTKSpeakDoublePressKeyModifier = flashConfig[RTKSpeakDoublePressKeyModifier_INDEX];
+        RTKSpeakDoublePressKey = flashConfig[RTKSpeakDoublePressKey_INDEX];
+        RTKMutePressKeyType = flashConfig[RTKMutePressKeyType_INDEX];
+        RTKMutePressKeyModifier = flashConfig[RTKMutePressKeyModifier_INDEX];
+        RTKMutePressKey = flashConfig[RTKMutePressKey_INDEX];
+        RTKMuteDoublePressKeyType = flashConfig[RTKMuteDoublePressKeyType_INDEX];
+        RTKMuteDoublePressKeyModifier = flashConfig[RTKMuteDoublePressKeyModifier_INDEX];
+        RTKMuteDoublePressKey = flashConfig[RTKMuteDoublePressKey_INDEX];
+        RTKDisplayPressKeyType = flashConfig[RTKDisplayPressKeyType_INDEX];
+        RTKDisplayPressKeyModifier = flashConfig[RTKDisplayPressKeyModifier_INDEX];
+        RTKDisplayPressKey = flashConfig[RTKDisplayPressKey_INDEX];
+        RTKDisplayDoublePressKeyType = flashConfig[RTKDisplayDoublePressKeyType_INDEX];
+        RTKDisplayDoublePressKeyModifier = flashConfig[RTKDisplayDoublePressKeyModifier_INDEX];
+        RTKDisplayDoublePressKey = flashConfig[RTKDisplayDoublePressKey_INDEX];
 
-            fullSensitivity = flashConfig[fullSensitivity_INDEX];
-            fullRightPressKeyType = flashConfig[fullRightPressKeyType_INDEX];
-            fullRightPressKeyModifier = flashConfig[fullRightPressKeyModifier_INDEX];
-            fullRightPressKey = flashConfig[fullRightPressKey_INDEX];
-            fullRightLongPressKeyType = flashConfig[fullRightLongPressKeyType_INDEX];
-            fullRightLongPressKeyModifier = flashConfig[fullRightLongPressKeyModifier_INDEX];
-            fullRightLongPressKey = flashConfig[fullRightLongPressKey_INDEX];
-            fullLeftPressKeyType = flashConfig[fullLeftPressKeyType_INDEX];
-            fullLeftPressKeyModifier = flashConfig[fullLeftPressKeyModifier_INDEX];
-            fullLeftPressKey = flashConfig[fullLeftPressKey_INDEX];
-            fullLeftLongPressKeyType = flashConfig[fullLeftLongPressKeyType_INDEX];
-            fullLeftLongPressKeyModifier = flashConfig[fullLeftLongPressKeyModifier_INDEX];
-            fullLeftLongPressKey = flashConfig[fullLeftLongPressKey_INDEX];
-            fullScrollUpKeyType = flashConfig[fullScrollUpKeyType_INDEX];
-            fullScrollUpKeyModifier = flashConfig[fullScrollUpKeyModifier_INDEX];
-            fullScrollUpKey = flashConfig[fullScrollUpKey_INDEX];
-            fullScrollDownKeyType = flashConfig[fullScrollDownKeyType_INDEX];
-            fullScrollDownKeyModifier = flashConfig[fullScrollDownKeyModifier_INDEX];
-            fullScrollDownKey = flashConfig[fullScrollDownKey_INDEX];
-            fullSignalPressKeyType = flashConfig[fullSignalPressKeyType_INDEX];
-            fullSignalPressKeyModifier = flashConfig[fullSignalPressKeyModifier_INDEX];
-            fullSignalPressKey = flashConfig[fullSignalPressKey_INDEX];
-            fullSignalLongPressKeyType = flashConfig[fullSignalLongPressKeyType_INDEX];
-            fullSignalLongPressKeyModifier = flashConfig[fullSignalLongPressKeyModifier_INDEX];
-            fullSignalLongPressKey = flashConfig[fullSignalLongPressKey_INDEX];
-        } else {
-            sensitivity = bytes[sensitivity_INDEX];
-            wheelMode = bytes[wheelMode_INDEX];
-            tempSensitivity = sensitivity;
-        }
+        fullSensitivity = flashConfig[fullSensitivity_INDEX];
+        fullRightPressKeyType = flashConfig[fullRightPressKeyType_INDEX];
+        fullRightPressKeyModifier = flashConfig[fullRightPressKeyModifier_INDEX];
+        fullRightPressKey = flashConfig[fullRightPressKey_INDEX];
+        fullRightLongPressKeyType = flashConfig[fullRightLongPressKeyType_INDEX];
+        fullRightLongPressKeyModifier = flashConfig[fullRightLongPressKeyModifier_INDEX];
+        fullRightLongPressKey = flashConfig[fullRightLongPressKey_INDEX];
+        fullLeftPressKeyType = flashConfig[fullLeftPressKeyType_INDEX];
+        fullLeftPressKeyModifier = flashConfig[fullLeftPressKeyModifier_INDEX];
+        fullLeftPressKey = flashConfig[fullLeftPressKey_INDEX];
+        fullLeftLongPressKeyType = flashConfig[fullLeftLongPressKeyType_INDEX];
+        fullLeftLongPressKeyModifier = flashConfig[fullLeftLongPressKeyModifier_INDEX];
+        fullLeftLongPressKey = flashConfig[fullLeftLongPressKey_INDEX];
+        fullScrollUpKeyType = flashConfig[fullScrollUpKeyType_INDEX];
+        fullScrollUpKeyModifier = flashConfig[fullScrollUpKeyModifier_INDEX];
+        fullScrollUpKey = flashConfig[fullScrollUpKey_INDEX];
+        fullScrollDownKeyType = flashConfig[fullScrollDownKeyType_INDEX];
+        fullScrollDownKeyModifier = flashConfig[fullScrollDownKeyModifier_INDEX];
+        fullScrollDownKey = flashConfig[fullScrollDownKey_INDEX];
+        fullSignalPressKeyType = flashConfig[fullSignalPressKeyType_INDEX];
+        fullSignalPressKeyModifier = flashConfig[fullSignalPressKeyModifier_INDEX];
+        fullSignalPressKey = flashConfig[fullSignalPressKey_INDEX];
+        fullSignalLongPressKeyType = flashConfig[fullSignalLongPressKeyType_INDEX];
+        fullSignalLongPressKeyModifier = flashConfig[fullSignalLongPressKeyModifier_INDEX];
+        fullSignalLongPressKey = flashConfig[fullSignalLongPressKey_INDEX];
     }
 
-    public static String getActionName(int id){
+    @Override
+    public String getActionName(int id){
         switch (id){
             case OldSensitivity:
                 return MyApplication.getContext().getString(R.string.sensitivity_label);
@@ -407,7 +387,8 @@ public class WLQ {
         }
     }
 
-    public static String getActionValue(int id){
+    @Override
+    public String getActionValue(int id){
         switch (id){
             case OldSensitivity:
                 return String.valueOf(sensitivity);
@@ -424,201 +405,201 @@ public class WLQ {
             case fullLongPressSensitivity:
                 return String.valueOf(fullSensitivity);
             case RTKPage:
-                if (WLQ.RTKPagePressKeyType == WLQ.KEYBOARD_HID) {
-                    return(KeyboardHID.getKeyboardKeyByCode(WLQ.RTKPagePressKey));
-                } else if (WLQ.RTKPagePressKeyType == WLQ.CONSUMER_HID) {
-                    return(KeyboardHID.getConsumerKeyByCode(WLQ.RTKPagePressKey));
-                } else if (WLQ.RTKPagePressKeyType == WLQ.UNDEFINED){
+                if (WLQ_N.RTKPagePressKeyType == WLQ_N.KEYBOARD_HID) {
+                    return(KeyboardHID.getKeyboardKeyByCode(WLQ_N.RTKPagePressKey));
+                } else if (WLQ_N.RTKPagePressKeyType == WLQ_N.CONSUMER_HID) {
+                    return(KeyboardHID.getConsumerKeyByCode(WLQ_N.RTKPagePressKey));
+                } else if (WLQ_N.RTKPagePressKeyType == WLQ_N.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case RTKPageDoublePress:
-                if (WLQ.RTKPageDoublePressKeyType == WLQ.KEYBOARD_HID) {
-                    return(KeyboardHID.getKeyboardKeyByCode(WLQ.RTKPageDoublePressKey));
-                } else if (WLQ.RTKPageDoublePressKeyType == WLQ.CONSUMER_HID) {
-                    return(KeyboardHID.getConsumerKeyByCode(WLQ.RTKPageDoublePressKey));
-                } else if (WLQ.RTKPageDoublePressKeyType == WLQ.UNDEFINED){
+                if (WLQ_N.RTKPageDoublePressKeyType == WLQ_N.KEYBOARD_HID) {
+                    return(KeyboardHID.getKeyboardKeyByCode(WLQ_N.RTKPageDoublePressKey));
+                } else if (WLQ_N.RTKPageDoublePressKeyType == WLQ_N.CONSUMER_HID) {
+                    return(KeyboardHID.getConsumerKeyByCode(WLQ_N.RTKPageDoublePressKey));
+                } else if (WLQ_N.RTKPageDoublePressKeyType == WLQ_N.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case RTKZoomPlus:
-                if (WLQ.RTKZoomPPressKeyType == WLQ.KEYBOARD_HID) {
-                    return(KeyboardHID.getKeyboardKeyByCode(WLQ.RTKZoomPPressKey));
-                } else if (WLQ.RTKZoomPPressKeyType == WLQ.CONSUMER_HID) {
-                    return(KeyboardHID.getConsumerKeyByCode(WLQ.RTKZoomPPressKey));
-                } else if (WLQ.RTKZoomPPressKeyType == WLQ.UNDEFINED){
+                if (WLQ_N.RTKZoomPPressKeyType == WLQ_N.KEYBOARD_HID) {
+                    return(KeyboardHID.getKeyboardKeyByCode(WLQ_N.RTKZoomPPressKey));
+                } else if (WLQ_N.RTKZoomPPressKeyType == WLQ_N.CONSUMER_HID) {
+                    return(KeyboardHID.getConsumerKeyByCode(WLQ_N.RTKZoomPPressKey));
+                } else if (WLQ_N.RTKZoomPPressKeyType == WLQ_N.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case RTKZoomPlusDoublePress:
-                if (WLQ.RTKZoomPDoublePressKeyType == WLQ.KEYBOARD_HID) {
-                    return(KeyboardHID.getKeyboardKeyByCode(WLQ.RTKZoomPDoublePressKey));
-                } else if (WLQ.RTKZoomPDoublePressKeyType == WLQ.CONSUMER_HID) {
-                    return(KeyboardHID.getConsumerKeyByCode(WLQ.RTKZoomPDoublePressKey));
-                } else if (WLQ.RTKZoomPDoublePressKeyType == WLQ.UNDEFINED){
+                if (WLQ_N.RTKZoomPDoublePressKeyType == WLQ_N.KEYBOARD_HID) {
+                    return(KeyboardHID.getKeyboardKeyByCode(WLQ_N.RTKZoomPDoublePressKey));
+                } else if (WLQ_N.RTKZoomPDoublePressKeyType == WLQ_N.CONSUMER_HID) {
+                    return(KeyboardHID.getConsumerKeyByCode(WLQ_N.RTKZoomPDoublePressKey));
+                } else if (WLQ_N.RTKZoomPDoublePressKeyType == WLQ_N.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case RTKZoomMinus:
-                if(WLQ.RTKZoomMPressKeyType == WLQ.KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(WLQ.RTKZoomMPressKey));
-                } else if(WLQ.RTKZoomMPressKeyType == WLQ.CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(WLQ.RTKZoomMPressKey));
-                } else if (WLQ.RTKZoomMPressKeyType == WLQ.UNDEFINED){
+                if(WLQ_N.RTKZoomMPressKeyType == WLQ_N.KEYBOARD_HID){
+                    return(KeyboardHID.getKeyboardKeyByCode(WLQ_N.RTKZoomMPressKey));
+                } else if(WLQ_N.RTKZoomMPressKeyType == WLQ_N.CONSUMER_HID){
+                    return(KeyboardHID.getConsumerKeyByCode(WLQ_N.RTKZoomMPressKey));
+                } else if (WLQ_N.RTKZoomMPressKeyType == WLQ_N.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case RTKZoomMinusDoublePress:
-                if(WLQ.RTKZoomMDoublePressKeyType == WLQ.KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(WLQ.RTKZoomMDoublePressKey));
-                } else if(WLQ.RTKZoomMDoublePressKeyType == WLQ.CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(WLQ.RTKZoomMDoublePressKey));
-                } else if (WLQ.RTKZoomMDoublePressKeyType == WLQ.UNDEFINED){
+                if(WLQ_N.RTKZoomMDoublePressKeyType == WLQ_N.KEYBOARD_HID){
+                    return(KeyboardHID.getKeyboardKeyByCode(WLQ_N.RTKZoomMDoublePressKey));
+                } else if(WLQ_N.RTKZoomMDoublePressKeyType == WLQ_N.CONSUMER_HID){
+                    return(KeyboardHID.getConsumerKeyByCode(WLQ_N.RTKZoomMDoublePressKey));
+                } else if (WLQ_N.RTKZoomMDoublePressKeyType == WLQ_N.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case RTKSpeak:
-                if(WLQ.RTKSpeakPressKeyType == WLQ.KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(WLQ.RTKSpeakPressKey));
-                } else if(WLQ.RTKSpeakPressKeyType == WLQ.CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(WLQ.RTKSpeakPressKey));
-                } else if (WLQ.RTKSpeakPressKeyType == WLQ.UNDEFINED){
+                if(WLQ_N.RTKSpeakPressKeyType == WLQ_N.KEYBOARD_HID){
+                    return(KeyboardHID.getKeyboardKeyByCode(WLQ_N.RTKSpeakPressKey));
+                } else if(WLQ_N.RTKSpeakPressKeyType == WLQ_N.CONSUMER_HID){
+                    return(KeyboardHID.getConsumerKeyByCode(WLQ_N.RTKSpeakPressKey));
+                } else if (WLQ_N.RTKSpeakPressKeyType == WLQ_N.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case RTKSpeakDoublePress:
-                if(WLQ.RTKSpeakDoublePressKeyType == WLQ.KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(WLQ.RTKSpeakDoublePressKey));
-                } else if(WLQ.RTKSpeakDoublePressKeyType == WLQ.CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(WLQ.RTKSpeakDoublePressKey));
-                } else if (WLQ.RTKSpeakDoublePressKeyType == WLQ.UNDEFINED){
+                if(WLQ_N.RTKSpeakDoublePressKeyType == WLQ_N.KEYBOARD_HID){
+                    return(KeyboardHID.getKeyboardKeyByCode(WLQ_N.RTKSpeakDoublePressKey));
+                } else if(WLQ_N.RTKSpeakDoublePressKeyType == WLQ_N.CONSUMER_HID){
+                    return(KeyboardHID.getConsumerKeyByCode(WLQ_N.RTKSpeakDoublePressKey));
+                } else if (WLQ_N.RTKSpeakDoublePressKeyType == WLQ_N.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case RTKMute:
-                if(WLQ.RTKMutePressKeyType == WLQ.KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(WLQ.RTKMutePressKey));
-                } else if(WLQ.RTKMutePressKeyType == WLQ.CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(WLQ.RTKMutePressKey));
-                } else if (WLQ.RTKMutePressKeyType == WLQ.UNDEFINED){
+                if(WLQ_N.RTKMutePressKeyType == WLQ_N.KEYBOARD_HID){
+                    return(KeyboardHID.getKeyboardKeyByCode(WLQ_N.RTKMutePressKey));
+                } else if(WLQ_N.RTKMutePressKeyType == WLQ_N.CONSUMER_HID){
+                    return(KeyboardHID.getConsumerKeyByCode(WLQ_N.RTKMutePressKey));
+                } else if (WLQ_N.RTKMutePressKeyType == WLQ_N.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case RTKMuteDoublePress:
-                if(WLQ.RTKMuteDoublePressKeyType == WLQ.KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(WLQ.RTKMuteDoublePressKey));
-                } else if(WLQ.RTKMuteDoublePressKeyType == WLQ.CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(WLQ.RTKMuteDoublePressKey));
-                } else if (WLQ.RTKMuteDoublePressKeyType == WLQ.UNDEFINED){
+                if(WLQ_N.RTKMuteDoublePressKeyType == WLQ_N.KEYBOARD_HID){
+                    return(KeyboardHID.getKeyboardKeyByCode(WLQ_N.RTKMuteDoublePressKey));
+                } else if(WLQ_N.RTKMuteDoublePressKeyType == WLQ_N.CONSUMER_HID){
+                    return(KeyboardHID.getConsumerKeyByCode(WLQ_N.RTKMuteDoublePressKey));
+                } else if (WLQ_N.RTKMuteDoublePressKeyType == WLQ_N.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case RTKDisplayOff:
-                if(WLQ.RTKDisplayPressKeyType == WLQ.KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(WLQ.RTKDisplayPressKey));
-                } else if(WLQ.RTKDisplayPressKeyType == WLQ.CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(WLQ.RTKDisplayPressKey));
-                } else if (WLQ.RTKDisplayPressKeyType == WLQ.UNDEFINED){
+                if(WLQ_N.RTKDisplayPressKeyType == WLQ_N.KEYBOARD_HID){
+                    return(KeyboardHID.getKeyboardKeyByCode(WLQ_N.RTKDisplayPressKey));
+                } else if(WLQ_N.RTKDisplayPressKeyType == WLQ_N.CONSUMER_HID){
+                    return(KeyboardHID.getConsumerKeyByCode(WLQ_N.RTKDisplayPressKey));
+                } else if (WLQ_N.RTKDisplayPressKeyType == WLQ_N.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case RTKDisplayOffDoublePress:
-                if(WLQ.RTKDisplayDoublePressKeyType == WLQ.KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(WLQ.RTKDisplayDoublePressKey));
-                } else if(WLQ.RTKDisplayDoublePressKeyType == WLQ.CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(WLQ.RTKDisplayDoublePressKey));
-                } else if (WLQ.RTKDisplayDoublePressKeyType == WLQ.UNDEFINED){
+                if(WLQ_N.RTKDisplayDoublePressKeyType == WLQ_N.KEYBOARD_HID){
+                    return(KeyboardHID.getKeyboardKeyByCode(WLQ_N.RTKDisplayDoublePressKey));
+                } else if(WLQ_N.RTKDisplayDoublePressKeyType == WLQ_N.CONSUMER_HID){
+                    return(KeyboardHID.getConsumerKeyByCode(WLQ_N.RTKDisplayDoublePressKey));
+                } else if (WLQ_N.RTKDisplayDoublePressKeyType == WLQ_N.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case fullScrollUp:
-                if(WLQ.fullScrollUpKeyType == WLQ.KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(WLQ.fullScrollUpKey));
-                } else if(WLQ.fullScrollUpKeyType == WLQ.CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(WLQ.fullScrollUpKey));
-                } else if(WLQ.fullScrollUpKeyType == WLQ.UNDEFINED){
+                if(WLQ_N.fullScrollUpKeyType == WLQ_N.KEYBOARD_HID){
+                    return(KeyboardHID.getKeyboardKeyByCode(WLQ_N.fullScrollUpKey));
+                } else if(WLQ_N.fullScrollUpKeyType == WLQ_N.CONSUMER_HID){
+                    return(KeyboardHID.getConsumerKeyByCode(WLQ_N.fullScrollUpKey));
+                } else if(WLQ_N.fullScrollUpKeyType == WLQ_N.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case fullScrollDown:
-                if(WLQ.fullScrollDownKeyType == WLQ.KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(WLQ.fullScrollDownKey));
-                } else if(WLQ.fullScrollDownKeyType == WLQ.CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(WLQ.fullScrollDownKey));
-                } else if(WLQ.fullScrollDownKeyType == WLQ.UNDEFINED){
+                if(WLQ_N.fullScrollDownKeyType == WLQ_N.KEYBOARD_HID){
+                    return(KeyboardHID.getKeyboardKeyByCode(WLQ_N.fullScrollDownKey));
+                } else if(WLQ_N.fullScrollDownKeyType == WLQ_N.CONSUMER_HID){
+                    return(KeyboardHID.getConsumerKeyByCode(WLQ_N.fullScrollDownKey));
+                } else if(WLQ_N.fullScrollDownKeyType == WLQ_N.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case fullToggleRight:
-                if(WLQ.fullRightPressKeyType == WLQ.KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(WLQ.fullRightPressKey));
-                } else if(WLQ.fullRightPressKeyType == WLQ.CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(WLQ.fullRightPressKey));
-                } else if(WLQ.fullRightPressKeyType == WLQ.UNDEFINED){
+                if(WLQ_N.fullRightPressKeyType == WLQ_N.KEYBOARD_HID){
+                    return(KeyboardHID.getKeyboardKeyByCode(WLQ_N.fullRightPressKey));
+                } else if(WLQ_N.fullRightPressKeyType == WLQ_N.CONSUMER_HID){
+                    return(KeyboardHID.getConsumerKeyByCode(WLQ_N.fullRightPressKey));
+                } else if(WLQ_N.fullRightPressKeyType == WLQ_N.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case fullToggleRightLongPress:
-                if(WLQ.fullRightLongPressKeyType == WLQ.KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(WLQ.fullRightLongPressKey));
-                } else if(WLQ.fullRightLongPressKeyType  == WLQ.CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(WLQ.fullRightLongPressKey));
-                } else if(WLQ.fullRightLongPressKeyType == WLQ.UNDEFINED){
+                if(WLQ_N.fullRightLongPressKeyType == WLQ_N.KEYBOARD_HID){
+                    return(KeyboardHID.getKeyboardKeyByCode(WLQ_N.fullRightLongPressKey));
+                } else if(WLQ_N.fullRightLongPressKeyType  == WLQ_N.CONSUMER_HID){
+                    return(KeyboardHID.getConsumerKeyByCode(WLQ_N.fullRightLongPressKey));
+                } else if(WLQ_N.fullRightLongPressKeyType == WLQ_N.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case fullToggleLeft:
-                if(WLQ.fullLeftPressKeyType == WLQ.KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(WLQ.fullLeftPressKey));
-                } else if(WLQ.fullLeftPressKeyType == WLQ.CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(WLQ.fullLeftPressKey));
-                } else if(WLQ.fullLeftPressKeyType == WLQ.UNDEFINED){
+                if(WLQ_N.fullLeftPressKeyType == WLQ_N.KEYBOARD_HID){
+                    return(KeyboardHID.getKeyboardKeyByCode(WLQ_N.fullLeftPressKey));
+                } else if(WLQ_N.fullLeftPressKeyType == WLQ_N.CONSUMER_HID){
+                    return(KeyboardHID.getConsumerKeyByCode(WLQ_N.fullLeftPressKey));
+                } else if(WLQ_N.fullLeftPressKeyType == WLQ_N.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case fullToggleLeftLongPress:
-                if(WLQ.fullLeftLongPressKeyType == WLQ.KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(WLQ.fullLeftLongPressKey));
-                } else if(WLQ.fullLeftLongPressKeyType  == WLQ.CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(WLQ.fullLeftLongPressKey));
-                } else if(WLQ.fullLeftLongPressKeyType == WLQ.UNDEFINED){
+                if(WLQ_N.fullLeftLongPressKeyType == WLQ_N.KEYBOARD_HID){
+                    return(KeyboardHID.getKeyboardKeyByCode(WLQ_N.fullLeftLongPressKey));
+                } else if(WLQ_N.fullLeftLongPressKeyType  == WLQ_N.CONSUMER_HID){
+                    return(KeyboardHID.getConsumerKeyByCode(WLQ_N.fullLeftLongPressKey));
+                } else if(WLQ_N.fullLeftLongPressKeyType == WLQ_N.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case fullSignalCancel:
-                if(WLQ.fullSignalPressKeyType == WLQ.KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(WLQ.fullSignalPressKey));
-                } else if(WLQ.fullSignalPressKeyType == WLQ.CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(WLQ.fullSignalPressKey));
-                } else if(WLQ.fullSignalPressKeyType == WLQ.UNDEFINED){
+                if(WLQ_N.fullSignalPressKeyType == WLQ_N.KEYBOARD_HID){
+                    return(KeyboardHID.getKeyboardKeyByCode(WLQ_N.fullSignalPressKey));
+                } else if(WLQ_N.fullSignalPressKeyType == WLQ_N.CONSUMER_HID){
+                    return(KeyboardHID.getConsumerKeyByCode(WLQ_N.fullSignalPressKey));
+                } else if(WLQ_N.fullSignalPressKeyType == WLQ_N.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case fullSignalCancelLongPress:
-                if(WLQ.fullSignalLongPressKeyType == WLQ.KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(WLQ.fullSignalLongPressKey));
-                } else if(WLQ.fullSignalLongPressKeyType == WLQ.CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(WLQ.fullSignalLongPressKey));
-                } else if(WLQ.fullSignalLongPressKeyType == WLQ.UNDEFINED){
+                if(WLQ_N.fullSignalLongPressKeyType == WLQ_N.KEYBOARD_HID){
+                    return(KeyboardHID.getKeyboardKeyByCode(WLQ_N.fullSignalLongPressKey));
+                } else if(WLQ_N.fullSignalLongPressKeyType == WLQ_N.CONSUMER_HID){
+                    return(KeyboardHID.getConsumerKeyByCode(WLQ_N.fullSignalLongPressKey));
+                } else if(WLQ_N.fullSignalLongPressKeyType == WLQ_N.UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
@@ -629,7 +610,8 @@ public class WLQ {
         }
     }
 
-    public static byte getActionKeyType(int id){
+    @Override
+    public byte getActionKeyType(int id){
         switch (id){
             case RTKPage:
                 return RTKPagePressKeyType;
@@ -677,7 +659,8 @@ public class WLQ {
         }
     }
 
-    public static byte getActionKey(int id) {
+    @Override
+    public byte getActionKey(int id) {
         switch (id) {
             case RTKPage:
                 return RTKPagePressKey;
@@ -725,7 +708,8 @@ public class WLQ {
         }
     }
 
-    public static byte getActionKeyModifiers(int id) {
+    @Override
+    public byte getActionKeyModifiers(int id) {
         switch (id) {
             case RTKPage:
                 return RTKPagePressKeyModifier;
@@ -773,7 +757,8 @@ public class WLQ {
         }
     }
 
-    public static void setActionKey(int id, byte type, byte modifiers, byte key) {
+    @Override
+    public void setActionKey(int id, byte type, byte modifiers, byte key) {
         switch (id) {
             case RTKPage:
                 tempConfig[RTKPagePressKeyType_INDEX] = type;
@@ -858,5 +843,95 @@ public class WLQ {
             default:
                 Log.d(TAG, "Unknown ActionID");
         }
+    }
+
+    @Override
+    public void setHardwareVersion(String version) {
+        hardwareVersion = version;
+    }
+
+    @Override
+    public String getHardwareVersion() {
+        return hardwareVersion;
+    }
+
+    @Override
+    public String getFirmwareVersion() {
+        return firmwareVersion;
+    }
+
+    @Override
+    public byte[] getFlash() {
+        return wunderLINQConfig;
+    }
+
+    @Override
+    public byte[] getConfig() {
+        return flashConfig;
+    }
+
+    @Override
+    public byte[] getTempConfig() {
+        return tempConfig;
+    }
+
+    @Override
+    public byte getKeyMode() {
+        return keyMode;
+    }
+
+    @Override
+    public byte getSensitivity() {
+        return sensitivity;
+    }
+
+    @Override
+    public byte[] GET_CONFIG_CMD() {
+        return WLQ_BASE.GET_CONFIG_CMD;
+    }
+
+    @Override
+    public byte[] WRITE_CONFIG_CMD() {
+        return WLQ_BASE.WRITE_CONFIG_CMD;
+    }
+
+    @Override
+    public byte[] WRITE_MODE_CMD() {
+        return WLQ_BASE.WRITE_MODE_CMD;
+    }
+
+    @Override
+    public byte[] CMD_EOM() {
+        return WLQ_BASE.CMD_EOM;
+    }
+
+    @Override
+    public byte KEYMODE_DEFAULT() {
+        return WLQ_BASE.KEYMODE_DEFAULT;
+    }
+
+    @Override
+    public byte KEYMODE_CUSTOM() {
+        return WLQ_BASE.KEYMODE_CUSTOM;
+    }
+
+    @Override
+    public byte KEYBOARD_HID() {
+        return WLQ_BASE.KEYBOARD_HID;
+    }
+
+    @Override
+    public byte CONSUMER_HID() {
+        return WLQ_BASE.CONSUMER_HID;
+    }
+
+    @Override
+    public byte UNDEFINED() {
+        return WLQ_BASE.UNDEFINED;
+    }
+
+    @Override
+    public int getHardwareType() {
+        return 1;
     }
 }

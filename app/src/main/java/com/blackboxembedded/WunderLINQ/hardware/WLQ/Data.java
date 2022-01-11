@@ -15,13 +15,17 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-package com.blackboxembedded.WunderLINQ;
+package com.blackboxembedded.WunderLINQ.hardware.WLQ;
 
 import android.location.Location;
 
 import java.util.Date;
 
 public class Data {
+    // WunderLINQ HW
+    public static WLQ wlq;
+    public static String hardwareVersion;
+
     // Last Message
     private static byte[] lastMessage;
     public static byte[] getLastMessage() {

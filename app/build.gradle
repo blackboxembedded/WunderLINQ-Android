@@ -67,5 +67,6 @@ dependencies {
     implementation 'stax:stax:1.2.0'
     implementation 'com.caverock:androidsvg-aar:1.4'
     implementation 'commons-io:commons-io:2.4'
+    implementation 'com.github.mik3y:usb-serial-for-android:3.4.4'
     testImplementation 'junit:junit:4.13.1'
 }

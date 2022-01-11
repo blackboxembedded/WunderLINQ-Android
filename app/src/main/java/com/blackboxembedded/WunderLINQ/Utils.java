@@ -132,7 +132,7 @@ public class Utils {
      * @see http://en.wikipedia.org/wiki/Low-pass_filter#Algorithmic_implementation
      */
     // Lowpass filter
-    protected static float[] lowPass( float[] input, float[] output, float ALPHA ) {
+    public static float[] lowPass(float[] input, float[] output, float ALPHA) {
         if ( output == null ) return input;
 
         for ( int i=0; i<input.length; i++ ) {

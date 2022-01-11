@@ -38,6 +38,10 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -121,7 +125,7 @@ public class AboutActivity extends AppCompatActivity {
                 emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sendlogs_subject) + " " + curdatetime);
                 emailIntent.putExtra(Intent.EXTRA_TEXT, "App Version: " + BuildConfig.VERSION_NAME + "\n"
-                        + "Firmware Version: " + WLQ.firmwareVersion + "\n"
+                        + "Firmware Version: " + Data.wlq.getFirmwareVersion() + "\n"
                         + "Android Version: " + Build.VERSION.RELEASE + "\n"
                         + "Manufacturer, Model: " + Build.MANUFACTURER + ", " + Build.MODEL + "\n"
                         + getString(R.string.sendlogs_body));
@@ -149,9 +153,9 @@ public class AboutActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if(WLQ.firmwareVersion == null) {
+        if(Data.wlq.getFirmwareVersion() == null) {
             if (MainActivity.gattCommandCharacteristic != null) {
-                BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, WLQ.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, WLQ_N.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
             }
         }
     }

@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-package com.blackboxembedded.WunderLINQ;
+package com.blackboxembedded.WunderLINQ.comms.BLE;
 
 import android.Manifest;
 import android.app.Notification;
@@ -53,6 +53,17 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
+import com.blackboxembedded.WunderLINQ.AlertActivity;
+import com.blackboxembedded.WunderLINQ.FaultActivity;
+import com.blackboxembedded.WunderLINQ.FaultStatus;
+import com.blackboxembedded.WunderLINQ.Logger;
+import com.blackboxembedded.WunderLINQ.MyApplication;
+import com.blackboxembedded.WunderLINQ.R;
+import com.blackboxembedded.WunderLINQ.Utils;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_C;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
 import com.blackboxembedded.WunderLINQ.protocols.CANbus;
 import com.blackboxembedded.WunderLINQ.protocols.LINbus;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -168,6 +179,9 @@ public class BluetoothLeService extends Service {
     public static final int STATE_CONNECTED = 2;
     public static final int STATE_DISCONNECTING = 4;
     private static final int STATE_BONDED = 5;
+
+    public static int connectedType = 0;
+
 
     /**
      * BluetoothAdapter for handling connections
@@ -603,6 +617,7 @@ public class BluetoothLeService extends Service {
         Bundle mBundle = new Bundle();
         // Putting the byte value read for GATT Db
         final byte[] data = characteristic.getValue();
+
         mBundle.putByteArray(EXTRA_BYTE_VALUE,
                 data);
         mBundle.putString(EXTRA_BYTE_UUID_VALUE,
@@ -656,16 +671,18 @@ public class BluetoothLeService extends Service {
             if (data != null) {
                 //Read Config
                 if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x57)) {
-                    if (!Arrays.equals(WLQ.wunderLINQConfig, data)) {
-                        new WLQ(data);
-                        intent.putExtras(mBundle);
-                        MyApplication.getContext().sendBroadcast(intent);
+                    if (Data.wlq == null) {
+                        if (connectedType == WLQ.TYPE_NAVIGATOR) {
+                            Data.wlq = new WLQ_N(data);
+                        } else if (connectedType == WLQ.TYPE_COMMANDER) {
+                            Data.wlq = new WLQ_C(data);
+                        }
                     }
                 }
             }
         } else if (characteristic.getUuid().equals(UUIDDatabase.UUID_HARDWARE_REVISION_STRING)) {
             if (data != null) {
-                WLQ.hardwareVersion = characteristic.getStringValue(0);
+                Data.hardwareVersion = characteristic.getStringValue(0);
                 Log.d(TAG, "HW String Value: " + characteristic.getStringValue(0));
             }
         } else {

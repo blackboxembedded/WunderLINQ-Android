@@ -75,6 +75,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.gridlayout.widget.GridLayout;
 
+import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
+import com.blackboxembedded.WunderLINQ.comms.BLE.GattAttributes;
+import com.blackboxembedded.WunderLINQ.comms.BLE.UUIDDatabase;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -394,7 +401,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         MenuInflater menuOtherInflater = mPopupMenu.getMenuInflater();
         menuOtherInflater.inflate(R.menu.menu_main, mPopupMenu.getMenu());
         mMenu = mPopupMenu.getMenu();
-        mMenu.findItem(R.id.action_hwsettings).setVisible(false);
+        mMenu.findItem(R.id.action_bike_info).setVisible(true);
+        mMenu.findItem(R.id.action_hwsettings).setVisible(true);
         mPopupMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
             @Override
@@ -821,6 +829,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     uuid = gattCharacteristic.getUuid().toString();
                     Log.d(TAG,"Characteristic Found: " + uuid);
                     if (UUID.fromString(GattAttributes.WUNDERLINQ_LINMESSAGE_CHARACTERISTIC).equals(gattCharacteristic.getUuid())) {
+                        BluetoothLeService.connectedType = WLQ.TYPE_NAVIGATOR;
+                        mMenu.findItem(R.id.action_bike_info).setVisible(true);
                         int charaProp = gattCharacteristic.getProperties();
                         if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
                             // If there is an active notification on a characteristic, clear
@@ -838,6 +848,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                                     gattCharacteristic, true);
                         }
                     } else if (UUID.fromString(GattAttributes.WUNDERLINQ_CANMESSAGE_CHARACTERISTIC).equals(gattCharacteristic.getUuid())) {
+                        BluetoothLeService.connectedType = WLQ.TYPE_COMMANDER;
+                        mMenu.findItem(R.id.action_bike_info).setVisible(false);
                         int charaProp = gattCharacteristic.getProperties();
                         if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
                             // If there is an active notification on a characteristic, clear
@@ -857,7 +869,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     } else if (UUID.fromString(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC).equals(gattCharacteristic.getUuid())){
                         gattCommandCharacteristic = gattCharacteristic;
                         // Read config
-                        BluetoothLeService.writeCharacteristic(gattCommandCharacteristic, WLQ.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                        BluetoothLeService.writeCharacteristic(gattCommandCharacteristic, WLQ_N.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
                     }
                 }
             }
