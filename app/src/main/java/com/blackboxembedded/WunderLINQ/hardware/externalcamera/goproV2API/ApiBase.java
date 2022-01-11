@@ -1,4 +1,4 @@
-package com.blackboxembedded.WunderLINQ.externalcamera.goproV2API;
+package com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV2API;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

@@ -1,4 +1,4 @@
-package com.blackboxembedded.WunderLINQ.externalcamera.goproV1API;
+package com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV1API;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;

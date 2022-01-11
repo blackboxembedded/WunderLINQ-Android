@@ -19,7 +19,7 @@ package com.blackboxembedded.WunderLINQ.protocols;
 
 import android.util.Log;
 
-import com.blackboxembedded.WunderLINQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
 import com.blackboxembedded.WunderLINQ.FaultStatus;
 import com.blackboxembedded.WunderLINQ.Utils;
 
@@ -27,7 +27,7 @@ public class CANbus {
     public static void parseCANMessage(byte[] data){
         Data.setLastMessage(data);
         int msgID = ((data[0] & 0xFF)<<3) + ((data[1] & 0xFF)>>5);
-        Log.d("CANbus","CANID: " + msgID + "  CANMSG: " + Utils.ByteArraytoHexNoDelim(data));
+        //Log.d("CANbus","CANID: " + msgID + "  CANMSG: " + Utils.ByteArraytoHexNoDelim(data));
 
         switch (msgID){
             case 268:

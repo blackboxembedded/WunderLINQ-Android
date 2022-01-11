@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-package com.blackboxembedded.WunderLINQ;
+package com.blackboxembedded.WunderLINQ.comms.BLE;
 
 import android.app.AppOpsManager;
 import android.app.usage.UsageStats;
@@ -34,6 +34,8 @@ import java.util.List;
 import static android.app.AppOpsManager.MODE_ALLOWED;
 import static android.app.AppOpsManager.OPSTR_GET_USAGE_STATS;
 import static android.os.Process.myUid;
+
+import com.blackboxembedded.WunderLINQ.MyApplication;
 
 public class BTConnectReceiver extends BroadcastReceiver {
 

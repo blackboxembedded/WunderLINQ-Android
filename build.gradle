@@ -5,7 +5,8 @@ buildscript {
         jcenter()
         mavenCentral()
         google()
-        maven { url "https://dl.bintray.com/caarmen/maven/" }
+        //maven { url "https://dl.bintray.com/caarmen/maven/" }
+        maven { url 'https://jitpack.io' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.1.2'
@@ -20,7 +21,8 @@ allprojects {
         jcenter()
         mavenCentral()
         google()
-        maven { url "https://dl.bintray.com/caarmen/maven/" }
+        //maven { url "https://dl.bintray.com/caarmen/maven/" }
+        maven { url 'https://jitpack.io' }
     }
 }
 
