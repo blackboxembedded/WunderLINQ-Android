@@ -40,6 +40,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.blackboxembedded.WunderLINQ.comms.BLE.GattAttributes;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
 
 import java.text.SimpleDateFormat;
@@ -178,12 +179,14 @@ public class BikeInfoActivity extends AppCompatActivity {
     };
 
     private void updateDisplay(){
-        if (Data.wlq.getFirmwareVersion() != null) {
-            if (Double.parseDouble(Data.wlq.getFirmwareVersion()) >= 1.8) {
-                tvResetHeader.setVisibility(View.VISIBLE);
-                spReset.setVisibility(View.VISIBLE);
-                tvResetLabel.setVisibility(View.VISIBLE);
-                btReset.setVisibility(View.VISIBLE);
+        if (Data.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
+            if (Data.wlq.getFirmwareVersion() != null) {
+                if (Double.parseDouble(Data.wlq.getFirmwareVersion()) >= 1.8) {
+                    tvResetHeader.setVisibility(View.VISIBLE);
+                    spReset.setVisibility(View.VISIBLE);
+                    tvResetLabel.setVisibility(View.VISIBLE);
+                    btReset.setVisibility(View.VISIBLE);
+                }
             }
         }
 
