@@ -102,6 +102,9 @@ public class NavAppHelper {
             case "14": //CoPilot GPS
                 url = "copilot://&EnableCustomButton=true&AppLaunchBundleID=com.blackboxembedded.WunderLINQ";
                 break;
+            case "15": //Yandex
+                url = "yandexnavi://";
+                break;
         }
         try {
             navIntent.setData(Uri.parse(url));
@@ -170,6 +173,9 @@ public class NavAppHelper {
                 //https://developer.trimblemaps.com/copilot-navigation/v10-19/feature-guide/advanced-features/url-launch/#send-stops
                 navUrl = "copilot://options?type=STOPS&stop=Start||||||" + String.valueOf(start.getLatitude()) + "|" + String.valueOf(start.getLongitude()) + "&stop=Stop||||||" + String.valueOf(end.getLatitude()) + "|" + String.valueOf(end.getLongitude())
                         + "&EnableCustomButton=true&AppLaunchBundleID=com.blackboxembedded.WunderLINQ";
+                break;
+            case "15": //Yandex
+                navUrl = "yandexnavi://build_route_on_map?lat_to=" + String.valueOf(end.getLatitude()) + "&lon_to=" + String.valueOf(end.getLongitude()) ;
                 break;
         }
         if (!navApp.equals("6")) {
@@ -241,6 +247,9 @@ public class NavAppHelper {
             case "14": //CoPilot GPS
                 navUrl = "copilot://mydestination?type=LOCATION&action=VIEW&lat=" + String.valueOf(waypoint.getLatitude()) + "&long=" + String.valueOf(waypoint.getLongitude())
                         + "&EnableCustomButton=true&AppLaunchBundleID=com.blackboxembedded.WunderLINQ";
+                break;
+            case "15": //Yandex
+                navUrl = "yandexnavi://show_point_on_map?lat=" + String.valueOf(waypoint.getLatitude()) + "&lon=" + String.valueOf(waypoint.getLongitude()) + "&zoom=12&no-balloon=0&desc=" + label;
                 break;
         }
         if (!navApp.equals("6")) {
