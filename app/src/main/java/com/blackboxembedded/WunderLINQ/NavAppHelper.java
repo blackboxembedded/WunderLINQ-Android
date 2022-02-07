@@ -28,6 +28,7 @@ import android.content.pm.ResolveInfo;
 import android.location.Location;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.util.List;
 
@@ -106,6 +107,7 @@ public class NavAppHelper {
                 url = "yandexnavi://";
                 break;
         }
+        Log.d("NavHelper","Nav APP URL: " + url);
         try {
             navIntent.setData(Uri.parse(url));
             if (android.os.Build.VERSION.SDK_INT >= 24) {
@@ -178,6 +180,7 @@ public class NavAppHelper {
                 navUrl = "yandexnavi://build_route_on_map?lat_to=" + String.valueOf(end.getLatitude()) + "&lon_to=" + String.valueOf(end.getLongitude()) ;
                 break;
         }
+        Log.d("NavHelper","Navigate URL: " + navUrl);
         if (!navApp.equals("6")) {
             try {
                 homeNavIntent.setData(Uri.parse(navUrl));
@@ -252,6 +255,7 @@ public class NavAppHelper {
                 navUrl = "yandexnavi://show_point_on_map?lat=" + String.valueOf(waypoint.getLatitude()) + "&lon=" + String.valueOf(waypoint.getLongitude()) + "&zoom=12&no-balloon=0&desc=" + label;
                 break;
         }
+        Log.d("NavHelper","View WPT URL: " + navUrl);
         if (!navApp.equals("6")) {
             try {
                 navIntent.setData(Uri.parse(navUrl));
