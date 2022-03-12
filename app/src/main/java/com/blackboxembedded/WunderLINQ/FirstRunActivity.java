@@ -235,8 +235,6 @@ public class FirstRunActivity extends AppCompatActivity {
                             if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
                                 Log.d(TAG,"Requesting BT_CONNECT permission");
                                 ActivityCompat.requestPermissions(FirstRunActivity.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, PERMISSION_REQUEST_BLUETOOTH_CONNECT);
-                            } else {
-                                Log.d(TAG,"NOT Requesting BT_CONNECT permission");
                             }
 
                             step = step + 1;
