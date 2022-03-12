@@ -851,13 +851,18 @@ public class BluetoothLeService extends Service {
         // We want to directly connect to the device, so we are setting the
         // autoConnect
         // parameter to false.
-        mBluetoothGatt = device.connectGatt(MyApplication.getContext(), false, mGattCallback);
-        mBluetoothDeviceAddress = address;
-        mBluetoothDeviceName = devicename;
+        if (ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+            mBluetoothGatt = device.connectGatt(MyApplication.getContext(), false, mGattCallback);
+            mBluetoothDeviceAddress = address;
+            mBluetoothDeviceName = devicename;
 
-        String dataLog = "[" + devicename + "|" + address + "] " +
-                "Connection request sent";
-        Log.d(TAG,dataLog);
+            String dataLog = "[" + devicename + "|" + address + "] " +
+                    "Connection request sent";
+            Log.d(TAG, dataLog);
+        } else {
+            //Request permission
+            Log.d(TAG, "No BLUETOOTH_CONNECT permission granted");
+        }
     }
 
     /**
@@ -869,10 +874,15 @@ public class BluetoothLeService extends Service {
     public static void disconnect() {
         Log.d(TAG,"disconnect called");
         if (mBluetoothAdapter != null || mBluetoothGatt != null) {
-            mBluetoothGatt.disconnect();
-            String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
-                    "Disconnection request sent";
-            Log.d(TAG,dataLog);
+            if (ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                mBluetoothGatt.disconnect();
+                String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
+                        "Disconnection request sent";
+                Log.d(TAG, dataLog);
+            } else {
+                //Request permission
+                Log.d(TAG, "No BLUETOOTH_CONNECT permission granted");
+            }
             //Data.clear();
             //FaultStatus.clear();
             clearNotifications();
@@ -882,10 +892,15 @@ public class BluetoothLeService extends Service {
 
     public static void discoverServices() {
         if (mBluetoothAdapter != null || mBluetoothGatt != null) {
-            mBluetoothGatt.discoverServices();
-            String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
-                    "Service discovery request sent";
-            Log.d(TAG,dataLog);
+            if (ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                mBluetoothGatt.discoverServices();
+                String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
+                        "Service discovery request sent";
+                Log.d(TAG, dataLog);
+            } else {
+                //Request permission
+                Log.d(TAG, "No BLUETOOTH_CONNECT permission granted");
+            }
         }
     }
 
@@ -894,7 +909,12 @@ public class BluetoothLeService extends Service {
      * resources are released properly.
      */
     public static void close() {
-        mBluetoothGatt.close();
+        if (ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+            mBluetoothGatt.close();
+        } else {
+            //Request permission
+            Log.d(TAG, "No BLUETOOTH_CONNECT permission granted");
+        }
         mBluetoothGatt = null;
     }
 
@@ -928,12 +948,17 @@ public class BluetoothLeService extends Service {
         boolean result = commandQueue.add(new Runnable() {
             @Override
             public void run() {
-                if(!mBluetoothGatt.readCharacteristic(characteristic)) {
-                    Log.e(TAG, String.format("ERROR: readCharacteristic failed for characteristic: %s", characteristic.getUuid()));
-                    completedCommand();
+                if (ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                    if (!mBluetoothGatt.readCharacteristic(characteristic)) {
+                        Log.e(TAG, String.format("ERROR: readCharacteristic failed for characteristic: %s", characteristic.getUuid()));
+                        completedCommand();
+                    } else {
+                        Log.d(TAG, String.format("Reading characteristic <%s>", characteristic.getUuid()));
+                        nrTries++;
+                    }
                 } else {
-                    Log.d(TAG, String.format("Reading characteristic <%s>", characteristic.getUuid()));
-                    nrTries++;
+                    //Request permission
+                    Log.d(TAG, "No BLUETOOTH_CONNECT permission granted");
                 }
             }
         });
@@ -989,12 +1014,14 @@ public class BluetoothLeService extends Service {
                     currentWriteBytes = bytesToWrite;
                     characteristic.setWriteType(writeTypeInternal);
                     characteristic.setValue(bytesToWrite);
-                    if (!mBluetoothGatt.writeCharacteristic(characteristic)) {
-                        Log.d(TAG, String.format("writeCharacteristic failed for characteristic: %s", characteristic.getUuid()));
-                        completedCommand();
-                    } else {
-                        //Log.d(TAG, String.format("Writing <%s> to characteristic <%s>", Utils.ByteArraytoHex(bytesToWrite), characteristic.getUuid()));
-                        nrTries++;
+                    if (ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                        if (!mBluetoothGatt.writeCharacteristic(characteristic)) {
+                            Log.d(TAG, String.format("writeCharacteristic failed for characteristic: %s", characteristic.getUuid()));
+                            completedCommand();
+                        } else {
+                            //Log.d(TAG, String.format("Writing <%s> to characteristic <%s>", Utils.ByteArraytoHex(bytesToWrite), characteristic.getUuid()));
+                            nrTries++;
+                        }
                     }
                 } else {
                     completedCommand();
@@ -1018,35 +1045,37 @@ public class BluetoothLeService extends Service {
      */
     public static void setCharacteristicNotification(
             BluetoothGattCharacteristic characteristic, boolean enabled) {
-        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            return;
-        }
-        if (characteristic.getDescriptor(UUID
-                .fromString(GattAttributes.CLIENT_CHARACTERISTIC_CONFIG)) != null) {
-            if (enabled) {
-                BluetoothGattDescriptor descriptor = characteristic
-                        .getDescriptor(UUID
-                                .fromString(GattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
-                descriptor
-                        .setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-                mBluetoothGatt.writeDescriptor(descriptor);
-
-            } else {
-                BluetoothGattDescriptor descriptor = characteristic
-                        .getDescriptor(UUID
-                                .fromString(GattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
-                descriptor
-                        .setValue(BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
-                mBluetoothGatt.writeDescriptor(descriptor);
+        if (ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+            if (mBluetoothAdapter == null || mBluetoothGatt == null) {
+                return;
             }
-        }
-        mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
-        if (enabled) {
-            String dataLog = "Start notification request sent";
-            Log.d(TAG,dataLog);
-        } else {
-            String dataLog = "Stop notification request sent";
-            Log.d(TAG,dataLog);
+            if (characteristic.getDescriptor(UUID
+                    .fromString(GattAttributes.CLIENT_CHARACTERISTIC_CONFIG)) != null) {
+                if (enabled) {
+                    BluetoothGattDescriptor descriptor = characteristic
+                            .getDescriptor(UUID
+                                    .fromString(GattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
+                    descriptor
+                            .setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+                    mBluetoothGatt.writeDescriptor(descriptor);
+
+                } else {
+                    BluetoothGattDescriptor descriptor = characteristic
+                            .getDescriptor(UUID
+                                    .fromString(GattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
+                    descriptor
+                            .setValue(BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
+                    mBluetoothGatt.writeDescriptor(descriptor);
+                }
+            }
+            mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
+            if (enabled) {
+                String dataLog = "Start notification request sent";
+                Log.d(TAG, dataLog);
+            } else {
+                String dataLog = "Stop notification request sent";
+                Log.d(TAG, dataLog);
+            }
         }
     }
 
