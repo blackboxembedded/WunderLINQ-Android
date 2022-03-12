@@ -1,32 +1,40 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/menu_container"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/task_container"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="300dp"
     android:layout_height="wrap_content"
     android:paddingBottom="5dp"
     android:paddingTop="5dp"
-    android:focusable="false">
+    android:focusable="false"
+    android:background="?attr/gridViewBorder">
 
     <ImageView
-        android:id="@+id/menu_icon"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:id="@+id/task_icon"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@+id/task_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:tint="?attr/iconTintColor"
-        tools:ignore="HardcodedText"/>
+        tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/menu_item"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="16dp"
-        android:layout_toEndOf="@+id/menu_icon"
-        android:gravity="center_vertical"
+        android:id="@+id/task_text"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
         android:text="Menu Item"
+        android:textAlignment="center"
         android:textColor="?attr/primaryTextColor"
-        android:textSize="24sp"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/task_icon"
         tools:ignore="HardcodedText" />
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

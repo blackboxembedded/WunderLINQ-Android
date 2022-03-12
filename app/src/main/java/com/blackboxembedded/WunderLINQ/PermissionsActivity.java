@@ -20,6 +20,7 @@ package com.blackboxembedded.WunderLINQ;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.app.AppOpsManager;
@@ -29,6 +30,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -86,33 +88,33 @@ public class PermissionsActivity extends AppCompatActivity {
             public void onItemClick (AdapterView < ? > adapter, View view, int position, long arg){
                 switch (listValues.get(position).getID()){
                     case PERMISSION_LOCATION:
-                        if (MyApplication.getContext().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_LOCATION);
+                        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(PermissionsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_LOCATION);
                         }
                         break;
                     case PERMISSION_CONTACTS:
-                        if (getApplication().checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-                            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_CONTACTS);
+                        if (ActivityCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(PermissionsActivity.this,new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_CONTACTS);
                         }
                         break;
                     case PERMISSION_RECORD_AUDIO:
-                        if (getApplication().checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                            requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSION_RECORD_AUDIO);
+                        if (ActivityCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(PermissionsActivity.this,new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSION_RECORD_AUDIO);
                         }
                         break;
                     case PERMISSION_CAMERA:
-                        if (getApplication().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                            requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSION_CAMERA);
+                        if (ActivityCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(PermissionsActivity.this,new String[]{Manifest.permission.CAMERA}, PERMISSION_CAMERA);
                         }
                         break;
                     case PERMISSION_WRITE_STORAGE:
-                        if (getApplication().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_WRITE_STORAGE);
+                        if (ActivityCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(PermissionsActivity.this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_WRITE_STORAGE);
                         }
                         break;
                     case PERMISSION_PHONE:
-                        if (getApplication().checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                            requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, PERMISSION_PHONE);
+                        if (ActivityCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(PermissionsActivity.this,new String[]{Manifest.permission.CALL_PHONE}, PERMISSION_PHONE);
                         }
                         break;
                     case PERMISSION_NOTIFICATION:
@@ -123,10 +125,12 @@ public class PermissionsActivity extends AppCompatActivity {
                         }
                         break;
                     case PERMISSION_OVERLAY:
-                        if (!Settings.canDrawOverlays(getApplication())) {
-                            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                    Uri.parse("package:" + getPackageName()));
-                            startActivity(intent);
+                        if(Build.VERSION.SDK_INT >= 23) {
+                            if (!Settings.canDrawOverlays(getApplication())) {
+                                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                        Uri.parse("package:" + getPackageName()));
+                                startActivity(intent);
+                            }
                         }
                         break;
                     case PERMISSION_USAGESTATS:
@@ -205,42 +209,42 @@ public class PermissionsActivity extends AppCompatActivity {
         listValues = new ArrayList<>();
         // Location permission
         boolean locationPermission = false;
-        if (getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationPermission = true;
         }
         listValues.add(new PermissionRecord(PERMISSION_LOCATION, getString(R.string.permission_location_label), locationPermission));
 
         //Contacts
         boolean contactsPermission = false;
-        if (getApplication().checkSelfPermission(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this,Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
             contactsPermission = true;
         }
         listValues.add(new PermissionRecord(PERMISSION_CONTACTS, getString(R.string.permission_contacts_label), contactsPermission));
 
         //Microphone
         boolean microphonePermission = false;
-        if (getApplication().checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this,Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
             microphonePermission = true;
         }
         listValues.add(new PermissionRecord(PERMISSION_RECORD_AUDIO, getString(R.string.permission_microphone_label), microphonePermission));
 
         //Camera
         boolean cameraPermission = false;
-        if (getApplication().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this,Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             cameraPermission = true;
         }
         listValues.add(new PermissionRecord(PERMISSION_CAMERA, getString(R.string.permission_camera_label), cameraPermission));
 
         //Write Storage
         boolean writePermission = false;
-        if (getApplication().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             writePermission = true;
         }
         listValues.add(new PermissionRecord(PERMISSION_WRITE_STORAGE, getString(R.string.permission_storagewrite_label), writePermission));
 
         //Phone
         boolean phonePermission = false;
-        if (getApplication().checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this,Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
             phonePermission = true;
         }
         listValues.add(new PermissionRecord(PERMISSION_PHONE, getString(R.string.permission_phone_label), phonePermission));
@@ -255,7 +259,11 @@ public class PermissionsActivity extends AppCompatActivity {
 
         //Overlay
         boolean overlayPermission = false;
-        if (Settings.canDrawOverlays(getApplication())) {
+        if(Build.VERSION.SDK_INT >= 23) {
+            if (Settings.canDrawOverlays(getApplication())) {
+                overlayPermission = true;
+            }
+        } else {
             overlayPermission = true;
         }
         listValues.add(new PermissionRecord(PERMISSION_OVERLAY, getString(R.string.permission_overlays_label), overlayPermission));

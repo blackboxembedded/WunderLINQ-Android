@@ -32,17 +32,16 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -51,13 +50,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.LinearSmoothScroller;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.wear.widget.WearableLinearLayoutManager;
-import androidx.wear.widget.WearableRecyclerView;
+import androidx.core.app.ActivityCompat;
 
-import com.blackboxembedded.WunderLINQ.AppListActivity;
-import com.blackboxembedded.WunderLINQ.ContactListActivity;
+import com.blackboxembedded.WunderLINQ.TaskList.Activities.AppListActivity;
+import com.blackboxembedded.WunderLINQ.TaskList.Activities.ContactListActivity;
 import com.blackboxembedded.WunderLINQ.GridOnSwipeTouchListener;
 import com.blackboxembedded.WunderLINQ.LoggingService;
 import com.blackboxembedded.WunderLINQ.MainActivity;
@@ -69,15 +65,19 @@ import com.blackboxembedded.WunderLINQ.PhotoService;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.SettingsActivity;
 import com.blackboxembedded.WunderLINQ.VideoRecService;
-import com.blackboxembedded.WunderLINQ.VolumeActivity;
+import com.blackboxembedded.WunderLINQ.TaskList.Activities.VolumeActivity;
 import com.blackboxembedded.WunderLINQ.WaypointDatasource;
-import com.blackboxembedded.WunderLINQ.WaypointNavActivity;
+import com.blackboxembedded.WunderLINQ.TaskList.Activities.WaypointNavActivity;
 import com.blackboxembedded.WunderLINQ.WaypointRecord;
-import com.blackboxembedded.WunderLINQ.WeatherMapActivity;
+import com.blackboxembedded.WunderLINQ.TaskList.Activities.WeatherMapActivity;
 import com.blackboxembedded.WunderLINQ.externalcamera.goproV1API.ApiBase;
 import com.blackboxembedded.WunderLINQ.externalcamera.goproV1API.ApiClient;
 import com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.model.GoProResponse;
 import com.google.android.gms.maps.model.LatLng;
+import com.yarolegovich.discretescrollview.DSVOrientation;
+import com.yarolegovich.discretescrollview.DiscreteScrollView;
+import com.yarolegovich.discretescrollview.transform.Pivot;
+import com.yarolegovich.discretescrollview.transform.ScaleTransformer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -100,13 +100,13 @@ import retrofit2.Response;
 
 public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOsmandMissingListener {
 
-    public final static String TAG = "TaskActivity";
+    private final static String TAG = "TaskActivity";
 
     private ConstraintLayout clTasks;
-    private WearableRecyclerView recyclerView;
-    private TextView tvLabel;
+    //private RecyclerView recyclerView;
+    private DiscreteScrollView taskListView;
     private TaskAdapter adapter;
-    final ArrayList<MenuItem> menuItems = new ArrayList<>();
+    final ArrayList<TaskItem> taskItems = new ArrayList<>();
 
     private SharedPreferences sharedPrefs;
 
@@ -118,6 +118,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
 
     private boolean actionCamOnline = false;
     private boolean actionCamRecording = false;
+
+    private int selected = 0;
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -143,22 +145,16 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
         }
 
-        clTasks = findViewById(R.id.layout_new_task);
-        tvLabel = findViewById(R.id.tvLabel);
-        recyclerView = findViewById(R.id.main_menu_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setEdgeItemsCenteringEnabled(true);
-        recyclerView.setCircularScrollingGestureEnabled(true);
-        recyclerView.setBezelFraction(0.5f);
-        recyclerView.setScrollDegreesPerScreen(90);
-        recyclerView.setOnTouchListener(new GridOnSwipeTouchListener(this) {
-
+        clTasks = findViewById(R.id.layout_task);
+        taskListView = findViewById(R.id.main_task_view);
+        taskListView.setOnTouchListener(new GridOnSwipeTouchListener(this) {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 getSupportActionBar().show();
                 startTimer();
                 return super.onTouch(v,event);
             }
+            /*
             @Override
             public void onSwipeLeft() {
                 Intent backIntent = new Intent(TaskActivity.this, MainActivity.class);
@@ -169,56 +165,78 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 Intent backIntent = new Intent(TaskActivity.this, MusicActivity.class);
                 startActivity(backIntent);
             }
+             */
         });
 
-        adapter = new TaskAdapter(this, menuItems, new TaskAdapter.AdapterCallback() {
+        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            taskListView.setOrientation(DSVOrientation.VERTICAL);
+        } else {
+            taskListView.setOrientation(DSVOrientation.HORIZONTAL);
+        }
+
+        adapter = new TaskAdapter(this, taskItems, new TaskAdapter.AdapterCallback() {
             @Override
-            public void onItemClicked(final Integer menuPosition) {
-                Log.d(TAG,"Item selected position: " + menuPosition);
-                updateTasks();
-                executeTask(menuPosition);
+            public void onItemClicked(final Integer taskPosition) {
+                //updateTasks();
+                selected = taskPosition;
+                Log.d(TAG,"Touch Selected: " + selected);
+                executeTask(taskPosition);
             }
         });
 
-        recyclerView.setAdapter(adapter);
+        taskListView.setAdapter(adapter);
 
-        CustomScrollingLayoutCallback customScrollingLayoutCallback =
-                new CustomScrollingLayoutCallback();
-        recyclerView.setLayoutManager(
-                new WearableLinearLayoutManager(this, customScrollingLayoutCallback));
+        taskListView.setItemTransformer(new ScaleTransformer.Builder()
+                .setMaxScale(1.00f)
+                .setMinScale(0.75f)
+                .setPivotX(Pivot.X.CENTER) // CENTER is a default one
+                .setPivotY(Pivot.Y.BOTTOM) // CENTER is a default one
+                .build());
 
         showActionBar();
     }
 
     @Override
     public void onResume() {
-        Log.d(TAG,"in onResume");
+        Log.d(TAG,"onResume");
         super.onResume();
 
         updateActionCamStatus();
 
         updateTasks();
 
-        updateOrientation(this.getResources().getConfiguration().orientation);
-
         getSupportActionBar().show();
+
+        Log.d(TAG,"Selected: " + selected);
+
+        adapter.selected = selected;
+
+        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            taskListView.setOrientation(DSVOrientation.VERTICAL);
+        } else {
+            taskListView.setOrientation(DSVOrientation.HORIZONTAL);
+        }
+
         startTimer();
     }
 
     @Override
     public void onPause() {
+        Log.d(TAG,"onPause");
         super.onPause();
         cancelTimer();
     }
 
     @Override
     public void onStop() {
+        Log.d(TAG,"onStop");
         super.onStop();
         cancelTimer();
     }
 
     @Override
     public void onDestroy() {
+        Log.d(TAG,"onDestroy");
         super.onDestroy();
         cancelTimer();
     }
@@ -245,7 +263,11 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        updateOrientation(newConfig.orientation);
+        if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            taskListView.setOrientation(DSVOrientation.VERTICAL);
+        } else {
+            taskListView.setOrientation(DSVOrientation.HORIZONTAL);
+        }
     }
 
     @Override
@@ -269,16 +291,10 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 } else {
                     adapter.selected = adapter.selected + 1;
                 }
+                selected = adapter.selected;
                 updateTasks();
-                RecyclerView.SmoothScroller smoothScroller = new
-                        LinearSmoothScroller(this) {
-                            @Override protected int getVerticalSnapPreference() {
-                                return LinearSmoothScroller.SNAP_TO_START;
-                            }
-                        };
-                smoothScroller.setTargetPosition(adapter.selected);
-                updateTasks();
-                recyclerView.getLayoutManager().startSmoothScroll(smoothScroller);
+                taskListView.smoothScrollToPosition(adapter.selected);
+                //updateTasks();
                 return true;
             case KeyEvent.KEYCODE_DPAD_UP:
                 if (adapter.selected == 0){
@@ -286,16 +302,10 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 } else {
                     adapter.selected = adapter.selected - 1;
                 }
+                selected = adapter.selected;
                 updateTasks();
-                RecyclerView.SmoothScroller smoothScroller2 = new
-                        LinearSmoothScroller(this) {
-                            @Override protected int getVerticalSnapPreference() {
-                                return LinearSmoothScroller.SNAP_TO_START;
-                            }
-                        };
-                smoothScroller2.setTargetPosition(adapter.selected);
-                updateTasks();
-                recyclerView.getLayoutManager().startSmoothScroll(smoothScroller2);
+                taskListView.smoothScrollToPosition(adapter.selected);
+                //updateTasks();
                 return true;
             default:
                 return super.onKeyUp(keyCode, event);
@@ -344,51 +354,6 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         }
     };
 
-    //Update layout for current orientation
-    private void updateOrientation(int orientation){
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int h = displayMetrics.heightPixels;
-        int w = displayMetrics.widthPixels;
-
-        ViewGroup.MarginLayoutParams params =
-                (ViewGroup.MarginLayoutParams)recyclerView.getLayoutParams();
-
-        ViewGroup.LayoutParams lp = recyclerView.getLayoutParams();
-
-        // Checks the orientation of the screen
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            recyclerView.setRotation(90.0f);
-            if(h > w){
-                lp.height = h;
-                lp.width = w;
-            } else {
-                lp.height = w;
-                lp.width = h;
-            }
-            if(getSupportActionBar().isShowing()) {
-                params.setMargins(params.leftMargin, 300, params.rightMargin, params.bottomMargin);
-            } else {
-                params.setMargins(params.leftMargin, 50, params.rightMargin, params.bottomMargin);
-            }
-            tvLabel.setVisibility(View.VISIBLE);
-        } else if (orientation == Configuration.ORIENTATION_PORTRAIT){
-            recyclerView.setRotation(0.0f);
-            if(h > w){
-                lp.height = h;
-                lp.width = w;
-            } else {
-                lp.height = w;
-                lp.width = h;
-            }
-            params.setMargins(params.leftMargin, 0, params.rightMargin, params.bottomMargin);
-            tvLabel.setVisibility(View.INVISIBLE);
-        }
-
-        recyclerView.requestLayout();
-        adapter.notifyDataSetChanged();
-    }
-
     //Start Timer to hide the ActionBar
     void startTimer() {
         if(!timerRunning) {
@@ -398,7 +363,6 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
 
                 public void onFinish() {
                     getSupportActionBar().hide();
-                    updateOrientation(TaskActivity.this.getResources().getConfiguration().orientation);
                     timerRunning = false;
                 }
             };
@@ -474,7 +438,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         iconId[17] = R.drawable.ic_volume_up;
 
         mapping = new ArrayList<>();
-        menuItems.clear();
+        taskItems.clear();
         int x = 0;
         while (x < numTasks){
             switch (x){
@@ -482,84 +446,84 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                     int selectionOne = Integer.parseInt(sharedPrefs.getString("prefQuickTaskOne", "0"));
                     if (!(selectionOne >= numTasks)){
                         mapping.add(selectionOne);
-                        menuItems.add(new MenuItem(iconId[selectionOne], taskTitles[selectionOne]));
+                        taskItems.add(new TaskItem(iconId[selectionOne], taskTitles[selectionOne]));
                     }
                     break;
                 case 1:
                     int selectionTwo = Integer.parseInt(sharedPrefs.getString("prefQuickTaskTwo", "1"));
                     if (!(selectionTwo >= numTasks)){
                         mapping.add(selectionTwo);
-                        menuItems.add(new MenuItem(iconId[selectionTwo], taskTitles[selectionTwo]));
+                        taskItems.add(new TaskItem(iconId[selectionTwo], taskTitles[selectionTwo]));
                     }
                     break;
                 case 2:
                     int selectionThree = Integer.parseInt(sharedPrefs.getString("prefQuickTaskThree", "2"));
                     if (!(selectionThree >= numTasks)){
                         mapping.add(selectionThree);
-                        menuItems.add(new MenuItem(iconId[selectionThree], taskTitles[selectionThree]));
+                        taskItems.add(new TaskItem(iconId[selectionThree], taskTitles[selectionThree]));
                     }
                     break;
                 case 3:
                     int selectionFour = Integer.parseInt(sharedPrefs.getString("prefQuickTaskFour", "3"));
                     if (!(selectionFour >= numTasks)){
                         mapping.add(selectionFour);
-                        menuItems.add(new MenuItem(iconId[selectionFour], taskTitles[selectionFour]));
+                        taskItems.add(new TaskItem(iconId[selectionFour], taskTitles[selectionFour]));
                     }
                     break;
                 case 4:
                     int selectionFive = Integer.parseInt(sharedPrefs.getString("prefQuickTaskFive", "4"));
                     if (!(selectionFive >= numTasks)){
                         mapping.add(selectionFive);
-                        menuItems.add(new MenuItem(iconId[selectionFive], taskTitles[selectionFive]));
+                        taskItems.add(new TaskItem(iconId[selectionFive], taskTitles[selectionFive]));
                     }
                     break;
                 case 5:
                     int selectionSix = Integer.parseInt(sharedPrefs.getString("prefQuickTaskSix", "5"));
                     if (!(selectionSix >= numTasks)){
                         mapping.add(selectionSix);
-                        menuItems.add(new MenuItem(iconId[selectionSix], taskTitles[selectionSix]));
+                        taskItems.add(new TaskItem(iconId[selectionSix], taskTitles[selectionSix]));
                     }
                     break;
                 case 6:
                     int selectionSeven = Integer.parseInt(sharedPrefs.getString("prefQuickTaskSeven", "6"));
                     if (!(selectionSeven >= numTasks)){
                         mapping.add(selectionSeven);
-                        menuItems.add(new MenuItem(iconId[selectionSeven], taskTitles[selectionSeven]));
+                        taskItems.add(new TaskItem(iconId[selectionSeven], taskTitles[selectionSeven]));
                     }
                     break;
                 case 7:
                     int selectionEight = Integer.parseInt(sharedPrefs.getString("prefQuickTaskEight", "7"));
                     if (!(selectionEight >= numTasks)){
                         mapping.add(selectionEight);
-                        menuItems.add(new MenuItem(iconId[selectionEight], taskTitles[selectionEight]));
+                        taskItems.add(new TaskItem(iconId[selectionEight], taskTitles[selectionEight]));
                     }
                     break;
                 case 8:
                     int selectionNine = Integer.parseInt(sharedPrefs.getString("prefQuickTaskNine", "8"));
                     if (!(selectionNine >= numTasks)){
                         mapping.add(selectionNine);
-                        menuItems.add(new MenuItem(iconId[selectionNine], taskTitles[selectionNine]));
+                        taskItems.add(new TaskItem(iconId[selectionNine], taskTitles[selectionNine]));
                     }
                     break;
                 case 9:
                     int selectionTen = Integer.parseInt(sharedPrefs.getString("prefQuickTaskTen", "9"));
                     if (!(selectionTen >= numTasks)){
                         mapping.add(selectionTen);
-                        menuItems.add(new MenuItem(iconId[selectionTen], taskTitles[selectionTen]));
+                        taskItems.add(new TaskItem(iconId[selectionTen], taskTitles[selectionTen]));
                     }
                     break;
                 case 10:
                     int selectionEleven = Integer.parseInt(sharedPrefs.getString("prefQuickTaskEleven", "10"));
                     if (!(selectionEleven >= numTasks)){
                         mapping.add(selectionEleven);
-                        menuItems.add(new MenuItem(iconId[selectionEleven], taskTitles[selectionEleven]));
+                        taskItems.add(new TaskItem(iconId[selectionEleven], taskTitles[selectionEleven]));
                     }
                     break;
                 case 11:
                     int selectionTwelve = Integer.parseInt(sharedPrefs.getString("prefQuickTaskTwelve", "11"));
                     if (!(selectionTwelve >= numTasks)){
                         mapping.add(selectionTwelve);
-                        menuItems.add(new MenuItem(iconId[selectionTwelve], taskTitles[selectionTwelve]));
+                        taskItems.add(new TaskItem(iconId[selectionTwelve], taskTitles[selectionTwelve]));
                     }
                     break;
                 default:
@@ -567,7 +531,6 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             }
             x = x + 1;
         }
-        tvLabel.setText(taskTitles[mapping.get(adapter.selected)]);
         adapter.notifyDataSetChanged();
     }
 
@@ -575,11 +538,11 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
     private void executeTask(int taskID){
         switch (mapping.get(taskID)){
             case 0:
-                //Open Navigation App
+                // Open Navigation App
                 NavAppHelper.open(this);
                 break;
             case 1:
-                //Navigate Home
+                // Navigate Home
                 String address = sharedPrefs.getString("prefHomeAddress","");
                 if (!address.equals("")) {
                     LatLng location = getLocationFromAddress(TaskActivity.this, address);
@@ -588,7 +551,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                         destination.setLatitude(location.latitude);
                         destination.setLongitude(location.longitude);
                         // Check Location permissions
-                        if (getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                             Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                         } else {
                             try {
@@ -598,7 +561,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                                 Criteria criteria = new Criteria();
                                 try {
                                     String bestProvider = locationManager.getBestProvider(criteria, false);
-                                    Log.d(TAG,"Trying Best Provider: " + bestProvider);
+                                    Log.d(TAG, "Trying Best Provider: " + bestProvider);
                                     Location currentLocation = locationManager.getLastKnownLocation(bestProvider);
 
                                     NavAppHelper.navigateTo(this, currentLocation, destination);
@@ -617,8 +580,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 }
                 break;
             case 2:
-                //Call Favorite Number
-                if (getApplication().checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                // Call Favorite Number
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
                     String phonenumber = sharedPrefs.getString("prefHomePhone", "");
@@ -632,9 +595,9 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 }
                 break;
             case 3:
-                //Call Contact
+                // Call Contact
                 // Check Read Contacts permissions
-                if (getApplication().checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
                     // Android version is lesser than 6.0 or the permission is already granted.
@@ -643,10 +606,9 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 }
                 break;
             case 4:
-                //Take photo
-                Log.d(TAG,"Take Rear Photo");
-                if (getApplication().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                        || getApplication().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                // Take photo
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                        || ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
                     Intent photoIntent = new Intent(TaskActivity.this, PhotoService.class);
@@ -655,28 +617,35 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 }
                 break;
             case 5:
-                //Take selfie
-                Log.d(TAG,"Take Front Photo");
+                // Take selfie
                 // Check Camera permissions
-                if (getApplication().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                        || getApplication().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                        || ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
                     Intent photoIntent = new Intent(TaskActivity.this, PhotoService.class);
-                    photoIntent.putExtra("camera",CameraCharacteristics.LENS_FACING_FRONT);
+                    photoIntent.putExtra("camera", CameraCharacteristics.LENS_FACING_FRONT);
                     startService(photoIntent);
                 }
                 break;
             case 6:
-                //Record Video
+                // Record Video
                 // Check Camera permissions
-                if (getApplication().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                        || getApplication().checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
-                        || getApplication().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                        || !Settings.canDrawOverlays(TaskActivity.this)){
+                boolean canDrawOverlays = false;
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if(Settings.canDrawOverlays(TaskActivity.this)){
+                        canDrawOverlays = true;
+                    }
+                } else {
+                    canDrawOverlays = true;
+                }
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                        || ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
+                        || ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                        || !canDrawOverlays) {
                     Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
-                    if (((MyApplication) TaskActivity.this.getApplication()).getVideoRecording()){
+                    if (((MyApplication) TaskActivity.this.getApplication()).getVideoRecording()) {
                         stopService(new Intent(TaskActivity.this, VideoRecService.class));
                         ((MyApplication) this.getApplication()).setVideoRecording(false);
                     } else {
@@ -687,13 +656,13 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 }
                 break;
             case 7:
-                //Trip Log
+                // Trip Log
                 // Check Write permissions
-                if (getApplication().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                        || getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                        || ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
-                    if (((MyApplication) TaskActivity.this.getApplication()).getTripRecording()){
+                    if (((MyApplication) TaskActivity.this.getApplication()).getTripRecording()) {
                         stopService(new Intent(TaskActivity.this, LoggingService.class));
                         ((MyApplication) this.getApplication()).setTripRecording(false);
                     } else {
@@ -704,9 +673,9 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 }
                 break;
             case 8:
-                //Waypoint
+                // Waypoint
                 // Check Location permissions
-                if (getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
                     try {
@@ -718,7 +687,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                         Criteria criteria = new Criteria();
                         try {
                             String bestProvider = locationManager.getBestProvider(criteria, false);
-                            Log.d(TAG,"Trying Best Provider: " + bestProvider);
+                            Log.d(TAG, "Trying Best Provider: " + bestProvider);
                             Location location = locationManager.getLastKnownLocation(bestProvider);
                             lat = location.getLatitude();
                             lon = location.getLongitude();
@@ -1321,7 +1290,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 break;
         }
 
-        recyclerView.clearFocus();
+        taskListView.clearFocus();
         clTasks.clearFocus();
     }
 
@@ -1410,25 +1379,5 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         }
 
         return p1;
-    }
-}
-
-class CustomScrollingLayoutCallback extends WearableLinearLayoutManager.LayoutCallback {
-    @Override
-    public void onLayoutFinished(View child, RecyclerView parent) {
-        final float MAX_ICON_PROGRESS = 0.65f;
-        try {
-            float centerOffset              = ((float) child.getHeight() / 2.0f) / (float) parent.getHeight();
-            float yRelativeToCenterOffset   = (child.getY() / parent.getHeight()) + centerOffset;
-
-            // Normalize for center, adjusting to the maximum scale
-            float progressToCenter          = Math.min(Math.abs(0.5f - yRelativeToCenterOffset), MAX_ICON_PROGRESS);
-
-            // Follow a curved path, rather than triangular!
-            progressToCenter                = (float)(Math.cos(progressToCenter * Math.PI * 0.90f));
-
-            child.setScaleX (progressToCenter);
-            child.setScaleY (progressToCenter);
-        } catch (Exception ignored) {}
     }
 }

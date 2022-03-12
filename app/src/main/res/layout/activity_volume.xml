@@ -5,7 +5,7 @@
     android:id="@+id/layout_volume"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VolumeActivity"
+    tools:context=".TaskList.Activities.VolumeActivity"
     android:background="?attr/backgroundColor">
 
     <ImageView

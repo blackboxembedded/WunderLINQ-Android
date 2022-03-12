@@ -3,37 +3,32 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layout_new_task"
+    android:id="@+id/layout_task"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/backgroundColor"
     android:focusable="false"
     tools:context=".TaskList.TaskActivity">
-
-    <androidx.wear.widget.WearableRecyclerView
-        android:id="@+id/main_menu_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+<!--
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/main_task_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:scrollbars="none"
         android:focusable="false"
-        android:background="@drawable/ic_wwheel"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
-
-    <TextView
-        android:id="@+id/tvLabel"
-        android:layout_width="0dp"
+-->
+    <com.yarolegovich.discretescrollview.DiscreteScrollView
+        android:id="@+id/main_task_view"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text=""
-        android:textAlignment="center"
-        android:textSize="36sp"
-        android:textStyle="bold"
         android:focusable="false"
+        android:background="@color/task_recycleview"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
+        app:layout_constraintStart_toStartOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

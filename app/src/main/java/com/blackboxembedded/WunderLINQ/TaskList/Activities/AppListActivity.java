@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-package com.blackboxembedded.WunderLINQ;
+package com.blackboxembedded.WunderLINQ.TaskList.Activities;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +38,11 @@ import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.blackboxembedded.WunderLINQ.AppInfo;
+import com.blackboxembedded.WunderLINQ.AppUtils;
+import com.blackboxembedded.WunderLINQ.OnSwipeTouchListener;
+import com.blackboxembedded.WunderLINQ.R;
 
 import java.util.ArrayList;
 import java.util.List;

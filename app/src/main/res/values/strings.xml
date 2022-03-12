@@ -651,6 +651,7 @@
     <string name="nav_app_calimoto">Calimoto</string>
     <string name="nav_app_copilot">CoPilot GPS</string>
     <string name="nav_app_yandex">Yandex.Navigator</string>
+    <string name="nav_app_cartograph">Cartograph Maps 3</string>
     <string-array name="nav_apps_array" translatable="false">
         <item name="1">@string/nav_app_default</item>
         <item name="2">@string/nav_app_google</item>
@@ -667,6 +668,7 @@
         <item name="13">@string/nav_app_calimoto</item>
         <item name="14">@string/nav_app_copilot</item>
         <item name="15">@string/nav_app_yandex</item>
+        <item name="16">@string/nav_app_cartograph</item>
     </string-array>
     <string-array name="nav_apps_arrayValues" translatable="false">
         <item name="1">1</item>
@@ -684,6 +686,7 @@
         <item name="13">12</item>
         <item name="14">14</item>
         <item name="15">15</item>
+        <item name="16">16</item>
     </string-array>
     <string name="pref_roadbook_app_title">Roadbook App</string>
     <string name="roadbook_app_rabbitrally">Rabbit Rally</string>

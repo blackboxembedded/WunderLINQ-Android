@@ -106,6 +106,9 @@ public class NavAppHelper {
             case "15": //Yandex
                 url = "yandexnavi://";
                 break;
+            case "16": //Cartograph
+                url = "cartograph://";
+                break;
         }
         Log.d("NavHelper","Nav APP URL: " + url);
         try {
@@ -179,8 +182,10 @@ public class NavAppHelper {
             case "15": //Yandex
                 navUrl = "yandexnavi://build_route_on_map?lat_to=" + String.valueOf(end.getLatitude()) + "&lon_to=" + String.valueOf(end.getLongitude()) ;
                 break;
+            case "16": //Cartograph
+                navUrl = "cartograph://route?geo="+String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&back_url=wunderlinq://";
+                break;
         }
-        Log.d("NavHelper","Navigate URL: " + navUrl);
         if (!navApp.equals("6")) {
             try {
                 homeNavIntent.setData(Uri.parse(navUrl));
@@ -254,8 +259,10 @@ public class NavAppHelper {
             case "15": //Yandex
                 navUrl = "yandexnavi://show_point_on_map?lat=" + String.valueOf(waypoint.getLatitude()) + "&lon=" + String.valueOf(waypoint.getLongitude()) + "&zoom=12&no-balloon=0&desc=" + label;
                 break;
+            case "16": //Cartograph
+                navUrl = "cartograph://view?geo="+String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&back_url=wunderlinq://";
+                break;
         }
-        Log.d("NavHelper","View WPT URL: " + navUrl);
         if (!navApp.equals("6")) {
             try {
                 navIntent.setData(Uri.parse(navUrl));

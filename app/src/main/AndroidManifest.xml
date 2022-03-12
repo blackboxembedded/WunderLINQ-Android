@@ -10,6 +10,7 @@
         android:name="android.hardware.telephony"
         android:required="false" />
 
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"  />
@@ -41,7 +42,7 @@
         android:theme="@style/WLQTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".VolumeActivity"
+            android:name=".TaskList.Activities.VolumeActivity"
             android:exported="false" />
         <activity android:name=".PermissionsActivity" android:exported="false">
             <intent-filter>
@@ -50,7 +51,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".AppListActivity" android:exported="false"/>
+        <activity android:name=".TaskList.Activities.AppListActivity" android:exported="false"/>
         <activity android:name=".HWSettingsActionActivity" android:exported="false"/>
         <!-- Work Around for GMaps crash https://issuetracker.google.com/issues/79478779 -->
         <uses-library
@@ -111,7 +112,7 @@
         </activity>
         <activity android:name=".SettingsActivity" android:exported="false"/>
         <activity android:name=".BikeInfoActivity" android:exported="false"/>
-        <activity android:name=".ContactListActivity" android:exported="false"/>
+        <activity android:name=".TaskList.Activities.ContactListActivity" android:exported="false"/>
         <activity android:name=".FaultActivity" android:exported="false"/>
         <activity
             android:name=".GeoDataActivity"
@@ -122,7 +123,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".AddWaypointActivity"
+            android:name=".TaskList.Activities.AddWaypointActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -158,7 +159,7 @@
             android:name=".TripViewActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".WaypointNavActivity"
+        <activity android:name=".TaskList.Activities.WaypointNavActivity"
             android:exported="true">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
@@ -180,7 +181,7 @@
             android:name=".HWSettingsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".WeatherMapActivity" />
+        <activity android:name=".TaskList.Activities.WeatherMapActivity" />
         <activity
             android:name=".DashActivity"
             android:exported="false"

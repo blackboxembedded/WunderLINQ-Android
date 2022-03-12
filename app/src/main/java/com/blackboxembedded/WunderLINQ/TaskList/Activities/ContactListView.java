@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-package com.blackboxembedded.WunderLINQ;
+package com.blackboxembedded.WunderLINQ.TaskList.Activities;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
@@ -25,6 +25,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.blackboxembedded.WunderLINQ.R;
 
 import java.util.ArrayList;
 

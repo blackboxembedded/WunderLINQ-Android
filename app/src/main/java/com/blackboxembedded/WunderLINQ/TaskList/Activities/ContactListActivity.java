@@ -15,11 +15,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-package com.blackboxembedded.WunderLINQ;
+package com.blackboxembedded.WunderLINQ.TaskList.Activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -33,7 +32,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
@@ -51,6 +49,11 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
+import com.blackboxembedded.WunderLINQ.AppUtils;
+import com.blackboxembedded.WunderLINQ.OnSwipeTouchListener;
+import com.blackboxembedded.WunderLINQ.R;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -129,24 +132,18 @@ public class ContactListActivity extends AppCompatActivity {
         showActionBar();
 
         // Check Read Contacts permissions
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (this.checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(getString(R.string.contacts_alert_title));
-                builder.setMessage(getString(R.string.contacts_alert_body));
-                builder.setPositiveButton(android.R.string.ok, null);
-                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @TargetApi(23)
-                    public void onDismiss(DialogInterface dialog) {
-                        requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
-                    }
-                });
-                builder.show();
-            } else {
-                // Android version is lesser than 6.0 or the permission is already granted.
-                updateList();
-            }
-        }  else {
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(getString(R.string.contacts_alert_title));
+            builder.setMessage(getString(R.string.contacts_alert_body));
+            builder.setPositiveButton(android.R.string.ok, null);
+            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                public void onDismiss(DialogInterface dialog) {
+                    ActivityCompat.requestPermissions(ContactListActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
+                }
+            });
+            builder.show();
+        } else {
             // Android version is lesser than 6.0 or the permission is already granted.
             updateList();
         }
@@ -178,6 +175,7 @@ public class ContactListActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_REQUEST_READ_CONTACTS) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission is granted
@@ -191,8 +189,8 @@ public class ContactListActivity extends AppCompatActivity {
 
     public void updateList(){
         // Check the SDK version and whether the permission is already granted or not.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(ContactListActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
             //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
         } else {
             // Android version is lesser than 6.0 or the permission is already granted.
@@ -277,24 +275,18 @@ public class ContactListActivity extends AppCompatActivity {
                     lastPosition = position;
                     // Call Number
                     boolean callPerms = false;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (getApplication().checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                            final AlertDialog.Builder builder = new AlertDialog.Builder(ContactListActivity.this);
-                            builder.setTitle(getString(R.string.call_alert_title));
-                            builder.setMessage(getString(R.string.call_alert_body));
-                            builder.setPositiveButton(android.R.string.ok, null);
-                            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                @TargetApi(23)
-                                public void onDismiss(DialogInterface dialog) {
-                                    requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
-                                }
-                            });
-                            builder.show();
-                        } else {
-                            // Android version is lesser than 6.0 or the permission is already granted.
-                            callPerms = true;
-                        }
-                    }  else {
+                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(ContactListActivity.this);
+                        builder.setTitle(getString(R.string.call_alert_title));
+                        builder.setMessage(getString(R.string.call_alert_body));
+                        builder.setPositiveButton(android.R.string.ok, null);
+                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            public void onDismiss(DialogInterface dialog) {
+                                ActivityCompat.requestPermissions(ContactListActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
+                            }
+                        });
+                        builder.show();
+                    } else {
                         // Android version is lesser than 6.0 or the permission is already granted.
                         callPerms = true;
                     }

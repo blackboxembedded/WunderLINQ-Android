@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-package com.blackboxembedded.WunderLINQ;
+package com.blackboxembedded.WunderLINQ.TaskList.Activities;
 
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
@@ -43,6 +43,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.blackboxembedded.WunderLINQ.Data;
+import com.blackboxembedded.WunderLINQ.R;
+import com.blackboxembedded.WunderLINQ.Utils;
+import com.blackboxembedded.WunderLINQ.WaypointActivity;
+import com.blackboxembedded.WunderLINQ.WaypointDatasource;
+import com.blackboxembedded.WunderLINQ.WaypointRecord;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;

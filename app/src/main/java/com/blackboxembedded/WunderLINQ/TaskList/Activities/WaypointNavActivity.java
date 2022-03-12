@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-package com.blackboxembedded.WunderLINQ;
+package com.blackboxembedded.WunderLINQ.TaskList.Activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -44,7 +44,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import com.blackboxembedded.WunderLINQ.AppUtils;
+import com.blackboxembedded.WunderLINQ.NavAppHelper;
+import com.blackboxembedded.WunderLINQ.OnSwipeTouchListener;
+import com.blackboxembedded.WunderLINQ.OsmAndHelper;
+import com.blackboxembedded.WunderLINQ.R;
+import com.blackboxembedded.WunderLINQ.WaypointDatasource;
+import com.blackboxembedded.WunderLINQ.WaypointListView;
+import com.blackboxembedded.WunderLINQ.WaypointRecord;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
@@ -129,7 +138,7 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
                 WaypointRecord record = (WaypointRecord) waypointList.getItemAtPosition(position);
 
                 // Check Location permissions
-                if (getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(WaypointNavActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
                     // Get the location manager

@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-package com.blackboxembedded.WunderLINQ;
+package com.blackboxembedded.WunderLINQ.TaskList.Activities;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -36,6 +36,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blackboxembedded.WunderLINQ.AppUtils;
+import com.blackboxembedded.WunderLINQ.Data;
+import com.blackboxembedded.WunderLINQ.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
@@ -48,7 +51,6 @@ import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
 import com.google.android.gms.maps.model.UrlTileProvider;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.MapsInitializer.Renderer;
 import com.google.android.gms.maps.OnMapsSdkInitializedCallback;
 

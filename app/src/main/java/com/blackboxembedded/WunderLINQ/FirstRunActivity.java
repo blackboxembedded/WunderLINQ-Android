@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -38,6 +39,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import static android.app.AppOpsManager.MODE_ALLOWED;
 import static android.app.AppOpsManager.OPSTR_GET_USAGE_STATS;
@@ -45,8 +47,6 @@ import static android.os.Process.myUid;
 
 import org.apache.commons.io.FileUtils;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class FirstRunActivity extends AppCompatActivity {
@@ -120,8 +120,8 @@ public class FirstRunActivity extends AppCompatActivity {
                             // Read Contacts permission
                             tvMessage.setText(getString(R.string.camera_alert_body));
 
-                            if (getApplication().checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-                                requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
+                            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                                ActivityCompat.requestPermissions(FirstRunActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
                             }
 
                             step = step + 1;
@@ -130,8 +130,8 @@ public class FirstRunActivity extends AppCompatActivity {
                             // Camera permission
                             tvMessage.setText(getString(R.string.call_alert_body));
 
-                            if (getApplication().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                                requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
+                            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                                ActivityCompat.requestPermissions(FirstRunActivity.this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
                             }
 
                             step = step + 1;
@@ -140,8 +140,8 @@ public class FirstRunActivity extends AppCompatActivity {
                             // Call phone permission
                             tvMessage.setText(getString(R.string.record_audio_alert_body));
 
-                            if (getApplication().checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                                requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, PERMISSION_REQUEST_CALL_PHONE);
+                            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                ActivityCompat.requestPermissions(FirstRunActivity.this, new String[]{Manifest.permission.CALL_PHONE}, PERMISSION_REQUEST_CALL_PHONE);
                             }
 
                             step = step + 1;
@@ -150,8 +150,8 @@ public class FirstRunActivity extends AppCompatActivity {
                             // Read Audio permission
                             tvMessage.setText(getString(R.string.write_alert_body));
 
-                            if (getApplication().checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                                requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSION_REQUEST_RECORD_AUDIO);
+                            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                                ActivityCompat.requestPermissions(FirstRunActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSION_REQUEST_RECORD_AUDIO);
                             }
 
                             step = step + 1;
@@ -160,8 +160,8 @@ public class FirstRunActivity extends AppCompatActivity {
                             // Write storage permission
                             tvMessage.setText(getString(R.string.location_alert_body));
 
-                            if (getApplication().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_WRITE_STORAGE);
+                            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                                ActivityCompat.requestPermissions(FirstRunActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_WRITE_STORAGE);
                             }
 
                             step = step + 1;
@@ -170,8 +170,8 @@ public class FirstRunActivity extends AppCompatActivity {
                             // Location permission
                             tvMessage.setText(getString(R.string.overlay_alert_body));
 
-                            if (getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_FINE_LOCATION);
+                            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                ActivityCompat.requestPermissions(FirstRunActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_FINE_LOCATION);
                             }
 
                             step = step + 1;
@@ -180,10 +180,12 @@ public class FirstRunActivity extends AppCompatActivity {
                             // Overlay permission
                             tvMessage.setText(getString(R.string.notification_alert_body));
 
-                            if (!Settings.canDrawOverlays(getApplication())) {
-                                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                        Uri.parse("package:" + getPackageName()));
-                                startActivity(intent);
+                            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                if (!Settings.canDrawOverlays(getApplication())) {
+                                    Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                            Uri.parse("package:" + getPackageName()));
+                                    startActivity(intent);
+                                }
                             }
 
                             step = step + 1;
