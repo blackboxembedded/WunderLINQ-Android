@@ -22,6 +22,8 @@
     <string name="location_alert_title">WunderLINQ needs location permission</string>
     <string name="location_alert_body">The WunderLINQ app needs access to your location to allow background track recording and data logging.
         Location permission is also used for data points such as altitude, GPS speed, and bearing.</string>
+    <string name="btconnect_alert_title">WunderLINQ needs Bluetooth permission</string>
+    <string name="btconnect_alert_body">The WunderLINQ app needs the ability to connect to the WunderLINQ Hardware.</string>
     <string name="write_alert_title">WunderLINQ needs write permission</string>
     <string name="write_alert_body">The WunderLINQ app needs access to write files for track logging and photos.</string>
     <string name="overlay_alert_title">WunderLINQ needs overlay permission</string>
@@ -30,6 +32,7 @@
     <string name="notification_alert_body">The WunderLINQ app needs notification access so that it can control your music player.</string>
     <string name="negative_alert_title">Functionality limited</string>
     <string name="negative_location_alert_body">Since location access has not been granted, this app will not be able to save waypoints or log your location.</string>
+    <string name="negative_btconnect_alert_body">Since Bluetooth permission has not been granted, this app will not be able to connect to the WunderLINQ hardware.</string>
     <string name="negative_write_alert_body">Since write access has not been granted, this app will not be able to save files.</string>
     <string name="negative_camera_alert_body">Since camera access has not been granted, this app will not be able to take photos or videos.</string>
     <string name="negative_contacts_alert_body">Since contact access has not been granted, this app will not be able to display or call your contacts.</string>
@@ -908,6 +911,7 @@
     <string name="permission_overlays_label">Draw Overlays</string>
     <string name="permission_usagestats_label">Usage Stats</string>
     <string name="permission_accessbility_label">Accessibility Service</string>
+    <string name="permission_btconnect_label">Connect to WunderLINQ hardware</string>
 
     <string name="share">Share</string>
     <string name="share_gpx">Share GPX</string>

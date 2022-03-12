@@ -64,6 +64,7 @@ public class PermissionsActivity extends AppCompatActivity {
     public static final int PERMISSION_OVERLAY = 8;
     public static final int PERMISSION_USAGESTATS = 9;
     public static final int PERMISSION_ACCESSIBILITY = 10;
+    public static final int PERMISSION_BLUETOOTH_CONNECT = 11;
 
     private ListView permissionsList;
     List<PermissionRecord> listValues;
@@ -145,6 +146,11 @@ public class PermissionsActivity extends AppCompatActivity {
                             Intent accessibilityIntent = new Intent();
                             accessibilityIntent.setAction(Settings.ACTION_ACCESSIBILITY_SETTINGS);
                             startActivity(accessibilityIntent);
+                        }
+                        break;
+                    case PERMISSION_BLUETOOTH_CONNECT:
+                        if (ActivityCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(PermissionsActivity.this,new String[]{Manifest.permission.BLUETOOTH_CONNECT}, PERMISSION_BLUETOOTH_CONNECT);
                         }
                         break;
                     default:
@@ -283,6 +289,13 @@ public class PermissionsActivity extends AppCompatActivity {
             accessibilityPermission = true;
         }
         listValues.add(new PermissionRecord(PERMISSION_ACCESSIBILITY, getString(R.string.permission_accessbility_label), accessibilityPermission));
+
+        //Bluetooth Connect
+        boolean btconnectPermission = false;
+        if (ActivityCompat.checkSelfPermission(this,Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+            btconnectPermission = true;
+        }
+        listValues.add(new PermissionRecord(PERMISSION_BLUETOOTH_CONNECT, getString(R.string.permission_btconnect_label), btconnectPermission));
     }
 
     @Override
@@ -376,11 +389,28 @@ public class PermissionsActivity extends AppCompatActivity {
             }
             case PERMISSION_LOCATION: {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d(TAG, "coarse location permission granted");
+                    Log.d(TAG, "Location permission granted");
                 } else {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle(getString(R.string.negative_alert_title));
                     builder.setMessage(getString(R.string.negative_location_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
+                }
+                break;
+            }
+            case PERMISSION_BLUETOOTH_CONNECT: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "BLUETOOTH_CONNECT permission granted");
+                } else {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.negative_alert_title));
+                    builder.setMessage(getString(R.string.negative_btconnect_alert_body));
                     builder.setPositiveButton(android.R.string.ok, null);
                     builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override

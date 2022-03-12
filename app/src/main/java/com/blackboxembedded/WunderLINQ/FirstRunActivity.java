@@ -59,6 +59,7 @@ public class FirstRunActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_READ_CONTACTS = 102;
     private static final int PERMISSION_REQUEST_WRITE_STORAGE = 112;
     private static final int PERMISSION_REQUEST_RECORD_AUDIO = 122;
+    private static final int PERMISSION_REQUEST_BLUETOOTH_CONNECT = 132;
 
     private int step = 0;
     private TextView tvMessage;
@@ -216,7 +217,7 @@ public class FirstRunActivity extends AppCompatActivity {
                             break;
                         case 10:
                             //Accessibility service
-                            tvMessage.setText(getString(R.string.firstrun_end));
+                            tvMessage.setText(getString(R.string.btconnect_alert_body));
 
                             if (!isAccessibilityServiceEnabled(getApplication(), MyAccessibilityService.class)) {
                                 Intent accessibilityIntent = new Intent();
@@ -227,6 +228,20 @@ public class FirstRunActivity extends AppCompatActivity {
                             step = step + 1;
                             break;
                         case 11:
+                            // Bluetooth Connect permission
+
+                            tvMessage.setText(getString(R.string.firstrun_end));
+
+                            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                                Log.d(TAG,"Requesting BT_CONNECT permission");
+                                ActivityCompat.requestPermissions(FirstRunActivity.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, PERMISSION_REQUEST_BLUETOOTH_CONNECT);
+                            } else {
+                                Log.d(TAG,"NOT Requesting BT_CONNECT permission");
+                            }
+
+                            step = step + 1;
+                            break;
+                        case 12:
                             SharedPreferences.Editor editor = sharedPrefs.edit();
                             editor.putBoolean("FIRST_LAUNCH", false);
                             editor.apply();
@@ -339,6 +354,23 @@ public class FirstRunActivity extends AppCompatActivity {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle(getString(R.string.negative_alert_title));
                     builder.setMessage(getString(R.string.negative_location_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
+                }
+                break;
+            }
+            case PERMISSION_REQUEST_BLUETOOTH_CONNECT: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "BLUETOOTH_CONNECT permission granted");
+                } else {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.negative_alert_title));
+                    builder.setMessage(getString(R.string.negative_btconnect_alert_body));
                     builder.setPositiveButton(android.R.string.ok, null);
                     builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override

@@ -17,6 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.PictureInPictureParams;
@@ -72,6 +73,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.gridlayout.widget.GridLayout;
 
@@ -147,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         int orientation = Integer.parseInt(sharedPrefs.getString("prefOrientation", "0"));
-        switch (orientation){
+        switch (orientation) {
             case 0:
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
                 break;
@@ -171,11 +173,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         View view = findViewById(R.id.layout_main);
         gridLayout = findViewById(R.id.gridLayout);
 
-        gestureDetector = new GestureDetectorListener(this){
+        gestureDetector = new GestureDetectorListener(this) {
 
             @Override
             public void onPressLong() {
-                if ( cell >= 1 && cell <= 15){
+                if (cell >= 1 && cell <= 15) {
                     showCellSelector(cell);
                 }
             }
@@ -212,10 +214,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             Log.d(TAG, "Brand: " + Build.BRAND);
             Log.d(TAG, "Device: " + Build.DEVICE);
             //Only quit on real device
-            if(!(Build.BRAND.startsWith("Android") && Build.DEVICE.startsWith("generic"))) {
+            if (!(Build.BRAND.startsWith("Android") && Build.DEVICE.startsWith("generic"))) {
                 finish();
             } else {
-                Log.d(TAG,"Running in the emulator");
+                Log.d(TAG, "Running in the emulator");
             }
         }
 
@@ -231,10 +233,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             Log.d(TAG, "Brand: " + Build.BRAND);
             Log.d(TAG, "Device: " + Build.DEVICE);
             //Only quit if on a real device
-            if(!(Build.BRAND.startsWith("Android") && Build.DEVICE.startsWith("generic"))){
+            if (!(Build.BRAND.startsWith("Android") && Build.DEVICE.startsWith("generic"))) {
                 finish();
             } else {
-                Log.d(TAG,"Running in the emulator");
+                Log.d(TAG, "Running in the emulator");
             }
 
             return;
@@ -243,11 +245,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         // Daily Disclaimer Warning
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         final String currentDate = sdf.format(new Date());
-        if (sharedPrefs.getString("LAST_LAUNCH_DATE","nodate").contains(currentDate)){
+        if (sharedPrefs.getString("LAST_LAUNCH_DATE", "nodate").contains(currentDate)) {
             // Date matches. User has already Launched the app once today. So do nothing.
-        }
-        else
-        {
+        } else {
             // Display dialog text here......
             final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(getString(R.string.disclaimer_alert_title));
@@ -277,14 +277,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         }
 
-        registerReceiver(mBondingBroadcast,new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
+        registerReceiver(mBondingBroadcast, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
 
         bluetoothLeService = new Intent(MainActivity.this, BluetoothLeService.class);
     }
 
-    private void showCellSelector(int cell){
+    private void showCellSelector(int cell) {
         String prefStringKey = "";
-        switch (cell){
+        switch (cell) {
             case 1:
                 prefStringKey = "prefCellOne";
                 break;
@@ -363,11 +363,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         }
     }
 
-    private void showActionBar(){
+    private void showActionBar() {
         View v = layoutInflater.inflate(R.layout.actionbar_nav_main, null);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setDisplayShowHomeEnabled (false);
+        actionBar.setDisplayShowHomeEnabled(false);
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
 
@@ -399,7 +399,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                switch(item.getItemId()) {
+                switch (item.getItemId()) {
                     case R.id.action_bike_info:
                         Intent bikeInfoIntent = new Intent(MainActivity.this, BikeInfoActivity.class);
                         startActivity(bikeInfoIntent);
@@ -458,13 +458,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         @Override
         public void onClick(View v) {
-            switch(v.getId()) {
+            switch (v.getId()) {
                 case R.id.action_connect:
-                    Log.d(TAG,"Connect");
-                    if(!(Build.BRAND.startsWith("Android") && Build.DEVICE.startsWith("generic"))) {
+                    Log.d(TAG, "Connect");
+                    if (!(Build.BRAND.startsWith("Android") && Build.DEVICE.startsWith("generic"))) {
                         setupBLE();
                     } else {
-                        Log.d(TAG,"Running in the emulator");
+                        Log.d(TAG, "Running in the emulator");
                     }
                     break;
                 case R.id.action_back:
@@ -491,19 +491,19 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     protected void onResume() {
-        Log.d(TAG,"In onResume");
+        Log.d(TAG, "In onResume");
         super.onResume();
         startService(bluetoothLeService);
 
-        registerReceiver(mBondingBroadcast,new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
+        registerReceiver(mBondingBroadcast, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
         if (mBluetoothLeService == null) {
-            Log.d(TAG,"mBluetoothLeService is null");
+            Log.d(TAG, "mBluetoothLeService is null");
             //Only use BLE if on a real device
-            if(!(Build.BRAND.startsWith("Android") && Build.DEVICE.startsWith("generic"))) {
+            if (!(Build.BRAND.startsWith("Android") && Build.DEVICE.startsWith("generic"))) {
                 setupBLE();
             } else {
-                Log.d(TAG,"Running in the emulator");
+                Log.d(TAG, "Running in the emulator");
             }
         }
 
@@ -515,36 +515,36 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     protected void onDestroy() {
-        Log.d(TAG,"In onDestroy");
+        Log.d(TAG, "In onDestroy");
         super.onDestroy();
         cancelTimer();
         try {
             unregisterReceiver(mGattUpdateReceiver);
             unregisterReceiver(mBondingBroadcast);
             unbindService(mServiceConnection);
-        } catch (IllegalArgumentException e){
-            Log.d(TAG,e.toString());
+        } catch (IllegalArgumentException e) {
+            Log.d(TAG, e.toString());
         }
         mBluetoothLeService = null;
     }
 
     @Override
     public void onStop() {
-        Log.d(TAG,"In onStop");
+        Log.d(TAG, "In onStop");
         super.onStop();
         cancelTimer();
         try {
             unregisterReceiver(mGattUpdateReceiver);
             unregisterReceiver(mBondingBroadcast);
             unbindService(mServiceConnection);
-        } catch (IllegalArgumentException e){
-            Log.d(TAG,e.toString());
+        } catch (IllegalArgumentException e) {
+            Log.d(TAG, e.toString());
         }
     }
 
     @Override
     protected void onPause() {
-        Log.d(TAG,"In onPause");
+        Log.d(TAG, "In onPause");
         super.onPause();
         cancelTimer();
         try {
@@ -553,13 +553,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             }
             unregisterReceiver(mBondingBroadcast);
             unbindService(mServiceConnection);
-        } catch (IllegalArgumentException e){
-            Log.d(TAG,e.toString());
+        } catch (IllegalArgumentException e) {
+            Log.d(TAG, e.toString());
         }
     }
 
     @Override
-    public void onUserLeaveHint () {
+    public void onUserLeaveHint() {
         //Set Brightness to defaults
         WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
         layoutParams.screenBrightness = -1;
@@ -609,14 +609,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Log.d(TAG,"In onConfigChange");
+        Log.d(TAG, "In onConfigChange");
         gridChange = true;
         updateDisplay();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG,"onActivityResult");
+        Log.d(TAG, "onActivityResult");
         // User chose not to enable Bluetooth.
         if (requestCode == REQUEST_ENABLE_BT && resultCode == Activity.RESULT_CANCELED) {
             finish();
@@ -650,20 +650,25 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     };
 
     private void setupBLE() {
-        Log.d(TAG,"In setupBLE()");
+        Log.d(TAG, "In setupBLE()");
         int wlqCnt = 0;
-        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-        if (!pairedDevices.isEmpty()) {
-            for (BluetoothDevice devices : pairedDevices) {
-                if (devices.getName() != null) {
-                    if (devices.getName().equals(getString(R.string.device_name))) {
-                        wlqCnt = wlqCnt + 1;
-                        Log.d(TAG, "Previously Paired WunderLINQ: " + devices.getAddress());
-                        mDeviceAddress = devices.getAddress();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+            Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+            if (!pairedDevices.isEmpty()) {
+                for (BluetoothDevice devices : pairedDevices) {
+                    if (devices.getName() != null) {
+                        if (devices.getName().equals(getString(R.string.device_name))) {
+                            wlqCnt = wlqCnt + 1;
+                            Log.d(TAG, "Previously Paired WunderLINQ: " + devices.getAddress());
+                            mDeviceAddress = devices.getAddress();
+                        }
                     }
                 }
             }
+        } else {
+            //Request Permission
         }
+
         if (wlqCnt == 0){
             Log.d(TAG, "No paired WunderLINQ: " + mDeviceAddress);
             // Display dialog text here......
