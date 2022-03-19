@@ -654,7 +654,7 @@
     <string name="nav_app_calimoto">Calimoto</string>
     <string name="nav_app_copilot">CoPilot GPS</string>
     <string name="nav_app_yandex">Yandex.Navigator</string>
-    <string name="nav_app_cartograph">Cartograph Maps 3</string>
+    <string name="nav_app_cartograph">Cartograph Maps</string>
     <string-array name="nav_apps_array" translatable="false">
         <item name="1">@string/nav_app_default</item>
         <item name="2">@string/nav_app_google</item>
