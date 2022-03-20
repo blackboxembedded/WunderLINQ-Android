@@ -8,6 +8,8 @@
     <string name="firstrun_start">The WunderLINQ requires a lot of permissions to enable all the cool features the app provides.  On the next few screens we will explain the need for each permission request.
         You will only be presented with these screens this one time.  If you need to enable certain permissions after, you will need to go into Android Settings and enable them.</string>
     <string name="firstrun_end">Thank you for purchasing the WunderLINQ!  Ride Safe.</string>
+    <string name="firstrun_button_ok">Agree</string>
+    <string name="firstrun_button_skip">Disagree</string>
     <!-- Permission Requests -->
     <string name="accessibilityservice_alert_title">WunderLINQ needs to run a Accessibility Service</string>
     <string name="accessibilityservice_alert_body">The WunderLINQ app uses an Accessibility service to enable Picture-in-Picture launching.</string>

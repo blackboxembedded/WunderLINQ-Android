@@ -61,7 +61,7 @@ public class NavAppHelper {
                 url = "https://waze.com/ul";
                 break;
             case "5": //Maps.me
-                url = "https://dlink.maps.me/?back_url=wunderlinq://datagrid";
+                url = "mapsme://?back_url=wunderlinq://datagrid";
                 break;
             case "6": //OsmAnd
                 url = "http://osmand.net/go";
@@ -146,7 +146,7 @@ public class NavAppHelper {
                 navUrl = "https://www.waze.com/ul?ll=" + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&navigate=yes&zoom=17";
                 break;
             case "5": //Maps.me
-                navUrl = "https://dlink.maps.me/route?sll=" + String.valueOf(start.getLatitude()) + "," + String.valueOf(start.getLongitude()) + "&saddr=Start&dll=" + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&daddr=Home&type=vehicle&back_url=wunderlinq://datagrid";
+                navUrl = "mapsme://route?sll=" + String.valueOf(start.getLatitude()) + "," + String.valueOf(start.getLongitude()) + "&saddr=Start&dll=" + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&daddr=Home&type=vehicle&back_url=wunderlinq://datagrid";
                 break;
             case "6": //OsmAnd
                 OsmAndHelper osmAndHelper = new OsmAndHelper(activity, OsmAndHelper.REQUEST_OSMAND_API, null);
@@ -224,7 +224,7 @@ public class NavAppHelper {
                 navUrl = "https://www.waze.com/ul?ll=" + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&zoom=10";
                 break;
             case "5": //Maps.me
-                navUrl = "https://dlink.maps.me/map?ll=" + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&n=" + label + "&back_url=wunderlinq://datagrid";
+                navUrl = "mapsme://map?ll=" + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&n=" + label + "&back_url=wunderlinq://datagrid";
                 break;
             case "6": //OsmAnd
                 //navUrl = "osmand.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
