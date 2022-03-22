@@ -96,7 +96,7 @@ public class FirstRunActivity extends AppCompatActivity {
             }
         }
 
-        if (sharedPrefs.getBoolean("FIRST_LAUNCH",true)){
+        if (!sharedPrefs.getBoolean("FIRST_LAUNCH",true)){
             startActivity(mainIntent);
             finish();
         } else {
