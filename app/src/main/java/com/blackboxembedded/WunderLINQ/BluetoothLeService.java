@@ -43,6 +43,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -851,7 +852,8 @@ public class BluetoothLeService extends Service {
         // We want to directly connect to the device, so we are setting the
         // autoConnect
         // parameter to false.
-        if (ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+        if ((ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED)
+        || (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)) {
             mBluetoothGatt = device.connectGatt(MyApplication.getContext(), false, mGattCallback);
             mBluetoothDeviceAddress = address;
             mBluetoothDeviceName = devicename;
@@ -874,7 +876,8 @@ public class BluetoothLeService extends Service {
     public static void disconnect() {
         Log.d(TAG,"disconnect called");
         if (mBluetoothAdapter != null || mBluetoothGatt != null) {
-            if (ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+            if ((ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED)
+                || (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)) {
                 mBluetoothGatt.disconnect();
                 String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
                         "Disconnection request sent";
@@ -892,7 +895,8 @@ public class BluetoothLeService extends Service {
 
     public static void discoverServices() {
         if (mBluetoothAdapter != null || mBluetoothGatt != null) {
-            if (ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+            if ((ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED)
+                    || (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)) {
                 mBluetoothGatt.discoverServices();
                 String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
                         "Service discovery request sent";
@@ -909,7 +913,8 @@ public class BluetoothLeService extends Service {
      * resources are released properly.
      */
     public static void close() {
-        if (ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+        if ((ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED)
+                || (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)) {
             mBluetoothGatt.close();
         } else {
             //Request permission
@@ -948,7 +953,8 @@ public class BluetoothLeService extends Service {
         boolean result = commandQueue.add(new Runnable() {
             @Override
             public void run() {
-                if (ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                if ((ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED)
+                        || (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)) {
                     if (!mBluetoothGatt.readCharacteristic(characteristic)) {
                         Log.e(TAG, String.format("ERROR: readCharacteristic failed for characteristic: %s", characteristic.getUuid()));
                         completedCommand();
@@ -1014,7 +1020,8 @@ public class BluetoothLeService extends Service {
                     currentWriteBytes = bytesToWrite;
                     characteristic.setWriteType(writeTypeInternal);
                     characteristic.setValue(bytesToWrite);
-                    if (ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                    if ((ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED)
+                            || (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)) {
                         if (!mBluetoothGatt.writeCharacteristic(characteristic)) {
                             Log.d(TAG, String.format("writeCharacteristic failed for characteristic: %s", characteristic.getUuid()));
                             completedCommand();
@@ -1045,7 +1052,8 @@ public class BluetoothLeService extends Service {
      */
     public static void setCharacteristicNotification(
             BluetoothGattCharacteristic characteristic, boolean enabled) {
-        if (ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+        if ((ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED)
+                || (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)) {
             if (mBluetoothAdapter == null || mBluetoothGatt == null) {
                 return;
             }

@@ -652,7 +652,15 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private void setupBLE() {
         Log.d(TAG, "In setupBLE()");
         int wlqCnt = 0;
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+        boolean blePermission = true;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                blePermission = false;
+                //TODO Request Permission
+                Log.d(TAG, "NO BLUETOOTH_CONNECT Permission");
+            }
+        }
+        if (blePermission) {
             Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
             if (!pairedDevices.isEmpty()) {
                 for (BluetoothDevice devices : pairedDevices) {
@@ -665,12 +673,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                 }
             }
-        } else {
-            //Request Permission
         }
 
         if (wlqCnt == 0){
-            Log.d(TAG, "No paired WunderLINQ: " + mDeviceAddress);
+            Log.d(TAG, "No paired WunderLINQ");
             // Display dialog text here......
             final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
             builder.setTitle(getString(R.string.no_pairing_alert_title));

@@ -235,9 +235,11 @@ public class FirstRunActivity extends AppCompatActivity {
                     buttonSkip.setVisibility(View.GONE);
                     buttonOk.setText(R.string.alert_btn_ok);
                     if (v.getId() == R.id.buttonOK) {
-                        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                            Log.d(TAG, "Requesting BT_CONNECT permission");
-                            ActivityCompat.requestPermissions(FirstRunActivity.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, PERMISSION_REQUEST_BLUETOOTH_CONNECT);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                                Log.d(TAG, "Requesting BT_CONNECT permission");
+                                ActivityCompat.requestPermissions(FirstRunActivity.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, PERMISSION_REQUEST_BLUETOOTH_CONNECT);
+                            }
                         }
                     }
                     step = step + 1;
