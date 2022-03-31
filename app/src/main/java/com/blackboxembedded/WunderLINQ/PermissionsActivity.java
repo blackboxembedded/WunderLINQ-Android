@@ -149,7 +149,7 @@ public class PermissionsActivity extends AppCompatActivity {
                         }
                         break;
                     case PERMISSION_BLUETOOTH_CONNECT:
-                        if (ActivityCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                        if (ActivityCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                             ActivityCompat.requestPermissions(PermissionsActivity.this,new String[]{Manifest.permission.BLUETOOTH_CONNECT}, PERMISSION_BLUETOOTH_CONNECT);
                         }
                         break;
@@ -293,6 +293,8 @@ public class PermissionsActivity extends AppCompatActivity {
         //Bluetooth Connect
         boolean btconnectPermission = false;
         if (ActivityCompat.checkSelfPermission(this,Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+            btconnectPermission = true;
+        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
             btconnectPermission = true;
         }
         listValues.add(new PermissionRecord(PERMISSION_BLUETOOTH_CONNECT, getString(R.string.permission_btconnect_label), btconnectPermission));
