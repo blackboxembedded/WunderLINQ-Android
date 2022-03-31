@@ -493,18 +493,18 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     protected void onResume() {
         Log.d(TAG, "In onResume");
         super.onResume();
-        startService(bluetoothLeService);
+        //Only use BLE if on a real device
+        if (!(Build.BRAND.startsWith("Android") && Build.DEVICE.startsWith("generic"))) {
+            startService(bluetoothLeService);
 
-        registerReceiver(mBondingBroadcast, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
-        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-        if (mBluetoothLeService == null) {
-            Log.d(TAG, "mBluetoothLeService is null");
-            //Only use BLE if on a real device
-            if (!(Build.BRAND.startsWith("Android") && Build.DEVICE.startsWith("generic"))) {
+            registerReceiver(mBondingBroadcast, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
+            registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+            if (mBluetoothLeService == null) {
+                Log.d(TAG, "mBluetoothLeService is null");
                 setupBLE();
-            } else {
-                Log.d(TAG, "Running in the emulator");
             }
+        } else {
+            Log.d(TAG, "Running in the emulator");
         }
 
         getSupportActionBar().show();
