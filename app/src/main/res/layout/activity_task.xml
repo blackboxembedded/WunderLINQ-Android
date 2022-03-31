@@ -9,24 +9,12 @@
     android:background="?attr/backgroundColor"
     android:focusable="false"
     tools:context=".TaskList.TaskActivity">
-<!--
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/main_task_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:focusable="false"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
--->
     <com.yarolegovich.discretescrollview.DiscreteScrollView
         android:id="@+id/main_task_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:focusable="false"
-        android:background="@color/task_recycleview"
+        android:drawable="@color/task_recycleview"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
