@@ -53,13 +53,13 @@ public class FirstRunActivity extends AppCompatActivity {
 
     private final static String TAG = "FirstRunActivity";
 
-    private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
-    private static final int PERMISSION_REQUEST_CAMERA = 100;
-    private static final int PERMISSION_REQUEST_CALL_PHONE = 101;
-    private static final int PERMISSION_REQUEST_READ_CONTACTS = 102;
-    private static final int PERMISSION_REQUEST_WRITE_STORAGE = 112;
-    private static final int PERMISSION_REQUEST_RECORD_AUDIO = 122;
-    private static final int PERMISSION_REQUEST_BLUETOOTH_CONNECT = 132;
+    private static final int PERMISSION_REQUEST_FINE_LOCATION = 100;
+    private static final int PERMISSION_REQUEST_CAMERA = 101;
+    private static final int PERMISSION_REQUEST_CALL_PHONE = 102;
+    private static final int PERMISSION_REQUEST_READ_CONTACTS = 103;
+    private static final int PERMISSION_REQUEST_WRITE_STORAGE = 104;
+    private static final int PERMISSION_REQUEST_RECORD_AUDIO = 105;
+    private static final int PERMISSION_REQUEST_BLUETOOTH_CONNECT = 106;
 
     private int step = 0;
     private TextView tvMessage;
@@ -96,16 +96,16 @@ public class FirstRunActivity extends AppCompatActivity {
             }
         }
 
-        if (!sharedPrefs.getBoolean("FIRST_LAUNCH",true)){
-            startActivity(mainIntent);
-            finish();
-        } else {
+        if (sharedPrefs.getBoolean("FIRST_LAUNCH1",true)){
             setContentView(R.layout.activity_first_run);
             tvMessage = findViewById(R.id.tvMessage);
             buttonOk = findViewById(R.id.buttonOK);
             buttonOk.setOnClickListener(mClickListener);
             buttonSkip = findViewById(R.id.buttonSkip);
             buttonSkip.setOnClickListener(mClickListener);
+        } else {
+            startActivity(mainIntent);
+            finish();
         }
     }
 
@@ -122,66 +122,79 @@ public class FirstRunActivity extends AppCompatActivity {
                 case 1:
                     // Read Contacts permission
                     tvMessage.setText(getString(R.string.camera_alert_body));
+                    step = step + 1;
                     if (v.getId() == R.id.buttonOK) {
                         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
                             ActivityCompat.requestPermissions(FirstRunActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
+                        } else {
+                            buttonOk.performClick();
                         }
                     }
-                    step = step + 1;
                     break;
                 case 2:
                     // Camera permission
                     tvMessage.setText(getString(R.string.call_alert_body));
+                    step = step + 1;
                     if (v.getId() == R.id.buttonOK) {
                         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                             ActivityCompat.requestPermissions(FirstRunActivity.this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
+                        } else {
+                            buttonOk.performClick();
                         }
                     }
-                    step = step + 1;
                     break;
                 case 3:
                     // Call phone permission
                     tvMessage.setText(getString(R.string.record_audio_alert_body));
+                    step = step + 1;
                     if (v.getId() == R.id.buttonOK) {
                         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                             ActivityCompat.requestPermissions(FirstRunActivity.this, new String[]{Manifest.permission.CALL_PHONE}, PERMISSION_REQUEST_CALL_PHONE);
+                        } else {
+                            buttonOk.performClick();
                         }
                     }
-                    step = step + 1;
                     break;
                 case 4:
                     // Read Audio permission
                     tvMessage.setText(getString(R.string.write_alert_body));
+                    step = step + 1;
                     if (v.getId() == R.id.buttonOK) {
                         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                             ActivityCompat.requestPermissions(FirstRunActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSION_REQUEST_RECORD_AUDIO);
+                        } else {
+                            buttonOk.performClick();
                         }
                     }
-                    step = step + 1;
                     break;
                 case 5:
                     // Write storage permission
                     tvMessage.setText(getString(R.string.location_alert_body));
+                    step = step + 1;
                     if (v.getId() == R.id.buttonOK) {
                         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                             ActivityCompat.requestPermissions(FirstRunActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_WRITE_STORAGE);
+                        } else {
+                            buttonOk.performClick();
                         }
                     }
-                    step = step + 1;
                     break;
                 case 6:
                     // Location permission
                     tvMessage.setText(getString(R.string.overlay_alert_body));
+                    step = step + 1;
                     if (v.getId() == R.id.buttonOK) {
                         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                             ActivityCompat.requestPermissions(FirstRunActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_FINE_LOCATION);
+                        } else {
+                            buttonOk.performClick();
                         }
                     }
-                    step = step + 1;
                     break;
                 case 7:
                     // Overlay permission
                     tvMessage.setText(getString(R.string.notification_alert_body));
+                    step = step + 1;
                     if (v.getId() == R.id.buttonOK) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             if (!Settings.canDrawOverlays(getApplication())) {
@@ -189,64 +202,73 @@ public class FirstRunActivity extends AppCompatActivity {
                                         Uri.parse("package:" + getPackageName()));
                                 startActivity(intent);
                             }
+                        } else {
+                            buttonOk.performClick();
                         }
                     }
-                    step = step + 1;
                     break;
                 case 8:
                     // Read notification permission
                     tvMessage.setText(getString(R.string.usagestats_alert_body));
+                    step = step + 1;
                     if (v.getId() == R.id.buttonOK) {
                         if (Settings.Secure.getString(getApplication().getContentResolver(), "enabled_notification_listeners") == null
                                 || !Settings.Secure.getString(getApplication().getContentResolver(), "enabled_notification_listeners").contains(getApplicationContext().getPackageName())) {
                             startActivity(new Intent(
                                     "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+                        } else {
+                            buttonOk.performClick();
                         }
                     }
-                    step = step + 1;
                     break;
                 case 9:
                     //Usage stats permission
                     tvMessage.setText(getString(R.string.accessibilityservice_alert_body));
+                    step = step + 1;
                     if (v.getId() == R.id.buttonOK) {
                         AppOpsManager appOps = (AppOpsManager) getApplication().getSystemService(Context.APP_OPS_SERVICE);
                         int mode = appOps.checkOpNoThrow(OPSTR_GET_USAGE_STATS, myUid(), getApplication().getPackageName());
                         if (mode != MODE_ALLOWED) {
                             startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                        } else {
+                            buttonOk.performClick();
                         }
                     }
-                    step = step + 1;
                     break;
                 case 10:
                     //Accessibility service
                     tvMessage.setText(getString(R.string.btconnect_alert_body));
+                    step = step + 1;
                     if (v.getId() == R.id.buttonOK) {
                         if (!isAccessibilityServiceEnabled(getApplication(), MyAccessibilityService.class)) {
                             Intent accessibilityIntent = new Intent();
                             accessibilityIntent.setAction(Settings.ACTION_ACCESSIBILITY_SETTINGS);
                             startActivity(accessibilityIntent);
+                        } else {
+                            buttonOk.performClick();
                         }
                     }
-                    step = step + 1;
                     break;
                 case 11:
                     // Bluetooth Connect permission
                     tvMessage.setText(getString(R.string.firstrun_end));
                     buttonSkip.setVisibility(View.GONE);
                     buttonOk.setText(R.string.alert_btn_ok);
+                    step = step + 1;
                     if (v.getId() == R.id.buttonOK) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                             if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
                                 Log.d(TAG, "Requesting BT_CONNECT permission");
                                 ActivityCompat.requestPermissions(FirstRunActivity.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, PERMISSION_REQUEST_BLUETOOTH_CONNECT);
                             }
+                        } else {
+                            buttonOk.performClick();
                         }
                     }
-                    step = step + 1;
                     break;
                 case 12:
                     SharedPreferences.Editor editor = sharedPrefs.edit();
-                    editor.putBoolean("FIRST_LAUNCH", false);
+                    editor.putBoolean("FIRST_LAUNCH1", false);
                     editor.apply();
                     startActivity(mainIntent);
                     finish();
