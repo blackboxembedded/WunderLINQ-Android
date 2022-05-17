@@ -364,6 +364,39 @@ public class Data {
         Data.rearSpeed = rearSpeed;
     }
 
+    // START of CAN only Data
+    // High Beam Status
+    private static boolean highBeam;
+    public static boolean getHighBeam() {
+        return highBeam;
+    }
+    public static void setHighBeam(boolean highBeam){
+        Data.highBeam = highBeam;
+    }
+
+    // Fog Light Status
+    private static boolean fogLight;
+    public static boolean getFogLight() {
+        return fogLight;
+    }
+    public static void setFogLight(boolean fogLight){
+        Data.fogLight = fogLight;
+    }
+
+    // Heated Grip Status
+    public static int GRIP_HIGH = 2;
+    public static int GRIP_LOW = 1;
+    public static int GRIP_OFF = 0;
+    private static int heatedGrips;
+    public static int getHeatedGrips() {
+        return heatedGrips;
+    }
+    public static void setHeatedGrips(int heatedGrips){
+        Data.heatedGrips = heatedGrips;
+    }
+
+    // END of CAN only Data
+
     // Utility functions
     public static void clear(){
         Data.lastLocation = null;
