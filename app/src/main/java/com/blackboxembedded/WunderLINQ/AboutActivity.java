@@ -53,6 +53,8 @@ public class AboutActivity extends AppCompatActivity {
 
     private final static String TAG = "AboutActivity";
 
+    String fwVersion = "Unknown";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,7 +127,7 @@ public class AboutActivity extends AppCompatActivity {
                 emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sendlogs_subject) + " " + curdatetime);
                 emailIntent.putExtra(Intent.EXTRA_TEXT, "App Version: " + BuildConfig.VERSION_NAME + "\n"
-                        + "Firmware Version: " + Data.wlq.getFirmwareVersion() + "\n"
+                        + "Firmware Version: " + fwVersion + "\n"
                         + "Android Version: " + Build.VERSION.RELEASE + "\n"
                         + "Manufacturer, Model: " + Build.MANUFACTURER + ", " + Build.MODEL + "\n"
                         + getString(R.string.sendlogs_body));
@@ -147,15 +149,19 @@ public class AboutActivity extends AppCompatActivity {
 
     @Override
     public void recreate() {
-        super.recreate();
+         super.recreate();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(Data.wlq.getFirmwareVersion() == null) {
-            if (MainActivity.gattCommandCharacteristic != null) {
-                BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, WLQ_N.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+        if (Data.wlq != null) {
+            if (Data.wlq.getFirmwareVersion() == null) {
+                if (MainActivity.gattCommandCharacteristic != null) {
+                    BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, WLQ_N.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                }
+            } else {
+                fwVersion = Data.wlq.getFirmwareVersion();
             }
         }
     }
