@@ -27,14 +27,12 @@ import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
 import com.blackboxembedded.WunderLINQ.FaultStatus;
 import com.blackboxembedded.WunderLINQ.Utils;
 
-import java.util.Arrays;
-
 public class CANbus {
     private static int prevBrakeValue = 0;
 
     public static void parseCANMessage(byte[] data){
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
-        //Data.setLastMessage(data);
+        Data.setLastMessage(data);
         int msgID = ((data[0] & 0xFF)<<3) + ((data[1] & 0xFF)>>5);
         //Log.d("CANbus","CANID: " + msgID + "  CANMSG: " + Utils.ByteArraytoHexNoDelim(data));
         switch (msgID){
@@ -50,7 +48,6 @@ public class CANbus {
             case 272:
                 // ASC Status - Needs testing
                 int ascStatusValue = ((data[5] & 0xFF)  >> 4) & 0x0f; // the highest 4 bits.
-                Log.d("CAN","ASC Value: " + ascStatusValue);
                 switch (ascStatusValue){
                     case 0x1: case 0x9:
                         FaultStatus.setAscSelfDiagActive(false);
@@ -170,7 +167,6 @@ public class CANbus {
 
                 // ABS Fault - Needs testing
                 int absValue = (data[8] & 0xFF);
-                Log.d("CANbus","abs value: " + absValue);
                 switch (absValue){
                     case 0x59:
                         FaultStatus.setAbsSelfDiagActive(true);
