@@ -158,27 +158,27 @@ public class BluetoothLeService extends Service {
      * GATT Status constants
      */
     public final static String ACTION_GATT_CONNECTED =
-            "com.example.bluetooth.le.ACTION_GATT_CONNECTED";
+            "com.blackboxembedded.bluetooth.le.ACTION_GATT_CONNECTED";
     public final static String ACTION_GATT_CONNECTING =
-            "com.example.bluetooth.le.ACTION_GATT_CONNECTING";
+            "com.blackboxembedded.bluetooth.le.ACTION_GATT_CONNECTING";
     public final static String ACTION_GATT_DISCONNECTED =
-            "com.example.bluetooth.le.ACTION_GATT_DISCONNECTED";
+            "com.blackboxembedded.bluetooth.le.ACTION_GATT_DISCONNECTED";
     public final static String ACTION_GATT_SERVICES_DISCOVERED =
-            "com.example.bluetooth.le.ACTION_GATT_SERVICES_DISCOVERED";
+            "com.blackboxembedded.bluetooth.le.ACTION_GATT_SERVICES_DISCOVERED";
     public final static String ACTION_DATA_AVAILABLE =
-            "com.example.bluetooth.le.ACTION_DATA_AVAILABLE";
+            "com.blackboxembedded.bluetooth.le.ACTION_DATA_AVAILABLE";
     public final static String ACTION_GATT_CHARACTERISTIC_ERROR =
-            "com.example.bluetooth.le.ACTION_GATT_CHARACTERISTIC_ERROR";
+            "com.blackboxembedded.bluetooth.le.ACTION_GATT_CHARACTERISTIC_ERROR";
     public final static String ACTION_GATT_SERVICE_DISCOVERY_UNSUCCESSFUL =
-            "com.example.bluetooth.le.ACTION_GATT_SERVICE_DISCOVERY_UNSUCCESSFUL";
+            "com.blackboxembedded.bluetooth.le.ACTION_GATT_SERVICE_DISCOVERY_UNSUCCESSFUL";
     public final static String ACTION_WRITE_FAILED =
             "android.bluetooth.device.action.ACTION_WRITE_FAILED";
     public final static String ACTION_WRITE_SUCCESS =
             "android.bluetooth.device.action.ACTION_WRITE_SUCCESS";
     private final static String ACTION_GATT_DISCONNECTING =
-            "com.example.bluetooth.le.ACTION_GATT_DISCONNECTING";
+            "com.blackboxembedded.bluetooth.le.ACTION_GATT_DISCONNECTING";
     private final static String ACTION_PAIRING_REQUEST =
-            "com.example.bluetooth.le.PAIRING_REQUEST";
+            "com.blackboxembedded.bluetooth.le.PAIRING_REQUEST";
 
     public static final String EXTRA_BYTE_VALUE = "com.blackboxembedded.wunderlinq.backgroundservices." +
             "EXTRA_BYTE_VALUE";
