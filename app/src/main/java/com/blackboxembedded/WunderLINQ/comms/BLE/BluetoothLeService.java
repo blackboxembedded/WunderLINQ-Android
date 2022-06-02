@@ -76,7 +76,7 @@ import com.google.android.gms.location.LocationServices;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
@@ -85,11 +85,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Service for managing connection and data communication with a GATT server
- * hosted on a given Bluetooth LE device.
+ * hosted on a WunderLINQ Bluetooth LE device.
  */
 public class BluetoothLeService extends Service {
 
-    private final static String TAG = "BluetoothLeService";
+    private final static String TAG = "BLE";
 
     int mStartMode;       // indicates how to behave if the service is killed
     boolean mAllowRebind; // indicates whether onRebind should be used
@@ -142,17 +142,11 @@ public class BluetoothLeService extends Service {
     private LocationRequest mLocationRequest;
 
     private int lastDirection;
+    private static HashMap<Integer, byte[]> messages = new HashMap<>();
 
-    private static byte[] lastMessage00 = new byte[8];
-    private static byte[] lastMessage01 = new byte[8];
-    private static byte[] lastMessage05 = new byte[8];
-    private static byte[] lastMessage06 = new byte[8];
-    private static byte[] lastMessage07 = new byte[8];
-    private static byte[] lastMessage08 = new byte[8];
-    private static byte[] lastMessage09 = new byte[8];
-    private static byte[] lastMessage0A = new byte[8];
-    private static byte[] lastMessage0B = new byte[8];
-    private static byte[] lastMessage0C = new byte[8];
+    private static BluetoothGattCharacteristic mNotifyCharacteristic;
+    public static BluetoothGattCharacteristic gattCommandCharacteristic;
+    public static BluetoothGattCharacteristic gattHWCharacteristic;
 
     /**
      * GATT Status constants
@@ -195,7 +189,6 @@ public class BluetoothLeService extends Service {
     private static final int STATE_BONDED = 5;
 
     public static int connectedType = 0;
-
 
     /**
      * BluetoothAdapter for handling connections
@@ -259,7 +252,7 @@ public class BluetoothLeService extends Service {
 
     @Override
     public void onCreate() {
-        Log.d(TAG,"In onCreate");
+        Log.d(TAG,"onCreate");
         // The service is being created
         // Initializing the service
         if (!initialize()) {
@@ -489,8 +482,9 @@ public class BluetoothLeService extends Service {
                 synchronized (mGattCallback) {
                     mConnectionState = STATE_CONNECTED;
                 }
-                broadcastConnectionUpdate(intentAction);
-                String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
+                //broadcastConnectionUpdate(intentAction);
+                discoverServices();
+                String dataLog = "GATT Connected: [" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
                         "Connection established";
                 Log.d(TAG,dataLog);
             }
@@ -504,10 +498,6 @@ public class BluetoothLeService extends Service {
                 String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
                         "Disconnected";
                 Log.d(TAG,dataLog);
-                /*
-                Data.clear();
-                FaultStatus.clear();
-                */
             }
             // GATT Server Connecting
             if (newState == BluetoothProfile.STATE_CONNECTING) {
@@ -534,7 +524,9 @@ public class BluetoothLeService extends Service {
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             // GATT Services discovered
             if (status == BluetoothGatt.GATT_SUCCESS) {
+                Log.d(TAG,"GATT: Services Discovered");
                 broadcastConnectionUpdate(ACTION_GATT_SERVICES_DISCOVERED);
+                checkGattServices(BluetoothLeService.getSupportedGattServices());
             } else if (status == BluetoothGatt.GATT_INSUFFICIENT_AUTHENTICATION ||
                     status == BluetoothGatt.GATT_INSUFFICIENT_ENCRYPTION) {
                 bondDevice();
@@ -654,76 +646,23 @@ public class BluetoothLeService extends Service {
 
                 //Check if message changed
                 boolean process = false;
-                switch (data[0]){
-                    case 0x00:
-                        if(!Arrays.equals(lastMessage00, data)){
-                            lastMessage00 = data;
-                            process = true;
-                        }
-                        break;
-                    case 0x01:
-                        if(!Arrays.equals(lastMessage01, data)){
-                            lastMessage01 = data;
-                            process = true;
-                        }
-                        break;
-                    case 0x05:
-                        if(!Arrays.equals(lastMessage05, data)){
-                            lastMessage05 = data;
-                            process = true;
-                        }
-                        break;
-                    case 0x06:
-                        if(!Arrays.equals(lastMessage06, data)){
-                            lastMessage06 = data;
-                            process = true;
-                        }
-                        break;
-                    case 0x07:
-                        if(!Arrays.equals(lastMessage07, data)){
-                            lastMessage07 = data;
-                            process = true;
-                        }
-                        break;
-                    case 0x08:
-                        if(!Arrays.equals(lastMessage08, data)){
-                            lastMessage08 = data;
-                            process = true;
-                        }
-                        break;
-                    case 0x09:
-                        if(!Arrays.equals(lastMessage09, data)){
-                            lastMessage09 = data;
-                            process = true;
-                        }
-                        break;
-                    case 0x0a:
-                        if(!Arrays.equals(lastMessage0A, data)){
-                            lastMessage0A = data;
-                            process = true;
-                        }
-                        break;
-                    case 0x0b:
-                        if(!Arrays.equals(lastMessage0B, data)){
-                            lastMessage0B = data;
-                            process = true;
-                        }
-                        break;
-                    case 0x0c:
-                        if(!Arrays.equals(lastMessage0C, data)){
-                            lastMessage0C = data;
-                            process = true;
-                        }
-                        break;
+                int msgID = (data[0] & 0xFF);
+                if(!messages.containsKey(msgID)){
+                    messages.put(msgID ,data);
+                    process = true;
+                } else {
+                    if(!Arrays.equals(messages.get(msgID), data)){
+                        process = true;
+                    }
                 }
-
+                //Process message
                 if(process) {
                     LINbus.parseLINMessage(data);
                     /*
                      * Sending the broad cast so that it can be received on registered
                      * receivers
                      */
-                    intent.putExtras(mBundle);
+                    //intent.putExtras(mBundle);
                     MyApplication.getContext().sendBroadcast(intent);
                 }
             }
@@ -741,23 +680,42 @@ public class BluetoothLeService extends Service {
                         debugLogger = null;
                     }
                 }
-                CANbus.parseCANMessage(data);
-                /*
-                 * Sending the broad cast so that it can be received on registered
-                 * receivers
-                 */
-                intent.putExtras(mBundle);
-                MyApplication.getContext().sendBroadcast(intent);
+
+                //Check if message changed
+                boolean process = false;
+                int msgID = ((data[0] & 0xFF)<<3) + ((data[1] & 0xFF)>>5);
+                if(!messages.containsKey(msgID)){
+                    messages.put(msgID ,data);
+                    process = true;
+                } else {
+                    if(!Arrays.equals(messages.get(msgID), data)){
+                        process = true;
+                    }
+                }
+                //Process message
+                if(process) {
+                    CANbus.parseCANMessage(data);
+                    /*
+                     * Sending the broad cast so that it can be received on registered
+                     * receivers
+                     */
+                    //intent.putExtras(mBundle);
+                    MyApplication.getContext().sendBroadcast(intent);
+                }
             }
         } else if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_COMMAND_CHARACTERISTIC)) {
             if (data != null) {
                 //Read Config
                 if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x57)) {
-                    if (Data.wlq == null) {
-                        if (connectedType == WLQ.TYPE_NAVIGATOR) {
-                            Data.wlq = new WLQ_N(data);
-                        } else if (connectedType == WLQ.TYPE_COMMANDER) {
-                            Data.wlq = new WLQ_C(data);
+                    if (connectedType == WLQ.TYPE_NAVIGATOR) {
+                        Data.wlq = new WLQ_N(data);
+                        if (Data.hardwareVersion != null) {
+                            Data.wlq.setHardwareVersion(Data.hardwareVersion);
+                        }
+                    } else if (connectedType == WLQ.TYPE_COMMANDER) {
+                        Data.wlq = new WLQ_C(data);
+                        if (Data.hardwareVersion != null) {
+                            Data.wlq.setHardwareVersion(Data.hardwareVersion);
                         }
                     }
                 }
@@ -1100,6 +1058,79 @@ public class BluetoothLeService extends Service {
             setCharacteristicNotification(bluetoothGattCharacteristic, false);
         } else {
             mDisableNotificationFlag = false;
+        }
+    }
+
+    private static void checkGattServices(List<BluetoothGattService> gattServices) {
+        List<BluetoothGattCharacteristic> gattCharacteristics;
+        if (gattServices == null) return;
+        String uuid;
+        // Loops through available GATT Services.
+        for (BluetoothGattService gattService : gattServices) {
+            if (UUIDDatabase.UUID_DEVICE_INFORMATION_SERVICE.equals(gattService.getUuid())){
+                uuid = gattService.getUuid().toString();
+                Log.d(TAG,"Device Information Service Found: " + uuid);
+                gattCharacteristics = gattService.getCharacteristics();
+                // Loops through available Characteristics.
+                for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
+                    uuid = gattCharacteristic.getUuid().toString();
+                    if (UUID.fromString(GattAttributes.HARDWARE_REVISION_STRING).equals(gattCharacteristic.getUuid())){
+                        Log.d(TAG, "HW Revision Characteristic Found: " + uuid);
+                        gattHWCharacteristic = gattCharacteristic;
+                        BluetoothLeService.readCharacteristic(gattHWCharacteristic);
+                    }
+                }
+            } else if (UUIDDatabase.UUID_WUNDERLINQ_SERVICE.equals(gattService.getUuid())){
+                uuid = gattService.getUuid().toString();
+                Log.d(TAG,"WunderLINQ Service Found: " + uuid);
+                gattCharacteristics = gattService.getCharacteristics();
+                // Loops through available Characteristics.
+                for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
+                    uuid = gattCharacteristic.getUuid().toString();
+                    Log.d(TAG,"Characteristic Found: " + uuid);
+                    if (UUID.fromString(GattAttributes.WUNDERLINQ_LINMESSAGE_CHARACTERISTIC).equals(gattCharacteristic.getUuid())) {
+                        BluetoothLeService.connectedType = WLQ.TYPE_NAVIGATOR;
+                        int charaProp = gattCharacteristic.getProperties();
+                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
+                            // If there is an active notification on a characteristic, clear
+                            // it first so it doesn't update the data field on the user interface.
+                            if (mNotifyCharacteristic != null) {
+                                BluetoothLeService.setCharacteristicNotification(
+                                        mNotifyCharacteristic, false);
+                                mNotifyCharacteristic = null;
+                            }
+                            BluetoothLeService.readCharacteristic(gattCharacteristic);
+                        }
+                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
+                            mNotifyCharacteristic = gattCharacteristic;
+                            BluetoothLeService.setCharacteristicNotification(
+                                    gattCharacteristic, true);
+                        }
+                    } else if (UUID.fromString(GattAttributes.WUNDERLINQ_CANMESSAGE_CHARACTERISTIC).equals(gattCharacteristic.getUuid())) {
+                        BluetoothLeService.connectedType = WLQ.TYPE_COMMANDER;
+                        int charaProp = gattCharacteristic.getProperties();
+                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
+                            // If there is an active notification on a characteristic, clear
+                            // it first so it doesn't update the data field on the user interface.
+                            if (mNotifyCharacteristic != null) {
+                                BluetoothLeService.setCharacteristicNotification(
+                                        mNotifyCharacteristic, false);
+                                mNotifyCharacteristic = null;
+                            }
+                            BluetoothLeService.readCharacteristic(gattCharacteristic);
+                        }
+                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
+                            mNotifyCharacteristic = gattCharacteristic;
+                            BluetoothLeService.setCharacteristicNotification(
+                                    gattCharacteristic, true);
+                        }
+                    } else if (UUID.fromString(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC).equals(gattCharacteristic.getUuid())){
+                        gattCommandCharacteristic = gattCharacteristic;
+                        // Read config
+                        BluetoothLeService.writeCharacteristic(gattCommandCharacteristic, WLQ_N.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                    }
+                }
+            }
         }
     }
 

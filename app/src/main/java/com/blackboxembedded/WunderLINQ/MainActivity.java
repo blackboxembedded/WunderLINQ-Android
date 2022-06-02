@@ -23,8 +23,6 @@ import android.app.Activity;
 import android.app.PictureInPictureParams;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -78,20 +76,13 @@ import androidx.core.content.ContextCompat;
 import androidx.gridlayout.widget.GridLayout;
 
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
-import com.blackboxembedded.WunderLINQ.comms.BLE.GattAttributes;
-import com.blackboxembedded.WunderLINQ.comms.BLE.UUIDDatabase;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ;
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.UUID;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
@@ -111,10 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private Intent bluetoothLeService;
     public static BluetoothAdapter mBluetoothAdapter;
     private BluetoothLeService mBluetoothLeService;
-    private BluetoothGattCharacteristic mNotifyCharacteristic;
-    public static BluetoothGattCharacteristic gattCommandCharacteristic;
-    public static BluetoothGattCharacteristic gattHWCharacteristic;
-    List<BluetoothGattCharacteristic> gattCharacteristics;
+
     private String mDeviceAddress;
     private static final int REQUEST_ENABLE_BT = 1;
     private static final int SETTINGS_CHECK = 10;
@@ -245,7 +233,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             } else {
                 Log.d(TAG, "Running in the emulator");
             }
-
             return;
         }
 
@@ -281,7 +268,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         }
                     });
             builder.show();
-
         }
 
         registerReceiver(mBondingBroadcast, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
@@ -504,7 +490,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         //Only use BLE if on a real device
         if (!(Build.BRAND.startsWith("Android") && Build.DEVICE.startsWith("generic"))) {
             startService(bluetoothLeService);
-
             registerReceiver(mBondingBroadcast, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
             registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
             if (mBluetoothLeService == null) {
@@ -683,7 +668,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             }
         }
 
-        if (wlqCnt == 0){
+        if (wlqCnt == 0) {
             Log.d(TAG, "No paired WunderLINQ");
             // Display dialog text here......
             final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
@@ -707,10 +692,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         }
                     });
             builder.show();
-        } else if (wlqCnt == 1){
+        } else if (wlqCnt == 1) {
             Log.d(TAG, "Connecting to Address: " + mDeviceAddress);
             bindService(bluetoothLeService, mServiceConnection, BIND_AUTO_CREATE);
-        } else if (wlqCnt > 1){
+        } else if (wlqCnt > 1) {
             Log.d(TAG, "Too many WunderLINQ pairings: " + wlqCnt);
             // Display dialog text here......
             final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
@@ -741,7 +726,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         @Override
         public void onReceive(Context context, Intent intent) {
             final int state = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.ERROR);
-
             switch (state) {
                 case BluetoothDevice.BOND_BONDING:
                     Log.d("Bonding Status:", " Bonding...");
@@ -769,35 +753,17 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
-                Log.d(TAG,"GATT_CONNECTED");
-                BluetoothLeService.discoverServices();
-            } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
-                Log.d(TAG,"GATT_DISCONNECTED");
-                //Data.clear();
-                if (!sharedPrefs.getBoolean("prefMotorcycleData", false)){
-                    updateDisplay();
-                }
+            if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 btButton.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.motorrad_red));
                 btButton.setEnabled(true);
                 mMenu.findItem(R.id.action_hwsettings).setVisible(false);
+                updateDisplay();
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-                Log.d(TAG,"GATT_SERVICE_DISCOVERED");
-                checkGattServices(BluetoothLeService.getSupportedGattServices());
                 btButton.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.motorrad_blue));
                 btButton.setEnabled(false);
                 mMenu.findItem(R.id.action_hwsettings).setVisible(true);
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-                Bundle bd = intent.getExtras();
-                if(bd != null) {
-                    if (bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE).contains(GattAttributes.WUNDERLINQ_LINMESSAGE_CHARACTERISTIC)
-                    || bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE).contains(GattAttributes.WUNDERLINQ_CANMESSAGE_CHARACTERISTIC)) {
-                        btButton.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.motorrad_blue));
-                        btButton.setEnabled(false);
-                        mMenu.findItem(R.id.action_hwsettings).setVisible(true);
-                    }
-                }
-                if(drawingComplete) {
+                if (drawingComplete) {
                     updateDisplay();
                 }
             }
@@ -813,106 +779,32 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         return intentFilter;
     }
 
-    private void checkGattServices(List<BluetoothGattService> gattServices) {
-        if (gattServices == null) return;
-        String uuid;
-        // Loops through available GATT Services.
-        for (BluetoothGattService gattService : gattServices) {
-            if (UUIDDatabase.UUID_DEVICE_INFORMATION_SERVICE.equals(gattService.getUuid())){
-                uuid = gattService.getUuid().toString();
-                Log.d(TAG,"Device Information Service Found: " + uuid);
-                gattCharacteristics = gattService.getCharacteristics();
-                // Loops through available Characteristics.
-                for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
-                    uuid = gattCharacteristic.getUuid().toString();
-                    if (UUID.fromString(GattAttributes.HARDWARE_REVISION_STRING).equals(gattCharacteristic.getUuid())){
-                        Log.d(TAG, "HW Revision Characteristic Found: " + uuid);
-                        gattHWCharacteristic = gattCharacteristic;
-                        BluetoothLeService.readCharacteristic(gattHWCharacteristic);
-                    }
-                }
-            } else if (UUIDDatabase.UUID_WUNDERLINQ_SERVICE.equals(gattService.getUuid())){
-                uuid = gattService.getUuid().toString();
-                Log.d(TAG,"WunderLINQ Service Found: " + uuid);
-                gattCharacteristics = gattService.getCharacteristics();
-                // Loops through available Characteristics.
-                for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
-                    uuid = gattCharacteristic.getUuid().toString();
-                    Log.d(TAG,"Characteristic Found: " + uuid);
-                    if (UUID.fromString(GattAttributes.WUNDERLINQ_LINMESSAGE_CHARACTERISTIC).equals(gattCharacteristic.getUuid())) {
-                        BluetoothLeService.connectedType = WLQ.TYPE_NAVIGATOR;
-                        mMenu.findItem(R.id.action_bike_info).setVisible(true);
-                        int charaProp = gattCharacteristic.getProperties();
-                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
-                            // If there is an active notification on a characteristic, clear
-                            // it first so it doesn't update the data field on the user interface.
-                            if (mNotifyCharacteristic != null) {
-                                BluetoothLeService.setCharacteristicNotification(
-                                        mNotifyCharacteristic, false);
-                                mNotifyCharacteristic = null;
-                            }
-                            BluetoothLeService.readCharacteristic(gattCharacteristic);
-                        }
-                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
-                            mNotifyCharacteristic = gattCharacteristic;
-                            BluetoothLeService.setCharacteristicNotification(
-                                    gattCharacteristic, true);
-                        }
-                    } else if (UUID.fromString(GattAttributes.WUNDERLINQ_CANMESSAGE_CHARACTERISTIC).equals(gattCharacteristic.getUuid())) {
-                        BluetoothLeService.connectedType = WLQ.TYPE_COMMANDER;
-                        mMenu.findItem(R.id.action_bike_info).setVisible(false);
-                        int charaProp = gattCharacteristic.getProperties();
-                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
-                            // If there is an active notification on a characteristic, clear
-                            // it first so it doesn't update the data field on the user interface.
-                            if (mNotifyCharacteristic != null) {
-                                BluetoothLeService.setCharacteristicNotification(
-                                        mNotifyCharacteristic, false);
-                                mNotifyCharacteristic = null;
-                            }
-                            BluetoothLeService.readCharacteristic(gattCharacteristic);
-                        }
-                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
-                            mNotifyCharacteristic = gattCharacteristic;
-                            BluetoothLeService.setCharacteristicNotification(
-                                    gattCharacteristic, true);
-                        }
-                    } else if (UUID.fromString(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC).equals(gattCharacteristic.getUuid())){
-                        gattCommandCharacteristic = gattCharacteristic;
-                        // Read config
-                        BluetoothLeService.writeCharacteristic(gattCommandCharacteristic, WLQ_N.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
-                    }
-                }
-            }
-        }
-    }
-
-    //Update Nightmode
-    private void updateNightMode(){
+    //Update Night Mode
+    private void updateNightMode() {
         int currentNightMode = getResources().getConfiguration().uiMode
                 & Configuration.UI_MODE_NIGHT_MASK;
         int prefNightMode = Integer.parseInt(sharedPrefs.getString("prefNightModeCombo", "3"));
 
-        switch(prefNightMode){
+        switch (prefNightMode) {
             case 0:
                 //Off
-                if(currentNightMode != Configuration.UI_MODE_NIGHT_NO){
+                if (currentNightMode != Configuration.UI_MODE_NIGHT_NO) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    Log.d(TAG,"Setting NIGHT MODE OFF");
+                    Log.d(TAG, "Setting NIGHT MODE OFF");
                 }
                 break;
             case 1:
                 //On
-                if(currentNightMode != Configuration.UI_MODE_NIGHT_YES){
+                if (currentNightMode != Configuration.UI_MODE_NIGHT_YES) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    Log.d(TAG,"Setting NIGHT MODE ON");
+                    Log.d(TAG, "Setting NIGHT MODE ON");
                 }
                 break;
             case 3:
                 //Android
-                if(currentNightMode != Configuration.UI_MODE_NIGHT_UNDEFINED){
+                if (currentNightMode != Configuration.UI_MODE_NIGHT_UNDEFINED) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                    Log.d(TAG,"Setting NIGHT MODE FOLLOW SYSTEM");
+                    Log.d(TAG, "Setting NIGHT MODE FOLLOW SYSTEM");
                 }
                 break;
             default:
@@ -922,251 +814,631 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     // Update Display
-    private void updateDisplay(){
+    private void updateDisplay() {
         drawingComplete = false;
-        gridLayout = findViewById(R.id.gridLayout);
-
-        //Check for active faults
-        ArrayList<String> faultListData = FaultStatus.getallActiveDesc();
-        if (!faultListData.isEmpty()) {
-            faultButton.setVisibility(View.VISIBLE);
-        } else {
-            faultButton.setVisibility(View.GONE);
-        }
-
-        // Cell One
-        Integer cell1Data = Integer.parseInt(sharedPrefs.getString("prefCellOne", "1"));
-        // Cell Two
-        Integer cell2Data = Integer.parseInt(sharedPrefs.getString("prefCellTwo", "2"));
-        // Cell Three
-        Integer cell3Data = Integer.parseInt(sharedPrefs.getString("prefCellThree", "3"));
-        // Cell Four
-        Integer cell4Data = Integer.parseInt(sharedPrefs.getString("prefCellFour", "4"));
-        // Cell Five
-        Integer cell5Data = Integer.parseInt(sharedPrefs.getString("prefCellFive", "5"));
-        // Cell Six
-        Integer cell6Data = Integer.parseInt(sharedPrefs.getString("prefCellSix", "6"));
-        // Cell Seven
-        Integer cell7Data = Integer.parseInt(sharedPrefs.getString("prefCellSeven", "7"));
-        // Cell Eight
-        Integer cell8Data = Integer.parseInt(sharedPrefs.getString("prefCellEight", "8"));
-        // Cell Nine
-        Integer cell9Data = Integer.parseInt(sharedPrefs.getString("prefCellNine", "9"));
-        // Cell Ten
-        Integer cell10Data = Integer.parseInt(sharedPrefs.getString("prefCellTen", "10"));
-        // Cell Eleven
-        Integer cell11Data = Integer.parseInt(sharedPrefs.getString("prefCellEleven", "11"));
-        // Cell Twelve
-        Integer cell12Data = Integer.parseInt(sharedPrefs.getString("prefCellTwelve", "12"));
-        // Cell Thirteen
-        Integer cell13Data = Integer.parseInt(sharedPrefs.getString("prefCellThirteen", "13"));
-        // Cell Fourteen
-        Integer cell14Data = Integer.parseInt(sharedPrefs.getString("prefCellFourteen", "14"));
-        // Cell Fifteen
-        Integer cell15Data = Integer.parseInt(sharedPrefs.getString("prefCellFifteen", "15"));
-
-        int count = Integer.parseInt(sharedPrefs.getString("CELL_COUNT", "15"));
-        if (inPIP) {
-            count = Integer.parseInt(sharedPrefs.getString("prefPIPCellCount", "4"));
-        }
-        boolean portrait = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
-        switch (count) {
-            case 15:
-                if (gridChange) {
-                    gridLayout.removeAllViews();
-                    if (portrait) {
-                        gridLayout.setColumnCount(3);
-                        gridLayout.setRowCount(5);
-                    } else {
-                        gridLayout.setColumnCount(5);
-                        gridLayout.setRowCount(3);
-                    }
-                }
-
+        new Thread() {
+            @Override
+            public void run() {
                 // Cell One
-                setCellText(1, cell1Data);
+                Integer cell1Data = Integer.parseInt(sharedPrefs.getString("prefCellOne", "1"));
+                GridItem cell1 = getCellData(cell1Data);
                 // Cell Two
-                setCellText(2, cell2Data);
+                Integer cell2Data = Integer.parseInt(sharedPrefs.getString("prefCellTwo", "2"));
+                GridItem cell2 = getCellData(cell2Data);
                 // Cell Three
-                setCellText(3, cell3Data);
+                Integer cell3Data = Integer.parseInt(sharedPrefs.getString("prefCellThree", "3"));
+                GridItem cell3 = getCellData(cell3Data);
                 // Cell Four
-                setCellText(4, cell4Data);
+                Integer cell4Data = Integer.parseInt(sharedPrefs.getString("prefCellFour", "4"));
+                GridItem cell4 = getCellData(cell4Data);
                 // Cell Five
-                setCellText(5, cell5Data);
+                Integer cell5Data = Integer.parseInt(sharedPrefs.getString("prefCellFive", "5"));
+                GridItem cell5 = getCellData(cell5Data);
                 // Cell Six
-                setCellText(6, cell6Data);
+                Integer cell6Data = Integer.parseInt(sharedPrefs.getString("prefCellSix", "6"));
+                GridItem cell6 = getCellData(cell6Data);
                 // Cell Seven
-                setCellText(7, cell7Data);
+                Integer cell7Data = Integer.parseInt(sharedPrefs.getString("prefCellSeven", "7"));
+                GridItem cell7 = getCellData(cell7Data);
                 // Cell Eight
-                setCellText(8, cell8Data);
+                Integer cell8Data = Integer.parseInt(sharedPrefs.getString("prefCellEight", "8"));
+                GridItem cell8 = getCellData(cell8Data);
                 // Cell Nine
-                setCellText(9, cell9Data);
+                Integer cell9Data = Integer.parseInt(sharedPrefs.getString("prefCellNine", "9"));
+                GridItem cell9 = getCellData(cell9Data);
                 // Cell Ten
-                setCellText(10, cell10Data);
+                Integer cell10Data = Integer.parseInt(sharedPrefs.getString("prefCellTen", "10"));
+                GridItem cell10 = getCellData(cell10Data);
                 // Cell Eleven
-                setCellText(11, cell11Data);
+                Integer cell11Data = Integer.parseInt(sharedPrefs.getString("prefCellEleven", "11"));
+                GridItem cell11 = getCellData(cell11Data);
                 // Cell Twelve
-                setCellText(12, cell12Data);
+                Integer cell12Data = Integer.parseInt(sharedPrefs.getString("prefCellTwelve", "12"));
+                GridItem cell12 = getCellData(cell12Data);
                 // Cell Thirteen
-                setCellText(13, cell13Data);
+                Integer cell13Data = Integer.parseInt(sharedPrefs.getString("prefCellThirteen", "13"));
+                GridItem cell13 = getCellData(cell13Data);
                 // Cell Fourteen
-                setCellText(14, cell14Data);
+                Integer cell14Data = Integer.parseInt(sharedPrefs.getString("prefCellFourteen", "14"));
+                GridItem cell14 = getCellData(cell14Data);
                 // Cell Fifteen
-                setCellText(15, cell15Data);
-                gridChange = false;
-                break;
-            case 12:
-                if (gridChange) {
-                    gridLayout.removeAllViews();
-                    if (portrait) {
-                        gridLayout.setColumnCount(3);
-                        gridLayout.setRowCount(4);
-                    } else {
-                        gridLayout.setColumnCount(4);
-                        gridLayout.setRowCount(3);
-                    }
+                Integer cell15Data = Integer.parseInt(sharedPrefs.getString("prefCellFifteen", "15"));
+                GridItem cell15 = getCellData(cell15Data);
+
+                int count = Integer.parseInt(sharedPrefs.getString("CELL_COUNT", "15"));
+                if (inPIP) {
+                    count = Integer.parseInt(sharedPrefs.getString("prefPIPCellCount", "4"));
                 }
-                // Cell One
-                setCellText(1, cell1Data);
-                // Cell Two
-                setCellText(2, cell2Data);
-                // Cell Three
-                setCellText(3, cell3Data);
-                // Cell Four
-                setCellText(4, cell4Data);
-                // Cell Five
-                setCellText(5, cell5Data);
-                // Cell Six
-                setCellText(6, cell6Data);
-                // Cell Seven
-                setCellText(7, cell7Data);
-                // Cell Eight
-                setCellText(8, cell8Data);
-                // Cell Nine
-                setCellText(9, cell9Data);
-                // Cell Ten
-                setCellText(10, cell10Data);
-                // Cell Eleven
-                setCellText(11, cell11Data);
-                // Cell Twelve
-                setCellText(12, cell12Data);
-                gridChange = false;
-                break;
-            case 10:
-                if (gridChange) {
-                    gridLayout.removeAllViews();
-                    if (portrait) {
-                        gridLayout.setColumnCount(2);
-                        gridLayout.setRowCount(5);
-                    } else {
-                        gridLayout.setColumnCount(5);
-                        gridLayout.setRowCount(2);
-                    }
+                boolean portrait = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
+                try {
+                    // code runs in a thread
+                    int finalCount = count;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Check for active faults
+                            if (!FaultStatus.getallActiveDesc().isEmpty()) {
+                                faultButton.setVisibility(View.VISIBLE);
+                            } else {
+                                faultButton.setVisibility(View.GONE);
+                            }
+                            switch (finalCount) {
+                                case 15:
+                                    if (gridChange) {
+                                        gridLayout.removeAllViews();
+                                        if (portrait) {
+                                            gridLayout.setColumnCount(3);
+                                            gridLayout.setRowCount(5);
+                                        } else {
+                                            gridLayout.setColumnCount(5);
+                                            gridLayout.setRowCount(3);
+                                        }
+                                    }
+
+                                    // Cell One
+                                    setCellText(1);
+                                    // Cell Two
+                                    setCellText(2);
+                                    // Cell Three
+                                    setCellText(3);
+                                    // Cell Four
+                                    setCellText(4);
+                                    // Cell Five
+                                    setCellText(5);
+                                    // Cell Six
+                                    setCellText(6);
+                                    // Cell Seven
+                                    setCellText(7);
+                                    // Cell Eight
+                                    setCellText(8);
+                                    // Cell Nine
+                                    setCellText(9);
+                                    // Cell Ten
+                                    setCellText(10);
+                                    // Cell Eleven
+                                    setCellText(11);
+                                    // Cell Twelve
+                                    setCellText(12);
+                                    // Cell Thirteen
+                                    setCellText(13);
+                                    // Cell Fourteen
+                                    setCellText(14);
+                                    // Cell Fifteen
+                                    setCellText(15);
+                                    gridChange = false;
+                                    break;
+                                case 12:
+                                    if (gridChange) {
+                                        gridLayout.removeAllViews();
+                                        if (portrait) {
+                                            gridLayout.setColumnCount(3);
+                                            gridLayout.setRowCount(4);
+                                        } else {
+                                            gridLayout.setColumnCount(4);
+                                            gridLayout.setRowCount(3);
+                                        }
+                                    }
+                                    // Cell One
+                                    setCellText(1);
+                                    // Cell Two
+                                    setCellText(2);
+                                    // Cell Three
+                                    setCellText(3);
+                                    // Cell Four
+                                    setCellText(4);
+                                    // Cell Five
+                                    setCellText(5);
+                                    // Cell Six
+                                    setCellText(6);
+                                    // Cell Seven
+                                    setCellText(7);
+                                    // Cell Eight
+                                    setCellText(8);
+                                    // Cell Nine
+                                    setCellText(9);
+                                    // Cell Ten
+                                    setCellText(10);
+                                    // Cell Eleven
+                                    setCellText(11);
+                                    // Cell Twelve
+                                    setCellText(12);
+                                    gridChange = false;
+                                    break;
+                                case 10:
+                                    if (gridChange) {
+                                        gridLayout.removeAllViews();
+                                        if (portrait) {
+                                            gridLayout.setColumnCount(2);
+                                            gridLayout.setRowCount(5);
+                                        } else {
+                                            gridLayout.setColumnCount(5);
+                                            gridLayout.setRowCount(2);
+                                        }
+                                    }
+                                    // Cell One
+                                    setCellText(1);
+                                    // Cell Two
+                                    setCellText(2);
+                                    // Cell Three
+                                    setCellText(3);
+                                    // Cell Four
+                                    setCellText(4);
+                                    // Cell Five
+                                    setCellText(5);
+                                    // Cell Six
+                                    setCellText(6);
+                                    // Cell Seven
+                                    setCellText(7);
+                                    // Cell Eight
+                                    setCellText(8);
+                                    // Cell Nine
+                                    setCellText(9);
+                                    // Cell Ten
+                                    setCellText(10);
+                                    gridChange = false;
+                                    break;
+                                case 8:
+                                    if (gridChange) {
+                                        gridLayout.removeAllViews();
+                                        if (portrait) {
+                                            gridLayout.setColumnCount(2);
+                                            gridLayout.setRowCount(4);
+                                        } else {
+                                            gridLayout.setColumnCount(4);
+                                            gridLayout.setRowCount(2);
+                                        }
+                                    }
+                                    // Cell One
+                                    setCellText(1);
+                                    // Cell Two
+                                    setCellText(2);
+                                    // Cell Three
+                                    setCellText(3);
+                                    // Cell Four
+                                    setCellText(4);
+                                    // Cell Five
+                                    setCellText(5);
+                                    // Cell Six
+                                    setCellText(6);
+                                    // Cell Seven
+                                    setCellText(7);
+                                    // Cell Eight
+                                    setCellText(8);
+                                    gridChange = false;
+                                    break;
+                                case 4:
+                                    if (gridChange) {
+                                        gridLayout.removeAllViews();
+                                        if (portrait) {
+                                            gridLayout.setColumnCount(1);
+                                            gridLayout.setRowCount(4);
+                                        } else {
+                                            gridLayout.setColumnCount(2);
+                                            gridLayout.setRowCount(2);
+                                        }
+                                    }
+                                    // Cell One
+                                    setCellText(1);
+                                    // Cell Two
+                                    setCellText(2);
+                                    // Cell Three
+                                    setCellText(3);
+                                    // Cell Four
+                                    setCellText(4);
+                                    gridChange = false;
+                                    break;
+                                case 2:
+                                    if (gridChange) {
+                                        gridLayout.removeAllViews();
+                                        if (portrait) {
+                                            gridLayout.setColumnCount(1);
+                                            gridLayout.setRowCount(2);
+                                        } else {
+                                            gridLayout.setColumnCount(2);
+                                            gridLayout.setRowCount(1);
+                                        }
+                                    }
+                                    // Cell One
+                                    setCellText(1);
+                                    // Cell Two
+                                    setCellText(2);
+                                    gridChange = false;
+                                    break;
+                                case 1:
+                                    if (gridChange) {
+                                        gridLayout.removeAllViews();
+                                        gridLayout.setColumnCount(1);
+                                        gridLayout.setRowCount(1);
+                                    }
+                                    // Cell One
+                                    setCellText(1);
+                                    gridChange = false;
+                                    break;
+                            }
+                        }
+
+                        // Set Cell Text and icon
+                        private void setCellText(Integer cellNumber) {
+                            switch (cellNumber) {
+                                case 1:
+                                    if (gridChange) {
+                                        View gridCell1 = layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false);
+                                        gridLayout.addView(gridCell1);
+                                    }
+                                    ConstraintLayout layout1 = findViewById(R.id.layout_1);
+                                    if (layout1 != null) {
+                                        TextView textView1 = findViewById(R.id.textView1);
+                                        TextView textView1Label = findViewById(R.id.textView1label);
+                                        ImageView imageView1 = findViewById(R.id.imageView1);
+                                        layout1.setOnTouchListener(MainActivity.this);
+                                        layout1.setTag(cellNumber);
+                                        textView1.setTag(cellNumber);
+                                        textView1Label.setTag(cellNumber);
+                                        textView1Label.setText(cell1.getLabel());
+                                        textView1.setText(cell1.getValue());
+                                        if (cell1.getIcon() != null) {
+                                            imageView1.setImageDrawable(cell1.getIcon());
+                                        } else {
+                                            imageView1.setImageResource(android.R.color.transparent);
+                                        }
+                                    }
+                                    break;
+                                case 2:
+                                    if (gridChange) {
+                                        View gridCell2 = layoutInflater.inflate(R.layout.layout_griditem2, gridLayout, false);
+                                        gridLayout.addView(gridCell2);
+                                    }
+                                    ConstraintLayout layout2 = findViewById(R.id.layout_2);
+                                    if (layout2 != null) {
+                                        TextView textView2 = findViewById(R.id.textView2);
+                                        TextView textView2Label = findViewById(R.id.textView2label);
+                                        ImageView imageView2 = findViewById(R.id.imageView2);
+                                        layout2.setOnTouchListener(MainActivity.this);
+                                        layout2.setTag(cellNumber);
+                                        textView2.setTag(cellNumber);
+                                        textView2Label.setTag(cellNumber);
+                                        textView2Label.setText(cell2.getLabel());
+                                        textView2.setText(cell2.getValue());
+                                        if (cell2.getIcon() != null) {
+                                            imageView2.setImageDrawable(cell2.getIcon());
+                                        } else {
+                                            imageView2.setImageResource(android.R.color.transparent);
+                                        }
+                                    }
+                                    break;
+                                case 3:
+                                    if (gridChange) {
+                                        View gridCell3 = layoutInflater.inflate(R.layout.layout_griditem3, gridLayout, false);
+                                        gridLayout.addView(gridCell3);
+                                    }
+                                    ConstraintLayout layout3 = findViewById(R.id.layout_3);
+                                    if (layout3 != null) {
+                                        TextView textView3 = findViewById(R.id.textView3);
+                                        TextView textView3Label = findViewById(R.id.textView3label);
+                                        ImageView imageView3 = findViewById(R.id.imageView3);
+                                        layout3.setOnTouchListener(MainActivity.this);
+                                        layout3.setTag(cellNumber);
+                                        textView3.setTag(cellNumber);
+                                        textView3Label.setTag(cellNumber);
+                                        textView3Label.setText(cell3.getLabel());
+                                        textView3.setText(cell3.getValue());
+                                        if (cell3.getIcon() != null) {
+                                            imageView3.setImageDrawable(cell3.getIcon());
+                                        } else {
+                                            imageView3.setImageResource(android.R.color.transparent);
+                                        }
+                                    }
+                                    break;
+                                case 4:
+                                    if (gridChange) {
+                                        View gridCell4 = layoutInflater.inflate(R.layout.layout_griditem4, gridLayout, false);
+                                        gridLayout.addView(gridCell4);
+                                    }
+                                    ConstraintLayout layout4 = findViewById(R.id.layout_4);
+                                    if (layout4 != null) {
+                                        TextView textView4 = findViewById(R.id.textView4);
+                                        TextView textView4Label = findViewById(R.id.textView4label);
+                                        ImageView imageView4 = findViewById(R.id.imageView4);
+                                        layout4.setOnTouchListener(MainActivity.this);
+                                        layout4.setTag(cellNumber);
+                                        textView4.setTag(cellNumber);
+                                        textView4Label.setTag(cellNumber);
+                                        textView4Label.setText(cell4.getLabel());
+                                        textView4.setText(cell4.getValue());
+                                        if (cell4.getIcon() != null) {
+                                            imageView4.setImageDrawable(cell4.getIcon());
+                                        } else {
+                                            imageView4.setImageResource(android.R.color.transparent);
+                                        }
+                                        break;
+                                    }
+                                case 5:
+                                    if (gridChange) {
+                                        View gridCell5 = layoutInflater.inflate(R.layout.layout_griditem5, gridLayout, false);
+                                        gridLayout.addView(gridCell5);
+                                    }
+                                    ConstraintLayout layout5 = findViewById(R.id.layout_5);
+                                    if (layout5 != null) {
+                                        TextView textView5 = findViewById(R.id.textView5);
+                                        TextView textView5Label = findViewById(R.id.textView5label);
+                                        ImageView imageView5 = findViewById(R.id.imageView5);
+                                        layout5.setOnTouchListener(MainActivity.this);
+                                        layout5.setTag(cellNumber);
+                                        textView5.setTag(cellNumber);
+                                        textView5Label.setTag(cellNumber);
+                                        textView5Label.setText(cell5.getLabel());
+                                        textView5.setText(cell5.getValue());
+                                        if (cell5.getIcon() != null) {
+                                            imageView5.setImageDrawable(cell5.getIcon());
+                                        } else {
+                                            imageView5.setImageResource(android.R.color.transparent);
+                                        }
+                                    }
+                                    break;
+                                case 6:
+                                    if (gridChange) {
+                                        View gridCell6 = layoutInflater.inflate(R.layout.layout_griditem6, gridLayout, false);
+                                        gridLayout.addView(gridCell6);
+                                    }
+                                    ConstraintLayout layout6 = findViewById(R.id.layout_6);
+                                    if (layout6 != null) {
+                                        TextView textView6 = findViewById(R.id.textView6);
+                                        TextView textView6Label = findViewById(R.id.textView6label);
+                                        ImageView imageView6 = findViewById(R.id.imageView6);
+                                        layout6.setOnTouchListener(MainActivity.this);
+                                        layout6.setTag(cellNumber);
+                                        textView6.setTag(cellNumber);
+                                        textView6Label.setTag(cellNumber);
+                                        textView6Label.setText(cell6.getLabel());
+                                        textView6.setText(cell6.getValue());
+                                        if (cell6.getIcon() != null) {
+                                            imageView6.setImageDrawable(cell6.getIcon());
+                                        } else {
+                                            imageView6.setImageResource(android.R.color.transparent);
+                                        }
+                                    }
+                                    break;
+                                case 7:
+                                    if (gridChange) {
+                                        View gridCell7 = layoutInflater.inflate(R.layout.layout_griditem7, gridLayout, false);
+                                        gridLayout.addView(gridCell7);
+                                    }
+                                    ConstraintLayout layout7 = findViewById(R.id.layout_7);
+                                    if (layout7 != null) {
+                                        TextView textView7 = findViewById(R.id.textView7);
+                                        TextView textView7Label = findViewById(R.id.textView7label);
+                                        ImageView imageView7 = findViewById(R.id.imageView7);
+                                        layout7.setOnTouchListener(MainActivity.this);
+                                        layout7.setTag(cellNumber);
+                                        textView7.setTag(cellNumber);
+                                        textView7Label.setTag(cellNumber);
+                                        textView7Label.setText(cell7.getLabel());
+                                        textView7.setText(cell7.getValue());
+                                        if (cell7.getIcon() != null) {
+                                            imageView7.setImageDrawable(cell7.getIcon());
+                                        } else {
+                                            imageView7.setImageResource(android.R.color.transparent);
+                                        }
+                                    }
+                                    break;
+                                case 8:
+                                    if (gridChange) {
+                                        View gridCell8 = layoutInflater.inflate(R.layout.layout_griditem8, gridLayout, false);
+                                        gridLayout.addView(gridCell8);
+                                    }
+                                    ConstraintLayout layout8 = findViewById(R.id.layout_8);
+                                    if (layout8 != null) {
+                                        TextView textView8 = findViewById(R.id.textView8);
+                                        TextView textView8Label = findViewById(R.id.textView8label);
+                                        ImageView imageView8 = findViewById(R.id.imageView8);
+                                        layout8.setOnTouchListener(MainActivity.this);
+                                        layout8.setTag(cellNumber);
+                                        textView8.setTag(cellNumber);
+                                        textView8Label.setTag(cellNumber);
+                                        textView8Label.setText(cell8.getLabel());
+                                        textView8.setText(cell8.getValue());
+                                        if (cell8.getIcon() != null) {
+                                            imageView8.setImageDrawable(cell8.getIcon());
+                                        } else {
+                                            imageView8.setImageResource(android.R.color.transparent);
+                                        }
+                                    }
+                                    break;
+                                case 9:
+                                    if (gridChange) {
+                                        View gridCell9 = layoutInflater.inflate(R.layout.layout_griditem9, gridLayout, false);
+                                        gridLayout.addView(gridCell9);
+                                    }
+                                    ConstraintLayout layout9 = findViewById(R.id.layout_9);
+                                    if (layout9 != null) {
+                                        TextView textView9 = findViewById(R.id.textView9);
+                                        TextView textView9Label = findViewById(R.id.textView9label);
+                                        ImageView imageView9 = findViewById(R.id.imageView9);
+                                        layout9.setOnTouchListener(MainActivity.this);
+                                        layout9.setTag(cellNumber);
+                                        textView9.setTag(cellNumber);
+                                        textView9Label.setTag(cellNumber);
+                                        textView9Label.setText(cell9.getLabel());
+                                        textView9.setText(cell9.getValue());
+                                        if (cell9.getIcon() != null) {
+                                            imageView9.setImageDrawable(cell9.getIcon());
+                                        } else {
+                                            imageView9.setImageResource(android.R.color.transparent);
+                                        }
+                                    }
+                                    break;
+                                case 10:
+                                    if (gridChange) {
+                                        View gridCell10 = layoutInflater.inflate(R.layout.layout_griditem10, gridLayout, false);
+                                        gridLayout.addView(gridCell10);
+                                    }
+                                    ConstraintLayout layout10 = findViewById(R.id.layout_10);
+                                    if (layout10 != null) {
+                                        TextView textView10 = findViewById(R.id.textView10);
+                                        TextView textView10Label = findViewById(R.id.textView10label);
+                                        ImageView imageView10 = findViewById(R.id.imageView10);
+                                        layout10.setOnTouchListener(MainActivity.this);
+                                        layout10.setTag(cellNumber);
+                                        textView10.setTag(cellNumber);
+                                        textView10Label.setTag(cellNumber);
+                                        textView10Label.setText(cell10.getLabel());
+                                        textView10.setText(cell10.getValue());
+                                        if (cell10.getIcon() != null) {
+                                            imageView10.setImageDrawable(cell10.getIcon());
+                                        } else {
+                                            imageView10.setImageResource(android.R.color.transparent);
+                                        }
+                                    }
+                                    break;
+                                case 11:
+                                    if (gridChange) {
+                                        View gridCell11 = layoutInflater.inflate(R.layout.layout_griditem11, gridLayout, false);
+                                        gridLayout.addView(gridCell11);
+                                    }
+                                    ConstraintLayout layout11 = findViewById(R.id.layout_11);
+                                    if (layout11 != null) {
+                                        TextView textView11 = findViewById(R.id.textView11);
+                                        TextView textView11Label = findViewById(R.id.textView11label);
+                                        ImageView imageView11 = findViewById(R.id.imageView11);
+                                        layout11.setOnTouchListener(MainActivity.this);
+                                        layout11.setTag(cellNumber);
+                                        textView11.setTag(cellNumber);
+                                        textView11Label.setTag(cellNumber);
+                                        textView11Label.setText(cell11.getLabel());
+                                        textView11.setText(cell11.getValue());
+                                        if (cell11.getIcon() != null) {
+                                            imageView11.setImageDrawable(cell11.getIcon());
+                                        } else {
+                                            imageView11.setImageResource(android.R.color.transparent);
+                                        }
+                                    }
+                                    break;
+                                case 12:
+                                    if (gridChange) {
+                                        View gridCell12 = layoutInflater.inflate(R.layout.layout_griditem12, gridLayout, false);
+                                        gridLayout.addView(gridCell12);
+                                    }
+                                    ConstraintLayout layout12 = findViewById(R.id.layout_12);
+                                    if (layout12 != null) {
+                                        TextView textView12 = findViewById(R.id.textView12);
+                                        TextView textView12Label = findViewById(R.id.textView12label);
+                                        ImageView imageView12 = findViewById(R.id.imageView12);
+                                        layout12.setOnTouchListener(MainActivity.this);
+                                        layout12.setTag(cellNumber);
+                                        textView12.setTag(cellNumber);
+                                        textView12Label.setTag(cellNumber);
+                                        textView12Label.setText(cell12.getLabel());
+                                        textView12.setText(cell12.getValue());
+                                        if (cell12.getIcon() != null) {
+                                            imageView12.setImageDrawable(cell12.getIcon());
+                                        } else {
+                                            imageView12.setImageResource(android.R.color.transparent);
+                                        }
+                                    }
+                                    break;
+                                case 13:
+                                    if (gridChange) {
+                                        View gridCell13 = layoutInflater.inflate(R.layout.layout_griditem13, gridLayout, false);
+                                        gridLayout.addView(gridCell13);
+                                    }
+                                    ConstraintLayout layout13 = findViewById(R.id.layout_13);
+                                    if (layout13 != null) {
+                                        TextView textView13 = findViewById(R.id.textView13);
+                                        TextView textView13Label = findViewById(R.id.textView13label);
+                                        ImageView imageView13 = findViewById(R.id.imageView13);
+                                        layout13.setOnTouchListener(MainActivity.this);
+                                        layout13.setTag(cellNumber);
+                                        textView13.setTag(cellNumber);
+                                        textView13Label.setTag(cellNumber);
+                                        textView13Label.setText(cell13.getLabel());
+                                        textView13.setText(cell13.getValue());
+                                        if (cell13.getIcon() != null) {
+                                            imageView13.setImageDrawable(cell13.getIcon());
+                                        } else {
+                                            imageView13.setImageResource(android.R.color.transparent);
+                                        }
+                                    }
+                                    break;
+                                case 14:
+                                    if (gridChange) {
+                                        View gridCell14 = layoutInflater.inflate(R.layout.layout_griditem14, gridLayout, false);
+                                        gridLayout.addView(gridCell14);
+                                    }
+                                    ConstraintLayout layout14 = findViewById(R.id.layout_14);
+                                    if (layout14 != null) {
+                                        TextView textView14 = findViewById(R.id.textView14);
+                                        TextView textView14Label = findViewById(R.id.textView14label);
+                                        ImageView imageView14 = findViewById(R.id.imageView14);
+                                        layout14.setOnTouchListener(MainActivity.this);
+                                        layout14.setTag(cellNumber);
+                                        textView14.setTag(cellNumber);
+                                        textView14Label.setTag(cellNumber);
+                                        textView14Label.setText(cell14.getLabel());
+                                        textView14.setText(cell14.getValue());
+                                        if (cell14.getIcon() != null) {
+                                            imageView14.setImageDrawable(cell14.getIcon());
+                                        } else {
+                                            imageView14.setImageResource(android.R.color.transparent);
+                                        }
+                                    }
+                                    break;
+                                case 15:
+                                    if (gridChange) {
+                                        View gridCell15 = layoutInflater.inflate(R.layout.layout_griditem15, gridLayout, false);
+                                        gridLayout.addView(gridCell15);
+                                    }
+                                    ConstraintLayout layout15 = findViewById(R.id.layout_15);
+                                    if (layout15 != null) {
+                                        TextView textView15 = findViewById(R.id.textView15);
+                                        TextView textView15Label = findViewById(R.id.textView15label);
+                                        ImageView imageView15 = findViewById(R.id.imageView15);
+                                        layout15.setOnTouchListener(MainActivity.this);
+                                        layout15.setTag(cellNumber);
+                                        textView15.setTag(cellNumber);
+                                        textView15Label.setTag(cellNumber);
+                                        textView15Label.setText(cell15.getLabel());
+                                        textView15.setText(cell15.getValue());
+                                        if (cell15.getIcon() != null) {
+                                            imageView15.setImageDrawable(cell15.getIcon());
+                                        } else {
+                                            imageView15.setImageResource(android.R.color.transparent);
+                                        }
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                            drawingComplete = true;
+                        }
+                    });
+                } catch (final Exception ex) {
+                    Log.i(TAG, "Exception in thread");
                 }
-                // Cell One
-                setCellText(1, cell1Data);
-                // Cell Two
-                setCellText(2, cell2Data);
-                // Cell Three
-                setCellText(3, cell3Data);
-                // Cell Four
-                setCellText(4, cell4Data);
-                // Cell Five
-                setCellText(5, cell5Data);
-                // Cell Six
-                setCellText(6, cell6Data);
-                // Cell Seven
-                setCellText(7, cell7Data);
-                // Cell Eight
-                setCellText(8, cell8Data);
-                // Cell Nine
-                setCellText(9, cell9Data);
-                // Cell Ten
-                setCellText(10, cell10Data);
-                gridChange = false;
-                break;
-            case 8:
-                if (gridChange) {
-                    gridLayout.removeAllViews();
-                    if (portrait) {
-                        gridLayout.setColumnCount(2);
-                        gridLayout.setRowCount(4);
-                    } else {
-                        gridLayout.setColumnCount(4);
-                        gridLayout.setRowCount(2);
-                    }
-                }
-                // Cell One
-                setCellText(1, cell1Data);
-                // Cell Two
-                setCellText(2, cell2Data);
-                // Cell Three
-                setCellText(3, cell3Data);
-                // Cell Four
-                setCellText(4, cell4Data);
-                // Cell Five
-                setCellText(5, cell5Data);
-                // Cell Six
-                setCellText(6, cell6Data);
-                // Cell Seven
-                setCellText(7, cell7Data);
-                // Cell Eight
-                setCellText(8, cell8Data);
-                gridChange = false;
-                break;
-            case 4:
-                if (gridChange) {
-                    gridLayout.removeAllViews();
-                    if (portrait) {
-                        gridLayout.setColumnCount(1);
-                        gridLayout.setRowCount(4);
-                    } else {
-                        gridLayout.setColumnCount(2);
-                        gridLayout.setRowCount(2);
-                    }
-                }
-                // Cell One
-                setCellText(1, cell1Data);
-                // Cell Two
-                setCellText(2, cell2Data);
-                // Cell Three
-                setCellText(3, cell3Data);
-                // Cell Four
-                setCellText(4, cell4Data);
-                gridChange = false;
-                break;
-            case 2:
-                if (gridChange) {
-                    gridLayout.removeAllViews();
-                    if (portrait) {
-                        gridLayout.setColumnCount(1);
-                        gridLayout.setRowCount(2);
-                    } else {
-                        gridLayout.setColumnCount(2);
-                        gridLayout.setRowCount(1);
-                    }
-                }
-                // Cell One
-                setCellText(1, cell1Data);
-                // Cell Two
-                setCellText(2, cell2Data);
-                gridChange = false;
-                break;
-            case 1:
-                if (gridChange) {
-                    gridLayout.removeAllViews();
-                    gridLayout.setColumnCount(1);
-                    gridLayout.setRowCount(1);
-                }
-                // Cell One
-                setCellText(1, cell1Data);
-                gridChange = false;
-                break;
-        }
+            }
+        }.start();
     }
 
-    // Set Cell Text
-    private void setCellText(Integer cellNumber, Integer dataPoint){
+    public GridItem getCellData(int dataPoint){
         String pressureUnit = "bar";
         String pressureFormat = sharedPrefs.getString("prefPressureF", "0");
         if (pressureFormat.contains("1")) {
@@ -1217,12 +1489,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 if(Data.getGear() != null){
                     value = Data.getGear();
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_cog);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_cog);
                 break;
             case 1:
                 //Engine
                 label = getString(R.string.engine_temp_label) + " (" + temperatureUnit + ")";
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_engine_temp);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_engine_temp);
                 if(Data.getEngineTemperature() != null ){
                     double engineTemp = Data.getEngineTemperature();
                     if (engineTemp >= 104.0){
@@ -1241,9 +1513,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 if(Data.getAmbientTemperature() != null ){
                     double ambientTemp = Data.getAmbientTemperature();
                     if(ambientTemp <= 0){
-                        icon = AppCompatResources.getDrawable(this, R.drawable.ic_snowflake);
+                        icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_snowflake);
+                        icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.motorrad_blue), PorterDuff.Mode.SRC_ATOP);
                     } else {
-                        icon = AppCompatResources.getDrawable(this, R.drawable.ic_thermometer_half);
+                        icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_thermometer_half);
                     }
                     if (temperatureFormat.contains("1")) {
                         // F
@@ -1251,7 +1524,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Math.round(ambientTemp));
                 } else {
-                    icon = AppCompatResources.getDrawable(this, R.drawable.ic_thermometer_half);
+                    icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_thermometer_half);
                 }
 
                 break;
@@ -1272,12 +1545,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Utils.oneDigit.format(rdcFront));
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_tire);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_tire);
                 if (FaultStatus.getfrontTirePressureCriticalActive()){
-                    icon = AppCompatResources.getDrawable(this, R.drawable.ic_tire_alert);
+                    icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_tire_alert);
                     icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
                 } else if (FaultStatus.getfrontTirePressureWarningActive()){
-                    icon = AppCompatResources.getDrawable(this, R.drawable.ic_tire_alert);
+                    icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_tire_alert);
                     icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
                 }
                 break;
@@ -1298,12 +1571,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Utils.oneDigit.format(rdcRear));
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_tire);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_tire);
                 if (FaultStatus.getrearTirePressureCriticalActive()){
-                    icon = AppCompatResources.getDrawable(this, R.drawable.ic_tire_alert);
+                    icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_tire_alert);
                     icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
                 } else if (FaultStatus.getrearTirePressureWarningActive()){
-                    icon = AppCompatResources.getDrawable(this, R.drawable.ic_tire_alert);
+                    icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_tire_alert);
                     icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
                 }
                 break;
@@ -1317,7 +1590,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Math.round(odometer));
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_dashboard_meter);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_dashboard_meter);
                 break;
             case 6:
                 //Voltage
@@ -1326,7 +1599,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Double voltage = Data.getvoltage();
                     value = String.valueOf(Utils.oneDigit.format(voltage));
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_car_battery);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_car_battery);
                 break;
             case 7:
                 //Throttle
@@ -1335,7 +1608,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Double throttlePosition = Data.getThrottlePosition();
                     value = String.valueOf(Math.round(throttlePosition));
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_signature);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_signature);
                 break;
             case 8:
                 //Front Brakes
@@ -1344,7 +1617,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Integer frontBrakes = Data.getFrontBrake();
                     value = String.valueOf(frontBrakes);
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_brakes);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_brakes);
                 break;
             case 9:
                 //Rear Brakes
@@ -1353,7 +1626,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Integer rearBrakes = Data.getRearBrake();
                     value = String.valueOf(rearBrakes);
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_brakes);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_brakes);
                 break;
             case 10:
                 //Ambient Light
@@ -1362,7 +1635,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Integer ambientLight = Data.getAmbientLight();
                     value = String.valueOf(ambientLight);
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_lightbulb);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_lightbulb);
                 break;
             case 11:
                 //Trip 1
@@ -1374,7 +1647,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = Utils.oneDigit.format(trip1);
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_suitcase);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_suitcase);
                 break;
             case 12:
                 //Trip 2
@@ -1386,7 +1659,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = Utils.oneDigit.format(trip2);
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_suitcase);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_suitcase);
                 break;
             case 13:
                 //Trip Auto
@@ -1398,7 +1671,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = Utils.oneDigit.format(tripauto);
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_suitcase);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_suitcase);
                 break;
             case 14:
                 //Speed
@@ -1410,7 +1683,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Math.round(speed));
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_tachometer_alt);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_tachometer_alt);
                 break;
             case 15:
                 //Average Speed
@@ -1422,7 +1695,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Utils.oneDigit.format(avgspeed));
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_tachometer_alt);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_tachometer_alt);
                 break;
             case 16:
                 //Current Consumption
@@ -1438,7 +1711,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Utils.oneDigit.format(currentConsumption));
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_gas_pump);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_gas_pump);
                 break;
             case 17:
                 //Fuel Economy One
@@ -1454,7 +1727,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Utils.oneDigit.format(fuelEconomyOne));
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_gas_pump);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_gas_pump);
                 break;
             case 18:
                 //Fuel Economy Two
@@ -1470,7 +1743,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Utils.oneDigit.format(fuelEconomyTwo));
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_gas_pump);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_gas_pump);
                 break;
             case 19:
                 //Fuel Range
@@ -1482,7 +1755,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Math.round(fuelrange));
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_gas_pump);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_gas_pump);
                 break;
             case 20:
                 //Shifts
@@ -1491,7 +1764,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     int shifts = Data.getNumberOfShifts();
                     value = String.valueOf(shifts);
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_arrows_alt_v);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_arrows_alt_v);
                 break;
             case 21:
                 //Lean Angle
@@ -1500,7 +1773,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Double leanAngle = Data.getLeanAngle();
                     value = String.valueOf(Math.round(leanAngle));
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_angle);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_angle);
                 break;
             case 22:
                 //g-force
@@ -1509,7 +1782,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Double gForce = Data.getGForce();
                     value = String.valueOf(Utils.oneDigit.format(gForce));
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_accelerometer);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_accelerometer);
                 break;
             case 23:
                 //bearing
@@ -1538,7 +1811,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = bearing;
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_compass);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_compass);
                 break;
             case 24:
                 //time
@@ -1550,7 +1823,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = dateformat.format(Data.getTime());
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_clock);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_clock);
                 break;
             case 25:
                 //barometric pressure
@@ -1558,7 +1831,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 if (Data.getBarometricPressure() != null) {
                     value = String.valueOf(Math.round(Data.getBarometricPressure()));
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_barometer);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_barometer);
                 break;
             case 26:
                 //GPS Speed
@@ -1571,7 +1844,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                 }
                 value = gpsSpeed;
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_tachometer_alt);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_tachometer_alt);
                 break;
             case 27:
                 //Altitude
@@ -1584,7 +1857,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                 }
                 value = altitude;
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_mountain);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_mountain);
                 break;
             case 28:
                 //Sunrise/Sunset
@@ -1603,14 +1876,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     value = sunriseString + "/" + sunsetString;
 
                     if(current.compareTo(sunrise) > 0 && current.compareTo(sunset) < 0){
-                        icon = AppCompatResources.getDrawable(this, R.drawable.ic_sun);
+                        icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_sun);
                     } else {
-                        icon = AppCompatResources.getDrawable(this, R.drawable.ic_moon);
+                        icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_moon);
                     }
 
                 } else {
                     value = "No Fix";
-                    icon = AppCompatResources.getDrawable(this, R.drawable.ic_sun);
+                    icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_sun);
                 }
 
                 break;
@@ -1620,7 +1893,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 if (Data.getRPM() > 0){
                     value = String.valueOf(Data.getRPM());
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_tachometer_alt);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_tachometer_alt);
                 break;
             case 30:
                 //Lean Angle Bike
@@ -1629,7 +1902,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     Double leanAngleBike = Data.getLeanAngleBike();
                     value = String.valueOf(Math.round(leanAngleBike));
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_angle);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_angle);
                 break;
             case 31:
                 //Rear Wheel Speed
@@ -1641,332 +1914,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     value = String.valueOf(Math.round(speed));
                 }
-                icon = AppCompatResources.getDrawable(this, R.drawable.ic_tachometer_alt);
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_tachometer_alt);
                 break;
             default:
 
                 break;
         }
-        switch (cellNumber){
-            case 1:
-                if (gridChange) {
-                    View gridCell1 = layoutInflater.inflate(R.layout.layout_griditem1, gridLayout, false);
-                    gridLayout.addView(gridCell1);
-                }
-                ConstraintLayout layout1 = findViewById(R.id.layout_1);
-                TextView textView1 = findViewById(R.id.textView1);
-                TextView textView1Label = findViewById(R.id.textView1label);
-                ImageView imageView1 = findViewById(R.id.imageView1);
-                layout1.setOnTouchListener(MainActivity.this);
-                layout1.setTag(cellNumber);
-                textView1.setTag(cellNumber);
-                textView1Label.setTag(cellNumber);
-                textView1Label.setText(label);
-                textView1.setText(value);
-                if (icon !=null) {
-                    imageView1.setImageDrawable(icon);
-                } else {
-                    imageView1.setImageResource(android.R.color.transparent);
-                }
-                break;
-            case 2:
-                if (gridChange) {
-                    View gridCell2 = layoutInflater.inflate(R.layout.layout_griditem2, gridLayout, false);
-                    gridLayout.addView(gridCell2);
-                }
-                ConstraintLayout layout2 = findViewById(R.id.layout_2);
-                TextView textView2 = findViewById(R.id.textView2);
-                TextView textView2Label = findViewById(R.id.textView2label);
-                ImageView imageView2 = findViewById(R.id.imageView2);
-                layout2.setOnTouchListener(MainActivity.this);
-                layout2.setTag(cellNumber);
-                textView2.setTag(cellNumber);
-                textView2Label.setTag(cellNumber);
-                textView2Label.setText(label);
-                textView2.setText(value);
-                if (icon !=null) {
-                    imageView2.setImageDrawable(icon);
-                } else {
-                    imageView2.setImageResource(android.R.color.transparent);
-                }
-                break;
-            case 3:
-                if (gridChange) {
-                    View gridCell3 = layoutInflater.inflate(R.layout.layout_griditem3, gridLayout, false);
-                    gridLayout.addView(gridCell3);
-                }
-                ConstraintLayout layout3 = findViewById(R.id.layout_3);
-                TextView textView3 = findViewById(R.id.textView3);
-                TextView textView3Label = findViewById(R.id.textView3label);
-                ImageView imageView3 = findViewById(R.id.imageView3);
-                layout3.setOnTouchListener(MainActivity.this);
-                layout3.setTag(cellNumber);
-                textView3.setTag(cellNumber);
-                textView3Label.setTag(cellNumber);
-                textView3Label.setText(label);
-                textView3.setText(value);
-                if (icon !=null) {
-                    imageView3.setImageDrawable(icon);
-                } else {
-                    imageView3.setImageResource(android.R.color.transparent);
-                }
-                break;
-            case 4:
-                if (gridChange) {
-                    View gridCell4 = layoutInflater.inflate(R.layout.layout_griditem4, gridLayout, false);
-                    gridLayout.addView(gridCell4);
-                }
-                ConstraintLayout layout4 = findViewById(R.id.layout_4);
-                TextView textView4 = findViewById(R.id.textView4);
-                TextView textView4Label = findViewById(R.id.textView4label);
-                ImageView imageView4 = findViewById(R.id.imageView4);
-                layout4.setOnTouchListener(MainActivity.this);
-                layout4.setTag(cellNumber);
-                textView4.setTag(cellNumber);
-                textView4Label.setTag(cellNumber);
-                textView4Label.setText(label);
-                textView4.setText(value);
-                if (icon !=null) {
-                    imageView4.setImageDrawable(icon);
-                } else {
-                    imageView4.setImageResource(android.R.color.transparent);
-                }
-                break;
-            case 5:
-                if (gridChange) {
-                    View gridCell5 = layoutInflater.inflate(R.layout.layout_griditem5, gridLayout, false);
-                    gridLayout.addView(gridCell5);
-                }
-                ConstraintLayout layout5 = findViewById(R.id.layout_5);
-                TextView textView5 = findViewById(R.id.textView5);
-                TextView textView5Label = findViewById(R.id.textView5label);
-                ImageView imageView5 = findViewById(R.id.imageView5);
-                layout5.setOnTouchListener(MainActivity.this);
-                layout5.setTag(cellNumber);
-                textView5.setTag(cellNumber);
-                textView5Label.setTag(cellNumber);
-                textView5Label.setText(label);
-                textView5.setText(value);
-                if (icon !=null) {
-                    imageView5.setImageDrawable(icon);
-                } else {
-                    imageView5.setImageResource(android.R.color.transparent);
-                }
-                break;
-            case 6:
-                if (gridChange) {
-                    View gridCell6 = layoutInflater.inflate(R.layout.layout_griditem6, gridLayout, false);
-                    gridLayout.addView(gridCell6);
-                }
-                ConstraintLayout layout6 = findViewById(R.id.layout_6);
-                TextView textView6 = findViewById(R.id.textView6);
-                TextView textView6Label = findViewById(R.id.textView6label);
-                ImageView imageView6 = findViewById(R.id.imageView6);
-                layout6.setOnTouchListener(MainActivity.this);
-                layout6.setTag(cellNumber);
-                textView6.setTag(cellNumber);
-                textView6Label.setTag(cellNumber);
-                textView6Label.setText(label);
-                textView6.setText(value);
-                if (icon !=null) {
-                    imageView6.setImageDrawable(icon);
-                } else {
-                    imageView6.setImageResource(android.R.color.transparent);
-                }
-                break;
-            case 7:
-                if (gridChange) {
-                    View gridCell7 = layoutInflater.inflate(R.layout.layout_griditem7, gridLayout, false);
-                    gridLayout.addView(gridCell7);
-                }
-                ConstraintLayout layout7 = findViewById(R.id.layout_7);
-                TextView textView7 = findViewById(R.id.textView7);
-                TextView textView7Label = findViewById(R.id.textView7label);
-                ImageView imageView7 = findViewById(R.id.imageView7);
-                layout7.setOnTouchListener(MainActivity.this);
-                layout7.setTag(cellNumber);
-                textView7.setTag(cellNumber);
-                textView7Label.setTag(cellNumber);
-                textView7Label.setText(label);
-                textView7.setText(value);
-                if (icon !=null) {
-                    imageView7.setImageDrawable(icon);
-                } else {
-                    imageView7.setImageResource(android.R.color.transparent);
-                }
-                break;
-            case 8:
-                if (gridChange) {
-                    View gridCell8 = layoutInflater.inflate(R.layout.layout_griditem8, gridLayout, false);
-                    gridLayout.addView(gridCell8);
-                }
-                ConstraintLayout layout8 = findViewById(R.id.layout_8);
-                TextView textView8 = findViewById(R.id.textView8);
-                TextView textView8Label = findViewById(R.id.textView8label);
-                ImageView imageView8 = findViewById(R.id.imageView8);
-                layout8.setOnTouchListener(MainActivity.this);
-                layout8.setTag(cellNumber);
-                textView8.setTag(cellNumber);
-                textView8Label.setTag(cellNumber);
-                textView8Label.setText(label);
-                textView8.setText(value);
-                if (icon !=null) {
-                    imageView8.setImageDrawable(icon);
-                } else {
-                    imageView8.setImageResource(android.R.color.transparent);
-                }
-                break;
-            case 9:
-                if (gridChange) {
-                    View gridCell9 = layoutInflater.inflate(R.layout.layout_griditem9, gridLayout, false);
-                    gridLayout.addView(gridCell9);
-                }
-                ConstraintLayout layout9 = findViewById(R.id.layout_9);
-                TextView textView9 = findViewById(R.id.textView9);
-                TextView textView9Label = findViewById(R.id.textView9label);
-                ImageView imageView9 = findViewById(R.id.imageView9);
-                layout9.setOnTouchListener(MainActivity.this);
-                layout9.setTag(cellNumber);
-                textView9.setTag(cellNumber);
-                textView9Label.setTag(cellNumber);
-                textView9Label.setText(label);
-                textView9.setText(value);
-                if (icon !=null) {
-                    imageView9.setImageDrawable(icon);
-                } else {
-                    imageView9.setImageResource(android.R.color.transparent);
-                }
-                break;
-            case 10:
-                if (gridChange) {
-                    View gridCell10 = layoutInflater.inflate(R.layout.layout_griditem10, gridLayout, false);
-                    gridLayout.addView(gridCell10);
-                }
-                ConstraintLayout layout10 = findViewById(R.id.layout_10);
-                TextView textView10 = findViewById(R.id.textView10);
-                TextView textView10Label = findViewById(R.id.textView10label);
-                ImageView imageView10 = findViewById(R.id.imageView10);
-                layout10.setOnTouchListener(MainActivity.this);
-                layout10.setTag(cellNumber);
-                textView10.setTag(cellNumber);
-                textView10Label.setTag(cellNumber);
-                textView10Label.setText(label);
-                textView10.setText(value);
-                if (icon !=null) {
-                    imageView10.setImageDrawable(icon);
-                } else {
-                    imageView10.setImageResource(android.R.color.transparent);
-                }
-                break;
-            case 11:
-                if (gridChange) {
-                    View gridCell11 = layoutInflater.inflate(R.layout.layout_griditem11, gridLayout, false);
-                    gridLayout.addView(gridCell11);
-                }
-                ConstraintLayout layout11 = findViewById(R.id.layout_11);
-                TextView textView11 = findViewById(R.id.textView11);
-                TextView textView11Label = findViewById(R.id.textView11label);
-                ImageView imageView11 = findViewById(R.id.imageView11);
-                layout11.setOnTouchListener(MainActivity.this);
-                layout11.setTag(cellNumber);
-                textView11.setTag(cellNumber);
-                textView11Label.setTag(cellNumber);
-                textView11Label.setText(label);
-                textView11.setText(value);
-                if (icon !=null) {
-                    imageView11.setImageDrawable(icon);
-                } else {
-                    imageView11.setImageResource(android.R.color.transparent);
-                }
-                break;
-            case 12:
-                if (gridChange) {
-                    View gridCell12 = layoutInflater.inflate(R.layout.layout_griditem12, gridLayout, false);
-                    gridLayout.addView(gridCell12);
-                }
-                ConstraintLayout layout12 = findViewById(R.id.layout_12);
-                TextView textView12 = findViewById(R.id.textView12);
-                TextView textView12Label = findViewById(R.id.textView12label);
-                ImageView imageView12 = findViewById(R.id.imageView12);
-                layout12.setOnTouchListener(MainActivity.this);
-                layout12.setTag(cellNumber);
-                textView12.setTag(cellNumber);
-                textView12Label.setTag(cellNumber);
-                textView12Label.setText(label);
-                textView12.setText(value);
-                if (icon !=null) {
-                    imageView12.setImageDrawable(icon);
-                } else {
-                    imageView12.setImageResource(android.R.color.transparent);
-                }
-                break;
-            case 13:
-                if (gridChange) {
-                    View gridCell13 = layoutInflater.inflate(R.layout.layout_griditem13, gridLayout, false);
-                    gridLayout.addView(gridCell13);
-                }
-                ConstraintLayout layout13 = findViewById(R.id.layout_13);
-                TextView textView13 = findViewById(R.id.textView13);
-                TextView textView13Label = findViewById(R.id.textView13label);
-                ImageView imageView13 = findViewById(R.id.imageView13);
-                layout13.setOnTouchListener(MainActivity.this);
-                layout13.setTag(cellNumber);
-                textView13.setTag(cellNumber);
-                textView13Label.setTag(cellNumber);
-                textView13Label.setText(label);
-                textView13.setText(value);
-                if (icon !=null) {
-                    imageView13.setImageDrawable(icon);
-                } else {
-                    imageView13.setImageResource(android.R.color.transparent);
-                }
-                break;
-            case 14:
-                if (gridChange) {
-                    View gridCell14 = layoutInflater.inflate(R.layout.layout_griditem14, gridLayout, false);
-                    gridLayout.addView(gridCell14);
-                }
-                ConstraintLayout layout14 = findViewById(R.id.layout_14);
-                TextView textView14 = findViewById(R.id.textView14);
-                TextView textView14Label = findViewById(R.id.textView14label);
-                ImageView imageView14 = findViewById(R.id.imageView14);
-                layout14.setOnTouchListener(MainActivity.this);
-                layout14.setTag(cellNumber);
-                textView14.setTag(cellNumber);
-                textView14Label.setTag(cellNumber);
-                textView14Label.setText(label);
-                textView14.setText(value);
-                if (icon !=null) {
-                    imageView14.setImageDrawable(icon);
-                } else {
-                    imageView14.setImageResource(android.R.color.transparent);
-                }
-                break;
-            case 15:
-                if (gridChange) {
-                    View gridCell15 = layoutInflater.inflate(R.layout.layout_griditem15, gridLayout, false);
-                    gridLayout.addView(gridCell15);
-                }
-                ConstraintLayout layout15 = findViewById(R.id.layout_15);
-                TextView textView15 = findViewById(R.id.textView15);
-                TextView textView15Label = findViewById(R.id.textView15label);
-                ImageView imageView15 = findViewById(R.id.imageView15);
-                layout15.setOnTouchListener(MainActivity.this);
-                layout15.setTag(cellNumber);
-                textView15.setTag(cellNumber);
-                textView15Label.setTag(cellNumber);
-                textView15Label.setText(label);
-                textView15.setText(value);
-                if (icon !=null) {
-                    imageView15.setImageDrawable(icon);
-                } else {
-                    imageView15.setImageResource(android.R.color.transparent);
-                }
-                break;
-            default:
-                break;
-        }
-        drawingComplete = true;
+        return new GridItem(icon,label,value);
     }
 
     @Override
@@ -2116,5 +2070,27 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         editor.putString("CELL_COUNT", String.valueOf(nextCellCount));
         editor.apply();
         updateDisplay();
+    }
+}
+
+class GridItem {
+    private String label;
+    private String value;
+    private Drawable icon;
+
+    public GridItem(Drawable icon, String label, String value) {
+        this.icon = icon;
+        this.label = label;
+        this.value = value;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+    public String getValue() {
+        return value;
+    }
+    public Drawable getIcon() {
+        return icon;
     }
 }

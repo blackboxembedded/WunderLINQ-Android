@@ -286,26 +286,20 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 startActivity(forwardIntent);
                 return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
-                if ((adapter.selected == (mapping.size() - 1))){
-                    adapter.selected = 0;
-                } else {
+                if ((adapter.selected != (mapping.size() - 1))){
                     adapter.selected = adapter.selected + 1;
                 }
                 selected = adapter.selected;
                 updateTasks();
                 taskListView.smoothScrollToPosition(adapter.selected);
-                //updateTasks();
                 return true;
             case KeyEvent.KEYCODE_DPAD_UP:
-                if (adapter.selected == 0){
-                    adapter.selected = mapping.size() - 1;
-                } else {
+                if (adapter.selected != 0){
                     adapter.selected = adapter.selected - 1;
                 }
                 selected = adapter.selected;
                 updateTasks();
                 taskListView.smoothScrollToPosition(adapter.selected);
-                //updateTasks();
                 return true;
             default:
                 return super.onKeyUp(keyCode, event);

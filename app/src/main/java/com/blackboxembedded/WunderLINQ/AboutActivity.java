@@ -157,8 +157,8 @@ public class AboutActivity extends AppCompatActivity {
         super.onResume();
         if (Data.wlq != null) {
             if (Data.wlq.getFirmwareVersion() == null) {
-                if (MainActivity.gattCommandCharacteristic != null) {
-                    BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, WLQ_N.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                if (BluetoothLeService.gattCommandCharacteristic != null) {
+                    BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, WLQ_N.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
                 }
             } else {
                 fwVersion = Data.wlq.getFirmwareVersion();

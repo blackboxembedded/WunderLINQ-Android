@@ -91,7 +91,7 @@ public class BikeInfoActivity extends AppCompatActivity {
         btReset = findViewById(R.id.btReset);
         btReset.setOnClickListener(mClickListener);
 
-        characteristic = MainActivity.gattCommandCharacteristic;
+        characteristic = BluetoothLeService.gattCommandCharacteristic;
         if ((characteristic != null) & (Data.wlq.getFirmwareVersion() == null)) {
             // Get Config
             BluetoothLeService.writeCharacteristic(characteristic, WLQ_N.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);

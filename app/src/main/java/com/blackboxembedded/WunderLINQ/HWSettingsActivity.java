@@ -53,7 +53,7 @@ import java.util.Arrays;
 
 public class HWSettingsActivity extends AppCompatActivity implements HWSettingsRecyclerViewAdapter.ItemClickListener  {
 
-    private final static String TAG = "HWSettingsActvity";
+    private final static String TAG = "HWSettingsActivity";
 
     private ImageButton resetButton;
     private TextView fwVersionTV;
@@ -101,14 +101,14 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
 
         // Read config
-        if (MainActivity.gattCommandCharacteristic != null) {
-            BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, WLQ_BASE.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+        if (BluetoothLeService.gattCommandCharacteristic != null) {
+            BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, WLQ_BASE.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
         }
 
         // Read HW Version
         if (Data.hardwareVersion == null) {
-            if (MainActivity.gattHWCharacteristic != null) {
-                BluetoothLeService.readCharacteristic(MainActivity.gattCommandCharacteristic);
+            if (BluetoothLeService.gattHWCharacteristic != null) {
+                BluetoothLeService.readCharacteristic(BluetoothLeService.gattCommandCharacteristic);
             }
         }
 
@@ -292,8 +292,8 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
         } else {
             //TODO: Add No Config msg & get Config button
             // Read config
-            if (MainActivity.gattCommandCharacteristic != null) {
-                BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, WLQ_BASE.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+            if (BluetoothLeService.gattCommandCharacteristic != null) {
+                BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, WLQ_BASE.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
             }
         }
     }
@@ -321,7 +321,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                     outputStream.write(Data.wlq.CMD_EOM());
                                     byte[] writeConfigCmd = outputStream.toByteArray();
                                     Log.d(TAG, "Reset Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
-                                    BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
+                                    BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                                 }
                             } else if (Data.wlq.getHardwareType() == WLQ.TYPE_COMMANDER) {
                                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -330,7 +330,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                 outputStream.write(Data.wlq.CMD_EOM());
                                 byte[] writeConfigCmd = outputStream.toByteArray();
                                 Log.d(TAG, "Reset Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
-                                BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
+                                BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                             }
                         } catch (IOException e) {
                             Log.d(TAG, e.toString());
@@ -371,7 +371,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                             outputStream.write(Data.wlq.getTempConfig());
                                             outputStream.write(Data.wlq.CMD_EOM());
                                             byte[] writeConfigCmd = outputStream.toByteArray();
-                                            BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
+                                            BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                                         } catch (IOException e) {
                                             Log.d(TAG, e.toString());
                                         }
@@ -386,7 +386,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                     outputStream.write(Data.wlq.getTempConfig());
                                     outputStream.write(Data.wlq.CMD_EOM());
                                     byte[] writeConfigCmd = outputStream.toByteArray();
-                                    BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
+                                    BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                                 } catch (IOException e) {
                                     Log.d(TAG, e.toString());
                                 }
@@ -425,7 +425,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                             outputStream.write(mode);
                             outputStream.write(Data.wlq.CMD_EOM());
                             byte[] writeConfigCmd = outputStream.toByteArray();
-                            BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
+                            BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                         } catch (IOException e) {
                             Log.d(TAG, e.toString());
                         }
