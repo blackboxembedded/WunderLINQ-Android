@@ -236,12 +236,14 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
                 goBack();
                 return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
+            case KeyEvent.KEYCODE_MINUS:
                 if ((waypointList.getSelectedItemPosition() == (listValues.size() - 1)) && lastPosition == (listValues.size() - 1) ){
                     waypointList.setSelection(0);
                 }
                 lastPosition = waypointList.getSelectedItemPosition();
                 return true;
             case KeyEvent.KEYCODE_DPAD_UP:
+            case KeyEvent.KEYCODE_PLUS:
                 if (waypointList.getSelectedItemPosition() == 0 && lastPosition == 0){
                     waypointList.setSelection(listValues.size() - 1);
                 }

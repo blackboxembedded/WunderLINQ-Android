@@ -1935,9 +1935,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 goForward();
                 return true;
             case KeyEvent.KEYCODE_DPAD_UP:
+            case KeyEvent.KEYCODE_PLUS:
                 goUp();
                 return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
+            case KeyEvent.KEYCODE_MINUS:
                 goDown();
                 return true;
             default:

@@ -286,6 +286,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 startActivity(forwardIntent);
                 return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
+            case KeyEvent.KEYCODE_MINUS:
                 if ((adapter.selected != (mapping.size() - 1))){
                     adapter.selected = adapter.selected + 1;
                 }
@@ -294,6 +295,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 taskListView.smoothScrollToPosition(adapter.selected);
                 return true;
             case KeyEvent.KEYCODE_DPAD_UP:
+            case KeyEvent.KEYCODE_PLUS:
                 if (adapter.selected != 0){
                     adapter.selected = adapter.selected - 1;
                 }

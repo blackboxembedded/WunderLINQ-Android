@@ -160,12 +160,14 @@ public class AppListActivity extends AppCompatActivity {
                 goBack();
                 return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
+            case KeyEvent.KEYCODE_MINUS:
                 if ((appList.getSelectedItemPosition() == (apps.size() - 1)) && lastPosition == (apps.size() - 1) ){
                     appList.setSelection(0);
                 }
                 lastPosition = appList.getSelectedItemPosition();
                 return true;
             case KeyEvent.KEYCODE_DPAD_UP:
+            case KeyEvent.KEYCODE_PLUS:
                 if (appList.getSelectedItemPosition() == 0 && lastPosition == 0){
                     appList.setSelection(apps.size() - 1);
                 }

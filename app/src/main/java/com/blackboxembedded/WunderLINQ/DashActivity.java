@@ -215,9 +215,11 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
                 prevDashboard();
                 return true;
             case KeyEvent.KEYCODE_DPAD_UP:
+            case KeyEvent.KEYCODE_PLUS:
                 nextInfoLine();
                 return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
+            case KeyEvent.KEYCODE_MINUS:
                 prevInfoLine();
                 return true;
             case KeyEvent.KEYCODE_DPAD_LEFT:

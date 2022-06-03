@@ -262,6 +262,7 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
                 goBack();
                 return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
+            case KeyEvent.KEYCODE_MINUS:
                 //Zoom Out
                 if (currentZoom > 3){
                     currentZoom = currentZoom - 1;
@@ -270,6 +271,7 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
                 }
                 return true;
             case KeyEvent.KEYCODE_DPAD_UP:
+            case KeyEvent.KEYCODE_PLUS:
                 //Zoom In
                 if (currentZoom < 16){
                     currentZoom = currentZoom + 1;
