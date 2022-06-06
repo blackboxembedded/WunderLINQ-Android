@@ -182,12 +182,14 @@ public class VolumeActivity extends AppCompatActivity {
                 return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
             case KeyEvent.KEYCODE_MINUS:
+            case KeyEvent.KEYCODE_NUMPAD_SUBTRACT:
                 //Volume Down
                 volumeDown();
                 updateUI();
                 return true;
             case KeyEvent.KEYCODE_DPAD_UP:
             case KeyEvent.KEYCODE_PLUS:
+            case KeyEvent.KEYCODE_NUMPAD_ADD:
                 //Volume Up
                 volumeUp();
                 updateUI();

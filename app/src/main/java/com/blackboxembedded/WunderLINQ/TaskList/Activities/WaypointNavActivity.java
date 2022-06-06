@@ -237,6 +237,7 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
                 return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
             case KeyEvent.KEYCODE_MINUS:
+            case KeyEvent.KEYCODE_NUMPAD_SUBTRACT:
                 if ((waypointList.getSelectedItemPosition() == (listValues.size() - 1)) && lastPosition == (listValues.size() - 1) ){
                     waypointList.setSelection(0);
                 }
@@ -244,6 +245,7 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
                 return true;
             case KeyEvent.KEYCODE_DPAD_UP:
             case KeyEvent.KEYCODE_PLUS:
+            case KeyEvent.KEYCODE_NUMPAD_ADD:
                 if (waypointList.getSelectedItemPosition() == 0 && lastPosition == 0){
                     waypointList.setSelection(listValues.size() - 1);
                 }

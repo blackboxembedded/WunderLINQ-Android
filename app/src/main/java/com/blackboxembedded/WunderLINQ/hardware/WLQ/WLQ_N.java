@@ -24,6 +24,8 @@ import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.Utils;
 
+import java.util.Arrays;
+
 public class WLQ_N extends WLQ_BASE {
 
     public final static String TAG = "WLQ_N";
@@ -251,83 +253,88 @@ public class WLQ_N extends WLQ_BASE {
         wunderLINQConfig = new byte[bytes.length];
         System.arraycopy(bytes, 0, wunderLINQConfig, 0, bytes.length);
 
-        Log.d("WLQ", "wunderLINQConfig: " + Utils.ByteArraytoHex(wunderLINQConfig));
+        Log.d(TAG, "WLQConfig: " + Utils.ByteArraytoHex(wunderLINQConfig));
 
-        flashConfig = new byte[configFlashSize];
-        System.arraycopy(bytes, 26, flashConfig, 0, configFlashSize);
+        byte[] flashConfigPart = new byte[configFlashSize];
+        System.arraycopy(bytes, 26, flashConfigPart, 0, configFlashSize);
 
-        tempConfig = new byte[flashConfig.length];
-        System.arraycopy(flashConfig, 0, tempConfig, 0, flashConfig.length);
+        if (!Arrays.equals(flashConfig, flashConfigPart)) {
+            flashConfig = new byte[configFlashSize];
+            System.arraycopy(flashConfigPart, 0, flashConfig, 0, flashConfigPart.length);
 
-        Log.d("WLQ", "flashConfig: " + Utils.ByteArraytoHex(flashConfig));
+            tempConfig = new byte[flashConfig.length];
+            System.arraycopy(flashConfig, 0, tempConfig, 0, flashConfig.length);
 
-        firmwareVersion = bytes[firmwareVersionMajor_INDEX] + "." + bytes[firmwareVersionMinor_INDEX];
+            Log.d(TAG, "New flashConfig: " + Utils.ByteArraytoHex(flashConfig));
 
-        keyMode = bytes[keyMode_INDEX];
-        USBVinThreshold =  ((flashConfig[USBVinThresholdHigh_INDEX] & 0xFF) << 8) | (flashConfig[USBVinThresholdLow_INDEX] & 0xFF);
-        RTKSensitivity = flashConfig[RTKSensitivity_INDEX];
-        RTKPagePressKeyType = flashConfig[RTKPagePressKeyType_INDEX];
-        RTKPagePressKeyModifier = flashConfig[RTKPagePressKeyModifier_INDEX];
-        RTKPagePressKey = flashConfig[RTKPagePressKey_INDEX];
-        RTKPageDoublePressKeyType = flashConfig[RTKPageDoublePressKeyType_INDEX];
-        RTKPageDoublePressKeyModifier = flashConfig[RTKPageDoublePressKeyModifier_INDEX];
-        RTKPageDoublePressKey = flashConfig[RTKPageDoublePressKey_INDEX];
-        RTKZoomPPressKeyType = flashConfig[RTKZoomPPressKeyType_INDEX];
-        RTKZoomPPressKeyModifier = flashConfig[RTKZoomPPressKeyModifier_INDEX];
-        RTKZoomPPressKey = flashConfig[RTKZoomPPressKey_INDEX];
-        RTKZoomPDoublePressKeyType = flashConfig[RTKZoomPDoublePressKeyType_INDEX];
-        RTKZoomPDoublePressKeyModifier = flashConfig[RTKZoomPDoublePressKeyModifier_INDEX];
-        RTKZoomPDoublePressKey = flashConfig[RTKZoomPDoublePressKey_INDEX];
-        RTKZoomMPressKeyType = flashConfig[RTKZoomMPressKeyType_INDEX];
-        RTKZoomMPressKeyModifier = flashConfig[RTKZoomMPressKeyModifier_INDEX];
-        RTKZoomMPressKey = flashConfig[RTKZoomMPressKey_INDEX];
-        RTKZoomMDoublePressKeyType = flashConfig[RTKZoomMDoublePressKeyType_INDEX];
-        RTKZoomMDoublePressKeyModifier = flashConfig[RTKZoomMDoublePressKeyModifier_INDEX];
-        RTKZoomMDoublePressKey = flashConfig[RTKZoomMDoublePressKey_INDEX];
-        RTKSpeakPressKeyType = flashConfig[RTKSpeakPressKeyType_INDEX];
-        RTKSpeakPressKeyModifier = flashConfig[RTKSpeakPressKeyModifier_INDEX];
-        RTKSpeakPressKey = flashConfig[RTKSpeakPressKey_INDEX];
-        RTKSpeakDoublePressKeyType = flashConfig[RTKSpeakDoublePressKeyType_INDEX];
-        RTKSpeakDoublePressKeyModifier = flashConfig[RTKSpeakDoublePressKeyModifier_INDEX];
-        RTKSpeakDoublePressKey = flashConfig[RTKSpeakDoublePressKey_INDEX];
-        RTKMutePressKeyType = flashConfig[RTKMutePressKeyType_INDEX];
-        RTKMutePressKeyModifier = flashConfig[RTKMutePressKeyModifier_INDEX];
-        RTKMutePressKey = flashConfig[RTKMutePressKey_INDEX];
-        RTKMuteDoublePressKeyType = flashConfig[RTKMuteDoublePressKeyType_INDEX];
-        RTKMuteDoublePressKeyModifier = flashConfig[RTKMuteDoublePressKeyModifier_INDEX];
-        RTKMuteDoublePressKey = flashConfig[RTKMuteDoublePressKey_INDEX];
-        RTKDisplayPressKeyType = flashConfig[RTKDisplayPressKeyType_INDEX];
-        RTKDisplayPressKeyModifier = flashConfig[RTKDisplayPressKeyModifier_INDEX];
-        RTKDisplayPressKey = flashConfig[RTKDisplayPressKey_INDEX];
-        RTKDisplayDoublePressKeyType = flashConfig[RTKDisplayDoublePressKeyType_INDEX];
-        RTKDisplayDoublePressKeyModifier = flashConfig[RTKDisplayDoublePressKeyModifier_INDEX];
-        RTKDisplayDoublePressKey = flashConfig[RTKDisplayDoublePressKey_INDEX];
+            firmwareVersion = bytes[firmwareVersionMajor_INDEX] + "." + bytes[firmwareVersionMinor_INDEX];
 
-        fullSensitivity = flashConfig[fullSensitivity_INDEX];
-        fullRightPressKeyType = flashConfig[fullRightPressKeyType_INDEX];
-        fullRightPressKeyModifier = flashConfig[fullRightPressKeyModifier_INDEX];
-        fullRightPressKey = flashConfig[fullRightPressKey_INDEX];
-        fullRightLongPressKeyType = flashConfig[fullRightLongPressKeyType_INDEX];
-        fullRightLongPressKeyModifier = flashConfig[fullRightLongPressKeyModifier_INDEX];
-        fullRightLongPressKey = flashConfig[fullRightLongPressKey_INDEX];
-        fullLeftPressKeyType = flashConfig[fullLeftPressKeyType_INDEX];
-        fullLeftPressKeyModifier = flashConfig[fullLeftPressKeyModifier_INDEX];
-        fullLeftPressKey = flashConfig[fullLeftPressKey_INDEX];
-        fullLeftLongPressKeyType = flashConfig[fullLeftLongPressKeyType_INDEX];
-        fullLeftLongPressKeyModifier = flashConfig[fullLeftLongPressKeyModifier_INDEX];
-        fullLeftLongPressKey = flashConfig[fullLeftLongPressKey_INDEX];
-        fullScrollUpKeyType = flashConfig[fullScrollUpKeyType_INDEX];
-        fullScrollUpKeyModifier = flashConfig[fullScrollUpKeyModifier_INDEX];
-        fullScrollUpKey = flashConfig[fullScrollUpKey_INDEX];
-        fullScrollDownKeyType = flashConfig[fullScrollDownKeyType_INDEX];
-        fullScrollDownKeyModifier = flashConfig[fullScrollDownKeyModifier_INDEX];
-        fullScrollDownKey = flashConfig[fullScrollDownKey_INDEX];
-        fullSignalPressKeyType = flashConfig[fullSignalPressKeyType_INDEX];
-        fullSignalPressKeyModifier = flashConfig[fullSignalPressKeyModifier_INDEX];
-        fullSignalPressKey = flashConfig[fullSignalPressKey_INDEX];
-        fullSignalLongPressKeyType = flashConfig[fullSignalLongPressKeyType_INDEX];
-        fullSignalLongPressKeyModifier = flashConfig[fullSignalLongPressKeyModifier_INDEX];
-        fullSignalLongPressKey = flashConfig[fullSignalLongPressKey_INDEX];
+            keyMode = bytes[keyMode_INDEX];
+            USBVinThreshold = ((flashConfig[USBVinThresholdHigh_INDEX] & 0xFF) << 8) | (flashConfig[USBVinThresholdLow_INDEX] & 0xFF);
+            RTKSensitivity = flashConfig[RTKSensitivity_INDEX];
+            RTKPagePressKeyType = flashConfig[RTKPagePressKeyType_INDEX];
+            RTKPagePressKeyModifier = flashConfig[RTKPagePressKeyModifier_INDEX];
+            RTKPagePressKey = flashConfig[RTKPagePressKey_INDEX];
+            RTKPageDoublePressKeyType = flashConfig[RTKPageDoublePressKeyType_INDEX];
+            RTKPageDoublePressKeyModifier = flashConfig[RTKPageDoublePressKeyModifier_INDEX];
+            RTKPageDoublePressKey = flashConfig[RTKPageDoublePressKey_INDEX];
+            RTKZoomPPressKeyType = flashConfig[RTKZoomPPressKeyType_INDEX];
+            RTKZoomPPressKeyModifier = flashConfig[RTKZoomPPressKeyModifier_INDEX];
+            RTKZoomPPressKey = flashConfig[RTKZoomPPressKey_INDEX];
+            RTKZoomPDoublePressKeyType = flashConfig[RTKZoomPDoublePressKeyType_INDEX];
+            RTKZoomPDoublePressKeyModifier = flashConfig[RTKZoomPDoublePressKeyModifier_INDEX];
+            RTKZoomPDoublePressKey = flashConfig[RTKZoomPDoublePressKey_INDEX];
+            RTKZoomMPressKeyType = flashConfig[RTKZoomMPressKeyType_INDEX];
+            RTKZoomMPressKeyModifier = flashConfig[RTKZoomMPressKeyModifier_INDEX];
+            RTKZoomMPressKey = flashConfig[RTKZoomMPressKey_INDEX];
+            RTKZoomMDoublePressKeyType = flashConfig[RTKZoomMDoublePressKeyType_INDEX];
+            RTKZoomMDoublePressKeyModifier = flashConfig[RTKZoomMDoublePressKeyModifier_INDEX];
+            RTKZoomMDoublePressKey = flashConfig[RTKZoomMDoublePressKey_INDEX];
+            RTKSpeakPressKeyType = flashConfig[RTKSpeakPressKeyType_INDEX];
+            RTKSpeakPressKeyModifier = flashConfig[RTKSpeakPressKeyModifier_INDEX];
+            RTKSpeakPressKey = flashConfig[RTKSpeakPressKey_INDEX];
+            RTKSpeakDoublePressKeyType = flashConfig[RTKSpeakDoublePressKeyType_INDEX];
+            RTKSpeakDoublePressKeyModifier = flashConfig[RTKSpeakDoublePressKeyModifier_INDEX];
+            RTKSpeakDoublePressKey = flashConfig[RTKSpeakDoublePressKey_INDEX];
+            RTKMutePressKeyType = flashConfig[RTKMutePressKeyType_INDEX];
+            RTKMutePressKeyModifier = flashConfig[RTKMutePressKeyModifier_INDEX];
+            RTKMutePressKey = flashConfig[RTKMutePressKey_INDEX];
+            RTKMuteDoublePressKeyType = flashConfig[RTKMuteDoublePressKeyType_INDEX];
+            RTKMuteDoublePressKeyModifier = flashConfig[RTKMuteDoublePressKeyModifier_INDEX];
+            RTKMuteDoublePressKey = flashConfig[RTKMuteDoublePressKey_INDEX];
+            RTKDisplayPressKeyType = flashConfig[RTKDisplayPressKeyType_INDEX];
+            RTKDisplayPressKeyModifier = flashConfig[RTKDisplayPressKeyModifier_INDEX];
+            RTKDisplayPressKey = flashConfig[RTKDisplayPressKey_INDEX];
+            RTKDisplayDoublePressKeyType = flashConfig[RTKDisplayDoublePressKeyType_INDEX];
+            RTKDisplayDoublePressKeyModifier = flashConfig[RTKDisplayDoublePressKeyModifier_INDEX];
+            RTKDisplayDoublePressKey = flashConfig[RTKDisplayDoublePressKey_INDEX];
+
+            fullSensitivity = flashConfig[fullSensitivity_INDEX];
+            fullRightPressKeyType = flashConfig[fullRightPressKeyType_INDEX];
+            fullRightPressKeyModifier = flashConfig[fullRightPressKeyModifier_INDEX];
+            fullRightPressKey = flashConfig[fullRightPressKey_INDEX];
+            fullRightLongPressKeyType = flashConfig[fullRightLongPressKeyType_INDEX];
+            fullRightLongPressKeyModifier = flashConfig[fullRightLongPressKeyModifier_INDEX];
+            fullRightLongPressKey = flashConfig[fullRightLongPressKey_INDEX];
+            fullLeftPressKeyType = flashConfig[fullLeftPressKeyType_INDEX];
+            fullLeftPressKeyModifier = flashConfig[fullLeftPressKeyModifier_INDEX];
+            fullLeftPressKey = flashConfig[fullLeftPressKey_INDEX];
+            fullLeftLongPressKeyType = flashConfig[fullLeftLongPressKeyType_INDEX];
+            fullLeftLongPressKeyModifier = flashConfig[fullLeftLongPressKeyModifier_INDEX];
+            fullLeftLongPressKey = flashConfig[fullLeftLongPressKey_INDEX];
+            fullScrollUpKeyType = flashConfig[fullScrollUpKeyType_INDEX];
+            fullScrollUpKeyModifier = flashConfig[fullScrollUpKeyModifier_INDEX];
+            fullScrollUpKey = flashConfig[fullScrollUpKey_INDEX];
+            fullScrollDownKeyType = flashConfig[fullScrollDownKeyType_INDEX];
+            fullScrollDownKeyModifier = flashConfig[fullScrollDownKeyModifier_INDEX];
+            fullScrollDownKey = flashConfig[fullScrollDownKey_INDEX];
+            fullSignalPressKeyType = flashConfig[fullSignalPressKeyType_INDEX];
+            fullSignalPressKeyModifier = flashConfig[fullSignalPressKeyModifier_INDEX];
+            fullSignalPressKey = flashConfig[fullSignalPressKey_INDEX];
+            fullSignalLongPressKeyType = flashConfig[fullSignalLongPressKeyType_INDEX];
+            fullSignalLongPressKeyModifier = flashConfig[fullSignalLongPressKeyModifier_INDEX];
+            fullSignalLongPressKey = flashConfig[fullSignalLongPressKey_INDEX];
+        }
     }
 
     @Override
@@ -764,84 +771,105 @@ public class WLQ_N extends WLQ_BASE {
                 tempConfig[RTKPagePressKeyType_INDEX] = type;
                 tempConfig[RTKPagePressKeyModifier_INDEX] = modifiers;
                 tempConfig[RTKPagePressKey_INDEX] = key;
+                break;
             case RTKPageDoublePress:
                 tempConfig[RTKPageDoublePressKeyType_INDEX] = type;
                 tempConfig[RTKPageDoublePressKeyModifier_INDEX] = modifiers;
                 tempConfig[RTKPageDoublePressKey_INDEX] = key;
+                break;
             case RTKZoomPlus:
                 tempConfig[RTKZoomPPressKeyType_INDEX] = type;
                 tempConfig[RTKZoomPPressKeyModifier_INDEX] = modifiers;
                 tempConfig[RTKZoomPPressKey_INDEX] = key;
+                break;
             case RTKZoomPlusDoublePress:
                 tempConfig[RTKZoomPDoublePressKeyType_INDEX] = type;
                 tempConfig[RTKZoomPDoublePressKeyModifier_INDEX] = modifiers;
                 tempConfig[RTKZoomPDoublePressKey_INDEX] = key;
+                break;
             case RTKZoomMinus:
                 tempConfig[RTKZoomMPressKeyType_INDEX] = type;
                 tempConfig[RTKZoomMPressKeyModifier_INDEX] = modifiers;
                 tempConfig[RTKZoomMPressKey_INDEX] = key;
+                break;
             case RTKZoomMinusDoublePress:
                 tempConfig[RTKZoomMDoublePressKeyType_INDEX] = type;
                 tempConfig[RTKZoomMDoublePressKeyModifier_INDEX] = modifiers;
                 tempConfig[RTKZoomMDoublePressKey_INDEX] = key;
+                break;
             case RTKSpeak:
                 tempConfig[RTKSpeakPressKeyType_INDEX] = type;
                 tempConfig[RTKSpeakPressKeyModifier_INDEX] = modifiers;
                 tempConfig[RTKSpeakPressKey_INDEX] = key;
+                break;
             case RTKSpeakDoublePress:
                 tempConfig[RTKSpeakDoublePressKeyType_INDEX] = type;
                 tempConfig[RTKSpeakDoublePressKeyModifier_INDEX] = modifiers;
                 tempConfig[RTKSpeakDoublePressKey_INDEX] = key;
+                break;
             case RTKMute:
                 tempConfig[RTKMutePressKeyType_INDEX] = type;
                 tempConfig[RTKMutePressKeyModifier_INDEX] = modifiers;
                 tempConfig[RTKMutePressKey_INDEX] = key;
+                break;
             case RTKMuteDoublePress:
                 tempConfig[RTKMuteDoublePressKeyType_INDEX] = type;
                 tempConfig[RTKMuteDoublePressKeyModifier_INDEX] = modifiers;
                 tempConfig[RTKMuteDoublePressKey_INDEX] = key;
+                break;
             case RTKDisplayOff:
                 tempConfig[RTKDisplayPressKeyType_INDEX] = type;
                 tempConfig[RTKDisplayPressKeyModifier_INDEX] = modifiers;
                 tempConfig[RTKDisplayPressKey_INDEX] = key;
+                break;
             case RTKDisplayOffDoublePress:
                 tempConfig[RTKDisplayDoublePressKeyType_INDEX] = type;
                 tempConfig[RTKDisplayDoublePressKeyModifier_INDEX] = modifiers;
                 tempConfig[RTKDisplayDoublePressKey_INDEX] = key;
+                break;
             case fullScrollUp:
                 tempConfig[fullScrollUpKeyType_INDEX] = type;
                 tempConfig[fullScrollUpKeyModifier_INDEX] = modifiers;
                 tempConfig[fullScrollUpKey_INDEX] = key;
+                break;
             case fullScrollDown:
                 tempConfig[fullScrollDownKeyType_INDEX] = type;
                 tempConfig[fullScrollDownKeyModifier_INDEX] = modifiers;
                 tempConfig[fullScrollDownKey_INDEX] = key;
+                break;
             case fullToggleRight:
                 tempConfig[fullRightPressKeyType_INDEX] = type;
                 tempConfig[fullRightPressKeyModifier_INDEX] = modifiers;
                 tempConfig[fullRightPressKey_INDEX] = key;
+                break;
             case fullToggleRightLongPress:
                 tempConfig[fullRightLongPressKeyType_INDEX] = type;
                 tempConfig[fullRightLongPressKeyModifier_INDEX] = modifiers;
                 tempConfig[fullRightLongPressKey_INDEX] = key;
+                break;
             case fullToggleLeft:
                 tempConfig[fullLeftPressKeyType_INDEX] = type;
                 tempConfig[fullLeftPressKeyModifier_INDEX] = modifiers;
                 tempConfig[fullLeftPressKey_INDEX] = key;
+                break;
             case fullToggleLeftLongPress:
                 tempConfig[fullLeftLongPressKeyType_INDEX] = type;
                 tempConfig[fullLeftLongPressKeyModifier_INDEX] = modifiers;
                 tempConfig[fullLeftLongPressKey_INDEX] = key;
+                break;
             case fullSignalCancel:
                 tempConfig[fullSignalPressKeyType_INDEX] = type;
                 tempConfig[fullSignalPressKeyModifier_INDEX] = modifiers;
                 tempConfig[fullSignalPressKey_INDEX] = key;
+                break;
             case fullSignalCancelLongPress:
                 tempConfig[fullSignalLongPressKeyType_INDEX] = type;
                 tempConfig[fullSignalLongPressKeyModifier_INDEX] = modifiers;
                 tempConfig[fullSignalLongPressKey_INDEX] = key;
+                break;
             default:
                 Log.d(TAG, "Unknown ActionID");
+                break;
         }
     }
 

@@ -161,6 +161,7 @@ public class AppListActivity extends AppCompatActivity {
                 return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
             case KeyEvent.KEYCODE_MINUS:
+            case KeyEvent.KEYCODE_NUMPAD_SUBTRACT:
                 if ((appList.getSelectedItemPosition() == (apps.size() - 1)) && lastPosition == (apps.size() - 1) ){
                     appList.setSelection(0);
                 }
@@ -168,6 +169,7 @@ public class AppListActivity extends AppCompatActivity {
                 return true;
             case KeyEvent.KEYCODE_DPAD_UP:
             case KeyEvent.KEYCODE_PLUS:
+            case KeyEvent.KEYCODE_NUMPAD_ADD:
                 if (appList.getSelectedItemPosition() == 0 && lastPosition == 0){
                     appList.setSelection(apps.size() - 1);
                 }

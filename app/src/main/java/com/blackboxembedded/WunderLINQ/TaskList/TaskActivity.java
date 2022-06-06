@@ -287,6 +287,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
             case KeyEvent.KEYCODE_MINUS:
+            case KeyEvent.KEYCODE_NUMPAD_SUBTRACT:
                 if ((adapter.selected != (mapping.size() - 1))){
                     adapter.selected = adapter.selected + 1;
                 }
@@ -296,6 +297,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 return true;
             case KeyEvent.KEYCODE_DPAD_UP:
             case KeyEvent.KEYCODE_PLUS:
+            case KeyEvent.KEYCODE_NUMPAD_ADD:
                 if (adapter.selected != 0){
                     adapter.selected = adapter.selected - 1;
                 }

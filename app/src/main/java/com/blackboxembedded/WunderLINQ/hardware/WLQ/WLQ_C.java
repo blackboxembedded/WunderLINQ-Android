@@ -7,6 +7,8 @@ import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.Utils;
 
+import java.util.Arrays;
+
 public class WLQ_C extends WLQ_BASE {
     //WunderLINQ Commander
     private final static String TAG = "WLQ_C";
@@ -122,55 +124,60 @@ public class WLQ_C extends WLQ_BASE {
         wunderLINQConfig = new byte[bytes.length];
         System.arraycopy(bytes, 0, wunderLINQConfig, 0, bytes.length);
 
-        Log.d(TAG, "wunderLINQConfig: " + Utils.ByteArraytoHex(wunderLINQConfig));
+        Log.d(TAG, "WLQConfig: " + Utils.ByteArraytoHex(wunderLINQConfig));
 
-        flashConfig = new byte[configFlashSize];
-        System.arraycopy(bytes, 6, flashConfig, 0, configFlashSize);
+        byte[] flashConfigPart = new byte[configFlashSize];
+        System.arraycopy(bytes, 6, flashConfigPart, 0, configFlashSize);
 
-        tempConfig = new byte[flashConfig.length];
-        System.arraycopy(flashConfig, 0, tempConfig, 0, flashConfig.length);
+        if (!Arrays.equals(flashConfig, flashConfigPart)) {
+            flashConfig = new byte[configFlashSize];
+            System.arraycopy(flashConfigPart, 0, flashConfig, 0, flashConfigPart.length);
 
-        Log.d(TAG, "flashConfig: " + Utils.ByteArraytoHex(flashConfig));
+            tempConfig = new byte[flashConfig.length];
+            System.arraycopy(flashConfig, 0, tempConfig, 0, flashConfig.length);
 
-        firmwareVersion = bytes[firmwareVersionMajor_INDEX] + "." + bytes[firmwareVersionMinor_INDEX];
+            Log.d(TAG, "New flashConfig: " + Utils.ByteArraytoHex(flashConfig));
 
-        keyMode = bytes[keyMode_INDEX];
-        CANSpeed = new byte[3];
-        CANSpeed[0] = flashConfig[CANCF1_INDEX];
-        CANSpeed[1] = flashConfig[CANCF2_INDEX];
-        CANSpeed[2] = flashConfig[CANCF3_INDEX];
-        USBVinThreshold = ((flashConfig[USBVinThresholdHigh_INDEX] & 0xFF) << 8) | (flashConfig[USBVinThresholdLow_INDEX] & 0xFF);
-        sensitivity = flashConfig[Sensitivity_INDEX];
-        wheelRightPressKeyType = flashConfig[wheelRightPressKeyType_INDEX];
-        wheelRightPressKeyModifier = flashConfig[wheelRightPressKeyModifier_INDEX];
-        wheelRightPressKey = flashConfig[wheelRightPressKey_INDEX];
-        wheelRightLongPressKeyType = flashConfig[wheelRightLongPressKeyType_INDEX];
-        wheelRightLongPressKeyModifier = flashConfig[wheelRightLongPressKeyModifier_INDEX];
-        wheelRightLongPressKey = flashConfig[wheelRightLongPressKey_INDEX];
-        wheelLeftPressKeyType = flashConfig[wheelLeftPressKeyType_INDEX];
-        wheelLeftPressKeyModifier = flashConfig[wheelLeftPressKeyModifier_INDEX];
-        wheelLeftPressKey = flashConfig[wheelLeftPressKey_INDEX];
-        wheelLeftLongPressKeyType = flashConfig[wheelLeftLongPressKeyType_INDEX];
-        wheelLeftLongPressKeyModifier = flashConfig[wheelLeftLongPressKeyModifier_INDEX];
-        wheelLeftLongPressKey = flashConfig[wheelLeftLongPressKey_INDEX];
-        wheelScrollUpKeyType = flashConfig[wheelScrollUpKeyType_INDEX];
-        wheelScrollUpKeyModifier = flashConfig[wheelScrollUpKeyModifier_INDEX];
-        wheelScrollUpKey = flashConfig[wheelScrollUpKey_INDEX];
-        wheelScrollDownKeyType = flashConfig[wheelScrollDownKeyType_INDEX];
-        wheelScrollDownKeyModifier = flashConfig[wheelScrollDownKeyModifier_INDEX];
-        wheelScrollDownKey = flashConfig[wheelScrollDownKey_INDEX];
-        menuUpPressKeyType = flashConfig[menuUpPressKeyType_INDEX];
-        menuUpPressKeyModifier = flashConfig[menuUpPressKeyModifier_INDEX];
-        menuUpPressKey = flashConfig[menuUpPressKey_INDEX];
-        menuUpLongPressKeyType = flashConfig[menuUpLongPressKeyType_INDEX];
-        menuUpLongPressKeyModifier = flashConfig[menuUpLongPressKeyModifier_INDEX];
-        menuUpLongPressKey = flashConfig[menuUpLongPressKey_INDEX];
-        menuDownPressKeyType = flashConfig[menuDownPressKeyType_INDEX];
-        menuDownPressKeyModifier = flashConfig[menuDownPressKeyModifier_INDEX];
-        menuDownPressKey = flashConfig[menuDownPressKey_INDEX];
-        menuDownLongPressKeyType = flashConfig[menuDownLongPressKeyType_INDEX];
-        menuDownLongPressKeyModifier = flashConfig[menuDownLongPressKeyModifier_INDEX];
-        menuDownLongPressKey = flashConfig[menuDownLongPressKey_INDEX];
+            firmwareVersion = bytes[firmwareVersionMajor_INDEX] + "." + bytes[firmwareVersionMinor_INDEX];
+
+            keyMode = bytes[keyMode_INDEX];
+            CANSpeed = new byte[3];
+            CANSpeed[0] = flashConfig[CANCF1_INDEX];
+            CANSpeed[1] = flashConfig[CANCF2_INDEX];
+            CANSpeed[2] = flashConfig[CANCF3_INDEX];
+            USBVinThreshold = ((flashConfig[USBVinThresholdHigh_INDEX] & 0xFF) << 8) | (flashConfig[USBVinThresholdLow_INDEX] & 0xFF);
+            sensitivity = flashConfig[Sensitivity_INDEX];
+            wheelRightPressKeyType = flashConfig[wheelRightPressKeyType_INDEX];
+            wheelRightPressKeyModifier = flashConfig[wheelRightPressKeyModifier_INDEX];
+            wheelRightPressKey = flashConfig[wheelRightPressKey_INDEX];
+            wheelRightLongPressKeyType = flashConfig[wheelRightLongPressKeyType_INDEX];
+            wheelRightLongPressKeyModifier = flashConfig[wheelRightLongPressKeyModifier_INDEX];
+            wheelRightLongPressKey = flashConfig[wheelRightLongPressKey_INDEX];
+            wheelLeftPressKeyType = flashConfig[wheelLeftPressKeyType_INDEX];
+            wheelLeftPressKeyModifier = flashConfig[wheelLeftPressKeyModifier_INDEX];
+            wheelLeftPressKey = flashConfig[wheelLeftPressKey_INDEX];
+            wheelLeftLongPressKeyType = flashConfig[wheelLeftLongPressKeyType_INDEX];
+            wheelLeftLongPressKeyModifier = flashConfig[wheelLeftLongPressKeyModifier_INDEX];
+            wheelLeftLongPressKey = flashConfig[wheelLeftLongPressKey_INDEX];
+            wheelScrollUpKeyType = flashConfig[wheelScrollUpKeyType_INDEX];
+            wheelScrollUpKeyModifier = flashConfig[wheelScrollUpKeyModifier_INDEX];
+            wheelScrollUpKey = flashConfig[wheelScrollUpKey_INDEX];
+            wheelScrollDownKeyType = flashConfig[wheelScrollDownKeyType_INDEX];
+            wheelScrollDownKeyModifier = flashConfig[wheelScrollDownKeyModifier_INDEX];
+            wheelScrollDownKey = flashConfig[wheelScrollDownKey_INDEX];
+            menuUpPressKeyType = flashConfig[menuUpPressKeyType_INDEX];
+            menuUpPressKeyModifier = flashConfig[menuUpPressKeyModifier_INDEX];
+            menuUpPressKey = flashConfig[menuUpPressKey_INDEX];
+            menuUpLongPressKeyType = flashConfig[menuUpLongPressKeyType_INDEX];
+            menuUpLongPressKeyModifier = flashConfig[menuUpLongPressKeyModifier_INDEX];
+            menuUpLongPressKey = flashConfig[menuUpLongPressKey_INDEX];
+            menuDownPressKeyType = flashConfig[menuDownPressKeyType_INDEX];
+            menuDownPressKeyModifier = flashConfig[menuDownPressKeyModifier_INDEX];
+            menuDownPressKey = flashConfig[menuDownPressKey_INDEX];
+            menuDownLongPressKeyType = flashConfig[menuDownLongPressKeyType_INDEX];
+            menuDownLongPressKeyModifier = flashConfig[menuDownLongPressKeyModifier_INDEX];
+            menuDownLongPressKey = flashConfig[menuDownLongPressKey_INDEX];
+        }
     }
 
     @Override
@@ -409,36 +416,45 @@ public class WLQ_C extends WLQ_BASE {
                 tempConfig[wheelScrollUpKeyType_INDEX] = type;
                 tempConfig[wheelScrollUpKeyModifier_INDEX] = modifiers;
                 tempConfig[wheelScrollUpKey_INDEX] = key;
+                break;
             case wheelScrollDown:
                 tempConfig[wheelScrollDownKeyType_INDEX] = type;
                 tempConfig[wheelScrollDownKeyModifier_INDEX] = modifiers;
                 tempConfig[wheelScrollDownKey_INDEX] = key;
+                break;
             case wheelToggleRight:
                 tempConfig[wheelRightPressKeyType_INDEX] = type;
                 tempConfig[wheelRightPressKeyModifier_INDEX] = modifiers;
                 tempConfig[wheelRightPressKey_INDEX] = key;
+                break;
             case wheelToggleRightLongPress:
                 tempConfig[wheelRightLongPressKeyType_INDEX] = type;
                 tempConfig[wheelRightLongPressKeyModifier_INDEX] = modifiers;
                 tempConfig[wheelRightLongPressKey_INDEX] = key;
+                break;
             case wheelToggleLeft:
                 tempConfig[wheelLeftPressKeyType_INDEX] = type;
                 tempConfig[wheelLeftPressKeyModifier_INDEX] = modifiers;
                 tempConfig[wheelLeftPressKey_INDEX] = key;
+                break;
             case wheelToggleLeftLongPress:
                 tempConfig[wheelLeftLongPressKeyType_INDEX] = type;
                 tempConfig[wheelLeftLongPressKeyModifier_INDEX] = modifiers;
                 tempConfig[wheelLeftLongPressKey_INDEX] = key;
+                break;
             case menuUp:
                 tempConfig[menuUpPressKeyType_INDEX] = type;
                 tempConfig[menuUpPressKeyModifier_INDEX] = modifiers;
                 tempConfig[menuUpPressKey_INDEX] = key;
+                break;
             case menuUpLongPress:
                 tempConfig[menuUpLongPressKeyType_INDEX] = type;
                 tempConfig[menuUpLongPressKeyModifier_INDEX] = modifiers;
                 tempConfig[menuUpLongPressKey_INDEX] = key;
+                break;
             default:
                 Log.d(TAG, "Unknown ActionID");
+                break;
         }
     }
 
