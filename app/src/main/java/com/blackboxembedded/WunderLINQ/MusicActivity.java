@@ -435,6 +435,8 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
                 mPlayPauseButton.requestFocus();
                 return true;
             case KeyEvent.KEYCODE_DPAD_UP:
+            case KeyEvent.KEYCODE_PLUS:
+            case KeyEvent.KEYCODE_NUMPAD_ADD:
                 if (controller != null) {
                     controls.skipToNext();
                     refreshMetaData();
@@ -443,6 +445,8 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
                 mPlayPauseButton.requestFocus();
                 return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
+            case KeyEvent.KEYCODE_MINUS:
+            case KeyEvent.KEYCODE_NUMPAD_SUBTRACT:
                 if (controller != null) {
                     controls.skipToPrevious();
                     refreshMetaData();

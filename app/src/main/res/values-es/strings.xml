@@ -356,8 +356,6 @@
     <string name="delete_bt">Borrar</string>
     <string name="cancel_bt">Cancelar</string>
     <string name="experimental_title">Características experimentales</string>
-    <string name="pref_taskswitcher_name">Habilitar conmutador de tareas</string>
-    <string name="pref_taskswitcher_summary">Si se mantiene la rueda a la izquierda, aparece el conmutador de tareas, habilitar sólo si no funciona como botón de retroceso</string>
     <string name="accessibilityservice_alert_title">WunderLINQ necesita ejecutar un servicio de accesibilidad</string>
     <string name="accessibilityservice_alert_body">Por favor, habilite el servicio de accesibilidad de WunderLINQ.</string>
     <string name="leanangle_header">Ángulo de inclinación</string>

@@ -37,7 +37,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.blackboxembedded.WunderLINQ.AppUtils;
-import com.blackboxembedded.WunderLINQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
 import com.blackboxembedded.WunderLINQ.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -262,6 +262,8 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
                 goBack();
                 return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
+            case KeyEvent.KEYCODE_MINUS:
+            case KeyEvent.KEYCODE_NUMPAD_SUBTRACT:
                 //Zoom Out
                 if (currentZoom > 3){
                     currentZoom = currentZoom - 1;
@@ -270,6 +272,8 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
                 }
                 return true;
             case KeyEvent.KEYCODE_DPAD_UP:
+            case KeyEvent.KEYCODE_PLUS:
+            case KeyEvent.KEYCODE_NUMPAD_ADD:
                 //Zoom In
                 if (currentZoom < 16){
                     currentZoom = currentZoom + 1;

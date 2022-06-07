@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-package com.blackboxembedded.WunderLINQ;
+package com.blackboxembedded.WunderLINQ.comms.BLE;
 
 import java.util.UUID;
 
@@ -29,8 +29,12 @@ public class UUIDDatabase {
      */
     public static final UUID UUID_WUNDERLINQ_SERVICE = UUID
             .fromString(GattAttributes.WUNDERLINQ_SERVICE);
-    public static final UUID UUID_WUNDERLINQ_MESSAGE_CHARACTERISTIC = UUID
-            .fromString(GattAttributes.WUNDERLINQ_MESSAGE_CHARACTERISTIC);
+    public static final UUID UUID_WUNDERLINQ_LINMESSAGE_CHARACTERISTIC = UUID
+            .fromString(GattAttributes.WUNDERLINQ_LINMESSAGE_CHARACTERISTIC);
+
+    public static final UUID UUID_WUNDERLINQ_CANMESSAGE_CHARACTERISTIC = UUID
+            .fromString(GattAttributes.WUNDERLINQ_CANMESSAGE_CHARACTERISTIC);
+
     public final static UUID UUID_WUNDERLINQ_COMMAND_CHARACTERISTIC = UUID
             .fromString(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC);
 

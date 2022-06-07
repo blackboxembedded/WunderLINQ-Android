@@ -34,6 +34,10 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_C;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
+
 public class HWSettingsActionActivity extends AppCompatActivity {
 
     private final static String TAG = "HWSettingsActionAct";
@@ -89,61 +93,61 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         actionTypeSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                if (actionID == WLQ.OldSensitivity){
-                    if ((pos + 1) == WLQ.sensitivity){
+                if (actionID == WLQ_N.USB){
+                    if((pos == 0) && (WLQ_N.USBVinThreshold == 0x0000)){
+                        saveBT.setVisibility(View.INVISIBLE);
+                    } else if((pos == 1) && (WLQ_N.USBVinThreshold != 0x0000) && (WLQ_N.USBVinThreshold != 0xFFFF)){
+                        saveBT.setVisibility(View.INVISIBLE);
+                    } else if((pos == 2) && (WLQ_N.USBVinThreshold == 0xFFFF)){
                         saveBT.setVisibility(View.INVISIBLE);
                     } else {
                         saveBT.setVisibility(View.VISIBLE);
                     }
-                } else if (actionID == WLQ.USB){
-                    if((pos == 0) && (WLQ.USBVinThreshold == 0x0000)){
-                        saveBT.setVisibility(View.INVISIBLE);
-                    } else if((pos == 1) && (WLQ.USBVinThreshold != 0x0000) && (WLQ.USBVinThreshold != 0xFFFF)){
-                        saveBT.setVisibility(View.INVISIBLE);
-                    } else if((pos == 2) && (WLQ.USBVinThreshold == 0xFFFF)){
+                } else if (actionID == WLQ_N.RTKDoublePressSensitivity){
+                    if ((pos + 1) == WLQ_N.RTKSensitivity){
                         saveBT.setVisibility(View.INVISIBLE);
                     } else {
                         saveBT.setVisibility(View.VISIBLE);
                     }
-                } else if (actionID == WLQ.RTKDoublePressSensitivity){
-                    if ((pos + 1) == WLQ.RTKSensitivity){
+                } else if (actionID == WLQ_N.fullLongPressSensitivity){
+                    if ((pos + 1) == WLQ_N.fullSensitivity){
                         saveBT.setVisibility(View.INVISIBLE);
                     } else {
                         saveBT.setVisibility(View.VISIBLE);
                     }
-                } else if (actionID == WLQ.fullLongPressSensitivity){
-                    if ((pos + 1) == WLQ.fullSensitivity){
+                } else if (actionID == WLQ_C.longPressSensitivity){
+                    if ((pos + 1) == WLQ_N.fullSensitivity){
                         saveBT.setVisibility(View.INVISIBLE);
                     } else {
                         saveBT.setVisibility(View.VISIBLE);
                     }
                 } else {
-                    if (pos == WLQ.UNDEFINED){
+                    if (pos == Data.wlq.UNDEFINED()){
                         actionKeySP.setVisibility(View.INVISIBLE);
                         actionModifiersSP.setVisibility(View.INVISIBLE);
-                        if(WLQ.getActionKeyType(actionID) == WLQ.UNDEFINED){
+                        if(Data.wlq.getActionKeyType(actionID) == Data.wlq.UNDEFINED()){
                             saveBT.setVisibility(View.INVISIBLE);
                         } else {
                             saveBT.setVisibility(View.VISIBLE);
                         }
-                    } else if (pos == WLQ.KEYBOARD_HID){
+                    } else if (pos == Data.wlq.KEYBOARD_HID()){
                         actionKeySP.setVisibility(View.VISIBLE);
                         actionModifiersSP.setVisibility(View.VISIBLE);
                         int position = actionKeySP.getSelectedItemPosition();
                         actionKeySP.setAdapter(keyboard);
                         actionKeySP.setSelection(position);
-                        if(WLQ.getActionKeyType(actionID) == WLQ.KEYBOARD_HID){
+                        if(Data.wlq.getActionKeyType(actionID) == Data.wlq.KEYBOARD_HID()){
                             saveBT.setVisibility(View.INVISIBLE);
                         } else {
                             saveBT.setVisibility(View.VISIBLE);
                         }
-                    } else if (pos == WLQ.CONSUMER_HID){
+                    } else if (pos == Data.wlq.CONSUMER_HID()){
                         actionKeySP.setVisibility(View.VISIBLE);
                         actionModifiersSP.setVisibility(View.INVISIBLE);
                         int position = actionKeySP.getSelectedItemPosition();
                         actionKeySP.setAdapter(consumer);
                         actionKeySP.setSelection(position);
-                        if(WLQ.getActionKeyType(actionID) == WLQ.CONSUMER_HID){
+                        if(Data.wlq.getActionKeyType(actionID) == Data.wlq.CONSUMER_HID()){
                             saveBT.setVisibility(View.INVISIBLE);
                         } else {
                             saveBT.setVisibility(View.VISIBLE);
@@ -161,18 +165,18 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         actionKeySP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                if (actionID == WLQ.OldSensitivity){
+                if (actionID == WLQ_N.USB){
 
-                } else if (actionID == WLQ.USB){
+                } else if (actionID == WLQ_N.RTKDoublePressSensitivity){
 
-                } else if (actionID == WLQ.RTKDoublePressSensitivity){
+                } else if (actionID == WLQ_N.fullLongPressSensitivity){
 
-                } else if (actionID == WLQ.fullLongPressSensitivity){
+                } else if (actionID == WLQ_C.longPressSensitivity){
 
                 } else {
-                    if (actionTypeSP.getSelectedItemPosition() == WLQ.KEYBOARD_HID) {
-                        if (WLQ.getActionKeyType(actionID) == WLQ.KEYBOARD_HID) {
-                            if (pos == KeyboardHID.getKeyboardKeyPositionByCode(WLQ.getActionKey(actionID))) {
+                    if (actionTypeSP.getSelectedItemPosition() == Data.wlq.KEYBOARD_HID()) {
+                        if (Data.wlq.getActionKeyType(actionID) == Data.wlq.KEYBOARD_HID()) {
+                            if (pos == KeyboardHID.getKeyboardKeyPositionByCode(Data.wlq.getActionKey(actionID))) {
                                 saveBT.setVisibility(View.INVISIBLE);
                             } else {
                                 saveBT.setVisibility(View.VISIBLE);
@@ -180,9 +184,9 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                         } else {
                             saveBT.setVisibility(View.VISIBLE);
                         }
-                    } else if (actionTypeSP.getSelectedItemPosition() == WLQ.CONSUMER_HID) {
-                        if (WLQ.getActionKeyType(actionID) == WLQ.CONSUMER_HID) {
-                            if (pos == KeyboardHID.getConsumerKeyPositionByCode(WLQ.getActionKey(actionID))) {
+                    } else if (actionTypeSP.getSelectedItemPosition() == Data.wlq.CONSUMER_HID()) {
+                        if (Data.wlq.getActionKeyType(actionID) == Data.wlq.CONSUMER_HID()) {
+                            if (pos == KeyboardHID.getConsumerKeyPositionByCode(Data.wlq.getActionKey(actionID))) {
                                 saveBT.setVisibility(View.INVISIBLE);
                             } else {
                                 saveBT.setVisibility(View.VISIBLE);
@@ -203,13 +207,15 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         actionModifiersSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                if (actionID == WLQ.OldSensitivity){
+                if (actionID == WLQ_N.OldSensitivity){
 
-                } else if (actionID == WLQ.USB){
+                } else if (actionID == WLQ_N.USB){
 
-                } else if (actionID == WLQ.RTKDoublePressSensitivity){
+                } else if (actionID == WLQ_N.RTKDoublePressSensitivity){
 
-                } else if (actionID == WLQ.fullLongPressSensitivity){
+                } else if (actionID == WLQ_N.fullLongPressSensitivity){
+
+                } else if (actionID == WLQ_C.longPressSensitivity){
 
                 } else {
                     saveBT.setVisibility(View.VISIBLE);
@@ -239,28 +245,28 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 Intent backIntent = new Intent(HWSettingsActionActivity.this, HWSettingsActivity.class);
                 startActivity(backIntent);
             } else if (v.getId() == R.id.btSave) {
-                if (actionID == WLQ.OldSensitivity){
-                    WLQ.tempSensitivity = (byte)(actionTypeSP.getSelectedItemPosition() + 1);
-                } else if (actionID == WLQ.USB){
+                if (actionID == WLQ_N.USB){
                     if(actionTypeSP.getSelectedItemPosition() == 0){
-                        WLQ.tempConfig[WLQ.USBVinThresholdHigh_INDEX] = 0x00;
-                        WLQ.tempConfig[WLQ.USBVinThresholdLow_INDEX] = 0x00;
+                        Data.wlq.getTempConfig()[WLQ_N.USBVinThresholdHigh_INDEX] = 0x00;
+                        Data.wlq.getTempConfig()[WLQ_N.USBVinThresholdLow_INDEX] = 0x00;
                     } else if(actionTypeSP.getSelectedItemPosition() == 1){
-                        WLQ.tempConfig[WLQ.USBVinThresholdHigh_INDEX] = 0x02;
-                        WLQ.tempConfig[WLQ.USBVinThresholdLow_INDEX] = (byte)0xBC;
+                        Data.wlq.getTempConfig()[WLQ_N.USBVinThresholdHigh_INDEX] = 0x02;
+                        Data.wlq.getTempConfig()[WLQ_N.USBVinThresholdLow_INDEX] = (byte)0xBC;
                     } else if(actionTypeSP.getSelectedItemPosition() == 2){
-                        WLQ.tempConfig[WLQ.USBVinThresholdHigh_INDEX] = (byte)0xFF;
-                        WLQ.tempConfig[WLQ.USBVinThresholdLow_INDEX] = (byte)0xFF;
+                        Data.wlq.getTempConfig()[WLQ_N.USBVinThresholdHigh_INDEX] = (byte)0xFF;
+                        Data.wlq.getTempConfig()[WLQ_N.USBVinThresholdLow_INDEX] = (byte)0xFF;
                     }
-                } else if (actionID == WLQ.RTKDoublePressSensitivity){
-                    WLQ.tempConfig[WLQ.RTKSensitivity_INDEX] = (byte)(actionTypeSP.getSelectedItemPosition() + 1);
-                } else if (actionID == WLQ.fullLongPressSensitivity){
-                    WLQ.tempConfig[WLQ.fullSensitivity_INDEX] = (byte)(actionTypeSP.getSelectedItemPosition() + 1);
+                } else if (actionID == WLQ_N.RTKDoublePressSensitivity){
+                    Data.wlq.getTempConfig()[WLQ_N.RTKSensitivity_INDEX] = (byte)(actionTypeSP.getSelectedItemPosition() + 1);
+                } else if (actionID == WLQ_N.fullLongPressSensitivity){
+                    Data.wlq.getTempConfig()[WLQ_N.fullSensitivity_INDEX] = (byte)(actionTypeSP.getSelectedItemPosition() + 1);
+                } else if (actionID == WLQ_C.longPressSensitivity){
+                    Data.wlq.getTempConfig()[WLQ_C.Sensitivity_INDEX] = (byte)(actionTypeSP.getSelectedItemPosition() + 1);
                 } else {
                     byte type = (byte)actionTypeSP.getSelectedItemPosition();
                     byte key = 0x00;
                     byte modifiers = 0x00;
-                    if (type == WLQ.KEYBOARD_HID) {
+                    if (type == Data.wlq.KEYBOARD_HID()) {
                         key = Integer.decode(getResources().getStringArray(R.array.hid_keyboard_usage_table_codes_array)[actionKeySP.getSelectedItemPosition()]).byteValue();
                         int i = -1;
                         for (boolean cc: actionModifiersSP.selected) {
@@ -269,10 +275,10 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                                 modifiers = (byte) (Integer.decode(getResources().getStringArray(R.array.hid_keyboard_modifier_usage_table_codes_array)[i]).byteValue() + modifiers);
                             }
                         }
-                    } else if (type == WLQ.CONSUMER_HID) {
+                    } else if (type == Data.wlq.CONSUMER_HID()) {
                         key = Integer.decode(getResources().getStringArray(R.array.hid_consumer_usage_table_codes_array)[actionKeySP.getSelectedItemPosition()]).byteValue();
                     }
-                    WLQ.setActionKey(actionID, type, modifiers, key);
+                    Data.wlq.setActionKey(actionID, type, modifiers, key);
                 }
                 Intent backIntent = new Intent(HWSettingsActionActivity.this, HWSettingsActivity.class);
                 startActivity(backIntent);
@@ -294,7 +300,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         actionBar.setCustomView(v);
 
         TextView navbarTitle = findViewById(R.id.action_title);
-        navbarTitle.setText(WLQ.getActionName(actionID));
+        navbarTitle.setText(Data.wlq.getActionName(actionID));
 
         ImageButton backButton = findViewById(R.id.action_back);
         backButton.setOnClickListener(mClickListener);
@@ -305,45 +311,19 @@ public class HWSettingsActionActivity extends AppCompatActivity {
 
     private void updateDisplay(){
         saveBT.setVisibility(View.INVISIBLE);
-        actionLabelTV.setText(WLQ.getActionName(actionID));
-        if (actionID == WLQ.OldSensitivity){
-            if(WLQ.wheelMode == WLQ.wheelMode_rtk){
-                int RTKSensitivityMax = 20;
-                Integer[] intArray = new Integer[RTKSensitivityMax];
-                for(int i = 0; i < RTKSensitivityMax; i++) {
-                    intArray[i] = i + 1;
-                }
-                sensitivity = new ArrayAdapter<Integer>(this,
-                        R.layout.item_hwsettings_spinners, intArray);
-                actionTypeSP.setAdapter(sensitivity);
-                actionKeySP.setVisibility(View.INVISIBLE);
-                actionModifiersSP.setVisibility(View.INVISIBLE);
-                actionTypeSP.setSelection(WLQ.sensitivity - 1);
-            } else if(WLQ.wheelMode == WLQ.wheelMode_full){
-                int fullSensitivityMax = 30;
-                Integer[] intArray = new Integer[fullSensitivityMax];
-                for(int i = 0; i < fullSensitivityMax; i++) {
-                    intArray[i] = i + 1;
-                }
-                sensitivity = new ArrayAdapter<Integer>(this,
-                        R.layout.item_hwsettings_spinners, intArray);
-                actionTypeSP.setAdapter(sensitivity);
-                actionKeySP.setVisibility(View.INVISIBLE);
-                actionModifiersSP.setVisibility(View.INVISIBLE);
-                actionTypeSP.setSelection(WLQ.sensitivity - 1);
-            }
-        } else if (actionID ==  WLQ.USB){ //USB
+        actionLabelTV.setText(Data.wlq.getActionName(actionID));
+        if (actionID ==  WLQ_N.USB){ //USB
             actionTypeSP.setAdapter(usb);
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
-            if(WLQ.USBVinThreshold == 0x0000){
+            if(WLQ_N.USBVinThreshold == 0x0000){
                 actionTypeSP.setSelection(0);
-            } else if(WLQ.USBVinThreshold == 0xFFFF){
+            } else if(WLQ_N.USBVinThreshold == 0xFFFF){
                 actionTypeSP.setSelection(2);
-            } else if(WLQ.USBVinThreshold != 0xFFFF && WLQ.USBVinThreshold != 0x0000){
+            } else if(WLQ_N.USBVinThreshold != 0xFFFF && WLQ_N.USBVinThreshold != 0x0000){
                 actionTypeSP.setSelection(1);
             }
-        } else if (actionID == WLQ.RTKDoublePressSensitivity){  //RTK Sensitivity
+        } else if (actionID == WLQ_N.RTKDoublePressSensitivity){  //RTK Sensitivity
             int RTKSensitivityMax = 20;
             Integer[] intArray = new Integer[RTKSensitivityMax];
             for(int i = 0; i < RTKSensitivityMax; i++) {
@@ -354,8 +334,8 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             actionTypeSP.setAdapter(sensitivity);
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
-            actionTypeSP.setSelection(WLQ.RTKSensitivity - 1);
-        } else if (actionID == WLQ.fullLongPressSensitivity){  //Full Sensitivity
+            actionTypeSP.setSelection(WLQ_N.RTKSensitivity - 1);
+        } else if (actionID == WLQ_N.fullLongPressSensitivity){  //Full Sensitivity
             int fullSensitivityMax = 30;
             Integer[] intArray = new Integer[fullSensitivityMax];
             for(int i = 0; i < fullSensitivityMax; i++) {
@@ -366,29 +346,41 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             actionTypeSP.setAdapter(sensitivity);
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
-            actionTypeSP.setSelection(WLQ.fullSensitivity - 1);
+            actionTypeSP.setSelection(WLQ_N.fullSensitivity - 1);
+        } else if (actionID == WLQ_C.longPressSensitivity){
+            int fullSensitivityMax = 30;
+            Integer[] intArray = new Integer[fullSensitivityMax];
+            for(int i = 0; i < fullSensitivityMax; i++) {
+                intArray[i] = i + 1;
+            }
+            sensitivity = new ArrayAdapter<Integer>(this,
+                    R.layout.item_hwsettings_spinners, intArray);
+            actionTypeSP.setAdapter(sensitivity);
+            actionKeySP.setVisibility(View.INVISIBLE);
+            actionModifiersSP.setVisibility(View.INVISIBLE);
+            actionTypeSP.setSelection(WLQ_C.sensitivity - 1);
         } else {    // Keys
-            if (WLQ.hardwareVersion != null) {
-                if (WLQ.hardwareVersion.equals(WLQ.hardwareVersion1)){
+            if (Data.wlq.getHardwareVersion() != null) {
+                if (Data.wlq.getHardwareVersion().equals(WLQ_N.hardwareVersion1)){
                     types = new ArrayAdapter<String>(this,
                             R.layout.item_hwsettings_spinners, getResources().getStringArray(R.array.hw1_hid_type_names_array));
                 }
             }
             actionTypeSP.setAdapter(types);
-            if (WLQ.getActionKeyType(actionID) >= types.getCount()){
+            if (Data.wlq.getActionKeyType(actionID) >= types.getCount()){
                 actionTypeSP.setSelection(0);
             } else {
-                actionTypeSP.setSelection(WLQ.getActionKeyType(actionID));
+                actionTypeSP.setSelection(Data.wlq.getActionKeyType(actionID));
             }
 
-            updateModifierSpinner1(WLQ.getActionKeyModifiers(actionID));
-            if (WLQ.getActionKeyType(actionID) == WLQ.KEYBOARD_HID) {
+            updateModifierSpinner1(Data.wlq.getActionKeyModifiers(actionID));
+            if (Data.wlq.getActionKeyType(actionID) == WLQ_N.KEYBOARD_HID) {
                 actionKeySP.setAdapter(keyboard);
-                actionKeySP.setSelection(KeyboardHID.getKeyboardKeyPositionByCode(WLQ.getActionKey(actionID)));
+                actionKeySP.setSelection(KeyboardHID.getKeyboardKeyPositionByCode(Data.wlq.getActionKey(actionID)));
                 actionModifiersSP.setVisibility(View.VISIBLE);
-            } else if (WLQ.getActionKeyType(actionID) == WLQ.CONSUMER_HID) {
+            } else if (Data.wlq.getActionKeyType(actionID) == WLQ_N.CONSUMER_HID) {
                 actionKeySP.setAdapter(consumer);
-                actionKeySP.setSelection(KeyboardHID.getConsumerKeyPositionByCode(WLQ.getActionKey(actionID)));
+                actionKeySP.setSelection(KeyboardHID.getConsumerKeyPositionByCode(Data.wlq.getActionKey(actionID)));
                 actionModifiersSP.setVisibility(View.INVISIBLE);
             }
         }

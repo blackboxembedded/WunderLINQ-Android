@@ -29,12 +29,10 @@ public class MyAccessibilityService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
-
     }
 
     @Override
     public void onInterrupt() {
-
     }
 
     @Override
@@ -52,9 +50,6 @@ public class MyAccessibilityService extends AccessibilityService {
                         if (Build.VERSION.SDK_INT >= 24) {
                             performGlobalAction(GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN);
                         }
-                        break;
-                    case 2:
-                        performGlobalAction(GLOBAL_ACTION_RECENTS);
                         break;
                     default:
                         Log.d(TAG, "Unknown command: " + command);

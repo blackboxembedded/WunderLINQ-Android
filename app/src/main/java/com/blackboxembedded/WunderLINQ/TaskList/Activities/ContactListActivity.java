@@ -416,12 +416,16 @@ public class ContactListActivity extends AppCompatActivity {
                 goBack();
                 return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
+            case KeyEvent.KEYCODE_MINUS:
+            case KeyEvent.KEYCODE_NUMPAD_SUBTRACT:
                 if ((contactList.getSelectedItemPosition() == (contacts.size() - 1)) && lastPosition == (contacts.size() - 1) ){
                     contactList.setSelection(0);
                 }
                 lastPosition = contactList.getSelectedItemPosition();
                 return true;
             case KeyEvent.KEYCODE_DPAD_UP:
+            case KeyEvent.KEYCODE_PLUS:
+            case KeyEvent.KEYCODE_NUMPAD_ADD:
                 if (contactList.getSelectedItemPosition() == 0 && lastPosition == 0){
                     contactList.setSelection(contacts.size() - 1);
                 }

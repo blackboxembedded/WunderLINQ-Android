@@ -3,6 +3,7 @@
     <string name="app_name" translatable="false">WunderLINQ</string>
     <string name="product" translatable="false">WunderLINQ</string>
     <string name="company_name" translatable="false">Black Box Embedded, LLC</string>
+    <!-- <string name="device_name" translatable="false">WunderLINQ</string> -->
     <string name="device_name" translatable="false">WunderLINQ</string>
     <!-- FirstRunActivity -->
     <string name="firstrun_start">The WunderLINQ requires a lot of permissions to enable all the cool features the app provides.  On the next few screens we will explain the need for each permission request.
@@ -830,8 +831,6 @@
     <string name="pref_autoNightModeDelay_name">Auto Night Mode Delay</string>
     <string name="pref_autoNightModeDelay_summary">Set Auto Night Mode Delay In Seconds</string>
     <string name="experimental_title">Experimental Features</string>
-    <string name="pref_taskswitcher_name">Enable task switcher</string>
-    <string name="pref_taskswitcher_summary">If wheel is held left it brings up the task switcher, only enable if it isn\'t working as a back button</string>
     <string name="pref_pip_name">Enable Picture in Picture mode</string>
     <string name="pref_pip_summary">When leaving the app the data grid is minimized into a hovering window.  Only available in Android 8.0+</string>
     <string name="pref_piporientation_name">PiP Orientation</string>
@@ -971,6 +970,10 @@
     <string name="full_toggle_left_long_label">Wheel Left Long Press</string>
     <string name="full_signal_cancel_label">Signal Cancel</string>
     <string name="full_signal_cancel_long_label">Signal Cancel Long Press</string>
+    <string name="full_menu_up_label">Menu Up</string>
+    <string name="full_menu_up_long_label">Menu Up Long Press</string>
+    <string name="full_menu_down_label">Menu Down</string>
+    <string name="full_menu_down_long_label">Menu Down Long Press</string>
     <string name="full_long_press_label">Long Press</string>
 
     <string name="rtk_page_label">Page</string>

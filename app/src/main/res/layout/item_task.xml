@@ -7,8 +7,7 @@
     android:layout_height="wrap_content"
     android:paddingBottom="5dp"
     android:paddingTop="5dp"
-    android:focusable="false"
-    android:background="?attr/gridViewBorder">
+    android:focusable="false">
 
     <ImageView
         android:id="@+id/task_icon"

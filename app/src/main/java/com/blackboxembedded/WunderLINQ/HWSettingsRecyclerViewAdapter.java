@@ -26,8 +26,6 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.blackboxembedded.WunderLINQ.externalcamera.goproV2API.model.GPConstants;
-
 import java.util.ArrayList;
 
 public class HWSettingsRecyclerViewAdapter extends RecyclerView.Adapter<HWSettingsRecyclerViewAdapter.ViewHolder>  {

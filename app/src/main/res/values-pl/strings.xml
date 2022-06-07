@@ -345,7 +345,6 @@
     <string name="system_default">Ustawienia początkowe</string>
     <string name="pref_autoNightModeDelay_summary">Ustaw opóźnienie trybu nocnego w sekundach</string>
     <string name="experimental_title">Eksperymentalne funkcje</string>
-    <string name="pref_taskswitcher_name">Włącz przełącznik zadań</string>
     <string name="pref_pip_name">Włącz Obraz w Obrazie</string>
     <string name="pref_pip_summary">Kiedy wychodzisz z appki to siatka danych zostaje zminimalizowana do okienek pływających. Działa tylko na Android 8.0+</string>
     <string name="pref_piporientation_name">Orientacja \"Obraz w Obrazie\"</string>
@@ -688,7 +687,6 @@
     <string name="pref_consumption_name">Wskazanie zużycia paliwa</string>
     <string name="orientation_rl">Odwrócony pejzaż</string>
     <string name="pref_autoNightModeDelay_name">Opóźnienie automatycznego trybu nocnego</string>
-    <string name="pref_taskswitcher_summary">Przytrzymanie rollera w lewo uruchamia wybór zadań. Tylko jeśli ten ruch nie jest ustawiony jako działanie \"Cofnij\"</string>
     <string name="pref_notification_name">Włącz ostrzeżenia błędów</string>
     <string name="pref_tpmsAlert_name">Ustaw własny poziom ciśnienia opon</string>
     <string name="pref_fuelAlert_summary">W przypadku małej ilości paliwa pokaż powiadomienie o prowadzeniu do najbliższego CPNu</string>

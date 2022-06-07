@@ -38,6 +38,10 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -48,6 +52,8 @@ import java.util.Date;
 public class AboutActivity extends AppCompatActivity {
 
     private final static String TAG = "AboutActivity";
+
+    String fwVersion = "Unknown";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +127,7 @@ public class AboutActivity extends AppCompatActivity {
                 emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sendlogs_subject) + " " + curdatetime);
                 emailIntent.putExtra(Intent.EXTRA_TEXT, "App Version: " + BuildConfig.VERSION_NAME + "\n"
-                        + "Firmware Version: " + WLQ.firmwareVersion + "\n"
+                        + "Firmware Version: " + fwVersion + "\n"
                         + "Android Version: " + Build.VERSION.RELEASE + "\n"
                         + "Manufacturer, Model: " + Build.MANUFACTURER + ", " + Build.MODEL + "\n"
                         + getString(R.string.sendlogs_body));
@@ -143,15 +149,19 @@ public class AboutActivity extends AppCompatActivity {
 
     @Override
     public void recreate() {
-        super.recreate();
+         super.recreate();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(WLQ.firmwareVersion == null) {
-            if (MainActivity.gattCommandCharacteristic != null) {
-                BluetoothLeService.writeCharacteristic(MainActivity.gattCommandCharacteristic, WLQ.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+        if (Data.wlq != null) {
+            if (Data.wlq.getFirmwareVersion() == null) {
+                if (BluetoothLeService.gattCommandCharacteristic != null) {
+                    BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, WLQ_N.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                }
+            } else {
+                fwVersion = Data.wlq.getFirmwareVersion();
             }
         }
     }

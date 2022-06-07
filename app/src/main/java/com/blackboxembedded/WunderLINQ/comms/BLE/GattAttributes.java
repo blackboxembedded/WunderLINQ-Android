@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-package com.blackboxembedded.WunderLINQ;
+package com.blackboxembedded.WunderLINQ.comms.BLE;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -28,7 +28,8 @@ public class GattAttributes {
      * WunderLINQ Service and Characteristics
      */
     public static final String WUNDERLINQ_SERVICE = "02997340-015f-11e5-8c2b-0002a5d5c51b";
-    public static final String WUNDERLINQ_MESSAGE_CHARACTERISTIC = "00000003-0000-1000-8000-00805f9b34fb";
+    public static final String WUNDERLINQ_LINMESSAGE_CHARACTERISTIC = "00000003-0000-1000-8000-00805f9b34fb";
+    public static final String WUNDERLINQ_CANMESSAGE_CHARACTERISTIC = "00000013-0010-0080-0000-805f9b34fb00";
     public static final String WUNDERLINQ_COMMAND_CHARACTERISTIC = "00000004-0000-1000-8000-00805f9b34fb";
 
     /**
@@ -58,7 +59,8 @@ public class GattAttributes {
     static {
         // WunderLINQ
         attributesUUID.put(UUIDDatabase.UUID_WUNDERLINQ_SERVICE, "WunderLINQ Service");
-        attributesUUID.put(UUIDDatabase.UUID_WUNDERLINQ_MESSAGE_CHARACTERISTIC, "WunderLINQ Messages");
+        attributesUUID.put(UUIDDatabase.UUID_WUNDERLINQ_LINMESSAGE_CHARACTERISTIC, "WunderLINQ LIN Messages");
+        attributesUUID.put(UUIDDatabase.UUID_WUNDERLINQ_CANMESSAGE_CHARACTERISTIC, "WunderLINQ CAN Messages");
         attributesUUID.put(UUIDDatabase.UUID_WUNDERLINQ_COMMAND_CHARACTERISTIC, "WunderLINQ Commands");
 
         // Descriptors

@@ -40,6 +40,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.blackboxembedded.WunderLINQ.SVGDashboards.ADVDashboard;
 import com.blackboxembedded.WunderLINQ.SVGDashboards.SportDashboard;
 import com.blackboxembedded.WunderLINQ.SVGDashboards.StandardDashboard;
+import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.caverock.androidsvg.SVG;
 import com.caverock.androidsvg.SVGImageView;
 
@@ -214,9 +215,13 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
                 prevDashboard();
                 return true;
             case KeyEvent.KEYCODE_DPAD_UP:
+            case KeyEvent.KEYCODE_PLUS:
+            case KeyEvent.KEYCODE_NUMPAD_ADD:
                 nextInfoLine();
                 return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
+            case KeyEvent.KEYCODE_MINUS:
+            case KeyEvent.KEYCODE_NUMPAD_SUBTRACT:
                 prevInfoLine();
                 return true;
             case KeyEvent.KEYCODE_DPAD_LEFT:

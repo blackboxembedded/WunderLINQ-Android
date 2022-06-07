@@ -15,13 +15,17 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-package com.blackboxembedded.WunderLINQ;
+package com.blackboxembedded.WunderLINQ.hardware.WLQ;
 
 import android.location.Location;
 
 import java.util.Date;
 
 public class Data {
+    // WunderLINQ HW
+    public static WLQ wlq;
+    public static String hardwareVersion;
+
     // Last Message
     private static byte[] lastMessage;
     public static byte[] getLastMessage() {
@@ -359,6 +363,39 @@ public class Data {
     public static void setRearSpeed(Double rearSpeed){
         Data.rearSpeed = rearSpeed;
     }
+
+    // START of CAN only Data
+    // High Beam Status
+    private static boolean highBeam;
+    public static boolean getHighBeam() {
+        return highBeam;
+    }
+    public static void setHighBeam(boolean highBeam){
+        Data.highBeam = highBeam;
+    }
+
+    // Fog Light Status
+    private static boolean fogLight;
+    public static boolean getFogLight() {
+        return fogLight;
+    }
+    public static void setFogLight(boolean fogLight){
+        Data.fogLight = fogLight;
+    }
+
+    // Heated Grip Status
+    public static int GRIP_HIGH = 2;
+    public static int GRIP_LOW = 1;
+    public static int GRIP_OFF = 0;
+    private static int heatedGrips;
+    public static int getHeatedGrips() {
+        return heatedGrips;
+    }
+    public static void setHeatedGrips(int heatedGrips){
+        Data.heatedGrips = heatedGrips;
+    }
+
+    // END of CAN only Data
 
     // Utility functions
     public static void clear(){

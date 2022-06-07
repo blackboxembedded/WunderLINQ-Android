@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.blackboxembedded.WunderLINQ">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-feature
         android:name="android.hardware.bluetooth_le"
@@ -198,8 +197,11 @@
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
+        <service android:name=".comms.Serial.SerialService"
+            android:enabled="true"
+            android:exported="true" />
         <service
-            android:name=".BluetoothLeService"
+            android:name=".comms.BLE.BluetoothLeService"
             android:enabled="true"
             android:exported="true" />
         <service
@@ -239,7 +241,7 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <receiver android:name=".BTConnectReceiver"
+        <receiver android:name=".comms.BLE.BTConnectReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />

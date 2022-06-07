@@ -37,6 +37,12 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
+import com.blackboxembedded.WunderLINQ.comms.BLE.GattAttributes;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
+
 import java.text.SimpleDateFormat;
 
 public class BikeInfoActivity extends AppCompatActivity {
@@ -85,10 +91,10 @@ public class BikeInfoActivity extends AppCompatActivity {
         btReset = findViewById(R.id.btReset);
         btReset.setOnClickListener(mClickListener);
 
-        characteristic = MainActivity.gattCommandCharacteristic;
-        if ((characteristic != null) & (WLQ.firmwareVersion == null)) {
+        characteristic = BluetoothLeService.gattCommandCharacteristic;
+        if ((characteristic != null) & (Data.wlq.getFirmwareVersion() == null)) {
             // Get Config
-            BluetoothLeService.writeCharacteristic(characteristic, WLQ.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+            BluetoothLeService.writeCharacteristic(characteristic, WLQ_N.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
         }
         updateDisplay();
     }
@@ -99,10 +105,10 @@ public class BikeInfoActivity extends AppCompatActivity {
 
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
 
-        if (WLQ.firmwareVersion == null) {
+        if (Data.wlq.getFirmwareVersion() == null) {
             if (characteristic != null) {
                 // Get Config
-                BluetoothLeService.writeCharacteristic(characteristic, WLQ.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                BluetoothLeService.writeCharacteristic(characteristic, WLQ_N.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
             }
         }
         updateDisplay();
@@ -150,19 +156,19 @@ public class BikeInfoActivity extends AppCompatActivity {
                 case R.id.btReset:
                     switch(spReset.getSelectedItemPosition()){
                         case 0: // Reset Cluster Average Speed
-                            BluetoothLeService.writeCharacteristic(characteristic, WLQ.RESET_CLUSTER_SPEED_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                            BluetoothLeService.writeCharacteristic(characteristic, WLQ_N.RESET_CLUSTER_SPEED_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
                             break;
                         case 1: // Reset Cluster Economy 1
-                            BluetoothLeService.writeCharacteristic(characteristic, WLQ.RESET_CLUSTER_ECONO1_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                            BluetoothLeService.writeCharacteristic(characteristic, WLQ_N.RESET_CLUSTER_ECONO1_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
                             break;
                         case 2: // Reset Cluster Economy 2
-                            BluetoothLeService.writeCharacteristic(characteristic, WLQ.RESET_CLUSTER_ECONO2_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                            BluetoothLeService.writeCharacteristic(characteristic, WLQ_N.RESET_CLUSTER_ECONO2_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
                             break;
                         case 3: // Reset Cluster Trip 1
-                            BluetoothLeService.writeCharacteristic(characteristic, WLQ.RESET_CLUSTER_TRIP1_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                            BluetoothLeService.writeCharacteristic(characteristic, WLQ_N.RESET_CLUSTER_TRIP1_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
                             break;
                         case 4: // Reset Cluster Trip 2
-                            BluetoothLeService.writeCharacteristic(characteristic, WLQ.RESET_CLUSTER_TRIP2_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                            BluetoothLeService.writeCharacteristic(characteristic, WLQ_N.RESET_CLUSTER_TRIP2_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
                             break;
                         default:
                             break;
@@ -173,12 +179,14 @@ public class BikeInfoActivity extends AppCompatActivity {
     };
 
     private void updateDisplay(){
-        if (WLQ.firmwareVersion != null) {
-            if (Double.parseDouble(WLQ.firmwareVersion) >= 1.8) {
-                tvResetHeader.setVisibility(View.VISIBLE);
-                spReset.setVisibility(View.VISIBLE);
-                tvResetLabel.setVisibility(View.VISIBLE);
-                btReset.setVisibility(View.VISIBLE);
+        if (Data.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
+            if (Data.wlq.getFirmwareVersion() != null) {
+                if (Double.parseDouble(Data.wlq.getFirmwareVersion()) >= 1.8) {
+                    tvResetHeader.setVisibility(View.VISIBLE);
+                    spReset.setVisibility(View.VISIBLE);
+                    tvResetLabel.setVisibility(View.VISIBLE);
+                    btReset.setVisibility(View.VISIBLE);
+                }
             }
         }
 

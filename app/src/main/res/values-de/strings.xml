@@ -304,8 +304,6 @@
     <string name="delete_bt">Löschen</string>
     <string name="cancel_bt">Abbrechen</string>
     <string name="experimental_title">Experimentelle Funktionen</string>
-    <string name="pref_taskswitcher_name">Task-Manager aktivieren</string>
-    <string name="pref_taskswitcher_summary">Das Rad nach Rechts gedrückt öffnet den Task-Manager, nur aktivieren wenn es nicht als Zurück-Knopf konfiguriert ist</string>
     <string name="accessibilityservice_alert_title">WunderLINQ benötigt den Zugriffs-Hilfsservice</string>
     <string name="accessibilityservice_alert_body">WunderLINQ verwendet den Zugriffs-Hilfsservice, um Bild-in-Bild zu ermöglichen.</string>
     <string name="leanangle_header">Neigungswinkel</string>
