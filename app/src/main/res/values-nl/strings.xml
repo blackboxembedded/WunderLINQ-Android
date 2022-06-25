@@ -4,11 +4,11 @@
     <string name="main_title">Motorfiets</string>
     <!-- Permission Requests -->
     <string name="camera_alert_title">WunderLINQ heeft toestemming nodig om de camera te gebruiken</string>
-    <string name="camera_alert_body">Geef toestemming om de camera te gebruiken </string>
+    <string name="camera_alert_body">De WunderLINQ app heeft toegang nodig tot je camera om foto\'s en video\'s te kunnen maken.</string>
     <string name="contacts_alert_title">WunderLINQ heeft toestemming nodig om de contacten te gebruiken</string>
-    <string name="contacts_alert_body">Geef toestemming om de contacten te gebruiken </string>
+    <string name="contacts_alert_body">De WunderLINQ app heeft toegang nodig tot je contacten om deze te kunnen bellen.</string>
     <string name="record_audio_alert_title">WunderLINQ heeft toestemming nodig om audio op te nemen</string>
-    <string name="record_audio_alert_body">Geef toestemming om audio op te nemen</string>
+    <string name="record_audio_alert_body">De WunderLINQ app heeft toegang nodig tot je microfoon om het geluid van je video\'s op te nemen.</string>
     <string name="location_alert_title">WunderLINQ heeft locatie toestemming nodig</string>
     <string name="location_alert_body">Geef toestemming voor locatie gebruik</string>
     <string name="write_alert_title">WunderLINQ heeft toestemming nodig voor wijzigingen toe te passen</string>
@@ -351,4 +351,5 @@
     <string name="keymode_label">Sleutel Modus</string>
     <string name="sensitivity_label">Gevoeligheid</string>
     <string name="pref_integrations_settings_title">Integraties</string>
+    <string name="call_alert_body">De WunderLINQ app heeft toegang nodig tot bellen om telefoongesprekken mogelijk te maken.</string>
 </resources>
