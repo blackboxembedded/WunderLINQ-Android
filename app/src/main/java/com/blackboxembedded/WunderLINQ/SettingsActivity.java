@@ -287,6 +287,7 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
         {
+            Log.d(TAG,"onSharedPreferenceChanged");
             if(key.equals("prefHomeAddress")) {
                 addressPref.setSummary(sharedPreferences.getString(key, getString(R.string.pref_homeAddress_summary)));
             }
@@ -296,43 +297,43 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
             if (key.equals("prefCellOne")){
                 prefCellOne.setSummary(prefCellOne.getEntry());
             }
-            if (key.equals("prefCellOne")){
+            if (key.equals("prefCellTwo")){
                 prefCellTwo.setSummary(prefCellTwo.getEntry());
             }
-            if (key.equals("prefCellOne")){
+            if (key.equals("prefCellThree")){
                 prefCellThree.setSummary(prefCellThree.getEntry());
             }
-            if (key.equals("prefCellOne")){
+            if (key.equals("prefCellFour")){
                 prefCellFour.setSummary(prefCellFour.getEntry());
             }
-            if (key.equals("prefCellOne")){
+            if (key.equals("prefCellFive")){
                 prefCellFive.setSummary(prefCellFive.getEntry());
             }
-            if (key.equals("prefCellOne")){
+            if (key.equals("prefCellSix")){
                 prefCellSix.setSummary(prefCellSix.getEntry());
             }
-            if (key.equals("prefCellOne")){
+            if (key.equals("prefCellSeven")){
                 prefCellSeven.setSummary(prefCellSeven.getEntry());
             }
-            if (key.equals("prefCellOne")){
+            if (key.equals("prefCellEight")){
                 prefCellEight.setSummary(prefCellEight.getEntry());
             }
-            if (key.equals("prefCellOne")){
+            if (key.equals("prefCellNine")){
                 prefCellNine.setSummary(prefCellNine.getEntry());
             }
-            if (key.equals("prefCellOne")){
+            if (key.equals("prefCellTen")){
                 prefCellTen.setSummary(prefCellTen.getEntry());
             }
-            if (key.equals("prefCellOne")){
+            if (key.equals("prefCellEleven")){
                 prefCellEleven.setSummary(prefCellEleven.getEntry());
             }
-            if (key.equals("prefCellOne")){
+            if (key.equals("prefCellTwelve")){
                 prefCellTwelve.setSummary(prefCellTwelve.getEntry());
             }
-            if (key.equals("prefCellOne")){
+            if (key.equals("prefCellThirteen")){
                 prefCellThirteen.setSummary(prefCellThirteen.getEntry());
             }
-            if (key.equals("prefCellOne")){
+            if (key.equals("prefCellFourteen")){
                 prefCellFourteen.setSummary(prefCellFourteen.getEntry());
             }
             if (key.equals("prefCellFifteen")){
