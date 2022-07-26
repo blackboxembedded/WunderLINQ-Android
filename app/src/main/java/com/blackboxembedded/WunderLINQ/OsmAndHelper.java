@@ -1,11 +1,14 @@
 package com.blackboxembedded.WunderLINQ;
 
+import static android.content.Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -519,6 +522,12 @@ public class OsmAndHelper {
      */
     private void sendRequest(OsmAndIntentBuilder intentBuilder) {
         try {
+            if (android.os.Build.VERSION.SDK_INT >= 24) {
+                if (mActivity.isInMultiWindowMode()) {
+                    intentBuilder.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                    Log.d("OSMAnd","intent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT)");
+                }
+            }
             Uri uri = intentBuilder.getUri();
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             intent.addFlags(intentBuilder.getFlags());
@@ -533,7 +542,8 @@ public class OsmAndHelper {
                 intent.setClipData(clipData);
             }
             if (isIntentSafe(intent)) {
-                mActivity.startActivityForResult(intent, mRequestCode);
+                //mActivity.startActivityForResult(intent, mRequestCode);
+                mActivity.startActivity(intent);
             } else {
                 mOsmandMissingListener.osmandMissing();
             }
