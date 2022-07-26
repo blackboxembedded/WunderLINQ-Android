@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
     buildToolsVersion '30.0.3'
     defaultConfig {
         applicationId "com.blackboxembedded.WunderLINQ"
         minSdkVersion 21
-        targetSdkVersion 31
-        versionCode 141
-        versionName "2.33"
+        targetSdkVersion 32
+        versionCode 142
+        versionName "2.34"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -48,8 +48,8 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.android.gms:play-services-location:19.0.1'
-    implementation 'com.google.android.gms:play-services-maps:18.0.2'
+    implementation 'com.google.android.gms:play-services-location:20.0.0'
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1'
     implementation 'com.opencsv:opencsv:4.2'
     implementation('com.squareup.retrofit2:retrofit:2.1.0') {
