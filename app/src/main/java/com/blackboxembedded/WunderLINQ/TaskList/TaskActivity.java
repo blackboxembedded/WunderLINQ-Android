@@ -293,7 +293,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 }
                 selected = adapter.selected;
                 updateTasks();
-                taskListView.smoothScrollToPosition(adapter.selected);
+                taskListView.scrollToPosition(adapter.selected);
                 return true;
             case KeyEvent.KEYCODE_DPAD_UP:
             case KeyEvent.KEYCODE_PLUS:
@@ -303,7 +303,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 }
                 selected = adapter.selected;
                 updateTasks();
-                taskListView.smoothScrollToPosition(adapter.selected);
+                taskListView.scrollToPosition(adapter.selected);
                 return true;
             default:
                 return super.onKeyUp(keyCode, event);

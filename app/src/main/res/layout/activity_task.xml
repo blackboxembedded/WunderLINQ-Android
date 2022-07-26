@@ -12,7 +12,7 @@
     <com.yarolegovich.discretescrollview.DiscreteScrollView
         android:id="@+id/main_task_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:focusable="false"
         android:drawable="@color/task_recycleview"
         app:layout_constraintTop_toTopOf="parent"
