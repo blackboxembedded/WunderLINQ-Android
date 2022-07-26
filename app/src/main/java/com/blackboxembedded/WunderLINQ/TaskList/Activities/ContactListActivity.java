@@ -234,24 +234,42 @@ public class ContactListActivity extends AppCompatActivity {
                         givenName = cursor.getString(givenNameIndex);
                         normalNum = cursor.getString(normalizedNumIndex);
 
-                        if (phoneType != null && normalNum != null) {
+                        if (phoneType != null) {
                             if((phoneType.equals("0")) || (phoneType.equals("1")) || phoneType.equals("2") || phoneType.equals("3")) {
-                                if (normalizedNumbersAlreadyFound.add(normalNum.replaceAll("\\p{C}", ""))) {
-                                    Log.d(TAG, "Adding Contact");
-                                    contacts.add(displayName + " (" + typeIDtoString(Integer.parseInt(phoneType)) + ")");
-                                    phoneNumbers.add(normalNum);
-                                    Drawable photo = null;
-                                    if (photoURI != null) {
-                                        try {
-                                            Bitmap photoBitmap = MediaStore.Images.Media
-                                                    .getBitmap(getContentResolver(),
-                                                            Uri.parse(photoURI));
-                                            photo = new BitmapDrawable(getResources(), photoBitmap);
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
+                                if(normalNum != null) {
+                                    if (normalizedNumbersAlreadyFound.add(normalNum.replaceAll("\\p{C}", ""))) {
+                                        contacts.add(displayName + " (" + typeIDtoString(Integer.parseInt(phoneType)) + ")");
+                                        phoneNumbers.add(normalNum);
+                                        Drawable photo = null;
+                                        if (photoURI != null) {
+                                            try {
+                                                Bitmap photoBitmap = MediaStore.Images.Media
+                                                        .getBitmap(getContentResolver(),
+                                                                Uri.parse(photoURI));
+                                                photo = new BitmapDrawable(getResources(), photoBitmap);
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
                                         }
+                                        photoId.add(photo);
                                     }
-                                    photoId.add(photo);
+                                } else if (phoneNumber != null) {
+                                    if (normalizedNumbersAlreadyFound.add(phoneNumber.replaceAll("\\p{C}", ""))) {
+                                        contacts.add(displayName + " (" + typeIDtoString(Integer.parseInt(phoneType)) + ")");
+                                        phoneNumbers.add(phoneNumber);
+                                        Drawable photo = null;
+                                        if (photoURI != null) {
+                                            try {
+                                                Bitmap photoBitmap = MediaStore.Images.Media
+                                                        .getBitmap(getContentResolver(),
+                                                                Uri.parse(photoURI));
+                                                photo = new BitmapDrawable(getResources(), photoBitmap);
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                        photoId.add(photo);
+                                    }
                                 }
                             } else {
                                 Log.d(TAG, "Not Adding Contact");
@@ -410,7 +428,6 @@ public class ContactListActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        Log.d(TAG, "Keycode: " + keyCode);
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 goBack();
