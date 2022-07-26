@@ -28,6 +28,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -37,6 +39,9 @@ import java.util.Map;
 
 public class OsmAndHelper {
     private static final String PREFIX = "osmand.api://";
+    private static final String OSMAND_FREE_PACKAGE_NAME = "net.osmand";
+    private static final String OSMAND_PLUS_PACKAGE_NAME = "net.osmand.plus";
+    private static final String OSMAND_PACKAGE_NAME = OSMAND_PLUS_PACKAGE_NAME;
 
     // Result codes
     // RESULT_OK == -1
@@ -48,7 +53,9 @@ public class OsmAndHelper {
     public static final int RESULT_CODE_ERROR_PLUGIN_INACTIVE = 1003;
     public static final int RESULT_CODE_ERROR_GPX_NOT_FOUND = 1004;
     public static final int RESULT_CODE_ERROR_INVALID_PROFILE = 1005;
-    public static final int REQUEST_OSMAND_API = 1001;
+    public static final int RESULT_CODE_ERROR_EMPTY_SEARCH_QUERY = 1006;
+    public static final int RESULT_CODE_ERROR_SEARCH_LOCATION_UNDEFINED = 1007;
+    public static final int RESULT_CODE_ERROR_QUICK_ACTION_NOT_FOUND = 1008;
 
     // Information
     private static final String GET_INFO = "get_info";
@@ -77,6 +84,11 @@ public class OsmAndHelper {
 
     private static final String START_GPX_REC = "start_gpx_rec";
     private static final String STOP_GPX_REC = "stop_gpx_rec";
+    private static final String SAVE_GPX = "save_gpx";
+    private static final String CLEAR_GPX = "clear_gpx";
+
+    public static final String API_CMD_EXECUTE_QUICK_ACTION = "execute_quick_action";
+    public static final String API_CMD_GET_QUICK_ACTION_INFO = "get_quick_action_info";
 
     // Parameters
     public static final String API_CMD_SUBSCRIBE_VOICE_NOTIFICATIONS = "subscribe_voice_notifications";
@@ -94,6 +106,7 @@ public class OsmAndHelper {
     public static final String PARAM_DATA = "data";
     public static final String PARAM_FORCE = "force";
     public static final String PARAM_SEARCH_PARAMS = "search_params";
+    public static final String PARAM_LOCATION_PERMISSION = "location_permission";
 
     public static final String PARAM_START_NAME = "start_name";
     public static final String PARAM_DEST_NAME = "dest_name";
@@ -112,6 +125,11 @@ public class OsmAndHelper {
     public static final String PARAM_DISTANCE_LEFT = "time_distance_left";
 
     public static final String PARAM_CLOSE_AFTER_COMMAND = "close_after_command";
+
+    public static final String PARAM_QUICK_ACTION_NAME = "quick_action_name";
+    public static final String PARAM_QUICK_ACTION_TYPE = "quick_action_type";
+    public static final String PARAM_QUICK_ACTION_PARAMS = "quick_action_params";
+    public static final String PARAM_QUICK_ACTION_NUMBER = "quick_action_number";
 
     private final int mRequestCode;
     private final Activity mActivity;
@@ -278,6 +296,30 @@ public class OsmAndHelper {
     }
 
     /**
+     * Save GPX
+     *
+     * @param closeAfterCommand - true if OsmAnd should be close immediately after executing
+     *                          command. Sent as URI parameter.
+     */
+    public void saveGpx(boolean closeAfterCommand) {
+        Map<String, String> params = new HashMap<>();
+        params.put(PARAM_CLOSE_AFTER_COMMAND, String.valueOf(closeAfterCommand));
+        sendRequest(new OsmAndIntentBuilder(SAVE_GPX).setParams(params));
+    }
+
+    /**
+     * Clear GPX
+     *
+     * @param closeAfterCommand - true if OsmAnd should be close immediately after executing
+     *                          command. Sent as URI parameter.
+     */
+    public void clearGpx(boolean closeAfterCommand) {
+        Map<String, String> params = new HashMap<>();
+        params.put(PARAM_CLOSE_AFTER_COMMAND, String.valueOf(closeAfterCommand));
+        sendRequest(new OsmAndIntentBuilder(CLEAR_GPX).setParams(params));
+    }
+
+    /**
      * Show GPX file on map.
      * OsmAnd must have rights to access location. Not recommended.
      *
@@ -393,7 +435,7 @@ public class OsmAndHelper {
      */
     public void navigate(String startName, double startLat, double startLon,
                          String destName, double destLat, double destLon,
-                         String profile, boolean force) {
+                         String profile, boolean force, boolean needLocationPermission) {
         // test navigate
         Map<String, String> params = new HashMap<>();
         params.put(PARAM_START_LAT, String.valueOf(startLat));
@@ -404,6 +446,7 @@ public class OsmAndHelper {
         params.put(PARAM_DEST_NAME, destName);
         params.put(PARAM_PROFILE, profile);
         params.put(PARAM_FORCE, String.valueOf(force));
+        params.put(PARAM_LOCATION_PERMISSION, String.valueOf(needLocationPermission));
         sendRequest(new OsmAndIntentBuilder(NAVIGATE).setParams(params));
     }
 
@@ -477,6 +520,16 @@ public class OsmAndHelper {
     }
 
     /**
+     * Imports file to OsmAnd
+     *
+     * @param fileUri - Uri address of the file
+     */
+    public void importFile(Uri fileUri) {
+        mActivity.grantUriPermission(OSMAND_PACKAGE_NAME, fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        sendFileRequest(fileUri);
+    }
+
+    /**
      * Creates intent and executes request.
      *
      * @param intentBuilder - contains intent parameters.
@@ -507,6 +560,24 @@ public class OsmAndHelper {
     }
 
     /**
+     * Creates intent and executes request.
+     *
+     * @param fileUri - Uri address of the file
+     */
+    private void sendFileRequest(Uri fileUri) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW, fileUri);
+            if (isIntentSafe(intent)) {
+                mActivity.startActivityForResult(intent, mRequestCode);
+            } else {
+                mOsmandMissingListener.osmandMissing();
+            }
+        } catch (Exception e) {
+            Toast.makeText(mActivity, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
      * Convenience method to validate if intent can be handled.
      *
      * @param intent - intent to be checked
@@ -517,6 +588,20 @@ public class OsmAndHelper {
         List activities = packageManager.queryIntentActivities(intent,
                 PackageManager.MATCH_DEFAULT_ONLY);
         return activities.size() > 0;
+    }
+
+    public void executeQuickAction(int actionNumber) {
+        Map<String, String> params = new HashMap<>();
+        params.put(PARAM_CLOSE_AFTER_COMMAND, String.valueOf(false));
+        params.put(PARAM_QUICK_ACTION_NUMBER, String.valueOf(actionNumber));
+        sendRequest(new OsmAndIntentBuilder(API_CMD_EXECUTE_QUICK_ACTION).setParams(params));
+    }
+
+    public void getQuickActionInfo(int actionNumber) {
+        Map<String, String> params = new HashMap<>();
+        params.put(PARAM_CLOSE_AFTER_COMMAND, String.valueOf(true));
+        params.put(PARAM_QUICK_ACTION_NUMBER, String.valueOf(actionNumber));
+        sendRequest(new OsmAndIntentBuilder(API_CMD_GET_QUICK_ACTION_INFO).setParams(params));
     }
 
     public interface OnOsmandMissingListener {
@@ -574,7 +659,7 @@ public class OsmAndHelper {
             return gpxUri;
         }
 
-        private static String getUriString(@NonNull String command,
+        private static String getUriString(@NonNull @NotNull String command,
                                            @Nullable Map<String, String> parameters) {
             StringBuilder stringBuilder = new StringBuilder(PREFIX);
             stringBuilder.append(command);

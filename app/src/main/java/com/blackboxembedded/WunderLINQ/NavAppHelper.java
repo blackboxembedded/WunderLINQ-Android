@@ -149,8 +149,8 @@ public class NavAppHelper {
                 navUrl = "mapsme://route?sll=" + String.valueOf(start.getLatitude()) + "," + String.valueOf(start.getLongitude()) + "&saddr=Start&dll=" + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&daddr=Home&type=vehicle&back_url=wunderlinq://datagrid";
                 break;
             case "6": //OsmAnd
-                OsmAndHelper osmAndHelper = new OsmAndHelper(activity, OsmAndHelper.REQUEST_OSMAND_API, null);
-                osmAndHelper.navigate("Start",start.getLatitude(),start.getLongitude(),"Destination",end.getLatitude(),end.getLongitude(),"motorcycle", true);
+                OsmAndHelper osmAndHelper = new OsmAndHelper(activity, 1001, null);
+                osmAndHelper.navigate("Start",start.getLatitude(),start.getLongitude(),"Destination",end.getLatitude(),end.getLongitude(),"motorcycle", true, true);
                 break;
             case "7": //Mapfactor Navigator
                 homeNavIntent.setPackage("com.mapfactor.navigator");
@@ -228,7 +228,7 @@ public class NavAppHelper {
                 break;
             case "6": //OsmAnd
                 //navUrl = "osmand.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
-                OsmAndHelper osmAndHelper = new OsmAndHelper(activity, OsmAndHelper.REQUEST_OSMAND_API, null);
+                OsmAndHelper osmAndHelper = new OsmAndHelper(activity, 1001, null);
                 osmAndHelper.showLocation(waypoint.getLatitude(),waypoint.getLongitude());
                 break;
             case "7": //Mapfactor Navigator
