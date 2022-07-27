@@ -107,10 +107,10 @@ public class NavAppHelper {
                 url = "yandexnavi://";
                 break;
             case "16": //Cartograph
-                url = "cartograph://";
+                url = "cartograph://?backurl=wunderlinq://datagrid";
                 break;
             case "17": //Organic Maps
-                url = "om://?back_url=wunderlinq://datagrid";
+                url = "om://?backurl=wunderlinq://datagrid";
                 break;
         }
         try {
@@ -185,10 +185,10 @@ public class NavAppHelper {
                 navUrl = "yandexnavi://build_route_on_map?lat_to=" + String.valueOf(end.getLatitude()) + "&lon_to=" + String.valueOf(end.getLongitude()) ;
                 break;
             case "16": //Cartograph
-                navUrl = "cartograph://route?geo="+String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&back_url=wunderlinq://";
+                navUrl = "cartograph://route?geo="+String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&back_url=wunderlinq://datagrid";
                 break;
             case "17": //Organic Maps
-                navUrl = "om://route?sll=" + String.valueOf(start.getLatitude()) + "," + String.valueOf(start.getLongitude()) + "&saddr=Start&dll=" + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&daddr=Home&type=vehicle&back_url=wunderlinq://datagrid";
+                navUrl = "om://route?sll=" + String.valueOf(start.getLatitude()) + "," + String.valueOf(start.getLongitude()) + "&saddr=Start&dll=" + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&daddr=Home&type=vehicle&backurl=wunderlinq://datagrid";
                 break;
         }
         if (!navApp.equals("6")) {
@@ -265,10 +265,10 @@ public class NavAppHelper {
                 navUrl = "yandexnavi://show_point_on_map?lat=" + String.valueOf(waypoint.getLatitude()) + "&lon=" + String.valueOf(waypoint.getLongitude()) + "&zoom=12&no-balloon=0&desc=" + label;
                 break;
             case "16": //Cartograph
-                navUrl = "cartograph://view?geo="+String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&back_url=wunderlinq://";
+                navUrl = "cartograph://view?geo="+String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&back_url=wunderlinq://datagrid";
                 break;
             case "17": //Organic Maps
-                navUrl = "om://map?ll=" + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&n=" + label + "&back_url=wunderlinq://datagrid";
+                navUrl = "om://map?ll=" + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&n=" + label + "&backurl=wunderlinq://datagrid";
                 break;
         }
         if (!navApp.equals("6")) {
