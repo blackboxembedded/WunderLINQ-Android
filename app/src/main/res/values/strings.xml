@@ -502,6 +502,9 @@
     <string name="thirteenth">Thirteenth</string>
     <string name="fourteenth">Fourteenth</string>
     <string name="fiftheenth">Fifteenth</string>
+    <string name="sixteenth">Sixteenth</string>
+    <string name="seventeenth">Seventeenth</string>
+    <string name="eighteenth">Eighteenth</string>
     <string name="pref_grid_one" translatable="false">@string/first</string>
     <string name="pref_grid_two" translatable="false">@string/second</string>
     <string name="pref_grid_three" translatable="false">@string/third</string>
@@ -599,6 +602,12 @@
     <string name="pref_task_ten" translatable="false">@string/tenth</string>
     <string name="pref_task_eleven" translatable="false">@string/eleventh</string>
     <string name="pref_task_twelve" translatable="false">@string/twelfth</string>
+    <string name="pref_task_thirteen" translatable="false">@string/thirteenth</string>
+    <string name="pref_task_fourteen" translatable="false">@string/fourteenth</string>
+    <string name="pref_task_fifteen" translatable="false">@string/fiftheenth</string>
+    <string name="pref_task_sixteen" translatable="false">@string/sixteenth</string>
+    <string name="pref_task_seventeen" translatable="false">@string/seventeenth</string>
+    <string name="pref_task_eighteen" translatable="false">@string/eighteenth</string>
     <string-array name="tasks_array" translatable="false">
         <item name="1">@string/task_title_navigation</item>
         <item name="2">@string/task_title_gohome</item>

@@ -40,21 +40,22 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.blackboxembedded.WunderLINQ.TaskList.Activities.AppListActivity;
 import com.blackboxembedded.WunderLINQ.TaskList.Activities.ContactListActivity;
-import com.blackboxembedded.WunderLINQ.GridOnSwipeTouchListener;
 import com.blackboxembedded.WunderLINQ.LoggingService;
 import com.blackboxembedded.WunderLINQ.MainActivity;
 import com.blackboxembedded.WunderLINQ.MusicActivity;
@@ -74,7 +75,6 @@ import com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV1API.ApiBas
 import com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV1API.ApiClient;
 import com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV2API.model.GoProResponse;
 import com.google.android.gms.maps.model.LatLng;
-import com.yarolegovich.discretescrollview.DSVOrientation;
 import com.yarolegovich.discretescrollview.DiscreteScrollView;
 import com.yarolegovich.discretescrollview.transform.Pivot;
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer;
@@ -103,7 +103,6 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
     private final static String TAG = "TaskActivity";
 
     private ConstraintLayout clTasks;
-    //private RecyclerView recyclerView;
     private DiscreteScrollView taskListView;
     private TaskAdapter adapter;
     final ArrayList<TaskItem> taskItems = new ArrayList<>();
@@ -111,7 +110,6 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
     private SharedPreferences sharedPrefs;
 
     private CountDownTimer cTimer = null;
-
     private boolean timerRunning = false;
 
     private List<Integer> mapping;
@@ -120,6 +118,29 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
     private boolean actionCamRecording = false;
 
     private int selected = 0;
+
+    private final DiscreteScrollView.ScrollStateChangeListener scrollListener = new DiscreteScrollView.ScrollStateChangeListener() {
+        @Override
+        public void onScrollStart(@NonNull RecyclerView.ViewHolder currentItemHolder, int adapterPosition) {
+        }
+
+        @Override
+        public void onScrollEnd(@NonNull RecyclerView.ViewHolder currentItemHolder, int adapterPosition) {
+            selected = adapterPosition;
+            adapter.selected = selected;
+            if (!taskListView.isComputingLayout()){
+                updateTasks();
+            }
+            if (!getSupportActionBar().isShowing()){
+                getSupportActionBar().show();
+                startTimer();
+            }
+        }
+
+        @Override
+        public void onScroll(float scrollPosition, int currentPosition, int newPosition, @Nullable RecyclerView.ViewHolder currentHolder, @Nullable RecyclerView.ViewHolder newCurrent) {
+        }
+    };
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -147,39 +168,11 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
 
         clTasks = findViewById(R.id.layout_task);
         taskListView = findViewById(R.id.main_task_view);
-        taskListView.setOnTouchListener(new GridOnSwipeTouchListener(this) {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                getSupportActionBar().show();
-                startTimer();
-                return super.onTouch(v,event);
-            }
-            /*
-            @Override
-            public void onSwipeLeft() {
-                Intent backIntent = new Intent(TaskActivity.this, MainActivity.class);
-                startActivity(backIntent);
-            }
-            @Override
-            public void onSwipeRight() {
-                Intent backIntent = new Intent(TaskActivity.this, MusicActivity.class);
-                startActivity(backIntent);
-            }
-             */
-        });
-
-        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            taskListView.setOrientation(DSVOrientation.VERTICAL);
-        } else {
-            taskListView.setOrientation(DSVOrientation.HORIZONTAL);
-        }
 
         adapter = new TaskAdapter(this, taskItems, new TaskAdapter.AdapterCallback() {
             @Override
             public void onItemClicked(final Integer taskPosition) {
-                //updateTasks();
                 selected = taskPosition;
-                Log.d(TAG,"Touch Selected: " + selected);
                 executeTask(taskPosition);
             }
         });
@@ -200,23 +193,10 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
     public void onResume() {
         Log.d(TAG,"onResume");
         super.onResume();
-
         updateActionCamStatus();
-
         updateTasks();
-
         getSupportActionBar().show();
-
-        Log.d(TAG,"Selected: " + selected);
-
-        adapter.selected = selected;
-
-        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            taskListView.setOrientation(DSVOrientation.VERTICAL);
-        } else {
-            taskListView.setOrientation(DSVOrientation.HORIZONTAL);
-        }
-
+        taskListView.addScrollStateChangeListener(scrollListener);
         startTimer();
     }
 
@@ -231,6 +211,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
     public void onStop() {
         Log.d(TAG,"onStop");
         super.onStop();
+        taskListView.removeScrollStateChangeListener(scrollListener);
         cancelTimer();
     }
 
@@ -238,6 +219,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
     public void onDestroy() {
         Log.d(TAG,"onDestroy");
         super.onDestroy();
+        taskListView.removeScrollStateChangeListener(scrollListener);
         cancelTimer();
     }
 
@@ -263,11 +245,6 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            taskListView.setOrientation(DSVOrientation.VERTICAL);
-        } else {
-            taskListView.setOrientation(DSVOrientation.HORIZONTAL);
-        }
     }
 
     @Override
@@ -441,87 +418,129 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         while (x < numTasks){
             switch (x){
                 case 0:
-                    int selectionOne = Integer.parseInt(sharedPrefs.getString("prefQuickTaskOne", "0"));
+                    int selectionOne = Integer.parseInt(sharedPrefs.getString("prefQuickTaskOne", "1"));
                     if (!(selectionOne >= numTasks)){
                         mapping.add(selectionOne);
                         taskItems.add(new TaskItem(iconId[selectionOne], taskTitles[selectionOne]));
                     }
                     break;
                 case 1:
-                    int selectionTwo = Integer.parseInt(sharedPrefs.getString("prefQuickTaskTwo", "1"));
+                    int selectionTwo = Integer.parseInt(sharedPrefs.getString("prefQuickTaskTwo", "2"));
                     if (!(selectionTwo >= numTasks)){
                         mapping.add(selectionTwo);
                         taskItems.add(new TaskItem(iconId[selectionTwo], taskTitles[selectionTwo]));
                     }
                     break;
                 case 2:
-                    int selectionThree = Integer.parseInt(sharedPrefs.getString("prefQuickTaskThree", "2"));
+                    int selectionThree = Integer.parseInt(sharedPrefs.getString("prefQuickTaskThree", "3"));
                     if (!(selectionThree >= numTasks)){
                         mapping.add(selectionThree);
                         taskItems.add(new TaskItem(iconId[selectionThree], taskTitles[selectionThree]));
                     }
                     break;
                 case 3:
-                    int selectionFour = Integer.parseInt(sharedPrefs.getString("prefQuickTaskFour", "3"));
+                    int selectionFour = Integer.parseInt(sharedPrefs.getString("prefQuickTaskFour", "4"));
                     if (!(selectionFour >= numTasks)){
                         mapping.add(selectionFour);
                         taskItems.add(new TaskItem(iconId[selectionFour], taskTitles[selectionFour]));
                     }
                     break;
                 case 4:
-                    int selectionFive = Integer.parseInt(sharedPrefs.getString("prefQuickTaskFive", "4"));
+                    int selectionFive = Integer.parseInt(sharedPrefs.getString("prefQuickTaskFive", "5"));
                     if (!(selectionFive >= numTasks)){
                         mapping.add(selectionFive);
                         taskItems.add(new TaskItem(iconId[selectionFive], taskTitles[selectionFive]));
                     }
                     break;
                 case 5:
-                    int selectionSix = Integer.parseInt(sharedPrefs.getString("prefQuickTaskSix", "5"));
+                    int selectionSix = Integer.parseInt(sharedPrefs.getString("prefQuickTaskSix", "6"));
                     if (!(selectionSix >= numTasks)){
                         mapping.add(selectionSix);
                         taskItems.add(new TaskItem(iconId[selectionSix], taskTitles[selectionSix]));
                     }
                     break;
                 case 6:
-                    int selectionSeven = Integer.parseInt(sharedPrefs.getString("prefQuickTaskSeven", "6"));
+                    int selectionSeven = Integer.parseInt(sharedPrefs.getString("prefQuickTaskSeven", "7"));
                     if (!(selectionSeven >= numTasks)){
                         mapping.add(selectionSeven);
                         taskItems.add(new TaskItem(iconId[selectionSeven], taskTitles[selectionSeven]));
                     }
                     break;
                 case 7:
-                    int selectionEight = Integer.parseInt(sharedPrefs.getString("prefQuickTaskEight", "7"));
+                    int selectionEight = Integer.parseInt(sharedPrefs.getString("prefQuickTaskEight", "8"));
                     if (!(selectionEight >= numTasks)){
                         mapping.add(selectionEight);
                         taskItems.add(new TaskItem(iconId[selectionEight], taskTitles[selectionEight]));
                     }
                     break;
                 case 8:
-                    int selectionNine = Integer.parseInt(sharedPrefs.getString("prefQuickTaskNine", "8"));
+                    int selectionNine = Integer.parseInt(sharedPrefs.getString("prefQuickTaskNine", "9"));
                     if (!(selectionNine >= numTasks)){
                         mapping.add(selectionNine);
                         taskItems.add(new TaskItem(iconId[selectionNine], taskTitles[selectionNine]));
                     }
                     break;
                 case 9:
-                    int selectionTen = Integer.parseInt(sharedPrefs.getString("prefQuickTaskTen", "9"));
+                    int selectionTen = Integer.parseInt(sharedPrefs.getString("prefQuickTaskTen", "10"));
                     if (!(selectionTen >= numTasks)){
                         mapping.add(selectionTen);
                         taskItems.add(new TaskItem(iconId[selectionTen], taskTitles[selectionTen]));
                     }
                     break;
                 case 10:
-                    int selectionEleven = Integer.parseInt(sharedPrefs.getString("prefQuickTaskEleven", "10"));
+                    int selectionEleven = Integer.parseInt(sharedPrefs.getString("prefQuickTaskEleven", "11"));
                     if (!(selectionEleven >= numTasks)){
                         mapping.add(selectionEleven);
                         taskItems.add(new TaskItem(iconId[selectionEleven], taskTitles[selectionEleven]));
                     }
                     break;
                 case 11:
-                    int selectionTwelve = Integer.parseInt(sharedPrefs.getString("prefQuickTaskTwelve", "11"));
+                    int selectionTwelve = Integer.parseInt(sharedPrefs.getString("prefQuickTaskTwelve", "12"));
                     if (!(selectionTwelve >= numTasks)){
                         mapping.add(selectionTwelve);
                         taskItems.add(new TaskItem(iconId[selectionTwelve], taskTitles[selectionTwelve]));
+                    }
+                    break;
+                case 12:
+                    int selectionThirteen = Integer.parseInt(sharedPrefs.getString("prefQuickTaskThirteen", "13"));
+                    if (!(selectionThirteen >= numTasks)){
+                        mapping.add(selectionThirteen);
+                        taskItems.add(new TaskItem(iconId[selectionThirteen], taskTitles[selectionThirteen]));
+                    }
+                    break;
+                case 13:
+                    int selectionFourteen = Integer.parseInt(sharedPrefs.getString("prefQuickTaskFourteen", "14"));
+                    if (!(selectionFourteen >= numTasks)){
+                        mapping.add(selectionFourteen);
+                        taskItems.add(new TaskItem(iconId[selectionFourteen], taskTitles[selectionFourteen]));
+                    }
+                    break;
+                case 14:
+                    int selectionFifteen = Integer.parseInt(sharedPrefs.getString("prefQuickTaskFifteen", "15"));
+                    if (!(selectionFifteen >= numTasks)){
+                        mapping.add(selectionFifteen);
+                        taskItems.add(new TaskItem(iconId[selectionFifteen], taskTitles[selectionFifteen]));
+                    }
+                    break;
+                case 15:
+                    int selectionSixteen = Integer.parseInt(sharedPrefs.getString("prefQuickTaskSixteen", "16"));
+                    if (!(selectionSixteen >= numTasks)){
+                        mapping.add(selectionSixteen);
+                        taskItems.add(new TaskItem(iconId[selectionSixteen], taskTitles[selectionSixteen]));
+                    }
+                    break;
+                case 16:
+                    int selectionSeventeen = Integer.parseInt(sharedPrefs.getString("prefQuickTaskSeventeen", "17"));
+                    if (!(selectionSeventeen >= numTasks)){
+                        mapping.add(selectionSeventeen);
+                        taskItems.add(new TaskItem(iconId[selectionSeventeen], taskTitles[selectionSeventeen]));
+                    }
+                    break;
+                case 17:
+                    int selectionEighteen = Integer.parseInt(sharedPrefs.getString("prefQuickTaskEighteen", "18"));
+                    if (!(selectionEighteen >= numTasks)){
+                        mapping.add(selectionEighteen);
+                        taskItems.add(new TaskItem(iconId[selectionEighteen], taskTitles[selectionEighteen]));
                     }
                     break;
                 default:

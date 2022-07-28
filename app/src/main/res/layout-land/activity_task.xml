@@ -16,7 +16,7 @@
         android:focusable="false"
         android:drawable="@color/task_recycleview"
         android:overScrollMode="always"
-        app:dsv_orientation="vertical"
+        app:dsv_orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

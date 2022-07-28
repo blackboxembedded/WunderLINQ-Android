@@ -20,7 +20,6 @@ package com.blackboxembedded.WunderLINQ.TaskList;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -75,8 +74,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.RecyclerViewHo
 
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, final int position) {
-
-        TaskItem data_provider = dataSource.get(position);
+        int adapterPosition = holder.getAdapterPosition();
+        TaskItem data_provider = dataSource.get(adapterPosition);
         holder.taskIcon.setImageResource(data_provider.getImage());
         holder.taskIcon.setImageResource(data_provider.getImage());
         holder.taskItem.setText(data_provider.getText());
@@ -84,29 +83,23 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.RecyclerViewHo
         holder.taskContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                selected = position;
                 if(callback != null) {
-                    callback.onItemClicked(position);
-
+                    callback.onItemClicked(adapterPosition);
                     int highlightColor = PreferenceManager.getDefaultSharedPreferences(context).getInt("prefHighlightColor", R.color.colorAccent);
-                    GradientDrawable shape = new GradientDrawable();
-                    shape.setShape(GradientDrawable.OVAL);
-                    shape.setColor(highlightColor);
-                    shape.setStroke(5, highlightColor);
-                    holder.taskIcon.setBackground(shape);
+                    holder.taskContainer.setBackgroundResource(R.drawable.rounded_corners);
+                    GradientDrawable drawable = (GradientDrawable) holder.taskContainer.getBackground();
+                    drawable.setColor(highlightColor);
                 }
             }
         });
 
-        if(selected == position){
+        if(selected == adapterPosition){
             int highlightColor = PreferenceManager.getDefaultSharedPreferences(context).getInt("prefHighlightColor", R.color.colorAccent);
-            GradientDrawable shape = new GradientDrawable();
-            shape.setShape(GradientDrawable.OVAL);
-            shape.setColor(highlightColor);
-            shape.setStroke(5, highlightColor);
-            holder.taskIcon.setBackground(shape);
+            holder.taskContainer.setBackgroundResource(R.drawable.rounded_corners);
+            GradientDrawable drawable = (GradientDrawable) holder.taskContainer.getBackground();
+            drawable.setColor(highlightColor);
         } else {
-            holder.taskIcon.setBackgroundColor(context.getColor(R.color.clear));
+            holder.taskIcon.setBackgroundResource(R.color.clear);
         }
     }
 
@@ -114,7 +107,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.RecyclerViewHo
     public int getItemCount() {
         return dataSource.size();
     }
-
 }
 
 class TaskItem {

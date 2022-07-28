@@ -221,6 +221,48 @@
                 android:entryValues="@array/tasks_arrayValues"
                 android:defaultValue="12"
                 />
+            <ListPreference
+                android:key="prefQuickTaskThirteen"
+                android:title="@string/pref_task_thirteen"
+                android:entries="@array/tasks_array"
+                android:entryValues="@array/tasks_arrayValues"
+                android:defaultValue="13"
+                />
+            <ListPreference
+                android:key="prefQuickTaskFourteen"
+                android:title="@string/pref_task_fourteen"
+                android:entries="@array/tasks_array"
+                android:entryValues="@array/tasks_arrayValues"
+                android:defaultValue="14"
+                />
+            <ListPreference
+                android:key="prefQuickTaskFifteen"
+                android:title="@string/pref_task_fifteen"
+                android:entries="@array/tasks_array"
+                android:entryValues="@array/tasks_arrayValues"
+                android:defaultValue="15"
+                />
+            <ListPreference
+                android:key="prefQuickTaskSixteen"
+                android:title="@string/pref_task_sixteen"
+                android:entries="@array/tasks_array"
+                android:entryValues="@array/tasks_arrayValues"
+                android:defaultValue="16"
+                />
+            <ListPreference
+                android:key="prefQuickTaskSeventeen"
+                android:title="@string/pref_task_seventeen"
+                android:entries="@array/tasks_array"
+                android:entryValues="@array/tasks_arrayValues"
+                android:defaultValue="17"
+                />
+            <ListPreference
+                android:key="prefQuickTaskEighteen"
+                android:title="@string/pref_task_eighteen"
+                android:entries="@array/tasks_array"
+                android:entryValues="@array/tasks_arrayValues"
+                android:defaultValue="18"
+                />
         </PreferenceScreen>
         <CheckBoxPreference
             android:defaultValue="false"
