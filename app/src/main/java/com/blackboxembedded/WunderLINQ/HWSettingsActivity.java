@@ -186,6 +186,11 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
 
         resetButton = findViewById(R.id.action_reset);
         resetButton.setOnClickListener(mClickListener);
+        resetButton.setVisibility(View.INVISIBLE);
+        if (Data.wlq != null) {
+            resetButton.setVisibility(View.VISIBLE);
+        }
+
     }
 
     private void updateDisplay(){
@@ -309,28 +314,30 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            if (Data.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
-                                if (Data.wlq.getHardwareVersion() != null) {
+                            if (Data.wlq != null) {
+                                if (Data.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
+                                    if (Data.wlq.getHardwareVersion() != null) {
+                                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                                        outputStream.write(Data.wlq.WRITE_CONFIG_CMD());
+                                        if (Data.wlq.getHardwareVersion().equals(WLQ_N.hardwareVersion1)) {
+                                            outputStream.write(WLQ_N.defaultConfig2HW1);
+                                        } else {
+                                            outputStream.write(WLQ_N.defaultConfig2);
+                                        }
+                                        outputStream.write(Data.wlq.CMD_EOM());
+                                        byte[] writeConfigCmd = outputStream.toByteArray();
+                                        Log.d(TAG, "Reset Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
+                                        BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
+                                    }
+                                } else if (Data.wlq.getHardwareType() == WLQ.TYPE_COMMANDER) {
                                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                                     outputStream.write(Data.wlq.WRITE_CONFIG_CMD());
-                                    if (Data.wlq.getHardwareVersion().equals(WLQ_N.hardwareVersion1)) {
-                                        outputStream.write(WLQ_N.defaultConfig2HW1);
-                                    } else {
-                                        outputStream.write(WLQ_N.defaultConfig2);
-                                    }
+                                    outputStream.write(WLQ_C.defaultConfig);
                                     outputStream.write(Data.wlq.CMD_EOM());
                                     byte[] writeConfigCmd = outputStream.toByteArray();
                                     Log.d(TAG, "Reset Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
                                     BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                                 }
-                            } else if (Data.wlq.getHardwareType() == WLQ.TYPE_COMMANDER) {
-                                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                                outputStream.write(Data.wlq.WRITE_CONFIG_CMD());
-                                outputStream.write(WLQ_C.defaultConfig);
-                                outputStream.write(Data.wlq.CMD_EOM());
-                                byte[] writeConfigCmd = outputStream.toByteArray();
-                                Log.d(TAG, "Reset Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
-                                BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                             }
                         } catch (IOException e) {
                             Log.d(TAG, e.toString());
