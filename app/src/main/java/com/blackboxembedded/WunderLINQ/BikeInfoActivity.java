@@ -92,9 +92,11 @@ public class BikeInfoActivity extends AppCompatActivity {
         btReset.setOnClickListener(mClickListener);
 
         characteristic = BluetoothLeService.gattCommandCharacteristic;
-        if ((characteristic != null) & (Data.wlq.getFirmwareVersion() == null)) {
-            // Get Config
-            BluetoothLeService.writeCharacteristic(characteristic, WLQ_N.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+        if (Data.wlq != null) {
+            if ((characteristic != null) & (Data.wlq.getFirmwareVersion() == null)) {
+                // Get Config
+                BluetoothLeService.writeCharacteristic(characteristic, WLQ_N.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+            }
         }
         updateDisplay();
     }
@@ -105,10 +107,12 @@ public class BikeInfoActivity extends AppCompatActivity {
 
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
 
-        if (Data.wlq.getFirmwareVersion() == null) {
-            if (characteristic != null) {
-                // Get Config
-                BluetoothLeService.writeCharacteristic(characteristic, WLQ_N.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+        if (Data.wlq != null) {
+            if (Data.wlq.getFirmwareVersion() == null) {
+                if (characteristic != null) {
+                    // Get Config
+                    BluetoothLeService.writeCharacteristic(characteristic, WLQ_N.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                }
             }
         }
         updateDisplay();
