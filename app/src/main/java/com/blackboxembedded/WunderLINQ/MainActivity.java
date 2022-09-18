@@ -387,8 +387,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         MenuInflater menuOtherInflater = mPopupMenu.getMenuInflater();
         menuOtherInflater.inflate(R.menu.menu_main, mPopupMenu.getMenu());
         mMenu = mPopupMenu.getMenu();
-        mMenu.findItem(R.id.action_bike_info).setVisible(true);
-        mMenu.findItem(R.id.action_hwsettings).setVisible(true);
+        mMenu.findItem(R.id.action_bike_info).setVisible(false);
+        mMenu.findItem(R.id.action_hwsettings).setVisible(false);
         mPopupMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
             @Override
@@ -756,11 +756,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 btButton.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.motorrad_red));
                 btButton.setEnabled(true);
+                mMenu.findItem(R.id.action_bike_info).setVisible(false);
                 mMenu.findItem(R.id.action_hwsettings).setVisible(false);
                 updateDisplay();
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 btButton.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.motorrad_blue));
                 btButton.setEnabled(false);
+                mMenu.findItem(R.id.action_bike_info).setVisible(true);
                 mMenu.findItem(R.id.action_hwsettings).setVisible(true);
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 if (drawingComplete) {
@@ -1925,6 +1927,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
+        Log.d("KEC", "Keycode: " + keyCode);
         switch (keyCode) {
             case KeyEvent.KEYCODE_ESCAPE:
                 return true;
