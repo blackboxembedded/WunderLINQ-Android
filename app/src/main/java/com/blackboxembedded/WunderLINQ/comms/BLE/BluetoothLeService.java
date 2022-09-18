@@ -73,13 +73,20 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -286,13 +293,68 @@ public class BluetoothLeService extends Service {
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null /* Looper */);
         }
+
+        // Update time Data field and send to the cluster if WLQ_N
+        Timer t = new Timer();
+        t.scheduleAtFixedRate(new TimerTask()
+        {
+            @Override
+            public void run() {
+                Calendar c = Calendar.getInstance();
+                Data.setTime(c.getTime());
+                final Intent intent = new Intent(BluetoothLeService.ACTION_DATA_AVAILABLE);
+                MyApplication.getContext().sendBroadcast(intent);
+
+                //Send time to cluster
+                if (Data.wlq != null) {
+                    if (Data.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
+                        if (BluetoothLeService.gattCommandCharacteristic != null) {
+                            BluetoothGattCharacteristic characteristic = BluetoothLeService.gattCommandCharacteristic;
+                            //Get Current Time
+                            Date date = new Date();
+                            Calendar calendar = new GregorianCalendar();
+                            calendar.setTime(date);
+                            int year = calendar.get(Calendar.YEAR);
+                            //Add one to month {0 - 11}
+                            int month = calendar.get(Calendar.MONTH) + 1;
+                            int day = calendar.get(Calendar.DAY_OF_MONTH);
+                            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                            int minute = calendar.get(Calendar.MINUTE);
+                            int second = calendar.get(Calendar.SECOND);
+                            int yearByte = (year >> 4);
+                            byte yearLByte = (byte) year;
+                            int yearNibble = (yearLByte & 0x0F);
+                            byte monthNibble = (byte) month;
+                            int monthYearByte = ((yearNibble & 0x0F) << 4 | (monthNibble & 0x0F));
+                            try {
+                                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                                outputStream.write(WLQ_N.SET_CLUSTER_CLOCK_CMD);
+                                outputStream.write((byte) second);
+                                outputStream.write((byte) minute);
+                                outputStream.write((byte) hour);
+                                outputStream.write((byte) day);
+                                outputStream.write((byte) monthYearByte);
+                                outputStream.write((byte) yearByte);
+                                outputStream.write(WLQ_N.CMD_EOM);
+                                byte[] setClusterClock = outputStream.toByteArray();
+                                writeCharacteristic(characteristic, setClusterClock, WriteType.WITH_RESPONSE);
+                            } catch (IOException e) {
+                                Log.d(TAG, e.toString());
+                            }
+                        }
+                    }
+                }
+            }
+        }, 1000, 1000); //Initial Delay and Period for update (in milliseconds)
     }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // The service is starting, due to a call to startService()
         Log.d(TAG,"onStartCommand");
         return mStartMode;
     }
+
     @Override
     public IBinder onBind(Intent intent) {
         Log.d(TAG, "onBind");
