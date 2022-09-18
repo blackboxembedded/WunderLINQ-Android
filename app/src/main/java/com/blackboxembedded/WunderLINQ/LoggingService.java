@@ -78,6 +78,7 @@ public class LoggingService extends Service {
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         Log.d(TAG, "In onTaskRemoved");
+        stopService(new Intent(this, LoggingService.class));
         if(outFile != null) {
             outFile.flush();
             outFile.close();
