@@ -20,7 +20,6 @@ package com.blackboxembedded.WunderLINQ;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +31,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 
 import java.io.File;
 import java.util.ArrayList;

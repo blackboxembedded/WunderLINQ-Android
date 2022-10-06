@@ -50,6 +50,8 @@ import static android.app.AppOpsManager.MODE_ALLOWED;
 import static android.app.AppOpsManager.OPSTR_GET_USAGE_STATS;
 import static android.os.Process.myUid;
 
+import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
+
 public class PermissionsActivity extends AppCompatActivity {
 
     public final static String TAG = "PermissionsActivity";

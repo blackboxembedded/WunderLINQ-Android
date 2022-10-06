@@ -19,10 +19,10 @@ package com.blackboxembedded.WunderLINQ.hardware.WLQ;
 
 import android.util.Log;
 
-import com.blackboxembedded.WunderLINQ.KeyboardHID;
+import com.blackboxembedded.WunderLINQ.protocols.KeyboardHID;
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
-import com.blackboxembedded.WunderLINQ.Utils;
+import com.blackboxembedded.WunderLINQ.Utils.Utils;
 
 import java.util.Arrays;
 

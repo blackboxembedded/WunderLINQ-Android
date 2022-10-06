@@ -40,9 +40,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.blackboxembedded.WunderLINQ.AppInfo;
-import com.blackboxembedded.WunderLINQ.AppUtils;
 import com.blackboxembedded.WunderLINQ.OnSwipeTouchListener;
 import com.blackboxembedded.WunderLINQ.R;
+import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 
 import java.util.ArrayList;
 import java.util.List;

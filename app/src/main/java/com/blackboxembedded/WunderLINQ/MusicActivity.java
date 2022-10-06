@@ -55,7 +55,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.res.ResourcesCompat;
+
+import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 
 import java.util.List;
 import java.util.Set;

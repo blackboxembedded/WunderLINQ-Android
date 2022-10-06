@@ -44,7 +44,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.blackboxembedded.WunderLINQ.R;
-import com.blackboxembedded.WunderLINQ.Utils;
+import com.blackboxembedded.WunderLINQ.Utils.Utils;
 import com.blackboxembedded.WunderLINQ.WaypointActivity;
 import com.blackboxembedded.WunderLINQ.WaypointDatasource;
 import com.blackboxembedded.WunderLINQ.WaypointRecord;

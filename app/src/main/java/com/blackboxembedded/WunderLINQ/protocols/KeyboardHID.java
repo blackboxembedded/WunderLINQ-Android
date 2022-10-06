@@ -15,7 +15,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-package com.blackboxembedded.WunderLINQ;
+package com.blackboxembedded.WunderLINQ.protocols;
+
+import com.blackboxembedded.WunderLINQ.MyApplication;
+import com.blackboxembedded.WunderLINQ.R;
 
 public class KeyboardHID {
 

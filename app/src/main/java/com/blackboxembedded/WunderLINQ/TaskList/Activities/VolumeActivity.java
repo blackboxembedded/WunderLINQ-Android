@@ -37,9 +37,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.blackboxembedded.WunderLINQ.AppUtils;
 import com.blackboxembedded.WunderLINQ.OnSwipeTouchListener;
 import com.blackboxembedded.WunderLINQ.R;
+import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 
 public class VolumeActivity extends AppCompatActivity {
 

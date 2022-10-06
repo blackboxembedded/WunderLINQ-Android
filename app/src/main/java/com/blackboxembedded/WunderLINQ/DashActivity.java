@@ -40,6 +40,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.blackboxembedded.WunderLINQ.SVGDashboards.ADVDashboard;
 import com.blackboxembedded.WunderLINQ.SVGDashboards.SportDashboard;
 import com.blackboxembedded.WunderLINQ.SVGDashboards.StandardDashboard;
+import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.caverock.androidsvg.SVG;
 import com.caverock.androidsvg.SVGImageView;

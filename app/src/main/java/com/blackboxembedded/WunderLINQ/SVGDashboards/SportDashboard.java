@@ -26,7 +26,7 @@ import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
 import com.blackboxembedded.WunderLINQ.FaultStatus;
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
-import com.blackboxembedded.WunderLINQ.Utils;
+import com.blackboxembedded.WunderLINQ.Utils.Utils;
 import com.caverock.androidsvg.SVG;
 
 import org.w3c.dom.Document;
