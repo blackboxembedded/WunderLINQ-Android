@@ -63,6 +63,7 @@ import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_BASE;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_C;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
 import com.blackboxembedded.WunderLINQ.protocols.CANbus;
@@ -644,12 +645,18 @@ public class BluetoothLeService extends Service {
                         "" + status);
                 intent.putExtras(mBundle);
                 if (characteristic.getUuid().toString().contains(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC)){
-                    if(characteristic.getValue() != null) {
+                    if(data[0] == WLQ_N.SET_CLUSTER_CLOCK_CMD[0]
+                            && data[1] == WLQ_N.SET_CLUSTER_CLOCK_CMD[1]
+                            && data[2] == WLQ_N.SET_CLUSTER_CLOCK_CMD[2]
+                            && data[3] == WLQ_N.SET_CLUSTER_CLOCK_CMD[3]) {
+                        if (Data.wlq == null ) {
+                            readCharacteristic(characteristic);
+                        }
+                    } else {
                         readCharacteristic(characteristic);
                     }
                 }
                 MyApplication.getContext().sendBroadcast(intent);
-
                 completedCommand();
             }
         }
@@ -1189,7 +1196,7 @@ public class BluetoothLeService extends Service {
                     } else if (UUID.fromString(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC).equals(gattCharacteristic.getUuid())){
                         gattCommandCharacteristic = gattCharacteristic;
                         // Read config
-                        BluetoothLeService.writeCharacteristic(gattCommandCharacteristic, WLQ_N.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                        BluetoothLeService.writeCharacteristic(gattCommandCharacteristic, WLQ_BASE.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
                     }
                 }
             }

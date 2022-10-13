@@ -79,6 +79,7 @@ import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -764,8 +765,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 btButton.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.motorrad_blue));
                 btButton.setEnabled(false);
-                mMenu.findItem(R.id.action_bike_info).setVisible(true);
-                mMenu.findItem(R.id.action_hwsettings).setVisible(true);
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 if (drawingComplete) {
                     updateDisplay();
@@ -880,6 +879,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            if(Data.wlq != null) {
+                                if(Data.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
+                                    mMenu.findItem(R.id.action_bike_info).setVisible(true);
+                                }
+                                mMenu.findItem(R.id.action_hwsettings).setVisible(true);
+                            }
                             //Check for active faults
                             if (!FaultStatus.getallActiveDesc().isEmpty()) {
                                 faultButton.setVisibility(View.VISIBLE);

@@ -58,6 +58,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
     private CountDownTimer cTimer = null;
     private boolean timerRunning = false;
     private boolean dashUpdateRunning = false;
+    private long lastUpdate = 0;
 
     private int numDashboard = 3;
     private int numInfoLine = 4;
@@ -302,9 +303,6 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     // Handles various events fired by the Service.
-    // ACTION_GATT_CONNECTED: connected to a GATT server.
-    // ACTION_GATT_DISCONNECTED: disconnected from a GATT server.
-    // ACTION_GATT_SERVICES_DISCOVERED: discovered GATT services.
     // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read
     //                        or notification operations.
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
@@ -312,12 +310,15 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-                updateDashboard();
+                if ((System.currentTimeMillis()) - lastUpdate > 500) {
+                    lastUpdate = System.currentTimeMillis();
+                    updateDashboard();
+                }
             }
         }
     };
 
-    public void updateDashboard(){
+    private void updateDashboard(){
         if (!dashUpdateRunning) {
             new Thread(new Runnable() {
                 @Override

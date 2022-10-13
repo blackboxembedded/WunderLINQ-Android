@@ -31,7 +31,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.blackboxembedded.WunderLINQ.TaskList.Activities.AddWaypointActivity;
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 
 import java.util.List;
