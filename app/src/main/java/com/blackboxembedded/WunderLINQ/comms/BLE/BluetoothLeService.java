@@ -109,7 +109,7 @@ public class BluetoothLeService extends Service {
     private static int nrTries;
     // Maximum number of retries of commands
     private static final int MAX_TRIES = 2;
-    private static byte[] currentWriteBytes;
+
     public enum WriteType {
         WITH_RESPONSE,
         WITHOUT_RESPONSE,
@@ -240,7 +240,6 @@ public class BluetoothLeService extends Service {
     }
 
     public BluetoothLeService() {
-
     }
 
     LocationCallback mLocationCallback = new LocationCallback() {
@@ -252,7 +251,7 @@ public class BluetoothLeService extends Service {
                 Location location = locationList.get(locationList.size() - 1);
                 Data.setLastLocation(location);
                 if (sharedPrefs.getBoolean("prefBearingOverride", false) && location.hasBearing()) {
-                    Data.setBearing((int)location.getBearing());
+                    Data.setBearing((int) location.getBearing());
                 }
             }
         }
@@ -260,17 +259,17 @@ public class BluetoothLeService extends Service {
 
     @Override
     public void onCreate() {
-        Log.d(TAG,"onCreate");
+        Log.d(TAG, "onCreate");
         // The service is being created
         // Initializing the service
         if (!initialize()) {
-            Log.d(TAG,"Service not initialized");
+            Log.d(TAG, "Service not initialized");
         }
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
 
         // Sensor Stuff
-        sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         rotationVector = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
@@ -297,20 +296,19 @@ public class BluetoothLeService extends Service {
 
         // Update time Data field and send to the cluster if WLQ_N
         Timer t = new Timer();
-        t.scheduleAtFixedRate(new TimerTask()
-        {
+        t.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 Calendar c = Calendar.getInstance();
                 Data.setTime(c.getTime());
-                final Intent intent = new Intent(BluetoothLeService.ACTION_DATA_AVAILABLE);
+                final Intent intent = new Intent(ACTION_DATA_AVAILABLE);
                 MyApplication.getContext().sendBroadcast(intent);
 
                 //Send time to cluster
                 if (Data.wlq != null) {
                     if (Data.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
-                        if (BluetoothLeService.gattCommandCharacteristic != null) {
-                            BluetoothGattCharacteristic characteristic = BluetoothLeService.gattCommandCharacteristic;
+                        if (gattCommandCharacteristic != null) {
+                            BluetoothGattCharacteristic characteristic = gattCommandCharacteristic;
                             //Get Current Time
                             Date date = new Date();
                             Calendar calendar = new GregorianCalendar();
@@ -352,7 +350,7 @@ public class BluetoothLeService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // The service is starting, due to a call to startService()
-        Log.d(TAG,"onStartCommand");
+        Log.d(TAG, "onStartCommand");
         return mStartMode;
     }
 
@@ -363,6 +361,7 @@ public class BluetoothLeService extends Service {
         mBound = true;
         return mBinder;
     }
+
     @Override
     public boolean onUnbind(Intent intent) {
         Log.d(TAG, "onUnbind");
@@ -370,12 +369,14 @@ public class BluetoothLeService extends Service {
         mBound = false;
         return mAllowRebind;
     }
+
     @Override
     public void onRebind(Intent intent) {
         Log.d(TAG, "onRebind");
         // A client is binding to the service with bindService(),
         // after onUnbind() has already been called
     }
+
     @Override
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
@@ -411,7 +412,7 @@ public class BluetoothLeService extends Service {
                 double leanAngle = 0.0;
                 SensorManager.getRotationMatrixFromVector(mRotationMatrix, event.values);
                 int rotation = MyApplication.getContext().getResources().getConfiguration().orientation;
-                if(rotation == 1) { // Default display rotation is portrait
+                if (rotation == 1) { // Default display rotation is portrait
                     SensorManager.remapCoordinateSystem(mRotationMatrix, SensorManager.AXIS_X, SensorManager.AXIS_Z, mRotationFixMatrix);
                     SensorManager.getOrientation(mRotationFixMatrix, orientation);
                     leanAngle = (orientation[2] * 180) / Math.PI;
@@ -448,7 +449,7 @@ public class BluetoothLeService extends Service {
                 mGeomagnetic = Utils.lowPass(event.values.clone(), mGeomagnetic, ALPHA);
             } else if (event.sensor.getType() == Sensor.TYPE_PRESSURE) {
                 float[] mBarometricPressure = event.values;
-                Data.setBarometricPressure((double)mBarometricPressure[0]);
+                Data.setBarometricPressure((double) mBarometricPressure[0]);
             } else if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
                 mAcceleration = event.values.clone();
                 double gforce = Math.sqrt(mAcceleration[0] * mAcceleration[0] + mAcceleration[1] * mAcceleration[1] + mAcceleration[2] * mAcceleration[2]);
@@ -499,7 +500,7 @@ public class BluetoothLeService extends Service {
                     SensorManager.remapCoordinateSystem(R, SensorManager.AXIS_X, SensorManager.AXIS_Z, remappedR);
                     SensorManager.getOrientation(remappedR, orientation);
                     int direction = filterChange(Utils.normalizeDegrees(Math.toDegrees(orientation[0])));
-                    if(direction != lastDirection) {
+                    if (direction != lastDirection) {
                         lastDirection = direction;
                         if (!sharedPrefs.getBoolean("prefBearingOverride", false)) {
                             Data.setBearing(lastDirection);
@@ -545,8 +546,13 @@ public class BluetoothLeService extends Service {
                 synchronized (mGattCallback) {
                     mConnectionState = STATE_CONNECTED;
                 }
-                //broadcastConnectionUpdate(intentAction);
-                discoverServices();
+                broadcastConnectionUpdate(intentAction);
+                if ((ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED)
+                        || (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)) {
+                    gatt.requestMtu(512);
+                } else {
+                    Log.d(TAG, "No BLUETOOTH_CONNECT permission granted");
+                }
                 String dataLog = "GATT Connected: [" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
                         "Connection established";
                 Log.d(TAG,dataLog);
@@ -589,7 +595,7 @@ public class BluetoothLeService extends Service {
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 Log.d(TAG,"GATT: Services Discovered");
                 broadcastConnectionUpdate(ACTION_GATT_SERVICES_DISCOVERED);
-                checkGattServices(BluetoothLeService.getSupportedGattServices());
+                checkGattServices(getSupportedGattServices());
             } else if (status == BluetoothGatt.GATT_INSUFFICIENT_AUTHENTICATION ||
                     status == BluetoothGatt.GATT_INSUFFICIENT_ENCRYPTION) {
                 bondDevice();
@@ -680,7 +686,18 @@ public class BluetoothLeService extends Service {
                                             BluetoothGattCharacteristic characteristic) {
             broadcastNotifyUpdate(characteristic);
         }
+
+        @Override
+        public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
+            super.onMtuChanged(gatt, mtu, status);
+
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                Log.d(TAG,"New MTU: " + mtu);
+            }
+            discoverServices();
+        }
     };
+
 
     private static void broadcastConnectionUpdate(final String action) {
         final Intent intent = new Intent(action);
@@ -688,7 +705,7 @@ public class BluetoothLeService extends Service {
     }
 
     private static void broadcastNotifyUpdate(final BluetoothGattCharacteristic characteristic) {
-        final Intent intent = new Intent(BluetoothLeService.ACTION_DATA_AVAILABLE);
+        final Intent intent = new Intent(ACTION_DATA_AVAILABLE);
         Bundle mBundle = new Bundle();
         // Putting the byte value read for GATT Db
         final byte[] data = characteristic.getValue();
@@ -787,6 +804,15 @@ public class BluetoothLeService extends Service {
                             Data.wlq.setHardwareVersion(Data.hardwareVersion);
                         }
                     }
+                } else if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x53)) {
+                    if(Data.wlq != null) {
+                        Data.wlq.setStatus(data);
+                        intent.putExtras(mBundle);
+                        MyApplication.getContext().sendBroadcast(intent);
+                    } else {
+                        // Request config
+                        writeCharacteristic(gattCommandCharacteristic, WLQ_BASE.GET_CONFIG_CMD, WriteType.WITH_RESPONSE);
+                    }
                 }
             }
         } else if (characteristic.getUuid().equals(UUIDDatabase.UUID_HARDWARE_REVISION_STRING)) {
@@ -836,7 +862,6 @@ public class BluetoothLeService extends Service {
                     "Connection request sent";
             Log.d(TAG, dataLog);
         } else {
-            //Request permission
             Log.d(TAG, "No BLUETOOTH_CONNECT permission granted");
         }
     }
@@ -991,7 +1016,6 @@ public class BluetoothLeService extends Service {
             @Override
             public void run() {
                 if (isConnected()) {
-                    currentWriteBytes = bytesToWrite;
                     characteristic.setWriteType(writeTypeInternal);
                     characteristic.setValue(bytesToWrite);
                     if ((ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED)
@@ -1146,7 +1170,7 @@ public class BluetoothLeService extends Service {
                     if (UUID.fromString(GattAttributes.HARDWARE_REVISION_STRING).equals(gattCharacteristic.getUuid())){
                         Log.d(TAG, "HW Revision Characteristic Found: " + uuid);
                         gattHWCharacteristic = gattCharacteristic;
-                        BluetoothLeService.readCharacteristic(gattHWCharacteristic);
+                        readCharacteristic(gattHWCharacteristic);
                     }
                 }
             } else if (UUIDDatabase.UUID_WUNDERLINQ_SERVICE.equals(gattService.getUuid())){
@@ -1158,45 +1182,62 @@ public class BluetoothLeService extends Service {
                     uuid = gattCharacteristic.getUuid().toString();
                     Log.d(TAG,"Characteristic Found: " + uuid);
                     if (UUID.fromString(GattAttributes.WUNDERLINQ_LINMESSAGE_CHARACTERISTIC).equals(gattCharacteristic.getUuid())) {
-                        BluetoothLeService.connectedType = WLQ.TYPE_NAVIGATOR;
+                        connectedType = WLQ.TYPE_NAVIGATOR;
                         int charaProp = gattCharacteristic.getProperties();
                         if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
                             // If there is an active notification on a characteristic, clear
                             // it first so it doesn't update the data field on the user interface.
                             if (mNotifyCharacteristic != null) {
-                                BluetoothLeService.setCharacteristicNotification(
+                                setCharacteristicNotification(
                                         mNotifyCharacteristic, false);
                                 mNotifyCharacteristic = null;
                             }
-                            BluetoothLeService.readCharacteristic(gattCharacteristic);
+                            readCharacteristic(gattCharacteristic);
                         }
                         if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
                             mNotifyCharacteristic = gattCharacteristic;
-                            BluetoothLeService.setCharacteristicNotification(
+                            setCharacteristicNotification(
                                     gattCharacteristic, true);
                         }
                     } else if (UUID.fromString(GattAttributes.WUNDERLINQ_CANMESSAGE_CHARACTERISTIC).equals(gattCharacteristic.getUuid())) {
-                        BluetoothLeService.connectedType = WLQ.TYPE_COMMANDER;
+                        connectedType = WLQ.TYPE_COMMANDER;
                         int charaProp = gattCharacteristic.getProperties();
                         if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
                             // If there is an active notification on a characteristic, clear
                             // it first so it doesn't update the data field on the user interface.
                             if (mNotifyCharacteristic != null) {
-                                BluetoothLeService.setCharacteristicNotification(
+                                setCharacteristicNotification(
                                         mNotifyCharacteristic, false);
                                 mNotifyCharacteristic = null;
                             }
-                            BluetoothLeService.readCharacteristic(gattCharacteristic);
+                            readCharacteristic(gattCharacteristic);
                         }
                         if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
                             mNotifyCharacteristic = gattCharacteristic;
-                            BluetoothLeService.setCharacteristicNotification(
+                            setCharacteristicNotification(
                                     gattCharacteristic, true);
                         }
                     } else if (UUID.fromString(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC).equals(gattCharacteristic.getUuid())){
+                        int charaProp = gattCharacteristic.getProperties();
+                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
+                            // If there is an active notification on a characteristic, clear
+                            // it first so it doesn't update the data field on the user interface.
+                            if (gattCommandCharacteristic != null) {
+                                setCharacteristicNotification(
+                                        gattCommandCharacteristic, false);
+                                gattCommandCharacteristic = null;
+                            }
+                            readCharacteristic(gattCharacteristic);
+                        }
+                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
+                            gattCommandCharacteristic = gattCharacteristic;
+                            setCharacteristicNotification(
+                                    gattCharacteristic, true);
+                        }
+
                         gattCommandCharacteristic = gattCharacteristic;
-                        // Read config
-                        BluetoothLeService.writeCharacteristic(gattCommandCharacteristic, WLQ_BASE.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                        // Request config
+                        writeCharacteristic(gattCommandCharacteristic, WLQ_BASE.GET_CONFIG_CMD, WriteType.WITH_RESPONSE);
                     }
                 }
             }

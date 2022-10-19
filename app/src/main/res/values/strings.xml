@@ -347,6 +347,10 @@
     <string name="south_east">SE</string>
     <string name="west">W</string>
     <string name="east">E</string>
+    <!-- AccessoryActivity -->
+    <string name="accessory_title">Accessory Status</string>
+    <string name="default_accessory_one_name">Channel One</string>
+    <string name="default_accessory_two_name">Channel Two</string>
     <!-- MusicActivity -->
     <string name="music_title">Music</string>
     <string name="title_activity_music">MusicActivity</string>

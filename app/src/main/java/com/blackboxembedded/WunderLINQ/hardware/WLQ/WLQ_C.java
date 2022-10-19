@@ -1,5 +1,23 @@
+/*
+WunderLINQ Client Application
+Copyright (C) 2020  Keith Conger, Black Box Embedded, LLC
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
 package com.blackboxembedded.WunderLINQ.hardware.WLQ;
 
+import android.graphics.Color;
 import android.util.Log;
 
 import com.blackboxembedded.WunderLINQ.protocols.KeyboardHID;
@@ -14,6 +32,8 @@ public class WLQ_C extends WLQ_BASE {
     private final static String TAG = "WLQ_C";
 
     public static String hardwareVersion1 = "2PCB7.0 11/19/21";
+
+    public static byte[] GET_STATUS_CMD = {0x57, 0x52, 0x53};
 
     private static int configFlashSize = 36;
     private static int firmwareVersionMajor_INDEX = 0;
@@ -42,6 +62,7 @@ public class WLQ_C extends WLQ_BASE {
     public static final int menuDown = 34;
     public static final int menuDownLongPress = 35;
 
+    // Config message
     private static int keyMode_INDEX = 5;
     private static int CANCF1_INDEX = 0;
     private static int CANCF2_INDEX = 1;
@@ -79,6 +100,95 @@ public class WLQ_C extends WLQ_BASE {
     private static int menuDownLongPressKeyType_INDEX = 33;
     private static int menuDownLongPressKeyModifier_INDEX = 34;
     private static int menuDownLongPressKey_INDEX = 35;
+
+    // Status message
+    private static int MODE_INDEX = 0;
+    //private static int MODE_INDEX = 1;
+    private static int TRIGGER_BIT_BYTE_INDEX = 2;
+    private static int TRIGGER_BIT_POS_INDEX = 3;
+    private static int TRIGGER_BIT_HOLD_CNT_LOW_INDEX = 4;
+    private static int TRIGGER_BIT_HOLD_CNT_HIGH_INDEX = 5;
+    private static int TRIGGER_BIT_MAX_CNT_LOW_INDEX = 6;
+    private static int TRIGGER_BIT_MAX_CNT_HIGH_INDEX = 7;
+    private static int TRIGGER_BIT_MIN_CNT_LOW_INDEX = 8;
+    private static int TRIGGER_BIT_MIN_CNT_HIGH_INDEX = 9;
+    private static int TRIGGER_BIT_MAX_VAL_INDEX = 10;
+    private static int TRIGGER_BIT_MIN_VAL_INDEX = 11;
+
+    private static int WW_R_BIT_BYTE_INDEX = 12;
+    private static int WW_R_BIT_POS_INDEX = 13;
+    private static int WW_R_BIT_HOLD_CNT_LOW_INDEX = 14;
+    private static int WW_R_BIT_HOLD_CNT_HIGH_INDEX = 15;
+    private static int WW_R_BIT_MAX_CNT_LOW_INDEX = 16;
+    private static int WW_R_BIT_MAX_CNT_HIGH_INDEX = 17;
+    private static int WW_R_BIT_MIN_CNT_LOW_INDEX = 18;
+    private static int WW_R_BIT_MIN_CNT_HIGH_INDEX = 19;
+    private static int WW_R_BIT_MAX_VAL_INDEX = 20;
+    private static int WW_R_BIT_MIN_VAL_INDEX = 21;
+
+    private static int WW_L_BIT_BYTE_INDEX = 22;
+    private static int WW_L_BIT_POS_INDEX = 23;
+    private static int WW_L_BIT_HOLD_CNT_LOW_INDEX = 24;
+    private static int WW_L_BIT_HOLD_CNT_HIGH_INDEX = 25;
+    private static int WW_L_BIT_MAX_CNT_LOW_INDEX = 26;
+    private static int WW_L_BIT_MAX_CNT_HIGH_INDEX = 27;
+    private static int WW_L_BIT_MIN_CNT_LOW_INDEX = 28;
+    private static int WW_L_BIT_MIN_CNT_HIGH_INDEX = 29;
+    private static int WW_L_BIT_MAX_VAL_INDEX = 30;
+    private static int WW_L_BIT_MIN_VAL_INDEX = 31;
+
+    private static int WW_SCROLL_BYTE_INDEX = 32;
+    private static int WW_SCROLL_LENGTH_INDEX = 33;
+    private static int WW_SCROLL_VAL_CURRENT_INDEX = 34;
+    private static int WW_SCROLL_VAL_OLD_INDEX = 35;
+    private static int WW_SCROLL_INC_VAL_INDEX = 36;
+    private static int WW_SCROLL_DEC_VAL_INDEX = 37;
+
+    private static int WLQ_SCHEDULE_SLOT_INDEX = 38;
+    private static int OEM_SCHEDULE_SLOT_INDEX = 39;
+    private static int ACC_SCHEDULE_SLOT_INDEX = 40;
+
+    private static int PIXEL_OB_INTENSITY_INDEX = 41;
+    private static int PIXEL_OB_B_INDEX = 42;
+    private static int PIXEL_OB_G_INDEX = 43;
+    private static int PIXEL_OB_R_INDEX = 44;
+    private static int PIXEL_REMOTE_INTENSITY_INDEX = 45;
+    private static int PIXEL_REMOTE_B_INDEX = 46;
+    private static int PIXEL_REMOTE_G_INDEX = 47;
+    private static int PIXEL_REMOTE_R_INDEX = 48;
+
+    public static int ACTIVE_CHAN_INDEX = 49;
+    private static int LIN_ACC_CHANNEL_CNT_INDEX = 50;
+
+    private static int LIN_ACC_CHANNEL1_CONFIG_BYTE_INDEX = 51;
+    private static int LIN_ACC_CHANNEL1_VAL_BYTE_INDEX = 52;
+    public static int LIN_ACC_CHANNEL1_CONFIG_STATE_INDEX = 53;
+    public static int LIN_ACC_CHANNEL1_VAL_RAW_INDEX = 54;
+    private static int LIN_ACC_CHANNEL1_VAL_OFFSET_INDEX = 55;
+    private static int LIN_ACC_CHANNEL1_VAL_SCALE_INDEX = 56;
+    private static int LIN_ACC_CHANNEL1_PIXEL_INTENSITY_INDEX = 57;
+    public static int LIN_ACC_CHANNEL1_PIXEL_B_INDEX = 58;
+    public static int LIN_ACC_CHANNEL1_PIXEL_G_INDEX = 59;
+    public static int LIN_ACC_CHANNEL1_PIXEL_R_INDEX = 60;
+
+    private static int LIN_ACC_CHANNEL2_CONFIG_BYTE_INDEX = 61;
+    private static int LIN_ACC_CHANNEL2_VAL_BYTE_INDEX = 62;
+    public static int LIN_ACC_CHANNEL2_CONFIG_STATE_INDEX = 63;
+    public static int LIN_ACC_CHANNEL2_VAL_RAW_INDEX = 64;
+    private static int LIN_ACC_CHANNEL2_VAL_OFFSET_INDEX = 65;
+    private static int LIN_ACC_CHANNEL2_VAL_SCALE_INDEX = 66;
+    private static int LIN_ACC_CHANNEL2_PIXEL_INTENSITY_INDEX = 67;
+    public static int LIN_ACC_CHANNEL2_PIXEL_B_INDEX = 68;
+    public static int LIN_ACC_CHANNEL2_PIXEL_G_INDEX = 69;
+    public static int LIN_ACC_CHANNEL2_PIXEL_R_INDEX = 70;
+
+    private static byte[] wunderLINQStatus;
+    public static int channel1PixelColor;
+    public static int channel2PixelColor;
+    public static int channel1PixelIntensity;
+    public static int channel2PixelIntensity;
+    public static int channe1ValueRaw;
+    public static int channel2ValueRaw;
 
     private static byte[] wunderLINQConfig;
     private static byte[] flashConfig;
@@ -546,5 +656,22 @@ public class WLQ_C extends WLQ_BASE {
     @Override
     public int getHardwareType() {
         return 2;
+    }
+
+    @Override
+    public byte[] getStatus() {
+        return wunderLINQStatus;
+    }
+
+    @Override
+    public void setStatus(byte[] status) {
+        wunderLINQStatus = new byte[71];
+        System.arraycopy(status, 3, wunderLINQStatus, 0, 71);
+        channel1PixelColor = (0x00 & 0xff) << 24 | (wunderLINQStatus[LIN_ACC_CHANNEL1_PIXEL_R_INDEX] & 0xFF) << 16 | (wunderLINQStatus[LIN_ACC_CHANNEL1_PIXEL_G_INDEX] & 0xFF) << 8 | (wunderLINQStatus[LIN_ACC_CHANNEL1_PIXEL_B_INDEX] & 0xFF);
+        channel2PixelColor = (0x00 & 0xff) << 24 | (wunderLINQStatus[LIN_ACC_CHANNEL2_PIXEL_R_INDEX] & 0xFF) << 16 | (wunderLINQStatus[LIN_ACC_CHANNEL2_PIXEL_G_INDEX] & 0xFF) << 8 | (wunderLINQStatus[LIN_ACC_CHANNEL2_PIXEL_B_INDEX] & 0xFF);
+        channel1PixelIntensity = (wunderLINQStatus[LIN_ACC_CHANNEL1_PIXEL_INTENSITY_INDEX] & 0xFF);
+        channel2PixelIntensity = (wunderLINQStatus[LIN_ACC_CHANNEL2_PIXEL_INTENSITY_INDEX] & 0xFF);
+        channe1ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
+        channel2ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
     }
 }
