@@ -823,49 +823,49 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             @Override
             public void run() {
                 // Cell One
-                Integer cell1Data = Integer.parseInt(sharedPrefs.getString("prefCellOne", "1"));
+                int cell1Data = Integer.parseInt(sharedPrefs.getString("prefCellOne", "14"));//Default:Speed
                 GridItem cell1 = getCellData(cell1Data);
                 // Cell Two
-                Integer cell2Data = Integer.parseInt(sharedPrefs.getString("prefCellTwo", "2"));
+                int cell2Data = Integer.parseInt(sharedPrefs.getString("prefCellTwo", "29"));//Default:RPM
                 GridItem cell2 = getCellData(cell2Data);
                 // Cell Three
-                Integer cell3Data = Integer.parseInt(sharedPrefs.getString("prefCellThree", "3"));
+                int cell3Data = Integer.parseInt(sharedPrefs.getString("prefCellThree", "3"));//Default:Speed
                 GridItem cell3 = getCellData(cell3Data);
                 // Cell Four
-                Integer cell4Data = Integer.parseInt(sharedPrefs.getString("prefCellFour", "4"));
+                int cell4Data = Integer.parseInt(sharedPrefs.getString("prefCellFour", "0"));//Default:Gear
                 GridItem cell4 = getCellData(cell4Data);
                 // Cell Five
-                Integer cell5Data = Integer.parseInt(sharedPrefs.getString("prefCellFive", "5"));
+                int cell5Data = Integer.parseInt(sharedPrefs.getString("prefCellFive", "1"));//Default:Engine Temp
                 GridItem cell5 = getCellData(cell5Data);
                 // Cell Six
-                Integer cell6Data = Integer.parseInt(sharedPrefs.getString("prefCellSix", "6"));
+                int cell6Data = Integer.parseInt(sharedPrefs.getString("prefCellSix", "2"));//Default:Air Temp
                 GridItem cell6 = getCellData(cell6Data);
                 // Cell Seven
-                Integer cell7Data = Integer.parseInt(sharedPrefs.getString("prefCellSeven", "7"));
+                int cell7Data = Integer.parseInt(sharedPrefs.getString("prefCellSeven", "20"));//Default:Shifts
                 GridItem cell7 = getCellData(cell7Data);
                 // Cell Eight
-                Integer cell8Data = Integer.parseInt(sharedPrefs.getString("prefCellEight", "8"));
+                int cell8Data = Integer.parseInt(sharedPrefs.getString("prefCellEight", "8"));//Default:Front Brakes
                 GridItem cell8 = getCellData(cell8Data);
                 // Cell Nine
-                Integer cell9Data = Integer.parseInt(sharedPrefs.getString("prefCellNine", "9"));
+                int cell9Data = Integer.parseInt(sharedPrefs.getString("prefCellNine", "9"));//Default:Rear Brakes
                 GridItem cell9 = getCellData(cell9Data);
                 // Cell Ten
-                Integer cell10Data = Integer.parseInt(sharedPrefs.getString("prefCellTen", "10"));
+                int cell10Data = Integer.parseInt(sharedPrefs.getString("prefCellTen", "7"));//Default:Throttle
                 GridItem cell10 = getCellData(cell10Data);
                 // Cell Eleven
-                Integer cell11Data = Integer.parseInt(sharedPrefs.getString("prefCellEleven", "11"));
+                int cell11Data = Integer.parseInt(sharedPrefs.getString("prefCellEleven", "24"));//Default:time
                 GridItem cell11 = getCellData(cell11Data);
                 // Cell Twelve
-                Integer cell12Data = Integer.parseInt(sharedPrefs.getString("prefCellTwelve", "12"));
+                int cell12Data = Integer.parseInt(sharedPrefs.getString("prefCellTwelve", "28"));//Default:Sunrise/Sunset
                 GridItem cell12 = getCellData(cell12Data);
                 // Cell Thirteen
-                Integer cell13Data = Integer.parseInt(sharedPrefs.getString("prefCellThirteen", "13"));
+                int cell13Data = Integer.parseInt(sharedPrefs.getString("prefCellThirteen", "27"));//Default:Altitude
                 GridItem cell13 = getCellData(cell13Data);
                 // Cell Fourteen
-                Integer cell14Data = Integer.parseInt(sharedPrefs.getString("prefCellFourteen", "14"));
+                int cell14Data = Integer.parseInt(sharedPrefs.getString("prefCellFourteen", "23"));//Default:Bearing
                 GridItem cell14 = getCellData(cell14Data);
                 // Cell Fifteen
-                Integer cell15Data = Integer.parseInt(sharedPrefs.getString("prefCellFifteen", "15"));
+                int cell15Data = Integer.parseInt(sharedPrefs.getString("prefCellFifteen", "22"));//Default:g-force
                 GridItem cell15 = getCellData(cell15Data);
 
                 int count = Integer.parseInt(sharedPrefs.getString("CELL_COUNT", "15"));
