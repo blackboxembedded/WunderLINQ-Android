@@ -2003,7 +2003,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             cTimer.cancel();
     }
 
-    //Go to next screen - Quick Tasks
+    //Go to next screen
     private void goForward(){
         Intent backIntent = new Intent(this, MusicActivity.class);
         if (sharedPrefs.getBoolean("prefDisplayDash", false)) {
@@ -2012,9 +2012,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         startActivity(backIntent);
     }
 
-    //Go back to last screen - Motorcycle Data
+    //Go previous screen
     private void goBack(){
         Intent backIntent = new Intent(this, com.blackboxembedded.WunderLINQ.TaskList.TaskActivity.class);
+        if (Data.wlq != null) {
+            if (Data.wlq.getStatus() != null) {
+                backIntent = new Intent(this, AccessoryActivity.class);
+            }
+        }
         startActivity(backIntent);
     }
 

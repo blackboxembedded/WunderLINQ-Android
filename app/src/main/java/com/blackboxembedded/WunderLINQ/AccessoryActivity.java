@@ -171,11 +171,12 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
 
             @Override
             public void onSwipeLeft() {
+                goForward();
             }
 
             @Override
             public void onSwipeRight() {
-                finish();
+                goBack();
             }
         };
 
@@ -234,7 +235,7 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
         ImageButton backButton = findViewById(R.id.action_back);
         ImageButton forwardButton = findViewById(R.id.action_forward);
         backButton.setOnClickListener(mClickListener);
-        forwardButton.setVisibility(View.INVISIBLE);
+        forwardButton.setOnClickListener(mClickListener);
     }
 
     @Override
@@ -255,14 +256,42 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
         public void onClick(View v) {
             switch(v.getId()) {
                 case R.id.action_back:
-                    finish();
+                    goBack();
+                    break;
+                case R.id.action_forward:
+                    goForward();
                     break;
             }
         }
     };
 
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_DPAD_LEFT:
+                goBack();
+                return true;
+            case KeyEvent.KEYCODE_DPAD_RIGHT:
+                goForward();
+                return true;
+            default:
+                return super.onKeyUp(keyCode, event);
+        }
+    }
+
+    //Go to next screen
+    private void goForward(){
+        Intent forwardIntent = new Intent(this, MainActivity.class);
+        startActivity(forwardIntent);
+    }
+
+    //Go previous screen
+    private void goBack(){
+        Intent backIntent = new Intent(this, com.blackboxembedded.WunderLINQ.TaskList.TaskActivity.class);
+        startActivity(backIntent);
+    }
+
     private void updateDisplay(){
-        Log.d(TAG,"updateDisplay()");
         channelOneHeaderTV.setText(sharedPrefs.getString("ACC_CHAN_1", getString(R.string.default_accessory_one_name)));
         channelOneHeaderET.setText(sharedPrefs.getString("ACC_CHAN_1", getString(R.string.default_accessory_one_name)));
         channelTwoHeaderTV.setText(sharedPrefs.getString("ACC_CHAN_2", getString(R.string.default_accessory_two_name)));
@@ -340,7 +369,7 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
                     }
                 }
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
-                finish();
+                goBack();
             }
         }
     };

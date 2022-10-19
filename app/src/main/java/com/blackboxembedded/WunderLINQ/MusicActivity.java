@@ -300,8 +300,8 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
 
     //Go to next screen - Quick Tasks
     private void goForward(){
-        Intent backIntent = new Intent(this, com.blackboxembedded.WunderLINQ.TaskList.TaskActivity.class);
-        startActivity(backIntent);
+        Intent forwardIntent = new Intent(this, com.blackboxembedded.WunderLINQ.TaskList.TaskActivity.class);
+        startActivity(forwardIntent);
     }
 
     //Go back to last screen - Motorcycle Data

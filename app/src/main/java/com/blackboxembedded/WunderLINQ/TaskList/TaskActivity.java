@@ -54,6 +54,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blackboxembedded.WunderLINQ.AccessoryActivity;
 import com.blackboxembedded.WunderLINQ.TaskList.Activities.AppListActivity;
 import com.blackboxembedded.WunderLINQ.TaskList.Activities.ContactListActivity;
 import com.blackboxembedded.WunderLINQ.LoggingService;
@@ -71,6 +72,7 @@ import com.blackboxembedded.WunderLINQ.WaypointDatasource;
 import com.blackboxembedded.WunderLINQ.TaskList.Activities.WaypointNavActivity;
 import com.blackboxembedded.WunderLINQ.WaypointRecord;
 import com.blackboxembedded.WunderLINQ.TaskList.Activities.WeatherMapActivity;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
 import com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV1API.ApiBase;
 import com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV1API.ApiClient;
 import com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV2API.model.GoProResponse;
@@ -255,12 +257,10 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 executeTask(adapter.selected);
                 return true;
             case KeyEvent.KEYCODE_DPAD_LEFT:
-                Intent backIntent = new Intent(TaskActivity.this, MusicActivity.class);
-                startActivity(backIntent);
+                goBack();
                 return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
-                Intent forwardIntent = new Intent(TaskActivity.this, MainActivity.class);
-                startActivity(forwardIntent);
+                goForward();
                 return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
             case KeyEvent.KEYCODE_MINUS:
@@ -318,12 +318,10 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         public void onClick(View v) {
             switch(v.getId()) {
                 case R.id.action_back:
-                    Intent backIntent = new Intent(TaskActivity.this, MusicActivity.class);
-                    startActivity(backIntent);
+                    goBack();
                     break;
                 case R.id.action_forward:
-                    Intent forwardIntent = new Intent(TaskActivity.this, MainActivity.class);
-                    startActivity(forwardIntent);
+                    goForward();
                     break;
             }
         }
@@ -350,6 +348,23 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
     void cancelTimer() {
         if(cTimer!=null)
             cTimer.cancel();
+    }
+
+    //Go to next screen
+    private void goForward(){
+        Intent forwardIntent = new Intent(this, MainActivity.class);
+        if (Data.wlq != null) {
+            if (Data.wlq.getStatus() != null) {
+                forwardIntent = new Intent(this, AccessoryActivity.class);
+            }
+        }
+        startActivity(forwardIntent);
+    }
+
+    //Go previous screen
+    private void goBack(){
+        Intent backIntent = new Intent(this, MusicActivity.class);
+        startActivity(backIntent);
     }
 
     //Update Tasks
