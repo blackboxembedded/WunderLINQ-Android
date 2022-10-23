@@ -16,6 +16,7 @@ import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.TypedValue;
@@ -58,6 +59,9 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
 
     // class member variable to save the X,Y coordinates
     private float[] lastTouchDownXY = new float[2];
+
+    private CountDownTimer cTimer = null;
+    private boolean timerRunning = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,11 +201,14 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
         }
 
         updateDisplay();
+
+        startTimer();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        cancelTimer();
         try {
             unregisterReceiver(mGattUpdateReceiver);
         } catch (IllegalArgumentException e) {
@@ -240,8 +247,8 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        //getSupportActionBar().show();
-        //startTimer();
+        getSupportActionBar().show();
+        startTimer();
         // Save the X,Y coordinates
         if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
             lastTouchDownXY[0] = event.getX();
@@ -352,6 +359,29 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
             // Request config
             BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, WLQ_BASE.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
         }
+    }
+
+    //start timer function
+    void startTimer() {
+        if(!timerRunning) {
+            cTimer = new CountDownTimer(10000, 1000) {
+                public void onTick(long millisUntilFinished) {
+                }
+
+                public void onFinish() {
+                    getSupportActionBar().hide();
+                    timerRunning = false;
+                }
+            };
+            timerRunning = true;
+            cTimer.start();
+        }
+    }
+
+    //cancel timer
+    void cancelTimer() {
+        if(cTimer!=null)
+            cTimer.cancel();
     }
 
     // Handles various events fired by the Service.
