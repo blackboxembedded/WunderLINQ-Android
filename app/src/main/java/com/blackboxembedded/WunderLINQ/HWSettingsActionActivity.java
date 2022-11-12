@@ -263,7 +263,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 } else if (actionID == WLQ_N.fullLongPressSensitivity){
                     Data.wlq.getTempConfig()[WLQ_N.fullSensitivity_INDEX] = (byte)(actionTypeSP.getSelectedItemPosition() + 1);
                 } else if (actionID == WLQ_C.longPressSensitivity){
-                    Data.wlq.getTempConfig()[WLQ_C.Sensitivity_INDEX] = (byte)(actionTypeSP.getSelectedItemPosition() + 1);
+                    //Data.wlq.getTempConfig()[WLQ_C.lpSensitivity_INDEX] = (byte)(actionTypeSP.getSelectedItemPosition() + 1);
                 } else {
                     byte type = (byte)actionTypeSP.getSelectedItemPosition();
                     byte key = 0x00;
@@ -350,6 +350,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             actionModifiersSP.setVisibility(View.INVISIBLE);
             actionTypeSP.setSelection(WLQ_N.fullSensitivity - 1);
         } else if (actionID == WLQ_C.longPressSensitivity){
+            /*
             int fullSensitivityMax = 30;
             Integer[] intArray = new Integer[fullSensitivityMax];
             for(int i = 0; i < fullSensitivityMax; i++) {
@@ -361,6 +362,8 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
             actionTypeSP.setSelection(WLQ_C.sensitivity - 1);
+
+             */
         } else {    // Keys
             if (Data.wlq.getHardwareVersion() != null) {
                 if (Data.wlq.getHardwareVersion().equals(WLQ_N.hardwareVersion1)){

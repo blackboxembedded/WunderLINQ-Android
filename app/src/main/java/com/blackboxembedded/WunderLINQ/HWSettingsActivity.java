@@ -259,17 +259,21 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                 }
             } else if (Data.wlq.getHardwareType() == 2) {
                 if (Data.wlq.getKeyMode() == Data.wlq.KEYMODE_DEFAULT() || Data.wlq.getKeyMode() == Data.wlq.KEYMODE_CUSTOM()) {
-                    actionItems.add(new ActionItem(WLQ_C.longPressSensitivity, getString(R.string.long_press_label), Data.wlq.getActionValue(WLQ_C.longPressSensitivity)));
+                    //actionItems.add(new ActionItem(WLQ_C.longPressSensitivity, getString(R.string.long_press_label), Data.wlq.getActionValue(WLQ_C.longPressSensitivity)));
                     actionItems.add(new ActionItem(WLQ_C.wheelScrollUp, getString(R.string.full_scroll_up_label), Data.wlq.getActionValue(WLQ_C.wheelScrollUp)));
                     actionItems.add(new ActionItem(WLQ_C.wheelScrollDown, getString(R.string.full_scroll_down_label), Data.wlq.getActionValue(WLQ_C.wheelScrollDown)));
                     actionItems.add(new ActionItem(WLQ_C.wheelToggleRight, getString(R.string.full_toggle_right_label), Data.wlq.getActionValue(WLQ_C.wheelToggleRight)));
                     actionItems.add(new ActionItem(WLQ_C.wheelToggleRightLongPress, getString(R.string.full_toggle_right_long_label), Data.wlq.getActionValue(WLQ_C.wheelToggleRightLongPress)));
                     actionItems.add(new ActionItem(WLQ_C.wheelToggleLeft, getString(R.string.full_toggle_left_label), Data.wlq.getActionValue(WLQ_C.wheelToggleLeft)));
                     actionItems.add(new ActionItem(WLQ_C.wheelToggleLeftLongPress, getString(R.string.full_toggle_left_long_label), Data.wlq.getActionValue(WLQ_C.wheelToggleLeftLongPress)));
-                    actionItems.add(new ActionItem(WLQ_C.menuUp, getString(R.string.full_menu_up_label), Data.wlq.getActionValue(WLQ_C.menuUp)));
-                    actionItems.add(new ActionItem(WLQ_C.menuUpLongPress, getString(R.string.full_menu_up_long_label), Data.wlq.getActionValue(WLQ_C.menuUpLongPress)));
-                    actionItems.add(new ActionItem(WLQ_C.menuDown, getString(R.string.full_menu_down_label), Data.wlq.getActionValue(WLQ_C.menuDown)));
-                    actionItems.add(new ActionItem(WLQ_C.menuDownLongPress, getString(R.string.full_menu_down_long_label), Data.wlq.getActionValue(WLQ_C.menuDownLongPress)));
+                    actionItems.add(new ActionItem(WLQ_C.rocker1Up, getString(R.string.full_rocker1_up_label), Data.wlq.getActionValue(WLQ_C.rocker1Up)));
+                    actionItems.add(new ActionItem(WLQ_C.rocker1UpLongPress, getString(R.string.full_rocker1_up_long_label), Data.wlq.getActionValue(WLQ_C.rocker1UpLongPress)));
+                    actionItems.add(new ActionItem(WLQ_C.rocker1Down, getString(R.string.full_rocker1_down_label), Data.wlq.getActionValue(WLQ_C.rocker1Down)));
+                    actionItems.add(new ActionItem(WLQ_C.rocker1DownLongPress, getString(R.string.full_rocker1_down_long_label), Data.wlq.getActionValue(WLQ_C.rocker1DownLongPress)));
+                    actionItems.add(new ActionItem(WLQ_C.rocker2Up, getString(R.string.full_rocker2_up_label), Data.wlq.getActionValue(WLQ_C.rocker2Up)));
+                    actionItems.add(new ActionItem(WLQ_C.rocker2UpLongPress, getString(R.string.full_rocker2_up_long_label), Data.wlq.getActionValue(WLQ_C.rocker2UpLongPress)));
+                    actionItems.add(new ActionItem(WLQ_C.rocker2Down, getString(R.string.full_rocker2_down_label), Data.wlq.getActionValue(WLQ_C.rocker2Down)));
+                    actionItems.add(new ActionItem(WLQ_C.rocker2DownLongPress, getString(R.string.full_rocker2_down_long_label), Data.wlq.getActionValue(WLQ_C.rocker2DownLongPress)));
 
                     hwKeyModeTV.setVisibility(View.VISIBLE);
                     if (Data.wlq.getKeyMode() == Data.wlq.KEYMODE_DEFAULT()) {

@@ -909,11 +909,6 @@ public class WLQ_N extends WLQ_BASE {
     }
 
     @Override
-    public byte getSensitivity() {
-        return sensitivity;
-    }
-
-    @Override
     public byte[] GET_CONFIG_CMD() {
         return WLQ_BASE.GET_CONFIG_CMD;
     }

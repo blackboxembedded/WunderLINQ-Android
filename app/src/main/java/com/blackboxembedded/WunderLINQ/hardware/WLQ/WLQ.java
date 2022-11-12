@@ -48,8 +48,6 @@ public interface WLQ {
 
     public byte getKeyMode();
 
-    public byte getSensitivity();
-
     public String getActionName(int id);
     public String getActionValue(int id);
     public byte getActionKeyType(int id);

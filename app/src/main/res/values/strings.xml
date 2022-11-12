@@ -986,10 +986,14 @@
     <string name="full_toggle_left_long_label">Wheel Left Long Press</string>
     <string name="full_signal_cancel_label">Signal Cancel</string>
     <string name="full_signal_cancel_long_label">Signal Cancel Long Press</string>
-    <string name="full_menu_up_label">Menu Up</string>
-    <string name="full_menu_up_long_label">Menu Up Long Press</string>
-    <string name="full_menu_down_label">Menu Down</string>
-    <string name="full_menu_down_long_label">Menu Down Long Press</string>
+    <string name="full_rocker1_up_label">Rocker1 Up</string>
+    <string name="full_rocker1_up_long_label">Rocker1 Up Long Press</string>
+    <string name="full_rocker1_down_label">Rocker1 Down</string>
+    <string name="full_rocker1_down_long_label">Rocker1 Down Long Press</string>
+    <string name="full_rocker2_up_label">Rocker2 Up</string>
+    <string name="full_rocker2_up_long_label">Rocker2 Up Long Press</string>
+    <string name="full_rocker2_down_label">Rocker2 Down</string>
+    <string name="full_rocker2_down_long_label">Rocker2 Down Long Press</string>
     <string name="full_long_press_label">Long Press</string>
 
     <string name="rtk_page_label">Page</string>
