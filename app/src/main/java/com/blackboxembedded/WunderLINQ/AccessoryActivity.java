@@ -206,6 +206,28 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        cancelTimer();
+        try {
+            unregisterReceiver(mGattUpdateReceiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        cancelTimer();
+        try {
+            unregisterReceiver(mGattUpdateReceiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         cancelTimer();
@@ -391,13 +413,8 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-                Bundle bd = intent.getExtras();
-                if(bd != null){
-                    if(bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE).contains(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC)) {
-                        updateDisplay();
-                    }
-                }
+            if (BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE.equals(action)) {
+                updateDisplay();
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 goBack();
             }
@@ -406,7 +423,7 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
 
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
+        intentFilter.addAction(BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE);
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_DISCONNECTED);
         return intentFilter;
     }

@@ -181,6 +181,8 @@ public class BluetoothLeService extends Service {
             "com.blackboxembedded.bluetooth.le.ACTION_GATT_DISCONNECTING";
     private final static String ACTION_PAIRING_REQUEST =
             "com.blackboxembedded.bluetooth.le.PAIRING_REQUEST";
+    public final static String ACTION_ACCSTATUS_AVAILABLE =
+            "com.blackboxembedded.bluetooth.le.ACTION_ACCSTATUS_AVAILABLE";
 
     public static final String EXTRA_BYTE_VALUE = "com.blackboxembedded.wunderlinq.backgroundservices." +
             "EXTRA_BYTE_VALUE";
@@ -705,7 +707,6 @@ public class BluetoothLeService extends Service {
     }
 
     private static void broadcastNotifyUpdate(final BluetoothGattCharacteristic characteristic) {
-        final Intent intent = new Intent(ACTION_DATA_AVAILABLE);
         Bundle mBundle = new Bundle();
         // Putting the byte value read for GATT Db
         final byte[] data = characteristic.getValue();
@@ -748,6 +749,7 @@ public class BluetoothLeService extends Service {
                      * Sending the broad cast so that it can be received on registered
                      * receivers
                      */
+                    final Intent intent = new Intent(ACTION_DATA_AVAILABLE);
                     //intent.putExtras(mBundle);
                     MyApplication.getContext().sendBroadcast(intent);
                 }
@@ -785,6 +787,7 @@ public class BluetoothLeService extends Service {
                      * Sending the broad cast so that it can be received on registered
                      * receivers
                      */
+                    final Intent intent = new Intent(ACTION_DATA_AVAILABLE);
                     //intent.putExtras(mBundle);
                     MyApplication.getContext().sendBroadcast(intent);
                 }
@@ -807,6 +810,7 @@ public class BluetoothLeService extends Service {
                 } else if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x53)) {
                     if(Data.wlq != null) {
                         Data.wlq.setStatus(data);
+                        final Intent intent = new Intent(ACTION_ACCSTATUS_AVAILABLE);
                         intent.putExtras(mBundle);
                         MyApplication.getContext().sendBroadcast(intent);
                     } else {
@@ -825,6 +829,7 @@ public class BluetoothLeService extends Service {
              * Sending the broad cast so that it can be received on registered
              * receivers
              */
+            final Intent intent = new Intent(ACTION_DATA_AVAILABLE);
             intent.putExtras(mBundle);
             MyApplication.getContext().sendBroadcast(intent);
         }

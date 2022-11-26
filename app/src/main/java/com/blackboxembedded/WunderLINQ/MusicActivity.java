@@ -18,9 +18,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package com.blackboxembedded.WunderLINQ;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -57,6 +59,9 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
+import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
+import com.blackboxembedded.WunderLINQ.comms.BLE.GattAttributes;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
 
 import java.util.List;
 import java.util.Set;
@@ -248,6 +253,8 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
 
         getSupportActionBar().show();
         startTimer();
+
+        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
     }
 
     @Override
@@ -255,6 +262,11 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         super.onPause();
         cancelTimer();
         mHandler.removeCallbacks(mUpdateMetaData);
+        try {
+            unregisterReceiver(mGattUpdateReceiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -262,6 +274,11 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         super.onStop();
         cancelTimer();
         mHandler.removeCallbacks(mUpdateMetaData);
+        try {
+            unregisterReceiver(mGattUpdateReceiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -269,6 +286,11 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         super.onDestroy();
         cancelTimer();
         mHandler.removeCallbacks(mUpdateMetaData);
+        try {
+            unregisterReceiver(mGattUpdateReceiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -491,5 +513,23 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
     void cancelTimer() {
         if(cTimer!=null)
             cTimer.cancel();
+    }
+
+    // Handles various events fired by the Service.
+    private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE.equals(action)) {
+                Intent accessoryIntent = new Intent(MusicActivity.this, AccessoryActivity.class);
+                startActivity(accessoryIntent);
+            }
+        }
+    };
+
+    private static IntentFilter makeGattUpdateIntentFilter() {
+        final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE);
+        return intentFilter;
     }
 }

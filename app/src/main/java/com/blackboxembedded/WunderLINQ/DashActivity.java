@@ -117,11 +117,11 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
     @Override
     public void onResume() {
         super.onResume();
-        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
         getSupportActionBar().show();
-        startTimer();
         currentDashboard = sharedPrefs.getInt("lastDashboard",1);
         updateDashboard();
+        startTimer();
+        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
     }
 
     @Override
@@ -130,6 +130,23 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
         SharedPreferences.Editor editor = sharedPrefs.edit();
         editor.putInt("lastDashboard", currentDashboard);
         editor.apply();
+        cancelTimer();
+        try {
+            unregisterReceiver(mGattUpdateReceiver);
+        } catch (IllegalArgumentException e){
+            Log.d(TAG,e.toString());
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        cancelTimer();
+        try {
+            unregisterReceiver(mGattUpdateReceiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -299,6 +316,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
+        intentFilter.addAction(BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE);
         return intentFilter;
     }
 
@@ -314,6 +332,9 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
                     lastUpdate = System.currentTimeMillis();
                     updateDashboard();
                 }
+            } else if (BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE.equals(action)) {
+                Intent accessoryIntent = new Intent(DashActivity.this, AccessoryActivity.class);
+                startActivity(accessoryIntent);
             }
         }
     };

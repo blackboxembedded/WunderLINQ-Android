@@ -19,8 +19,10 @@ package com.blackboxembedded.WunderLINQ.TaskList;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -72,6 +74,7 @@ import com.blackboxembedded.WunderLINQ.WaypointDatasource;
 import com.blackboxembedded.WunderLINQ.TaskList.Activities.WaypointNavActivity;
 import com.blackboxembedded.WunderLINQ.WaypointRecord;
 import com.blackboxembedded.WunderLINQ.TaskList.Activities.WeatherMapActivity;
+import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
 import com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV1API.ApiBase;
 import com.blackboxembedded.WunderLINQ.hardware.externalcamera.goproV1API.ApiClient;
@@ -200,6 +203,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         getSupportActionBar().show();
         taskListView.addScrollStateChangeListener(scrollListener);
         startTimer();
+        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
     }
 
     @Override
@@ -207,6 +211,11 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         Log.d(TAG,"onPause");
         super.onPause();
         cancelTimer();
+        try {
+            unregisterReceiver(mGattUpdateReceiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -215,6 +224,11 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         super.onStop();
         taskListView.removeScrollStateChangeListener(scrollListener);
         cancelTimer();
+        try {
+            unregisterReceiver(mGattUpdateReceiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -223,6 +237,11 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         super.onDestroy();
         taskListView.removeScrollStateChangeListener(scrollListener);
         cancelTimer();
+        try {
+            unregisterReceiver(mGattUpdateReceiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -1411,5 +1430,23 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         }
 
         return p1;
+    }
+
+    // Handles various events fired by the Service.
+    private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE.equals(action)) {
+                Intent accessoryIntent = new Intent(TaskActivity.this, AccessoryActivity.class);
+                startActivity(accessoryIntent);
+            }
+        }
+    };
+
+    private static IntentFilter makeGattUpdateIntentFilter() {
+        final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE);
+        return intentFilter;
     }
 }

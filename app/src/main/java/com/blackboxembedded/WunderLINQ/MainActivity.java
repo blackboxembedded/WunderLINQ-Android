@@ -769,6 +769,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 if (drawingComplete) {
                     updateDisplay();
                 }
+            } else if (BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE.equals(action)) {
+                Intent accessoryIntent = new Intent(MainActivity.this, AccessoryActivity.class);
+                startActivity(accessoryIntent);
             }
         }
     };
@@ -779,6 +782,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_DISCONNECTED);
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED);
         intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
+        intentFilter.addAction(BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE);
         return intentFilter;
     }
 
