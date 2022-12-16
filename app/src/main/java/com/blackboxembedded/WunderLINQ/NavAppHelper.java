@@ -39,7 +39,7 @@ public class NavAppHelper {
     static public void open(Activity activity){
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
         String navApp = sharedPrefs.getString("prefNavApp", "1");
-        Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
+        Intent navIntent = new Intent(android.content.Intent.ACTION_MAIN);
         String url = "google.navigation://?free=1&mode=d&entry=fnls";
         switch (navApp){
             default: case "1": //Android Default or Google Maps
@@ -112,9 +112,14 @@ public class NavAppHelper {
             case "17": //Organic Maps
                 url = "om://?backurl=wunderlinq://datagrid";
                 break;
+            case "18": //Cruiser
+                navIntent = activity.getPackageManager().getLaunchIntentForPackage("gr.talent.cruiser");
+                url = "";
         }
         try {
-            navIntent.setData(Uri.parse(url));
+            if (!url.equals("")) {
+                navIntent.setData(Uri.parse(url));
+            }
             if (android.os.Build.VERSION.SDK_INT >= 24) {
                 if (activity.isInMultiWindowMode()) {
                     navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
@@ -190,6 +195,10 @@ public class NavAppHelper {
             case "17": //Organic Maps
                 navUrl = "om://route?sll=" + String.valueOf(start.getLatitude()) + "," + String.valueOf(start.getLongitude()) + "&saddr=Start&dll=" + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&daddr=Home&type=vehicle&backurl=wunderlinq://datagrid";
                 break;
+            case "18": //Cruiser
+                homeNavIntent.setPackage("gr.talent.cruiser");
+                navUrl = "geo:0,0?q=" + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude());
+                //navUrl = "https://kurviger.de/en?point="  + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&vehicle=motorycycle" + "weighting=fastest";
         }
         if (!navApp.equals("6")) {
             try {
@@ -270,6 +279,8 @@ public class NavAppHelper {
             case "17": //Organic Maps
                 navUrl = "om://map?ll=" + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&n=" + label + "&backurl=wunderlinq://datagrid";
                 break;
+            case "18": //Cruiser
+                navIntent.setPackage("gr.talent.cruiser");
         }
         if (!navApp.equals("6")) {
             try {
