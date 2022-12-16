@@ -198,7 +198,6 @@ public class NavAppHelper {
             case "18": //Cruiser
                 homeNavIntent.setPackage("gr.talent.cruiser");
                 navUrl = "geo:0,0?q=" + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude());
-                //navUrl = "https://kurviger.de/en?point="  + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&vehicle=motorycycle" + "weighting=fastest";
         }
         if (!navApp.equals("6")) {
             try {
