@@ -17,8 +17,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ.TaskList;
 
+import static android.content.Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -423,7 +426,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 getResources().getString(R.string.task_title_weathermap),
                 getResources().getString(R.string.task_title_applauncher),
                 getResources().getString(R.string.task_title_roadbook),
-                getResources().getString(R.string.task_title_systemvolume)
+                getResources().getString(R.string.task_title_systemvolume),
+                getResources().getString(R.string.task_title_gopro)
         };
         int numTasks = taskTitles.length;
         int[] iconId = new int[numTasks];
@@ -445,6 +449,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         iconId[15] = R.drawable.ic_android;
         iconId[16] = R.drawable.ic_roadbook;
         iconId[17] = R.drawable.ic_volume_up;
+        iconId[18] = R.drawable.ic_action_camera;
 
         mapping = new ArrayList<>();
         taskItems.clear();
@@ -1029,6 +1034,16 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 //Open System Volume Control
                 Intent volumeIntent = new Intent(TaskActivity.this, VolumeActivity.class);
                 startActivity(volumeIntent);
+                break;
+            case 18:
+                //Open System Volume Control
+                Intent WLQGoProIntent = new Intent(android.content.Intent.ACTION_MAIN);
+                String url = "wunderlinqgp://test";
+                WLQGoProIntent.setData(Uri.parse(url));
+                try {
+                    startActivity(WLQGoProIntent);
+                } catch ( ActivityNotFoundException ex  ) {
+                }
                 break;
             default:
                 break;
