@@ -1037,12 +1037,13 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 break;
             case 18:
                 //Open System Volume Control
-                Intent WLQGoProIntent = new Intent(android.content.Intent.ACTION_MAIN);
-                String url = "wunderlinqgp://test";
+                Intent WLQGoProIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                String url = "wunderlinqgp://";
                 WLQGoProIntent.setData(Uri.parse(url));
                 try {
                     startActivity(WLQGoProIntent);
                 } catch ( ActivityNotFoundException ex  ) {
+                    Log.d(TAG,"Activity not found");
                 }
                 break;
             default:
