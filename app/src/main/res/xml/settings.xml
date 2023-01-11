@@ -426,13 +426,6 @@
                 android:entryValues="@array/roadbook_apps_arrayValues"
                 android:defaultValue="1"
                 />
-            <ListPreference
-                android:key="prefActionCam"
-                android:title="@string/pref_actioncam_title"
-                android:entries="@array/actioncam_array"
-                android:entryValues="@array/actioncam_arrayValues"
-                android:defaultValue="0"
-                />
         </PreferenceScreen>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/experimental_title" >

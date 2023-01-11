@@ -151,7 +151,6 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
         ListPreference prefDashSpeedSource;
         ListPreference prefNavApp;
         ListPreference prefRoadBookApp;
-        ListPreference prefActionCam;
         ListPreference prefPIPorientation;
         ListPreference prefPIPCellCount;
 
@@ -271,8 +270,6 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
             prefNavApp.setSummary(prefNavApp.getEntry());
             prefRoadBookApp = findPreference("prefRoadBookApp");
             prefRoadBookApp.setSummary(prefRoadBookApp.getEntry());
-            prefActionCam = findPreference("prefActionCam");
-            prefActionCam.setSummary(prefActionCam.getEntry());
             prefPIPorientation = findPreference("prefPIPorientation");
             prefPIPorientation.setSummary(prefPIPorientation.getEntry());
             prefPIPCellCount = findPreference("prefPIPCellCount");
@@ -431,9 +428,6 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
             }
             if (key.equals("prefRoadBookApp")){
                 prefRoadBookApp.setSummary(prefRoadBookApp.getEntry());
-            }
-            if (key.equals("prefActionCam")){
-                prefActionCam.setSummary(prefActionCam.getEntry());
             }
             if (key.equals("prefPIPorientation")){
                 prefPIPorientation.setSummary(prefPIPorientation.getEntry());
