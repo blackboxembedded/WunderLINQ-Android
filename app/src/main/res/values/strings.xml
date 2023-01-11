@@ -627,13 +627,12 @@
         <item name="11">@string/task_title_voicecontrol</item>
         <item name="12">@string/task_title_settings</item>
         <item name="13">@string/task_title_homescreen</item>
-        <item name="14">@string/task_title_actioncam_start_video</item>
+        <item name="14">@string/task_title_gopro</item>
         <item name="15">@string/task_title_weathermap</item>
         <item name="16">@string/task_title_applauncher</item>
         <item name="17">@string/task_title_roadbook</item>
         <item name="18">@string/task_title_systemvolume</item>
-        <item name="19">@string/task_title_gopro</item>
-        <item name="20">@string/task_title_empty</item>
+        <item name="19">@string/task_title_empty</item>
     </string-array>
     <string-array name="tasks_arrayValues" translatable="false">
         <item name="1">0</item>
@@ -655,7 +654,6 @@
         <item name="17">16</item>
         <item name="18">17</item>
         <item name="19">18</item>
-        <item name="20">19</item>
     </string-array>
     <string name="pref_nav_app_title">Navigation App</string>
     <string name="nav_app_default">Android Default</string>
