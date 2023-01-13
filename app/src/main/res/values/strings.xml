@@ -382,6 +382,8 @@
     <string name="task_title_roadbook">Road Book</string>
     <string name="task_title_systemvolume">Volume</string>
     <string name="task_title_gopro">GoPro Control</string>
+    <string name="nogpremote_alert_title">WunderLINQ GoPro Remote Not Found</string>
+    <string name="nogpremote_alert_body">GoPro Control is provided by a seperate free app called WunderLINQ GoPro Remote.  Click OK to install.</string>
     <string name="toast_actioncam_notconnected">ActionCam Not Connected</string>
     <string name="toast_actioncam_notset">Set ActionCam type in the app settings</string>
     <string name="task_title_empty">Empty</string>
