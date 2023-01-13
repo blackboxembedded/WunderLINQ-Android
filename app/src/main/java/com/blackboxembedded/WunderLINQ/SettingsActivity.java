@@ -53,7 +53,9 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportFragmentManager().beginTransaction().replace(android.R.id.content, new UserSettingActivityFragment()).commit();
+        if(savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(android.R.id.content, new UserSettingActivityFragment()).commit();
+        }
         showActionBar();
     }
 
