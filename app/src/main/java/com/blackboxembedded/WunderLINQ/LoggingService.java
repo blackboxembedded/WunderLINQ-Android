@@ -366,14 +366,6 @@ public class LoggingService extends Service {
             handler.removeCallbacks(runnable);
         }
 
-        NotificationManager mNotificationManager =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mNotificationManager.deleteNotificationChannel(CHANNEL_ID);
-        } else {
-            mNotificationManager.cancel(1234);
-        }
-
         ((MyApplication) this.getApplication()).setTripRecording(false);
     }
 
