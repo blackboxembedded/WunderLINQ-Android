@@ -197,7 +197,7 @@ public class NavAppHelper {
                 break;
             case "18": //Cruiser
                 homeNavIntent.setPackage("gr.talent.cruiser");
-                navUrl = "geo:0,0?q=" + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude());
+                navUrl = "https://www.openstreetmap.org/directions?route=" + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude());
         }
         if (!navApp.equals("6")) {
             try {
