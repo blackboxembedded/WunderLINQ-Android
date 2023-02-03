@@ -115,6 +115,11 @@ public class NavAppHelper {
             case "18": //Cruiser
                 navIntent = activity.getPackageManager().getLaunchIntentForPackage("gr.talent.cruiser");
                 url = "";
+                break;
+            case "19": //OruxMaps
+                navIntent = activity.getPackageManager().getLaunchIntentForPackage("com.orux.oruxmapsDonate");
+                url = "";
+                break;
         }
         try {
             if (!url.equals("")) {
@@ -198,10 +203,23 @@ public class NavAppHelper {
             case "18": //Cruiser
                 homeNavIntent.setPackage("gr.talent.cruiser");
                 navUrl = "https://www.openstreetmap.org/directions?route=" + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude());
+                break;
+            case "19": //OruxMaps
+                homeNavIntent = new Intent("com.oruxmaps.VIEW_MAP_ONLINE");
+                double[] targetLat = {start.getLatitude(),end.getLatitude()};
+                double [] targetLon = {start.getLongitude(),end.getLongitude()};
+                String [] targetNames = {"Start","End"};
+                homeNavIntent.putExtra("targetLat", targetLat);
+                homeNavIntent.putExtra("targetLon", targetLon);
+                homeNavIntent.putExtra("targetName", targetNames);
+                homeNavIntent.putExtra("navigatetoindex", 0); //index of the wpt. you want to start
+                break;
         }
         if (!navApp.equals("6")) {
             try {
-                homeNavIntent.setData(Uri.parse(navUrl));
+                if (!navApp.equals("19")) {
+                    homeNavIntent.setData(Uri.parse(navUrl));
+                }
                 if (android.os.Build.VERSION.SDK_INT >= 24) {
                     if (activity.isInMultiWindowMode()) {
                         homeNavIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
@@ -280,10 +298,22 @@ public class NavAppHelper {
                 break;
             case "18": //Cruiser
                 navIntent.setPackage("gr.talent.cruiser");
+                break;
+            case "19": //OruxMaps
+                navIntent = new Intent("com.oruxmaps.VIEW_MAP_ONLINE");
+                double[] targetLat = {waypoint.getLatitude()};
+                double [] targetLon = {waypoint.getLongitude()};
+                String [] targetNames = {label};
+                navIntent.putExtra("targetLat", targetLat);
+                navIntent.putExtra("targetLon", targetLon);
+                navIntent.putExtra("targetName", targetNames);
+                break;
         }
         if (!navApp.equals("6")) {
             try {
-                navIntent.setData(Uri.parse(navUrl));
+                if (!navApp.equals("19")) {
+                    navIntent.setData(Uri.parse(navUrl));
+                }
                 if (android.os.Build.VERSION.SDK_INT >= 24) {
                     if (activity.isInMultiWindowMode()) {
                         navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
