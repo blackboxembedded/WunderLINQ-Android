@@ -214,7 +214,7 @@ public class NavAppHelper {
                 break;
             case "18": //Cruiser
                 homeNavIntent = new Intent();
-                homeNavIntent.setAction("com.devemux86.NAVIGATION");
+                homeNavIntent.setAction("com.devemux86.intent.action.NAVIGATION");
                 homeNavIntent.setPackage("gr.talent.cruiser");
                 homeNavIntent.putExtra("LATITUDE", new double[]{start.getLatitude(), end.getLatitude()});
                 homeNavIntent.putExtra("LONGITUDE", new double[]{start.getLongitude(), end.getLongitude()});
@@ -324,7 +324,7 @@ public class NavAppHelper {
                 break;
             case "18": //Cruiser
                 navIntent = new Intent();
-                navIntent.setAction("com.devemux86.MAP_VIEW");
+                navIntent.setAction("com.devemux86.intent.action.MAP_VIEW");
                 navIntent.setPackage("gr.talent.cruiser");
                 navIntent.putExtra("LATITUDE", waypoint.getLatitude());
                 navIntent.putExtra("LONGITUDE", waypoint.getLongitude());
