@@ -160,7 +160,7 @@ public class NavAppHelper {
                 homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "5": //Maps.me
-                navUrl = "mapsme://route?sll=" + String.valueOf(start.getLatitude()) + "," + String.valueOf(start.getLongitude()) + "&saddr=Start&dll=" + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&daddr=Home&type=vehicle&back_url=wunderlinq://datagrid";
+                navUrl = "mapsme://route?sll=" + String.valueOf(start.getLatitude()) + "," + String.valueOf(start.getLongitude()) + "&saddr=" + MyApplication.getContext().getString(R.string.trip_view_waypoint_start_label) + "&dll=" + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&daddr=" + MyApplication.getContext().getString(R.string.trip_view_waypoint_start_label) + "&type=vehicle&back_url=wunderlinq://datagrid";
                 homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "6": //OsmAnd
@@ -209,7 +209,7 @@ public class NavAppHelper {
                 homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "17": //Organic Maps
-                navUrl = "om://route?sll=" + String.valueOf(start.getLatitude()) + "," + String.valueOf(start.getLongitude()) + "&saddr=Start&dll=" + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&daddr=Home&type=vehicle&backurl=wunderlinq://datagrid";
+                navUrl = "om://route?sll=" + String.valueOf(start.getLatitude()) + "," + String.valueOf(start.getLongitude()) + "&saddr=" + MyApplication.getContext().getString(R.string.trip_view_waypoint_start_label) + "&dll=" + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&daddr=" + MyApplication.getContext().getString(R.string.trip_view_waypoint_end_label) + "&type=vehicle&backurl=wunderlinq://datagrid";
                 homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "18": //Cruiser
@@ -218,13 +218,13 @@ public class NavAppHelper {
                 homeNavIntent.setPackage("gr.talent.cruiser");
                 homeNavIntent.putExtra("LATITUDE", new double[]{start.getLatitude(), end.getLatitude()});
                 homeNavIntent.putExtra("LONGITUDE", new double[]{start.getLongitude(), end.getLongitude()});
-                homeNavIntent.putExtra("NAME", new String[]{"Beginning", "Stop!", "Destination"});
+                homeNavIntent.putExtra("NAME", new String[]{MyApplication.getContext().getString(R.string.trip_view_waypoint_start_label), MyApplication.getContext().getString(R.string.trip_view_waypoint_end_label)});
                 break;
             case "19": //OruxMaps
                 homeNavIntent = new Intent("com.oruxmaps.VIEW_MAP_ONLINE");
                 double[] targetLat = {start.getLatitude(),end.getLatitude()};
                 double [] targetLon = {start.getLongitude(),end.getLongitude()};
-                String [] targetNames = {"Start","End"};
+                String [] targetNames = {MyApplication.getContext().getString(R.string.trip_view_waypoint_start_label), MyApplication.getContext().getString(R.string.trip_view_waypoint_end_label)};
                 homeNavIntent.putExtra("targetLat", targetLat);
                 homeNavIntent.putExtra("targetLon", targetLon);
                 homeNavIntent.putExtra("targetName", targetNames);
@@ -340,7 +340,7 @@ public class NavAppHelper {
                 navIntent.putExtra("targetName", targetNames);
                 break;
         }
-        if (!navApp.equals("6")) { //If NOT OsmAnd
+        if (!navApp.equals("6")) { // If NOT OsmAnd
             try {
                 if (android.os.Build.VERSION.SDK_INT >= 24) {
                     if (activity.isInMultiWindowMode()) {
