@@ -28,7 +28,6 @@ import android.content.pm.ResolveInfo;
 import android.location.Location;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import java.util.List;
 
@@ -146,6 +145,7 @@ public class NavAppHelper {
                 break;
             case "2": //Google Maps
                 homeNavIntent.setPackage("com.google.android.apps.maps");
+                homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "3": //Locus Maps
                 homeNavIntent.setPackage("menion.android.locus.pro");
@@ -153,12 +153,15 @@ public class NavAppHelper {
                 if(!isCallable(activity, homeNavIntent)){
                     homeNavIntent.setPackage("menion.android.locus");
                 }
+                homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "4": //Waze
                 navUrl = "https://www.waze.com/ul?ll=" + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&navigate=yes&zoom=17";
+                homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "5": //Maps.me
                 navUrl = "mapsme://route?sll=" + String.valueOf(start.getLatitude()) + "," + String.valueOf(start.getLongitude()) + "&saddr=Start&dll=" + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&daddr=Home&type=vehicle&back_url=wunderlinq://datagrid";
+                homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "6": //OsmAnd
                 OsmAndHelper osmAndHelper = new OsmAndHelper(activity, 1001, null);
@@ -167,42 +170,55 @@ public class NavAppHelper {
             case "7": //Mapfactor Navigator
                 homeNavIntent.setPackage("com.mapfactor.navigator");
                 navUrl = "http://maps.google.com/maps?f=d&daddr=@"  + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&navigate=yes";
+                homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "8": //Sygic
                 //https://www.sygic.com/developers/professional-navigation-sdk/android/api-examples/custom-url
                 navUrl = "com.sygic.aura://coordinate|"  + String.valueOf(end.getLongitude()) + "|" + String.valueOf(end.getLatitude()) + "|drive";
+                homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "9": //Kurviger 2
                 homeNavIntent.setPackage("gr.talent.kurviger");
                 navUrl = "https://kurviger.de/en?point="  + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&vehicle=motorycycle"
                         + "weighting=fastest";
+                homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "10": //TomTom GO
                 homeNavIntent.setPackage("com.tomtom.gplay.navapp");
                 navUrl = "geo:" + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude());
+                homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "13": //Kurviger 1 Pro
                 homeNavIntent.setPackage("gr.talent.kurviger.pro");
                 navUrl = "https://kurviger.de/en?point="  + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&vehicle=motorycycle"
                         + "weighting=fastest";
+                homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "14": //CoPilot GPS
                 //https://developer.trimblemaps.com/copilot-navigation/v10-19/feature-guide/advanced-features/url-launch/#send-stops
                 navUrl = "copilot://options?type=STOPS&stop=Start||||||" + String.valueOf(start.getLatitude()) + "|" + String.valueOf(start.getLongitude()) + "&stop=Stop||||||" + String.valueOf(end.getLatitude()) + "|" + String.valueOf(end.getLongitude())
                         + "&EnableCustomButton=true&AppLaunchBundleID=com.blackboxembedded.WunderLINQ";
+                homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "15": //Yandex
                 navUrl = "yandexnavi://build_route_on_map?lat_to=" + String.valueOf(end.getLatitude()) + "&lon_to=" + String.valueOf(end.getLongitude()) ;
+                homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "16": //Cartograph
                 navUrl = "cartograph://route?geo="+String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&back_url=wunderlinq://datagrid";
+                homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "17": //Organic Maps
                 navUrl = "om://route?sll=" + String.valueOf(start.getLatitude()) + "," + String.valueOf(start.getLongitude()) + "&saddr=Start&dll=" + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude()) + "&daddr=Home&type=vehicle&backurl=wunderlinq://datagrid";
+                homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "18": //Cruiser
+                homeNavIntent = new Intent();
+                homeNavIntent.setAction("com.devemux86.NAVIGATION");
                 homeNavIntent.setPackage("gr.talent.cruiser");
-                navUrl = "https://www.openstreetmap.org/directions?route=" + String.valueOf(end.getLatitude()) + "," + String.valueOf(end.getLongitude());
+                homeNavIntent.putExtra("LATITUDE", new double[]{start.getLatitude(), end.getLatitude()});
+                homeNavIntent.putExtra("LONGITUDE", new double[]{start.getLongitude(), end.getLongitude()});
+                homeNavIntent.putExtra("NAME", new String[]{"Beginning", "Stop!", "Destination"});
                 break;
             case "19": //OruxMaps
                 homeNavIntent = new Intent("com.oruxmaps.VIEW_MAP_ONLINE");
@@ -215,11 +231,8 @@ public class NavAppHelper {
                 homeNavIntent.putExtra("navigatetoindex", 0); //index of the wpt. you want to start
                 break;
         }
-        if (!navApp.equals("6")) {
+        if (!navApp.equals("6")) { // If NOT OsmAnd
             try {
-                if (!navApp.equals("19")) {
-                    homeNavIntent.setData(Uri.parse(navUrl));
-                }
                 if (android.os.Build.VERSION.SDK_INT >= 24) {
                     if (activity.isInMultiWindowMode()) {
                         homeNavIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
@@ -243,6 +256,7 @@ public class NavAppHelper {
                 break;
             case "2": //Google Maps
                 navIntent.setPackage("com.google.android.apps.maps");
+                navIntent.setData(Uri.parse(navUrl));
                 break;
             case "3": //Locus Maps
                 navIntent.setPackage("menion.android.locus.pro");
@@ -250,12 +264,15 @@ public class NavAppHelper {
                 if(!isCallable(activity, navIntent)){
                     navIntent.setPackage("menion.android.locus");
                 }
+                navIntent.setData(Uri.parse(navUrl));
                 break;
             case "4": //Waze
                 navUrl = "https://www.waze.com/ul?ll=" + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&zoom=10";
+                navIntent.setData(Uri.parse(navUrl));
                 break;
             case "5": //Maps.me
                 navUrl = "mapsme://map?ll=" + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&n=" + label + "&back_url=wunderlinq://datagrid";
+                navIntent.setData(Uri.parse(navUrl));
                 break;
             case "6": //OsmAnd
                 //navUrl = "osmand.navigation:q=" + String.valueOf(location.latitude) + "," + String.valueOf(location.longitude) + "&navigate=yes";
@@ -264,40 +281,54 @@ public class NavAppHelper {
                 break;
             case "7": //Mapfactor Navigator
                 navIntent.setPackage("com.mapfactor.navigator");
+                navIntent.setData(Uri.parse(navUrl));
                 break;
             case "8": //Sygic
                 //https://www.sygic.com/developers/professional-navigation-sdk/android/api-examples/custom-url
                 navUrl = "com.sygic.aura://coordinate|"  + String.valueOf(waypoint.getLongitude()) + "|" + String.valueOf(waypoint.getLatitude()) + "|show";
+                navIntent.setData(Uri.parse(navUrl));
                 break;
             case "9": //Kurviger 2
                 navIntent.setPackage("gr.talent.kurviger");
                 navUrl = "https://kurviger.de/en?point="  + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&locale=en" +"&vehicle=motorycycle"
                         + "weighting=fastest" + "use_miles=true";
+                navIntent.setData(Uri.parse(navUrl));
                 break;
             case "10": //TomTom GO
                 navIntent.setPackage("com.tomtom.gplay.navapp");
                 navUrl = "geo:" + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude());
+                navIntent.setData(Uri.parse(navUrl));
                 break;
             case "13": //Kurviger 1 Pro
                 navIntent.setPackage("gr.talent.kurviger.pro");
                 navUrl = "https://kurviger.de/en?point="  + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&locale=en" +"&vehicle=motorycycle"
                         + "weighting=fastest" + "use_miles=true";
+                navIntent.setData(Uri.parse(navUrl));
                 break;
             case "14": //CoPilot GPS
                 navUrl = "copilot://mydestination?type=LOCATION&action=VIEW&lat=" + String.valueOf(waypoint.getLatitude()) + "&long=" + String.valueOf(waypoint.getLongitude())
                         + "&EnableCustomButton=true&AppLaunchBundleID=com.blackboxembedded.WunderLINQ";
+                navIntent.setData(Uri.parse(navUrl));
                 break;
             case "15": //Yandex
                 navUrl = "yandexnavi://show_point_on_map?lat=" + String.valueOf(waypoint.getLatitude()) + "&lon=" + String.valueOf(waypoint.getLongitude()) + "&zoom=12&no-balloon=0&desc=" + label;
+                navIntent.setData(Uri.parse(navUrl));
                 break;
             case "16": //Cartograph
                 navUrl = "cartograph://view?geo="+String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&back_url=wunderlinq://datagrid";
+                navIntent.setData(Uri.parse(navUrl));
                 break;
             case "17": //Organic Maps
                 navUrl = "om://map?ll=" + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&n=" + label + "&backurl=wunderlinq://datagrid";
+                navIntent.setData(Uri.parse(navUrl));
                 break;
             case "18": //Cruiser
+                navIntent = new Intent();
+                navIntent.setAction("com.devemux86.MAP_VIEW");
                 navIntent.setPackage("gr.talent.cruiser");
+                navIntent.putExtra("LATITUDE", waypoint.getLatitude());
+                navIntent.putExtra("LONGITUDE", waypoint.getLongitude());
+                navIntent.putExtra("NAME", label);
                 break;
             case "19": //OruxMaps
                 navIntent = new Intent("com.oruxmaps.VIEW_MAP_ONLINE");
@@ -309,11 +340,8 @@ public class NavAppHelper {
                 navIntent.putExtra("targetName", targetNames);
                 break;
         }
-        if (!navApp.equals("6")) {
+        if (!navApp.equals("6")) { //If NOT OsmAnd
             try {
-                if (!navApp.equals("19")) {
-                    navIntent.setData(Uri.parse(navUrl));
-                }
                 if (android.os.Build.VERSION.SDK_INT >= 24) {
                     if (activity.isInMultiWindowMode()) {
                         navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
