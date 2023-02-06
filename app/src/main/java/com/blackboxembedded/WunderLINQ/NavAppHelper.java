@@ -46,7 +46,6 @@ public class NavAppHelper {
                 break;
             case "2": //Google Maps
                 navIntent.setPackage("com.google.android.apps.maps");
-                url = "";
                 break;
             case "3": //Locus Maps
                 url = "http://link.locusmap.eu";
@@ -58,78 +57,79 @@ public class NavAppHelper {
                 break;
             case "4": //Waze
                 url = "https://waze.com/ul";
+                navIntent.setData(Uri.parse(url));
                 break;
             case "5": //Maps.me
                 url = "mapsme://?back_url=wunderlinq://datagrid";
+                navIntent.setData(Uri.parse(url));
                 break;
             case "6": //OsmAnd
                 url = "http://osmand.net/go";
+                navIntent.setData(Uri.parse(url));
                 break;
             case "7": //Mapfactor Navigator
                 navIntent.setPackage("com.mapfactor.navigator");
                 url = "http://maps.google.com/maps";
+                navIntent.setData(Uri.parse(url));
                 break;
             case "8": //Sygic
                 //https://www.sygic.com/developers/professional-navigation-sdk/android/api-examples/custom-url
                 url = "com.sygic.aura://";
+                navIntent.setData(Uri.parse(url));
                 break;
             case "9": //Kurviger 2
                 navIntent = activity.getPackageManager().getLaunchIntentForPackage("gr.talent.kurviger");
-                url = "";
                 break;
             case "10": //TomTom GO
                 navIntent = activity.getPackageManager().getLaunchIntentForPackage("com.tomtom.gplay.navapp");
-                url = "";
                 break;
             case "11": //BMW ConnectedRide
                 String discoveredBMWApp = installedApps(activity,"com.bmw.ConnectedRide");
                 if (!discoveredBMWApp.equals("")) {
                     navIntent = activity.getPackageManager().getLaunchIntentForPackage(discoveredBMWApp);
                 }
-                url = "";
                 break;
             case "12": //Calimoto
                 String discoveredCalimotoApp = installedApps(activity, "com.calimoto.calimoto");
                 if (!discoveredCalimotoApp.equals("")) {
                     navIntent = activity.getPackageManager().getLaunchIntentForPackage(discoveredCalimotoApp);
                 }
-                url = "";
                 break;
             case "13": //Kurviger 1 Pro
                 navIntent = activity.getPackageManager().getLaunchIntentForPackage("gr.talent.kurviger.pro");
-                url = "";
                 break;
             case "14": //CoPilot GPS
                 url = "copilot://&EnableCustomButton=true&AppLaunchBundleID=com.blackboxembedded.WunderLINQ";
+                navIntent.setData(Uri.parse(url));
                 break;
             case "15": //Yandex
                 url = "yandexnavi://";
+                navIntent.setData(Uri.parse(url));
                 break;
             case "16": //Cartograph
                 url = "cartograph://?backurl=wunderlinq://datagrid";
+                navIntent.setData(Uri.parse(url));
                 break;
             case "17": //Organic Maps
                 url = "om://?backurl=wunderlinq://datagrid";
+                navIntent.setData(Uri.parse(url));
                 break;
             case "18": //Cruiser
                 navIntent = activity.getPackageManager().getLaunchIntentForPackage("gr.talent.cruiser");
-                url = "";
                 break;
             case "19": //OruxMaps
                 navIntent = activity.getPackageManager().getLaunchIntentForPackage("com.orux.oruxmapsDonate");
-                url = "";
                 break;
         }
         try {
-            if (!url.equals("")) {
-                navIntent.setData(Uri.parse(url));
-            }
-            if (android.os.Build.VERSION.SDK_INT >= 24) {
-                if (activity.isInMultiWindowMode()) {
-                    navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+            if (navIntent != null) {
+                if (android.os.Build.VERSION.SDK_INT >= 24) {
+                    if (activity.isInMultiWindowMode()) {
+                        navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                    }
                 }
+                activity.startActivity(navIntent);
             }
-            activity.startActivity(navIntent);
         } catch ( ActivityNotFoundException ex  ) {
         }
     }
