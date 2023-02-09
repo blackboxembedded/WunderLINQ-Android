@@ -383,7 +383,10 @@
     <string name="task_title_systemvolume">Volume</string>
     <string name="task_title_gopro">GoPro Control</string>
     <string name="nogpremote_alert_title">WunderLINQ GoPro Remote Not Found</string>
-    <string name="nogpremote_alert_body">GoPro Control is provided by a seperate free app called WunderLINQ GoPro Remote.  Click OK to install.</string>
+    <string name="nogpremote_alert_body">GoPro Control is provided by a separate free app called WunderLINQ GoPro Remote.  Click OK to install.</string>
+    <string name="task_title_insta360">Insta360 Control</string>
+    <string name="no360remote_alert_title">WunderLINQ Insta360 Remote Not Found</string>
+    <string name="no360remote_alert_body">Insta360 Control is provided by a separate free app called WunderLINQ Insta360 Remote.  Click OK to install.</string>
     <string name="toast_actioncam_notconnected">ActionCam Not Connected</string>
     <string name="toast_actioncam_notset">Set ActionCam type in the app settings</string>
     <string name="task_title_empty">Empty</string>
@@ -634,7 +637,8 @@
         <item name="16">@string/task_title_applauncher</item>
         <item name="17">@string/task_title_roadbook</item>
         <item name="18">@string/task_title_systemvolume</item>
-        <item name="19">@string/task_title_empty</item>
+        <item name="19">@string/task_title_insta360</item>
+        <item name="20">@string/task_title_empty</item>
     </string-array>
     <string-array name="tasks_arrayValues" translatable="false">
         <item name="1">0</item>
@@ -656,6 +660,7 @@
         <item name="17">16</item>
         <item name="18">17</item>
         <item name="19">18</item>
+        <item name="20">19</item>
     </string-array>
     <string name="pref_nav_app_title">Navigation App</string>
     <string name="nav_app_default">Android Default</string>

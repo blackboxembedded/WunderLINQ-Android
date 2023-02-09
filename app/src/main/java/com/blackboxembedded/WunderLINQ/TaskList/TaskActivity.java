@@ -402,7 +402,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 getResources().getString(R.string.task_title_weathermap),
                 getResources().getString(R.string.task_title_applauncher),
                 getResources().getString(R.string.task_title_roadbook),
-                getResources().getString(R.string.task_title_systemvolume)
+                getResources().getString(R.string.task_title_systemvolume),
+                getResources().getString(R.string.task_title_insta360)
         };
         int numTasks = taskTitles.length;
         int[] iconId = new int[numTasks];
@@ -424,6 +425,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         iconId[15] = R.drawable.ic_android;
         iconId[16] = R.drawable.ic_roadbook;
         iconId[17] = R.drawable.ic_volume_up;
+        iconId[18] = R.drawable.ic_spherical_camera;
 
         mapping = new ArrayList<>();
         taskItems.clear();
@@ -809,6 +811,36 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 //Open System Volume Control
                 Intent volumeIntent = new Intent(TaskActivity.this, VolumeActivity.class);
                 startActivity(volumeIntent);
+                break;
+            case 18:
+                //Open WunderLINQ Insta360 Remote
+                Intent WLQInsta360Intent = new Intent(android.content.Intent.ACTION_VIEW);
+                WLQInsta360Intent.setData(Uri.parse("wunderlinqi360://"));
+                try {
+                    startActivity(WLQInsta360Intent);
+                } catch ( ActivityNotFoundException ex  ) {
+                    Log.d(TAG,"WunderLINQ Insta360 Remote not found");
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.no360remote_alert_title));
+                    builder.setMessage(getString(R.string.no360remote_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            final String appPackageName = "com.blackboxembedded.wunderlinqinsta360";
+                            try {
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                            } catch (android.content.ActivityNotFoundException exception) {
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                            }
+                        }
+                    });
+                    builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+                    builder.show();
+                }
                 break;
             default:
                 break;
