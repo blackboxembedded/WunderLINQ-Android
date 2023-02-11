@@ -224,25 +224,21 @@
             </intent-filter>
         </service>
         <service
-            android:name=".comms.Serial.SerialService"
-            android:enabled="true"
-            android:exported="true" />
-        <service
             android:name=".comms.BLE.BluetoothLeService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="false" />
         <service
             android:name=".LoggingService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="false" />
         <service
             android:name=".VideoRecService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="false" />
         <service
             android:name=".PhotoService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="false" />
         <service
             android:name=".MyAccessibilityService"
             android:enabled="true"
@@ -270,7 +266,7 @@
 
         <receiver
             android:name=".comms.BLE.BTConnectReceiver"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
             </intent-filter>
