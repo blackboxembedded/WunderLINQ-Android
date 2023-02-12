@@ -60,7 +60,6 @@ public class PermissionsActivity extends AppCompatActivity {
     public static final int PERMISSION_CONTACTS = 2;
     public static final int PERMISSION_RECORD_AUDIO = 3;
     public static final int PERMISSION_CAMERA = 4;
-    public static final int PERMISSION_WRITE_STORAGE = 5;
     public static final int PERMISSION_PHONE = 6;
     public static final int PERMISSION_NOTIFICATION = 7;
     public static final int PERMISSION_OVERLAY = 8;
@@ -108,11 +107,6 @@ public class PermissionsActivity extends AppCompatActivity {
                     case PERMISSION_CAMERA:
                         if (ActivityCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                             ActivityCompat.requestPermissions(PermissionsActivity.this,new String[]{Manifest.permission.CAMERA}, PERMISSION_CAMERA);
-                        }
-                        break;
-                    case PERMISSION_WRITE_STORAGE:
-                        if (ActivityCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(PermissionsActivity.this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_WRITE_STORAGE);
                         }
                         break;
                     case PERMISSION_PHONE:
@@ -243,13 +237,6 @@ public class PermissionsActivity extends AppCompatActivity {
         }
         listValues.add(new PermissionRecord(PERMISSION_CAMERA, getString(R.string.permission_camera_label), cameraPermission));
 
-        //Write Storage
-        boolean writePermission = false;
-        if (ActivityCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            writePermission = true;
-        }
-        listValues.add(new PermissionRecord(PERMISSION_WRITE_STORAGE, getString(R.string.permission_storagewrite_label), writePermission));
-
         //Phone
         boolean phonePermission = false;
         if (ActivityCompat.checkSelfPermission(this,Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
@@ -364,23 +351,6 @@ public class PermissionsActivity extends AppCompatActivity {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle(getString(R.string.negative_alert_title));
                     builder.setMessage(getString(R.string.negative_record_audio_alert_body));
-                    builder.setPositiveButton(android.R.string.ok, null);
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                        }
-                    });
-                    builder.show();
-                }
-                break;
-            }
-            case PERMISSION_WRITE_STORAGE: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d(TAG, "Write to storage permission granted");
-                } else {
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle(getString(R.string.negative_alert_title));
-                    builder.setMessage(getString(R.string.negative_write_alert_body));
                     builder.setPositiveButton(android.R.string.ok, null);
                     builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override

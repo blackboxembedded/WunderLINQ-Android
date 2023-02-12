@@ -57,7 +57,6 @@ public class FirstRunActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CAMERA = 101;
     private static final int PERMISSION_REQUEST_CALL_PHONE = 102;
     private static final int PERMISSION_REQUEST_READ_CONTACTS = 103;
-    private static final int PERMISSION_REQUEST_WRITE_STORAGE = 104;
     private static final int PERMISSION_REQUEST_RECORD_AUDIO = 105;
     private static final int PERMISSION_REQUEST_BLUETOOTH_CONNECT = 106;
 
@@ -76,25 +75,6 @@ public class FirstRunActivity extends AppCompatActivity {
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         mainIntent = new Intent(FirstRunActivity.this, MainActivity.class);
-
-        //Migrate Data for targeting API31
-        if (!sharedPrefs.getBoolean("API31_MIGRATION",false)){
-            Log.d(TAG,"Migrating data to new directory");
-            File root = new File(Environment.getExternalStorageDirectory(), "/WunderLINQ/logs");
-            if(root.exists()){
-                Log.d(TAG,"Old Directory Found: " + root.toString());
-                File destination = new File(this.getExternalFilesDir(null), "/");
-                try {
-                    Log.d(TAG,"Source: " + root.toString() + " Destination: " + destination.toString());
-                    moveDirectory(root, destination);
-                    SharedPreferences.Editor editor = sharedPrefs.edit();
-                    editor.putBoolean("API31_MIGRATION", true);
-                    editor.apply();
-                } catch (IOException e) {
-                    Log.d(TAG, "Trouble migrating user files to new directory: " + e.toString());
-                }
-            }
-        }
 
         if (sharedPrefs.getBoolean("FIRST_LAUNCH1",true)){
             setContentView(R.layout.activity_first_run);
@@ -157,7 +137,7 @@ public class FirstRunActivity extends AppCompatActivity {
                     break;
                 case 4:
                     // Read Audio permission
-                    tvMessage.setText(getString(R.string.write_alert_body));
+                    tvMessage.setText(getString(R.string.location_alert_body));
                     step = step + 1;
                     if (v.getId() == R.id.buttonOK) {
                         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
@@ -168,18 +148,6 @@ public class FirstRunActivity extends AppCompatActivity {
                     }
                     break;
                 case 5:
-                    // Write storage permission
-                    tvMessage.setText(getString(R.string.location_alert_body));
-                    step = step + 1;
-                    if (v.getId() == R.id.buttonOK) {
-                        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(FirstRunActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_WRITE_STORAGE);
-                        } else {
-                            buttonOk.performClick();
-                        }
-                    }
-                    break;
-                case 6:
                     // Location permission
                     tvMessage.setText(getString(R.string.overlay_alert_body));
                     step = step + 1;
@@ -191,7 +159,7 @@ public class FirstRunActivity extends AppCompatActivity {
                         }
                     }
                     break;
-                case 7:
+                case 6:
                     // Overlay permission
                     tvMessage.setText(getString(R.string.notification_alert_body));
                     step = step + 1;
@@ -207,7 +175,7 @@ public class FirstRunActivity extends AppCompatActivity {
                         }
                     }
                     break;
-                case 8:
+                case 7:
                     // Read notification permission
                     tvMessage.setText(getString(R.string.usagestats_alert_body));
                     step = step + 1;
@@ -221,7 +189,7 @@ public class FirstRunActivity extends AppCompatActivity {
                         }
                     }
                     break;
-                case 9:
+                case 8:
                     //Usage stats permission
                     tvMessage.setText(getString(R.string.accessibilityservice_alert_body));
                     step = step + 1;
@@ -235,7 +203,7 @@ public class FirstRunActivity extends AppCompatActivity {
                         }
                     }
                     break;
-                case 10:
+                case 9:
                     //Accessibility service
                     tvMessage.setText(getString(R.string.btconnect_alert_body));
                     step = step + 1;
@@ -249,7 +217,7 @@ public class FirstRunActivity extends AppCompatActivity {
                         }
                     }
                     break;
-                case 11:
+                case 10:
                     // Bluetooth Connect permission
                     tvMessage.setText(getString(R.string.firstrun_end));
                     buttonSkip.setVisibility(View.GONE);
@@ -266,7 +234,7 @@ public class FirstRunActivity extends AppCompatActivity {
                         }
                     }
                     break;
-                case 12:
+                case 11:
                     SharedPreferences.Editor editor = sharedPrefs.edit();
                     editor.putBoolean("FIRST_LAUNCH1", false);
                     editor.apply();
@@ -343,23 +311,6 @@ public class FirstRunActivity extends AppCompatActivity {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle(getString(R.string.negative_alert_title));
                     builder.setMessage(getString(R.string.negative_record_audio_alert_body));
-                    builder.setPositiveButton(android.R.string.ok, null);
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                        }
-                    });
-                    builder.show();
-                }
-                break;
-            }
-            case PERMISSION_REQUEST_WRITE_STORAGE: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d(TAG, "Write to storage permission granted");
-                } else {
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle(getString(R.string.negative_alert_title));
-                    builder.setMessage(getString(R.string.negative_write_alert_body));
                     builder.setPositiveButton(android.R.string.ok, null);
                     builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
