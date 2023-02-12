@@ -632,8 +632,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 break;
             case 4:
                 // Take photo
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                        || ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
                     Intent photoIntent = new Intent(TaskActivity.this, PhotoService.class);
@@ -644,8 +643,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             case 5:
                 // Take selfie
                 // Check Camera permissions
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                        || ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
                     Intent photoIntent = new Intent(TaskActivity.this, PhotoService.class);
@@ -666,7 +664,6 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 }
                 if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
                         || ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
-                        || ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
                         || !canDrawOverlays) {
                     Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
@@ -683,8 +680,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             case 7:
                 // Trip Log
                 // Check Write permissions
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                        || ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
                     if (((MyApplication) TaskActivity.this.getApplication()).getTripRecording()) {
