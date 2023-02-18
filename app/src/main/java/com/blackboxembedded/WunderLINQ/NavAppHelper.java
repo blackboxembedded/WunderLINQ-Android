@@ -213,8 +213,7 @@ public class NavAppHelper {
                 homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "18": //Cruiser
-                homeNavIntent = new Intent();
-                homeNavIntent.setAction("com.devemux86.intent.action.NAVIGATION");
+                homeNavIntent = new Intent("com.devemux86.intent.action.NAVIGATION");
                 homeNavIntent.setPackage("gr.talent.cruiser");
                 homeNavIntent.putExtra("LATITUDE", new double[]{start.getLatitude(), end.getLatitude()});
                 homeNavIntent.putExtra("LONGITUDE", new double[]{start.getLongitude(), end.getLongitude()});
@@ -222,12 +221,9 @@ public class NavAppHelper {
                 break;
             case "19": //OruxMaps
                 homeNavIntent = new Intent("com.oruxmaps.VIEW_MAP_ONLINE");
-                double[] targetLat = {start.getLatitude(),end.getLatitude()};
-                double [] targetLon = {start.getLongitude(),end.getLongitude()};
-                String [] targetNames = {MyApplication.getContext().getString(R.string.trip_view_waypoint_start_label), MyApplication.getContext().getString(R.string.trip_view_waypoint_end_label)};
-                homeNavIntent.putExtra("targetLat", targetLat);
-                homeNavIntent.putExtra("targetLon", targetLon);
-                homeNavIntent.putExtra("targetName", targetNames);
+                homeNavIntent.putExtra("targetLat", new double[]{start.getLatitude(), end.getLatitude()});
+                homeNavIntent.putExtra("targetLon", new double[]{start.getLongitude(), end.getLongitude()});
+                homeNavIntent.putExtra("targetName", new String[]{MyApplication.getContext().getString(R.string.trip_view_waypoint_start_label), MyApplication.getContext().getString(R.string.trip_view_waypoint_end_label)});
                 homeNavIntent.putExtra("navigatetoindex", 0); //index of the wpt. you want to start
                 break;
         }
@@ -323,8 +319,7 @@ public class NavAppHelper {
                 navIntent.setData(Uri.parse(navUrl));
                 break;
             case "18": //Cruiser
-                navIntent = new Intent();
-                navIntent.setAction("com.devemux86.intent.action.MAP_VIEW");
+                navIntent = new Intent("com.devemux86.intent.action.MAP_VIEW");
                 navIntent.setPackage("gr.talent.cruiser");
                 navIntent.putExtra("LATITUDE", waypoint.getLatitude());
                 navIntent.putExtra("LONGITUDE", waypoint.getLongitude());
@@ -332,12 +327,9 @@ public class NavAppHelper {
                 break;
             case "19": //OruxMaps
                 navIntent = new Intent("com.oruxmaps.VIEW_MAP_ONLINE");
-                double[] targetLat = {waypoint.getLatitude()};
-                double [] targetLon = {waypoint.getLongitude()};
-                String [] targetNames = {label};
-                navIntent.putExtra("targetLat", targetLat);
-                navIntent.putExtra("targetLon", targetLon);
-                navIntent.putExtra("targetName", targetNames);
+                navIntent.putExtra("targetLat", new double[]{waypoint.getLatitude()});
+                navIntent.putExtra("targetLon", new double[]{waypoint.getLongitude()});
+                navIntent.putExtra("targetName", new String[]{label});
                 break;
         }
         if (!navApp.equals("6")) { // If NOT OsmAnd
