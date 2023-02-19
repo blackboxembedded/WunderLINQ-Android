@@ -126,6 +126,7 @@
         <a href="http://www.wunderlinq.com">WunderLINQ™</a>
     </string>
     <string name="version_label">Version:</string>
+    <string name="btn_documentation_title">Documentation</string>
     <string name="btn_sendlogs_title">Send Logs</string>
     <string name="sendlogs_email" translatable="false">support@blackboxembedded.com</string>
     <string name="sendlogs_subject" translatable="false">WunderLINQ Android Debug Logs</string>

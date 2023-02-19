@@ -85,6 +85,16 @@ public class AboutActivity extends AppCompatActivity {
         tvVersion.setText(String.format("%s %s", getString(R.string.version_label), BuildConfig.VERSION_NAME));
         TextView tvCompany = findViewById(R.id.tvCompany);
         tvCompany.setMovementMethod(LinkMovementMethod.getInstance());
+        Button btDocumentation = findViewById(R.id.btDocumentation);
+        btDocumentation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "https://blackboxembedded.github.io/WunderLINQ-Documentation/";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
         Button btSendLogs = findViewById(R.id.btSendLogs);
         btSendLogs.setOnClickListener(new View.OnClickListener() {
 
