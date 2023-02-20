@@ -198,7 +198,7 @@
     <!-- VideoRecService -->
     <string name="title_video_notification">WunderLINQ opnemen video</string>
     <!-- SettingsActivity -->
-    <string name="title_activity_settings"/>
+    <string name="title_activity_settings">Instellingen</string>
     <!-- Preference strings -->
     <string name="info_title">Persoonlijke Informatie</string>
     <string name="pref_homeAddress_name">Thuis Adres</string>
@@ -242,9 +242,9 @@
     <string name="debug_settings_title">Instellen Voorkeuren</string>
     <string name="advanced_settings_title">Geavanceerde Instellingen</string>
     <string name="btn_sendlogs_title">Stuur Logbestanden</string>
-    <string name="sendlogs_body">Beschrijf uw probleem hieronder:
+    <string name="sendlogs_body">Beschrijf uw problem hieronder:
 \n</string>
-    <string name="sendlogs_intent_title">Stuur Logbestanden...</string>
+    <string name="sendlogs_intent_title">Stuur Logbestanden…</string>
     <string name="negative_contacts_alert_body"/>
     <string name="tripauto_label">Trip Auto</string>
     <string name="voltage_label">Voltage</string>
