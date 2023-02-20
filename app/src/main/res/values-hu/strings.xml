@@ -174,7 +174,7 @@
 \n</string>
     <string name="btn_sendlogs_title">Elküldöttek</string>
     <string name="version_label">Verzió:</string>
-    <string name="about_title">Rólunk</string>
+    <string name="about_title">Információk</string>
     <string name="hwsave_alert_btn_cancel">Elvet</string>
     <string name="hwsave_alert_btn_ok">Folytat</string>
     <string name="hwsave_alert_body">Az új eszközbeállítások mentése után a WunderLINQ eszköz instabillá válhat ezért el kell távolítani és újra behelyezni a tartóba.
@@ -188,7 +188,7 @@
     <string name="fw_config_title">WunderLINQ beállítások</string>
     <string name="vin_label">Alvázszám</string>
     <string name="close_label">Bezár</string>
-    <string name="info_label">Rólunk</string>
+    <string name="info_label">Információk</string>
     <string name="hwsettings_label">Eszközbeállítások</string>
     <string name="appsettings_label">Applikáció beállításai</string>
     <string name="speed_label">Sebesség</string>
