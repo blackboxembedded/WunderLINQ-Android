@@ -152,7 +152,7 @@
 \n</string>
     <string name="btn_sendlogs_title">ログの送信</string>
     <string name="version_label">バージョン：</string>
-    <string name="about_title">およそ</string>
+    <string name="about_title">アバウト</string>
     <string name="hwsave_alert_btn_cancel">キャンセル</string>
     <string name="hwsave_alert_body">ハードウェアセッティングを変更すると動作が不安定になります。　クレードルから一度外してリセットして下さい.</string>
     <string name="hwsave_alert_title">警告!</string>
@@ -168,7 +168,7 @@
     <string name="fw_config_title">ワンダーリンク設定</string>
     <string name="close_label">閉じる</string>
     <string name="hwsettings_label">ハードウェア設定</string>
-    <string name="appsettings_label">アプリ設定</string>
+    <string name="appsettings_label">APP設定</string>
     <string name="gear_label">ギア</string>
     <string name="trip2_label">トリップ２</string>
     <string name="trip1_label">トリップ１</string>
