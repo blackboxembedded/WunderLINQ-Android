@@ -204,8 +204,9 @@
     <string name="pref_fuelAlert_summary">Consultar si desea direcciones hacia la gasolinera más cercana cuando hay se detecte poco combustible</string>
     <string name="advanced_settings_title">Ajustes avanzados</string>
     <string name="btn_sendlogs_title">Enviar registros</string>
-    <string name="sendlogs_body">Por favor describa su problema a continuación:</string>
-    <string name="sendlogs_intent_title">Enviar registros...</string>
+    <string name="sendlogs_body">Por favor describa su problema a continuación:
+\n</string>
+    <string name="sendlogs_intent_title">Enviar registros…</string>
     <string name="hw_settings_title">Configuración de hardware de WunderLINQ</string>
     <string name="north">N</string>
     <string name="north_west">NW</string>
