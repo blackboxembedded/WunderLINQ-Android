@@ -97,6 +97,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
         TextView tvDistance = findViewById(R.id.tvDistance);
         TextView tvDuration = findViewById(R.id.tvDuration);
         TextView tvSpeed = findViewById(R.id.tvSpeed);
+        TextView tvLean = findViewById(R.id.tvLean);
         TextView tvGearShifts = findViewById(R.id.tvGearShifts);
         TextView tvBrakes = findViewById(R.id.tvBrakes);
         TextView tvAmbient = findViewById(R.id.tvAmbient);
@@ -134,6 +135,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
             routePoints = new ArrayList<>();
             List<Double> speeds = new ArrayList<>();
             Double maxSpeed = null;
+            Double maxLean = null;
             List<Double> ambientTemps = new ArrayList<>();
             Double minAmbientTemp = null;
             Double maxAmbientTemp = null;
@@ -222,6 +224,11 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                                     endShiftCnt = Integer.parseInt(nextLine[15]);
                                 }
                             }
+                            if (!nextLine[32].equals("null")){
+                                maxLean = Double.parseDouble(nextLine[32]);
+                            } else if (!nextLine[27].equals("null")){
+                                maxLean = Double.parseDouble(nextLine[27]);
+                            }
                         }
                         tvDate.setText(nextLine[0]);
                     }
@@ -235,6 +242,10 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                     }
                     avgSpeed = avgSpeed / speeds.size();
                     tvSpeed.setText(Utils.oneDigit.format(avgSpeed) + "/" + Utils.oneDigit.format(maxSpeed) + " (" + speedUnit + ")");
+                }
+
+                if (maxLean != null){
+                    tvLean.setText(Utils.oneDigit.format(maxLean));
                 }
 
                 if(endShiftCnt != null){
