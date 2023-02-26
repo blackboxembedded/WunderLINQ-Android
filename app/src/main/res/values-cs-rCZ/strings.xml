@@ -325,12 +325,10 @@
     <string name="fueleconomyone_label">Spotřeba 1</string>
     <string name="fueleconomytwo_label">Spotřeba 2</string>
     <string name="fuelrange_label">Dojezd</string>
-    <string name="accessibility_explanation">Oprávnění je potřeba k automatické aktivaci režimu rozdělené obrazovky a k spuštění správce úloh systému.</string>
     <string name="pref_pipgrid_name">Počet údajů PiP</string>
     <string name="pref_piporientation_name">Orientace PiP</string>
     <string name="pref_pip_summary">Po opuštění aplikace se zobrazí plovoucí okno s údaji o motocyklu (pouze Android 8.0+).</string>
     <string name="pref_pip_name">Povolit obraz v obraze (PiP)</string>
-    <string name="splitscreen_label">Rozdělit obrazovku</string>
     <string name="delete_waypoint_alert_title">Varování!</string>
     <string name="delete_waypoint_alert_body">Smazat místo?</string>
     <string name="delete_trip_alert_title">Varování!</string>

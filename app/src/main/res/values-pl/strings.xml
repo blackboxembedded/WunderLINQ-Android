@@ -31,7 +31,6 @@
     <string name="negative_contacts_alert_body">Nie chcesz dzwonić do wybranego kontaktu z poziomu appki\? Odmów uprawnień. Ale warto dać uprawnienia. Ułatwia życie.</string>
     <string name="negative_record_audio_alert_body">Dzięki uprawnieniom do nagrywania będziesz mógł się cieszyć wspomnieniami z trasy.</string>
     <string name="usagestats_alert_body">A WunderLINQ potrzebuje tego żeby móc się automatycznie uruchamiać kiedy się połączy z urządzeniem.</string>
-    <string name="accessibility_explanation">Jeżeli tego nie włączysz to WunderLINQ nie będzie w pełni funkcjonalny.</string>
     <string name="no_pairing_alert_title">Urządzenie WunderLINQ nie jest sparowane</string>
     <string name="no_pairing_alert_body">Sparuj urządzenie w ustawieniach Bluetooth.</string>
     <string name="too_many_pairings_alert_title">Sparowano z urządzeniem WunderLINQ kilka razy</string>
@@ -58,7 +57,6 @@
     <string name="bike_info_label">Informacje o motocyklu</string>
     <string name="appsettings_label">Ustawienia appki</string>
     <string name="hwsettings_label">Ustawienia HW</string>
-    <string name="splitscreen_label">Wejdź w ekran podzielony</string>
     <string name="info_label">O nas</string>
     <string name="close_label">Zamknij</string>
     <string name="bike_info_title">Informacje o motocyklu</string>

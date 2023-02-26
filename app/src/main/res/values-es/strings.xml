@@ -343,12 +343,10 @@
     <string name="fueleconomyone_label">Econ 1</string>
     <string name="fueleconomytwo_label">Econ 2</string>
     <string name="fuelrange_label">Rango</string>
-    <string name="accessibility_explanation">Esto se requiere para entrar automáticamente en el modo multi-ventana. Si decide no habilitarlo, se le pedirá entrar manualmente al modo multi-ventana.</string>
     <string name="pref_pipgrid_name">Cuenta de celdas PIP</string>
     <string name="pref_piporientation_name">Orientación PiP</string>
     <string name="pref_pip_summary">Al salir de la aplicación, la cuadrícula de datos se minimiza en una ventana flotante. Sólo disponible a partir de Android 8.0+</string>
     <string name="pref_pip_name">Habilitar imagen en imagen (PiP)</string>
-    <string name="splitscreen_label">Activar pantalla dividida</string>
     <string name="delete_waypoint_alert_title">¡Adventencia!</string>
     <string name="delete_waypoint_alert_body">¿Borrar punto de paso (Waypoint)?</string>
     <string name="delete_trip_alert_title">¡Adventencia!</string>

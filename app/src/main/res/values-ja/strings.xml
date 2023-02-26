@@ -271,9 +271,7 @@
     <string name="bike_info_label">バイク情報</string>
     <string name="notification_alert_body">お知らせへのアクセスを許可してください。　ワンダーリンクがミュージックプレーヤーをコントロールできます</string>
     <string name="hw_settings_title">ワンダーリンクハードウェアセッティング</string>
-    <string name="accessibility_explanation">マルチウィンドーモードとアンドロイとタスクスイッチャーの起動に必要です。有効にしないとワンダーリンクは完璧には動作しません。</string>
     <string name="accessibilityservice_alert_title">ワンダーリンクはアクセシビリティーサービスの実行が必要です</string>
-    <string name="splitscreen_label">分離画面にする</string>
     <string name="waypoint_view_label_hint">ウェイポイントラベル</string>
     <string name="waypoint_view_waypoint_label">ウェイポイント</string>
     <string name="pref_homeAddress_summary">フォーマット：番地、市町村、都道府県、郵便番号</string>

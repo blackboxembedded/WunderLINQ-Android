@@ -325,12 +325,10 @@
     <string name="fueleconomyone_label">Poraba 1</string>
     <string name="fueleconomytwo_label">Poraba 2</string>
     <string name="fuelrange_label">Doseg</string>
-    <string name="accessibility_explanation">To je potrebno za samodejni prehod v način večih oken, če tega ne omogočite boste opomnjeni da sami preklopite.</string>
     <string name="pref_pipgrid_name">SvS število celic</string>
     <string name="pref_piporientation_name">SvS orientacija</string>
     <string name="pref_pip_summary">Ob izhodu iz aplikacije se podatkovna mreža pomanjša v lebdeče okno. Na voljo le za Android 8.0+</string>
     <string name="pref_pip_name">Omogoči Sliko v Sliki</string>
-    <string name="splitscreen_label">Vstopi v deljeni zaslon</string>
     <string name="delete_waypoint_alert_title">Pozor!</string>
     <string name="delete_waypoint_alert_body">Izbrišem kažipot?</string>
     <string name="delete_trip_alert_title">Pozor!</string>
@@ -421,7 +419,6 @@
     <string name="full_toggle_right_label">Kolešček v desno</string>
     <string name="reset_header">Ponastavitev podatkov gruče</string>
     <string name="toast_permission_denied">Potrebna dovoljenja za to opravilo niso dodeljena.</string>
-    <string name="pref_dashboard_gps_speed_name">GPS hitrost na armaturi</string>
     <string name="nav_app_sygic">Sygic</string>
     <string name="nav_app_bmwconnectedride">BMW Motorrad Connected</string>
     <string name="pref_notification_summary">O(ne)mogoči vsa opozorila</string>

@@ -321,8 +321,6 @@
     <string name="fueleconomyone_label">Economie 1</string>
     <string name="fueleconomytwo_label">Economie 2</string>
     <string name="fuelrange_label">Dist. Est.</string>
-    <string name="accessibility_explanation">Ceci est requis pour le fonctionnement du mode multifenêtre. Lorsque non activé, certaines fonctions de WunderLINQ ne fonctionneront pas.</string>
-    <string name="splitscreen_label">Activer écran partagé</string>
     <string name="delete_waypoint_alert_title">Attention!</string>
     <string name="delete_waypoint_alert_body">Effacer destination?</string>
     <string name="delete_trip_alert_title">Attention!</string>
@@ -406,7 +404,6 @@
     <string name="nav_app_tomtomgo">TomTom GO</string>
     <string name="system_default">Paramètres par défaut</string>
     <string name="nav_app_bmwconnectedride">BMW Motorrad Connecté</string>
-    <string name="title_activity_first_run">FirstRunActivity</string>
     <string name="nav_app_calimoto">Calimoto</string>
     <string name="addwaypoint_view_tv_search_label">Emplacement ou adresse</string>
     <string name="sendlogs_subject" translatable="false">Journaux de débogage WunderINQ pour Android</string>

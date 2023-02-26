@@ -247,7 +247,6 @@
     <string name="nav_app_locus">Locus</string>
     <string name="toast_waypoint_saved">Úti pont elmentve</string>
     <string name="accessibilityservice_alert_body">A WunderLINQ a hozzáférési szolgáltatást használja a kép a képben indításhoz.</string>
-    <string name="accessibility_explanation">Erre szükség van a többablakos mód automatikus megnyitásához és az Android Task Switcher indításához. Ha ezt nem engedélyezed, a WunderLINQ nem fog teljesen működni.</string>
     <string name="camera_alert_title">A WunderLINQ engedélyt kér a kamera használatához</string>
     <string name="accessibilityservice_alert_title">A WunderLINQ futtatja a hozzáférési szolgáltatást</string>
     <string name="camera_alert_body">A WunderLINQ fényképek és videófelvételek készítéséhez hozzáférést kér a kamerához.</string>
@@ -269,7 +268,6 @@
     <string name="avgspeed_label">Átlagsebesség</string>
     <string name="cconsumption_label">Fogyasztás</string>
     <string name="weathermap_title">Időjárástérkép</string>
-    <string name="splitscreen_label">Osztott képernyős mód</string>
     <string name="pref_time_name">Időformátum</string>
     <string name="timef_12h">12 órás</string>
     <string name="timef_24h">24 órás</string>

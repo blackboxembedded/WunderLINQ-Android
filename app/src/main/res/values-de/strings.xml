@@ -291,12 +291,10 @@
     <string name="fueleconomyone_label">Verbrauch 1</string>
     <string name="fueleconomytwo_label">Verbrauch 1</string>
     <string name="fuelrange_label">Reichweite</string>
-    <string name="accessibility_explanation">Dies wird für automatischen Mehrfachfenster-Modus benötigt, wenn Sie sich entscheiden dies nicht einzuschalten wird WunderLINQ nicht vollständig funktionieren.</string>
     <string name="pref_pipgrid_name">Bild-in-Bild Zellenanzahl</string>
     <string name="pref_piporientation_name">Bild-in-Bild Orientierung</string>
     <string name="pref_pip_summary">Wenn die App verlassen wird, wird die Bild-in-Bild Anzeige in ein Fenster minimiert. Nur verfügbar mit Android 8.0+</string>
     <string name="pref_pip_name">Bild-in-Bild Modus aktivieren</string>
-    <string name="splitscreen_label">Bildschirmaufteilung aktivieren</string>
     <string name="delete_waypoint_alert_title">Warnung!</string>
     <string name="delete_waypoint_alert_body">Wegpunkt löschen?</string>
     <string name="delete_trip_alert_title">Warnung!</string>
