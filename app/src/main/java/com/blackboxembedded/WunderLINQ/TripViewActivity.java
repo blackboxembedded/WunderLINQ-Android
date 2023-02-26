@@ -225,9 +225,17 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                                 }
                             }
                             if (!nextLine[32].equals("null")){
-                                maxLean = Double.parseDouble(nextLine[32]);
+                                if (maxLean == null) {
+                                    maxLean = Math.abs(Double.parseDouble(nextLine[32]));
+                                } else if (maxLean < Math.abs(Double.parseDouble(nextLine[32]))){
+                                    maxLean = Math.abs(Double.parseDouble(nextLine[32]));
+                                }
                             } else if (!nextLine[27].equals("null")){
-                                maxLean = Double.parseDouble(nextLine[27]);
+                                if (maxLean == null) {
+                                    maxLean = Math.abs(Double.parseDouble(nextLine[27]));
+                                } else if (maxLean < Math.abs(Double.parseDouble(nextLine[27]))){
+                                    maxLean = Math.abs(Double.parseDouble(nextLine[27]));
+                                }
                             }
                         }
                         tvDate.setText(nextLine[0]);
