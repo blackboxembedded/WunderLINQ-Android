@@ -320,6 +320,7 @@
     <!-- TripViewActivity -->
     <string name="trip_view_title">Trip</string>
     <string name="trip_view_trip_label">WunderLINQ Trip Log</string>
+    <string name="trip_view_label_hint">Trip Label</string>
     <string name="trip_view_waypoint_start_label">Start</string>
     <string name="trip_view_waypoint_end_label">End</string>
     <string name="trip_view_share_label">Share</string>

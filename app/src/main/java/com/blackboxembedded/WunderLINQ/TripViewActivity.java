@@ -25,10 +25,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -79,7 +83,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
     private static final String TAG = "TripViewActivity";
 
     private PopupMenu mPopupMenu;
-
+    private EditText etLabel;
     private List<LatLng> routePoints;
     private ArrayList tripFileList = new ArrayList<String>();
     private String fileName;
@@ -92,7 +96,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
 
         AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
         setContentView(R.layout.activity_trip_view);
-
+        etLabel = findViewById(R.id.tvLabel);
         TextView tvDate = findViewById(R.id.tvDate);
         TextView tvDistance = findViewById(R.id.tvDistance);
         TextView tvDuration = findViewById(R.id.tvDuration);
@@ -103,6 +107,28 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
         TextView tvAmbient = findViewById(R.id.tvAmbient);
         TextView tvEngine = findViewById(R.id.tvEngine);
 
+        etLabel.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    // Update File Name
+                    if (file != null){
+                        File newFileName = new File(TripViewActivity.this.getExternalFilesDir(null), "/logs/" + etLabel.getText().toString() + ".csv");
+                        if (file.renameTo(newFileName)) {
+                            Log.d(TAG,"File renamed successfully");
+                            file = newFileName;
+                        } else {
+                            Log.d(TAG,"Failed to rename file");
+                        }
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
         showActionBar();
 
         Bundle extras = getIntent().getExtras();
@@ -111,7 +137,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
             fileName = extras.getString("FILE");
             index = tripFileList.indexOf(fileName);
             file = new File(this.getExternalFilesDir(null), "/logs/" + fileName);
-
+            etLabel.setText(fileName.split("\\.")[0]);
             View view = findViewById(R.id.layout_trip_view);
             view.setOnTouchListener(new OnSwipeTouchListener(this) {
                 @Override
