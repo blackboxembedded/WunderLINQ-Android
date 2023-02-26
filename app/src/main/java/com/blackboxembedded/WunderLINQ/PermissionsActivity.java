@@ -64,7 +64,6 @@ public class PermissionsActivity extends AppCompatActivity {
     public static final int PERMISSION_NOTIFICATION = 7;
     public static final int PERMISSION_OVERLAY = 8;
     public static final int PERMISSION_USAGESTATS = 9;
-    public static final int PERMISSION_ACCESSIBILITY = 10;
     public static final int PERMISSION_BLUETOOTH_CONNECT = 11;
 
     private ListView permissionsList;
@@ -135,13 +134,6 @@ public class PermissionsActivity extends AppCompatActivity {
                         int mode = appOps.checkOpNoThrow(OPSTR_GET_USAGE_STATS, myUid(), getApplication().getPackageName());
                         if (mode != MODE_ALLOWED) {
                             startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-                        }
-                        break;
-                    case PERMISSION_ACCESSIBILITY:
-                        if (!isAccessibilityServiceEnabled(getApplication(), MyAccessibilityService.class)) {
-                            Intent accessibilityIntent = new Intent();
-                            accessibilityIntent.setAction(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                            startActivity(accessibilityIntent);
                         }
                         break;
                     case PERMISSION_BLUETOOTH_CONNECT:
@@ -271,13 +263,6 @@ public class PermissionsActivity extends AppCompatActivity {
             usageStatsPermission = true;
         }
         listValues.add(new PermissionRecord(PERMISSION_USAGESTATS, getString(R.string.permission_usagestats_label), usageStatsPermission));
-
-        //Accessibility Service
-        boolean accessibilityPermission = false;
-        if (isAccessibilityServiceEnabled(getApplication(), MyAccessibilityService.class)) {
-            accessibilityPermission = true;
-        }
-        listValues.add(new PermissionRecord(PERMISSION_ACCESSIBILITY, getString(R.string.permission_accessbility_label), accessibilityPermission));
 
         //Bluetooth Connect
         boolean btconnectPermission = false;

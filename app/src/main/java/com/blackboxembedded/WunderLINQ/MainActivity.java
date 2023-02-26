@@ -413,21 +413,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         Intent hwSettingsIntent = new Intent(MainActivity.this, HWSettingsActivity.class);
                         startActivity(hwSettingsIntent);
                         break;
-                    case R.id.action_enter_splitscreen:
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            if (!isInMultiWindowMode()) {
-                                if (isAccessibilityServiceEnabled(MainActivity.this, MyAccessibilityService.class)) {
-                                    Intent accessibilityService = new Intent(MainActivity.this, MyAccessibilityService.class);
-                                    accessibilityService.putExtra("command", 1);
-                                    startService(accessibilityService);
-                                } else {
-                                    Intent accessibilityIntent = new Intent();
-                                    accessibilityIntent.setAction(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                                    startActivity(accessibilityIntent);
-                                }
-                            }
-                        }
-                        break;
                     case R.id.action_about:
                         Intent aboutIntent = new Intent(MainActivity.this, AboutActivity.class);
                         startActivity(aboutIntent);

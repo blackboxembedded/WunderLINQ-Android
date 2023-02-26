@@ -28,7 +28,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -191,7 +190,7 @@ public class FirstRunActivity extends AppCompatActivity {
                     break;
                 case 8:
                     //Usage stats permission
-                    tvMessage.setText(getString(R.string.accessibilityservice_alert_body));
+                    tvMessage.setText(getString(R.string.btconnect_alert_body));
                     step = step + 1;
                     if (v.getId() == R.id.buttonOK) {
                         AppOpsManager appOps = (AppOpsManager) getApplication().getSystemService(Context.APP_OPS_SERVICE);
@@ -204,20 +203,6 @@ public class FirstRunActivity extends AppCompatActivity {
                     }
                     break;
                 case 9:
-                    //Accessibility service
-                    tvMessage.setText(getString(R.string.btconnect_alert_body));
-                    step = step + 1;
-                    if (v.getId() == R.id.buttonOK) {
-                        if (!isAccessibilityServiceEnabled(getApplication(), MyAccessibilityService.class)) {
-                            Intent accessibilityIntent = new Intent();
-                            accessibilityIntent.setAction(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                            startActivity(accessibilityIntent);
-                        } else {
-                            buttonOk.performClick();
-                        }
-                    }
-                    break;
-                case 10:
                     // Bluetooth Connect permission
                     tvMessage.setText(getString(R.string.firstrun_end));
                     buttonSkip.setVisibility(View.GONE);
@@ -234,7 +219,7 @@ public class FirstRunActivity extends AppCompatActivity {
                         }
                     }
                     break;
-                case 11:
+                case 10:
                     SharedPreferences.Editor editor = sharedPrefs.edit();
                     editor.putBoolean("FIRST_LAUNCH1", false);
                     editor.apply();
