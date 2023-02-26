@@ -45,6 +45,7 @@ import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
 
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 
 public class BikeInfoActivity extends AppCompatActivity {
 
@@ -200,9 +201,11 @@ public class BikeInfoActivity extends AppCompatActivity {
         }
 
         if (Data.getNextServiceDate() != null){
-            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-            String dateString = format.format(Data.getNextServiceDate());
-            tvNextServiceDate.setText(dateString);
+            // Creating a DateTimeFormatter object with desired format
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+            // Formatting the date using the formatter
+            String formattedDate = Data.getNextServiceDate().format(formatter);
+            tvNextServiceDate.setText(formattedDate);
         }
 
         if (Data.getNextService() != null){

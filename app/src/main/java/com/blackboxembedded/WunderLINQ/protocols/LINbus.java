@@ -27,6 +27,7 @@ import com.blackboxembedded.WunderLINQ.FaultStatus;
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -1145,16 +1146,30 @@ public class LINbus {
                         int year = (((data[2] & 0xFF) & 0x0f) << 8) |(data[1] & 0xFF);
                         int month = ((data[2] & 0xFF) >> 4 & 0x0f) - 1;
                         int day = (data[3] & 0xFF);
-                        Calendar cal = Calendar.getInstance();
-                        cal.set(Calendar.YEAR, year);
-                        cal.set(Calendar.MONTH, month);
-                        cal.set(Calendar.DAY_OF_MONTH, day);
-                        Date nextServiceDate = cal.getTime();
+                        LocalDate nextServiceDate = LocalDate.of(year, month, day);
                         Data.setNextServiceDate(nextServiceDate);
+
+                        // Getting the current date
+                        LocalDate currentDate = LocalDate.now();
+
+                        // Comparing the two dates
+                        int comparison = nextServiceDate.compareTo(currentDate);
+                        if (comparison <= 0) {
+                            FaultStatus.setServiceActive(true);
+                        } else {
+                            FaultStatus.setServiceActive(false);
+                        }
                     }
                     if ((data[4] & 0xFF) != 0xFF){
                         int nextService = data[4] * 100;
                         Data.setNextService(nextService);
+                        if (Data.getOdometer() != null ) {
+                            if (nextService <= Data.getOdometer()) {
+                                FaultStatus.setServiceActive(true);
+                            } else {
+                                FaultStatus.setServiceActive(false);
+                            }
+                        }
                     }
                     break;
                 case 0x0c:

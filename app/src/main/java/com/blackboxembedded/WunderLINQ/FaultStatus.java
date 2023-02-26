@@ -140,6 +140,9 @@ public class FaultStatus extends ContextWrapper {
     private static boolean oilLowActive = false;
     private static String oilLowDesc = "";
 
+    private static boolean serviceActive = false;
+    private static String serviceDesc = "";
+
     public FaultStatus(Context base) {
         super(base);
         // Motorcycle faults
@@ -180,6 +183,7 @@ public class FaultStatus extends ContextWrapper {
         generalFlashingRedDesc = MyApplication.getContext().getResources().getString(R.string.fault_GENWARNFSRED);
         generalShowsRedDesc = MyApplication.getContext().getResources().getString(R.string.fault_GENWARNSHRED);
         oilLowDesc = MyApplication.getContext().getResources().getString(R.string.fault_OILLOW);
+        serviceDesc = MyApplication.getContext().getResources().getString(R.string.fault_SERVICE);
     }
 
     public static ArrayList<String> getallActiveDesc() {
@@ -296,6 +300,9 @@ public class FaultStatus extends ContextWrapper {
         }
         if(oilLowActive){
             allActiveDesc.add(oilLowDesc);
+        }
+        if(serviceActive){
+            allActiveDesc.add(serviceDesc);
         }
 
         return allActiveDesc;
@@ -696,6 +703,16 @@ public class FaultStatus extends ContextWrapper {
         return oilLowDesc;
     }
 
+    public static void setServiceActive(boolean serviceActive){
+        FaultStatus.serviceActive = serviceActive;
+    }
+    public static boolean getServiceActive() {
+        return serviceActive;
+    }
+    public static String getServiceDesc() {
+        return serviceDesc;
+    }
+
     // Utility functions
     public static void clear(){
         // Motorcycle Faults
@@ -736,6 +753,7 @@ public class FaultStatus extends ContextWrapper {
         generalFlashingRedActive = false;
         generalShowsRedActive = false;
         oilLowActive = false;
+        serviceActive = false;
     }
 }
 

@@ -19,6 +19,7 @@ package com.blackboxembedded.WunderLINQ.hardware.WLQ;
 
 import android.location.Location;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Data {
@@ -63,11 +64,11 @@ public class Data {
     }
 
     // Next Service, Date
-    private static Date nextServiceDate;
-    public static Date getNextServiceDate() {
+    private static LocalDate nextServiceDate;
+    public static LocalDate getNextServiceDate() {
         return nextServiceDate;
     }
-    public static void setNextServiceDate(Date nextServiceDate){
+    public static void setNextServiceDate(LocalDate nextServiceDate){
         Data.nextServiceDate = nextServiceDate;
     }
 
