@@ -385,18 +385,20 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
 
     //start timer function
     void startTimer() {
-        if(!timerRunning) {
-            cTimer = new CountDownTimer(10000, 1000) {
-                public void onTick(long millisUntilFinished) {
-                }
+        if (sharedPrefs.getBoolean("prefHideNavBar", true)) {
+            if (!timerRunning) {
+                cTimer = new CountDownTimer(10000, 1000) {
+                    public void onTick(long millisUntilFinished) {
+                    }
 
-                public void onFinish() {
-                    getSupportActionBar().hide();
-                    timerRunning = false;
-                }
-            };
-            timerRunning = true;
-            cTimer.start();
+                    public void onFinish() {
+                        getSupportActionBar().hide();
+                        timerRunning = false;
+                    }
+                };
+                timerRunning = true;
+                cTimer.start();
+            }
         }
     }
 
