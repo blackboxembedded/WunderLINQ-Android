@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package com.blackboxembedded.WunderLINQ;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -36,7 +37,9 @@ import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -60,6 +63,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 
 public class VideoRecService extends Service implements LifecycleOwner {
 
@@ -106,6 +110,7 @@ public class VideoRecService extends Service implements LifecycleOwner {
         mediaRecorder = new MediaRecorder();
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand");
@@ -185,9 +190,10 @@ public class VideoRecService extends Service implements LifecycleOwner {
                 }
 
                 // Set up the video capture use case
-                androidx.camera.core.VideoCapture.Builder videoCaptureConfigBuilder = new androidx.camera.core.VideoCapture.Builder();
+                VideoCapture.Builder videoCaptureConfigBuilder = new VideoCapture.Builder();
                 videoCaptureConfigBuilder.setTargetAspectRatio(AspectRatio.RATIO_16_9);
                 VideoCapture videoCapture = videoCaptureConfigBuilder.build();
+
                 // Bind the lifecycle of the camera to the lifecycle of the service
                 cameraProvider.bindToLifecycle(this, cameraSelector, videoCapture);
 
@@ -207,17 +213,39 @@ public class VideoRecService extends Service implements LifecycleOwner {
                 ).build();
 
 
-                videoCapture.startRecording(outputFileOptions, getMainExecutor(), new VideoCapture.OnVideoSavedCallback() {
-                    @Override
-                    public void onVideoSaved(@NonNull VideoCapture.OutputFileResults outputFileResults) {
-                        Log.i(TAG,"Recording ended");
-                    }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    videoCapture.startRecording(outputFileOptions, getMainExecutor(), new VideoCapture.OnVideoSavedCallback() {
+                        @Override
+                        public void onVideoSaved(@NonNull VideoCapture.OutputFileResults outputFileResults) {
+                            Log.i(TAG,"Recording ended");
+                        }
 
-                    @Override
-                    public void onError(int videoCaptureError, String message, Throwable cause) {
-                        // Error occurred while saving the video
-                    }
-                });
+                        @Override
+                        public void onError(int videoCaptureError, String message, Throwable cause) {
+                            // Error occurred while saving the video
+                        }
+                    });
+                } else {
+                    Handler mainHandler = new Handler(Looper.getMainLooper());
+                    Executor mainExecutor = new Executor() {
+                        @Override
+                        public void execute(Runnable command) {
+                            mainHandler.post(command);
+                        }
+                    };
+
+                    videoCapture.startRecording(outputFileOptions, mainExecutor, new VideoCapture.OnVideoSavedCallback() {
+                        @Override
+                        public void onVideoSaved(@NonNull VideoCapture.OutputFileResults outputFileResults) {
+                            Log.i(TAG,"Recording ended");
+                        }
+
+                        @Override
+                        public void onError(int videoCaptureError, String message, Throwable cause) {
+                            // Error occurred while saving the video
+                        }
+                    });
+                }
 
                 // Start recording
                 mediaRecorder.start();
