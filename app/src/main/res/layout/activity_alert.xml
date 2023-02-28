@@ -13,7 +13,8 @@
         android:id="@+id/imageViewBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop"
+        android:contentDescription="Preview" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineVertical"

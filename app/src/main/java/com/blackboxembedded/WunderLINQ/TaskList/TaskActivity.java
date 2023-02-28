@@ -55,7 +55,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -94,8 +93,6 @@ import java.util.List;
 public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOsmandMissingListener {
 
     private final static String TAG = "TaskActivity";
-
-    private ConstraintLayout clTasks;
     private DiscreteScrollView taskListView;
     private TaskAdapter adapter;
     final ArrayList<TaskItem> taskItems = new ArrayList<>();
@@ -156,7 +153,6 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
         }
 
-        clTasks = findViewById(R.id.layout_task);
         taskListView = findViewById(R.id.main_task_view);
 
         adapter = new TaskAdapter(this, taskItems, new TaskAdapter.AdapterCallback() {
@@ -375,8 +371,10 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
     //Update Tasks
     public void updateTasks(){
         String videoTaskText = getResources().getString(R.string.task_title_start_record);
+        String videoFrontTaskText = getResources().getString(R.string.task_title_front_start_record);
         if (((MyApplication) this.getApplication()).getVideoRecording()){
             videoTaskText = getResources().getString(R.string.task_title_stop_record);
+            videoFrontTaskText = getResources().getString(R.string.task_title_stop_record);
         }
 
         String tripTaskText = getResources().getString(R.string.task_title_start_trip);
@@ -405,7 +403,9 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 getResources().getString(R.string.task_title_applauncher),
                 getResources().getString(R.string.task_title_roadbook),
                 getResources().getString(R.string.task_title_systemvolume),
-                getResources().getString(R.string.task_title_insta360)
+                getResources().getString(R.string.task_title_insta360),
+                videoFrontTaskText
+
         };
         int numTasks = taskTitles.length;
         int[] iconId = new int[numTasks];
@@ -428,6 +428,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         iconId[16] = R.drawable.ic_roadbook;
         iconId[17] = R.drawable.ic_volume_up;
         iconId[18] = R.drawable.ic_spherical_camera;
+        iconId[19] = R.drawable.ic_video_camera;
 
         mapping = new ArrayList<>();
         taskItems.clear();
@@ -654,26 +655,20 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 }
                 break;
             case 6:
-                // Record Video
+                // Record Rear Camera Video
                 // Check Camera permissions
-                boolean canDrawOverlays = false;
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if(Settings.canDrawOverlays(TaskActivity.this)){
-                        canDrawOverlays = true;
-                    }
-                } else {
-                    canDrawOverlays = true;
-                }
                 if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
                         || ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
-                        || !canDrawOverlays) {
+                        || !canDrawOverlays()) {
                     Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
                     if (((MyApplication) TaskActivity.this.getApplication()).getVideoRecording()) {
                         stopService(new Intent(TaskActivity.this, VideoRecService.class));
                         ((MyApplication) this.getApplication()).setVideoRecording(false);
                     } else {
-                        startService(new Intent(TaskActivity.this, VideoRecService.class));
+                        Intent videoIntent = new Intent(TaskActivity.this, VideoRecService.class);
+                        videoIntent.putExtra("camera", 1);
+                        startService(videoIntent);
                         ((MyApplication) this.getApplication()).setVideoRecording(true);
                     }
                     updateTasks();
@@ -840,6 +835,27 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                     builder.show();
                 }
                 break;
+            case 19:
+                // Front Camera Video
+                // Check Camera permissions
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                        || ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
+                        || !canDrawOverlays()) {
+                    Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
+                } else {
+                    if (((MyApplication) TaskActivity.this.getApplication()).getVideoRecording()) {
+                        stopService(new Intent(TaskActivity.this, VideoRecService.class));
+                        ((MyApplication) this.getApplication()).setVideoRecording(false);
+                    } else {
+                        Intent videoIntent = new Intent(TaskActivity.this, VideoRecService.class);
+                        videoIntent.putExtra("camera", 0);
+                        startService(videoIntent);
+                        ((MyApplication) this.getApplication()).setVideoRecording(true);
+                    }
+                    updateTasks();
+                }
+                break;
+
             default:
                 break;
         }
@@ -886,5 +902,17 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE);
         return intentFilter;
+    }
+
+    private boolean canDrawOverlays(){
+        boolean canDrawOverlays = false;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(Settings.canDrawOverlays(TaskActivity.this)){
+                canDrawOverlays = true;
+            }
+        } else {
+            canDrawOverlays = true;
+        }
+        return canDrawOverlays;
     }
 }

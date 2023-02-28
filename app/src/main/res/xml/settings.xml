@@ -407,7 +407,7 @@
             android:title="@string/pref_photopreview_name" >
         </CheckBoxPreference>
         <CheckBoxPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="prefAutoLaunch"
             android:summary="@string/pref_autolaunch_summary"
             android:title="@string/pref_autolaunch_name" >

@@ -26,50 +26,260 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.PixelFormat;
-import android.hardware.Camera;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
 import android.provider.MediaStore;
 import android.text.format.DateFormat;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.Surface;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.view.WindowManager;
-import android.view.WindowManager.LayoutParams;
+import android.util.Size;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.camera.core.AspectRatio;
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.VideoCapture;
+import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LifecycleRegistry;
+
+import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
-public class VideoRecService extends Service implements SurfaceHolder.Callback {
+public class VideoRecService extends Service implements LifecycleOwner {
 
-    private final static String TAG = "VideoRecService";
+    private static final String TAG = "VideoRecService";
+    private LifecycleRegistry mLifecycleRegistry;
 
-    private WindowManager windowManager;
-    private SurfaceView surfaceView;
-    private Camera camera = null;
-    private MediaRecorder mediaRecorder = null;
-
-    private File recordingFile;
-
+    private int cameraArg = 0;
+    private CameraManager cameraManager;
+    private MediaRecorder mediaRecorder;
+    private String cameraId;
+    private Size videoSize;
+    private ProcessCameraProvider cameraProvider;
+    private File outputFile;
     private Location location;
+    private boolean isRecording = false;
 
     @Override
     public void onCreate() {
-        recordingFile = new File(Environment.getExternalStoragePublicDirectory(
+        super.onCreate();
+        mLifecycleRegistry = new LifecycleRegistry(this);
+        mLifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
+
+        createNotification();
+
+        cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+        try {
+            for (String id : cameraManager.getCameraIdList()) {
+                CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(id);
+                if (characteristics.get(CameraCharacteristics.LENS_FACING) == cameraArg) {
+                    cameraId = id;
+                    break;
+                }
+            }
+        } catch (CameraAccessException e) {
+            Log.e(TAG, "Failed to get camera ID", e);
+            stopSelf();
+        }
+
+        if (cameraId == null) {
+            Log.e(TAG, "No camera found");
+            stopSelf();
+        }
+
+        mediaRecorder = new MediaRecorder();
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG, "onStartCommand");
+        mLifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_START);
+
+        if (intent != null) {
+            // Retrieve the Intent that started the Service
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                cameraArg = extras.getInt("camera");
+                Log.d(TAG, "Camera Choice: " + cameraArg);
+            } else {
+                stopSelf();
+            }
+        }
+
+        boolean locationWPPerms = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // Check Location permissions
+            if (getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                locationWPPerms = true;
+            }
+        } else {
+            locationWPPerms = true;
+        }
+        if (locationWPPerms) {
+            LocationManager locationManager = (LocationManager)
+                    this.getSystemService(LOCATION_SERVICE);
+            Criteria criteria = new Criteria();
+            String bestProvider = locationManager.getBestProvider(criteria, false);
+            location = locationManager.getLastKnownLocation(bestProvider);
+        }
+
+        cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+
+        // Get the camera instance
+        ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(this);
+        cameraProviderFuture.addListener(() -> {
+            try {
+                // Set up the video output file
+                outputFile = createVideoFile();
+
+                // Set up the MediaRecorder
+                Size[] sizes = cameraManager.getCameraCharacteristics(cameraId)
+                        .get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+                        .getOutputSizes(MediaRecorder.class);
+
+                videoSize = sizes[0];
+                for (Size size : sizes) {
+                    if (size.getWidth() * size.getHeight() > videoSize.getWidth() * videoSize.getHeight()) {
+                        videoSize = size;
+                    }
+                }
+                mediaRecorder = new MediaRecorder();
+                mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
+                mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+                mediaRecorder.setOutputFile(outputFile.getAbsolutePath());
+                mediaRecorder.setVideoEncodingBitRate(10000000);
+                mediaRecorder.setAudioSamplingRate(16000);
+                mediaRecorder.setVideoFrameRate(30);
+                mediaRecorder.setVideoSize(videoSize.getWidth(), videoSize.getHeight());
+                mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
+                mediaRecorder.prepare();
+
+                // Get the camera provider instance
+                cameraProvider = cameraProviderFuture.get();
+
+                cameraProvider.unbindAll();
+
+                CameraSelector cameraSelector = new CameraSelector.Builder()
+                        .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                        .build();
+                if (cameraArg == 0 ){
+                    cameraSelector = new CameraSelector.Builder()
+                            .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
+                            .build();
+                }
+
+                // Set up the video capture use case
+                androidx.camera.core.VideoCapture.Builder videoCaptureConfigBuilder = new androidx.camera.core.VideoCapture.Builder();
+                videoCaptureConfigBuilder.setTargetAspectRatio(AspectRatio.RATIO_16_9);
+                VideoCapture videoCapture = videoCaptureConfigBuilder.build();
+                // Bind the lifecycle of the camera to the lifecycle of the service
+                cameraProvider.bindToLifecycle(this, cameraSelector, videoCapture);
+
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "WunderLINQ-" + DateFormat.format("yyyyMMdd_kkmmss", new Date().getTime()).toString());
+                contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4");
+                contentValues.put(MediaStore.Video.Media.TITLE, "WunderLINQ Video");
+                if (location != null) {
+                    contentValues.put(MediaStore.Video.Media.LATITUDE, String.valueOf(location.getLatitude()));
+                    contentValues.put(MediaStore.Video.Media.LONGITUDE, String.valueOf(location.getLongitude()));
+                }
+
+                VideoCapture.OutputFileOptions outputFileOptions = new VideoCapture.OutputFileOptions.Builder(
+                        this.getContentResolver(),
+                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI, //Use this to save in normal Gallery
+                        contentValues
+                ).build();
+
+
+                videoCapture.startRecording(outputFileOptions, getMainExecutor(), new VideoCapture.OnVideoSavedCallback() {
+                    @Override
+                    public void onVideoSaved(@NonNull VideoCapture.OutputFileResults outputFileResults) {
+                        Log.i(TAG,"Recording ended");
+                    }
+
+                    @Override
+                    public void onError(int videoCaptureError, String message, Throwable cause) {
+                        // Error occurred while saving the video
+                    }
+                });
+
+                // Start recording
+                mediaRecorder.start();
+                isRecording = true;
+                Log.d(TAG, "Recording started");
+                ((MyApplication) this.getApplication()).setVideoRecording(true);
+
+            } catch (ExecutionException | InterruptedException | IOException | CameraAccessException e) {
+                Log.e(TAG, "Error setting up camera and media recorder", e);
+                stopSelf();
+            }
+        }, ContextCompat.getMainExecutor(this));
+
+        // Return START_STICKY to indicate that this service should be restarted if it's killed
+        return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d(TAG, "onDestroy");
+        mLifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
+
+        if (isRecording) {
+            // Stop recording
+            try {
+                mediaRecorder.stop();
+            } catch(RuntimeException stopException) {
+                // handle cleanup here
+            }
+            mediaRecorder.reset();
+            mediaRecorder.release();
+            Log.d(TAG, "Recording stopped");
+        }
+
+        // Unbind and release the camera
+        cameraProvider.unbindAll();
+
+        ((MyApplication) this.getApplication()).setVideoRecording(false);
+
+        super.onDestroy();
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @NonNull
+    @Override
+    public Lifecycle getLifecycle() {
+        return mLifecycleRegistry;
+    }
+
+    private File createVideoFile() throws IOException {
+        return new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_DCIM)+"/WunderLINQ/VID_"+
                 DateFormat.format("yyyyMMdd_kkmmss", new Date().getTime())+
                 ".mp4");
+    }
+
+    private void createNotification() {
         // Start foreground service to avoid unexpected kill
         String CHANNEL_ID = "WunderLINQ";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -88,141 +298,5 @@ public class VideoRecService extends Service implements SurfaceHolder.Callback {
                 .setSmallIcon(R.drawable.ic_video_camera);
         Notification notification = builder.build();
         startForeground(1234, notification);
-
-        // Create new SurfaceView, set its size to 1x1, move it to the top left corner and set this service as a callback
-        windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
-        surfaceView = new SurfaceView(this);
-        int LAYOUT_FLAG;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            LAYOUT_FLAG = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
-        } else {
-            LAYOUT_FLAG = WindowManager.LayoutParams.TYPE_PHONE;
-        }
-        LayoutParams layoutParams = new WindowManager.LayoutParams(
-                1, 1,
-                LAYOUT_FLAG,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                PixelFormat.TRANSLUCENT
-        );
-        layoutParams.gravity = Gravity.START | Gravity.TOP;
-        windowManager.addView(surfaceView, layoutParams);
-        surfaceView.getHolder().addCallback(this);
-
-        boolean locationWPPerms = false;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            // Check Location permissions
-            if (getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                locationWPPerms = true;
-            }
-        } else {
-            locationWPPerms = true;
-        }
-        if (locationWPPerms) {
-            LocationManager locationManager = (LocationManager)
-                    this.getSystemService(LOCATION_SERVICE);
-            Criteria criteria = new Criteria();
-            String bestProvider = locationManager.getBestProvider(criteria, false);
-            location = locationManager.getLastKnownLocation(bestProvider);
-        }
-        ((MyApplication) this.getApplication()).setVideoRecording(true);
     }
-
-    // Method called right after Surface created (initializing and starting MediaRecorder)
-    @Override
-    public void surfaceCreated(SurfaceHolder surfaceHolder) {
-
-        WindowManager windowService = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        int rotation = 0;
-        switch (windowService.getDefaultDisplay().getRotation()) {
-            case Surface.ROTATION_0:
-                Log.d(TAG,"Rotation 0");
-                rotation = 90;
-                break;
-            case Surface.ROTATION_90:
-                Log.d(TAG,"Rotation 90");
-                rotation = 0;
-                break;
-            case Surface.ROTATION_180:
-                Log.d(TAG,"Rotation 180");
-                rotation = 0;
-                break;
-            case Surface.ROTATION_270:
-                Log.d(TAG,"Rotation 270");
-                rotation = 180;
-                break;
-            default:
-                Log.d(TAG,"Rotation " + windowService.getDefaultDisplay().getRotation());
-                rotation = 0;
-                break;
-        }
-
-        camera = Camera.open();
-        mediaRecorder = new MediaRecorder();
-        camera.unlock();
-
-
-        mediaRecorder.setPreviewDisplay(surfaceHolder.getSurface());
-        mediaRecorder.setCamera(camera);
-        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
-        mediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
-        mediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
-        mediaRecorder.setOrientationHint(rotation);
-
-        File root = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DCIM), "/WunderLINQ/");
-        if(!root.exists()){
-            if(!root.mkdirs()){
-                Log.d(TAG,"Unable to create directory: " + root);
-            }
-        }
-        mediaRecorder.setOutputFile(recordingFile.getPath());
-
-        try { mediaRecorder.prepare(); } catch (Exception e) {
-            Log.d(TAG,"Exception: " + e.toString());
-        }
-        mediaRecorder.start();
-    }
-
-    // Stop recording and remove SurfaceView
-    @Override
-    public void onDestroy() {
-        if (mediaRecorder != null) {
-            try {
-                mediaRecorder.stop();
-                mediaRecorder.reset();
-                mediaRecorder.release();
-            } catch (RuntimeException e) {
-                Log.d(TAG,"RuntimeException: " + e.toString());
-            }
-        }
-
-        if (camera != null) {
-            camera.lock();
-            camera.release();
-        }
-
-        windowManager.removeView(surfaceView);
-
-        ContentValues values = new ContentValues(5);
-        values.put(MediaStore.Video.Media.TITLE, "WunderLINQ Video");
-        values.put(MediaStore.Video.Media.MIME_TYPE, "video/mp4");
-        if (location != null){
-            values.put(MediaStore.Video.Media.LATITUDE, String.valueOf(location.getLatitude()));
-            values.put(MediaStore.Video.Media.LONGITUDE, String.valueOf(location.getLongitude()));
-        }
-        values.put(MediaStore.Video.Media.DATA, recordingFile.getAbsolutePath());
-        getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
-
-        ((MyApplication) this.getApplication()).setVideoRecording(false);
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder surfaceHolder, int format, int width, int height) {}
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {}
-
-    @Override
-    public IBinder onBind(Intent intent) { return null; }
-
 }

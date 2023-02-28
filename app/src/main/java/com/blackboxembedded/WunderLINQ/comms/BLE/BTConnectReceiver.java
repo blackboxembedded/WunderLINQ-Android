@@ -25,7 +25,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -46,7 +45,7 @@ public class BTConnectReceiver extends BroadcastReceiver {
 
         SharedPreferences sharedPrefs;
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
-        if (sharedPrefs.getBoolean("prefAutoLaunch",true)) {
+        if (sharedPrefs.getBoolean("prefAutoLaunch",false)) {
 
             if (intent.getAction().equals("android.bluetooth.device.action.ACL_CONNECTED")) {
                 Log.d(TAG, "android.bluetooth.device.action.ACL_CONNECTED!");

@@ -118,6 +118,7 @@ public class AlertActivity extends AppCompatActivity {
                     Log.d(TAG,"Setting Background Image");
                     backgroundImageView = findViewById(R.id.imageViewBackground);
                     backgroundImageView.setImageDrawable(Drawable.createFromPath(backgroundPath));
+                    backgroundImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 }
                 break;
             default:
