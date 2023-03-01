@@ -57,7 +57,6 @@ import androidx.core.app.NotificationCompat;
 import com.blackboxembedded.WunderLINQ.AlertActivity;
 import com.blackboxembedded.WunderLINQ.FaultActivity;
 import com.blackboxembedded.WunderLINQ.FaultStatus;
-import com.blackboxembedded.WunderLINQ.Logger;
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
@@ -115,8 +114,6 @@ public class BluetoothLeService extends Service {
         WITHOUT_RESPONSE,
         SIGNED
     }
-
-    private static Logger debugLogger = null;
 
     public static boolean fuelAlertSent = false;
 
@@ -720,15 +717,7 @@ public class BluetoothLeService extends Service {
             if (data != null) {
                 if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
                     // Log data
-                    if (debugLogger == null) {
-                        debugLogger = new Logger();
-                    }
-                    debugLogger.write(Utils.ByteArraytoHexNoDelim(data));
-                } else {
-                    if (debugLogger != null) {
-                        debugLogger.shutdown();
-                        debugLogger = null;
-                    }
+                    Log.d(TAG,Utils.ByteArraytoHexNoDelim(data));
                 }
 
                 //Check if message changed
@@ -758,15 +747,7 @@ public class BluetoothLeService extends Service {
             if (data != null) {
                 if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
                     // Log data
-                    if (debugLogger == null) {
-                        debugLogger = new Logger();
-                    }
-                    debugLogger.write(Utils.ByteArraytoHexNoDelim(data));
-                } else {
-                    if (debugLogger != null) {
-                        debugLogger.shutdown();
-                        debugLogger = null;
-                    }
+                    Log.d(TAG,Utils.ByteArraytoHexNoDelim(data));
                 }
 
                 //Check if message changed

@@ -32,7 +32,7 @@ public class AppUtils {
 
     public static void adjustDisplayScale(Context context, Configuration configuration) {
         if (configuration != null) {
-            Log.d("TAG", "adjustDisplayScale: " + configuration.densityDpi);
+            Log.d(TAG, "adjustDisplayScale: " + configuration.densityDpi);
             if(configuration.densityDpi >= 485) //for 6 inch device OR for 538 ppi
                 configuration.densityDpi = 500; //decrease "display size" by ~30
             else if(configuration.densityDpi >= 300) //for 5.5 inch device OR for 432 ppi
