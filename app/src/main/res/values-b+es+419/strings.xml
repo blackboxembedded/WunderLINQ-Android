@@ -238,4 +238,8 @@
     <string name="vin_label">VIN</string>
     <string name="btn_logging_notification_stop">Stop Recording</string>
     <string name="longitude_header">Longitud</string>
+    <string name="close_label">Cerrar</string>
+    <string name="debug_settings_title">Ajustes de depuración</string>
+    <string name="pref_debuglogging_name">Habilitar el registro de depuración (Debug Log)</string>
+    <string name="pref_debuglogging_summary">Sólo habilitar en caso de necesidad de soporte, podría impactar al rendimiento del dispositivo si siempre está activo. Por favor, deshabilitar cuando se termine.</string>
 </resources>
