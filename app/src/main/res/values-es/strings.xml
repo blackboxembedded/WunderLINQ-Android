@@ -318,9 +318,9 @@
     <!-- JCAL 201909303 -->
     <string name="pref_autolaunch_name">Auto ejecución de App</string>
     <string name="pref_autolaunch_summary">Auto ejecución de WunderLINQ app cuando el se conecta el dispositivo hardware WunderLINQ</string>
-    <string name="pref_debuglogging_name">Habilitar el registro de depuración (debug log)</string>
+    <string name="pref_debuglogging_name">Habilitar el registro de depuración (Debug Log)</string>
     <string name="pref_debuglogging_summary">Sólo habilitar en caso de necesidad de soporte, podría impactar al rendimiento del dispositivo si siempre está activo. Por favor, deshabilitar cuando se termine.</string>
-    <string name="debug_settings_title">Ajustes de depuración (debug)</string>
+    <string name="debug_settings_title">Ajustes de depuración</string>
     <string name="negative_record_audio_alert_body">Como la grabación de audio no se ha permitido, esta aplicación no podrá grabar videos.</string>
     <string name="negative_call_alert_body">Como el acceso al teléfono no se ha permitido, esta aplicación no podrá hacer llamadas.</string>
     <string name="negative_contacts_alert_body">Como el acceso a los contactos no se ha permitido, esta aplicación no podrá mostrar o llamar a sus contactos.</string>
