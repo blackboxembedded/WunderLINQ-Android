@@ -378,4 +378,5 @@
     <string name="next_service_date_label">Volgende onderhoudsbeurt</string>
     <string name="pref_grid_settings_title">Aangepaste data layout</string>
     <string name="pref_tasks_settings_title">Aangepaste snelle takenlijst</string>
+    <string name="pref_debuglogging_summary">Zet deze optie alleen aan indien gevraagd door de helpdesk. Het aanlaten van deze functie kan impact hebben op de prestaties van de applicatie. Zet uit wanneer problemen zijn opgelost.</string>
 </resources>
