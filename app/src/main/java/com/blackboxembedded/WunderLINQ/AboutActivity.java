@@ -98,35 +98,35 @@ public class AboutActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
+                // Get current date
+                Calendar cal = Calendar.getInstance();
+                Date date = cal.getTime();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-HH:mm");
+                String curdatetime = formatter.format(date);
+                //Send file(s) using email
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.setType("text/plain");
+                String[] to;
+                to = new String[]{getString(R.string.sendlogs_email)};
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
                 File outputFile = new File(MyApplication.getContext().getExternalFilesDir(null), "wunderlinq.log");
                 if(outputFile.exists()) {
-                    // Get current date
-                    Calendar cal = Calendar.getInstance();
-                    Date date = cal.getTime();
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-HH:mm");
-                    String curdatetime = formatter.format(date);
-                    //Send file(s) using email
-                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
-                    emailIntent.setType("text/plain");
-                    String[] to;
-                    to = new String[]{getString(R.string.sendlogs_email)};
-                    emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
                     emailIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(AboutActivity.this, "com.blackboxembedded.wunderlinq.fileprovider", outputFile));
-                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sendlogs_subject) + " " + curdatetime);
-                    emailIntent.putExtra(Intent.EXTRA_TEXT, "App Version: " + BuildConfig.VERSION_NAME + "\n"
-                            + "Firmware Version: " + fwVersion + "\n"
-                            + "Android Version: " + Build.VERSION.RELEASE + "\n"
-                            + "Manufacturer, Model: " + Build.MANUFACTURER + ", " + Build.MODEL + "\n"
-                            + getString(R.string.sendlogs_body));
-                    emailIntent.setType("message/rfc822");
-                    emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // Grant read access to the URI
-                    startActivity(Intent.createChooser(emailIntent, getString(R.string.sendlogs_intent_title)));
-
-                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(AboutActivity.this);
-                    SharedPreferences.Editor editor = sharedPrefs.edit();
-                    editor.putBoolean("prefDebugLogging", false);
-                    editor.apply();
                 }
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sendlogs_subject) + " " + curdatetime);
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "App Version: " + BuildConfig.VERSION_NAME + "\n"
+                        + "Firmware Version: " + fwVersion + "\n"
+                        + "Android Version: " + Build.VERSION.RELEASE + "\n"
+                        + "Manufacturer, Model: " + Build.MANUFACTURER + ", " + Build.MODEL + "\n"
+                        + getString(R.string.sendlogs_body));
+                emailIntent.setType("message/rfc822");
+                emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // Grant read access to the URI
+                startActivity(Intent.createChooser(emailIntent, getString(R.string.sendlogs_intent_title)));
+
+                SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(AboutActivity.this);
+                SharedPreferences.Editor editor = sharedPrefs.edit();
+                editor.putBoolean("prefDebugLogging", false);
+                editor.apply();
             }
 
         });
