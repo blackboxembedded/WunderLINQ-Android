@@ -64,8 +64,10 @@ public class NavAppHelper {
                 navIntent.setData(Uri.parse(url));
                 break;
             case "6": //OsmAnd
-                url = "http://osmand.net/go";
-                navIntent.setData(Uri.parse(url));
+                navIntent = activity.getPackageManager().getLaunchIntentForPackage("net.osmand.plus");
+                if(!isCallable(activity, navIntent)){
+                    navIntent = activity.getPackageManager().getLaunchIntentForPackage("net.osmand");
+                }
                 break;
             case "7": //Mapfactor Navigator
                 navIntent.setPackage("com.mapfactor.navigator");
