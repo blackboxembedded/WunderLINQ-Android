@@ -75,41 +75,45 @@ public class FirstRunActivity extends AppCompatActivity {
 
         mainIntent = new Intent(FirstRunActivity.this, MainActivity.class);
 
-        File outputFile = new File(MyApplication.getContext().getExternalFilesDir(null), "wunderlinq.log");
-        // Check if the file size is larger than 20MB (20 * 1024 * 1024 bytes).
-        if (outputFile.exists() && outputFile.length() > 20 * 1024 * 1024) {
-            // Delete the file.
-            if (outputFile.delete()) {
-                Log.d(TAG, "File deleted successfully.");
-            } else {
-                Log.e(TAG, "Failed to delete file.");
-            }
-        } else {
-            Log.d(TAG, "File not over 20Mb");
-        }
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Log.d(TAG,"Starting Log File: " + outputFile.getAbsolutePath());
-                    Process process = Runtime.getRuntime().exec("logcat -f " + outputFile.getAbsolutePath());
-
-                    // Wait for the process to complete.
-                    int exitCode = process.waitFor();
-
-                    // Do some more work after the process completes.
-                    if (exitCode != 0) {
-                        // Handle error.
-                        Log.d(TAG,"ERROR exitCode: " + exitCode);
-                    } else {
-                        Log.d(TAG,"NO ERROR exitCode: " + exitCode);
-                    }
-                } catch (IOException | InterruptedException e) {
-                    e.printStackTrace();
+        // Enable Debug Logging
+        if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
+            File outputFile = new File(MyApplication.getContext().getExternalFilesDir(null), "wunderlinq.log");
+            // Check if the file size is larger than 20MB (20 * 1024 * 1024 bytes).
+            if (outputFile.exists() && outputFile.length() > 20 * 1024 * 1024) {
+                // Delete the file.
+                if (outputFile.delete()) {
+                    Log.d(TAG, "File deleted successfully.");
+                } else {
+                    Log.e(TAG, "Failed to delete file.");
                 }
+            } else {
+                Log.d(TAG, "File not over 20Mb");
             }
-        }).start();
+
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Log.d(TAG, "Starting Log File: " + outputFile.getAbsolutePath());
+                        Process process = Runtime.getRuntime().exec("logcat -f " + outputFile.getAbsolutePath());
+
+                        // Wait for the process to complete.
+                        int exitCode = process.waitFor();
+
+                        // Do some more work after the process completes.
+                        if (exitCode != 0) {
+                            // Handle error.
+                            Log.d(TAG, "ERROR exitCode: " + exitCode);
+                        } else {
+                            Log.d(TAG, "NO ERROR exitCode: " + exitCode);
+                        }
+                    } catch (IOException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        }
 
         if (sharedPrefs.getBoolean("FIRST_LAUNCH1",true)){
             setContentView(R.layout.activity_first_run);
