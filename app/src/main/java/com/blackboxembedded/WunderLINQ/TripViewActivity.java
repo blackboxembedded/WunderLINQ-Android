@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -89,6 +90,8 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
     private String fileName;
     private File file;
     private int index;
+    private LatLng lastLocation;
+    private double totalDistance = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -202,6 +205,17 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                         }
                         if((lineNumber > 1) && (!nextLine[1].equals("No Fix") && (!nextLine[2].equals("No Fix")))) {
                             LatLng location = new LatLng(Double.parseDouble(nextLine[1]), Double.parseDouble(nextLine[2]));
+                            if(lastLocation == null){
+                                lastLocation = new LatLng(Double.parseDouble(nextLine[1]), Double.parseDouble(nextLine[2]));
+                            } else {
+                                float[] results = new float[1];
+                                Location.distanceBetween(lastLocation.latitude, lastLocation.longitude,
+                                        location.latitude, location.longitude, results);
+
+                                // Update total distance
+                                totalDistance += results[0];
+                            }
+
                             routePoints.add(location);
                             speeds.add(Double.parseDouble(nextLine[4]));
                             if (maxSpeed == null || maxSpeed < Double.parseDouble(nextLine[4])){
@@ -326,6 +340,9 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 double distance = 0;
                 if (endOdometer != null && startOdometer != null) {
                     distance = endOdometer - startOdometer;
+                }
+                if (distance == 0 && totalDistance != 0.0){
+                    distance = totalDistance / 1000.0;
                 }
                 tvDistance.setText(Utils.oneDigit.format(distance) + " " + distanceUnit);
 
