@@ -212,7 +212,7 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
                 /* Define the URL pattern for the tile images */
                 //https://www.rainviewer.com/api.html
                 String s = String.format(Locale.US, "https://tilecache.rainviewer.com/v2/radar/%s/256/%d/%d/%d/4/1_1.png", timestamp, zoom, x, y);
-                Log.d(TAG,s);
+                //Log.d(TAG,s);
                 try {
                     return new URL(s);
                 } catch (MalformedURLException e) {
