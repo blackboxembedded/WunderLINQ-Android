@@ -50,7 +50,7 @@ import java.util.Date;
 public class AboutActivity extends AppCompatActivity {
 
     private final static String TAG = "AboutActivity";
-
+    SharedPreferences sharedPrefs;
     String fwVersion = "Unknown";
 
     @Override
@@ -58,6 +58,8 @@ public class AboutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(AboutActivity.this);
+        fwVersion = sharedPrefs.getString("firmwareVersion", "Unknown");
         View view = findViewById(R.id.clAbout);
         view.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
@@ -80,7 +82,7 @@ public class AboutActivity extends AppCompatActivity {
 
         });
         TextView tvVersion = findViewById(R.id.tvVersion);
-        tvVersion.setText(String.format("%s %s", getString(R.string.version_label), BuildConfig.VERSION_NAME));
+        tvVersion.setText(String.format("%s %s %s %s %s", getString(R.string.version_label), getString(R.string.app_ver_label), BuildConfig.VERSION_NAME, getString(R.string.fw_ver_label), fwVersion));
         TextView tvCompany = findViewById(R.id.tvCompany);
         tvCompany.setMovementMethod(LinkMovementMethod.getInstance());
         Button btDocumentation = findViewById(R.id.btDocumentation);
@@ -123,7 +125,6 @@ public class AboutActivity extends AppCompatActivity {
                 emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // Grant read access to the URI
                 startActivity(Intent.createChooser(emailIntent, getString(R.string.sendlogs_intent_title)));
 
-                SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(AboutActivity.this);
                 SharedPreferences.Editor editor = sharedPrefs.edit();
                 editor.putBoolean("prefDebugLogging", false);
                 editor.apply();
@@ -144,15 +145,6 @@ public class AboutActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if (Data.wlq != null) {
-            if (Data.wlq.getFirmwareVersion() == null) {
-                if (BluetoothLeService.gattCommandCharacteristic != null) {
-                    BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, WLQ_N.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
-                }
-            } else {
-                fwVersion = Data.wlq.getFirmwareVersion();
-            }
-        }
     }
 
     @Override

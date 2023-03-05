@@ -17,12 +17,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ.hardware.WLQ;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.blackboxembedded.WunderLINQ.protocols.KeyboardHID;
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
+import com.google.android.material.shadow.ShadowRenderer;
 
 import java.util.Arrays;
 
@@ -268,6 +271,10 @@ public class WLQ_N extends WLQ_BASE {
             Log.d(TAG, "New flashConfig: " + Utils.ByteArraytoHex(flashConfig));
 
             firmwareVersion = bytes[firmwareVersionMajor_INDEX] + "." + bytes[firmwareVersionMinor_INDEX];
+
+            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext()).edit();
+            editor.putString("firmwareVersion", firmwareVersion);
+            editor.apply();
 
             keyMode = bytes[keyMode_INDEX];
             USBVinThreshold = ((flashConfig[USBVinThresholdHigh_INDEX] & 0xFF) << 8) | (flashConfig[USBVinThresholdLow_INDEX] & 0xFF);

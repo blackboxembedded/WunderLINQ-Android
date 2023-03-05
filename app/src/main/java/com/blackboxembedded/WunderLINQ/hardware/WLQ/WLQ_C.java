@@ -17,6 +17,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ.hardware.WLQ;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.blackboxembedded.WunderLINQ.protocols.KeyboardHID;
@@ -319,6 +321,9 @@ public class WLQ_C extends WLQ_BASE {
             Log.d(TAG, "New flashConfig: " + Utils.ByteArraytoHex(flashConfig));
 
             firmwareVersion = bytes[firmwareVersionMajor_INDEX] + "." + bytes[firmwareVersionMinor_INDEX];
+            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext()).edit();
+            editor.putString("firmwareVersion", firmwareVersion);
+            editor.apply();
 
             keyMode = bytes[keyMode_INDEX];
             spSensitivity = ((flashConfig[spSensitivityHigh_INDEX] & 0xFF) << 8) | (flashConfig[spSensitivityLow_INDEX] & 0xFF);
