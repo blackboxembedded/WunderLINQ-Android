@@ -193,7 +193,6 @@ public class BluetoothLeService extends Service {
     public static final int STATE_CONNECTING = 1;
     public static final int STATE_CONNECTED = 2;
     public static final int STATE_DISCONNECTING = 4;
-    private static final int STATE_BONDED = 5;
 
     public static int connectedType = 0;
 
@@ -408,16 +407,14 @@ public class BluetoothLeService extends Service {
                 float[] mRotationMatrix = new float[9];
                 float[] mRotationFixMatrix = new float[9];
                 float[] orientation = new float[3];
-                double leanAngle = 0.0;
+                double leanAngle;
                 SensorManager.getRotationMatrixFromVector(mRotationMatrix, event.values);
                 int rotation = MyApplication.getContext().getResources().getConfiguration().orientation;
+                SensorManager.remapCoordinateSystem(mRotationMatrix, SensorManager.AXIS_X, SensorManager.AXIS_Z, mRotationFixMatrix);
+                SensorManager.getOrientation(mRotationFixMatrix, orientation);
                 if (rotation == 1) { // Default display rotation is portrait
-                    SensorManager.remapCoordinateSystem(mRotationMatrix, SensorManager.AXIS_X, SensorManager.AXIS_Z, mRotationFixMatrix);
-                    SensorManager.getOrientation(mRotationFixMatrix, orientation);
                     leanAngle = (orientation[2] * 180) / Math.PI;
                 } else {   // Default display rotation is landscape
-                    SensorManager.remapCoordinateSystem(mRotationMatrix, SensorManager.AXIS_X, SensorManager.AXIS_Z, mRotationFixMatrix);
-                    SensorManager.getOrientation(mRotationFixMatrix, orientation);
                     leanAngle = ((orientation[2] * 180) / Math.PI) + 90;
                 }
                 //Filter out impossible values, max sport bike lean is +/-60
@@ -495,7 +492,7 @@ public class BluetoothLeService extends Service {
                 float[] remappedR = new float[9];
                 boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
                 if (success) {
-                    float orientation[] = new float[3];
+                    float[] orientation = new float[3];
                     SensorManager.remapCoordinateSystem(R, SensorManager.AXIS_X, SensorManager.AXIS_Z, remappedR);
                     SensorManager.getOrientation(remappedR, orientation);
                     int direction = filterChange(Utils.normalizeDegrees(Math.toDegrees(orientation[0])));
@@ -871,8 +868,6 @@ public class BluetoothLeService extends Service {
                 //Request permission
                 Log.d(TAG, "No BLUETOOTH_CONNECT permission granted");
             }
-            //Data.clear();
-            //FaultStatus.clear();
             clearNotifications();
             close();
         }
@@ -1043,22 +1038,18 @@ public class BluetoothLeService extends Service {
             }
             if (characteristic.getDescriptor(UUID
                     .fromString(GattAttributes.CLIENT_CHARACTERISTIC_CONFIG)) != null) {
+                BluetoothGattDescriptor descriptor = characteristic
+                        .getDescriptor(UUID
+                                .fromString(GattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
                 if (enabled) {
-                    BluetoothGattDescriptor descriptor = characteristic
-                            .getDescriptor(UUID
-                                    .fromString(GattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
                     descriptor
                             .setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-                    mBluetoothGatt.writeDescriptor(descriptor);
 
                 } else {
-                    BluetoothGattDescriptor descriptor = characteristic
-                            .getDescriptor(UUID
-                                    .fromString(GattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
                     descriptor
                             .setValue(BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
-                    mBluetoothGatt.writeDescriptor(descriptor);
                 }
+                mBluetoothGatt.writeDescriptor(descriptor);
             }
             mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
             if (enabled) {
@@ -1338,8 +1329,8 @@ public class BluetoothLeService extends Service {
     protected void createLocationRequest() {
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(1000);
-        mLocationRequest.setFastestInterval(1000);
+        mLocationRequest.setInterval(500);
+        mLocationRequest.setFastestInterval(500);
     }
 
     public static boolean isConnected() {

@@ -61,7 +61,7 @@ public class LoggingService extends Service {
     private Location lastLocation;
     private PrintWriter outFile = null;
 
-    private int loggingInterval = 1000;
+    private int loggingInterval = 250;
     private String CHANNEL_ID = "WunderLINQ";
 
     String pressureFormat = "";
@@ -166,7 +166,7 @@ public class LoggingService extends Service {
                     // Log data
                     Calendar cal = Calendar.getInstance();
                     Date date = cal.getTime();
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ");
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SZZZZZ");
                     String curdatetime = formatter.format(date);
                     String lat = "No Fix";
                     String lon = "No Fix";
