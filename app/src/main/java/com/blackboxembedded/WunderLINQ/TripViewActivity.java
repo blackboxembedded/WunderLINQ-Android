@@ -563,7 +563,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
     };
 
     private void updateListing(){
-        File root = new File(Environment.getExternalStorageDirectory(), "/WunderLINQ/logs/");
+        File root = new File(MyApplication.getContext().getExternalFilesDir(null), "/logs/");
         if(!root.exists()){
             if(!root.mkdirs()){
                 Log.d(TAG,"Unable to create directory: " + root);
