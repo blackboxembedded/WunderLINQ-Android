@@ -17,6 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ.TaskList.Activities;
 
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -56,6 +57,8 @@ import com.google.android.gms.maps.OnMapsSdkInitializedCallback;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyCallback, OnMapsSdkInitializedCallback {
@@ -64,12 +67,13 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
     private GoogleMap mMap;
     private Marker mMarker;
     private TileOverlay tileOverlay;
+    private ValueAnimator animator;
     private SharedPreferences sharedPrefs;
 
     private Handler handler = new Handler();
     private int delay = 60 * 1000;
 
-    private int currentZoom = 10;
+    private int currentZoom = 8;
 
     private String timestamp = "";
 
@@ -107,6 +111,26 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        animator = ValueAnimator.ofFloat(0f, 1f);
+        animator.setDuration(30000); // 30 seconds
+        animator.setRepeatCount(ValueAnimator.INFINITE); // repeat forever
+        animator.setRepeatMode(ValueAnimator.RESTART); // repeat from the beginning
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                float progress = (float) valueAnimator.getAnimatedValue();
+                Date date = calculateDateForProgress(progress);
+                long l = date.getTime();
+                l -= l % (10*60*1000);
+                long unixtime = l / 1000L;
+                if (!timestamp.equals(String.valueOf(unixtime))) {
+                    Log.d(TAG,"Updating Map");
+                    timestamp = String.valueOf(unixtime);
+                    tileOverlay.clearTileCache();
+                }
+            }
+        });
     }
 
     @Override
@@ -122,6 +146,7 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
     @Override
     public void onPause() {
         super.onPause();
+        animator.end();
         handler.removeCallbacksAndMessages(null);
     }
 
@@ -177,16 +202,15 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
             mMarker = mMap.addMarker(mMarkerOptions);
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, currentZoom));
         }
+        long l = System.currentTimeMillis();
+        l -= l % (10*60*1000);
+        long unixtime = l / 1000L;
+        timestamp = String.valueOf(unixtime);
         TileProvider tileProvider = new UrlTileProvider(256, 256) {
             @Override
             public URL getTileUrl(int x, int y, int zoom) {
-
                 /* Define the URL pattern for the tile images */
                 //https://www.rainviewer.com/api.html
-                long l = System.currentTimeMillis();
-                l -= l % (10*60*1000);
-                long unixtime = l / 1000L;
-                timestamp = String.valueOf(unixtime);
                 String s = String.format(Locale.US, "https://tilecache.rainviewer.com/v2/radar/%s/256/%d/%d/%d/4/1_1.png", timestamp, zoom, x, y);
                 Log.d(TAG,s);
                 try {
@@ -200,6 +224,9 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
         tileOverlay = mMap.addTileOverlay(new TileOverlayOptions()
                 .tileProvider(tileProvider));
 
+
+        animator.start();
+
         handler.postDelayed(new Runnable(){
             public void run(){
                 Log.d(TAG,"Updating marker");
@@ -211,12 +238,35 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
                 if (Data.getLastLocation() != null) {
                     LatLng location = new LatLng(Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
                     mMarker.setPosition(location);
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, currentZoom));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
                     tileOverlay.clearTileCache();
                 }
                 handler.postDelayed(this, delay);
             }
         }, delay);
+    }
+
+    private Date calculateDateForProgress(float progress) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+
+        // Calculate the timestamp for one hour ago
+        cal.add(Calendar.HOUR_OF_DAY, -2);
+        Date startDate = cal.getTime();
+
+        // Calculate the timestamp for the current frame
+        long timeRange = 60 * 60 * 2000; // 1 hour in milliseconds
+        long frameTime = (long) (timeRange * progress);
+        Date frameDate = new Date(startDate.getTime() + frameTime);
+
+        // Round down to the nearest 15-minute interval
+        int minute = frameDate.getMinutes();
+        int roundedMinute = minute / 15 * 15;
+        cal.setTime(frameDate);
+        cal.set(Calendar.MINUTE, roundedMinute);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
     }
 
     private void showActionBar(){
