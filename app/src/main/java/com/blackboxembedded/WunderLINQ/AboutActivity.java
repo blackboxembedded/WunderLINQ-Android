@@ -38,10 +38,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
-import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -173,8 +169,7 @@ public class AboutActivity extends AppCompatActivity {
         forwardButton.setVisibility(View.INVISIBLE);
     }
 
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
-
+    private final View.OnClickListener mClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             if(v.getId() == R.id.action_back) {

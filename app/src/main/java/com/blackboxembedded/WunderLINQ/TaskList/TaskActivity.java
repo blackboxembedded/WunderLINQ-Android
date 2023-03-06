@@ -700,6 +700,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                         // Get the location manager
                         double lat;
                         double lon;
+                        double elev;
                         LocationManager locationManager = (LocationManager)
                                 TaskActivity.this.getSystemService(LOCATION_SERVICE);
                         Criteria criteria = new Criteria();
@@ -709,7 +710,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                             Location location = locationManager.getLastKnownLocation(bestProvider);
                             lat = location.getLatitude();
                             lon = location.getLongitude();
-                            String waypoint = lat + "," + lon;
+                            elev = location.getAltitude();
+                            String waypoint = lat + "," + lon+ "," + elev;
                             // Get current date/time
                             Calendar cal = Calendar.getInstance();
                             Date date = cal.getTime();

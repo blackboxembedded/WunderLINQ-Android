@@ -102,7 +102,7 @@
         app:layout_constraintTop_toBottomOf="@+id/llLatLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/llLabelLabel">
+        app:layout_constraintBottom_toTopOf="@+id/llElevLabel">
 
         <TextView
             android:id="@+id/tvLonLabel"
@@ -127,7 +127,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llLabelLabel"
+        android:id="@+id/llElevLabel"
         android:orientation="horizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -136,6 +136,42 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintTop_toBottomOf="@+id/llLonLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/llLabelLabel">
+
+        <TextView
+            android:id="@+id/tvElevLabel"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/waypoint_view_tv_elevation_label"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tvElevation"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAlignment="viewStart"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llLabelLabel"
+        android:orientation="horizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/llElevLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">

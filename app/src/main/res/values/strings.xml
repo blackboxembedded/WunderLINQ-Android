@@ -24,7 +24,7 @@
     <string name="record_audio_alert_body">The WunderLINQ app needs access to your microphone to record video audio.</string>
     <string name="location_alert_title">WunderLINQ needs location permission</string>
     <string name="location_alert_body">The WunderLINQ app needs access to your location to allow background track recording and data logging.
-        Location permission is also used for data points such as altitude, GPS speed, and bearing.</string>
+        Location permission is also used for data points such as elevation, GPS speed, and bearing.</string>
     <string name="btconnect_alert_title">WunderLINQ needs Bluetooth permission</string>
     <string name="btconnect_alert_body">The WunderLINQ app needs the ability to connect to the WunderLINQ Hardware.</string>
     <string name="write_alert_title">WunderLINQ needs write permission</string>
@@ -307,6 +307,7 @@
     <string name="waypoint_view_tv_date_label">Date Recorded</string>
     <string name="waypoint_view_tv_lat_label">Latitude</string>
     <string name="waypoint_view_tv_lon_label">Longitude</string>
+    <string name="waypoint_view_tv_elevation_label">Elevation</string>
     <string name="waypoint_view_tv_label_label">Label</string>
     <string name="waypoint_view_label_hint">Waypoint Label</string>
     <string name="waypoint_view_bt_navigate">Navigate</string>
@@ -437,7 +438,7 @@
     <string name="time_header">Time</string>
     <string name="latitude_header">Latitude</string>
     <string name="longitude_header">Longitude</string>
-    <string name="altitude_header">Altitude</string>
+    <string name="altitude_header">Elevation</string>
     <string name="gpsspeed_header">GPS Speed</string>
     <string name="gear_header">Gear</string>
     <string name="enginetemp_header">Engine Temperature</string>
@@ -977,7 +978,7 @@
     <string name="dash_range_label">Range</string>
     <string name="dash_rdcf_label">F</string>
     <string name="dash_rdcr_label">R</string>
-    <string name="dash_altitude_label">ALT</string>
+    <string name="dash_altitude_label">ELEV</string>
 
     <string name="customize_btn_label">Customize</string>
     <string name="default_btn_label">Default Mode</string>

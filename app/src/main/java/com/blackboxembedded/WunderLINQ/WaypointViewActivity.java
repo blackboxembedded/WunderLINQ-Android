@@ -27,6 +27,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -44,10 +45,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.FragmentManager;
 
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
+import com.blackboxembedded.WunderLINQ.Utils.Utils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -86,6 +89,9 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
 
     private Double lat;
     private Double lon;
+    private Double elev;
+
+    private static final int PERMISSION_REQUEST_FINE_LOCATION = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +104,7 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
         TextView tvDate = findViewById(R.id.tvDate);
         TextView tvLatitude = findViewById(R.id.tvLatitude);
         TextView tvLongitude = findViewById(R.id.tvLongitude);
+        TextView tvElevation = findViewById(R.id.tvElevation);
         etLabel = findViewById(R.id.tvLabel);
         etLabel.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
@@ -158,6 +165,17 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
             String[] latlong = record.getData().split(",");
             lat = Double.parseDouble(latlong[0]);
             lon = Double.parseDouble(latlong[1]);
+            if (latlong.length > 2){
+                elev = Double.parseDouble(latlong[2]);
+                String heightUnit = "m";
+                String elevation = Math.round(Float.parseFloat(latlong[2])) + heightUnit;
+                String distanceFormat = PreferenceManager.getDefaultSharedPreferences(this).getString("prefDistance", "0");
+                if (distanceFormat.contains("1")) {
+                    heightUnit = "ft";
+                    elevation = Math.round(Utils.mToFeet(Float.parseFloat(latlong[2]))) + heightUnit;
+                }
+                tvElevation.setText(elevation);
+            }
             tvLatitude.setText(latlong[0]);
             tvLongitude.setText(latlong[1]);
             etLabel.setText(record.getLabel());
@@ -287,7 +305,8 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
     public void navigate() {
         //Navigation
         // Check Location permissions
-        if (getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_FINE_LOCATION);
             Toast.makeText(WaypointViewActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
         } else {
             // Get the location manager
@@ -355,9 +374,14 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
                     Log.d(TAG, "Exception parsing a date: " + e.toString());
                 }
 
-                final GPX gpx = GPX.builder()
+                GPX gpx = GPX.builder()
                         .creator(getString(R.string.app_name)).addWayPoint(WayPoint.builder().lat(lat).lon(lon).time(date.getTime()).cmt(label).build())
                         .build();
+                if(elev != null){
+                    gpx = GPX.builder()
+                            .creator(getString(R.string.app_name)).addWayPoint(WayPoint.builder().lat(lat).lon(lon).ele(elev).time(date.getTime()).cmt(label).build())
+                            .build();
+                }
                 GPX.write(gpx, gpxOutStream);
                 Uri uri = FileProvider.getUriForFile(this, "com.blackboxembedded.wunderlinq.fileprovider", gpxFile);
                 share("application/gpx+xml", uri, true);
