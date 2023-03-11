@@ -614,8 +614,10 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 } else {
                     String phonenumber = sharedPrefs.getString("prefHomePhone", "");
                     if (!phonenumber.equals("")) {
+                        String encodedPhoneNumber = String.format("tel:%s", Uri.encode(phonenumber));
+                        Uri number = Uri.parse(encodedPhoneNumber);
                         Intent callHomeIntent = new Intent(Intent.ACTION_CALL);
-                        callHomeIntent.setData(Uri.parse("tel:" + phonenumber));
+                        callHomeIntent.setData(number);
                         startActivity(callHomeIntent);
                     } else {
                         Toast.makeText(TaskActivity.this, R.string.toast_phone_not_set, Toast.LENGTH_LONG).show();

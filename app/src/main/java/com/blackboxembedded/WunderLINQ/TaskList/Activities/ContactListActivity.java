@@ -310,7 +310,9 @@ public class ContactListActivity extends AppCompatActivity {
                     }
                     if (callPerms) {
                         Intent callHomeIntent = new Intent(Intent.ACTION_CALL);
-                        callHomeIntent.setData(Uri.parse("tel:" + phoneNumbers.get(position)));
+                        String encodedPhoneNumber = String.format("tel:%s", Uri.encode(phoneNumbers.get(position)));
+                        Uri number = Uri.parse(encodedPhoneNumber);
+                        callHomeIntent.setData(number);
                         startActivity(callHomeIntent);
                     }
                 }
