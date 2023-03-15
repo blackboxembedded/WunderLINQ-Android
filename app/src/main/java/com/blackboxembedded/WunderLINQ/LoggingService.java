@@ -166,7 +166,7 @@ public class LoggingService extends Service {
                     // Log data
                     Calendar cal = Calendar.getInstance();
                     Date date = cal.getTime();
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SZZZZZ");
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
                     String curdatetime = formatter.format(date);
                     String lat = "No Fix";
                     String lon = "No Fix";

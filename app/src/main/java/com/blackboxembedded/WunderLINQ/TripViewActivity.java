@@ -171,7 +171,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
             List<Double> engineTemps = new ArrayList<>();
             Double minEngineTemp = null;
             Double maxEngineTemp = null;
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SZZZZZ");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
             Date startTime = null;
             Date endTime = null;
             Double startOdometer = null;
@@ -522,7 +522,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 int lineNumber = 0;
                 for (String[] nextLine : myEntries) {
                     if ((lineNumber > 1) && (!nextLine[1].equals("No Fix") && (!nextLine[2].equals("No Fix")))) {
-                        Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ").parse(nextLine[0]);
+                        Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").parse(nextLine[0]);
                         double lat = Double.parseDouble(nextLine[1]);
                         double lon = Double.parseDouble(nextLine[1]);
                         double elevation = Double.parseDouble(nextLine[3]);
