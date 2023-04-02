@@ -682,6 +682,7 @@
     <string name="nav_app_sygic">Sygic</string>
     <string name="nav_app_kurviger">Kurviger 2</string>
     <string name="nav_app_kurviger1">Kurviger 1 Pro</string>
+    <string name="nav_app_kurviger3">Kurviger 3</string>
     <string name="nav_app_tomtomgo">TomTom GO</string>
     <string name="nav_app_bmwconnectedride">BMW Motorrad Connected</string>
     <string name="nav_app_calimoto">Calimoto</string>
@@ -700,17 +701,18 @@
         <item name="6">@string/nav_app_osmand</item>
         <item name="7">@string/nav_app_mapfactor</item>
         <item name="8">@string/nav_app_sygic</item>
-        <item name="9">@string/nav_app_kurviger</item>
-        <item name="10">@string/nav_app_kurviger1</item>
-        <item name="11">@string/nav_app_tomtomgo</item>
-        <item name="12">@string/nav_app_bmwconnectedride</item>
-        <item name="13">@string/nav_app_calimoto</item>
-        <item name="14">@string/nav_app_copilot</item>
-        <item name="15">@string/nav_app_yandex</item>
-        <item name="16">@string/nav_app_cartograph</item>
-        <item name="17">@string/nav_app_organicmaps</item>
-        <item name="18">@string/nav_app_cruiser</item>
-        <item name="19">@string/nav_app_oruxmaps</item>
+        <item name="9">@string/nav_app_kurviger3</item>
+        <item name="10">@string/nav_app_kurviger</item>
+        <item name="11">@string/nav_app_kurviger1</item>
+        <item name="12">@string/nav_app_tomtomgo</item>
+        <item name="13">@string/nav_app_bmwconnectedride</item>
+        <item name="14">@string/nav_app_calimoto</item>
+        <item name="15">@string/nav_app_copilot</item>
+        <item name="16">@string/nav_app_yandex</item>
+        <item name="17">@string/nav_app_cartograph</item>
+        <item name="18">@string/nav_app_organicmaps</item>
+        <item name="19">@string/nav_app_cruiser</item>
+        <item name="20">@string/nav_app_oruxmaps</item>
     </string-array>
     <string-array name="nav_apps_arrayValues" translatable="false">
         <item name="1">1</item>
@@ -721,17 +723,18 @@
         <item name="6">6</item>
         <item name="7">7</item>
         <item name="8">8</item>
-        <item name="9">9</item>
-        <item name="10">13</item>
-        <item name="11">10</item>
-        <item name="12">11</item>
-        <item name="13">12</item>
-        <item name="14">14</item>
-        <item name="15">15</item>
-        <item name="16">16</item>
-        <item name="17">17</item>
-        <item name="18">18</item>
-        <item name="19">19</item>
+        <item name="9">20</item>
+        <item name="10">9</item>
+        <item name="11">13</item>
+        <item name="12">10</item>
+        <item name="13">11</item>
+        <item name="14">12</item>
+        <item name="15">14</item>
+        <item name="16">15</item>
+        <item name="17">16</item>
+        <item name="18">17</item>
+        <item name="19">18</item>
+        <item name="20">19</item>
     </string-array>
     <string name="pref_roadbook_app_title">Roadbook App</string>
     <string name="roadbook_app_rabbitrally">Rabbit Rally</string>

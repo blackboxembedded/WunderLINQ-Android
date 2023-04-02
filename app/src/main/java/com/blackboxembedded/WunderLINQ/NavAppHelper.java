@@ -122,6 +122,9 @@ public class NavAppHelper {
             case "19": //OruxMaps
                 navIntent = activity.getPackageManager().getLaunchIntentForPackage("com.orux.oruxmapsDonate");
                 break;
+            case "20": //Kurviger 3
+                navIntent = activity.getPackageManager().getLaunchIntentForPackage("com.kurviger.android");
+                break;
         }
         try {
             if (navIntent != null) {
@@ -228,6 +231,9 @@ public class NavAppHelper {
                 homeNavIntent.putExtra("targetName", new String[]{MyApplication.getContext().getString(R.string.trip_view_waypoint_start_label), MyApplication.getContext().getString(R.string.trip_view_waypoint_end_label)});
                 homeNavIntent.putExtra("navigatetoindex", 0); //index of the wpt. you want to start
                 break;
+            case "20": //Kurviger 3
+                homeNavIntent.setPackage("com.kurviger.android");
+                break;
         }
         if (!navApp.equals("6")) { // If NOT OsmAnd
             try {
@@ -332,6 +338,9 @@ public class NavAppHelper {
                 navIntent.putExtra("targetLat", new double[]{waypoint.getLatitude()});
                 navIntent.putExtra("targetLon", new double[]{waypoint.getLongitude()});
                 navIntent.putExtra("targetName", new String[]{label});
+                break;
+            case "20": //Kurviger 3
+                navIntent.setPackage("com.kurviger.android");
                 break;
         }
         if (!navApp.equals("6")) { // If NOT OsmAnd
