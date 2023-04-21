@@ -43,9 +43,15 @@ public class NavAppHelper {
         switch (navApp){
             default: case "1": //Android Default or Google Maps
                 //Nothing to do
+                navIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                url = "geo:";
+                navIntent.setData(Uri.parse(url));
                 break;
             case "2": //Google Maps
                 navIntent.setPackage("com.google.android.apps.maps");
+                navIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                url = "google.navigation://?free=1&mode=d&entry=fnls";
+                navIntent.setData(Uri.parse(url));
                 break;
             case "3": //Locus Maps
                 navIntent = activity.getPackageManager().getLaunchIntentForPackage("menion.android.locus.pro");
@@ -54,10 +60,12 @@ public class NavAppHelper {
                 }
                 break;
             case "4": //Waze
+                navIntent = new Intent(android.content.Intent.ACTION_VIEW);
                 url = "https://waze.com/ul";
                 navIntent.setData(Uri.parse(url));
                 break;
             case "5": //Maps.me
+                navIntent = new Intent(android.content.Intent.ACTION_VIEW);
                 url = "mapsme://?back_url=wunderlinq://datagrid";
                 navIntent.setData(Uri.parse(url));
                 break;
@@ -68,12 +76,14 @@ public class NavAppHelper {
                 }
                 break;
             case "7": //Mapfactor Navigator
+                navIntent = new Intent(android.content.Intent.ACTION_VIEW);
                 navIntent.setPackage("com.mapfactor.navigator");
                 url = "http://maps.google.com/maps";
                 navIntent.setData(Uri.parse(url));
                 break;
             case "8": //Sygic
                 //https://www.sygic.com/developers/professional-navigation-sdk/android/api-examples/custom-url
+                navIntent = new Intent(android.content.Intent.ACTION_VIEW);
                 url = "com.sygic.aura://";
                 navIntent.setData(Uri.parse(url));
                 break;
@@ -99,18 +109,22 @@ public class NavAppHelper {
                 navIntent = activity.getPackageManager().getLaunchIntentForPackage("gr.talent.kurviger.pro");
                 break;
             case "14": //CoPilot GPS
+                navIntent = new Intent(android.content.Intent.ACTION_VIEW);
                 url = "copilot://&EnableCustomButton=true&AppLaunchBundleID=com.blackboxembedded.WunderLINQ";
                 navIntent.setData(Uri.parse(url));
                 break;
             case "15": //Yandex
+                navIntent = new Intent(android.content.Intent.ACTION_VIEW);
                 url = "yandexnavi://";
                 navIntent.setData(Uri.parse(url));
                 break;
             case "16": //Cartograph
+                navIntent = new Intent(android.content.Intent.ACTION_VIEW);
                 url = "cartograph://?backurl=wunderlinq://datagrid";
                 navIntent.setData(Uri.parse(url));
                 break;
             case "17": //Organic Maps
+                navIntent = new Intent(android.content.Intent.ACTION_VIEW);
                 url = "om://?backurl=wunderlinq://datagrid";
                 navIntent.setData(Uri.parse(url));
                 break;
