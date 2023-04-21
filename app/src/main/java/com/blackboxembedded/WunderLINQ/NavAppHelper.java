@@ -48,11 +48,9 @@ public class NavAppHelper {
                 navIntent.setPackage("com.google.android.apps.maps");
                 break;
             case "3": //Locus Maps
-                url = "http://link.locusmap.eu";
-                navIntent.setPackage("menion.android.locus.pro");
-                navIntent.setData(Uri.parse(url));
+                navIntent = activity.getPackageManager().getLaunchIntentForPackage("menion.android.locus.pro");
                 if(!isCallable(activity, navIntent)){
-                    navIntent.setPackage("menion.android.locus");
+                    navIntent = activity.getPackageManager().getLaunchIntentForPackage("menion.android.locus");
                 }
                 break;
             case "4": //Waze
