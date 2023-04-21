@@ -127,7 +127,9 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
                 if (!timestamp.equals(String.valueOf(unixtime))) {
                     Log.d(TAG,"Updating Map");
                     timestamp = String.valueOf(unixtime);
-                    tileOverlay.clearTileCache();
+                    if (tileOverlay != null) {
+                        tileOverlay.clearTileCache();
+                    }
                 }
             }
         });
