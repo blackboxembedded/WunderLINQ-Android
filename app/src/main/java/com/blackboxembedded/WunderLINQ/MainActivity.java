@@ -563,9 +563,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         pipHeight = width;
                     }
                 }
-                PictureInPictureParams params = new PictureInPictureParams.Builder()
-                        .setAspectRatio(new Rational(pipWidth, pipHeight)).build();
-                enterPictureInPictureMode(params);
+                try {
+                    PictureInPictureParams params = new PictureInPictureParams.Builder()
+                            .setAspectRatio(new Rational(pipWidth, pipHeight)).build();
+                    enterPictureInPictureMode(params);
+                } catch (IllegalStateException e){
+                    Log.d(TAG,"PiP Not Supported at this time: " + e);
+                }
             }
         }
     }
