@@ -281,7 +281,9 @@ public class VideoRecService extends Service implements LifecycleOwner {
         }
 
         // Unbind and release the camera
-        cameraProvider.unbindAll();
+        if (cameraProvider != null) {
+            cameraProvider.unbindAll();
+        }
 
         ((MyApplication) this.getApplication()).setVideoRecording(false);
 
