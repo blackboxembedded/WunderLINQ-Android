@@ -8,6 +8,15 @@ to control your mobile device and other connected devices like GoPros from your 
 If your motorcycle also has the On Board Computer Pro option the WunderLINQ can also receive and 
 decode performance and fault data.
 
+<a href="https://play.google.com/store/apps/details?id=com.blackboxembedded.WunderLINQ" target="_blank">
+<img src="https://blackboxembedded.github.io/WunderLINQ-Documentation/en/images-localized/badge_store_google_play.png" alt="Get it on Google Play" height="60"/></a>
+
+<p>
+<a href="https://weblate.blackboxembedded.com/engage/wunderlinq/">
+<img src="https://weblate.blackboxembedded.com/widgets/wunderlinq/-/wunderlinq-android/svg-badge.svg" alt="Translation status" />
+</a>
+</p>
+
 ## Build Instructions
 1. Clone the project and open in Android Studio
 
