@@ -392,6 +392,8 @@ public class NavAppHelper {
     }
 
     static private boolean isCallable(Activity activity, Intent intent) {
+        if(intent == null) return false;
+        
         List<ResolveInfo> list = activity.getPackageManager().queryIntentActivities(intent,
                 PackageManager.MATCH_DEFAULT_ONLY);
         return list.size() > 0;
