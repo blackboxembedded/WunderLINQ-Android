@@ -519,4 +519,5 @@
     <string name="app_ver_label">Application :</string>
     <string name="nav_app_kurviger1">Kurviger 1 Pro</string>
     <string name="default_btn_label">Mode par défaut</string>
+    <string name="full_signal_cancel_long_label">Annulation du signal Appui long</string>
 </resources>
