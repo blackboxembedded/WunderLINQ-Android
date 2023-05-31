@@ -52,6 +52,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.xmlpull.v1.XmlPullParserException;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -62,6 +64,13 @@ import java.util.Date;
 import java.util.List;
 
 import io.jenetics.jpx.GPX;
+import io.ticofab.androidgpxparser.parser.GPXParser;
+import io.ticofab.androidgpxparser.parser.domain.Extensions;
+import io.ticofab.androidgpxparser.parser.domain.Gpx;
+import io.ticofab.androidgpxparser.parser.domain.Track;
+import io.ticofab.androidgpxparser.parser.domain.TrackPoint;
+import io.ticofab.androidgpxparser.parser.domain.TrackSegment;
+import io.ticofab.androidgpxparser.parser.domain.WayPoint;
 
 public class AddWaypointActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -202,43 +211,53 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
                             {
                                 @SuppressLint("NewApi")
                                 @Override
-                                public void onClick(DialogInterface dialog, int which){
+                                public void onClick(DialogInterface dialog, int which) {
                                     InputStream is;
+                                    GPXParser parser = new GPXParser();
+                                    Gpx parsedGpx = null;
                                     try {
                                         is = resolver.openInputStream(uri);
+                                        parsedGpx = parser.parse(is);
+                                    } catch (IOException | XmlPullParserException e) {
+                                        e.printStackTrace();
+                                    }
+                                    if (parsedGpx == null) {
+                                        // Error parsing GPX
+                                    } else {
+                                        // Do something with the parsed GPX
                                         // Open database
                                         WaypointDatasource datasource = new WaypointDatasource(AddWaypointActivity.this);
                                         datasource.open();
-                                        GPX.read(is).getWayPoints().forEach(e -> {
-                                            String waypoint = e.getLatitude().toString() + "," + e.getLongitude().toString();
+                                        List<WayPoint> waypoints = parsedGpx.getWayPoints();
+                                        for (int i = 0; i < waypoints.size(); i++) {
+                                            WayPoint waypoint = waypoints.get(i);
+                                            Log.d(TAG, "waypoint " + i + ":");
+                                            String wpt = waypoint.getLatitude().toString() + "," + waypoint.getLongitude().toString();
                                             String label = "";
-                                            if (e.getComment().isPresent()){
-                                                label = e.getComment().get();
+                                            if (waypoint.getName() != null) {
+                                                label = waypoint.getName();
                                             }
-
                                             // Get current date/time
                                             Calendar cal = Calendar.getInstance();
                                             Date date = cal.getTime();
                                             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ");
                                             String time = formatter.format(date);
-                                            if (e.getTime().isPresent()){
-                                                date = Date.from(e.getTime().get().toInstant());
+                                            if (waypoint.getTime() != null) {
+                                                date = Date.from(waypoint.getTime().toDate().toInstant());
                                                 time = formatter.format(date);
                                             }
-                                            WaypointRecord record = new WaypointRecord(time, waypoint, label);
+                                            WaypointRecord record = new WaypointRecord(time, wpt, label);
                                             datasource.addRecord(record);
 
-                                            LatLng latLong = new LatLng(e.getLatitude().doubleValue(), e.getLongitude().doubleValue());
-                                            etLatitude.setText(String.valueOf(e.getLatitude().doubleValue()));
-                                            etLongitude.setText(String.valueOf(e.getLongitude().doubleValue()));
+                                            LatLng latLong = new LatLng(waypoint.getLatitude().doubleValue(), waypoint.getLongitude().doubleValue());
+                                            etLatitude.setText(String.valueOf(waypoint.getLatitude().doubleValue()));
+                                            etLongitude.setText(String.valueOf(waypoint.getLongitude().doubleValue()));
                                             etLabel.setText(label);
                                             googleMap.clear();
                                             googleMap.addMarker(new MarkerOptions().position(latLong));
-                                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLong,15));
-                                        });
+                                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLong, 15));
+                                        }
                                         datasource.close();
-                                    } catch (IOException e){
-                                        Log.e(TAG, e.toString());
                                     }
                                 }
                             }).setNegativeButton(getString(R.string.cancel), null).show();
