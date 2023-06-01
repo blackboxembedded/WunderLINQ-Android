@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,8 +10,8 @@
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
         android:background="@null"
-        android:src="@drawable/ic_chevron_left"
-        android:tint="?attr/iconTintColor"
+        app:srcCompat="@drawable/ic_chevron_left"
+        app:tint="?attr/iconTintColor"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:layout_alignParentStart="true"
@@ -27,8 +28,8 @@
         android:focusable="false"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
-        android:src="@drawable/ic_plus"
-        android:tint="?attr/iconTintColor" />
+        app:srcCompat="@drawable/ic_plus"
+        app:tint="?attr/iconTintColor" />
 
     <TextView
         android:id="@+id/action_title"

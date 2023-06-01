@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -12,8 +13,8 @@
         android:paddingBottom="4dp"
         android:layout_alignParentStart="true"
         android:background="@null"
-        android:src="@drawable/ic_chevron_left"
-        android:tint="?attr/iconTintColor" />
+        app:srcCompat="@drawable/ic_chevron_left"
+        app:tint="?attr/iconTintColor" />
 
     <ImageButton
         android:id="@+id/action_connect"
@@ -25,7 +26,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@null"
-        android:src="@drawable/ic_bluetooth"
+        app:srcCompat="@drawable/ic_bluetooth"
         android:layout_toEndOf="@+id/action_back"/>
 
     <ImageButton
@@ -39,7 +40,7 @@
         android:paddingLeft="10dp"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
-        android:src="@drawable/ic_warning" />
+        app:srcCompat="@drawable/ic_warning" />
 
     <ImageButton
         android:id="@+id/action_menu"
@@ -48,8 +49,8 @@
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
         android:background="@null"
-        android:src="@drawable/ic_bars"
-        android:tint="?attr/iconTintColor"
+        app:srcCompat="@drawable/ic_bars"
+        app:tint="?attr/iconTintColor"
         android:layout_toStartOf="@+id/action_forward"
         android:paddingRight="10dp"
         android:paddingTop="4dp"
@@ -62,8 +63,8 @@
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
         android:background="@null"
-        android:src="@drawable/ic_chevron_right"
-        android:tint="?attr/iconTintColor"
+        app:srcCompat="@drawable/ic_chevron_right"
+        app:tint="?attr/iconTintColor"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:layout_alignParentEnd="true"/>
