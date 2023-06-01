@@ -162,7 +162,22 @@
                 <data android:host="*" />
                 <data android:mimeType="application/gpx+xml" />
             </intent-filter>
-
+            <intent-filter
+                android:label="@string/app_name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="file" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.gpx" />
+            </intent-filter>
+            <intent-filter
+                android:label="@string/app_name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="content" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.gpx" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".WaypointViewActivity"
