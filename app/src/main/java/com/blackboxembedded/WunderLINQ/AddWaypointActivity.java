@@ -258,6 +258,7 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
                                             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLong, 15));
                                         }
                                         datasource.close();
+                                        Toast.makeText(AddWaypointActivity.this, R.string.toast_gpx_saved, Toast.LENGTH_LONG).show();
                                     }
                                 }
                             }).setNegativeButton(getString(R.string.cancel), null).show();
