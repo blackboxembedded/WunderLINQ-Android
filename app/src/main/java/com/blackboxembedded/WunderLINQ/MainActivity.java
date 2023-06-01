@@ -209,14 +209,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         // selectively disable BLE-related features.
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
             Toast.makeText(this, R.string.bt_not_supported, Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "Brand: " + Build.BRAND);
-            Log.d(TAG, "Device: " + Build.DEVICE);
-            //Only quit on real device
-            if (!(Build.BRAND.startsWith("Android") && Build.DEVICE.startsWith("generic"))) {
-                finish();
-            } else {
-                Log.d(TAG, "Running in the emulator");
-            }
+            Log.d(TAG, "BLE Not supported, Brand: " + Build.BRAND + ", Device: " + Build.DEVICE);
         }
 
         // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
@@ -224,18 +217,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         final BluetoothManager bluetoothManager =
                 (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
-
-        // Checks if Bluetooth is supported on the device.
         if (mBluetoothAdapter == null) {
-            Toast.makeText(this, R.string.bt_not_supported, Toast.LENGTH_LONG).show();
-            Log.d(TAG, "Brand: " + Build.BRAND);
-            Log.d(TAG, "Device: " + Build.DEVICE);
-            //Only quit if on a real device
-            if (!(Build.BRAND.startsWith("Android") && Build.DEVICE.startsWith("generic"))) {
-                finish();
-            } else {
-                Log.d(TAG, "Running in the emulator");
-            }
+            Log.d(TAG, "mBluetoothAdapter == null");
             return;
         }
 
@@ -443,7 +426,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             switch (v.getId()) {
                 case R.id.action_connect:
                     Log.d(TAG, "Connect");
-                    if (!(Build.BRAND.startsWith("Android") && Build.DEVICE.startsWith("generic"))) {
+                    if (!(Build.BRAND.startsWith("google") && Build.DEVICE.startsWith("generic"))) {
                         setupBLE();
                     } else {
                         Log.d(TAG, "Running in the emulator");
@@ -476,7 +459,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         Log.d(TAG, "In onResume");
         super.onResume();
         //Only use BLE if on a real device
-        if (!(Build.BRAND.startsWith("Android") && Build.DEVICE.startsWith("generic"))) {
+        if (!(Build.BRAND.startsWith("google") && Build.DEVICE.startsWith("generic"))) {
             startService(bluetoothLeService);
             registerReceiver(mBondingBroadcast, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
             registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
