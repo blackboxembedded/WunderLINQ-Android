@@ -178,8 +178,10 @@ public class BluetoothLeService extends Service {
             "com.blackboxembedded.bluetooth.le.ACTION_GATT_DISCONNECTING";
     private final static String ACTION_PAIRING_REQUEST =
             "com.blackboxembedded.bluetooth.le.PAIRING_REQUEST";
+    public final static String ACTION_PERFORMANCE_DATA_AVAILABLE =
+            "com.blackboxembedded.wunderlinq.ACTION_PERFORMANCE_DATA_AVAILABLE";
     public final static String ACTION_ACCSTATUS_AVAILABLE =
-            "com.blackboxembedded.bluetooth.le.ACTION_ACCSTATUS_AVAILABLE";
+            "com.blackboxembedded.wunderlinq.ACTION_ACCSTATUS_AVAILABLE";
 
     public static final String EXTRA_BYTE_VALUE = "com.blackboxembedded.wunderlinq.backgroundservices." +
             "EXTRA_BYTE_VALUE";
@@ -299,8 +301,6 @@ public class BluetoothLeService extends Service {
             public void run() {
                 Calendar c = Calendar.getInstance();
                 Data.setTime(c.getTime());
-                final Intent intent = new Intent(ACTION_DATA_AVAILABLE);
-                MyApplication.getContext().sendBroadcast(intent);
 
                 //Send time to cluster
                 if (Data.wlq != null) {
@@ -735,9 +735,7 @@ public class BluetoothLeService extends Service {
                      * Sending the broad cast so that it can be received on registered
                      * receivers
                      */
-                    final Intent intent = new Intent(ACTION_DATA_AVAILABLE);
-                    //intent.putExtras(mBundle);
-                    MyApplication.getContext().sendBroadcast(intent);
+                    sendDataBroadcast();
                 }
             }
         } else if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_CANMESSAGE_CHARACTERISTIC)) {
@@ -765,9 +763,7 @@ public class BluetoothLeService extends Service {
                      * Sending the broad cast so that it can be received on registered
                      * receivers
                      */
-                    final Intent intent = new Intent(ACTION_DATA_AVAILABLE);
-                    //intent.putExtras(mBundle);
-                    MyApplication.getContext().sendBroadcast(intent);
+                    sendDataBroadcast();
                 }
             }
         } else if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_COMMAND_CHARACTERISTIC)) {
@@ -1394,5 +1390,10 @@ public class BluetoothLeService extends Service {
             }
         }
         nextCommand();
+    }
+
+    private static void sendDataBroadcast() {
+        final Intent intent = new Intent(ACTION_PERFORMANCE_DATA_AVAILABLE);
+        MyApplication.getContext().sendBroadcast(intent);
     }
 }

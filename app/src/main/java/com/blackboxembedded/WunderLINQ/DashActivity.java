@@ -317,7 +317,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
 
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
+        intentFilter.addAction(BluetoothLeService.ACTION_PERFORMANCE_DATA_AVAILABLE);
         intentFilter.addAction(BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE);
         return intentFilter;
     }
@@ -329,7 +329,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
+            if (BluetoothLeService.ACTION_PERFORMANCE_DATA_AVAILABLE.equals(action)) {
                 if ((System.currentTimeMillis()) - lastUpdate > 500) {
                     lastUpdate = System.currentTimeMillis();
                     updateDashboard();
