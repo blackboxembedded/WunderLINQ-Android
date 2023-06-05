@@ -135,16 +135,21 @@ public class FirstRunActivity extends AppCompatActivity {
                 case 0:
                     buttonSkip.setVisibility(View.VISIBLE);
                     buttonOk.setText(R.string.firstrun_button_ok);
-                    tvMessage.setText(getString(R.string.contacts_alert_body));
+                    tvMessage.setText(getString(R.string.btconnect_alert_body));
                     step = step + 1;
                     break;
                 case 1:
-                    // Read Contacts permission
+                    // Bluetooth Connect permission
                     tvMessage.setText(getString(R.string.camera_alert_body));
+                    buttonSkip.setVisibility(View.GONE);
+                    buttonOk.setText(R.string.alert_btn_ok);
                     step = step + 1;
                     if (v.getId() == R.id.buttonOK) {
-                        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(FirstRunActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                                Log.d(TAG, "Requesting BT_CONNECT permission");
+                                ActivityCompat.requestPermissions(FirstRunActivity.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, PERMISSION_REQUEST_BLUETOOTH_CONNECT);
+                            }
                         } else {
                             buttonOk.performClick();
                         }
@@ -188,7 +193,7 @@ public class FirstRunActivity extends AppCompatActivity {
                     break;
                 case 5:
                     // Location permission
-                    tvMessage.setText(getString(R.string.overlay_alert_body));
+                    tvMessage.setText(getString(R.string.contacts_alert_body));
                     step = step + 1;
                     if (v.getId() == R.id.buttonOK) {
                         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -199,6 +204,18 @@ public class FirstRunActivity extends AppCompatActivity {
                     }
                     break;
                 case 6:
+                    // Read Contacts permission
+                    tvMessage.setText(getString(R.string.overlay_alert_body));
+                    step = step + 1;
+                    if (v.getId() == R.id.buttonOK) {
+                        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(FirstRunActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
+                        } else {
+                            buttonOk.performClick();
+                        }
+                    }
+                    break;
+                case 7:
                     // Overlay permission
                     tvMessage.setText(getString(R.string.notification_alert_body));
                     step = step + 1;
@@ -214,7 +231,7 @@ public class FirstRunActivity extends AppCompatActivity {
                         }
                     }
                     break;
-                case 7:
+                case 8:
                     // Read notification permission
                     tvMessage.setText(getString(R.string.usagestats_alert_body));
                     step = step + 1;
@@ -228,32 +245,15 @@ public class FirstRunActivity extends AppCompatActivity {
                         }
                     }
                     break;
-                case 8:
+                case 9:
                     //Usage stats permission
-                    tvMessage.setText(getString(R.string.btconnect_alert_body));
+                    tvMessage.setText(getString(R.string.firstrun_end));
                     step = step + 1;
                     if (v.getId() == R.id.buttonOK) {
                         AppOpsManager appOps = (AppOpsManager) getApplication().getSystemService(Context.APP_OPS_SERVICE);
                         int mode = appOps.checkOpNoThrow(OPSTR_GET_USAGE_STATS, myUid(), getApplication().getPackageName());
                         if (mode != MODE_ALLOWED) {
                             startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-                        } else {
-                            buttonOk.performClick();
-                        }
-                    }
-                    break;
-                case 9:
-                    // Bluetooth Connect permission
-                    tvMessage.setText(getString(R.string.firstrun_end));
-                    buttonSkip.setVisibility(View.GONE);
-                    buttonOk.setText(R.string.alert_btn_ok);
-                    step = step + 1;
-                    if (v.getId() == R.id.buttonOK) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                                Log.d(TAG, "Requesting BT_CONNECT permission");
-                                ActivityCompat.requestPermissions(FirstRunActivity.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, PERMISSION_REQUEST_BLUETOOTH_CONNECT);
-                            }
                         } else {
                             buttonOk.performClick();
                         }

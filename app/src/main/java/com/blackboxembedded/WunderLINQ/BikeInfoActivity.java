@@ -185,13 +185,15 @@ public class BikeInfoActivity extends AppCompatActivity {
     };
 
     private void updateDisplay(){
-        if (Data.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
-            if (Data.wlq.getFirmwareVersion() != null) {
-                if (Double.parseDouble(Data.wlq.getFirmwareVersion()) >= 1.8) {
-                    tvResetHeader.setVisibility(View.VISIBLE);
-                    spReset.setVisibility(View.VISIBLE);
-                    tvResetLabel.setVisibility(View.VISIBLE);
-                    btReset.setVisibility(View.VISIBLE);
+        if (Data.wlq != null) {
+            if (Data.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
+                if (Data.wlq.getFirmwareVersion() != null) {
+                    if (Double.parseDouble(Data.wlq.getFirmwareVersion()) >= 1.8) {
+                        tvResetHeader.setVisibility(View.VISIBLE);
+                        spReset.setVisibility(View.VISIBLE);
+                        tvResetLabel.setVisibility(View.VISIBLE);
+                        btReset.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         }

@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private String mDeviceAddress;
     private static final int REQUEST_ENABLE_BT = 1;
+    private static final int PERMISSION_REQUEST_BLUETOOTH_CONNECT = 106;
     private static final int SETTINGS_CHECK = 10;
 
     private PopupMenu mPopupMenu;
@@ -641,56 +642,83 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                 }
             }
-        }
+            if (wlqCnt == 0) {
+                Log.d(TAG, "No paired WunderLINQ");
+                // Display dialog text here......
+                final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+                builder.setTitle(getString(R.string.no_pairing_alert_title));
+                builder.setMessage(getString(R.string.no_pairing_alert_body));
+                builder.setPositiveButton(R.string.alert_btn_ok,
+                        new DialogInterface.OnClickListener() {
 
-        if (wlqCnt == 0) {
-            Log.d(TAG, "No paired WunderLINQ");
-            // Display dialog text here......
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                builder.setNegativeButton(R.string.task_title_settings,
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent settings_intent = new Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
+                                startActivityForResult(settings_intent, 0);
+                            }
+                        });
+                builder.show();
+            } else if (wlqCnt == 1) {
+                Log.d(TAG, "Connecting to Address: " + mDeviceAddress);
+                bindService(bluetoothLeService, mServiceConnection, BIND_AUTO_CREATE);
+            } else if (wlqCnt > 1) {
+                Log.d(TAG, "Too many WunderLINQ pairings: " + wlqCnt);
+                // Display dialog text here......
+                final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+                builder.setTitle(getString(R.string.too_many_pairings_alert_title));
+                builder.setMessage(getString(R.string.too_many_pairings_alert_body));
+                builder.setPositiveButton(R.string.alert_btn_ok,
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                builder.setNegativeButton(R.string.task_title_settings,
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent settings_intent = new Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
+                                startActivityForResult(settings_intent, 0);
+                            }
+                        });
+                builder.show();
+            }
+        } else {
+            // Display A message about the need of Bluetooth Connect Permissions
             final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-            builder.setTitle(getString(R.string.no_pairing_alert_title));
-            builder.setMessage(getString(R.string.no_pairing_alert_body));
+            builder.setTitle(getString(R.string.negative_alert_title));
+            builder.setMessage(getString(R.string.btconnect_alert_body));
             builder.setPositiveButton(R.string.alert_btn_ok,
                     new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                                    Log.d(TAG, "Requesting BT_CONNECT permission");
+                                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, PERMISSION_REQUEST_BLUETOOTH_CONNECT);
+                                }
+                            }
                             dialog.cancel();
                         }
                     });
-            builder.setNegativeButton(R.string.task_title_settings,
+            builder.setNegativeButton(R.string.disclaimer_quit,
                     new DialogInterface.OnClickListener() {
-
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Intent settings_intent = new Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
-                            startActivityForResult(settings_intent, 0);
-                        }
-                    });
-            builder.show();
-        } else if (wlqCnt == 1) {
-            Log.d(TAG, "Connecting to Address: " + mDeviceAddress);
-            bindService(bluetoothLeService, mServiceConnection, BIND_AUTO_CREATE);
-        } else if (wlqCnt > 1) {
-            Log.d(TAG, "Too many WunderLINQ pairings: " + wlqCnt);
-            // Display dialog text here......
-            final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-            builder.setTitle(getString(R.string.too_many_pairings_alert_title));
-            builder.setMessage(getString(R.string.too_many_pairings_alert_body));
-            builder.setPositiveButton(R.string.alert_btn_ok,
-                    new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-            builder.setNegativeButton(R.string.task_title_settings,
-                    new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent settings_intent = new Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
-                            startActivityForResult(settings_intent, 0);
+                            // End App
+                            finishAndRemoveTask();
                         }
                     });
             builder.show();
@@ -732,6 +760,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 btButton.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.motorrad_blue));
                 btButton.setEnabled(false);
+                mMenu.findItem(R.id.action_bike_info).setVisible(true);
+                mMenu.findItem(R.id.action_hwsettings).setVisible(true);
             } else if (BluetoothLeService.ACTION_PERFORMANCE_DATA_AVAILABLE.equals(action)) {
                 if (drawingComplete) {
                     updateDisplay();
@@ -2062,6 +2092,33 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         editor.putString("CELL_COUNT", String.valueOf(nextCellCount));
         editor.apply();
         updateDisplay();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case PERMISSION_REQUEST_BLUETOOTH_CONNECT: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "BLUETOOTH_CONNECT permission granted");
+                } else {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.negative_alert_title));
+                    builder.setMessage(getString(R.string.negative_btconnect_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
+                }
+                break;
+            }
+            default:
+                Log.d(TAG, "Unknown Permissions Request Code");
+                break;
+        }
     }
 }
 
