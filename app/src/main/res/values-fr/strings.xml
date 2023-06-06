@@ -196,8 +196,8 @@
     <string name="gear_header">Vitesse</string>
     <string name="enginetemp_header">Températeur moteur</string>
     <string name="ambienttemp_header">Température ambiante</string>
-    <string name="frontpressure_header">Pression pneu avant</string>
-    <string name="rearpressure_header">Pression pneu arrière</string>
+    <string name="frontpressure_header">Pres. pneu avant</string>
+    <string name="rearpressure_header">Pres. pneu arrière</string>
     <string name="odometer_header">Odomètre</string>
     <string name="voltage_header">Voltage</string>
     <string name="throttle_header">Poignée des gaz</string>
@@ -372,7 +372,7 @@
     <string name="contacts_filter_favorites">Favoris</string>
     <string name="task_title_weathermap">Carte météo</string>
     <string name="sunrisesunset_header">Lever/Coucher du soleil</string>
-    <string name="task_title_homescreen">Accueuil</string>
+    <string name="task_title_homescreen">Accueil</string>
     <string name="toast_actioncam_notconnected">Aucune ActionCam détectée</string>
     <string name="timef_12h">12h</string>
     <string name="pref_time_name">Format de l\'heure</string>
