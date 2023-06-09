@@ -1163,13 +1163,6 @@ public class LINbus {
                     if ((data[4] & 0xFF) != 0xFF){
                         int nextService = data[4] * 100;
                         Data.setNextService(nextService);
-                        if (Data.getOdometer() != null ) {
-                            if (nextService <= Data.getOdometer()) {
-                                FaultStatus.setServiceActive(true);
-                            } else {
-                                FaultStatus.setServiceActive(false);
-                            }
-                        }
                     }
                     break;
                 case 0x0c:
