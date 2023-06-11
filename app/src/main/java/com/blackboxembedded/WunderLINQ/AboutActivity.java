@@ -120,10 +120,6 @@ public class AboutActivity extends AppCompatActivity {
                 emailIntent.setType("message/rfc822");
                 emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // Grant read access to the URI
                 startActivity(Intent.createChooser(emailIntent, getString(R.string.sendlogs_intent_title)));
-
-                SharedPreferences.Editor editor = sharedPrefs.edit();
-                editor.putBoolean("prefDebugLogging", false);
-                editor.apply();
             }
 
         });
