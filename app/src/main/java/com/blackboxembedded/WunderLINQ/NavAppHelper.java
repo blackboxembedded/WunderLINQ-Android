@@ -138,7 +138,7 @@ public class NavAppHelper {
                 break;
             case "21": //Guru Maps
                 navIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                url = "guru://";
+                url = "guru://?back_url=wunderlinq://";
                 navIntent.setData(Uri.parse(url));
                 break;
         }
@@ -249,7 +249,7 @@ public class NavAppHelper {
                 homeNavIntent.setPackage("com.kurviger.android");
                 break;
             case "21": //Guru Maps
-                navUrl = "guru://nav?finish=" + end.getLatitude() + "," + end.getLongitude() + "&mode=motorcycle&start_navigation=true";
+                navUrl = "guru://nav?finish=" + end.getLatitude() + "," + end.getLongitude() + "&mode=motorcycle&start_navigation=true&back_url=wunderlinq://";
                 homeNavIntent.setData(Uri.parse(navUrl));
                 break;
         }
@@ -359,11 +359,7 @@ public class NavAppHelper {
                 navIntent.setPackage("com.kurviger.android");
                 break;
             case "21": //Guru Maps
-                navIntent = activity.getPackageManager().getLaunchIntentForPackage("com.bodunov.GalileoPro");
-                if(!isCallable(activity, navIntent)){
-                    navIntent = activity.getPackageManager().getLaunchIntentForPackage("com.bodunov.galileo");
-                }
-                navUrl = "geo://" + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude());
+                navUrl = "guru://show?place=" + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude() + "&back_url=wunderlinq://");
                 navIntent.setData(Uri.parse(navUrl));
                 break;
         }
