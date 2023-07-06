@@ -695,6 +695,7 @@
     <string name="nav_app_cruiser">Cruiser</string>
     <string name="nav_app_oruxmaps">OruxMaps</string>
     <string name="nav_app_gurumaps">Guru Maps</string>
+    <string name="nav_app_myrouteapp">MyRoute-app</string>
     <string-array name="nav_apps_array" translatable="false">
         <item name="1">@string/nav_app_default</item>
         <item name="2">@string/nav_app_google</item>
@@ -717,6 +718,7 @@
         <item name="19">@string/nav_app_cruiser</item>
         <item name="20">@string/nav_app_oruxmaps</item>
         <item name="21">@string/nav_app_gurumaps</item>
+        <item name="22">@string/nav_app_myrouteapp</item>
     </string-array>
     <string-array name="nav_apps_arrayValues" translatable="false">
         <item name="1">1</item>
@@ -740,6 +742,7 @@
         <item name="19">18</item>
         <item name="20">19</item>
         <item name="21">21</item>
+        <item name="22">22</item>
     </string-array>
     <string name="pref_roadbook_app_title">Roadbook App</string>
     <string name="roadbook_app_rabbitrally">Rabbit Rally</string>

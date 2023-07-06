@@ -141,6 +141,11 @@ public class NavAppHelper {
                 url = "guru://?back_url=wunderlinq://";
                 navIntent.setData(Uri.parse(url));
                 break;
+            case "22": //MyRoute-app
+                navIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                url = "mra-mobile://x-callback-url/?x-success=wunderlinq://&x-source=WunderLINQ";
+                navIntent.setData(Uri.parse(url));
+                break;
         }
         try {
             if (navIntent != null) {
@@ -252,6 +257,10 @@ public class NavAppHelper {
                 navUrl = "guru://nav?finish=" + end.getLatitude() + "," + end.getLongitude() + "&mode=motorcycle&start_navigation=true&back_url=wunderlinq://";
                 homeNavIntent.setData(Uri.parse(navUrl));
                 break;
+            case "22": //MyRoute-app
+                navUrl = "mra-mobile://x-callback-url/view?x-success=wunderlinq://&x-source=WunderLINQ&geo=" + end.getLatitude() + "," + end.getLongitude();
+                homeNavIntent.setData(Uri.parse(navUrl));
+                break;
         }
         if (!navApp.equals("6")) { // If NOT OsmAnd
             try {
@@ -360,6 +369,10 @@ public class NavAppHelper {
                 break;
             case "21": //Guru Maps
                 navUrl = "guru://show?place=" + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude() + "&back_url=wunderlinq://");
+                navIntent.setData(Uri.parse(navUrl));
+                break;
+            case "22": //MyRoute-app
+                navUrl = "mra-mobile://x-callback-url/view?x-success=wunderlinq://&x-source=WunderLINQ&geo=" + waypoint.getLatitude() + "," + waypoint.getLongitude();
                 navIntent.setData(Uri.parse(navUrl));
                 break;
         }
