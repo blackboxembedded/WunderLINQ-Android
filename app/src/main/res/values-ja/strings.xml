@@ -164,7 +164,7 @@
     <string name="altitude_header">標高</string>
     <string name="longitude_header">経度</string>
     <string name="latitude_header">緯度</string>
-    <string name="wwtype_label">タイヤタイプ</string>
+    <string name="wwtype_label">マルチコントローラータイプ</string>
     <string name="fw_config_title">ワンダーリンク設定</string>
     <string name="close_label">閉じる</string>
     <string name="hwsettings_label">ハードウェア設定</string>
@@ -253,8 +253,8 @@
     <string name="off">オフ</string>
     <string name="pref_debuglogging_summary">"サポートで必要な場合のみ有効にする, 放置するとパフォーマンスに影響が出ます.  終了後は停止して下さい."</string>
     <string name="pref_actioncam_title">アクションカメラ</string>
-    <string name="pref_integrations_settings_summary">外部アプリおよびハードウェアとの統合を有効にします。</string>
-    <string name="pref_integrations_settings_title">インテグレーションズの表示</string>
+    <string name="pref_integrations_settings_summary">外部アプリおよびハードウェアとの連携を有効にします。</string>
+    <string name="pref_integrations_settings_title">連携APP選択（音楽・地図など）</string>
     <string name="timef_24h">24時間表示</string>
     <string name="timef_12h">12時間表示</string>
     <string name="pref_time_name">時間のフォーマット</string>
@@ -356,7 +356,7 @@
     <string name="pref_autolaunch_summary">ワンダーリンクハードウェア検出時にAPPを自動起動</string>
     <string name="pref_rpmmax_name">最高回転数</string>
     <string name="rearwheel_speed_header">後輪速度</string>
-    <string name="pref_highlightColor_title">ハイライトカラー</string>
+    <string name="pref_highlightColor_title">カラーハイライト</string>
     <string name="pref_display_dashboard_name">ダッシュボード画面を有効にする</string>
     <string name="rpmmax_10k">10000</string>
     <string name="rpmmax_12k">12000</string>
@@ -729,4 +729,17 @@
     <string name="consumer_hid_0xA4_label">マンスリー</string>
     <string name="consumer_hid_0xB0_label">プレイ</string>
     <string name="consumer_hid_0xB1_label">停止</string>
+    <string name="waypoint_view_tv_elevation_label">標高</string>
+    <string name="accessory_title">アクセサリーステイタス</string>
+    <string name="default_accessory_one_name">チャンネル1</string>
+    <string name="default_accessory_two_name">チャンネル2</string>
+    <string name="nogpremote_alert_title">WUNDERLINQのGOPROコントロールがありません</string>
+    <string name="fault_SERVICE">点検期限</string>
+    <string name="task_title_insta360">インスタ360コントロール</string>
+    <string name="toast_gpx_saved">GPXデータロード完了</string>
+    <string name="task_title_gopro">GOPRO操作</string>
+    <string name="no360remote_alert_title">WUNDERLINQのインスタ360リモートが見つかりません</string>
+    <string name="btn_documentation_title">ドキュメント</string>
+    <string name="task_title_front_start_record">セルフィービデオ撮影開始</string>
+    <string name="app_ver_label">APP:</string>
 </resources>
