@@ -415,7 +415,7 @@ public class WLQ_N extends WLQ_BASE {
                     return MyApplication.getContext().getString(R.string.usbcontrol_engine_label);
                 }
             case RTKDoublePressSensitivity:
-                return String.valueOf(RTKSensitivity);
+                return String.valueOf(RTKSensitivity * 50) + "ms";
             case fullLongPressSensitivity:
                 return String.valueOf(fullSensitivity * 50) + "ms";
             case RTKPage:

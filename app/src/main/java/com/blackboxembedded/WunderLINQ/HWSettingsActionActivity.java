@@ -259,7 +259,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                         Data.wlq.getTempConfig()[WLQ_N.USBVinThresholdLow_INDEX] = (byte)0xFF;
                     }
                 } else if (actionID == WLQ_N.RTKDoublePressSensitivity){
-                    Data.wlq.getTempConfig()[WLQ_N.RTKSensitivity_INDEX] = (byte)(actionTypeSP.getSelectedItemPosition() + 1);
+                    Data.wlq.getTempConfig()[WLQ_N.RTKSensitivity_INDEX] = (byte)((actionTypeSP.getSelectedItemPosition() + 1) / 50);
                 } else if (actionID == WLQ_N.fullLongPressSensitivity){
                     Data.wlq.getTempConfig()[WLQ_N.fullSensitivity_INDEX] = (byte)((actionTypeSP.getSelectedItemPosition() + 1) / 50);
                 } else if (actionID == WLQ_C.longPressSensitivity){
@@ -329,7 +329,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             int RTKSensitivityMax = 20;
             Integer[] intArray = new Integer[RTKSensitivityMax];
             for(int i = 0; i < RTKSensitivityMax; i++) {
-                intArray[i] = i + 1;
+                intArray[i] = i * 50;
             }
             sensitivity = new ArrayAdapter<Integer>(this,
                     R.layout.item_hwsettings_spinners, intArray);
