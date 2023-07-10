@@ -417,7 +417,7 @@ public class WLQ_N extends WLQ_BASE {
             case RTKDoublePressSensitivity:
                 return String.valueOf(RTKSensitivity);
             case fullLongPressSensitivity:
-                return String.valueOf(fullSensitivity);
+                return String.valueOf(fullSensitivity * 50) + "ms";
             case RTKPage:
                 if (WLQ_N.RTKPagePressKeyType == WLQ_N.KEYBOARD_HID) {
                     return(KeyboardHID.getKeyboardKeyByCode(WLQ_N.RTKPagePressKey));

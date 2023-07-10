@@ -742,7 +742,8 @@ public class BluetoothLeService extends Service {
             if (data != null) {
                 if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
                     // Log data
-                    Log.d(TAG,Utils.ByteArraytoHexNoDelim(data));
+                    int msgID = ((data[0] & 0xFF)<<3) + ((data[1] & 0xFF)>>5);
+                    Log.d(TAG,"CAN ID: " + msgID + "  MSG: " + Utils.ByteArraytoHexNoDelim(data));
                 }
 
                 //Check if message changed
@@ -1394,6 +1395,31 @@ public class BluetoothLeService extends Service {
 
     private static void sendDataBroadcast() {
         final Intent intent = new Intent(ACTION_PERFORMANCE_DATA_AVAILABLE);
+        /*
+        intent.putExtra("frontTirePressure", Data.getFrontTirePressure());
+        intent.putExtra("rearTirePressure", Data.getRearTirePressure());
+        intent.putExtra("ambientTemperature", Data.getAmbientTemperature());
+        intent.putExtra("engineTemperature", Data.getEngineTemperature());
+        intent.putExtra("odometer", Data.getOdometer());
+        intent.putExtra("tripOne", Data.getTripOne());
+        intent.putExtra("tripTwo", Data.getTripTwo());
+        intent.putExtra("tripAuto", Data.getTripAuto());
+        intent.putExtra("numberOfShifts", Data.getNumberOfShifts());
+        intent.putExtra("rpm", Data.getRPM());
+        intent.putExtra("gear", Data.getGear());
+        intent.putExtra("voltage", Data.getvoltage());
+        intent.putExtra("throttlePosition", Data.getThrottlePosition());
+        intent.putExtra("frontBrake", Data.getFrontBrake());
+        intent.putExtra("rearBrake", Data.getRearBrake());
+        intent.putExtra("ambientLight", Data.getAmbientLight());
+        intent.putExtra("speed", Data.getSpeed());
+        intent.putExtra("avgSpeed", Data.getAvgSpeed());
+        intent.putExtra("currentConsumption", Data.getCurrentConsumption());
+        intent.putExtra("fuelEconomyOne", Data.getFuelEconomyOne());
+        intent.putExtra("fuelEconomyTwo", Data.getFuelEconomyTwo());
+        intent.putExtra("fuelRange", Data.getFuelRange());
+        intent.putExtra("leanAngle", Data.getLeanAngleBike());
+         */
         MyApplication.getContext().sendBroadcast(intent);
     }
 }

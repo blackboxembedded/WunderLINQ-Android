@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package com.blackboxembedded.WunderLINQ.hardware.WLQ;
 
 import android.location.Location;
+import android.util.Log;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -88,6 +89,7 @@ public class Data {
     }
     public static void setRearTirePressure(Double pressure){
         Data.rearTirePressure = pressure;
+        Log.d("RearTirePressure","Value Set: " + Data.rearTirePressure);
     }
 
     // Ambient Temperature in C
@@ -399,6 +401,7 @@ public class Data {
     // END of CAN only Data
 
     // Utility functions
+    /*
     public static void clear(){
         Data.lastLocation = null;
         Data.lastMessage = null;
@@ -429,4 +432,5 @@ public class Data {
         Data.leanAngleBike = null;
         Data.rearSpeed = null;
     }
+     */
 }

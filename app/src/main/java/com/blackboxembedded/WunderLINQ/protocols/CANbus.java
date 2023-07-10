@@ -34,7 +34,6 @@ public class CANbus {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
         Data.setLastMessage(data);
         int msgID = ((data[0] & 0xFF)<<3) + ((data[1] & 0xFF)>>5);
-        //Log.d("CANbus","CANID: " + msgID + "  CANMSG: " + Utils.ByteArraytoHexNoDelim(data));
         switch (msgID){
             case 268:
                 // RPM
