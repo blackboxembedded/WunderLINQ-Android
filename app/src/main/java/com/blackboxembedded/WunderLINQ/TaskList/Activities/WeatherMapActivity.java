@@ -308,7 +308,6 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        Log.d(TAG, "Keycode: " + keyCode);
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 goBack();
@@ -318,9 +317,11 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
             case KeyEvent.KEYCODE_NUMPAD_SUBTRACT:
                 //Zoom Out
                 if (currentZoom > 3){
-                    currentZoom = currentZoom - 1;
-                    LatLng location = new LatLng(Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, currentZoom));
+                    if (Data.getLastLocation() != null) {
+                        currentZoom = currentZoom - 1;
+                        LatLng location = new LatLng(Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, currentZoom));
+                    }
                 }
                 return true;
             case KeyEvent.KEYCODE_DPAD_UP:
@@ -328,15 +329,19 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
             case KeyEvent.KEYCODE_NUMPAD_ADD:
                 //Zoom In
                 if (currentZoom < 16){
-                    currentZoom = currentZoom + 1;
-                    LatLng location = new LatLng(Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, currentZoom));
+                    if (Data.getLastLocation() != null) {
+                        currentZoom = currentZoom + 1;
+                        LatLng location = new LatLng(Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, currentZoom));
+                    }
                 }
                 return true;
             case KeyEvent.KEYCODE_ENTER:
                 //Center
-                LatLng location = new LatLng(Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 10));
+                if (Data.getLastLocation() != null) {
+                    LatLng location = new LatLng(Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 10));
+                }
                 return true;
             default:
                 return super.onKeyUp(keyCode, event);
