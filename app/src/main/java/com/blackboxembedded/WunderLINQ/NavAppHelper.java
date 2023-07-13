@@ -66,7 +66,7 @@ public class NavAppHelper {
                 break;
             case "5": //Maps.me
                 navIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                url = "mapsme://?back_url=wunderlinq://datagrid";
+                url = "mapsme://?back_url=wunderlinq://quicktasks";
                 navIntent.setData(Uri.parse(url));
                 break;
             case "6": //OsmAnd
@@ -119,12 +119,12 @@ public class NavAppHelper {
                 break;
             case "16": //Cartograph
                 navIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                url = "cartograph://?backurl=wunderlinq://datagrid";
+                url = "cartograph://?backurl=wunderlinq://quicktasks";
                 navIntent.setData(Uri.parse(url));
                 break;
             case "17": //Organic Maps
                 navIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                url = "om://?backurl=wunderlinq://datagrid";
+                url = "om://?backurl=wunderlinq://quicktasks";
                 navIntent.setData(Uri.parse(url));
                 break;
             case "18": //Cruiser
@@ -138,12 +138,12 @@ public class NavAppHelper {
                 break;
             case "21": //Guru Maps
                 navIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                url = "guru://?back_url=wunderlinq://";
+                url = "guru://?back_url=wunderlinq://quicktasks";
                 navIntent.setData(Uri.parse(url));
                 break;
             case "22": //MyRoute-app
                 navIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                url = "mra-mobile://x-callback-url/?x-success=wunderlinq://&x-source=WunderLINQ";
+                url = "mra-mobile://x-callback-url/?x-success=wunderlinq://quicktasks&x-source=WunderLINQ";
                 navIntent.setData(Uri.parse(url));
                 break;
         }
@@ -186,7 +186,7 @@ public class NavAppHelper {
                 homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "5": //Maps.me
-                navUrl = "mapsme://route?sll=" + start.getLatitude() + "," + start.getLongitude() + "&saddr=" + MyApplication.getContext().getString(R.string.trip_view_waypoint_start_label) + "&dll=" + end.getLatitude() + "," + end.getLongitude() + "&daddr=" + MyApplication.getContext().getString(R.string.trip_view_waypoint_start_label) + "&type=vehicle&back_url=wunderlinq://datagrid";
+                navUrl = "mapsme://route?sll=" + start.getLatitude() + "," + start.getLongitude() + "&saddr=" + MyApplication.getContext().getString(R.string.trip_view_waypoint_start_label) + "&dll=" + end.getLatitude() + "," + end.getLongitude() + "&daddr=" + MyApplication.getContext().getString(R.string.trip_view_waypoint_start_label) + "&type=vehicle&back_url=wunderlinq://quicktasks";
                 homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "6": //OsmAnd
@@ -229,11 +229,11 @@ public class NavAppHelper {
                 homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "16": //Cartograph
-                navUrl = "cartograph://route?geo=" + end.getLatitude() + "," + end.getLongitude() + "&back_url=wunderlinq://datagrid";
+                navUrl = "cartograph://route?geo=" + end.getLatitude() + "," + end.getLongitude() + "&back_url=wunderlinq://quicktasks";
                 homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "17": //Organic Maps
-                navUrl = "om://route?sll=" + start.getLatitude() + "," + start.getLongitude() + "&saddr=" + MyApplication.getContext().getString(R.string.trip_view_waypoint_start_label) + "&dll=" + end.getLatitude() + "," + end.getLongitude() + "&daddr=" + MyApplication.getContext().getString(R.string.trip_view_waypoint_end_label) + "&type=vehicle&backurl=wunderlinq://datagrid";
+                navUrl = "om://route?sll=" + start.getLatitude() + "," + start.getLongitude() + "&saddr=" + MyApplication.getContext().getString(R.string.trip_view_waypoint_start_label) + "&dll=" + end.getLatitude() + "," + end.getLongitude() + "&daddr=" + MyApplication.getContext().getString(R.string.trip_view_waypoint_end_label) + "&type=vehicle&backurl=wunderlinq://quicktasks";
                 homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "18": //Cruiser
@@ -254,11 +254,11 @@ public class NavAppHelper {
                 homeNavIntent.setPackage("com.kurviger.android");
                 break;
             case "21": //Guru Maps
-                navUrl = "guru://nav?finish=" + end.getLatitude() + "," + end.getLongitude() + "&mode=motorcycle&start_navigation=true&back_url=wunderlinq://";
+                navUrl = "guru://nav?finish=" + end.getLatitude() + "," + end.getLongitude() + "&mode=motorcycle&start_navigation=true&back_url=wunderlinq://quicktasks";
                 homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "22": //MyRoute-app
-                navUrl = "mra-mobile://x-callback-url/view?x-success=wunderlinq://&x-source=WunderLINQ&geo=" + end.getLatitude() + "," + end.getLongitude();
+                navUrl = "mra-mobile://x-callback-url/view?x-success=wunderlinq://quicktasks&x-source=WunderLINQ&geo=" + end.getLatitude() + "," + end.getLongitude();
                 homeNavIntent.setData(Uri.parse(navUrl));
                 break;
         }
@@ -302,7 +302,7 @@ public class NavAppHelper {
                 navIntent.setData(Uri.parse(navUrl));
                 break;
             case "5": //Maps.me
-                navUrl = "mapsme://map?ll=" + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&n=" + label + "&back_url=wunderlinq://datagrid";
+                navUrl = "mapsme://map?ll=" + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&n=" + label + "&back_url=wunderlinq://quicktasks";
                 navIntent.setData(Uri.parse(navUrl));
                 break;
             case "6": //OsmAnd
@@ -344,11 +344,11 @@ public class NavAppHelper {
                 navIntent.setData(Uri.parse(navUrl));
                 break;
             case "16": //Cartograph
-                navUrl = "cartograph://view?geo="+String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&back_url=wunderlinq://datagrid";
+                navUrl = "cartograph://view?geo="+String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&back_url=wunderlinq://quicktasks";
                 navIntent.setData(Uri.parse(navUrl));
                 break;
             case "17": //Organic Maps
-                navUrl = "om://map?ll=" + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&n=" + label + "&backurl=wunderlinq://datagrid";
+                navUrl = "om://map?ll=" + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&n=" + label + "&backurl=wunderlinq://quicktasks";
                 navIntent.setData(Uri.parse(navUrl));
                 break;
             case "18": //Cruiser
@@ -368,11 +368,11 @@ public class NavAppHelper {
                 navIntent.setPackage("com.kurviger.android");
                 break;
             case "21": //Guru Maps
-                navUrl = "guru://show?place=" + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude() + "&back_url=wunderlinq://");
+                navUrl = "guru://show?place=" + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude() + "&back_url=wunderlinq://quicktasks");
                 navIntent.setData(Uri.parse(navUrl));
                 break;
             case "22": //MyRoute-app
-                navUrl = "mra-mobile://x-callback-url/view?x-success=wunderlinq://&x-source=WunderLINQ&geo=" + waypoint.getLatitude() + "," + waypoint.getLongitude();
+                navUrl = "mra-mobile://x-callback-url/view?x-success=wunderlinq://quicktasks&x-source=WunderLINQ&geo=" + waypoint.getLatitude() + "," + waypoint.getLongitude();
                 navIntent.setData(Uri.parse(navUrl));
                 break;
         }
