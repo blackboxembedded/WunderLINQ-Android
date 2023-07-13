@@ -1,3 +1,5 @@
+[![Project Map](https://sourcespy.com/shield.svg)](https://sourcespy.com/github/blackboxembeddedwunderlinqandroid/)
+
 # WunderLINQ Android App
 
 The WunderLINQ app is for use with the [WunderLINQ Hardware](https://www.wunderlinq.com)
