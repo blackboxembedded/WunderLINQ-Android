@@ -26,6 +26,8 @@ public abstract class WLQ_BASE implements WLQ {
 
     public static byte KEYMODE_DEFAULT = 0x00;
     public static byte KEYMODE_CUSTOM = 0x01;
+    public static byte KEYMODE_MEDIA = 0x02;
+    public static byte KEYMODE_DMD2 = 0x03;
     public static byte KEYBOARD_HID = 0x01;
     public static byte CONSUMER_HID = 0x02;
     public static byte UNDEFINED = 0x00;
