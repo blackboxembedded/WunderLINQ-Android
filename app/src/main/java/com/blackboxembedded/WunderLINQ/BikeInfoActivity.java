@@ -228,7 +228,7 @@ public class BikeInfoActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
+            if (BluetoothLeService.ACTION_CMDSTATUS_AVAILABLE.equals(action)) {
                 Bundle bd = intent.getExtras();
                 if(bd != null){
                     if(bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE).contains(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC)) {
@@ -241,7 +241,7 @@ public class BikeInfoActivity extends AppCompatActivity {
 
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
+        intentFilter.addAction(BluetoothLeService.ACTION_CMDSTATUS_AVAILABLE);
         return intentFilter;
     }
 }

@@ -180,6 +180,8 @@ public class BluetoothLeService extends Service {
             "com.blackboxembedded.bluetooth.le.PAIRING_REQUEST";
     public final static String ACTION_PERFORMANCE_DATA_AVAILABLE =
             "com.blackboxembedded.wunderlinq.ACTION_PERFORMANCE_DATA_AVAILABLE";
+    public final static String ACTION_CMDSTATUS_AVAILABLE =
+            "com.blackboxembedded.wunderlinq.ACTION_CMDSTATUS_AVAILABLE";
     public final static String ACTION_ACCSTATUS_AVAILABLE =
             "com.blackboxembedded.wunderlinq.ACTION_ACCSTATUS_AVAILABLE";
 
@@ -782,6 +784,9 @@ public class BluetoothLeService extends Service {
                             Data.wlq.setHardwareVersion(Data.hardwareVersion);
                         }
                     }
+                    final Intent intent = new Intent(ACTION_CMDSTATUS_AVAILABLE);
+                    intent.putExtras(mBundle);
+                    MyApplication.getContext().sendBroadcast(intent);
                 } else if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x53)) {
                     if(Data.wlq != null) {
                         Data.wlq.setStatus(data);
