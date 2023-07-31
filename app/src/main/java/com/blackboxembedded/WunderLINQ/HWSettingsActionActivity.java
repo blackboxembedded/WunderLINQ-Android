@@ -271,6 +271,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             } else if (v.getId() == R.id.btSave) {
                 if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE){
                     setHWMode(Data.wlq.KEYMODE_DEFAULT());
+                    return;
                 } else if (actionID == WLQ_N.USB){
                     if(actionTypeSP.getSelectedItemPosition() == 0){
                         Data.wlq.getTempConfig()[WLQ_N.USBVinThresholdHigh_INDEX] = 0x00;
