@@ -994,12 +994,13 @@
 
     <string name="customize_btn_label">Customize</string>
     <string name="default_btn_label">Default Mode</string>
-    <string name="keymode_label">Key Mode</string>
+    <string name="keymode_label">Mode</string>
     <string name="hwreset_alert_body">The current WunderLINQ Custom settings will be reset to the factory defaults.</string>
     <string name="corrupt_config_label">Corrupt Config! Reset Needed</string>
     <string name="keymode_default_label">Default</string>
     <string name="keymode_custom_label">Custom</string>
-
+    <string name="keymode_media_label">Media</string>
+    <string name="keymode_dmd2_label">DMD2</string>
     <string name="usb_threshold_label">USB Port Control</string>
     <string name="usbcontrol_on_label">Always On</string>
     <string name="usbcontrol_engine_label">On Engine</string>

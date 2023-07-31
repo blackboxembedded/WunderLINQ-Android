@@ -28,7 +28,9 @@ public interface WLQ {
     public byte[] CMD_EOM();
 
     public byte KEYMODE_DEFAULT();
-    public byte KEYMODE_CUSTOM ();
+    public byte KEYMODE_CUSTOM();
+    public byte KEYMODE_MEDIA();
+    public byte KEYMODE_DMD2();
 
     public byte KEYBOARD_HID();
     public byte CONSUMER_HID();

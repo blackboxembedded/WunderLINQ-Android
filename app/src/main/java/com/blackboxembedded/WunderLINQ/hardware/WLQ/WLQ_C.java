@@ -52,6 +52,7 @@ public class WLQ_C extends WLQ_BASE {
             0x02, 0x00, (byte)0xB5, 0x02, 0x00, (byte)0xB0,     // Rocker2 Up
             0x02, 0x00, (byte)0xB6, 0x02, 0x00, (byte)0xB7};    // Rocker2 Down
 
+    public static final int KEYMODE = 100;
     public static final int longPressSensitivity = 25;
     public static final int wheelScrollUp = 26;
     public static final int wheelScrollDown = 27;
@@ -407,6 +408,19 @@ public class WLQ_C extends WLQ_BASE {
     @Override
     public String getActionValue(int id){
         switch (id){
+            case KEYMODE:
+                switch (keyMode){
+                    case 0:
+                        return MyApplication.getContext().getString(R.string.keymode_default_label);
+                    case 1:
+                        return MyApplication.getContext().getString(R.string.keymode_custom_label);
+                    case 2:
+                        return MyApplication.getContext().getString(R.string.keymode_media_label);
+                    case 3:
+                        return MyApplication.getContext().getString(R.string.keymode_dmd2_label);
+                    default:
+                        return "";
+                }
             case longPressSensitivity:
                 return String.valueOf(lpSensitivity);
             case wheelScrollUp:
@@ -808,6 +822,14 @@ public class WLQ_C extends WLQ_BASE {
     public byte KEYMODE_CUSTOM() {
         return WLQ_BASE.KEYMODE_CUSTOM;
     }
+
+    @Override
+    public byte KEYMODE_MEDIA() {
+        return WLQ_BASE.KEYMODE_MEDIA;
+    }
+
+    @Override
+    public byte KEYMODE_DMD2() { return WLQ_BASE.KEYMODE_DMD2; }
 
     @Override
     public byte KEYBOARD_HID() {

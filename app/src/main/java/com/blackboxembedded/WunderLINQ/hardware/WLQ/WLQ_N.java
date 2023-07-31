@@ -92,6 +92,7 @@ public class WLQ_N extends WLQ_BASE {
     public static byte UNDEFINED = 0x00;
 
     public static final int OldSensitivity = 0;
+    public static final int KEYMODE = 100;
     public static final int USB = 1;
     public static final int RTKDoublePressSensitivity = 2;
     public static final int fullLongPressSensitivity = 3;
@@ -349,6 +350,8 @@ public class WLQ_N extends WLQ_BASE {
         switch (id){
             case OldSensitivity:
                 return MyApplication.getContext().getString(R.string.sensitivity_label);
+            case KEYMODE:
+                return MyApplication.getContext().getString(R.string.keymode_label);
             case USB:
                 return MyApplication.getContext().getString(R.string.usb_threshold_label);
             case RTKDoublePressSensitivity:
@@ -406,6 +409,19 @@ public class WLQ_N extends WLQ_BASE {
         switch (id){
             case OldSensitivity:
                 return String.valueOf(sensitivity);
+            case KEYMODE:
+                switch (keyMode){
+                    case 0:
+                        return MyApplication.getContext().getString(R.string.keymode_default_label);
+                    case 1:
+                        return MyApplication.getContext().getString(R.string.keymode_custom_label);
+                    case 2:
+                        return MyApplication.getContext().getString(R.string.keymode_media_label);
+                    case 3:
+                        return MyApplication.getContext().getString(R.string.keymode_dmd2_label);
+                    default:
+                        return "";
+                }
             case USB:
                 if (USBVinThreshold == 0x0000){
                     return MyApplication.getContext().getString(R.string.usbcontrol_on_label);
@@ -941,9 +957,15 @@ public class WLQ_N extends WLQ_BASE {
     }
 
     @Override
-    public byte KEYMODE_CUSTOM() {
-        return WLQ_BASE.KEYMODE_CUSTOM;
+    public byte KEYMODE_CUSTOM() { return WLQ_BASE.KEYMODE_CUSTOM; }
+
+    @Override
+    public byte KEYMODE_MEDIA() {
+        return WLQ_BASE.KEYMODE_MEDIA;
     }
+
+    @Override
+    public byte KEYMODE_DMD2() { return WLQ_BASE.KEYMODE_DMD2; }
 
     @Override
     public byte KEYBOARD_HID() {
@@ -956,9 +978,7 @@ public class WLQ_N extends WLQ_BASE {
     }
 
     @Override
-    public byte UNDEFINED() {
-        return WLQ_BASE.UNDEFINED;
-    }
+    public byte UNDEFINED() { return WLQ_BASE.UNDEFINED; }
 
     @Override
     public int getHardwareType() {

@@ -18,9 +18,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package com.blackboxembedded.WunderLINQ;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,10 +37,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
+import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_C;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
 import com.blackboxembedded.WunderLINQ.protocols.KeyboardHID;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 public class HWSettingsActionActivity extends AppCompatActivity {
 
@@ -52,7 +58,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
     private MultiSpinner actionModifiersSP;
     private Button saveBT;
     private Button cancelBT;
-
+    private ArrayAdapter<String> keymodes;
     private ArrayAdapter<String> usb;
     private ArrayAdapter<Integer> sensitivity;
     private ArrayAdapter<String> types;
@@ -80,6 +86,12 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         saveBT = findViewById(R.id.btSave);
         cancelBT = findViewById(R.id.btCancel);
 
+        keymodes = new ArrayAdapter<String>(this,
+                R.layout.item_hwsettings_spinners, new String[]{getResources().getString(R.string.keymode_default_label),
+                getResources().getString(R.string.keymode_custom_label),
+                getResources().getString(R.string.keymode_media_label),
+                getResources().getString(R.string.keymode_dmd2_label)});
+
         usb = new ArrayAdapter<String>(this,
                 R.layout.item_hwsettings_spinners, new String[]{getResources().getString(R.string.usbcontrol_on_label),
                 getResources().getString(R.string.usbcontrol_engine_label),
@@ -95,7 +107,13 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         actionTypeSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                if (actionID == WLQ_N.USB){
+                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE){
+                    if(Data.wlq.getKeyMode() != pos){
+                        saveBT.setVisibility(View.VISIBLE);
+                    } else {
+                        saveBT.setVisibility(View.INVISIBLE);
+                    }
+                } else if (actionID == WLQ_N.USB){
                     if((pos == 0) && (WLQ_N.USBVinThreshold == 0x0000)){
                         saveBT.setVisibility(View.INVISIBLE);
                     } else if((pos == 1) && (WLQ_N.USBVinThreshold != 0x0000) && (WLQ_N.USBVinThreshold != 0xFFFF)){
@@ -167,7 +185,9 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         actionKeySP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                if (actionID == WLQ_N.USB){
+                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE){
+
+                } else if (actionID == WLQ_N.USB){
 
                 } else if (actionID == WLQ_N.RTKDoublePressSensitivity){
 
@@ -211,6 +231,8 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
                 if (actionID == WLQ_N.OldSensitivity){
 
+                } else if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE){
+
                 } else if (actionID == WLQ_N.USB){
 
                 } else if (actionID == WLQ_N.RTKDoublePressSensitivity){
@@ -247,7 +269,9 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 Intent backIntent = new Intent(HWSettingsActionActivity.this, HWSettingsActivity.class);
                 startActivity(backIntent);
             } else if (v.getId() == R.id.btSave) {
-                if (actionID == WLQ_N.USB){
+                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE){
+                    setHWMode(Data.wlq.KEYMODE_DEFAULT());
+                } else if (actionID == WLQ_N.USB){
                     if(actionTypeSP.getSelectedItemPosition() == 0){
                         Data.wlq.getTempConfig()[WLQ_N.USBVinThresholdHigh_INDEX] = 0x00;
                         Data.wlq.getTempConfig()[WLQ_N.USBVinThresholdLow_INDEX] = 0x00;
@@ -314,7 +338,12 @@ public class HWSettingsActionActivity extends AppCompatActivity {
     private void updateDisplay(){
         saveBT.setVisibility(View.INVISIBLE);
         actionLabelTV.setText(Data.wlq.getActionName(actionID));
-        if (actionID ==  WLQ_N.USB){ //USB
+        if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE){ //Key mode
+            actionTypeSP.setAdapter(keymodes);
+            actionKeySP.setVisibility(View.INVISIBLE);
+            actionModifiersSP.setVisibility(View.INVISIBLE);
+            actionTypeSP.setSelection(Data.wlq.getKeyMode());
+        } else if (actionID ==  WLQ_N.USB){ //USB
             actionTypeSP.setAdapter(usb);
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
@@ -421,4 +450,39 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         }
     }
 
+    private void setHWMode(byte mode){
+        Log.d(TAG,"setHWMode()");
+        // Display dialog
+        final AlertDialog.Builder resetBuilder = new AlertDialog.Builder(HWSettingsActionActivity.this);
+        resetBuilder.setTitle(getString(R.string.hwsave_alert_title));
+        resetBuilder.setMessage(getString(R.string.hwsave_alert_body));
+        resetBuilder.setPositiveButton(R.string.hwsave_alert_btn_ok,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                            outputStream.write(Data.wlq.WRITE_MODE_CMD());
+                            outputStream.write(mode);
+                            outputStream.write(Data.wlq.CMD_EOM());
+                            byte[] writeConfigCmd = outputStream.toByteArray();
+                            BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
+                        } catch (IOException e) {
+                            Log.d(TAG, e.toString());
+                        }
+                        finish();
+                        Intent backIntent = new Intent(HWSettingsActionActivity.this, MainActivity.class);
+                        backIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(backIntent);
+                    }
+                });
+        resetBuilder.setNegativeButton(R.string.hwsave_alert_btn_cancel,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        resetBuilder.show();
+    }
 }
