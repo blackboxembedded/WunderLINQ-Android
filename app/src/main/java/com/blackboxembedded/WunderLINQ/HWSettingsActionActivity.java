@@ -124,19 +124,19 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                         saveBT.setVisibility(View.VISIBLE);
                     }
                 } else if (actionID == WLQ_N.RTKDoublePressSensitivity){
-                    if ((pos + 1) == WLQ_N.RTKSensitivity){
+                    if ((pos) == WLQ_N.RTKSensitivity){
                         saveBT.setVisibility(View.INVISIBLE);
                     } else {
                         saveBT.setVisibility(View.VISIBLE);
                     }
                 } else if (actionID == WLQ_N.fullLongPressSensitivity){
-                    if ((pos + 1) == WLQ_N.fullSensitivity){
+                    if ((pos) == WLQ_N.fullSensitivity){
                         saveBT.setVisibility(View.INVISIBLE);
                     } else {
                         saveBT.setVisibility(View.VISIBLE);
                     }
                 } else if (actionID == WLQ_C.longPressSensitivity){
-                    if ((pos + 1) == WLQ_N.fullSensitivity){
+                    if ((pos) == WLQ_N.fullSensitivity){
                         saveBT.setVisibility(View.INVISIBLE);
                     } else {
                         saveBT.setVisibility(View.VISIBLE);
@@ -366,7 +366,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             actionTypeSP.setAdapter(sensitivity);
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
-            actionTypeSP.setSelection(WLQ_N.RTKSensitivity - 1);
+            actionTypeSP.setSelection(WLQ_N.RTKSensitivity);
         } else if (actionID == WLQ_N.fullLongPressSensitivity){  //Full Sensitivity
             int fullSensitivityMax = 30;
             Integer[] intArray = new Integer[fullSensitivityMax];
@@ -378,7 +378,8 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             actionTypeSP.setAdapter(sensitivity);
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
-            actionTypeSP.setSelection(WLQ_N.fullSensitivity - 1);
+            actionTypeSP.setSelection(WLQ_N.fullSensitivity);
+            Log.d(TAG,"WLQ_N.fullSensitivity: " + WLQ_N.fullSensitivity);
         } else if (actionID == WLQ_C.longPressSensitivity){
             /*
             int fullSensitivityMax = 30;
