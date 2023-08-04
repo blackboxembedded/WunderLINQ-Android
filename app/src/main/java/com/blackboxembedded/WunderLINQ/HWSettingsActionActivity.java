@@ -270,7 +270,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 startActivity(backIntent);
             } else if (v.getId() == R.id.btSave) {
                 if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE){
-                    setHWMode(Data.wlq.KEYMODE_DEFAULT());
+                    setHWMode((byte) actionTypeSP.getSelectedItemPosition());
                     return;
                 } else if (actionID == WLQ_N.USB){
                     if(actionTypeSP.getSelectedItemPosition() == 0){
@@ -288,6 +288,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 } else if (actionID == WLQ_N.fullLongPressSensitivity){
                     Data.wlq.getTempConfig()[WLQ_N.fullSensitivity_INDEX] = (byte)((actionTypeSP.getSelectedItemPosition() + 1) / 50);
                 } else if (actionID == WLQ_C.longPressSensitivity){
+                    //TODO
                     //Data.wlq.getTempConfig()[WLQ_C.lpSensitivity_INDEX] = (byte)(actionTypeSP.getSelectedItemPosition() + 1);
                 } else {
                     byte type = (byte)actionTypeSP.getSelectedItemPosition();
@@ -379,9 +380,8 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
             actionTypeSP.setSelection(WLQ_N.fullSensitivity);
-            Log.d(TAG,"WLQ_N.fullSensitivity: " + WLQ_N.fullSensitivity);
         } else if (actionID == WLQ_C.longPressSensitivity){
-            /*
+            /* TODO
             int fullSensitivityMax = 30;
             Integer[] intArray = new Integer[fullSensitivityMax];
             for(int i = 0; i < fullSensitivityMax; i++) {
@@ -393,7 +393,6 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
             actionTypeSP.setSelection(WLQ_C.sensitivity - 1);
-
              */
         } else {    // Keys
             if (Data.wlq.getHardwareVersion() != null) {
@@ -453,7 +452,6 @@ public class HWSettingsActionActivity extends AppCompatActivity {
     }
 
     private void setHWMode(byte mode){
-        Log.d(TAG,"setHWMode()");
         // Display dialog
         final AlertDialog.Builder resetBuilder = new AlertDialog.Builder(HWSettingsActionActivity.this);
         resetBuilder.setTitle(getString(R.string.hwsave_alert_title));
