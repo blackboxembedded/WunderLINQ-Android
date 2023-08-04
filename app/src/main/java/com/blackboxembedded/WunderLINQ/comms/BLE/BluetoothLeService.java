@@ -1400,7 +1400,6 @@ public class BluetoothLeService extends Service {
 
     private static void sendDataBroadcast() {
         final Intent intent = new Intent(ACTION_PERFORMANCE_DATA_AVAILABLE);
-        /*
         intent.putExtra("frontTirePressure", Data.getFrontTirePressure());
         intent.putExtra("rearTirePressure", Data.getRearTirePressure());
         intent.putExtra("ambientTemperature", Data.getAmbientTemperature());
@@ -1424,7 +1423,6 @@ public class BluetoothLeService extends Service {
         intent.putExtra("fuelEconomyTwo", Data.getFuelEconomyTwo());
         intent.putExtra("fuelRange", Data.getFuelRange());
         intent.putExtra("leanAngle", Data.getLeanAngleBike());
-         */
         MyApplication.getContext().sendBroadcast(intent);
     }
 }
