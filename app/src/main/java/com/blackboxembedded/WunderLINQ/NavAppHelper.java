@@ -134,7 +134,7 @@ public class NavAppHelper {
                 navIntent = activity.getPackageManager().getLaunchIntentForPackage("com.orux.oruxmapsDonate");
                 break;
             case "20": //Kurviger 3
-                navIntent = activity.getPackageManager().getLaunchIntentForPackage("com.kurviger.android");
+                navIntent = activity.getPackageManager().getLaunchIntentForPackage("com.kurviger.app");
                 break;
             case "21": //Guru Maps
                 navIntent = new Intent(android.content.Intent.ACTION_VIEW);
@@ -251,7 +251,8 @@ public class NavAppHelper {
                 homeNavIntent.putExtra("navigatetoindex", 0); //index of the wpt. you want to start
                 break;
             case "20": //Kurviger 3
-                homeNavIntent.setPackage("com.kurviger.android");
+                navUrl = "https://kurviger.de/en?point=" + start.getLatitude() + "," + start.getLongitude() + "&padr.0=" +  MyApplication.getContext().getString(R.string.trip_view_waypoint_start_label) + "&point=" + end.getLatitude() + "," + end.getLongitude() + "&padr.1=" + MyApplication.getContext().getString(R.string.trip_view_waypoint_end_label);
+                homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "21": //Guru Maps
                 navUrl = "guru://nav?finish=" + end.getLatitude() + "," + end.getLongitude() + "&mode=motorcycle&start_navigation=true&back_url=wunderlinq://quicktasks";
@@ -365,7 +366,9 @@ public class NavAppHelper {
                 navIntent.putExtra("targetName", new String[]{label});
                 break;
             case "20": //Kurviger 3
-                navIntent.setPackage("com.kurviger.android");
+                navIntent.setPackage("com.kurviger.app");
+                navUrl = "geo:" + waypoint.getLatitude() + "," + waypoint.getLongitude();
+                navIntent.setData(Uri.parse(navUrl));
                 break;
             case "21": //Guru Maps
                 navUrl = "guru://show?place=" + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude() + "&back_url=wunderlinq://quicktasks");
