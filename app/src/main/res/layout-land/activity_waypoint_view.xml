@@ -1,76 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/layout_addwaypoint_view"
+    android:id="@+id/layout_waypoint_view"
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/backgroundColor">
 
-    <fragment xmlns:map="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.50"/>
+
+    <androidx.fragment.app.FragmentContainerView xmlns:map="http://schemas.android.com/apk/res-auto"
         android:id="@+id/map"
         class="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scrollbars="vertical"
-        android:layout_marginBottom="8dp"
-        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintEnd_toEndOf="@+id/guideline"
         map:layout_constraintStart_toStartOf="parent"
-        map:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/tvSearchLabel"/>
+        map:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvSearchLabel"
+    <LinearLayout
+        android:id="@+id/llDate"
+        android:orientation="horizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/addwaypoint_view_tv_search_label"
-        android:textAlignment="viewStart"
-        android:textColor="?attr/primaryTextColor"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/etSearch"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        app:layout_constraintBottom_toTopOf="@+id/llLatLabel">
 
-    <EditText
-        android:id="@+id/etSearch"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
-        android:background="?attr/backgroundColor"
-        android:ems="10"
-        android:hint="@string/addwaypoint_view_search_hint"
-        android:imeOptions="actionDone"
-        android:importantForAutofill="no"
-        android:inputType="textPersonName"
-        android:text=""
-        android:textAlignment="viewStart"
-        android:textColor="?attr/primaryTextColor"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/btSearch"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/tvDateLabel"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/waypoint_view_tv_date_label"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
 
-    <Button
-        android:id="@+id/btSearch"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="?attr/buttonColor"
-        android:text="@string/addwaypoint_view_bt_search"
-        android:textColor="?attr/buttonTextColor"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/llLatLabel" />
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAlignment="viewStart"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/llLatLabel"
@@ -81,8 +70,8 @@
         android:paddingBottom="2dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/llDate"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/llLonLabel">
 
@@ -96,22 +85,16 @@
             android:textSize="18sp"
             android:textStyle="bold"/>
 
-        <EditText
-            android:id="@+id/etLatitude"
+        <TextView
+            android:id="@+id/tvLatitude"
+            android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="?attr/backgroundColor"
-            android:ems="10"
-            android:hint="@string/waypoint_view_tv_lat_label"
-            android:imeOptions="actionDone"
-            android:importantForAutofill="no"
-            android:inputType="numberSigned|numberDecimal"
             android:text=""
             android:textAlignment="viewStart"
             android:textColor="?attr/primaryTextColor"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
     </LinearLayout>
 
     <LinearLayout
@@ -123,10 +106,10 @@
         android:paddingBottom="2dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/llLatLabel"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/llLabelLabel">
+        app:layout_constraintBottom_toTopOf="@+id/llElevLabel">
 
         <TextView
             android:id="@+id/tvLonLabel"
@@ -138,22 +121,52 @@
             android:textSize="18sp"
             android:textStyle="bold"/>
 
-        <EditText
-            android:id="@+id/etLongitude"
+        <TextView
+            android:id="@+id/tvLongitude"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/waypoint_view_tv_lon_label"
-            android:imeOptions="actionDone"
-            android:inputType="textPersonName"
             android:text=""
             android:textAlignment="viewStart"
-            android:background="?attr/backgroundColor"
             android:textColor="?attr/primaryTextColor"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:importantForAutofill="no"/>
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llElevLabel"
+        android:orientation="horizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/llLonLabel"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/llLabelLabel">
+
+        <TextView
+            android:id="@+id/tvElevLabel"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/waypoint_view_tv_elevation_label"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tvElevation"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAlignment="viewStart"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
     </LinearLayout>
 
     <LinearLayout
@@ -165,10 +178,10 @@
         android:paddingBottom="2dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/llElevLabel"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/btSave">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
             android:id="@+id/tvLabelLabel"
@@ -181,7 +194,7 @@
             android:textStyle="bold"/>
 
         <EditText
-            android:id="@+id/etLabel"
+            android:id="@+id/tvLabel"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -194,21 +207,7 @@
             android:background="?attr/backgroundColor"
             android:textColor="?attr/primaryTextColor"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:importantForAutofill="no" />
+            android:textStyle="bold" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btSave"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:background="?attr/buttonColor"
-        android:textColor="?attr/buttonTextColor"
-        android:text="@string/addwaypoint_view_bt_save"
-        android:textSize="18sp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
