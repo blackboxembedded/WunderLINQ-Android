@@ -337,7 +337,9 @@ public class LoggingService extends Service {
                                 + currentConsumption + "," + fuelEconomyOne + "," + fuelEconomyTwo + ","
                                 + fuelRange + "," + Data.getLeanAngle() + "," + Data.getGForce() + ","
                                 + bearing + "," + Data.getBarometricPressure() + "," + Data.getRPM() + ","
-                                + Data.getLeanAngleBike() + "," + rearWheelSpeed + "\n");
+                                + Data.getLeanAngleBike() + "," + rearWheelSpeed + "," + Data.getCellularSignal() + ","
+                                + Data.getLocalBattery()
+                                + "\n");
                         outFile.flush();
                     } else {
                         initializeFile();
@@ -470,8 +472,10 @@ public class LoggingService extends Service {
                         MyApplication.getContext().getResources().getString(R.string.bearing_header) + "(" + bearingUnit + ")" + "," +
                         MyApplication.getContext().getResources().getString(R.string.barometricpressure_header) + "(mBar)" + "," +
                         MyApplication.getContext().getResources().getString(R.string.rpm_header) + "," +
-                        MyApplication.getContext().getResources().getString(R.string.leanangle_bike_header) +
-                        MyApplication.getContext().getResources().getString(R.string.rearwheel_speed_header) +
+                        MyApplication.getContext().getResources().getString(R.string.leanangle_bike_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.rearwheel_speed_header) + "," +
+                        MyApplication.getContext().getResources().getString(R.string.cellular_signal_header) + "(dBm)" + "," +
+                        MyApplication.getContext().getResources().getString(R.string.local_battery_header) + "(%)" +
                         "\n";
 
                 File logFile = new File( root, filename + curdatetime + ".csv" );

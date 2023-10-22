@@ -33,8 +33,10 @@ import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
@@ -42,12 +44,16 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
+import android.os.BatteryManager;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.telephony.PhoneStateListener;
+import android.telephony.SignalStrength;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -118,6 +124,9 @@ public class BluetoothLeService extends Service {
     public static boolean fuelAlertSent = false;
 
     private static SharedPreferences sharedPrefs;
+
+    private TelephonyManager telephonyManager;
+    private MyPhoneStateListener phoneStateListener;
 
     private SensorManager sensorManager;
     private Sensor accelerometer;
@@ -259,6 +268,17 @@ public class BluetoothLeService extends Service {
         }
     };
 
+    // Define your custom PhoneStateListener to handle signal strength changes
+    private class MyPhoneStateListener extends PhoneStateListener {
+        @Override
+        public void onSignalStrengthsChanged(SignalStrength signalStrength) {
+            super.onSignalStrengthsChanged(signalStrength);
+            // Get the signal strength values in dBm (decibels-milliwatts)
+            int gsmSignalStrength = signalStrength.getGsmSignalStrength();
+            Data.setCellularSignal(gsmSignalStrength);
+        }
+    }
+
     @Override
     public void onCreate() {
         Log.d(TAG, "onCreate");
@@ -269,6 +289,19 @@ public class BluetoothLeService extends Service {
         }
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
+
+        // Get the TelephonyManager instance
+        telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+
+        // Create a new PhoneStateListener
+        phoneStateListener = new MyPhoneStateListener();
+
+        // Register the PhoneStateListener to listen for signal strength changes
+        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+
+        // Register the BroadcastReceiver to listen for battery status changes
+        IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        registerReceiver(batteryReceiver, filter);
 
         // Sensor Stuff
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -389,9 +422,22 @@ public class BluetoothLeService extends Service {
         sensorManager.unregisterListener(sensorEventListener, barometer);
         sensorManager.unregisterListener(sensorEventListener, acceleration);
         sensorManager.unregisterListener(sensorEventListener, lightSensor);
-
+        unregisterReceiver(batteryReceiver);
+        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
         stopLocationUpdates();
     }
+
+    private BroadcastReceiver batteryReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+            int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+            if (level != -1 && scale != -1) {
+                double batteryPct = (level / scale) * 100;
+                Data.setLocalBattery(batteryPct);
+            }
+        }
+    };
 
     // Listens for sensor events
     private final SensorEventListener sensorEventListener

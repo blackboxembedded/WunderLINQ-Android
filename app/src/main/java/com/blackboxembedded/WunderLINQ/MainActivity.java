@@ -1926,6 +1926,35 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 }
                 icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_tachometer_alt);
                 break;
+            case 32:
+                //Cellular Signal
+                label = getString(R.string.cellular_signal_header) + " (dBm)";
+                if(Data.getCellularSignal() != null){
+                    value = String.valueOf(Data.getCellularSignal());
+                }
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.signal);
+                break;
+            case 33:
+                //Local Device Battery
+                label = getString(R.string.local_battery_header) + " (%)";
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.battery_empty);
+                if(Data.getLocalBattery() != null){
+                    double battery = Data.getLocalBattery();
+                    value = String.valueOf(Math.round(battery));
+                    if(battery > 95){
+                        icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.battery_full);
+                    } else if(battery > 75){
+                        icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.battery_three_quarters);
+                    } else if(battery > 50 ){
+                        icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.battery_half);
+                    } else if(battery > 25){
+                        icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.battery_quarter);
+                    } else if(battery > 0){
+                        icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.battery_empty);
+                        icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
+                    }
+                }
+                break;
             default:
 
                 break;
