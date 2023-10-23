@@ -65,6 +65,7 @@ public class PermissionsActivity extends AppCompatActivity {
     public static final int PERMISSION_OVERLAY = 8;
     public static final int PERMISSION_USAGESTATS = 9;
     public static final int PERMISSION_BLUETOOTH_CONNECT = 11;
+    public static final int PERMISSION_READ_PHONE_STATE = 12;
 
     private ListView permissionsList;
     List<PermissionRecord> listValues;
@@ -139,6 +140,11 @@ public class PermissionsActivity extends AppCompatActivity {
                     case PERMISSION_BLUETOOTH_CONNECT:
                         if (ActivityCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                             ActivityCompat.requestPermissions(PermissionsActivity.this,new String[]{Manifest.permission.BLUETOOTH_CONNECT}, PERMISSION_BLUETOOTH_CONNECT);
+                        }
+                        break;
+                    case PERMISSION_READ_PHONE_STATE:
+                        if (ActivityCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(PermissionsActivity.this,new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_READ_PHONE_STATE);
                         }
                         break;
                     default:
@@ -272,6 +278,13 @@ public class PermissionsActivity extends AppCompatActivity {
             btconnectPermission = true;
         }
         listValues.add(new PermissionRecord(PERMISSION_BLUETOOTH_CONNECT, getString(R.string.permission_btconnect_label), btconnectPermission));
+
+        //READ_PHONE_STATE
+        boolean phoneStatePermission = false;
+        if (ActivityCompat.checkSelfPermission(this,Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+            phoneStatePermission = true;
+        }
+        listValues.add(new PermissionRecord(PERMISSION_READ_PHONE_STATE, getString(R.string.permission_phonestate_label), phoneStatePermission));
     }
 
     @Override
@@ -370,6 +383,23 @@ public class PermissionsActivity extends AppCompatActivity {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle(getString(R.string.negative_alert_title));
                     builder.setMessage(getString(R.string.negative_btconnect_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
+                }
+                break;
+            }
+            case PERMISSION_READ_PHONE_STATE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "Read Phone State permission granted");
+                } else {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.negative_alert_title));
+                    builder.setMessage(getString(R.string.negative_phone_state_alert_body));
                     builder.setPositiveButton(android.R.string.ok, null);
                     builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override

@@ -58,6 +58,7 @@ public class FirstRunActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_READ_CONTACTS = 103;
     private static final int PERMISSION_REQUEST_RECORD_AUDIO = 105;
     private static final int PERMISSION_REQUEST_BLUETOOTH_CONNECT = 106;
+    private static final int PERMISSION_REQUEST_READ_PHONE_STATE = 107;
 
     private int step = 0;
     private TextView tvMessage;
@@ -205,7 +206,7 @@ public class FirstRunActivity extends AppCompatActivity {
                     break;
                 case 6:
                     // Read Contacts permission
-                    tvMessage.setText(getString(R.string.overlay_alert_body));
+                    tvMessage.setText(getString(R.string.phone_state_alert_body));
                     step = step + 1;
                     if (v.getId() == R.id.buttonOK) {
                         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
@@ -216,6 +217,18 @@ public class FirstRunActivity extends AppCompatActivity {
                     }
                     break;
                 case 7:
+                    // Phone Stats
+                    tvMessage.setText(getString(R.string.overlay_alert_body));
+                    step = step + 1;
+                    if (v.getId() == R.id.buttonOK) {
+                        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(FirstRunActivity.this, new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_READ_PHONE_STATE);
+                        } else {
+                            buttonOk.performClick();
+                        }
+                    }
+                    break;
+                case 8:
                     // Overlay permission
                     tvMessage.setText(getString(R.string.notification_alert_body));
                     step = step + 1;
@@ -231,7 +244,7 @@ public class FirstRunActivity extends AppCompatActivity {
                         }
                     }
                     break;
-                case 8:
+                case 9:
                     // Read notification permission
                     tvMessage.setText(getString(R.string.usagestats_alert_body));
                     step = step + 1;
@@ -245,7 +258,7 @@ public class FirstRunActivity extends AppCompatActivity {
                         }
                     }
                     break;
-                case 9:
+                case 10:
                     //Usage stats permission
                     tvMessage.setText(getString(R.string.firstrun_end));
                     step = step + 1;
@@ -259,7 +272,7 @@ public class FirstRunActivity extends AppCompatActivity {
                         }
                     }
                     break;
-                case 10:
+                case 11:
                     SharedPreferences.Editor editor = sharedPrefs.edit();
                     editor.putBoolean("FIRST_LAUNCH1", false);
                     editor.apply();
@@ -370,6 +383,23 @@ public class FirstRunActivity extends AppCompatActivity {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle(getString(R.string.negative_alert_title));
                     builder.setMessage(getString(R.string.negative_btconnect_alert_body));
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                    builder.show();
+                }
+                break;
+            }
+            case PERMISSION_REQUEST_READ_PHONE_STATE: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "READ_PHONE_STATE permission granted");
+                } else {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(getString(R.string.negative_alert_title));
+                    builder.setMessage(getString(R.string.negative_phone_state_alert_body));
                     builder.setPositiveButton(android.R.string.ok, null);
                     builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override

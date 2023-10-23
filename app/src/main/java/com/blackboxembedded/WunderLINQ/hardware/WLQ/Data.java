@@ -46,6 +46,24 @@ public class Data {
         Data.lastLocation = location;
     }
 
+    // Mobile device battery
+    private static Double localBattery;
+    public static Double getLocalBattery() {
+        return localBattery;
+    }
+    public static void setLocalBattery(Double localBattery){
+        Data.localBattery = localBattery;
+    }
+
+    // Mobile device cell signal (dBm)
+    private static Integer cellularSignal;
+    public static Integer getCellularSignal() {
+        return cellularSignal;
+    }
+    public static void setCellularSignal(Integer cellularSignal){
+        Data.cellularSignal = cellularSignal;
+    }
+
     // VIN
     private static String vin;
     public static String getVin() {

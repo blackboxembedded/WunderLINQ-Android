@@ -29,6 +29,8 @@
     <string name="btconnect_alert_body">The WunderLINQ app needs the ability to connect to the WunderLINQ Hardware.</string>
     <string name="write_alert_title">WunderLINQ needs write permission</string>
     <string name="write_alert_body">The WunderLINQ app needs access to write files for track logging and photos.</string>
+    <string name="phone_state_alert_title">WunderLINQ needs phone state permission</string>
+    <string name="phone_state_alert_body">The WunderLINQ app needs phone state permissions for the cellular signal strength data point.</string>
     <string name="overlay_alert_title">WunderLINQ needs overlay permission</string>
     <string name="overlay_alert_body">The WunderLINQ app needs overlay permissions for background video recording.</string>
     <string name="notification_alert_title">WunderLINQ needs notification access</string>
@@ -42,6 +44,7 @@
     <string name="negative_call_alert_body">Since phone access has not been granted, this app will not be able to place phone calls.</string>
     <string name="negative_microphone_alert_body">Since microphone access has not been granted, this app will not be able to record videos.</string>
     <string name="negative_record_audio_alert_body">Since audio recording access has not been granted, this app will not be able to record videos.</string>
+    <string name="negative_phone_state_alert_body">Since phone state access has not been granted, this app will not be able to display your signal strength.</string>
     <string name="usagestats_alert_title">WunderLINQ needs usage stat access</string>
     <string name="usagestats_alert_body">The WunderLINQ app needs access to usage stats for auto launch of the app when the WunderLINQ device is connected.</string>
     <!-- MainActivity -->
@@ -472,6 +475,8 @@
     <string name="rpm_header">RPM</string>
     <string name="leanangle_bike_header">Lean Angle</string>
     <string name="rearwheel_speed_header">Rear Wheel Speed</string>
+    <string name="cellular_signal_header">Cell Signal</string>
+    <string name="local_battery_header">Device Battery</string>
     <!-- VideoRecService -->
     <string name="title_video_notification">WunderLINQ recording video</string>
     <!-- WeatherMapActivity -->
@@ -572,6 +577,8 @@
         <item name="30">@string/rpm_header</item>
         <item name="31">@string/leanangle_bike_header</item>
         <item name="32">@string/rearwheel_speed_header</item>
+        <item name="33">@string/cellular_signal_header</item>
+        <item name="34">@string/local_battery_header</item>
     </string-array>
     <string-array name="dataPoints_arrayValues" translatable="false">
         <item name="1">0</item>
@@ -606,6 +613,8 @@
         <item name="30">29</item>
         <item name="31">30</item>
         <item name="32">31</item>
+        <item name="33">32</item>
+        <item name="34">33</item>
     </string-array>
     <string name="pref_tasks_settings_title">Quick Task Customization</string>
     <string name="pref_tasks_settings_summary">Customize which tasks to display and in which order</string>
@@ -966,6 +975,7 @@
     <string name="permission_usagestats_label">Usage Stats</string>
     <string name="permission_accessbility_label">Accessibility Service</string>
     <string name="permission_btconnect_label">Connect to WunderLINQ hardware</string>
+    <string name="permission_phonestate_label">Read Phone State</string>
 
     <string name="share">Share</string>
     <string name="share_gpx">Share GPX</string>
