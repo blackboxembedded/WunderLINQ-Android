@@ -51,9 +51,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.telephony.CellInfoGsm;
+import android.telephony.CellInfoLte;
+import android.telephony.CellInfoNr;
+import android.telephony.CellSignalStrengthGsm;
+import android.telephony.CellSignalStrengthLte;
+import android.telephony.CellSignalStrengthNr;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
+import android.telephony.TelephonyCallback;
+import android.telephony.CellInfo;
+
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -126,7 +135,6 @@ public class BluetoothLeService extends Service {
     private static SharedPreferences sharedPrefs;
 
     private TelephonyManager telephonyManager;
-    private MyPhoneStateListener phoneStateListener;
 
     private SensorManager sensorManager;
     private Sensor accelerometer;
@@ -268,16 +276,34 @@ public class BluetoothLeService extends Service {
         }
     };
 
-    // Define your custom PhoneStateListener to handle signal strength changes
-    private class MyPhoneStateListener extends PhoneStateListener {
+    private final PhoneStateListener signalListener = new PhoneStateListener() {
         @Override
-        public void onSignalStrengthsChanged(SignalStrength signalStrength) {
-            super.onSignalStrengthsChanged(signalStrength);
-            // Get the signal strength values in dBm (decibels-milliwatts)
-            int gsmSignalStrength = signalStrength.getGsmSignalStrength();
-            Data.setCellularSignal(gsmSignalStrength);
+        public void onCellInfoChanged(List<CellInfo> cellInfoList) {
+            if (ActivityCompat.checkSelfPermission(BluetoothLeService.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(BluetoothLeService.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            super.onCellInfoChanged(cellInfoList);
+            if (cellInfoList != null) {
+                for (CellInfo cellInfo : cellInfoList) {
+                    if (cellInfo instanceof CellInfoGsm) {
+                        CellSignalStrengthGsm signalStrengthGsm = ((CellInfoGsm) cellInfo).getCellSignalStrength();
+                        int dBm = signalStrengthGsm.getDbm();
+                        Data.setCellularSignal(dBm);
+                    } else if (cellInfo instanceof CellInfoLte) {
+                        CellSignalStrengthLte signalStrengthLte = ((CellInfoLte) cellInfo).getCellSignalStrength();
+                        int dBm = signalStrengthLte.getDbm();
+                        Data.setCellularSignal(dBm);
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        if (cellInfo instanceof CellInfoNr) {
+                            CellSignalStrengthNr signalStrengthNr = (CellSignalStrengthNr) ((CellInfoNr) cellInfo).getCellSignalStrength();
+                            int dBm = signalStrengthNr.getDbm();
+                            Data.setCellularSignal(dBm);
+                        }
+                    }
+                }
+            }
         }
-    }
+    };
 
     @Override
     public void onCreate() {
@@ -291,13 +317,14 @@ public class BluetoothLeService extends Service {
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
 
         // Get the TelephonyManager instance
-        telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-
-        // Create a new PhoneStateListener
-        phoneStateListener = new MyPhoneStateListener();
-
-        // Register the PhoneStateListener to listen for signal strength changes
-        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            Log.d(TAG,"No permission for telephonyManager");
+        } else {
+            telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            if (telephonyManager != null) {
+                telephonyManager.listen(signalListener, PhoneStateListener.LISTEN_CELL_INFO);
+            }
+        }
 
         // Register the BroadcastReceiver to listen for battery status changes
         IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
@@ -423,7 +450,9 @@ public class BluetoothLeService extends Service {
         sensorManager.unregisterListener(sensorEventListener, acceleration);
         sensorManager.unregisterListener(sensorEventListener, lightSensor);
         unregisterReceiver(batteryReceiver);
-        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
+        if (telephonyManager != null) {
+            telephonyManager.listen(signalListener, PhoneStateListener.LISTEN_NONE);
+        }
         stopLocationUpdates();
     }
 
@@ -433,8 +462,8 @@ public class BluetoothLeService extends Service {
             int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
             int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
             if (level != -1 && scale != -1) {
-                double batteryPct = (level / scale) * 100;
-                Data.setLocalBattery(batteryPct);
+                float batteryPct = level * 100 / (float)scale;
+                Data.setLocalBattery((double)batteryPct);
             }
         }
     };

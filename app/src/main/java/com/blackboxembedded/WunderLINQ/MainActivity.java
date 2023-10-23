@@ -1929,10 +1929,22 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             case 32:
                 //Cellular Signal
                 label = getString(R.string.cellular_signal_header) + " (dBm)";
+                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.signal_bar_0);
                 if(Data.getCellularSignal() != null){
-                    value = String.valueOf(Data.getCellularSignal());
+                    int signal = Data.getCellularSignal();
+                    value = String.valueOf(signal);
+                    if (signal > -79) {
+                        icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.signal_bar_4);
+                    } else if (signal > -89 && signal < -80) {
+                        icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.signal_bar_3);
+                    } else if (signal > -99 && signal < -90) {
+                        icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.signal_bar_2);
+                    } else if (signal > -109 && signal < -100) {
+                        icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.signal_bar_1);
+                    } else if (signal < -110) {
+                        icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.signal_bar_0);
+                    }
                 }
-                icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.signal);
                 break;
             case 33:
                 //Local Device Battery
@@ -1943,13 +1955,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     value = String.valueOf(Math.round(battery));
                     if(battery > 95){
                         icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.battery_full);
-                    } else if(battery > 75){
+                    } else if(battery > 75 && battery < 95){
                         icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.battery_three_quarters);
-                    } else if(battery > 50 ){
+                    } else if(battery > 50 && battery < 75){
                         icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.battery_half);
-                    } else if(battery > 25){
+                    } else if(battery > 25 && battery < 50){
                         icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.battery_quarter);
-                    } else if(battery > 0){
+                    } else if(battery > 0 && battery < 25){
                         icon = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.battery_empty);
                         icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
                     }
