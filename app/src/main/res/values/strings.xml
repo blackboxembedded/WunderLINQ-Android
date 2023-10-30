@@ -438,6 +438,7 @@
     <string name="alert_label_fuel">Route to the nearest fuel station?"</string>
     <string name="alert_title_photopreview">Photo Preview</string>
     <!-- LoggingService -->
+    <string name="gps_nofix">No Fix</string>
     <string name="title_logging_notification">WunderLINQ Trip Recording Active</string>
     <string name="btn_logging_notification_stop">Stop Recording</string>
     <string name="time_header">Time</string>
