@@ -8,6 +8,7 @@
     android:layout_height="match_parent"
     android:background="?attr/backgroundColor"
     android:focusable="false"
+    android:listSelector="@android:color/transparent"
     tools:context=".TaskList.TaskActivity">
     <com.yarolegovich.discretescrollview.DiscreteScrollView
         android:id="@+id/main_task_view"

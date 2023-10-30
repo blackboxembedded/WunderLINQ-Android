@@ -223,7 +223,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                             }
                         }
                         if (lineNumber > 1) {
-                            if (!nextLine[6].equals("null")){
+                            if (!nextLine[6].equals("null") && !nextLine[6].equals("")){
                                 engineTemps.add(Double.parseDouble(nextLine[6]));
                                 if (maxEngineTemp == null || maxEngineTemp < Double.parseDouble(nextLine[6])){
                                     maxEngineTemp = Double.parseDouble(nextLine[6]);
@@ -232,7 +232,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                                     minEngineTemp = Double.parseDouble(nextLine[6]);
                                 }
                             }
-                            if (!nextLine[7].equals("null")){
+                            if (!nextLine[7].equals("null") && !nextLine[7].equals("")){
                                 ambientTemps.add(Double.parseDouble(nextLine[7]));
                                 if (maxAmbientTemp == null || maxAmbientTemp < Double.parseDouble(nextLine[7])){
                                     maxAmbientTemp = Double.parseDouble(nextLine[7]);
@@ -241,7 +241,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                                     minAmbientTemp = Double.parseDouble(nextLine[7]);
                                 }
                             }
-                            if (!nextLine[10].equals("null")){
+                            if (!nextLine[10].equals("null") && !nextLine[10].equals("")){
                                 if (endOdometer == null || endOdometer < Double.parseDouble(nextLine[10])){
                                     endOdometer = Double.parseDouble(nextLine[10]);
                                 }
@@ -249,28 +249,28 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                                     startOdometer = Double.parseDouble(nextLine[10]);
                                 }
                             }
-                            if (!nextLine[13].equals("null")){
+                            if (!nextLine[13].equals("null") && !nextLine[13].equals("")){
                                 if (endFrontBrakeCnt == null || endFrontBrakeCnt < Double.parseDouble(nextLine[13])){
                                     endFrontBrakeCnt = Integer.parseInt(nextLine[13]);
                                 }
                             }
-                            if (!nextLine[14].equals("null")){
+                            if (!nextLine[14].equals("null") && !nextLine[14].equals("")){
                                 if (endRearBrakeCnt == null || endRearBrakeCnt < Double.parseDouble(nextLine[14])){
                                     endRearBrakeCnt = Integer.parseInt(nextLine[14]);
                                 }
                             }
-                            if (!nextLine[15].equals("null")){
+                            if (!nextLine[15].equals("null") && !nextLine[15].equals("")){
                                 if (endShiftCnt == null || endShiftCnt < Double.parseDouble(nextLine[15])){
                                     endShiftCnt = Integer.parseInt(nextLine[15]);
                                 }
                             }
-                            if (!nextLine[32].equals("null")){
+                            if (!nextLine[32].equals("null") && !nextLine[32].equals("")){
                                 if (maxLean == null) {
                                     maxLean = Math.abs(Double.parseDouble(nextLine[32]));
                                 } else if (maxLean < Math.abs(Double.parseDouble(nextLine[32]))){
                                     maxLean = Math.abs(Double.parseDouble(nextLine[32]));
                                 }
-                            } else if (!nextLine[27].equals("null")){
+                            } else if (!nextLine[27].equals("null") && !nextLine[27].equals("")){
                                 if (maxLean == null) {
                                     maxLean = Math.abs(Double.parseDouble(nextLine[27]));
                                 } else if (maxLean < Math.abs(Double.parseDouble(nextLine[27]))){
