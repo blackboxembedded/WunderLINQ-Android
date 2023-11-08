@@ -8,6 +8,7 @@
     <!-- FirstRunActivity -->
     <string name="firstrun_start">The WunderLINQ requires a lot of permissions to enable all the cool features the app provides.  On the next few screens we will explain the need for each permission request.
         You will only be presented with these screens this one time.  If you need to enable certain permissions after, you will need to go into Android Settings and enable them.</string>
+    <string name="firstrun_navapp_body">Select your preferred Navigation App. Level of WunderLINQ support varies, for more details see the following page: https://blackboxembedded.com/pages/integrations</string>
     <string name="firstrun_end">Thank you for purchasing the WunderLINQ!  Ride Safe.</string>
     <string name="firstrun_button_ok">Agree</string>
     <string name="firstrun_button_skip">Disagree</string>
