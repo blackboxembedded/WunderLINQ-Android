@@ -28,6 +28,7 @@ import android.content.pm.ResolveInfo;
 import android.location.Location;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.util.List;
 
@@ -74,7 +75,7 @@ public class NavAppHelper {
                 break;
             case "7": //Mapfactor Navigator
                 navIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                navIntent.setPackage("com.mapfactor.navigator");
+                navIntent.setPackage("com.mapfactor.navigator_pro_car");
                 url = "http://maps.google.com/maps";
                 navIntent.setData(Uri.parse(url));
                 break;
@@ -189,8 +190,8 @@ public class NavAppHelper {
                 OsmAndHelper osmAndHelper = new OsmAndHelper(activity, 1001, null);
                 osmAndHelper.navigate("Start",start.getLatitude(),start.getLongitude(),"Destination",end.getLatitude(),end.getLongitude(),"motorcycle", true, true);
                 break;
-            case "7": //Mapfactor Navigator
-                homeNavIntent.setPackage("com.mapfactor.navigator");
+            case "7": //Mapfactor Navigator Pro
+                homeNavIntent.setPackage("com.mapfactor.navigator_pro_car");
                 navUrl = "http://maps.google.com/maps?f=d&daddr=@"  + end.getLatitude() + "," + end.getLongitude() + "&navigate=yes";
                 homeNavIntent.setData(Uri.parse(navUrl));
                 break;
@@ -301,7 +302,7 @@ public class NavAppHelper {
                 osmAndHelper.showLocation(waypoint.getLatitude(),waypoint.getLongitude());
                 break;
             case "7": //Mapfactor Navigator
-                navIntent.setPackage("com.mapfactor.navigator");
+                navIntent.setPackage("com.mapfactor.navigator_pro_car");
                 navIntent.setData(Uri.parse(navUrl));
                 break;
             case "8": //Sygic
