@@ -687,7 +687,8 @@
     <string name="pref_nav_app_title">Navigation App</string>
     <string name="nav_app_default">Android Default</string>
     <string name="nav_app_google">Google Maps</string>
-    <string name="nav_app_locus">Locus Maps</string>
+    <string name="nav_app_locus">Locus Map 4</string>
+    <string name="nav_app_locus_classic">Locus Map 3 Classic</string>
     <string name="nav_app_waze">Waze</string>
     <string name="nav_app_mapsme">Maps.me</string>
     <string name="nav_app_osmand">OsmAnd</string>
@@ -717,8 +718,6 @@
         <item name="7">@string/nav_app_mapfactor</item>
         <item name="8">@string/nav_app_sygic</item>
         <item name="9">@string/nav_app_kurviger3</item>
-        <item name="10">@string/nav_app_kurviger</item>
-        <item name="11">@string/nav_app_kurviger1</item>
         <item name="12">@string/nav_app_tomtomgo</item>
         <item name="13">@string/nav_app_bmwconnectedride</item>
         <item name="14">@string/nav_app_calimoto</item>
@@ -730,6 +729,7 @@
         <item name="20">@string/nav_app_oruxmaps</item>
         <item name="21">@string/nav_app_gurumaps</item>
         <item name="22">@string/nav_app_myrouteapp</item>
+        <item name="23">@string/nav_app_locus_classic</item>
     </string-array>
     <string-array name="nav_apps_arrayValues" translatable="false">
         <item name="1">1</item>
@@ -741,8 +741,6 @@
         <item name="7">7</item>
         <item name="8">8</item>
         <item name="9">20</item>
-        <item name="10">9</item>
-        <item name="11">13</item>
         <item name="12">10</item>
         <item name="13">11</item>
         <item name="14">12</item>
@@ -754,6 +752,7 @@
         <item name="20">19</item>
         <item name="21">21</item>
         <item name="22">22</item>
+        <item name="23">23</item>
     </string-array>
     <string name="pref_roadbook_app_title">Roadbook App</string>
     <string name="roadbook_app_rabbitrally">Rabbit Rally</string>
