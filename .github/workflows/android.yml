@@ -21,7 +21,7 @@ jobs:
         cache: gradle
 
     - name: Get secrets.xml from Secrets
-      run: echo "${{secrets.SECRETS_XML}}" > $GITHUB_WORKSPACE/app/src/main/res/values/secrets.xml
+      run: echo "${{secrets.SECRETS_PROPERTIES}}" > $GITHUB_WORKSPACE/secrets.properties
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
