@@ -21,7 +21,7 @@ jobs:
         cache: gradle
 
     - name: Get local.properties from secrets
-      run: echo "${{secrets.SECRETS_XML }}" > $GITHUB_WORKSPACE/WunderLINQ-Android/app/src/main/res/values/secrets.xml
+      run: echo "${{secrets.SECRETS_XML }}" > $GITHUB_WORKSPACE/app/src/main/res/values/secrets.xml
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
