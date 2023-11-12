@@ -8,6 +8,7 @@
     <!-- FirstRunActivity -->
     <string name="firstrun_start">The WunderLINQ requires a lot of permissions to enable all the cool features the app provides.  On the next few screens we will explain the need for each permission request.
         You will only be presented with these screens this one time.  If you need to enable certain permissions after, you will need to go into Android Settings and enable them.</string>
+    <string name="firstrun_navapp_body">Select your preferred Navigation App. Level of WunderLINQ support varies, for more details see the following page: https://blackboxembedded.com/pages/integrations</string>
     <string name="firstrun_end">Thank you for purchasing the WunderLINQ!  Ride Safe.</string>
     <string name="firstrun_button_ok">Agree</string>
     <string name="firstrun_button_skip">Disagree</string>
@@ -438,6 +439,7 @@
     <string name="alert_label_fuel">Route to the nearest fuel station?"</string>
     <string name="alert_title_photopreview">Photo Preview</string>
     <!-- LoggingService -->
+    <string name="gps_nofix">No Fix</string>
     <string name="title_logging_notification">WunderLINQ Trip Recording Active</string>
     <string name="btn_logging_notification_stop">Stop Recording</string>
     <string name="time_header">Time</string>
@@ -685,11 +687,12 @@
     <string name="pref_nav_app_title">Navigation App</string>
     <string name="nav_app_default">Android Default</string>
     <string name="nav_app_google">Google Maps</string>
-    <string name="nav_app_locus">Locus Maps</string>
+    <string name="nav_app_locus">Locus Map 4</string>
+    <string name="nav_app_locus_classic">Locus Map 3 Classic</string>
     <string name="nav_app_waze">Waze</string>
     <string name="nav_app_mapsme">Maps.me</string>
     <string name="nav_app_osmand">OsmAnd</string>
-    <string name="nav_app_mapfactor">Mapfactor Navigator</string>
+    <string name="nav_app_mapfactor">Mapfactor Navigator Pro</string>
     <string name="nav_app_sygic">Sygic</string>
     <string name="nav_app_kurviger">Kurviger 2</string>
     <string name="nav_app_kurviger1">Kurviger 1 Pro</string>
@@ -715,8 +718,6 @@
         <item name="7">@string/nav_app_mapfactor</item>
         <item name="8">@string/nav_app_sygic</item>
         <item name="9">@string/nav_app_kurviger3</item>
-        <item name="10">@string/nav_app_kurviger</item>
-        <item name="11">@string/nav_app_kurviger1</item>
         <item name="12">@string/nav_app_tomtomgo</item>
         <item name="13">@string/nav_app_bmwconnectedride</item>
         <item name="14">@string/nav_app_calimoto</item>
@@ -728,6 +729,7 @@
         <item name="20">@string/nav_app_oruxmaps</item>
         <item name="21">@string/nav_app_gurumaps</item>
         <item name="22">@string/nav_app_myrouteapp</item>
+        <item name="23">@string/nav_app_locus_classic</item>
     </string-array>
     <string-array name="nav_apps_arrayValues" translatable="false">
         <item name="1">1</item>
@@ -739,8 +741,6 @@
         <item name="7">7</item>
         <item name="8">8</item>
         <item name="9">20</item>
-        <item name="10">9</item>
-        <item name="11">13</item>
         <item name="12">10</item>
         <item name="13">11</item>
         <item name="14">12</item>
@@ -752,6 +752,7 @@
         <item name="20">19</item>
         <item name="21">21</item>
         <item name="22">22</item>
+        <item name="23">23</item>
     </string-array>
     <string name="pref_roadbook_app_title">Roadbook App</string>
     <string name="roadbook_app_rabbitrally">Rabbit Rally</string>

@@ -28,6 +28,7 @@ import android.content.pm.ResolveInfo;
 import android.location.Location;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.util.List;
 
@@ -53,11 +54,8 @@ public class NavAppHelper {
                 url = "google.navigation://?free=1&mode=d&entry=fnls";
                 navIntent.setData(Uri.parse(url));
                 break;
-            case "3": //Locus Maps
+            case "3": //Locus Map 3 Classic
                 navIntent = activity.getPackageManager().getLaunchIntentForPackage("menion.android.locus.pro");
-                if(!isCallable(activity, navIntent)){
-                    navIntent = activity.getPackageManager().getLaunchIntentForPackage("menion.android.locus");
-                }
                 break;
             case "4": //Waze
                 navIntent = new Intent(android.content.Intent.ACTION_VIEW);
@@ -77,7 +75,7 @@ public class NavAppHelper {
                 break;
             case "7": //Mapfactor Navigator
                 navIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                navIntent.setPackage("com.mapfactor.navigator");
+                navIntent.setPackage("com.mapfactor.navigator_pro_car");
                 url = "http://maps.google.com/maps";
                 navIntent.setData(Uri.parse(url));
                 break;
@@ -87,7 +85,7 @@ public class NavAppHelper {
                 navIntent.setData(Uri.parse(url));
                 break;
             case "9": //Kurviger 2
-                navIntent = activity.getPackageManager().getLaunchIntentForPackage("gr.talent.kurviger");
+                // App no longer available
                 break;
             case "10": //TomTom GO
                 navIntent = activity.getPackageManager().getLaunchIntentForPackage("com.tomtom.gplay.navapp");
@@ -105,7 +103,7 @@ public class NavAppHelper {
                 }
                 break;
             case "13": //Kurviger 1 Pro
-                navIntent = activity.getPackageManager().getLaunchIntentForPackage("gr.talent.kurviger.pro");
+                // App no longer available
                 break;
             case "14": //CoPilot GPS
                 navIntent = new Intent(android.content.Intent.ACTION_VIEW);
@@ -146,6 +144,9 @@ public class NavAppHelper {
                 url = "mra-mobile://x-callback-url/?x-success=wunderlinq://quicktasks&x-source=WunderLINQ";
                 navIntent.setData(Uri.parse(url));
                 break;
+            case "23": //Locus Map 4
+                navIntent = activity.getPackageManager().getLaunchIntentForPackage("menion.android.locus");
+                break;
         }
         try {
             if (navIntent != null) {
@@ -173,12 +174,8 @@ public class NavAppHelper {
                 homeNavIntent.setPackage("com.google.android.apps.maps");
                 homeNavIntent.setData(Uri.parse(navUrl));
                 break;
-            case "3": //Locus Maps
+            case "3": //Locus Map 3 Classic
                 homeNavIntent.setPackage("menion.android.locus.pro");
-                homeNavIntent.setData(Uri.parse(navUrl));
-                if(!isCallable(activity, homeNavIntent)){
-                    homeNavIntent.setPackage("menion.android.locus");
-                }
                 homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "4": //Waze
@@ -193,8 +190,8 @@ public class NavAppHelper {
                 OsmAndHelper osmAndHelper = new OsmAndHelper(activity, 1001, null);
                 osmAndHelper.navigate("Start",start.getLatitude(),start.getLongitude(),"Destination",end.getLatitude(),end.getLongitude(),"motorcycle", true, true);
                 break;
-            case "7": //Mapfactor Navigator
-                homeNavIntent.setPackage("com.mapfactor.navigator");
+            case "7": //Mapfactor Navigator Pro
+                homeNavIntent.setPackage("com.mapfactor.navigator_pro_car");
                 navUrl = "http://maps.google.com/maps?f=d&daddr=@"  + end.getLatitude() + "," + end.getLongitude() + "&navigate=yes";
                 homeNavIntent.setData(Uri.parse(navUrl));
                 break;
@@ -203,10 +200,7 @@ public class NavAppHelper {
                 homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "9": //Kurviger 2
-                homeNavIntent.setPackage("gr.talent.kurviger");
-                navUrl = "https://kurviger.de/en?point="  + end.getLatitude() + "," + end.getLongitude() + "&vehicle=motorycycle"
-                        + "weighting=fastest";
-                homeNavIntent.setData(Uri.parse(navUrl));
+                // App no longer available
                 break;
             case "10": //TomTom GO
                 homeNavIntent.setPackage("com.tomtom.gplay.navapp");
@@ -214,10 +208,7 @@ public class NavAppHelper {
                 homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "13": //Kurviger 1 Pro
-                homeNavIntent.setPackage("gr.talent.kurviger.pro");
-                navUrl = "https://kurviger.de/en?point="  + end.getLatitude() + "," + end.getLongitude() + "&vehicle=motorycycle"
-                        + "weighting=fastest";
-                homeNavIntent.setData(Uri.parse(navUrl));
+                // App no longer available
                 break;
             case "14": //CoPilot GPS
                 navUrl = "copilot://options?type=STOPS&stop=Start||||||" + start.getLatitude() + "|" + start.getLongitude() + "&stop=Stop||||||" + end.getLatitude() + "|" + end.getLongitude()
@@ -262,6 +253,10 @@ public class NavAppHelper {
                 navUrl = "mra-mobile://x-callback-url/view?x-success=wunderlinq://quicktasks&x-source=WunderLINQ&geo=" + end.getLatitude() + "," + end.getLongitude();
                 homeNavIntent.setData(Uri.parse(navUrl));
                 break;
+            case "23": //Locus Map 4
+                homeNavIntent.setPackage("menion.android.locus");
+                homeNavIntent.setData(Uri.parse(navUrl));
+                break;
         }
         if (!navApp.equals("6")) { // If NOT OsmAnd
             try {
@@ -290,12 +285,8 @@ public class NavAppHelper {
                 navIntent.setPackage("com.google.android.apps.maps");
                 navIntent.setData(Uri.parse(navUrl));
                 break;
-            case "3": //Locus Maps
+            case "3": //Locus Map 3 Classic
                 navIntent.setPackage("menion.android.locus.pro");
-                navIntent.setData(Uri.parse(navUrl));
-                if(!isCallable(activity, navIntent)){
-                    navIntent.setPackage("menion.android.locus");
-                }
                 navIntent.setData(Uri.parse(navUrl));
                 break;
             case "4": //Waze
@@ -311,7 +302,7 @@ public class NavAppHelper {
                 osmAndHelper.showLocation(waypoint.getLatitude(),waypoint.getLongitude());
                 break;
             case "7": //Mapfactor Navigator
-                navIntent.setPackage("com.mapfactor.navigator");
+                navIntent.setPackage("com.mapfactor.navigator_pro_car");
                 navIntent.setData(Uri.parse(navUrl));
                 break;
             case "8": //Sygic
@@ -319,10 +310,7 @@ public class NavAppHelper {
                 navIntent.setData(Uri.parse(navUrl));
                 break;
             case "9": //Kurviger 2
-                navIntent.setPackage("gr.talent.kurviger");
-                navUrl = "https://kurviger.de/en?point="  + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&locale=en" +"&vehicle=motorycycle"
-                        + "weighting=fastest" + "use_miles=true";
-                navIntent.setData(Uri.parse(navUrl));
+                // App no longer available
                 break;
             case "10": //TomTom GO
                 navIntent.setPackage("com.tomtom.gplay.navapp");
@@ -330,10 +318,7 @@ public class NavAppHelper {
                 navIntent.setData(Uri.parse(navUrl));
                 break;
             case "13": //Kurviger 1 Pro
-                navIntent.setPackage("gr.talent.kurviger.pro");
-                navUrl = "https://kurviger.de/en?point="  + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&locale=en" +"&vehicle=motorycycle"
-                        + "weighting=fastest" + "use_miles=true";
-                navIntent.setData(Uri.parse(navUrl));
+                // App no longer available
                 break;
             case "14": //CoPilot GPS
                 navUrl = "copilot://mydestination?type=LOCATION&action=VIEW&lat=" + String.valueOf(waypoint.getLatitude()) + "&long=" + String.valueOf(waypoint.getLongitude())
@@ -376,6 +361,10 @@ public class NavAppHelper {
                 break;
             case "22": //MyRoute-app
                 navUrl = "mra-mobile://x-callback-url/view?x-success=wunderlinq://quicktasks&x-source=WunderLINQ&geo=" + waypoint.getLatitude() + "," + waypoint.getLongitude();
+                navIntent.setData(Uri.parse(navUrl));
+                break;
+            case "23": //Locus Map 4
+                navIntent.setPackage("menion.android.locus");
                 navIntent.setData(Uri.parse(navUrl));
                 break;
         }

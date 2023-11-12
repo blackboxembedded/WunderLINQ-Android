@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="wrap_content" >
     <TableRow>
         <TextView
             android:id="@+id/tv_label"
@@ -14,6 +14,6 @@
             android:textAppearance="@android:style/TextAppearance.Material.Large"
             android:textColor="?attr/taskTextColor"
             android:textStyle="bold"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
     </TableRow>
 </TableLayout>

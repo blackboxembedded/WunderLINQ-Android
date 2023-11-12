@@ -34,6 +34,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -62,6 +63,7 @@ public class FirstRunActivity extends AppCompatActivity {
 
     private int step = 0;
     private TextView tvMessage;
+    private Spinner spSelector;
     private Button buttonOk;
     private Button buttonSkip;
     private SharedPreferences sharedPrefs;
@@ -119,6 +121,7 @@ public class FirstRunActivity extends AppCompatActivity {
         if (sharedPrefs.getBoolean("FIRST_LAUNCH1",true)){
             setContentView(R.layout.activity_first_run);
             tvMessage = findViewById(R.id.tvMessage);
+            spSelector = findViewById(R.id.spSelector);
             buttonOk = findViewById(R.id.buttonOK);
             buttonOk.setOnClickListener(mClickListener);
             buttonSkip = findViewById(R.id.buttonSkip);
@@ -260,19 +263,32 @@ public class FirstRunActivity extends AppCompatActivity {
                     break;
                 case 10:
                     //Usage stats permission
-                    tvMessage.setText(getString(R.string.firstrun_end));
+                    tvMessage.setText(getString(R.string.firstrun_navapp_body));
+                    spSelector.setVisibility(View.VISIBLE);
                     step = step + 1;
                     if (v.getId() == R.id.buttonOK) {
                         AppOpsManager appOps = (AppOpsManager) getApplication().getSystemService(Context.APP_OPS_SERVICE);
                         int mode = appOps.checkOpNoThrow(OPSTR_GET_USAGE_STATS, myUid(), getApplication().getPackageName());
                         if (mode != MODE_ALLOWED) {
                             startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-                        } else {
-                            buttonOk.performClick();
                         }
                     }
                     break;
                 case 11:
+                    //Preferred Nav App Selection
+                    tvMessage.setText(getString(R.string.firstrun_end));
+                    spSelector.setVisibility(View.INVISIBLE);
+                    step = step + 1;
+                    if (v.getId() == R.id.buttonOK) {
+                        String[] navappIDs = getResources().getStringArray(R.array.nav_apps_arrayValues);
+                        String selected = "1";
+                        selected = navappIDs[spSelector.getSelectedItemPosition()];
+                        SharedPreferences.Editor editor = sharedPrefs.edit();
+                        editor.putString("prefNavApp", selected);
+                        editor.apply();
+                    }
+                    break;
+                case 12:
                     SharedPreferences.Editor editor = sharedPrefs.edit();
                     editor.putBoolean("FIRST_LAUNCH1", false);
                     editor.apply();
