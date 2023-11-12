@@ -17,6 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ.comms.BLE;
 
+import android.Manifest;
 import android.app.AppOpsManager;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
@@ -25,6 +26,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -33,6 +35,8 @@ import java.util.List;
 import static android.app.AppOpsManager.MODE_ALLOWED;
 import static android.app.AppOpsManager.OPSTR_GET_USAGE_STATS;
 import static android.os.Process.myUid;
+
+import androidx.core.app.ActivityCompat;
 
 import com.blackboxembedded.WunderLINQ.MyApplication;
 
@@ -45,16 +49,26 @@ public class BTConnectReceiver extends BroadcastReceiver {
 
         SharedPreferences sharedPrefs;
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
-        if (sharedPrefs.getBoolean("prefAutoLaunch",false)) {
+        if (sharedPrefs.getBoolean("prefAutoLaunch", false)) {
 
             if (intent.getAction().equals("android.bluetooth.device.action.ACL_CONNECTED")) {
                 Log.d(TAG, "android.bluetooth.device.action.ACL_CONNECTED!");
                 // Get the BluetoothDevice object from the Intent
                 BluetoothDevice device = intent
                         .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                if (ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
                 if (device.getName() != null) {
                     if (device.getName().contains("WunderLINQ")) {
-                        if(device.getBondState() == BluetoothDevice.BOND_BONDED) {
+                        if (device.getBondState() == BluetoothDevice.BOND_BONDED) {
                             String topPackageName;
                             AppOpsManager appOps = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
                             int mode = appOps.checkOpNoThrow(OPSTR_GET_USAGE_STATS, myUid(), context.getPackageName());
