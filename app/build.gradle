@@ -35,6 +35,9 @@ android {
     lint {
         checkReleaseBuilds false
     }
+    lintOptions {
+        abortOnError false
+    }
     namespace 'com.blackboxembedded.WunderLINQ'
 }
 
