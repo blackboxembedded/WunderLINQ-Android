@@ -39,8 +39,11 @@ jobs:
           java-version: '17'
           cache: 'gradle'
 
-      - name: Get secrets.properties from Secrets
+      - name: Restore secrets.properties from Secrets
         run: echo "${{secrets.SECRETS_PROPERTIES}}" > $GITHUB_WORKSPACE/secrets.properties
+
+      - name: Restore playstore.keystore.jks from Secrets
+        run: echo ${{secrets.KEYSTORE}} | base64 -d > $GITHUB_WORKSPACE/playstore.keystore.jks
       
       - name: Change wrapper permissions
         run: chmod +x ./gradlew
@@ -49,27 +52,57 @@ jobs:
       - name: Run gradle tests
         run: ./gradlew test
 
-      # Run Build Project
-      - name: Build gradle project
-        run: ./gradlew build
+      # Create APK Debug
+      - name: Build apk debug project (APK) - ${{ env.main_project_module }} module
+        run: ./gradlew assembleDebug
 
       # Create APK Release
       - name: Build apk release project (APK) - ${{ env.main_project_module }} module
         run: ./gradlew assemble
 
-      - uses: r0adkll/sign-android-release@v1
-        name: Sign app APK
-        # ID used to access action output
-        id: sign_app
-        with:
-          releaseDirectory: app/build/outputs/apk/release
-          signingKeyBase64: ${{ secrets.KEYSTORE }}
-          alias: ${{ secrets.KEYSTORE_ALIAS }}
-          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
-          keyPassword: ${{ secrets.KEY_PASSWORD }}
+      # Create Bundle AAB Release
+      # Noted for main module build [main_project_module]:bundleRelease
+      - name: Build app bundle release (AAB) - ${{ env.main_project_module }} module
+        run: ./gradlew ${{ env.main_project_module }}:bundleRelease
 
-        # Example use of `signedReleaseFile` output -- not needed
-      - uses: actions/upload-artifact@v2
+      # - name: Build APK(s) Debug from bundle using bundletool
+      #   run: java -jar ".github/lib/bundletool.jar" build-apks --bundle=${{ env.main_project_module }}/build/outputs/bundle/debug/${{ env.artifact_name }}-debug.aab --output=${{ env.main_project_module }}/build/outputs/bundle/debug/${{ env.artifact_name }}-debug.apks --mode=universal
+
+      - name: Set Env Artifact name from generated aab
+        run: |
+          cd ${{ env.main_project_module }}/build/outputs/bundle/release/
+          files=(*)
+          echo "generated_name_aab=${files[0]%.*}" >> $GITHUB_ENV
+
+      # Build APK From Bundle Using Bundletool
+      # Noted For Output [main_project_module]/build/outputs/bundle/release/
+      - name: Build APK(s) Release from bundle using bundletool (Path same with bundle output)
+        run: java -jar ".github/lib/bundletool.jar" build-apks --bundle=${{ env.main_project_module }}/build/outputs/bundle/release/${{ env.generated_name_aab }}.aab --output=${{ env.main_project_module }}/build/outputs/bundle/release/${{ env.generated_name_aab }}.apks --mode=universal --ks="$GITHUB_WORKSPACE/playstore.keystore.jks" --ks-pass=pass:${{ secrets.KEYSTORE_PASSWORD }} --ks-key-alias=${{ secrets.KEYSTORE_ALIAS }} --key-pass=pass: ${{ secrets.KEY_PASSWORD }}
+
+      # Duplicate APK(s) Release to zip file and extract
+      - name: Duplicate APK(s) Release to zip file and extract
+        run: |
+          cd ${{ env.main_project_module }}/build/outputs/bundle/release/
+          unzip -p ${{ env.generated_name_aab }}.apks universal.apk > ${{ env.generated_name_aab }}.apk
+
+      # Upload Artifact Build
+      # Noted For Output [main_project_module]/build/outputs/apk/debug/
+      - name: Upload APK Debug - ${{ env.repository_name }}
+        uses: actions/upload-artifact@v3
         with:
-          name: Signed app bundle
-          path: ${{steps.sign_app.outputs.signedReleaseFile}}
+          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - APK(s) debug generated
+          path: ${{ env.main_project_module }}/build/outputs/apk/debug/
+
+      # Noted For Output [main_project_module]/build/outputs/apk/release/
+      - name: Upload APK Release - ${{ env.repository_name }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - APK(s) release generated
+          path: ${{ env.main_project_module }}/build/outputs/apk/release/
+
+      # Noted For Output [main_project_module]/build/outputs/bundle/release/
+      - name: Upload AAB (App Bundle) Release - ${{ env.repository_name }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - App bundle(s) AAB release generated
+          path: ${{ env.main_project_module }}/build/outputs/bundle/release/
