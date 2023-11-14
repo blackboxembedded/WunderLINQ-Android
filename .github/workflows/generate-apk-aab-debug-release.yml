@@ -77,7 +77,7 @@ jobs:
       # Build APK From Bundle Using Bundletool
       # Noted For Output [main_project_module]/build/outputs/bundle/release/
       - name: Build APK(s) Release from bundle using bundletool (Path same with bundle output)
-        run: java -jar ".github/lib/bundletool.jar" build-apks --bundle=${{ env.main_project_module }}/build/outputs/bundle/release/${{ env.generated_name_aab }}.aab --output=${{ env.main_project_module }}/build/outputs/bundle/release/${{ env.generated_name_aab }}.apks --mode=universal --ks="$GITHUB_WORKSPACE/playstore.keystore.jks" --ks-pass=pass:${{ secrets.KEYSTORE_PASSWORD }} --ks-key-alias=${{ secrets.KEYSTORE_ALIAS }} --key-pass=pass: ${{ secrets.KEY_PASSWORD }}
+        run: java -jar ".github/lib/bundletool.jar" build-apks --bundle=${{ env.main_project_module }}/build/outputs/bundle/release/${{ env.generated_name_aab }}.aab --output=${{ env.main_project_module }}/build/outputs/bundle/release/${{ env.generated_name_aab }}.apks --mode=universal --ks=$GITHUB_WORKSPACE/playstore.keystore.jks --ks-pass=pass:${{secrets.KEYSTORE_PASSWORD}} --ks-key-alias=${{secrets.KEYSTORE_ALIAS}} --key-pass=pass:${{secrets.KEY_PASSWORD}}
 
       # Duplicate APK(s) Release to zip file and extract
       - name: Duplicate APK(s) Release to zip file and extract
