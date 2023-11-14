@@ -22,11 +22,8 @@ decode performance and fault data.
 ## Build Instructions
 1. Clone the project and open in Android Studio
 
-2. Create an xml resource file called res/values/secrets.xml with your own Google Maps API key in it, like so:
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="google_maps_api_key" translatable="false">YOUR_API_KEY_HERE</string>
-</resources>
+2. Create a file called secrets.properties with your own Google Maps API key in it, like so:
+```
+MAPS_API_KEY=<KEY>
 ```
 3. Build and Run
