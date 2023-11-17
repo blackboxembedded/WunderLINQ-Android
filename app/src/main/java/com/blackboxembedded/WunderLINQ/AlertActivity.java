@@ -19,11 +19,9 @@ package com.blackboxembedded.WunderLINQ;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -39,6 +37,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
 
 public class AlertActivity extends AppCompatActivity {
 
@@ -107,7 +107,6 @@ public class AlertActivity extends AppCompatActivity {
             title = extras.getString("TITLE");
             body = extras.getString("BODY");
             backgroundPath = extras.getString("BACKGROUND");
-            Log.d(TAG,"Background Image: " + backgroundPath);
         }
         tvAlertbody.setText(body);
 
@@ -115,7 +114,6 @@ public class AlertActivity extends AppCompatActivity {
             case 2:
                 btnOK.setVisibility(View.INVISIBLE);
                 if(!backgroundPath.equals("")){
-                    Log.d(TAG,"Setting Background Image");
                     backgroundImageView = findViewById(R.id.imageViewBackground);
                     backgroundImageView.setImageDrawable(Drawable.createFromPath(backgroundPath));
                     backgroundImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -173,9 +171,9 @@ public class AlertActivity extends AppCompatActivity {
                     finish();
                     break;
                 case R.id.btnOK:
-                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("google.navigation:q=fuel+station"));
-                    mapIntent.setPackage("com.google.android.apps.maps");
-                    startActivity(mapIntent);
+                    if (!NavAppHelper.navigateToFuel(AlertActivity.this, Data.getLastLocation())){
+                        tvAlertbody.setText(getString(R.string.nav_app_feature_not_supported));
+                    }
                     break;
             }
         }
@@ -201,7 +199,6 @@ public class AlertActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        Log.d(TAG, "Keycode: " + keyCode);
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 finish();
@@ -218,12 +215,6 @@ public class AlertActivity extends AppCompatActivity {
                         btnOK.performClick();
                         break;
                 }
-                return true;
-            case KeyEvent.KEYCODE_DPAD_DOWN:
-
-                return true;
-            case KeyEvent.KEYCODE_DPAD_UP:
-
                 return true;
             default:
                 return super.onKeyUp(keyCode, event);

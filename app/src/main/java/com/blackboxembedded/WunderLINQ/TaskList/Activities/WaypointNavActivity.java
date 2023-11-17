@@ -156,7 +156,9 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
                         destination.setLatitude(location.latitude);
                         destination.setLongitude(location.longitude);
 
-                        NavAppHelper.navigateTo(WaypointNavActivity.this, currentLocation, destination);
+                        if (!NavAppHelper.navigateTo(WaypointNavActivity.this, currentLocation, destination)) {
+                            Toast.makeText(WaypointNavActivity.this, R.string.nav_app_feature_not_supported, Toast.LENGTH_LONG).show();
+                        }
                     } catch (SecurityException|NullPointerException e) {
                         e.printStackTrace();
                     }

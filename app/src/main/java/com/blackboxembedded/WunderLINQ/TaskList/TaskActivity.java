@@ -592,7 +592,9 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                                     Log.d(TAG, "Trying Best Provider: " + bestProvider);
                                     Location currentLocation = locationManager.getLastKnownLocation(bestProvider);
 
-                                    NavAppHelper.navigateTo(this, currentLocation, destination);
+                                    if (!NavAppHelper.navigateTo(this, currentLocation, destination)) {
+                                        Toast.makeText(TaskActivity.this, R.string.nav_app_feature_not_supported, Toast.LENGTH_LONG).show();
+                                    }
                                 } catch (NullPointerException e) {
                                     e.printStackTrace();
                                 }

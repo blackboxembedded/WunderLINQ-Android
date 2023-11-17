@@ -298,7 +298,9 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
         destination.setLatitude(location.latitude);
         destination.setLongitude(location.longitude);
 
-        NavAppHelper.viewWaypoint(WaypointViewActivity.this, destination, record.getLabel());
+        if (!NavAppHelper.viewWaypoint(WaypointViewActivity.this, destination, record.getLabel())) {
+            Toast.makeText(WaypointViewActivity.this, R.string.nav_app_feature_not_supported, Toast.LENGTH_LONG).show();
+        }
     }
 
     // Navigate
@@ -324,7 +326,9 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
                 destination.setLatitude(location.latitude);
                 destination.setLongitude(location.longitude);
 
-                NavAppHelper.navigateTo(WaypointViewActivity.this, currentLocation, destination);
+                if (!NavAppHelper.navigateTo(WaypointViewActivity.this, currentLocation, destination)) {
+                    Toast.makeText(WaypointViewActivity.this, R.string.nav_app_feature_not_supported, Toast.LENGTH_LONG).show();
+                }
             } catch (SecurityException | NullPointerException e) {
                 e.printStackTrace();
             }
