@@ -237,7 +237,7 @@ public class NavAppHelper {
                 break;
             case "17": //Organic Maps
                 supported = true;
-                url = "om://search?cll=" + current.getLatitude()+ "," + current.getLongitude() + "&query=fuel station";
+                url = "om://search?cll=" + current.getLatitude()+ "," + current.getLongitude() + "&query=fuel station&backurl=wunderlinq://";
                 navIntent.setData(Uri.parse(url));
                 break;
             case "18": //Cruiser
