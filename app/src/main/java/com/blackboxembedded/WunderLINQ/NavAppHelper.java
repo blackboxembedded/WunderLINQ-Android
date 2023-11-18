@@ -236,10 +236,12 @@ public class NavAppHelper {
                 // Not Supported
                 break;
             case "17": //Organic Maps
-                //TODO
+                supported = true;
+                url = "om://search?cll=" + current.getLatitude()+ "," + current.getLongitude() + "&query=fuel station";
+                navIntent.setData(Uri.parse(url));
                 break;
             case "18": //Cruiser
-                //TODO - Not working
+                // Not working yet
                 supported = true;
                 navIntent = new Intent("com.devemux86.intent.action.NAVIGATION");
                 navIntent.setPackage("gr.talent.cruiser");
@@ -257,7 +259,7 @@ public class NavAppHelper {
                 navIntent.setData(Uri.parse(url));
                 break;
             case "22": //MyRoute-app
-                //TODO
+                // Not Supported
                 break;
             case "23": //Locus Map 4
                 supported = true;
