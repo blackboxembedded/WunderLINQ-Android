@@ -146,6 +146,9 @@ public class NavAppHelper {
             case "23": //Locus Map 4
                 navIntent = activity.getPackageManager().getLaunchIntentForPackage("menion.android.locus");
                 break;
+            case "24": //HERE WeGo
+                navIntent = activity.getPackageManager().getLaunchIntentForPackage("com.here.app.maps");
+                break;
         }
         try {
             if (navIntent != null) {
@@ -163,25 +166,28 @@ public class NavAppHelper {
     static public boolean navigateToFuel(Activity activity, Location current){
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
         String navApp = sharedPrefs.getString("prefNavApp", "1");
-        Intent navIntent = new Intent(android.content.Intent.ACTION_MAIN);
+        Intent navIntent = new Intent(android.content.Intent.ACTION_VIEW);
         String url = "google.navigation:q=fuel+station";
         boolean supported = false;
         switch (navApp){
             default: case "1": //Android Default
-                //TODO - Test
+                supported = true;
+                url = "google.navigation:q=fuel+station";
+                navIntent.setData(Uri.parse(url));
                 break;
             case "2": //Google Maps
                 supported = true;
                 navIntent.setPackage("com.google.android.apps.maps");
-                navIntent = new Intent(android.content.Intent.ACTION_VIEW);
                 url = "google.navigation:q=fuel+station";
                 navIntent.setData(Uri.parse(url));
                 break;
             case "3": //Locus Map 3 Classic
-                //TODO
+                supported = true;
+                navIntent.setPackage("menion.android.locus.pro");
+                url = "google.navigation:q=fuel+station";
+                navIntent.setData(Uri.parse(url));
                 break;
             case "4": //Waze
-                //TODO - Test
                 supported = true;
                 url = "https://waze.com/ul?q=fuel&navigate=yes";
                 navIntent.setData(Uri.parse(url));
@@ -190,15 +196,17 @@ public class NavAppHelper {
                 // Not Supported
                 break;
             case "6": //OsmAnd
-                //TODO
+                supported = true;
+                OsmAndHelper osmAndHelper = new OsmAndHelper(activity, 1001, null);
+                osmAndHelper.navigateSearch("Start", current.getLatitude(), current.getLongitude(),"gas station", current.getLatitude(), current.getLongitude(), "motorcycle", true, true);
                 break;
             case "7": //Mapfactor Navigator
                 // Not Supported
                 break;
             case "8": //Sygic
-                //TODO - Test
                 supported = true;
-                url = "com.sygic.aura://search|fuel";
+                navIntent.setPackage("com.sygic.aura");
+                url = "google.navigation:q=fuel+station";
                 navIntent.setData(Uri.parse(url));
                 break;
             case "9": //Kurviger 2
@@ -220,7 +228,6 @@ public class NavAppHelper {
                 // Not Supported
                 break;
             case "15": //Yandex
-                //TODO - Test
                 supported = true;
                 url = "yandexnavi://map_search?text=fuel";
                 navIntent.setData(Uri.parse(url));
@@ -232,8 +239,9 @@ public class NavAppHelper {
                 //TODO
                 break;
             case "18": //Cruiser
+                //TODO - Not working
                 supported = true;
-                navIntent.setAction("com.devemux86.intent.action.NAVIGATION");
+                navIntent = new Intent("com.devemux86.intent.action.NAVIGATION");
                 navIntent.setPackage("gr.talent.cruiser");
                 navIntent.putExtra("FUEL", true);
                 break;
@@ -244,9 +252,7 @@ public class NavAppHelper {
                 // Not Supported
                 break;
             case "21": //Guru Maps
-                //TODO - Test
                 supported = true;
-                navIntent = new Intent(android.content.Intent.ACTION_VIEW);
                 url = "guru://search?q=fuel&coord=" + current.getLatitude() + "," + current.getLongitude() + "&mode=motorcycle&back_url=wunderlinq://quicktasks";
                 navIntent.setData(Uri.parse(url));
                 break;
@@ -254,20 +260,33 @@ public class NavAppHelper {
                 //TODO
                 break;
             case "23": //Locus Map 4
-                //TODO
+                supported = true;
+                navIntent.setPackage("menion.android.locus");
+                url = "google.navigation:q=fuel+station";
+                navIntent.setData(Uri.parse(url));
+                break;
+            case "24": //HERE WeGO
+                supported = true;
+                navIntent.setPackage("com.here.app.maps");
+                url = "google.navigation:q=fuel+station";
+                navIntent.setData(Uri.parse(url));
                 break;
         }
-        try {
-            if (navIntent != null) {
-                if (android.os.Build.VERSION.SDK_INT >= 24) {
-                    if (activity.isInMultiWindowMode()) {
-                        navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+        if (supported) {
+            if (!navApp.equals("6")) { // If NOT OsmAnd
+                try {
+                    if (navIntent != null) {
+                        if (android.os.Build.VERSION.SDK_INT >= 24) {
+                            if (activity.isInMultiWindowMode()) {
+                                navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                            }
+                        }
+                        activity.startActivity(navIntent);
                     }
+                } catch (ActivityNotFoundException ex) {
+                    return false;
                 }
-                activity.startActivity(navIntent);
             }
-        } catch ( ActivityNotFoundException ex  ) {
-            return false;
         }
         return supported;
     }
@@ -281,6 +300,7 @@ public class NavAppHelper {
         switch (navApp){
             default: case "1": //Android Default
                 supported = true;
+                homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "2": //Google Maps
                 supported = true;
@@ -393,17 +413,24 @@ public class NavAppHelper {
                 homeNavIntent.setPackage("menion.android.locus");
                 homeNavIntent.setData(Uri.parse(navUrl));
                 break;
+            case "24": //HERE WeGO
+                supported = true;
+                homeNavIntent.setPackage("com.here.app.maps");
+                homeNavIntent.setData(Uri.parse(navUrl));
+                break;
         }
-        if (!navApp.equals("6")) { // If NOT OsmAnd
-            try {
-                if (android.os.Build.VERSION.SDK_INT >= 24) {
-                    if (activity.isInMultiWindowMode()) {
-                        homeNavIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+        if (supported) {
+            if (!navApp.equals("6")) { // If NOT OsmAnd
+                try {
+                    if (android.os.Build.VERSION.SDK_INT >= 24) {
+                        if (activity.isInMultiWindowMode()) {
+                            homeNavIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                        }
                     }
+                    activity.startActivity(homeNavIntent);
+                } catch (ActivityNotFoundException ex) {
+                    return false;
                 }
-                activity.startActivity(homeNavIntent);
-            } catch (ActivityNotFoundException ex) {
-                return false;
             }
         }
         return supported;
@@ -419,6 +446,7 @@ public class NavAppHelper {
             default: case "1": //Android Default
                 //Nothing to do
                 supported = true;
+                navIntent.setData(Uri.parse(navUrl));
                 break;
             case "2": //Google Maps
                 supported = true;
@@ -530,17 +558,24 @@ public class NavAppHelper {
                 navIntent.setPackage("menion.android.locus");
                 navIntent.setData(Uri.parse(navUrl));
                 break;
+            case "24": //HERE WeGO
+                supported = true;
+                navIntent.setPackage("com.here.app.maps");
+                navIntent.setData(Uri.parse(navUrl));
+                break;
         }
-        if (!navApp.equals("6")) { // If NOT OsmAnd
-            try {
-                if (android.os.Build.VERSION.SDK_INT >= 24) {
-                    if (activity.isInMultiWindowMode()) {
-                        navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+        if (supported) {
+            if (!navApp.equals("6")) { // If NOT OsmAnd
+                try {
+                    if (android.os.Build.VERSION.SDK_INT >= 24) {
+                        if (activity.isInMultiWindowMode()) {
+                            navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                        }
                     }
+                    activity.startActivity(navIntent);
+                } catch (ActivityNotFoundException ex) {
+                    return false;
                 }
-                activity.startActivity(navIntent);
-            } catch (ActivityNotFoundException ex) {
-                return false;
             }
         }
         return supported;

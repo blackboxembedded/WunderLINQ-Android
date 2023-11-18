@@ -404,7 +404,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 getResources().getString(R.string.task_title_roadbook),
                 getResources().getString(R.string.task_title_systemvolume),
                 getResources().getString(R.string.task_title_insta360),
-                videoFrontTaskText
+                videoFrontTaskText,
+                getResources().getString(R.string.task_title_fuel)
 
         };
         int numTasks = taskTitles.length;
@@ -429,6 +430,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         iconId[17] = R.drawable.ic_volume_up;
         iconId[18] = R.drawable.ic_spherical_camera;
         iconId[19] = R.drawable.ic_video_camera;
+        iconId[20] = R.drawable.ic_gas_pump;
 
         mapping = new ArrayList<>();
         taskItems.clear();
@@ -861,7 +863,12 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                     updateTasks();
                 }
                 break;
-
+            case 20:
+                // Open Navigation App to Fuel
+                if (!NavAppHelper.navigateToFuel(this,Data.getLastLocation())) {
+                    Toast.makeText(TaskActivity.this, R.string.nav_app_feature_not_supported, Toast.LENGTH_LONG).show();
+                }
+                break;
             default:
                 break;
         }

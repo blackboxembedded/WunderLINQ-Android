@@ -393,6 +393,7 @@
     <string name="task_title_roadbook">Road Book</string>
     <string name="task_title_systemvolume">Volume</string>
     <string name="task_title_gopro">GoPro Control</string>
+    <string name="task_title_fuel">Fuel</string>
     <string name="nogpremote_alert_title">WunderLINQ GoPro Remote Not Found</string>
     <string name="nogpremote_alert_body">GoPro Control is provided by a separate free app called WunderLINQ GoPro Remote.  Click OK to install.</string>
     <string name="task_title_insta360">Insta360 Control</string>
@@ -659,7 +660,8 @@
         <item name="18">@string/task_title_roadbook</item>
         <item name="19">@string/task_title_systemvolume</item>
         <item name="20">@string/task_title_insta360</item>
-        <item name="21">@string/task_title_empty</item>
+        <item name="21">@string/task_title_fuel</item>
+        <item name="22">@string/task_title_empty</item>
     </string-array>
     <string-array name="tasks_arrayValues" translatable="false">
         <item name="1">0</item>
@@ -683,6 +685,7 @@
         <item name="19">17</item>
         <item name="20">18</item>
         <item name="21">20</item>
+        <item name="22">21</item>
     </string-array>
     <string name="pref_nav_app_title">Navigation App</string>
     <string name="nav_app_feature_not_supported">Feature not supported by selected Navigation App</string>
@@ -695,9 +698,7 @@
     <string name="nav_app_osmand">OsmAnd</string>
     <string name="nav_app_mapfactor">Mapfactor Navigator Pro</string>
     <string name="nav_app_sygic">Sygic</string>
-    <string name="nav_app_kurviger">Kurviger 2</string>
-    <string name="nav_app_kurviger1">Kurviger 1 Pro</string>
-    <string name="nav_app_kurviger3">Kurviger 3</string>
+    <string name="nav_app_kurviger3">Kurviger</string>
     <string name="nav_app_tomtomgo">TomTom GO</string>
     <string name="nav_app_bmwconnectedride">BMW Motorrad Connected</string>
     <string name="nav_app_calimoto">Calimoto</string>
@@ -709,6 +710,7 @@
     <string name="nav_app_oruxmaps">OruxMaps</string>
     <string name="nav_app_gurumaps">Guru Maps</string>
     <string name="nav_app_myrouteapp">MyRoute-app</string>
+    <string name="nav_app_here">HERE WeGo</string>
     <string-array name="nav_apps_array" translatable="false">
         <item name="1">@string/nav_app_default</item>
         <item name="2">@string/nav_app_google</item>
@@ -731,6 +733,7 @@
         <item name="21">@string/nav_app_gurumaps</item>
         <item name="22">@string/nav_app_myrouteapp</item>
         <item name="23">@string/nav_app_locus_classic</item>
+        <item name="23">@string/nav_app_here</item>
     </string-array>
     <string-array name="nav_apps_arrayValues" translatable="false">
         <item name="1">1</item>
@@ -754,6 +757,7 @@
         <item name="21">21</item>
         <item name="22">22</item>
         <item name="23">23</item>
+        <item name="24">24</item>
     </string-array>
     <string name="pref_roadbook_app_title">Roadbook App</string>
     <string name="roadbook_app_rabbitrally">Rabbit Rally</string>
