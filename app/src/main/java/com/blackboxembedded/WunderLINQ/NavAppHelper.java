@@ -241,7 +241,6 @@ public class NavAppHelper {
                 navIntent.setData(Uri.parse(url));
                 break;
             case "18": //Cruiser
-                // Not working yet
                 supported = true;
                 navIntent = new Intent("com.devemux86.intent.action.NAVIGATION");
                 navIntent.setPackage("gr.talent.cruiser");
