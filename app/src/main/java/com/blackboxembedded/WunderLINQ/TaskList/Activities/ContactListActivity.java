@@ -271,8 +271,6 @@ public class ContactListActivity extends AppCompatActivity {
                                         photoId.add(photo);
                                     }
                                 }
-                            } else {
-                                Log.d(TAG, "Not Adding Contact");
                             }
                         }
                     }
@@ -431,6 +429,11 @@ public class ContactListActivity extends AppCompatActivity {
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         switch (keyCode) {
+            case KeyEvent.KEYCODE_DPAD_RIGHT:
+                int lastVisiblePosition = contactList.getLastVisiblePosition();
+                contactList.smoothScrollToPosition(lastVisiblePosition);
+                contactList.setSelection(lastVisiblePosition);
+                return true;
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 goBack();
                 return true;
