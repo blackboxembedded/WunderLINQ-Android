@@ -59,6 +59,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blackboxembedded.WunderLINQ.AccessoryActivity;
+import com.blackboxembedded.WunderLINQ.DashActivity;
 import com.blackboxembedded.WunderLINQ.TaskList.Activities.AppListActivity;
 import com.blackboxembedded.WunderLINQ.TaskList.Activities.ContactListActivity;
 import com.blackboxembedded.WunderLINQ.LoggingService;
@@ -364,7 +365,12 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
 
     //Go previous screen
     private void goBack(){
-        Intent backIntent = new Intent(this, MusicActivity.class);
+        Intent backIntent = new Intent(this, MainActivity.class);
+        if (sharedPrefs.getBoolean("prefDisplayMusic", false)) {
+            backIntent = new Intent(this, MusicActivity.class);
+        } else if (sharedPrefs.getBoolean("prefDisplayDash", false)) {
+            backIntent = new Intent(this, DashActivity.class);
+        }
         startActivity(backIntent);
     }
 

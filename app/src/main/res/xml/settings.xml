@@ -25,6 +25,21 @@
             />
         <PreferenceScreen
             android:key="prefScreenGrid"
+            android:title="@string/pref_main_settings_title"
+            android:summary="@string/pref_main_settings_summary">
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="prefDisplayDash"
+                android:title="@string/pref_display_dashboard_name" >
+            </CheckBoxPreference>
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="prefDisplayMusic"
+                android:title="@string/pref_display_music_name" >
+            </CheckBoxPreference>
+        </PreferenceScreen>
+        <PreferenceScreen
+            android:key="prefScreenGrid"
             android:title="@string/pref_grid_settings_title"
             android:summary="@string/pref_grid_settings_summary">
             <ListPreference
@@ -264,11 +279,6 @@
                 android:defaultValue="18"
                 />
         </PreferenceScreen>
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="prefDisplayDash"
-            android:title="@string/pref_display_dashboard_name" >
-        </CheckBoxPreference>
         <ListPreference
             android:key="prefRPMMax"
             android:title="@string/pref_rpmmax_name"

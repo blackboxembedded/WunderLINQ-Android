@@ -496,7 +496,6 @@
     <string name="pref_homePhone_summary">Format: 11234567890</string>
     <string name="ui_title">User Interface</string>
     <string name="pref_highlightColor_title">Highlight Color</string>
-    <string name="pref_display_dashboard_name">Enable Dashboard Screen</string>
     <string name="pref_dashboard_speedsource_name">Dashboard Speed Source</string>
     <string name="pref_rpmmax_name">Max RPM</string>
     <string name="rpmmax_10k">10000</string>
@@ -512,6 +511,10 @@
         <item name="2">1</item>
         <item name="3">2</item>
     </string-array>
+    <string name="pref_main_settings_title">Main Screen Customization</string>
+    <string name="pref_main_settings_summary">Customize optional screens to display</string>
+    <string name="pref_display_music_name">Enable Music Control Screen</string>
+    <string name="pref_display_dashboard_name">Enable Dashboard Screen</string>
     <string name="pref_grid_settings_title">Data Grid Customization</string>
     <string name="pref_grid_settings_summary">Customize which data points to display and in which cell</string>
     <string name="first">First</string>

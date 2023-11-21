@@ -40,6 +40,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.blackboxembedded.WunderLINQ.SVGDashboards.ADVDashboard;
 import com.blackboxembedded.WunderLINQ.SVGDashboards.SportDashboard;
 import com.blackboxembedded.WunderLINQ.SVGDashboards.StandardDashboard;
+import com.blackboxembedded.WunderLINQ.TaskList.TaskActivity;
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.caverock.androidsvg.SVG;
@@ -204,8 +205,11 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
 
     //Go to next screen - Quick Tasks
     private void goForward(){
-        Intent backIntent = new Intent(this, MusicActivity.class);
-        startActivity(backIntent);
+        Intent forwardIntent = new Intent(this, TaskActivity.class);
+        if (sharedPrefs.getBoolean("prefDisplayMusic", false)) {
+            forwardIntent = new Intent(this, MusicActivity.class);
+        }
+        startActivity(forwardIntent);
     }
 
     //Go back to last screen - Motorcycle Data

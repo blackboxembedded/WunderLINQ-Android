@@ -75,6 +75,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.gridlayout.widget.GridLayout;
 
+import com.blackboxembedded.WunderLINQ.TaskList.TaskActivity;
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
@@ -1525,11 +1526,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     //Go to next screen
     private void goForward(){
-        Intent backIntent = new Intent(this, MusicActivity.class);
+        Intent forwardIntent = new Intent(this, TaskActivity.class);
         if (sharedPrefs.getBoolean("prefDisplayDash", false)) {
-            backIntent = new Intent(this, DashActivity.class);
+            forwardIntent = new Intent(this, DashActivity.class);
+        } else if (sharedPrefs.getBoolean("prefDisplayMusic", false)) {
+            forwardIntent = new Intent(this, MusicActivity.class);
         }
-        startActivity(backIntent);
+        startActivity(forwardIntent);
     }
 
     //Go previous screen
