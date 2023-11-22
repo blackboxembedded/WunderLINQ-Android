@@ -36,7 +36,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,7 +65,6 @@ public class ContactListActivity extends AppCompatActivity {
     private ListView contactList;
 
     private SharedPreferences sharedPrefs;
-
     private ArrayList<String> contacts;
     private ArrayList<String> phoneNumbers;
     private ArrayList<Drawable> photoId;
@@ -113,6 +111,10 @@ public class ContactListActivity extends AppCompatActivity {
             @Override
             public void onSwipeRight() {
                 goBack();
+            }
+            @Override
+            public void onSwipeLeft() {
+                goForward();
             }
         });
 
@@ -413,6 +415,13 @@ public class ContactListActivity extends AppCompatActivity {
         startActivity(backIntent);
     }
 
+    private void goForward(){
+        int lastVisiblePosition = contactList.getLastVisiblePosition();
+        contactList.smoothScrollToPosition(lastVisiblePosition);
+        contactList.setSelection(lastVisiblePosition);
+        lastPosition = contactList.getSelectedItemPosition();
+    }
+
     private View.OnClickListener mClickListener = new View.OnClickListener() {
 
         @Override
@@ -430,9 +439,7 @@ public class ContactListActivity extends AppCompatActivity {
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_RIGHT:
-                int lastVisiblePosition = contactList.getLastVisiblePosition();
-                contactList.smoothScrollToPosition(lastVisiblePosition);
-                contactList.setSelection(lastVisiblePosition);
+                goForward();
                 return true;
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 goBack();
