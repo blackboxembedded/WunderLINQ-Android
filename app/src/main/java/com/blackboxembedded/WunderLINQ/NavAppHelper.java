@@ -102,7 +102,7 @@ public class NavAppHelper {
                 }
                 break;
             case "13": //Kurviger 1 Pro
-                // App no longer available
+                navIntent = activity.getPackageManager().getLaunchIntentForPackage("gr.talent.kurviger.pro");
                 break;
             case "14": //CoPilot GPS
                 navIntent = new Intent(android.content.Intent.ACTION_VIEW);
@@ -222,7 +222,7 @@ public class NavAppHelper {
                 // Not Supported
                 break;
             case "13": //Kurviger 1 Pro
-                // App no longer available
+                // Not Supported
                 break;
             case "14": //CoPilot GPS
                 // Not Supported
@@ -355,7 +355,11 @@ public class NavAppHelper {
                 // Not Supported
                 break;
             case "13": //Kurviger 1 Pro
-                // App no longer available
+                supported = true;
+                homeNavIntent.setPackage("gr.talent.kurviger.pro");
+                navUrl = "https://kurviger.de/en?point="  + end.getLatitude() + "," + end.getLongitude() + "&vehicle=motorycycle"
+                        + "weighting=fastest";
+                homeNavIntent.setData(Uri.parse(navUrl));
                 break;
             case "14": //CoPilot GPS
                 supported = true;
@@ -500,7 +504,11 @@ public class NavAppHelper {
                 // Not Supported
                 break;
             case "13": //Kurviger 1 Pro
-                // App no longer available
+                supported = true;
+                navIntent.setPackage("gr.talent.kurviger.pro");
+                navUrl = "https://kurviger.de/en?point="  + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "&locale=en" +"&vehicle=motorycycle"
+                        + "weighting=fastest" + "use_miles=true";
+                navIntent.setData(Uri.parse(navUrl));
                 break;
             case "14": //CoPilot GPS
                 supported = true;

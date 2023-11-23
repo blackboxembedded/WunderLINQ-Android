@@ -701,7 +701,8 @@
     <string name="nav_app_osmand">OsmAnd</string>
     <string name="nav_app_mapfactor">Mapfactor Navigator Pro</string>
     <string name="nav_app_sygic">Sygic</string>
-    <string name="nav_app_kurviger3">Kurviger</string>
+    <string name="nav_app_kurviger1">Kurviger 1 Pro</string>
+    <string name="nav_app_kurviger3">Kurviger 3</string>
     <string name="nav_app_tomtomgo">TomTom GO</string>
     <string name="nav_app_bmwconnectedride">BMW Motorrad Connected</string>
     <string name="nav_app_calimoto">Calimoto</string>
@@ -724,6 +725,7 @@
         <item name="7">@string/nav_app_mapfactor</item>
         <item name="8">@string/nav_app_sygic</item>
         <item name="9">@string/nav_app_kurviger3</item>
+        <item name="11">@string/nav_app_kurviger1</item>
         <item name="12">@string/nav_app_tomtomgo</item>
         <item name="13">@string/nav_app_bmwconnectedride</item>
         <item name="14">@string/nav_app_calimoto</item>
@@ -748,6 +750,7 @@
         <item name="7">7</item>
         <item name="8">8</item>
         <item name="9">20</item>
+        <item name="11">13</item>
         <item name="12">10</item>
         <item name="13">11</item>
         <item name="14">12</item>
