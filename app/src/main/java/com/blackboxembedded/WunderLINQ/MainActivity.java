@@ -252,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // End App
-                            finishAndRemoveTask();
+                            finishAffinity();
                         }
                     });
             builder.show();

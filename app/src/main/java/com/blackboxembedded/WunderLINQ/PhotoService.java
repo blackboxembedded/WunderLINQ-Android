@@ -197,7 +197,7 @@ public class PhotoService extends Service implements LifecycleOwner {
                     if (sharedPrefs.getBoolean("prefPhotoPreview",false)) {
                         Intent alertIntent = new Intent(MyApplication.getContext(), AlertActivity.class);
                         alertIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
-                        alertIntent.putExtra("TYPE", 2);
+                        alertIntent.putExtra("TYPE", AlertActivity.ALERT_PHOTO);
                         alertIntent.putExtra("TITLE", MyApplication.getContext().getResources().getString(R.string.alert_title_photopreview));
                         alertIntent.putExtra("BODY", "");
                         alertIntent.putExtra("BACKGROUND", file.getAbsolutePath());

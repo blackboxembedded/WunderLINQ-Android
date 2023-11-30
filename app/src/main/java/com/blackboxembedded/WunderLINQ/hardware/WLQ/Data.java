@@ -116,6 +116,15 @@ public class Data {
         Data.cellularSignal = cellularSignal;
     }
 
+    // Ignition Status
+    private static Boolean ignitionStatus;
+    public static Boolean getIgnitionStatus() {
+        return ignitionStatus;
+    }
+    public static void setIgnitionStatus(Boolean ignitionStatus){
+        Data.ignitionStatus = ignitionStatus;
+    }
+
     // VIN
     private static String vin;
     public static String getVin() {

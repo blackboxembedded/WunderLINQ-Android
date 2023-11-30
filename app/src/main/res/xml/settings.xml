@@ -395,6 +395,12 @@
             android:summary="@string/pref_fuelAlert_summary"
             android:title="@string/pref_fuelAlert_name" >
         </CheckBoxPreference>
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="prefIgnitionAlert"
+            android:summary="@string/pref_ignitionAlert_summary"
+            android:title="@string/pref_ignitionAlert_name" >
+        </CheckBoxPreference>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/advanced_settings_title" >
         <ListPreference
