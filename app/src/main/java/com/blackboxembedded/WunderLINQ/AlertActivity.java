@@ -25,6 +25,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,13 +38,18 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
 
 public class AlertActivity extends AppCompatActivity {
 
     public final static String TAG = "AlertActivity";
 
-    int type = 1;
+    int type = 0;
+    public final static int ALERT_FUEL = 1;
+    public final static  int ALERT_PHOTO = 2;
+    public final static  int ALERT_IGNITION = 3;
+
     String title = "";
     String body = "";
     String backgroundPath = "";
@@ -110,7 +116,9 @@ public class AlertActivity extends AppCompatActivity {
         tvAlertbody.setText(body);
 
         switch (type){
-            case 2:
+            case ALERT_FUEL:
+                break;
+            case ALERT_PHOTO:
                 btnOK.setVisibility(View.INVISIBLE);
                 if(!backgroundPath.equals("")){
                     backgroundImageView = findViewById(R.id.imageViewBackground);
@@ -170,8 +178,15 @@ public class AlertActivity extends AppCompatActivity {
                     finish();
                     break;
                 case R.id.btnOK:
-                    if (!NavAppHelper.navigateToFuel(AlertActivity.this, Data.getLastLocation())){
-                        tvAlertbody.setText(getString(R.string.nav_app_feature_not_supported));
+                    if (type == ALERT_FUEL) {
+                        if (!NavAppHelper.navigateToFuel(AlertActivity.this, Data.getLastLocation())) {
+                            tvAlertbody.setText(getString(R.string.nav_app_feature_not_supported));
+                        }
+                    } else if (type == ALERT_IGNITION) {
+                        //Stop Service
+                        BluetoothLeService.close();
+                        // End App
+                        finishAffinity();
                     }
                     break;
             }
@@ -203,11 +218,11 @@ public class AlertActivity extends AppCompatActivity {
                 finish();
                 return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
-                if (type != 2) {
+                if (type != ALERT_PHOTO) {
                     btnOK.performClick();
                 }
                 switch (type){
-                    case 2:
+                    case ALERT_PHOTO:
                         finish();
                         break;
                     default:

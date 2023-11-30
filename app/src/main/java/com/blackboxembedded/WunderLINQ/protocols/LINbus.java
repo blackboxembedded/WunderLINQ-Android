@@ -49,6 +49,26 @@ public class LINbus {
                 }
                 break;
             case 0x01:
+                //Ignition
+                int ignitionValue = ((data[2] & 0xFF) >> 4) & 0x0f;
+                switch (ignitionValue){
+                    case 0x0: case 0x1: case 0x2: case 0x3:
+                        //Ignition Off
+                        if (Data.getIgnitionStatus()){
+                            BluetoothLeService.ignitionAlert();
+                        }
+                        Data.setIgnitionStatus(false);
+                        break;
+                    case 0x4: case 0x5: case 0x6: case 0x7:
+                        //Ignition On
+                        Data.setIgnitionStatus(true);
+                        break;
+                    default:
+                        //Unknown
+                        Data.setIgnitionStatus(false);
+                        break;
+                }
+
                 //Rear Speed
                 if ((data[3] & 0xFF) != 0xFF && (data[4] & 0xFF) != 0xFF) {
                     double rearSpeed = ((data[3] & 0xFF) | (((data[4] & 0xFF) & 0x0f) << 8)) * 0.14;

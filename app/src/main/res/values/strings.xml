@@ -438,6 +438,8 @@
     <string name="alert_btn_close">Close</string>
     <string name="alert_title_fuel">Low Fuel</string>
     <string name="alert_label_fuel">Route to the nearest fuel station?"</string>
+    <string name="alert_title_ignition">Ignition Off</string>
+    <string name="alert_label_ignition">Shutdown WunderLINQ App?"</string>git
     <string name="alert_title_photopreview">Photo Preview</string>
     <!-- LoggingService -->
     <string name="gps_nofix">No Fix</string>
@@ -935,6 +937,8 @@
     <string name="pref_tpmsAlertThreshold_summary">Specify a number based on your unit selection</string>
     <string name="pref_fuelAlert_name">Fuel Routing</string>
     <string name="pref_fuelAlert_summary">Prompt to route to nearest fuel station when low fuel fault is present</string>
+    <string name="pref_ignitionAlert_name">Ignition</string>
+    <string name="pref_ignitionAlert_summary">Prompt to close app when ignition is shutoff</string>
     <string name="debug_settings_title">Debug Settings</string>
     <string name="advanced_settings_title">Advanced Settings</string>
     <string-array name="dashSpeedSources_array" translatable="false">

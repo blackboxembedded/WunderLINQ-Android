@@ -1378,7 +1378,8 @@ public class BluetoothLeService extends Service {
             if (!fuelAlertSent) {
                 fuelAlertSent = true;
                 Intent alertIntent = new Intent(MyApplication.getContext(), AlertActivity.class);
-                alertIntent.putExtra("TYPE", 1);
+                alertIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                alertIntent.putExtra("TYPE", AlertActivity.ALERT_FUEL);
                 alertIntent.putExtra("TITLE", MyApplication.getContext().getResources().getString(R.string.alert_title_fuel));
                 alertIntent.putExtra("BODY", MyApplication.getContext().getResources().getString(R.string.alert_label_fuel));
                 alertIntent.putExtra("BACKGROUND", "");
@@ -1387,6 +1388,18 @@ public class BluetoothLeService extends Service {
 
         } else {
             fuelAlertSent = false;
+        }
+    }
+
+    static public void ignitionAlert(){
+        if (sharedPrefs.getBoolean("prefIgnitionAlert", false)) {
+            Intent alertIntent = new Intent(MyApplication.getContext(), AlertActivity.class);
+            alertIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            alertIntent.putExtra("TYPE", AlertActivity.ALERT_IGNITION);
+            alertIntent.putExtra("TITLE", MyApplication.getContext().getResources().getString(R.string.alert_title_ignition));
+            alertIntent.putExtra("BODY", MyApplication.getContext().getResources().getString(R.string.alert_label_ignition));
+            alertIntent.putExtra("BACKGROUND", "");
+            MyApplication.getContext().startActivity(alertIntent);
         }
     }
 
