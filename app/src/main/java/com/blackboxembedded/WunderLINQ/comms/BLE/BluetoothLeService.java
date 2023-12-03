@@ -819,29 +819,30 @@ public class BluetoothLeService extends Service {
             if (data != null) {
                 if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
                     // Log data
-                    int msgID = ((data[0] & 0xFF)<<3) + ((data[1] & 0xFF)>>5);
-                    Log.d(TAG,"CAN ID: " + msgID + "  MSG: " + Utils.ByteArraytoHexNoDelim(data));
+                    Log.d(TAG,Utils.ByteArraytoHexNoDelim(data));
                 }
 
                 //Check if message changed
                 boolean process = false;
-                int msgID = ((data[0] & 0xFF)<<3) + ((data[1] & 0xFF)>>5);
-                if(!messages.containsKey(msgID)){
-                    messages.put(msgID ,data);
-                    process = true;
-                } else {
-                    if(!Arrays.equals(messages.get(msgID), data)){
+                if (data.length > 2) {
+                    int msgID = ((data[0] & 0xFF) << 8) | (data[1] & 0xFF);
+                    if (!messages.containsKey(msgID)) {
+                        messages.put(msgID, data);
                         process = true;
+                    } else {
+                        if (!Arrays.equals(messages.get(msgID), data)) {
+                            process = true;
+                        }
                     }
-                }
-                //Process message
-                if(process) {
-                    CANbus.parseCANMessage(data);
-                    /*
-                     * Sending the broad cast so that it can be received on registered
-                     * receivers
-                     */
-                    sendDataBroadcast();
+                    //Process message
+                    if (process) {
+                        CANbus.parseCANMessage(data);
+                        /*
+                         * Sending the broad cast so that it can be received on registered
+                         * receivers
+                         */
+                        sendDataBroadcast();
+                    }
                 }
             }
         } else if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_COMMAND_CHARACTERISTIC)) {
