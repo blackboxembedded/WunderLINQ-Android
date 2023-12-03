@@ -26,19 +26,16 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import com.blackboxembedded.WunderLINQ.TaskList.TaskActivity;
-import com.blackboxembedded.WunderLINQ.Utils.Utils;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
 
 import java.io.File;
@@ -58,6 +55,7 @@ public class LoggingService extends Service {
 
     private Location lastLocation;
     private PrintWriter outFile = null;
+    private Date logStartDate;
 
     private int loggingInterval = 250;
     private String CHANNEL_ID = "WunderLINQ";
@@ -167,43 +165,50 @@ public class LoggingService extends Service {
                         lon = Double.toString(lastLocation.getLongitude());
                     }
                     if (outFile != null) {
-                        outFile.write(curdatetime + "," +
-                                lat + "," + lon + "," +
-                                Data.getValue(Data.DATA_ALTITUDE_DEVICE) + "," +
-                                Data.getValue(Data.DATA_SPEED_DEVICE)  + "," +
-                                Data.getValue(Data.DATA_GEAR)  + "," +
-                                Data.getValue(Data.DATA_ENGINE_TEMP)  + "," +
-                                Data.getValue(Data.DATA_AIR_TEMP) + "," +
-                                Data.getValue(Data.DATA_FRONT_RDC)  + "," +
-                                Data.getValue(Data.DATA_REAR_RDC)  + "," +
-                                Data.getValue(Data.DATA_ODOMETER)  + "," +
-                                Data.getValue(Data.DATA_VOLTAGE)  + "," +
-                                Data.getValue(Data.DATA_THROTTLE)  + "," +
-                                Data.getValue(Data.DATA_FRONT_BRAKE) + "," +
-                                Data.getValue(Data.DATA_REAR_BRAKE)  + "," +
-                                Data.getValue(Data.DATA_SHIFTS) + "," +
-                                Data.getVin() + "," +
-                                Data.getValue(Data.DATA_AMBIENT_LIGHT) + "," +
-                                Data.getValue(Data.DATA_TRIP_ONE) + "," +
-                                Data.getValue(Data.DATA_TRIP_TWO)  + "," +
-                                Data.getValue(Data.DATA_TRIP_AUTO)  + "," +
-                                Data.getValue(Data.DATA_SPEED)  + "," +
-                                Data.getValue(Data.DATA_AVG_SPEED)  + "," +
-                                Data.getValue(Data.DATA_CURRENT_CONSUMPTION)  + "," +
-                                Data.getValue(Data.DATA_ECONOMY_ONE)  + "," +
-                                Data.getValue(Data.DATA_ECONOMY_TWO)  + "," +
-                                Data.getValue(Data.DATA_RANGE)  + "," +
-                                Data.getValue(Data.DATA_LEAN_DEVICE)  + "," +
-                                Data.getValue(Data.DATA_GFORCE_DEVICE)  + "," +
-                                Data.getValue(Data.DATA_BEARING_DEVICE)  + "," +
-                                Data.getValue(Data.DATA_BAROMETRIC_DEVICE) + "," +
-                                Data.getValue(Data.DATA_RPM) + "," +
-                                Data.getValue(Data.DATA_LEAN) + "," +
-                                Data.getValue(Data.DATA_REAR_SPEED) + "," +
-                                Data.getValue(Data.DATA_CELL_SIGNAL) + "," +
-                                Data.getValue(Data.DATA_BATTERY_DEVICE) +
-                                "\n");
-                        outFile.flush();
+                        Calendar startDate = Calendar.getInstance();
+                        startDate.setTime(logStartDate);
+                        if (startDate.get(Calendar.YEAR) != cal.get(Calendar.YEAR)
+                                || startDate.get(Calendar.DAY_OF_YEAR) != cal.get(Calendar.DAY_OF_YEAR)){
+                            initializeFile();
+                        } else {
+                            outFile.write(curdatetime + "," +
+                                    lat + "," + lon + "," +
+                                    Data.getValue(Data.DATA_ALTITUDE_DEVICE) + "," +
+                                    Data.getValue(Data.DATA_SPEED_DEVICE) + "," +
+                                    Data.getValue(Data.DATA_GEAR) + "," +
+                                    Data.getValue(Data.DATA_ENGINE_TEMP) + "," +
+                                    Data.getValue(Data.DATA_AIR_TEMP) + "," +
+                                    Data.getValue(Data.DATA_FRONT_RDC) + "," +
+                                    Data.getValue(Data.DATA_REAR_RDC) + "," +
+                                    Data.getValue(Data.DATA_ODOMETER) + "," +
+                                    Data.getValue(Data.DATA_VOLTAGE) + "," +
+                                    Data.getValue(Data.DATA_THROTTLE) + "," +
+                                    Data.getValue(Data.DATA_FRONT_BRAKE) + "," +
+                                    Data.getValue(Data.DATA_REAR_BRAKE) + "," +
+                                    Data.getValue(Data.DATA_SHIFTS) + "," +
+                                    Data.getVin() + "," +
+                                    Data.getValue(Data.DATA_AMBIENT_LIGHT) + "," +
+                                    Data.getValue(Data.DATA_TRIP_ONE) + "," +
+                                    Data.getValue(Data.DATA_TRIP_TWO) + "," +
+                                    Data.getValue(Data.DATA_TRIP_AUTO) + "," +
+                                    Data.getValue(Data.DATA_SPEED) + "," +
+                                    Data.getValue(Data.DATA_AVG_SPEED) + "," +
+                                    Data.getValue(Data.DATA_CURRENT_CONSUMPTION) + "," +
+                                    Data.getValue(Data.DATA_ECONOMY_ONE) + "," +
+                                    Data.getValue(Data.DATA_ECONOMY_TWO) + "," +
+                                    Data.getValue(Data.DATA_RANGE) + "," +
+                                    Data.getValue(Data.DATA_LEAN_DEVICE) + "," +
+                                    Data.getValue(Data.DATA_GFORCE_DEVICE) + "," +
+                                    Data.getValue(Data.DATA_BEARING_DEVICE) + "," +
+                                    Data.getValue(Data.DATA_BAROMETRIC_DEVICE) + "," +
+                                    Data.getValue(Data.DATA_RPM) + "," +
+                                    Data.getValue(Data.DATA_LEAN) + "," +
+                                    Data.getValue(Data.DATA_REAR_SPEED) + "," +
+                                    Data.getValue(Data.DATA_CELL_SIGNAL) + "," +
+                                    Data.getValue(Data.DATA_BATTERY_DEVICE) +
+                                    "\n");
+                            outFile.flush();
+                        }
                     } else {
                         initializeFile();
                     }
@@ -252,9 +257,9 @@ public class LoggingService extends Service {
                 Log.d(TAG,"Initialize Logging");
                 // Get current time in UTC
                 Calendar cal = Calendar.getInstance();
-                Date date = cal.getTime();
+                logStartDate = cal.getTime();
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-HH-mm-ss");
-                String curdatetime = formatter.format(date);
+                String curdatetime = formatter.format(logStartDate);
                 String filename = "WunderLINQ-TripLog-";
 
                 String header = MyApplication.getContext().getResources().getString(R.string.time_header) + "," +
