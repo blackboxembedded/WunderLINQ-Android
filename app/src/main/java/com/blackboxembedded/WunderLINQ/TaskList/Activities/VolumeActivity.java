@@ -40,6 +40,7 @@ import android.widget.TextView;
 import com.blackboxembedded.WunderLINQ.OnSwipeTouchListener;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
+import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
 
 public class VolumeActivity extends AppCompatActivity {
 
@@ -154,6 +155,7 @@ public class VolumeActivity extends AppCompatActivity {
     }
 
     private void goBack(){
+        SoundManager.playSound(this, R.raw.directional);
         Intent backIntent = new Intent(VolumeActivity.this, com.blackboxembedded.WunderLINQ.TaskList.TaskActivity.class);
         startActivity(backIntent);
     }
@@ -176,6 +178,7 @@ public class VolumeActivity extends AppCompatActivity {
                 goBack();
                 return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
+                SoundManager.playSound(this, R.raw.enter);
                 //Mute
                 volumeMute();
                 updateUI();
@@ -183,6 +186,7 @@ public class VolumeActivity extends AppCompatActivity {
             case KeyEvent.KEYCODE_DPAD_DOWN:
             case KeyEvent.KEYCODE_MINUS:
             case KeyEvent.KEYCODE_NUMPAD_SUBTRACT:
+                SoundManager.playSound(this, R.raw.directional);
                 //Volume Down
                 volumeDown();
                 updateUI();
@@ -190,6 +194,7 @@ public class VolumeActivity extends AppCompatActivity {
             case KeyEvent.KEYCODE_DPAD_UP:
             case KeyEvent.KEYCODE_PLUS:
             case KeyEvent.KEYCODE_NUMPAD_ADD:
+                SoundManager.playSound(this, R.raw.directional);
                 //Volume Up
                 volumeUp();
                 updateUI();

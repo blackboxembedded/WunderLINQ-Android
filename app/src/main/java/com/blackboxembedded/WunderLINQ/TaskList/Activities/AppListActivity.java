@@ -43,6 +43,7 @@ import com.blackboxembedded.WunderLINQ.AppInfo;
 import com.blackboxembedded.WunderLINQ.OnSwipeTouchListener;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
+import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,6 +138,7 @@ public class AppListActivity extends AppCompatActivity {
     }
 
     private void goBack(){
+        SoundManager.playSound(this, R.raw.directional);
         Intent backIntent = new Intent(AppListActivity.this, com.blackboxembedded.WunderLINQ.TaskList.TaskActivity.class);
         startActivity(backIntent);
     }
@@ -162,6 +164,7 @@ public class AppListActivity extends AppCompatActivity {
             case KeyEvent.KEYCODE_DPAD_DOWN:
             case KeyEvent.KEYCODE_MINUS:
             case KeyEvent.KEYCODE_NUMPAD_SUBTRACT:
+                SoundManager.playSound(this, R.raw.directional);
                 if ((appList.getSelectedItemPosition() == (apps.size() - 1)) && lastPosition == (apps.size() - 1) ){
                     appList.setSelection(0);
                 }
@@ -170,6 +173,7 @@ public class AppListActivity extends AppCompatActivity {
             case KeyEvent.KEYCODE_DPAD_UP:
             case KeyEvent.KEYCODE_PLUS:
             case KeyEvent.KEYCODE_NUMPAD_ADD:
+                SoundManager.playSound(this, R.raw.directional);
                 if (appList.getSelectedItemPosition() == 0 && lastPosition == 0){
                     appList.setSelection(apps.size() - 1);
                 }
@@ -188,6 +192,7 @@ public class AppListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
+                SoundManager.playSound(AppListActivity.this, R.raw.enter);
                 lastPosition = position;
                 Intent intent = packageManager.getLaunchIntentForPackage(apps.get(position).name.toString());
                 AppListActivity.this.startActivity(intent);

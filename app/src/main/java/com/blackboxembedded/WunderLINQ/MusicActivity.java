@@ -59,6 +59,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
+import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.blackboxembedded.WunderLINQ.comms.BLE.GattAttributes;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
@@ -322,12 +323,14 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
 
     //Go to next screen - Quick Tasks
     private void goForward(){
+        SoundManager.playSound(this, R.raw.directional);
         Intent forwardIntent = new Intent(this, com.blackboxembedded.WunderLINQ.TaskList.TaskActivity.class);
         startActivity(forwardIntent);
     }
 
     //Go back to last screen - Motorcycle Data
     private void goBack(){
+        SoundManager.playSound(this, R.raw.directional);
         Intent backIntent = new Intent(this, MainActivity.class);
         if (sharedPrefs.getBoolean("prefDisplayDash", false)) {
             backIntent = new Intent(this, DashActivity.class);
@@ -460,6 +463,7 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
             case KeyEvent.KEYCODE_DPAD_UP:
             case KeyEvent.KEYCODE_PLUS:
             case KeyEvent.KEYCODE_NUMPAD_ADD:
+                SoundManager.playSound(this, R.raw.enter);
                 if (controller != null) {
                     controls.skipToNext();
                     refreshMetaData();
@@ -470,6 +474,7 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
             case KeyEvent.KEYCODE_DPAD_DOWN:
             case KeyEvent.KEYCODE_MINUS:
             case KeyEvent.KEYCODE_NUMPAD_SUBTRACT:
+                SoundManager.playSound(this, R.raw.enter);
                 if (controller != null) {
                     controls.skipToPrevious();
                     refreshMetaData();

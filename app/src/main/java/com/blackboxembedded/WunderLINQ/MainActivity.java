@@ -75,6 +75,7 @@ import androidx.gridlayout.widget.GridLayout;
 
 import com.blackboxembedded.WunderLINQ.TaskList.TaskActivity;
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
+import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ;
@@ -1521,6 +1522,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     //Go to next screen
     private void goForward(){
+        SoundManager.playSound(this, R.raw.directional);
         Intent forwardIntent = new Intent(this, TaskActivity.class);
         if (sharedPrefs.getBoolean("prefDisplayDash", false)) {
             forwardIntent = new Intent(this, DashActivity.class);
@@ -1532,6 +1534,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     //Go previous screen
     private void goBack(){
+        SoundManager.playSound(this, R.raw.directional);
         Intent backIntent = new Intent(this, com.blackboxembedded.WunderLINQ.TaskList.TaskActivity.class);
         if (Data.wlq != null) {
             if (Data.wlq.getStatus() != null) {
@@ -1543,6 +1546,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     //Go up - Change grid count
     private void goUp(){
+        SoundManager.playSound(this, R.raw.directional);
         int currentCellCount = Integer.parseInt(sharedPrefs.getString("CELL_COUNT","15"));
         int nextCellCount = 1;
         SharedPreferences.Editor editor = sharedPrefs.edit();
@@ -1577,6 +1581,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     //Go down - Change grid count
     private void goDown(){
+        SoundManager.playSound(this, R.raw.directional);
         int currentCellCount = Integer.parseInt(sharedPrefs.getString("CELL_COUNT","15"));
         int nextCellCount = 1;
         SharedPreferences.Editor editor = sharedPrefs.edit();

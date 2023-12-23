@@ -42,6 +42,7 @@ import com.blackboxembedded.WunderLINQ.SVGDashboards.SportDashboard;
 import com.blackboxembedded.WunderLINQ.SVGDashboards.StandardDashboard;
 import com.blackboxembedded.WunderLINQ.TaskList.TaskActivity;
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
+import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.caverock.androidsvg.SVG;
 import com.caverock.androidsvg.SVGImageView;
@@ -205,6 +206,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
 
     //Go to next screen - Quick Tasks
     private void goForward(){
+        SoundManager.playSound(this, R.raw.directional);
         Intent forwardIntent = new Intent(this, TaskActivity.class);
         if (sharedPrefs.getBoolean("prefDisplayMusic", false)) {
             forwardIntent = new Intent(this, MusicActivity.class);
@@ -214,6 +216,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
 
     //Go back to last screen - Motorcycle Data
     private void goBack(){
+        SoundManager.playSound(this, R.raw.directional);
         Intent backIntent = new Intent(this, MainActivity.class);
         startActivity(backIntent);
     }
@@ -259,6 +262,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     void nextDashboard(){
+        SoundManager.playSound(this, R.raw.enter);
         if (currentDashboard == numDashboard){
             currentDashboard = 1;
         } else {
@@ -268,6 +272,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     void prevDashboard(){
+        SoundManager.playSound(this, R.raw.enter);
         if (currentDashboard == 1){
             currentDashboard = numDashboard;
         } else {
@@ -277,6 +282,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     void nextInfoLine(){
+        SoundManager.playSound(this, R.raw.enter);
         if (currentInfoLine == numInfoLine){
             currentInfoLine = 1;
         } else {
@@ -286,6 +292,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     void prevInfoLine(){
+        SoundManager.playSound(this, R.raw.enter);
         if (currentInfoLine == 1){
             currentInfoLine = numInfoLine;
         } else {

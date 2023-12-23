@@ -71,6 +71,7 @@ import com.blackboxembedded.WunderLINQ.OsmAndHelper;
 import com.blackboxembedded.WunderLINQ.PhotoService;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.SettingsActivity;
+import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
 import com.blackboxembedded.WunderLINQ.VideoRecService;
 import com.blackboxembedded.WunderLINQ.TaskList.Activities.VolumeActivity;
 import com.blackboxembedded.WunderLINQ.WaypointDatasource;
@@ -253,6 +254,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_ENTER:
+                SoundManager.playSound(this, R.raw.enter);
                 updateTasks();
                 executeTask(adapter.selected);
                 return true;
@@ -265,6 +267,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             case KeyEvent.KEYCODE_DPAD_DOWN:
             case KeyEvent.KEYCODE_MINUS:
             case KeyEvent.KEYCODE_NUMPAD_SUBTRACT:
+                SoundManager.playSound(this, R.raw.directional);
                 if ((adapter.selected != (mapping.size() - 1))){
                     adapter.selected = adapter.selected + 1;
                 }
@@ -275,6 +278,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             case KeyEvent.KEYCODE_DPAD_UP:
             case KeyEvent.KEYCODE_PLUS:
             case KeyEvent.KEYCODE_NUMPAD_ADD:
+                SoundManager.playSound(this, R.raw.directional);
                 if (adapter.selected != 0){
                     adapter.selected = adapter.selected - 1;
                 }
@@ -354,6 +358,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
 
     //Go to next screen
     private void goForward(){
+        SoundManager.playSound(this, R.raw.directional);
         Intent forwardIntent = new Intent(this, MainActivity.class);
         if (Data.wlq != null) {
             if (Data.wlq.getStatus() != null) {
@@ -365,6 +370,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
 
     //Go previous screen
     private void goBack(){
+        SoundManager.playSound(this, R.raw.directional);
         Intent backIntent = new Intent(this, MainActivity.class);
         if (sharedPrefs.getBoolean("prefDisplayMusic", false)) {
             backIntent = new Intent(this, MusicActivity.class);

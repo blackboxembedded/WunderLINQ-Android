@@ -53,6 +53,7 @@ import androidx.core.app.ActivityCompat;
 import com.blackboxembedded.WunderLINQ.OnSwipeTouchListener;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
+import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -290,6 +291,7 @@ public class ContactListActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, final View view,
                                         int position, long id) {
+                    SoundManager.playSound(ContactListActivity.this, R.raw.enter);
                     lastPosition = position;
                     // Call Number
                     boolean callPerms = false;
@@ -411,11 +413,13 @@ public class ContactListActivity extends AppCompatActivity {
     }
 
     private void goBack(){
+        SoundManager.playSound(this, R.raw.directional);
         Intent backIntent = new Intent(ContactListActivity.this, com.blackboxembedded.WunderLINQ.TaskList.TaskActivity.class);
         startActivity(backIntent);
     }
 
     private void goForward(){
+        SoundManager.playSound(this, R.raw.directional);
         int lastVisiblePosition = contactList.getLastVisiblePosition();
         contactList.smoothScrollToPosition(lastVisiblePosition);
         contactList.setSelection(lastVisiblePosition);
@@ -447,6 +451,7 @@ public class ContactListActivity extends AppCompatActivity {
             case KeyEvent.KEYCODE_DPAD_DOWN:
             case KeyEvent.KEYCODE_MINUS:
             case KeyEvent.KEYCODE_NUMPAD_SUBTRACT:
+                SoundManager.playSound(this, R.raw.directional);
                 if ((contactList.getSelectedItemPosition() == (contacts.size() - 1)) && lastPosition == (contacts.size() - 1) ){
                     contactList.setSelection(0);
                 }
@@ -455,6 +460,7 @@ public class ContactListActivity extends AppCompatActivity {
             case KeyEvent.KEYCODE_DPAD_UP:
             case KeyEvent.KEYCODE_PLUS:
             case KeyEvent.KEYCODE_NUMPAD_ADD:
+                SoundManager.playSound(this, R.raw.directional);
                 if (contactList.getSelectedItemPosition() == 0 && lastPosition == 0){
                     contactList.setSelection(contacts.size() - 1);
                 }

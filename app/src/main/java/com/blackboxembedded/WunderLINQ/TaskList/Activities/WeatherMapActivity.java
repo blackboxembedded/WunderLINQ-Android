@@ -38,6 +38,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
+import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
 import com.blackboxembedded.WunderLINQ.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -315,6 +316,7 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
             case KeyEvent.KEYCODE_DPAD_DOWN:
             case KeyEvent.KEYCODE_MINUS:
             case KeyEvent.KEYCODE_NUMPAD_SUBTRACT:
+                SoundManager.playSound(this, R.raw.directional);
                 //Zoom Out
                 if (currentZoom > 3){
                     if (Data.getLastLocation() != null) {
@@ -327,6 +329,7 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
             case KeyEvent.KEYCODE_DPAD_UP:
             case KeyEvent.KEYCODE_PLUS:
             case KeyEvent.KEYCODE_NUMPAD_ADD:
+                SoundManager.playSound(this, R.raw.directional);
                 //Zoom In
                 if (currentZoom < 16){
                     if (Data.getLastLocation() != null) {
@@ -338,6 +341,7 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
                 return true;
             case KeyEvent.KEYCODE_ENTER:
                 //Center
+                SoundManager.playSound(this, R.raw.enter);
                 if (Data.getLastLocation() != null) {
                     LatLng location = new LatLng(Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 10));

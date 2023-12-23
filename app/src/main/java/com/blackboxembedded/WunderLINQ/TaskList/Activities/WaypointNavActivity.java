@@ -51,6 +51,7 @@ import com.blackboxembedded.WunderLINQ.NavAppHelper;
 import com.blackboxembedded.WunderLINQ.OnSwipeTouchListener;
 import com.blackboxembedded.WunderLINQ.OsmAndHelper;
 import com.blackboxembedded.WunderLINQ.R;
+import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
 import com.blackboxembedded.WunderLINQ.WaypointDatasource;
 import com.blackboxembedded.WunderLINQ.WaypointListView;
 import com.blackboxembedded.WunderLINQ.WaypointRecord;
@@ -134,6 +135,7 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
         waypointList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick (AdapterView < ? > adapter, View view, int position, long arg){
+                SoundManager.playSound(WaypointNavActivity.this, R.raw.enter);
                 lastPosition = position;
                 WaypointRecord record = (WaypointRecord) waypointList.getItemAtPosition(position);
 
@@ -214,6 +216,7 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
     }
 
     private void goBack(){
+        SoundManager.playSound(this, R.raw.directional);
         Intent backIntent = new Intent(WaypointNavActivity.this, com.blackboxembedded.WunderLINQ.TaskList.TaskActivity.class);
         startActivity(backIntent);
     }
@@ -240,6 +243,7 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
             case KeyEvent.KEYCODE_DPAD_DOWN:
             case KeyEvent.KEYCODE_MINUS:
             case KeyEvent.KEYCODE_NUMPAD_SUBTRACT:
+                SoundManager.playSound(this, R.raw.directional);
                 if ((waypointList.getSelectedItemPosition() == (listValues.size() - 1)) && lastPosition == (listValues.size() - 1) ){
                     waypointList.setSelection(0);
                 }
@@ -248,6 +252,7 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
             case KeyEvent.KEYCODE_DPAD_UP:
             case KeyEvent.KEYCODE_PLUS:
             case KeyEvent.KEYCODE_NUMPAD_ADD:
+                SoundManager.playSound(this, R.raw.directional);
                 if (waypointList.getSelectedItemPosition() == 0 && lastPosition == 0){
                     waypointList.setSelection(listValues.size() - 1);
                 }
