@@ -119,8 +119,7 @@ public class FaultActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch(v.getId()) {
                 case R.id.action_back:
-                    Intent backIntent = new Intent(FaultActivity.this, MainActivity.class);
-                    startActivity(backIntent);
+                    finish();
                     break;
             }
         }
