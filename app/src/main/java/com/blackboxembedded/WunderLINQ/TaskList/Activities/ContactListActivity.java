@@ -50,10 +50,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.blackboxembedded.WunderLINQ.FaultActivity;
 import com.blackboxembedded.WunderLINQ.OnSwipeTouchListener;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,6 +64,7 @@ import java.util.HashSet;
 public class ContactListActivity extends AppCompatActivity {
 
     public final static String TAG = "ContactList";
+    private ImageButton faultButton;
 
     private ListView contactList;
 
@@ -410,6 +413,15 @@ public class ContactListActivity extends AppCompatActivity {
 
         ImageButton forwardButton = findViewById(R.id.action_forward);
         forwardButton.setVisibility(View.INVISIBLE);
+        faultButton = findViewById(R.id.action_faults);
+        faultButton.setOnClickListener(mClickListener);
+
+        //Check for active faults
+        if (!Faults.getallActiveDesc().isEmpty()) {
+            faultButton.setVisibility(View.VISIBLE);
+        } else {
+            faultButton.setVisibility(View.GONE);
+        }
     }
 
     private void goBack(){
@@ -434,6 +446,10 @@ public class ContactListActivity extends AppCompatActivity {
                 case R.id.action_back:
                     // Go back
                     goBack();
+                    break;
+                case R.id.action_faults:
+                    Intent faultIntent = new Intent(ContactListActivity.this, FaultActivity.class);
+                    startActivity(faultIntent);
                     break;
             }
         }

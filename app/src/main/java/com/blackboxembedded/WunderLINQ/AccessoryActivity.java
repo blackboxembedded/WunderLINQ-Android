@@ -33,8 +33,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
+import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_BASE;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_C;
 
@@ -44,6 +46,7 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
     private final static String TAG = "AccActivity";
 
     private SharedPreferences sharedPrefs;
+    private ImageButton faultButton;
     private GestureDetectorListener gestureDetector;
 
     private ConstraintLayout channelOneCL;
@@ -261,8 +264,17 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
 
         ImageButton backButton = findViewById(R.id.action_back);
         ImageButton forwardButton = findViewById(R.id.action_forward);
+        faultButton = findViewById(R.id.action_faults);
         backButton.setOnClickListener(mClickListener);
         forwardButton.setOnClickListener(mClickListener);
+        faultButton.setOnClickListener(mClickListener);
+
+        //Check for active faults
+        if (!Faults.getallActiveDesc().isEmpty()) {
+            faultButton.setVisibility(View.VISIBLE);
+        } else {
+            faultButton.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -288,6 +300,10 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
                 case R.id.action_forward:
                     goForward();
                     break;
+                case R.id.action_faults:
+                    Intent faultIntent = new Intent(AccessoryActivity.this, FaultActivity.class);
+                    startActivity(faultIntent);
+                    break;
             }
         }
     };
@@ -308,23 +324,31 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
 
     //Go to next screen
     private void goForward(){
+        SoundManager.playSound(this, R.raw.directional);
         Intent forwardIntent = new Intent(this, MainActivity.class);
         startActivity(forwardIntent);
     }
 
     //Go previous screen
     private void goBack(){
+        SoundManager.playSound(this, R.raw.directional);
         Intent backIntent = new Intent(this, com.blackboxembedded.WunderLINQ.TaskList.TaskActivity.class);
         startActivity(backIntent);
     }
 
     private void updateDisplay(){
-        channelOneHeaderTV.setText(sharedPrefs.getString("ACC_CHAN_1", getString(R.string.default_accessory_one_name)));
-        channelOneHeaderET.setText(sharedPrefs.getString("ACC_CHAN_1", getString(R.string.default_accessory_one_name)));
-        channelTwoHeaderTV.setText(sharedPrefs.getString("ACC_CHAN_2", getString(R.string.default_accessory_two_name)));
-        channelTwoHeaderET.setText(sharedPrefs.getString("ACC_CHAN_2", getString(R.string.default_accessory_two_name)));
+        //Check for active faults
+        if (!Faults.getallActiveDesc().isEmpty()) {
+            faultButton.setVisibility(View.VISIBLE);
+        } else {
+            faultButton.setVisibility(View.GONE);
+        }
         if (Data.wlq != null){
             if (Data.wlq.getStatus() != null) {
+                channelOneHeaderTV.setText(sharedPrefs.getString("ACC_CHAN_1", getString(R.string.default_accessory_one_name)));
+                channelOneHeaderET.setText(sharedPrefs.getString("ACC_CHAN_1", getString(R.string.default_accessory_one_name)));
+                channelTwoHeaderTV.setText(sharedPrefs.getString("ACC_CHAN_2", getString(R.string.default_accessory_two_name)));
+                channelTwoHeaderET.setText(sharedPrefs.getString("ACC_CHAN_2", getString(R.string.default_accessory_two_name)));
                 int channelActive = (Data.wlq.getStatus()[WLQ_C.ACTIVE_CHAN_INDEX] & 0xFF);
                 int channel1State = (Data.wlq.getStatus()[WLQ_C.LIN_ACC_CHANNEL1_CONFIG_STATE_INDEX] & 0xFF);
                 int channel2State = (Data.wlq.getStatus()[WLQ_C.LIN_ACC_CHANNEL2_CONFIG_STATE_INDEX] & 0xFF);

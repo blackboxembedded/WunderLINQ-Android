@@ -69,7 +69,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.blackboxembedded.WunderLINQ.AlertActivity;
 import com.blackboxembedded.WunderLINQ.FaultActivity;
-import com.blackboxembedded.WunderLINQ.FaultStatus;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
@@ -1300,16 +1300,16 @@ public class BluetoothLeService extends Service {
     static public void updateNotification(){
         StringBuilder body = new StringBuilder();
         body.append("");
-        if(FaultStatus.getfrontTirePressureCriticalActive()){
+        if(Faults.getfrontTirePressureCriticalActive()){
             body.append(MyApplication.getContext().getResources().getString(R.string.fault_TIREFCF)).append("\n");
         }
-        if(FaultStatus.getrearTirePressureCriticalActive()){
+        if(Faults.getrearTirePressureCriticalActive()){
             body.append(MyApplication.getContext().getResources().getString(R.string.fault_TIRERCF)).append("\n");
         }
-        if(FaultStatus.getgeneralFlashingRedActive()){
+        if(Faults.getgeneralFlashingRedActive()){
             body.append(MyApplication.getContext().getResources().getString(R.string.fault_GENWARNFSRED)).append("\n");
         }
-        if(FaultStatus.getgeneralShowsRedActive()){
+        if(Faults.getgeneralShowsRedActive()){
             body.append(MyApplication.getContext().getResources().getString(R.string.fault_GENWARNSHRED)).append("\n");
         }
         if(!body.toString().equals("")){

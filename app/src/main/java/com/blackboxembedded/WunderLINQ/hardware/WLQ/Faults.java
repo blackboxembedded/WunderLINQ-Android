@@ -15,14 +15,17 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-package com.blackboxembedded.WunderLINQ;
+package com.blackboxembedded.WunderLINQ.hardware.WLQ;
 
 import android.content.Context;
 import android.content.ContextWrapper;
 
+import com.blackboxembedded.WunderLINQ.MyApplication;
+import com.blackboxembedded.WunderLINQ.R;
+
 import java.util.ArrayList;
 
-public class FaultStatus extends ContextWrapper {
+public class Faults extends ContextWrapper {
 
     // Motorcycle faults
     private static boolean absSelfDiagActive = false;
@@ -143,7 +146,7 @@ public class FaultStatus extends ContextWrapper {
     private static boolean serviceActive = false;
     private static String serviceDesc = "";
 
-    public FaultStatus(Context base) {
+    public Faults(Context base) {
         super(base);
         // Motorcycle faults
         absSelfDiagDesc = MyApplication.getContext().getResources().getString(R.string.fault_ABSSLF);
@@ -310,7 +313,7 @@ public class FaultStatus extends ContextWrapper {
 
     // Motorcycle faults
     public static void setAbsSelfDiagActive(boolean absSelfDiagActive){
-        FaultStatus.absSelfDiagActive = absSelfDiagActive;
+        Faults.absSelfDiagActive = absSelfDiagActive;
     }
     public static boolean getabsSelfDiagActive() {
         return absSelfDiagActive;
@@ -320,7 +323,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setAbsDeactivatedActive(boolean absDeactivatedActive){
-        FaultStatus.ascDeactivatedActive = absDeactivatedActive;
+        Faults.ascDeactivatedActive = absDeactivatedActive;
     }
     public static boolean getabsDeactivatedActive() {
         return absDeactivatedActive;
@@ -330,7 +333,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setabsErrorActive(boolean absErrorActive){
-        FaultStatus.absErrorActive = absErrorActive;
+        Faults.absErrorActive = absErrorActive;
     }
     public static boolean getabsErrorActive() {
         return absErrorActive;
@@ -340,7 +343,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setAscSelfDiagActive(boolean ascSelfDiagActive){
-        FaultStatus.ascSelfDiagActive = ascSelfDiagActive;
+        Faults.ascSelfDiagActive = ascSelfDiagActive;
     }
     public static boolean getascSelfDiagActive() {
         return ascSelfDiagActive;
@@ -350,7 +353,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setAscInterventionActive(boolean ascInterventionActive){
-        FaultStatus.ascInterventionActive = ascInterventionActive;
+        Faults.ascInterventionActive = ascInterventionActive;
     }
     public static boolean getascInterventionActive() {
         return ascInterventionActive;
@@ -360,7 +363,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setAscDeactivatedActive(boolean ascDeactivatedActive){
-        FaultStatus.ascDeactivatedActive = ascDeactivatedActive;
+        Faults.ascDeactivatedActive = ascDeactivatedActive;
     }
     public static boolean getascDeactivatedActive() {
         return ascDeactivatedActive;
@@ -370,7 +373,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setascErrorActive(boolean ascErrorActive){
-        FaultStatus.ascErrorActive = ascErrorActive;
+        Faults.ascErrorActive = ascErrorActive;
     }
     public static boolean getascErrorActive() {
         return ascErrorActive;
@@ -380,7 +383,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setfuelFaultActive(boolean fuelFaultActive){
-        FaultStatus.fuelFaultActive = fuelFaultActive;
+        Faults.fuelFaultActive = fuelFaultActive;
     }
     public static boolean getfuelFaultActive() {
         return fuelFaultActive;
@@ -390,7 +393,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setfrontTirePressureWarningActive(boolean frontTirePressureWarningActive){
-        FaultStatus.frontTirePressureWarningActive = frontTirePressureWarningActive;
+        Faults.frontTirePressureWarningActive = frontTirePressureWarningActive;
     }
     public static boolean getfrontTirePressureWarningActive() {
         return frontTirePressureWarningActive;
@@ -400,7 +403,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setrearTirePressureWarningActive(boolean rearTirePressureWarningActive){
-        FaultStatus.rearTirePressureWarningActive = rearTirePressureWarningActive;
+        Faults.rearTirePressureWarningActive = rearTirePressureWarningActive;
     }
     public static boolean getrearTirePressureWarningActive() {
         return rearTirePressureWarningActive;
@@ -410,7 +413,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setfrontTirePressureCriticalActive(boolean frontTirePressureCriticalActive){
-        FaultStatus.frontTirePressureCriticalActive = frontTirePressureCriticalActive;
+        Faults.frontTirePressureCriticalActive = frontTirePressureCriticalActive;
     }
     public static boolean getfrontTirePressureCriticalActive() {
         return frontTirePressureCriticalActive;
@@ -419,14 +422,14 @@ public class FaultStatus extends ContextWrapper {
         return frontTirePressureCriticalDesc;
     }
     public static void setfrontTirePressureCriticalNotificationActive(boolean frontTirePressureCriticalNotificationActive){
-        FaultStatus.frontTirePressureCriticalNotificationActive = frontTirePressureCriticalNotificationActive;
+        Faults.frontTirePressureCriticalNotificationActive = frontTirePressureCriticalNotificationActive;
     }
     public static boolean getfrontTirePressureCriticalNotificationActive() {
         return frontTirePressureCriticalNotificationActive;
     }
 
     public static void setrearTirePressureCriticalActive(boolean rearTirePressureCriticalActive){
-        FaultStatus.rearTirePressureCriticalActive = rearTirePressureCriticalActive;
+        Faults.rearTirePressureCriticalActive = rearTirePressureCriticalActive;
     }
     public static boolean getrearTirePressureCriticalActive() {
         return rearTirePressureCriticalActive;
@@ -435,14 +438,14 @@ public class FaultStatus extends ContextWrapper {
         return rearTirePressureCriticalDesc;
     }
     public static void setrearTirePressureCriticalNotificationActive(boolean rearTirePressureCriticalNotificationActive){
-        FaultStatus.rearTirePressureCriticalNotificationActive = rearTirePressureCriticalNotificationActive;
+        Faults.rearTirePressureCriticalNotificationActive = rearTirePressureCriticalNotificationActive;
     }
     public static boolean getrearTirePressureCriticalNotificationActive() {
         return rearTirePressureCriticalNotificationActive;
     }
 
     public static void setAddFrontLightOneActive(boolean addFrontLightOneActive){
-        FaultStatus.addFrontLightOneActive = addFrontLightOneActive;
+        Faults.addFrontLightOneActive = addFrontLightOneActive;
     }
     public static boolean getaddFrontLightOneActive() {
         return addFrontLightOneActive;
@@ -452,7 +455,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setAddFrontLightTwoActive(boolean addFrontLightTwoActive){
-        FaultStatus.addFrontLightTwoActive = addFrontLightTwoActive;
+        Faults.addFrontLightTwoActive = addFrontLightTwoActive;
     }
     public static boolean getaddFrontLightTwoActive() {
         return addFrontLightTwoActive;
@@ -462,7 +465,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setDaytimeRunningActive(boolean daytimeRunningActive){
-        FaultStatus.daytimeRunningActive = daytimeRunningActive;
+        Faults.daytimeRunningActive = daytimeRunningActive;
     }
     public static boolean getdaytimeRunningActive() {
         return daytimeRunningActive;
@@ -472,7 +475,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setfrontLeftSignalActive(boolean frontLeftSignalActive){
-        FaultStatus.frontLeftSignalActive = frontLeftSignalActive;
+        Faults.frontLeftSignalActive = frontLeftSignalActive;
     }
     public static boolean getfrontLeftSignalActive() {
         return frontLeftSignalActive;
@@ -482,7 +485,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setfrontRightSignalActive(boolean frontRightSignalActive){
-        FaultStatus.frontRightSignalActive = frontRightSignalActive;
+        Faults.frontRightSignalActive = frontRightSignalActive;
     }
     public static boolean getfrontRightSignalActive() {
         return frontRightSignalActive;
@@ -492,7 +495,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setrearLeftSignalActive(boolean rearLeftSignalActive){
-        FaultStatus.rearLeftSignalActive = rearLeftSignalActive;
+        Faults.rearLeftSignalActive = rearLeftSignalActive;
     }
     public static boolean getrearLeftSignalActive() {
         return rearLeftSignalActive;
@@ -502,7 +505,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setrearRightSignalActive(boolean rearRightSignalActive){
-        FaultStatus.rearRightSignalActive = rearRightSignalActive;
+        Faults.rearRightSignalActive = rearRightSignalActive;
     }
     public static boolean getrearRightSignalActive() {
         return rearRightSignalActive;
@@ -512,7 +515,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setFrontParkingLightOneActive(boolean frontParkingLightOneActive){
-        FaultStatus.frontParkingLightOneActive = frontParkingLightOneActive;
+        Faults.frontParkingLightOneActive = frontParkingLightOneActive;
     }
     public static boolean getfrontParkingLightOneActive() {
         return frontParkingLightOneActive;
@@ -522,7 +525,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setFrontParkingLightTwoActive(boolean frontParkingLightTwoActive){
-        FaultStatus.frontParkingLightTwoActive = frontParkingLightTwoActive;
+        Faults.frontParkingLightTwoActive = frontParkingLightTwoActive;
     }
     public static boolean getfrontParkingLightTwoActive() {
         return frontParkingLightTwoActive;
@@ -532,7 +535,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setLowBeamActive(boolean lowBeamActive){
-        FaultStatus.lowBeamActive = lowBeamActive;
+        Faults.lowBeamActive = lowBeamActive;
     }
     public static boolean getlowBeamActive() {
         return lowBeamActive;
@@ -542,7 +545,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setHighBeamActive(boolean highBeamActive){
-        FaultStatus.highBeamActive = highBeamActive;
+        Faults.highBeamActive = highBeamActive;
     }
     public static boolean gethighBeamActive() {
         return highBeamActive;
@@ -552,7 +555,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setRearLightActive(boolean rearLightActive){
-        FaultStatus.rearLightActive = rearLightActive;
+        Faults.rearLightActive = rearLightActive;
     }
     public static boolean getrearLightActive() {
         return rearLightActive;
@@ -562,7 +565,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setBrakeLightActive(boolean brakeLightActive){
-        FaultStatus.brakeLightActive = brakeLightActive;
+        Faults.brakeLightActive = brakeLightActive;
     }
     public static boolean getBrakeLightActive() {
         return brakeLightActive;
@@ -572,7 +575,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setLicenseLightActive(boolean licenseLightActive){
-        FaultStatus.licenseLightActive = licenseLightActive;
+        Faults.licenseLightActive = licenseLightActive;
     }
     public static boolean getLicenseLightActive() {
         return licenseLightActive;
@@ -582,7 +585,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setRearFogLightActive(boolean rearFogLightActive){
-        FaultStatus.rearFogLightActive = rearFogLightActive;
+        Faults.rearFogLightActive = rearFogLightActive;
     }
     public static boolean getRearFogLightActive() {
         return rearFogLightActive;
@@ -592,7 +595,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setAddDippedLightActive(boolean addDippedLightActive){
-        FaultStatus.addDippedLightActive = addDippedLightActive;
+        Faults.addDippedLightActive = addDippedLightActive;
     }
     public static boolean getAddDippedLightActive() {
         return addDippedLightActive;
@@ -602,7 +605,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setAddBrakeLightActive(boolean addBrakeLightActive){
-        FaultStatus.addBrakeLightActive = addBrakeLightActive;
+        Faults.addBrakeLightActive = addBrakeLightActive;
     }
     public static boolean getAddBrakeLightActive() {
         return addBrakeLightActive;
@@ -612,7 +615,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setFrontLampOneLightActive(boolean frontLampOneLightActive){
-        FaultStatus.frontLampOneLightActive = frontLampOneLightActive;
+        Faults.frontLampOneLightActive = frontLampOneLightActive;
     }
     public static boolean getFrontLampOneLightActive() {
         return frontLampOneLightActive;
@@ -622,7 +625,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setFrontLampTwoLightActive(boolean frontLampTwoLightActive){
-        FaultStatus.frontLampTwoLightActive = frontLampTwoLightActive;
+        Faults.frontLampTwoLightActive = frontLampTwoLightActive;
     }
     public static boolean getFrontLampvLightActive() {
         return frontLampTwoLightActive;
@@ -632,7 +635,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void seticeWarnActive(boolean iceWarningActive){
-        FaultStatus.iceWarningActive = iceWarningActive;
+        Faults.iceWarningActive = iceWarningActive;
     }
     public static boolean geticeWarningActive() {
         return iceWarningActive;
@@ -642,7 +645,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setGeneralFlashingYellowActive(boolean generalFlashingYellowActive){
-        FaultStatus.generalFlashingYellowActive = generalFlashingYellowActive;
+        Faults.generalFlashingYellowActive = generalFlashingYellowActive;
     }
     public static boolean getgeneralFlashingYellowActive() {
         return generalFlashingYellowActive;
@@ -652,7 +655,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setGeneralShowsYellowActive(boolean generalShowsYellowActive){
-        FaultStatus.generalShowsYellowActive = generalShowsYellowActive;
+        Faults.generalShowsYellowActive = generalShowsYellowActive;
     }
     public static boolean getgeneralShowsYellowActive() {
         return generalShowsYellowActive;
@@ -662,7 +665,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setGeneralFlashingRedActive(boolean generalFlashingRedActive){
-        FaultStatus.generalFlashingRedActive = generalFlashingRedActive;
+        Faults.generalFlashingRedActive = generalFlashingRedActive;
     }
     public static boolean getgeneralFlashingRedActive() {
         return generalFlashingRedActive;
@@ -671,14 +674,14 @@ public class FaultStatus extends ContextWrapper {
         return generalFlashingRedDesc;
     }
     public static void setGeneralFlashingRedNotificationActive(boolean generalFlashingRedNotificationActive){
-        FaultStatus.generalFlashingRedNotificationActive = generalFlashingRedNotificationActive;
+        Faults.generalFlashingRedNotificationActive = generalFlashingRedNotificationActive;
     }
     public static boolean getgeneralFlashingRedNotificationActive() {
         return generalFlashingRedNotificationActive;
     }
 
     public static void setGeneralShowsRedActive(boolean generalShowsRedActive){
-        FaultStatus.generalShowsRedActive = generalShowsRedActive;
+        Faults.generalShowsRedActive = generalShowsRedActive;
     }
     public static boolean getgeneralShowsRedActive() {
         return generalShowsRedActive;
@@ -687,14 +690,14 @@ public class FaultStatus extends ContextWrapper {
         return generalShowsRedDesc;
     }
     public static void setGeneralShowsRedNotificationActive(boolean generalShowsRedNotificationActive){
-        FaultStatus.generalShowsRedNotificationActive = generalShowsRedNotificationActive;
+        Faults.generalShowsRedNotificationActive = generalShowsRedNotificationActive;
     }
     public static boolean getgeneralShowsRedNotificationActive() {
         return generalShowsRedNotificationActive;
     }
 
     public static void setOilLowActive(boolean oilLowActive){
-        FaultStatus.oilLowActive = oilLowActive;
+        Faults.oilLowActive = oilLowActive;
     }
     public static boolean getOilLowActive() {
         return oilLowActive;
@@ -704,7 +707,7 @@ public class FaultStatus extends ContextWrapper {
     }
 
     public static void setServiceActive(boolean serviceActive){
-        FaultStatus.serviceActive = serviceActive;
+        Faults.serviceActive = serviceActive;
     }
     public static boolean getServiceActive() {
         return serviceActive;

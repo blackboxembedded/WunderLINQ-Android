@@ -36,6 +36,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 
 import java.util.ArrayList;
 
@@ -47,8 +48,8 @@ public class FaultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FaultStatus faults;
-        faults = (new FaultStatus(this));
+        Faults faults;
+        faults = (new Faults(this));
         ListView faultList;
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);

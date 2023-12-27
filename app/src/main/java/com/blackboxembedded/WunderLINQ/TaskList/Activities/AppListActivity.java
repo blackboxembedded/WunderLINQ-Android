@@ -40,10 +40,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.blackboxembedded.WunderLINQ.AppInfo;
+import com.blackboxembedded.WunderLINQ.FaultActivity;
 import com.blackboxembedded.WunderLINQ.OnSwipeTouchListener;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +53,7 @@ import java.util.List;
 public class AppListActivity extends AppCompatActivity {
 
     public final static String TAG = "AppList";
+    private ImageButton faultButton;
 
     private ListView appList;
 
@@ -135,6 +138,15 @@ public class AppListActivity extends AppCompatActivity {
 
         ImageButton forwardButton = findViewById(R.id.action_forward);
         forwardButton.setVisibility(View.INVISIBLE);
+        faultButton = findViewById(R.id.action_faults);
+        faultButton.setOnClickListener(mClickListener);
+
+        //Check for active faults
+        if (!Faults.getallActiveDesc().isEmpty()) {
+            faultButton.setVisibility(View.VISIBLE);
+        } else {
+            faultButton.setVisibility(View.GONE);
+        }
     }
 
     private void goBack(){
@@ -150,6 +162,10 @@ public class AppListActivity extends AppCompatActivity {
                 case R.id.action_back:
                     // Go back
                     goBack();
+                    break;
+                case R.id.action_faults:
+                    Intent faultIntent = new Intent(AppListActivity.this, FaultActivity.class);
+                    startActivity(faultIntent);
                     break;
             }
         }

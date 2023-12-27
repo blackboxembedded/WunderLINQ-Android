@@ -23,7 +23,7 @@ import android.util.Log;
 
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
-import com.blackboxembedded.WunderLINQ.FaultStatus;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
@@ -151,12 +151,12 @@ public class SportDashboard {
                 doc.getElementById("iconVideo").setAttribute("style","display:inline");
             }
             //Fault Icon
-            ArrayList<String> faultListData = FaultStatus.getallActiveDesc();
+            ArrayList<String> faultListData = Faults.getallActiveDesc();
             if (!faultListData.isEmpty()) {
                 doc.getElementById("iconFault").setAttribute("style","display:inline");
             }
             //Fuel Icon
-            if (FaultStatus.getfuelFaultActive()) {
+            if (Faults.getfuelFaultActive()) {
                 doc.getElementById("iconFuel").setAttribute("style","display:inline");
             }
             //Bluetooth Icon

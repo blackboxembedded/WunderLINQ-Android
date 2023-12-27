@@ -37,14 +37,17 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.blackboxembedded.WunderLINQ.FaultActivity;
 import com.blackboxembedded.WunderLINQ.OnSwipeTouchListener;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 
 public class VolumeActivity extends AppCompatActivity {
 
     public final static String TAG = "VolumeActivity";
+    private ImageButton faultButton;
 
     private ImageView volumeImage;
     private ProgressBar volumeProgressBar;
@@ -139,9 +142,24 @@ public class VolumeActivity extends AppCompatActivity {
         ImageButton forwardButton = findViewById(R.id.action_forward);
         backButton.setOnClickListener(mClickListener);
         forwardButton.setVisibility(View.INVISIBLE);
+        faultButton = findViewById(R.id.action_faults);
+        faultButton.setOnClickListener(mClickListener);
+
+        //Check for active faults
+        if (!Faults.getallActiveDesc().isEmpty()) {
+            faultButton.setVisibility(View.VISIBLE);
+        } else {
+            faultButton.setVisibility(View.GONE);
+        }
     }
 
     private void updateUI(){
+        //Check for active faults
+        if (!Faults.getallActiveDesc().isEmpty()) {
+            faultButton.setVisibility(View.VISIBLE);
+        } else {
+            faultButton.setVisibility(View.GONE);
+        }
         int currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
         int streamMaxVolume = audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         float volume = ((float) currentVolume) / streamMaxVolume;
@@ -166,6 +184,10 @@ public class VolumeActivity extends AppCompatActivity {
             switch(v.getId()) {
                 case R.id.action_back:
                     goBack();
+                    break;
+                case R.id.action_faults:
+                    Intent faultIntent = new Intent(VolumeActivity.this, FaultActivity.class);
+                    startActivity(faultIntent);
                     break;
             }
         }

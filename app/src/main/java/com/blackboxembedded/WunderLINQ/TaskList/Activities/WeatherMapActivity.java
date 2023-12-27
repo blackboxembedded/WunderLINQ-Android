@@ -37,10 +37,12 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blackboxembedded.WunderLINQ.FaultActivity;
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
 import com.blackboxembedded.WunderLINQ.R;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
@@ -65,6 +67,7 @@ import java.util.Locale;
 public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyCallback, OnMapsSdkInitializedCallback {
 
     public final static String TAG = "WeatherActivity";
+    private ImageButton faultButton;
     private GoogleMap mMap;
     private Marker mMarker;
     private TileOverlay tileOverlay;
@@ -232,8 +235,13 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
 
         handler.postDelayed(new Runnable(){
             public void run(){
-                Log.d(TAG,"Updating marker");
                 // This portion of code runs each 10s.
+                //Check for active faults
+                if (!Faults.getallActiveDesc().isEmpty()) {
+                    faultButton.setVisibility(View.VISIBLE);
+                } else {
+                    faultButton.setVisibility(View.GONE);
+                }
                 long l = System.currentTimeMillis();
                 l -= l % (10*60*1000);
                 long unixtime = l / 1000L;
@@ -289,6 +297,15 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
         ImageButton forwardButton = findViewById(R.id.action_forward);
         backButton.setOnClickListener(mClickListener);
         forwardButton.setVisibility(View.INVISIBLE);
+        faultButton = findViewById(R.id.action_faults);
+        faultButton.setOnClickListener(mClickListener);
+
+        //Check for active faults
+        if (!Faults.getallActiveDesc().isEmpty()) {
+            faultButton.setVisibility(View.VISIBLE);
+        } else {
+            faultButton.setVisibility(View.GONE);
+        }
     }
 
     private void goBack(){
@@ -302,6 +319,10 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
             switch(v.getId()) {
                 case R.id.action_back:
                     goBack();
+                    break;
+                case R.id.action_faults:
+                    Intent faultIntent = new Intent(WeatherMapActivity.this, FaultActivity.class);
+                    startActivity(faultIntent);
                     break;
             }
         }

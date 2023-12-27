@@ -27,7 +27,6 @@ import android.util.Log;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
 
-import com.blackboxembedded.WunderLINQ.FaultStatus;
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
@@ -773,20 +772,20 @@ public class Data {
                 break;
             case DATA_FRONT_RDC:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire);
-                if (FaultStatus.getfrontTirePressureCriticalActive()){
+                if (Faults.getfrontTirePressureCriticalActive()){
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire_alert);
                     icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
-                } else if (FaultStatus.getfrontTirePressureWarningActive()){
+                } else if (Faults.getfrontTirePressureWarningActive()){
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire_alert);
                     icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
                 }
                 break;
             case DATA_REAR_RDC:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire);
-                if (FaultStatus.getrearTirePressureCriticalActive()){
+                if (Faults.getrearTirePressureCriticalActive()){
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire_alert);
                     icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
-                } else if (FaultStatus.getrearTirePressureWarningActive()){
+                } else if (Faults.getrearTirePressureWarningActive()){
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire_alert);
                     icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
                 }

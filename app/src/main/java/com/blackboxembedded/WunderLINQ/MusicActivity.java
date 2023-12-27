@@ -61,8 +61,7 @@ import androidx.core.app.NotificationManagerCompat;
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
-import com.blackboxembedded.WunderLINQ.comms.BLE.GattAttributes;
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 
 import java.util.List;
 import java.util.Set;
@@ -71,6 +70,7 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
 
     public final static String TAG = "MusicActivity";
 
+    private ImageButton faultButton;
     private ImageButton mPlayPauseButton;
     private TextView mArtistText;
     private TextView mTitleText;
@@ -115,6 +115,10 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
                     break;
                 case R.id.action_forward:
                     goForward();
+                    break;
+                case R.id.action_faults:
+                    Intent faultIntent = new Intent(MusicActivity.this, FaultActivity.class);
+                    startActivity(faultIntent);
                     break;
                 case R.id.album_art:
                     if (controller != null) {
@@ -317,8 +321,17 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
 
         ImageButton backButton = findViewById(R.id.action_back);
         ImageButton forwardButton = findViewById(R.id.action_forward);
+        faultButton = findViewById(R.id.action_faults);
         backButton.setOnClickListener(mClickListener);
         forwardButton.setOnClickListener(mClickListener);
+        faultButton.setOnClickListener(mClickListener);
+
+        //Check for active faults
+        if (!Faults.getallActiveDesc().isEmpty()) {
+            faultButton.setVisibility(View.VISIBLE);
+        } else {
+            faultButton.setVisibility(View.GONE);
+        }
     }
 
     //Go to next screen - Quick Tasks
@@ -358,6 +371,12 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
     private Runnable mUpdateMetaData = new Runnable() {
         @Override
         public void run() {
+            //Check for active faults
+            if (!Faults.getallActiveDesc().isEmpty()) {
+                faultButton.setVisibility(View.VISIBLE);
+            } else {
+                faultButton.setVisibility(View.GONE);
+            }
             refreshMetaData();
             mHandler.postDelayed(this, 1000); //setting up update event after one second
         }

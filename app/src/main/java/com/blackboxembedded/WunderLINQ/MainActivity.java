@@ -78,6 +78,7 @@ import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ;
 
 import java.text.SimpleDateFormat;
@@ -881,7 +882,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                                 mMenu.findItem(R.id.action_hwsettings).setVisible(true);
                             }
                             //Check for active faults
-                            if (!FaultStatus.getallActiveDesc().isEmpty()) {
+                            if (!Faults.getallActiveDesc().isEmpty()) {
                                 faultButton.setVisibility(View.VISIBLE);
                             } else {
                                 faultButton.setVisibility(View.GONE);

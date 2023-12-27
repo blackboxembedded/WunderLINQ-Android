@@ -46,6 +46,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.blackboxembedded.WunderLINQ.FaultActivity;
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 import com.blackboxembedded.WunderLINQ.NavAppHelper;
 import com.blackboxembedded.WunderLINQ.OnSwipeTouchListener;
@@ -55,6 +56,7 @@ import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
 import com.blackboxembedded.WunderLINQ.WaypointDatasource;
 import com.blackboxembedded.WunderLINQ.WaypointListView;
 import com.blackboxembedded.WunderLINQ.WaypointRecord;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
@@ -62,6 +64,7 @@ import java.util.List;
 public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelper.OnOsmandMissingListener {
 
     public final static String TAG = "WaypointNav";
+    private ImageButton faultButton;
 
     private ListView waypointList;
     List<WaypointRecord> listValues;
@@ -213,6 +216,15 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
         ImageButton forwardButton = findViewById(R.id.action_forward);
         backButton.setOnClickListener(mClickListener);
         forwardButton.setVisibility(View.INVISIBLE);
+        faultButton = findViewById(R.id.action_faults);
+        faultButton.setOnClickListener(mClickListener);
+
+        //Check for active faults
+        if (!Faults.getallActiveDesc().isEmpty()) {
+            faultButton.setVisibility(View.VISIBLE);
+        } else {
+            faultButton.setVisibility(View.GONE);
+        }
     }
 
     private void goBack(){
@@ -228,6 +240,10 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
             switch(v.getId()) {
                 case R.id.action_back:
                     goBack();
+                    break;
+                case R.id.action_faults:
+                    Intent faultIntent = new Intent(WaypointNavActivity.this, FaultActivity.class);
+                    startActivity(faultIntent);
                     break;
             }
         }

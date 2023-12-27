@@ -60,6 +60,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.blackboxembedded.WunderLINQ.AccessoryActivity;
 import com.blackboxembedded.WunderLINQ.DashActivity;
+import com.blackboxembedded.WunderLINQ.FaultActivity;
 import com.blackboxembedded.WunderLINQ.TaskList.Activities.AppListActivity;
 import com.blackboxembedded.WunderLINQ.TaskList.Activities.ContactListActivity;
 import com.blackboxembedded.WunderLINQ.LoggingService;
@@ -80,6 +81,7 @@ import com.blackboxembedded.WunderLINQ.WaypointRecord;
 import com.blackboxembedded.WunderLINQ.TaskList.Activities.WeatherMapActivity;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.google.android.gms.maps.model.LatLng;
 import com.yarolegovich.discretescrollview.DiscreteScrollView;
 import com.yarolegovich.discretescrollview.transform.Pivot;
@@ -95,6 +97,7 @@ import java.util.List;
 public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOsmandMissingListener {
 
     private final static String TAG = "TaskActivity";
+    private ImageButton faultButton;
     private DiscreteScrollView taskListView;
     private TaskAdapter adapter;
     final ArrayList<TaskItem> taskItems = new ArrayList<>();
@@ -312,8 +315,17 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
 
         ImageButton backButton = findViewById(R.id.action_back);
         ImageButton forwardButton = findViewById(R.id.action_forward);
+        faultButton = findViewById(R.id.action_faults);
         backButton.setOnClickListener(mClickListener);
         forwardButton.setOnClickListener(mClickListener);
+        faultButton.setOnClickListener(mClickListener);
+
+        //Check for active faults
+        if (!Faults.getallActiveDesc().isEmpty()) {
+            faultButton.setVisibility(View.VISIBLE);
+        } else {
+            faultButton.setVisibility(View.GONE);
+        }
     }
 
     private View.OnClickListener mClickListener = new View.OnClickListener() {
@@ -326,6 +338,10 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                     break;
                 case R.id.action_forward:
                     goForward();
+                    break;
+                case R.id.action_faults:
+                    Intent faultIntent = new Intent(TaskActivity.this, FaultActivity.class);
+                    startActivity(faultIntent);
                     break;
             }
         }

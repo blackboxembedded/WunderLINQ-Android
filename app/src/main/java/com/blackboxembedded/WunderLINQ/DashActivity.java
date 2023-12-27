@@ -44,6 +44,7 @@ import com.blackboxembedded.WunderLINQ.TaskList.TaskActivity;
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.caverock.androidsvg.SVG;
 import com.caverock.androidsvg.SVGImageView;
 
@@ -52,6 +53,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
     public final static String TAG = "DashActivity";
 
     private SharedPreferences sharedPrefs;
+    private ImageButton faultButton;
 
     private SVGImageView dashboardView;
     private SVG svg;
@@ -185,8 +187,17 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
 
         ImageButton backButton = findViewById(R.id.action_back);
         ImageButton forwardButton = findViewById(R.id.action_forward);
+        faultButton = findViewById(R.id.action_faults);
         backButton.setOnClickListener(mClickListener);
         forwardButton.setOnClickListener(mClickListener);
+        faultButton.setOnClickListener(mClickListener);
+
+        //Check for active faults
+        if (!Faults.getallActiveDesc().isEmpty()) {
+            faultButton.setVisibility(View.VISIBLE);
+        } else {
+            faultButton.setVisibility(View.GONE);
+        }
     }
 
     private View.OnClickListener mClickListener = new View.OnClickListener() {
@@ -199,6 +210,10 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
                     break;
                 case R.id.action_forward:
                     goForward();
+                    break;
+                case R.id.action_faults:
+                    Intent faultIntent = new Intent(DashActivity.this, FaultActivity.class);
+                    startActivity(faultIntent);
                     break;
             }
         }
@@ -282,7 +297,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     void nextInfoLine(){
-        SoundManager.playSound(this, R.raw.enter);
+        SoundManager.playSound(this, R.raw.directional);
         if (currentInfoLine == numInfoLine){
             currentInfoLine = 1;
         } else {
@@ -292,7 +307,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     void prevInfoLine(){
-        SoundManager.playSound(this, R.raw.enter);
+        SoundManager.playSound(this, R.raw.directional);
         if (currentInfoLine == 1){
             currentInfoLine = numInfoLine;
         } else {
@@ -353,6 +368,12 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
     };
 
     private void updateDashboard(){
+        //Check for active faults
+        if (!Faults.getallActiveDesc().isEmpty()) {
+            faultButton.setVisibility(View.VISIBLE);
+        } else {
+            faultButton.setVisibility(View.GONE);
+        }
         if (!dashUpdateRunning) {
             new Thread(new Runnable() {
                 @Override

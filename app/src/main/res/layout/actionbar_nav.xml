@@ -18,6 +18,20 @@
         android:focusable="false"/>
 
     <ImageButton
+        android:id="@+id/action_faults"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:layout_toEndOf="@+id/action_back"
+        android:background="@null"
+        android:paddingLeft="10dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:visibility="invisible"
+        app:srcCompat="@drawable/ic_warning" />
+
+    <ImageButton
         android:id="@+id/action_forward"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

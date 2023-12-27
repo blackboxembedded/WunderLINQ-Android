@@ -22,7 +22,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
-import com.blackboxembedded.WunderLINQ.FaultStatus;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
@@ -202,7 +202,7 @@ public class StandardDashboard {
                             fuelrange = Utils.kmToMiles(fuelrange);
                         }
                         doc.getElementById("dataValue").setTextContent(String.valueOf(Math.round(fuelrange)) + " " + distanceUnit);
-                        if (FaultStatus.getfuelFaultActive()) {
+                        if (Faults.getfuelFaultActive()) {
                             doc.getElementById("dataValue").setAttribute("style",
                                     doc.getElementById("dataValue").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
                             );
@@ -308,11 +308,11 @@ public class StandardDashboard {
                     rdcFront = Utils.barToPsi(rdcFront);
                 }
                 doc.getElementById("rdcF").setTextContent(Utils.oneDigit.format(rdcFront) + pressureUnit);
-                if (FaultStatus.getfrontTirePressureCriticalActive()) {
+                if (Faults.getfrontTirePressureCriticalActive()) {
                     doc.getElementById("rdcF").setAttribute("style",
                             doc.getElementById("rdcF").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
                     );
-                } else if (FaultStatus.getfrontTirePressureWarningActive()) {
+                } else if (Faults.getfrontTirePressureWarningActive()) {
                     doc.getElementById("rdcF").setAttribute("style",
                             doc.getElementById("rdcF").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#fcc914;")
                     );
@@ -335,12 +335,12 @@ public class StandardDashboard {
                     rdcRear = Utils.barToPsi(rdcRear);
                 }
                 doc.getElementById("rdcR").setTextContent(Utils.oneDigit.format(rdcRear) + pressureUnit);
-                if (FaultStatus.getrearTirePressureCriticalActive()) {
+                if (Faults.getrearTirePressureCriticalActive()) {
                     doc.getElementById("rdcR").setAttribute("style",
                             doc.getElementById("rdcR").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
                     );
 
-                } else if (FaultStatus.getrearTirePressureWarningActive()) {
+                } else if (Faults.getrearTirePressureWarningActive()) {
                     doc.getElementById("rdcR").setAttribute("style",
                             doc.getElementById("rdcR").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#fcc914;")
                     );
@@ -357,12 +357,12 @@ public class StandardDashboard {
                 doc.getElementById("iconVideo").setAttribute("style","display:inline");
             }
             //Fault Icon
-            ArrayList<String> faultListData = FaultStatus.getallActiveDesc();
+            ArrayList<String> faultListData = Faults.getallActiveDesc();
             if (!faultListData.isEmpty()) {
                 doc.getElementById("iconFault").setAttribute("style","display:inline");
             }
             //Fuel Icon
-            if (FaultStatus.getfuelFaultActive()) {
+            if (Faults.getfuelFaultActive()) {
                 doc.getElementById("iconFuel").setAttribute("style","display:inline");
             }
 
