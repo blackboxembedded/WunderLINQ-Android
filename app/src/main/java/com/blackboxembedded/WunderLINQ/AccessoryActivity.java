@@ -4,6 +4,7 @@ import androidx.annotation.ColorInt;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -194,7 +195,7 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
     protected void onResume() {
         super.onResume();
 
-        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        ContextCompat.registerReceiver(this, mGattUpdateReceiver, makeGattUpdateIntentFilter(), ContextCompat.RECEIVER_EXPORTED);
 
         // Read status
         if (BluetoothLeService.gattCommandCharacteristic != null) {

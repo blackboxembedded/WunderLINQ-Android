@@ -33,6 +33,9 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
@@ -60,7 +63,7 @@
             android:exported="false" />
         <activity
             android:name=".PermissionsActivity"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.blackboxembedded.WunderLINQ.PermissionsActivity" />
 
@@ -242,10 +245,12 @@
         <service
             android:name=".LoggingService"
             android:enabled="true"
+            android:foregroundServiceType="location"
             android:exported="false" />
         <service
             android:name=".VideoRecService"
             android:enabled="true"
+            android:foregroundServiceType="mediaPlayback"
             android:exported="false" />
         <service
             android:name=".PhotoService"

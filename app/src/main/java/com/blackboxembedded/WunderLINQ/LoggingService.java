@@ -17,6 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ;
 
+import static android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION;
 import static androidx.core.app.NotificationCompat.PRIORITY_MIN;
 
 import android.app.Notification;
@@ -139,7 +140,11 @@ public class LoggingService extends Service {
                 .setCategory(NotificationCompat.CATEGORY_SERVICE)
                 .build();
 
-        startForeground(1234, notification);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(1234, notification, FOREGROUND_SERVICE_TYPE_LOCATION);
+        } else {
+            startForeground(1234, notification);
+        }
 
         ((MyApplication) this.getApplication()).setTripRecording(true);
     }

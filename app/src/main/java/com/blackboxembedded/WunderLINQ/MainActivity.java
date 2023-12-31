@@ -255,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             builder.show();
         }
 
-        registerReceiver(mBondingBroadcast, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
+        ContextCompat.registerReceiver(this, mGattUpdateReceiver, makeGattUpdateIntentFilter(), ContextCompat.RECEIVER_EXPORTED);
 
         bluetoothLeService = new Intent(MainActivity.this, BluetoothLeService.class);
     }
@@ -461,7 +461,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         if (!(Build.BRAND.startsWith("google") && Build.DEVICE.startsWith("generic"))) {
             startService(bluetoothLeService);
             registerReceiver(mBondingBroadcast, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
-            registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+            ContextCompat.registerReceiver(this, mGattUpdateReceiver, makeGattUpdateIntentFilter(), ContextCompat.RECEIVER_EXPORTED);
             if (mBluetoothLeService == null) {
                 Log.d(TAG, "mBluetoothLeService is null");
                 setupBLE();

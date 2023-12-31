@@ -36,6 +36,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
@@ -107,7 +108,7 @@ public class BikeInfoActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        ContextCompat.registerReceiver(this, mGattUpdateReceiver, makeGattUpdateIntentFilter(), ContextCompat.RECEIVER_EXPORTED);
 
         if (Data.wlq != null) {
             if (Data.wlq.getFirmwareVersion() == null) {

@@ -36,6 +36,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.blackboxembedded.WunderLINQ.SVGDashboards.ADVDashboard;
 import com.blackboxembedded.WunderLINQ.SVGDashboards.SportDashboard;
@@ -125,7 +126,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
         currentDashboard = sharedPrefs.getInt("lastDashboard",1);
         updateDashboard();
         startTimer();
-        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        ContextCompat.registerReceiver(this, mGattUpdateReceiver, makeGattUpdateIntentFilter(), ContextCompat.RECEIVER_EXPORTED);
     }
 
     @Override

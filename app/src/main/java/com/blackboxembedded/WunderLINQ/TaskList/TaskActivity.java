@@ -56,6 +56,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blackboxembedded.WunderLINQ.AccessoryActivity;
@@ -188,7 +189,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         getSupportActionBar().show();
         taskListView.addScrollStateChangeListener(scrollListener);
         startTimer();
-        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        ContextCompat.registerReceiver(this, mGattUpdateReceiver, makeGattUpdateIntentFilter(), ContextCompat.RECEIVER_EXPORTED);
     }
 
     @Override
