@@ -4,19 +4,19 @@
     <string name="main_title">Motocicleta</string>
     <!-- Permission Requests -->
     <string name="camera_alert_title">WunderLINQ necesita permisos para usar tu cámara</string>
-    <string name="camera_alert_body">La aplicación WunderLINQ necesita acceso a su cámara para tomar fotos y grabar vídeo.</string>
+    <string name="camera_alert_body">La app WunderLINQ necesita acceso a su cámara para tomar fotos y grabar vídeo.</string>
     <string name="contacts_alert_title">WunderLINQ necesita permisos para leer tus contactos</string>
-    <string name="contacts_alert_body">La aplicación WunderLINQ necesita acceder a sus contactos para incluirlos en la lista de marcación.</string>
+    <string name="contacts_alert_body">La app WunderLINQ necesita acceder a sus contactos para incluirlos en la lista de marcación.</string>
     <string name="record_audio_alert_title">WunderLINQ necesita permisos para grabar audio</string>
-    <string name="record_audio_alert_body">La aplicación WunderLINQ necesita acceso a su micrófono para grabar audio de vídeo.</string>
+    <string name="record_audio_alert_body">La app WunderLINQ necesita acceso a su micrófono para grabar audio de vídeo.</string>
     <string name="location_alert_title">WunderLINQ necesita permiso de ubicación</string>
-    <string name="location_alert_body">La aplicación WunderLINQ necesita acceder a su ubicación para permitir la grabación de la ruta en segundo plano y el registro de datos. El permiso de ubicación también se utiliza para registrar datos como la elevación, la velocidad mediante GPS y el rumbo.</string>
+    <string name="location_alert_body">La app WunderLINQ necesita acceder a su ubicación para permitir la grabación de la ruta en segundo plano y el registro de datos. El permiso de ubicación también se utiliza para registrar datos como la elevación, la velocidad mediante GPS y el rumbo.</string>
     <string name="write_alert_title">WunderLINQ necesita permiso de escritura</string>
     <string name="write_alert_body">La aplicación WunderLINQ necesita acceso para escribir archivos para el registro de pistas y fotos.</string>
     <string name="overlay_alert_title">WunderLINQ necesita permiso para superposición</string>
     <string name="overlay_alert_body">La aplicación WunderLINQ necesita permisos de superposición para la grabación de vídeo en segundo plano.</string>
     <string name="negative_alert_title">Funcionalidad limitada</string>
-    <string name="negative_location_alert_body">Dado que no se ha concedido acceso a la ubicación, esta aplicación no podrá guardar waypoints ni registrar tu ubicación.</string>
+    <string name="negative_location_alert_body">Dado que no se ha concedido acceso a la ubicación, esta app no podrá guardar puntos de referencia ni registrar tu ubicación.</string>
     <string name="negative_write_alert_body">Dado que no se ha otorgado acceso de escritura, esta aplicación no podrá guardar archivos.</string>
     <string name="negative_camera_alert_body">Dado que no se ha otorgado acceso a la cámara, esta aplicación no podrá tomar fotos ni videos.</string>
     <string name="negative_microphone_alert_body">Como no se ha concedido acceso al micrófono, esta aplicación no podrá grabar vídeos.</string>
@@ -292,7 +292,7 @@
     <string name="consumer_hid_0x02_label">Teclado numérico</string>
     <string name="consumer_hid_0x20_label">+10</string>
     <string name="firstrun_start">WunderLINQ requiere una gran cantidad de permisos para habilitar todas las funciones interesantes que ofrece la aplicación. En las siguientes pantallas le explicaremos la necesidad de cada solicitud de permiso. Sólo se le presentarán estas pantallas esta vez. Si necesita habilitar ciertos permisos después, tendrá que ir a los Ajustes de Android y habilitarlos.</string>
-    <string name="firstrun_navapp_body">Seleccione su aplicación de navegación preferida. El nivel de compatibilidad con WunderLINQ varía. Para obtener más información, consulte la siguiente página: https://blackboxembedded.com/pages/integrations</string>
+    <string name="firstrun_navapp_body">Seleccione su App de navegación preferida. El nivel de compatibilidad con WunderLINQ varía. Para obtener más información, consulte la siguiente página: https://blackboxembedded.com/pages/integrations</string>
     <string name="consumer_hid_0xB6_label">Escanear pista anterior</string>
     <string name="consumer_hid_0xB8_label">Expulsar</string>
     <string name="consumer_hid_0xB9_label">Reproducción aleatoria</string>
@@ -500,8 +500,8 @@
     <string name="rtk_display_double_label">Doble Pulsación Pantalla</string>
     <string name="keyboard_hid_0x87_label">Teclado Internacional1</string>
     <string name="firstrun_button_ok">De acuerdo</string>
-    <string name="accessibilityservice_alert_body">La aplicación WunderLINQ utiliza el servicio de accesibilidad para permitir el inicio Picture-in-Picture.</string>
-    <string name="call_alert_body">La aplicación WunderLINQ necesita acceso al teléfono para iniciar llamadas.</string>
+    <string name="accessibilityservice_alert_body">La app WunderLINQ utiliza el servicio de accesibilidad para permitir el inicio Picture-in-Picture.</string>
+    <string name="call_alert_body">La app WunderLINQ necesita acceso al teléfono para iniciar llamadas.</string>
     <string name="firstrun_button_skip">En desacuerdo</string>
     <string name="call_alert_title">WunderLINQ necesita permisos para utilizar su teléfono para realizar llamadas telefónicas</string>
     <string name="negative_call_alert_body">Dado que no se ha concedido acceso al teléfono, esta aplicación no podrá realizar llamadas telefónicas.</string>
@@ -655,7 +655,7 @@
     <string name="local_battery_header">Batería Del Dispositivo</string>
     <string name="systemvolume_title">Volumen Del Sistema</string>
     <string name="pref_highlightColor_title">Resaltar Color</string>
-    <string name="pref_dashboard_speedsource_name">Origen De La Velocidad En El Tablero</string>
+    <string name="pref_dashboard_speedsource_name">Origen De La Velocidad En Dashboard</string>
     <string name="pref_rpmmax_name">RPM Max</string>
     <string name="pref_display_dashboard_name">Habilitar La Pantalla Del Dashboard</string>
     <string name="nav_app_kurviger1">Kurviger 1 Pro</string>
@@ -668,7 +668,7 @@
     <string name="toast_waypoint_saved">Punto de referencia guardado</string>
     <string name="dash_title">Dashboard</string>
     <string name="full_rocker2_down_label">Rocker2 Abajo</string>
-    <string name="dash_trip1_label">Viaje1</string>
+    <string name="dash_trip1_label">Trip1</string>
     <string name="keyboard_hid_0x08_label">Tecla e</string>
     <string name="keyboard_hid_0x0A_label">Tecla g</string>
     <string name="keyboard_hid_0x33_label">Teclas ; y :</string>
@@ -762,7 +762,7 @@
     <string name="keyboard_hid_0x61_label">Teclado numérico 9 y Página Arriba</string>
     <string name="keyboard_hid_0x62_label">Teclado numérico 0 e Insertar</string>
     <string name="keyboard_hid_0x63_label">Teclado numérico . y Suprimir</string>
-    <string name="consumer_hid_0xB4_label">Rebobinar</string>
+    <string name="consumer_hid_0xB4_label">Retroceder</string>
     <string name="consumer_hid_0xE0_label">Volumen</string>
     <string name="fw_ver_label">Firmware:</string>
     <string name="app_ver_label">App:</string>
@@ -830,8 +830,8 @@
     <string name="keyboard_hid_0x2A_label">Retroceso</string>
     <string name="keyboard_hid_0x30_label">Tecla ]</string>
     <string name="full_rocker1_down_label">Rocker1 Abajo</string>
-    <string name="dash_trip2_label">Viaje2</string>
-    <string name="dash_tripauto_label">ViajeA</string>
+    <string name="dash_trip2_label">Trip2</string>
+    <string name="dash_tripauto_label">TripA</string>
     <string name="dash_fueleconomyone_label">Eco1</string>
     <string name="keyboard_hid_0x50_label">Flecha Izquierda</string>
     <string name="keyboard_hid_0x4F_label">Flecha Derecha</string>
