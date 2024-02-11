@@ -34,8 +34,6 @@ android {
     }
     lint {
         checkReleaseBuilds false
-    }
-    lintOptions {
         abortOnError false
     }
     namespace 'com.blackboxembedded.WunderLINQ'
@@ -59,11 +57,11 @@ dependencies {
     implementation 'androidx.preference:preference:1.2.1'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation "androidx.lifecycle:lifecycle-viewmodel:2.6.2"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:2.7.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.11.0'
-    implementation 'com.google.android.gms:play-services-location:21.0.1'
+    implementation 'com.google.android.gms:play-services-location:21.1.0'
     implementation 'com.google.android.gms:play-services-maps:18.2.0'
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1'
     implementation 'com.opencsv:opencsv:4.2'
