@@ -971,7 +971,9 @@ public class BluetoothLeService extends Service {
     public static void close() {
         if ((ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED)
                 || (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)) {
-            mBluetoothGatt.close();
+            if (mBluetoothGatt != null) {
+                mBluetoothGatt.close();
+            }
         } else {
             //Request permission
             Log.d(TAG, "No BLUETOOTH_CONNECT permission granted");
