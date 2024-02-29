@@ -16,7 +16,7 @@
     <string name="overlay_alert_title">WunderLINQ necesita permiso para superposición</string>
     <string name="overlay_alert_body">La aplicación WunderLINQ necesita permisos de superposición para la grabación de vídeo en segundo plano.</string>
     <string name="negative_alert_title">Funcionalidad limitada</string>
-    <string name="negative_location_alert_body">Dado que no se ha concedido acceso a la ubicación, esta app no podrá guardar puntos de referencia ni registrar tu ubicación.</string>
+    <string name="negative_location_alert_body">Dado que no se ha concedido acceso a la ubicación, esta app no podrá guardar waypoints ni registrar tu ubicación.</string>
     <string name="negative_write_alert_body">Dado que no se ha otorgado acceso de escritura, esta aplicación no podrá guardar archivos.</string>
     <string name="negative_camera_alert_body">Dado que no se ha otorgado acceso a la cámara, esta aplicación no podrá tomar fotos ni videos.</string>
     <string name="negative_microphone_alert_body">Como no se ha concedido acceso al micrófono, esta aplicación no podrá grabar vídeos.</string>
@@ -30,13 +30,13 @@
     <string name="disclaimer_quit">Salir</string>
     <!-- BLE Stuff Below -->
     <string name="bt_not_supported">No es compatible con BLE</string>
-    <string name="rdc_front_label">Neumático delantero</string>
-    <string name="rdc_rear_label">Neumático trasero</string>
-    <string name="engine_temp_label">Temperatura del motor</string>
-    <string name="ambient_temp_label">Temperatura ambiente</string>
+    <string name="rdc_front_label">Rueda Del</string>
+    <string name="rdc_rear_label">Rueda Tra</string>
+    <string name="engine_temp_label">Temp. Motor</string>
+    <string name="ambient_temp_label">Temp. Ambiente</string>
     <string name="odometer_label">Odómetro</string>
-    <string name="trip1_label">Viaje 1</string>
-    <string name="trip2_label">Viaje 2</string>
+    <string name="trip1_label">Trip 1</string>
+    <string name="trip2_label">Trip 2</string>
     <string name="gear_label">Marcha</string>
     <!-- Data Menu -->
     <!-- FaultActivity -->
@@ -77,27 +77,27 @@
     <string name="fault_GENWARNFSRED">Luz de advertencia general destella en rojo</string>
     <string name="fault_GENWARNSHRED">Luz de advertencia general encendida en rojo</string>
     <string name="fault_OILLOW">Nivel de aceite muy bajo</string>
-    <string name="fault_TIREFWF">Advertencia de Presión de Neumático Delantero</string>
-    <string name="fault_TIRERWF">Advertencia de Presión de Neumático Trasero</string>
-    <string name="fault_TIREFCF">Presión Crítica en Neumático Delantero</string>
-    <string name="fault_TIRERCF">Presión Crítica en Neumático Trasero</string>
+    <string name="fault_TIREFWF">Advertencia de Presión Rueda Delantera</string>
+    <string name="fault_TIRERWF">Advertencia de Presión Rueda Trasera</string>
+    <string name="fault_TIREFCF">Presión Crítica en Rueda Delantera</string>
+    <string name="fault_TIRERCF">Presión Crítica en Rueda Trasera</string>
     <!-- WaypointActivity -->
-    <string name="waypoint_title">Puntos de Ruta Guardados</string>
+    <string name="waypoint_title">Waypoints Guardados</string>
     <!-- WaypointViewActivity -->
-    <string name="waypoint_view_title">Punto de Ruta Guardado</string>
+    <string name="waypoint_view_title">Waypoint Guardado</string>
     <string name="waypoint_view_tv_date_label">Fecha de Grabación</string>
     <string name="waypoint_view_tv_lat_label">Latitud</string>
     <string name="waypoint_view_tv_lon_label">Longitud</string>
     <string name="waypoint_view_tv_label_label">Etiqueta</string>
-    <string name="waypoint_view_label_hint">Etiqueta del Punto de Ruta</string>
+    <string name="waypoint_view_label_hint">Etiqueta de Waypoint</string>
     <string name="waypoint_view_bt_open">Abrir en App de Mapas</string>
     <string name="waypoint_view_bt_share">Compartir</string>
     <string name="waypoint_view_bt_delete">Eliminar</string>
     <string name="waypoint_view_share_label">Compartir vía</string>
     <!-- TripsActivity -->
     <!-- TripViewActivity -->
-    <string name="trip_view_title">Viaje</string>
-    <string name="trip_view_trip_label">Bitácora de Viaje WunderLINQ</string>
+    <string name="trip_view_title">Trip</string>
+    <string name="trip_view_trip_label">Bitácora de Trip WunderLINQ</string>
     <string name="trip_view_waypoint_start_label">Inicio</string>
     <string name="trip_view_waypoint_end_label">Fin</string>
     <string name="trip_view_share_label">Compartir</string>
@@ -105,9 +105,9 @@
     <string name="trip_view_tv_duration">Duración</string>
     <string name="trip_view_tv_speed">Velocidad (Prom/Máx)</string>
     <string name="trip_view_tv_shifts">Cambios de Marcha</string>
-    <string name="trip_view_tv_brakes">Frenos (Del/Tras)</string>
-    <string name="trip_view_tv_ambient">Temp ambiente(Min/Prom/Máx)</string>
-    <string name="trip_view_tv_engine">Temp Motor(Min/Prom/Máx)</string>
+    <string name="trip_view_tv_brakes">Frenos (Del/Tra)</string>
+    <string name="trip_view_tv_ambient">Temp. Ambiente (Min/Prom/Máx)</string>
+    <string name="trip_view_tv_engine">Temp. Motor (Min/Prom/Máx)</string>
     <!-- CompassActivity -->
     <string name="compass_title">Compás</string>
     <!-- MusicActivity -->
@@ -128,8 +128,8 @@
     <string name="task_title_selfie">Tomar Selfie</string>
     <string name="task_title_start_record">Iniciar Grabación</string>
     <string name="task_title_stop_record">Detener Grabación</string>
-    <string name="task_title_start_trip">Iniciar Bitácora de Viaje</string>
-    <string name="task_title_stop_trip">Detener Bitácora de Viaje</string>
+    <string name="task_title_start_trip">Iniciar Bitácora de Trip</string>
+    <string name="task_title_stop_trip">Detener Bitácora de Trip</string>
     <string name="toast_address_not_set">No Se Ha Configurado La Dirección Ir a Casa en Ajustes</string>
     <string name="toast_phone_not_set">No Se ha Configurado un Número Favorito en Ajustes</string>
     <string name="toast_photo_taken">Fotografía Tomada!</string>
@@ -196,9 +196,9 @@
     <string name="pref_autoNightModeDelay_name">Retardo del Modo Noche Automático</string>
     <string name="pref_autoNightModeDelay_summary">Establecer Demora en Segundos del Modo Nocturno Automático</string>
     <string name="alerting_title">Configuración de Alertas</string>
-    <string name="pref_tpmsAlert_name">Umbral personalizado de presión de neumático</string>
-    <string name="pref_tpmsAlert_summary">Utilice un umbral personalizado para alertas de baja presión de los neumáticos</string>
-    <string name="pref_tpmsAlertThreshold_name">Umbral de Presión de Neumáticos Bajo</string>
+    <string name="pref_tpmsAlert_name">Umbral Personalizado Presión de Ruedas</string>
+    <string name="pref_tpmsAlert_summary">Utilice un umbral personalizado para alertas de baja presión de las ruedas</string>
+    <string name="pref_tpmsAlertThreshold_name">Umbral de Presión de Rueda Baja</string>
     <string name="pref_tpmsAlertThreshold_summary">Especifique un número en la unidad de medida elegida</string>
     <string name="pref_fuelAlert_name">Ruta a Gasolinera</string>
     <string name="pref_fuelAlert_summary">Preguntar por la ruta a la estación de gasolina más cercana en caso de aviso por bajo nivel de combustible</string>
@@ -219,9 +219,9 @@
     <string name="enginetemp_header">Temperatura Del Motor</string>
     <string name="odometer_header">Odómetro</string>
     <string name="vin_header">VIN</string>
-    <string name="tripone_header">Viaje 1</string>
-    <string name="triptwo_header">Viaje 2</string>
-    <string name="tripauto_header">Viaje Auto</string>
+    <string name="tripone_header">Trip 1</string>
+    <string name="triptwo_header">Trip 2</string>
+    <string name="tripauto_header">Auto Trip</string>
     <string name="pref_nightMode_summary">Esquema de color de la interfaz de usuario</string>
     <string name="eighth">Octavo</string>
     <string name="eleventh">Décimo Primero</string>
@@ -247,14 +247,14 @@
     <string name="permission_location_label">Ubicación</string>
     <string name="permissions_title">Permisos</string>
     <string name="accessibilityservice_alert_title">WunderLINQ necesita ejecutar el Servicio de Accesibilidad</string>
-    <string name="throttle_label">Acelerador</string>
+    <string name="throttle_label">Aceleración</string>
     <string name="credits_label">Créditos</string>
     <string name="task_title_gopro">Control GoPro</string>
     <string name="fault_SERVICE">Vencimiento del Servicio</string>
     <string name="addwaypoint_view_tv_search_label">Colocar pin o dirección de búsqueda</string>
     <string name="addwaypoint_view_search_hint">Tipo de Dirección</string>
     <string name="toast_waypoint_error">Latitud y Longitud Requeridas</string>
-    <string name="waypoint_view_waypoint_label">Punto de Referencia</string>
+    <string name="waypoint_view_waypoint_label">Waypoint</string>
     <string name="hours">h</string>
     <string name="default_accessory_two_name">Canal Dos</string>
     <string name="touch_here">Toque Aquí Para Solicitar Permiso</string>
@@ -302,7 +302,7 @@
     <string name="usagestats_alert_body">La aplicación WunderLINQ necesita acceder a las estadísticas de uso para el lanzamiento automático de la aplicación cuando el dispositivo WunderLINQ está conectado.</string>
     <string name="accessory_title">Estado del Accesorio</string>
     <string name="pref_bearing_override_name">Orientación del GPS</string>
-    <string name="time_header">Tiempo</string>
+    <string name="time_header">Hora</string>
     <string name="version_label">Versión:</string>
     <string name="rtk_page_label">Página</string>
     <string name="full_long_press_label">Presión Prolongada</string>
@@ -335,14 +335,14 @@
     <string name="config_reset_label">Restablecer configuración</string>
     <string name="config_write_label">Guardar configuración</string>
     <string name="hwsave_alert_title">Advertencia!</string>
-    <string name="delete_waypoint_alert_body">Eliminar Punto de Referencia\?</string>
+    <string name="delete_waypoint_alert_body">Eliminar Waypoint\?</string>
     <string name="delete_waypoint_alert_title">Advertencia!</string>
-    <string name="trips_title">Viajes Grabados</string>
+    <string name="trips_title">Trips Grabados</string>
     <string name="minutes">m</string>
     <string name="default_accessory_one_name">Canal Uno</string>
     <string name="pref_pip_summary">Cuando se abandona la aplicación, la cuadrícula de datos se minimiza en una ventana flotante. Solo disponible en Android 8.0+</string>
-    <string name="task_title_waypoint">Guardar Punto de Referencia</string>
-    <string name="task_title_waypoint_nav">Navegar a Punto de Referencia</string>
+    <string name="task_title_waypoint">Guardar Waypoint</string>
+    <string name="task_title_waypoint_nav">Navegar a Waypoint</string>
     <string name="dash_range_label">Rango</string>
     <string name="rtk_mute_double_label">Doble pulsación para Silenciar</string>
     <string name="fourth">Cuarto</string>
@@ -445,7 +445,7 @@
     <string name="consumer_hid_0xF2_label">Reproducción estándar</string>
     <string name="consumer_hid_0xF4_label">Reproducción extendida</string>
     <string name="consumer_hid_0xF5_label">Lento</string>
-    <string name="bike_info_title">Información de la Motocicleta</string>
+    <string name="bike_info_title">Info. Motocicleta</string>
     <string name="appsettings_label">Ajustes de la App</string>
     <string name="hwsettings_label">Ajustes del Dispositivo</string>
     <string name="info_label">Acerca de</string>
@@ -511,13 +511,13 @@
     <string name="no_pairing_alert_body">No hay un WunderLINQ emparejado. Por favor, empareje su WunderLINQ en los Ajustes Bluetooth.</string>
     <string name="too_many_pairings_alert_title">Más de un WunderLINQ emparejado</string>
     <string name="too_many_pairings_alert_body">Más de más de un WunderLINQ emparejado. Por favor, elimine los emparejamientos antiguos en su Configuración Bluetooth.</string>
-    <string name="avgspeed_label">Velocidad Promedio</string>
+    <string name="avgspeed_label">Vel Prom</string>
     <string name="cconsumption_label">Consumo</string>
-    <string name="fueleconomytwo_label">Economía 2</string>
+    <string name="fueleconomytwo_label">Consumo 2</string>
     <string name="fuelrange_label">Rango</string>
-    <string name="fueleconomyone_label">Economía 1</string>
-    <string name="bike_info_label">Información de la Motocicleta</string>
-    <string name="geodata_label">Viajes y Puntos de Ruta</string>
+    <string name="fueleconomyone_label">Consumo 1</string>
+    <string name="bike_info_label">Info. Motocicleta</string>
+    <string name="geodata_label">Trips &amp; Waypoints</string>
     <string name="hwsave_alert_body">Después de guardar la nueva configuración del dispositivo, el dispositivo WunderLINQ se volverá inestable y será necesario retirarlo y volver a instalarlo en la base.
 \n Los cambios en la asignación de teclas pueden afectar a la navegación de la aplicación con la rueda.</string>
     <string name="hwsave_alert_btn_ok">Continuar</string>
@@ -526,10 +526,10 @@
     <string name="seconds">s</string>
     <string name="delete_trip_alert_title">Advertencia!</string>
     <string name="cancel_bt">Cancelar</string>
-    <string name="delete_trip_alert_body">Borrar Registro de Viaje\?</string>
+    <string name="delete_trip_alert_body">Borrar Registro de Trip\?</string>
     <string name="nav_app_gurumaps">Guru Maps</string>
     <string name="system_default">Predeterminado del Sistema</string>
-    <string name="waypoints_nav_title">Puntos de referencia</string>
+    <string name="waypoints_nav_title">Waypoints</string>
     <string name="full_scroll_down_label">Desplazar Hacia Abajo</string>
     <string name="task_title_actioncam_stop_video">Detener Grabación Cámara de Acción</string>
     <string name="task_title_actioncam_start_video">Iniciar Grabación Cámara de Acción</string>
@@ -569,7 +569,7 @@
     <string name="consumer_hid_0xA0_label">VCR Plus</string>
     <string name="trip_view_tv_lean">Inclinación (Max)</string>
     <string name="waypoint_view_tv_elevation_label">Elevación</string>
-    <string name="trip_view_label_hint">Etiqueta de Viaje</string>
+    <string name="trip_view_label_hint">Etiqueta de Trip</string>
     <string name="nogpremote_alert_body">El control de GoPro lo proporciona una aplicación gratuita independiente llamada WunderLINQ GoPro Remote. Haz clic en ACEPTAR para instalarla.</string>
     <string name="toast_actioncam_notconnected">Cámara De Acción No Conectada</string>
     <string name="weathermap_title">Mapa Meteorológico</string>
@@ -598,8 +598,8 @@
     <string name="alert_title_photopreview">Vista Previa Foto</string>
     <string name="voltage_header">Voltaje</string>
     <string name="throttle_header">Posición Del Acelerador</string>
-    <string name="rearpressure_header">Presión De Neumático Trasero</string>
-    <string name="rearbrakes_header">Frenos Traseros</string>
+    <string name="rearpressure_header">Presión Rueda Trasera</string>
+    <string name="rearbrakes_header">Freno Tra.</string>
     <string name="shifts_header">Cambios</string>
     <string name="ambientlight_header">Luz Ambiente</string>
     <string name="speed_header">Velocidad</string>
@@ -616,13 +616,13 @@
     <string name="btconnect_alert_body">La aplicación WunderLINQ necesita poder conectarse al dispositivo WunderLINQ.</string>
     <string name="keyboard_hid_0x8D_label">Teclado Internacional7</string>
     <string name="keyboard_hid_0x99_label">Tecla Borrado alternativo</string>
-    <string name="frontbrakes_label">Frenos Delanteros</string>
-    <string name="rearbrakes_label">Frenos Traseros</string>
+    <string name="frontbrakes_label">Freno Del.</string>
+    <string name="rearbrakes_label">Freno Tra.</string>
     <string name="ambientlight_label">Luz Ambiental</string>
     <string name="speed_label">Velocidad</string>
     <string name="consumer_hid_0xE8_label">MPX</string>
     <string name="nogpremote_alert_title">WunderLINQ GoPro Remote No Encontrado</string>
-    <string name="addwaypoint_view_title">Agregar Punto de Ruta</string>
+    <string name="addwaypoint_view_title">Agregar Waypoint</string>
     <string name="addwaypoint_view_bt_save">Guardar</string>
     <string name="addwaypoint_view_bt_search">Busque</string>
     <string name="waypoint_view_bt_navigate">Navegar</string>
@@ -649,7 +649,7 @@
     <string name="alert_title_ignition">Apagado</string>
     <string name="alert_label_ignition">Apagar WunderLINQ App\?</string>git
     <string name="gpsspeed_header">Velocidad GPS</string>
-    <string name="frontbrakes_header">Frenos Delanteros</string>
+    <string name="frontbrakes_header">Freno Del.</string>
     <string name="rearwheel_speed_header">Velocidad De Rueda Trasera</string>
     <string name="cellular_signal_header">Señal Celular</string>
     <string name="local_battery_header">Batería Del Dispositivo</string>
@@ -665,7 +665,7 @@
     <string name="consumption_km">km/L</string>
     <string name="pref_ignitionAlert_name">Encendido</string>
     <string name="pref_ignitionAlert_summary">Preguntar si se cierra la aplicación cuando se ha apagado el motor</string>
-    <string name="toast_waypoint_saved">Punto de referencia guardado</string>
+    <string name="toast_waypoint_saved">Waypoint Guardado</string>
     <string name="dash_title">Dashboard</string>
     <string name="full_rocker2_down_label">Rocker2 Abajo</string>
     <string name="dash_trip1_label">Trip1</string>
@@ -778,8 +778,8 @@
     <string name="consumer_hid_0x85_label">Solicitar película</string>
     <string name="task_title_fuel">Combustible</string>
     <string name="gps_nofix">Sin Solución</string>
-    <string name="frontpressure_header">Presión De Neumático Delantero</string>
-    <string name="ambienttemp_header">Temperatura Ambiente</string>
+    <string name="frontpressure_header">Presión Rueda Delantera</string>
+    <string name="ambienttemp_header">Temp. Ambiente</string>
     <string name="avgspeed_header">Velocidad Promedio</string>
     <string name="cconsumption_header">Consumo Actual</string>
     <string name="fueleconomyone_header">Ahorro de Combustible 1</string>
@@ -791,14 +791,14 @@
     <string name="rpm_header">RPM</string>
     <string name="leanangle_bike_header">Ángulo De Inclinación</string>
     <string name="bearing_header">Rumbo</string>
-    <string name="title_logging_notification">Grabación de viajes WunderLINQ activa</string>
+    <string name="title_logging_notification">Grabación de Trip WunderLINQ Activa</string>
     <string name="pref_main_settings_title">Personalización De La Pantalla Principal</string>
     <string name="pref_main_settings_summary">Personalizar Las Pantallas Opcionales Para Mostrar</string>
     <string name="pref_display_music_name">Habilitar Pantalla De Control De Música</string>
     <string name="pref_tasks_settings_title">Personalización Rápida de Tareas</string>
     <string name="pref_tasks_settings_summary">Personaliza qué tareas mostrar y en qué orden</string>
     <string name="nav_app_feature_not_supported">Función no compatible con la App de Navegación seleccionada</string>
-    <string name="gpx_import_alert_body">Importar puntos de referencia desde GPX\?</string>
+    <string name="gpx_import_alert_body">Importar waypoints desde GPX\?</string>
     <string name="nav_app_locus_classic">Locus Map 3 Classic</string>
     <string name="nav_app_bmwconnectedride">BMW Motorrad Connected</string>
     <string name="nav_app_calimoto">Calimoto</string>
