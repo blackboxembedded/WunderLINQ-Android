@@ -447,7 +447,7 @@
     <string name="consumer_hid_0xF5_label">Lento</string>
     <string name="bike_info_title">Info. Motocicleta</string>
     <string name="appsettings_label">Ajustes de la App</string>
-    <string name="hwsettings_label">Ajustes del Dispositivo</string>
+    <string name="hwsettings_label">Configuraciones del Dispositivo</string>
     <string name="info_label">Acerca de</string>
     <string name="altitude_header">Elevación</string>
     <string name="latitude_header">Latitud</string>
