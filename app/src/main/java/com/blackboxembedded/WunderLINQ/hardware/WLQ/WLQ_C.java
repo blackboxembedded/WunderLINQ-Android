@@ -119,136 +119,13 @@ public class WLQ_C extends WLQ_BASE {
     private static int rocker2DownLongPressKey_INDEX = 45;
 
     // Status message
-    private static int statusSize = 111;
-    private static int MODE_INDEX = 0;
-    //private static int MODE_INDEX = 1;
-    private static int TRIGGER_BIT_BYTE_INDEX = 2;
-    private static int TRIGGER_BIT_POS_INDEX = 3;
-    private static int TRIGGER_BIT_HOLD_CNT_LOW_INDEX = 4;
-    private static int TRIGGER_BIT_HOLD_CNT_HIGH_INDEX = 5;
-    private static int TRIGGER_BIT_MAX_CNT_LOW_INDEX = 6;
-    private static int TRIGGER_BIT_MAX_CNT_HIGH_INDEX = 7;
-    private static int TRIGGER_BIT_MIN_CNT_LOW_INDEX = 8;
-    private static int TRIGGER_BIT_MIN_CNT_HIGH_INDEX = 9;
-    private static int TRIGGER_BIT_MAX_VAL_INDEX = 10;
-    private static int TRIGGER_BIT_MIN_VAL_INDEX = 11;
-
-    private static int ROCKER1_U_BIT_BYTE_INDEX = 12;
-    private static int ROCKER1_U_BIT_POS_INDEX = 13;
-    private static int ROCKER1_U_BIT_HOLD_CNT_LOW_INDEX = 14;
-    private static int ROCKER1_U_BIT_HOLD_CNT_HIGH_INDEX = 15;
-    private static int ROCKER1_U_BIT_MAX_CNT_LOW_INDEX = 16;
-    private static int ROCKER1_U_BIT_MAX_CNT_HIGH_INDEX = 17;
-    private static int ROCKER1_U_BIT_MIN_CNT_LOW_INDEX = 18;
-    private static int ROCKER1_U_BIT_MIN_CNT_HIGH_INDEX = 19;
-    private static int ROCKER1_U_BIT_MAX_VAL_INDEX = 20;
-    private static int ROCKER1_U_BIT_MIN_VAL_INDEX = 21;
-
-    private static int ROCKER1_D_BIT_BYTE_INDEX = 22;
-    private static int ROCKER1_D_BIT_POS_INDEX = 23;
-    private static int ROCKER1_D_BIT_HOLD_CNT_LOW_INDEX = 24;
-    private static int ROCKER1_D_BIT_HOLD_CNT_HIGH_INDEX = 25;
-    private static int ROCKER1_D_BIT_MAX_CNT_LOW_INDEX = 26;
-    private static int ROCKER1_D_BIT_MAX_CNT_HIGH_INDEX = 27;
-    private static int ROCKER1_D_BIT_MIN_CNT_LOW_INDEX = 28;
-    private static int ROCKER1_D_BIT_MIN_CNT_HIGH_INDEX = 29;
-    private static int ROCKER1_D_BIT_MAX_VAL_INDEX = 30;
-    private static int ROCKER1_D_BIT_MIN_VAL_INDEX = 31;
-
-    private static int ROCKER2_U_BIT_BYTE_INDEX = 32;
-    private static int ROCKER2_U_BIT_POS_INDEX = 33;
-    private static int ROCKER2_U_BIT_HOLD_CNT_LOW_INDEX = 34;
-    private static int ROCKER2_U_BIT_HOLD_CNT_HIGH_INDEX = 35;
-    private static int ROCKER2_U_BIT_MAX_CNT_LOW_INDEX = 36;
-    private static int ROCKER2_U_BIT_MAX_CNT_HIGH_INDEX = 37;
-    private static int ROCKER2_U_BIT_MIN_CNT_LOW_INDEX = 38;
-    private static int ROCKER2_U_BIT_MIN_CNT_HIGH_INDEX = 39;
-    private static int ROCKER2_U_BIT_MAX_VAL_INDEX = 40;
-    private static int ROCKER2_U_BIT_MIN_VAL_INDEX = 41;
-
-    private static int ROCKER2_D_BIT_BYTE_INDEX = 42;
-    private static int ROCKER2_D_BIT_POS_INDEX = 43;
-    private static int ROCKER2_D_BIT_HOLD_CNT_LOW_INDEX = 44;
-    private static int ROCKER2_D_BIT_HOLD_CNT_HIGH_INDEX = 45;
-    private static int ROCKER2_D_BIT_MAX_CNT_LOW_INDEX = 46;
-    private static int ROCKER2_D_BIT_MAX_CNT_HIGH_INDEX = 47;
-    private static int ROCKER2_D_BIT_MIN_CNT_LOW_INDEX = 48;
-    private static int ROCKER2_D_BIT_MIN_CNT_HIGH_INDEX = 49;
-    private static int ROCKER2_D_BIT_MAX_VAL_INDEX = 50;
-    private static int ROCKER2_D_BIT_MIN_VAL_INDEX = 51;
-
-    private static int WW_R_BIT_BYTE_INDEX = 52;
-    private static int WW_R_BIT_POS_INDEX = 53;
-    private static int WW_R_BIT_HOLD_CNT_LOW_INDEX = 54;
-    private static int WW_R_BIT_HOLD_CNT_HIGH_INDEX = 55;
-    private static int WW_R_BIT_MAX_CNT_LOW_INDEX = 56;
-    private static int WW_R_BIT_MAX_CNT_HIGH_INDEX = 57;
-    private static int WW_R_BIT_MIN_CNT_LOW_INDEX = 58;
-    private static int WW_R_BIT_MIN_CNT_HIGH_INDEX = 59;
-    private static int WW_R_BIT_MAX_VAL_INDEX = 60;
-    private static int WW_R_BIT_MIN_VAL_INDEX = 61;
-
-    private static int WW_L_BIT_BYTE_INDEX = 62;
-    private static int WW_L_BIT_POS_INDEX = 63;
-    private static int WW_L_BIT_HOLD_CNT_LOW_INDEX = 64;
-    private static int WW_L_BIT_HOLD_CNT_HIGH_INDEX = 65;
-    private static int WW_L_BIT_MAX_CNT_LOW_INDEX = 66;
-    private static int WW_L_BIT_MAX_CNT_HIGH_INDEX = 67;
-    private static int WW_L_BIT_MIN_CNT_LOW_INDEX = 68;
-    private static int WW_L_BIT_MIN_CNT_HIGH_INDEX = 69;
-    private static int WW_L_BIT_MAX_VAL_INDEX = 70;
-    private static int WW_L_BIT_MIN_VAL_INDEX = 71;
-
-    private static int WW_SCROLL_BYTE_INDEX = 72;
-    private static int WW_SCROLL_LENGTH_INDEX = 73;
-    private static int WW_SCROLL_VAL_CURRENT_INDEX = 74;
-    private static int WW_SCROLL_VAL_OLD_INDEX = 75;
-    private static int WW_SCROLL_INC_VAL_INDEX = 76;
-    private static int WW_SCROLL_DEC_VAL_INDEX = 77;
-
-    private static int WLQ_SCHEDULE_SLOT_INDEX = 78;
-    private static int OEM_SCHEDULE_SLOT_INDEX = 79;
-    private static int ACC_SCHEDULE_SLOT_INDEX = 80;
-
-    private static int PIXEL_OB_INTENSITY_INDEX = 81;
-    private static int PIXEL_OB_B_INDEX = 82;
-    private static int PIXEL_OB_G_INDEX = 83;
-    private static int PIXEL_OB_R_INDEX = 84;
-    private static int PIXEL_REMOTE_INTENSITY_INDEX = 85;
-    private static int PIXEL_REMOTE_B_INDEX = 86;
-    private static int PIXEL_REMOTE_G_INDEX = 87;
-    private static int PIXEL_REMOTE_R_INDEX = 88;
-
-    public static int ACTIVE_CHAN_INDEX = 89;
-    private static int LIN_ACC_CHANNEL_CNT_INDEX = 90;
-
-    private static int LIN_ACC_CHANNEL1_CONFIG_BYTE_INDEX = 91;
-    private static int LIN_ACC_CHANNEL1_VAL_BYTE_INDEX = 92;
-    public static int LIN_ACC_CHANNEL1_CONFIG_STATE_INDEX = 93;
-    public static int LIN_ACC_CHANNEL1_VAL_RAW_INDEX = 94;
-    private static int LIN_ACC_CHANNEL1_VAL_OFFSET_INDEX = 95;
-    private static int LIN_ACC_CHANNEL1_VAL_SCALE_INDEX = 96;
-    private static int LIN_ACC_CHANNEL1_PIXEL_INTENSITY_INDEX = 97;
-    public static int LIN_ACC_CHANNEL1_PIXEL_B_INDEX = 98;
-    public static int LIN_ACC_CHANNEL1_PIXEL_G_INDEX = 99;
-    public static int LIN_ACC_CHANNEL1_PIXEL_R_INDEX = 100;
-
-    private static int LIN_ACC_CHANNEL2_CONFIG_BYTE_INDEX = 101;
-    private static int LIN_ACC_CHANNEL2_VAL_BYTE_INDEX = 102;
-    public static int LIN_ACC_CHANNEL2_CONFIG_STATE_INDEX = 103;
-    public static int LIN_ACC_CHANNEL2_VAL_RAW_INDEX = 104;
-    private static int LIN_ACC_CHANNEL2_VAL_OFFSET_INDEX = 105;
-    private static int LIN_ACC_CHANNEL2_VAL_SCALE_INDEX = 106;
-    private static int LIN_ACC_CHANNEL2_PIXEL_INTENSITY_INDEX = 107;
-    public static int LIN_ACC_CHANNEL2_PIXEL_B_INDEX = 108;
-    public static int LIN_ACC_CHANNEL2_PIXEL_G_INDEX = 109;
-    public static int LIN_ACC_CHANNEL2_PIXEL_R_INDEX = 110;
+    private static int statusSize = 3;
+    public static int ACTIVE_CHAN_INDEX = 0;
+    public static int LIN_ACC_CHANNEL1_VAL_RAW_INDEX = 1;
+    public static int LIN_ACC_CHANNEL2_VAL_RAW_INDEX = 2;
 
     private static byte[] wunderLINQStatus;
-    public static int channel1PixelColor;
-    public static int channel2PixelColor;
-    public static int channel1PixelIntensity;
-    public static int channel2PixelIntensity;
+    public static int activeChannel;
     public static int channe1ValueRaw;
     public static int channel2ValueRaw;
 
@@ -860,10 +737,7 @@ public class WLQ_C extends WLQ_BASE {
     public void setStatus(byte[] status) {
         wunderLINQStatus = new byte[statusSize];
         System.arraycopy(status, 3, wunderLINQStatus, 0, statusSize);
-        channel1PixelColor = (0x00 & 0xff) << 24 | (wunderLINQStatus[LIN_ACC_CHANNEL1_PIXEL_R_INDEX] & 0xFF) << 16 | (wunderLINQStatus[LIN_ACC_CHANNEL1_PIXEL_G_INDEX] & 0xFF) << 8 | (wunderLINQStatus[LIN_ACC_CHANNEL1_PIXEL_B_INDEX] & 0xFF);
-        channel2PixelColor = (0x00 & 0xff) << 24 | (wunderLINQStatus[LIN_ACC_CHANNEL2_PIXEL_R_INDEX] & 0xFF) << 16 | (wunderLINQStatus[LIN_ACC_CHANNEL2_PIXEL_G_INDEX] & 0xFF) << 8 | (wunderLINQStatus[LIN_ACC_CHANNEL2_PIXEL_B_INDEX] & 0xFF);
-        channel1PixelIntensity = (wunderLINQStatus[LIN_ACC_CHANNEL1_PIXEL_INTENSITY_INDEX] & 0xFF);
-        channel2PixelIntensity = (wunderLINQStatus[LIN_ACC_CHANNEL2_PIXEL_INTENSITY_INDEX] & 0xFF);
+        activeChannel = (wunderLINQStatus[ACTIVE_CHAN_INDEX] & 0xFF);
         channe1ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
         channel2ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
     }
