@@ -172,7 +172,7 @@ public class LINbus {
                     double rdcFront = (data[4] & 0xFF) / 50.0;
                     Data.setFrontTirePressure(rdcFront);
                     if (sharedPrefs.getBoolean("prefTPMSAlert", false)) {
-                        int pressureThreshold = Integer.parseInt(sharedPrefs.getString("prefTPMSAlertThreshold", "-1"));
+                        Double pressureThreshold = Double.parseDouble(sharedPrefs.getString("prefTPMSAlertThreshold", "30.0"));
                         if (pressureThreshold >= 0) {
                             String pressureFormat = sharedPrefs.getString("prefPressureF", "0");
                             if (pressureFormat.contains("1")) {
@@ -210,12 +210,8 @@ public class LINbus {
                 if ((data[5] & 0xFF) != 0xFF){
                     double rdcRear = (data[5] & 0xFF) / 50.0;
                     Data.setRearTirePressure(rdcRear);
-                    if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
-                        // Log data
-                        Log.d("RearTirePressure","Value Received: " + rdcRear);
-                    }
                     if (sharedPrefs.getBoolean("prefTPMSAlert",false)) {
-                        int pressureThreshold = Integer.parseInt(sharedPrefs.getString("prefTPMSAlertThreshold","-1"));
+                        Double pressureThreshold = Double.parseDouble(sharedPrefs.getString("prefTPMSAlertThreshold", "30.0"));
                         if (pressureThreshold >= 0) {
                             String pressureFormat = sharedPrefs.getString("prefPressureF", "0");
                             if (pressureFormat.contains("1")) {
@@ -248,11 +244,6 @@ public class LINbus {
                                 }
                             }
                         }
-                    }
-                } else {
-                    if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
-                        // Log data
-                        Log.d("RearTirePressure","Value Received: 0xFF");
                     }
                 }
 

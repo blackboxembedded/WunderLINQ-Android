@@ -19,6 +19,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -99,8 +100,8 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
         channelTwoHeaderTV = findViewById(R.id.tvChannel2Header);
         channelTwoHeaderET = findViewById(R.id.etChannel2Header);
         channelTwoValuePB = findViewById(R.id.pbChannel2Value);
-        channelOneValuePB.setMax(254);
-        channelTwoValuePB.setMax(254);
+        channelOneValuePB.setMax(4);
+        channelTwoValuePB.setMax(4);
 
         gestureDetector = new GestureDetectorListener(this){
             @Override
@@ -199,7 +200,7 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
 
         // Read status
         if (BluetoothLeService.gattCommandCharacteristic != null) {
-            BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, WLQ_C.GET_STATUS_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+            //BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, WLQ_C.GET_STATUS_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
         }
 
         updateDisplay();
@@ -351,12 +352,8 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
                 channelTwoHeaderTV.setText(sharedPrefs.getString("ACC_CHAN_2", getString(R.string.default_accessory_two_name)));
                 channelTwoHeaderET.setText(sharedPrefs.getString("ACC_CHAN_2", getString(R.string.default_accessory_two_name)));
                 int channelActive = (Data.wlq.getStatus()[WLQ_C.ACTIVE_CHAN_INDEX] & 0xFF);
-                int channel1State = (Data.wlq.getStatus()[WLQ_C.LIN_ACC_CHANNEL1_CONFIG_STATE_INDEX] & 0xFF);
-                int channel2State = (Data.wlq.getStatus()[WLQ_C.LIN_ACC_CHANNEL2_CONFIG_STATE_INDEX] & 0xFF);
                 int channel1ValueRaw = (Data.wlq.getStatus()[WLQ_C.LIN_ACC_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
                 int channel2ValueRaw = (Data.wlq.getStatus()[WLQ_C.LIN_ACC_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
-                int channel1PixelColor = (0xff & 0xff) << 24 | (Data.wlq.getStatus()[WLQ_C.LIN_ACC_CHANNEL1_PIXEL_R_INDEX] & 0xFF) << 16 | (Data.wlq.getStatus()[WLQ_C.LIN_ACC_CHANNEL1_PIXEL_G_INDEX] & 0xFF) << 8 | (Data.wlq.getStatus()[WLQ_C.LIN_ACC_CHANNEL1_PIXEL_B_INDEX] & 0xFF);
-                int channel2PixelColor = (0xff & 0xff) << 24 | (Data.wlq.getStatus()[WLQ_C.LIN_ACC_CHANNEL2_PIXEL_R_INDEX] & 0xFF) << 16 | (Data.wlq.getStatus()[WLQ_C.LIN_ACC_CHANNEL2_PIXEL_G_INDEX] & 0xFF) << 8 | (Data.wlq.getStatus()[WLQ_C.LIN_ACC_CHANNEL2_PIXEL_B_INDEX] & 0xFF);
 
                 TypedValue typedValue = new TypedValue();
                 Resources.Theme theme = this.getTheme();
@@ -365,20 +362,19 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
                 GradientDrawable drawable = (GradientDrawable) getDrawable(R.drawable.border_highlight);
                 drawable.mutate(); // only change this instance of the xml, not all components using this xml
                 drawable.setStroke(20, androidx.preference.PreferenceManager.getDefaultSharedPreferences(this).getInt("prefHighlightColor", R.color.colorAccent)); // set stroke width and stroke color
+                Log.d(TAG,"ACTIVE CHANNEL: " + channelActive);
                 switch (channelActive) {
-                    case 1:
+                    case 3:
                         channelOneCL.setBackground(drawable);
                         channelTwoCL.setBackgroundResource(0);
-                        //channelOneValuePB.setProgressTintList(ColorStateList.valueOf(androidx.preference.PreferenceManager.getDefaultSharedPreferences(this).getInt("prefHighlightColor", R.color.colorAccent)));
-                        channelOneValuePB.setProgressTintList(ColorStateList.valueOf(channel1PixelColor));
+                        channelOneValuePB.setProgressTintList(ColorStateList.valueOf(androidx.preference.PreferenceManager.getDefaultSharedPreferences(this).getInt("prefHighlightColor", R.color.colorAccent)));
                         channelTwoValuePB.setProgressTintList(ColorStateList.valueOf(foregroundColor));
                         break;
-                    case 2:
+                    case 4:
                         channelOneCL.setBackgroundResource(0);
                         channelTwoCL.setBackground(drawable);
+                        channelTwoValuePB.setProgressTintList(ColorStateList.valueOf(androidx.preference.PreferenceManager.getDefaultSharedPreferences(this).getInt("prefHighlightColor", R.color.colorAccent)));
                         channelOneValuePB.setProgressTintList(ColorStateList.valueOf(foregroundColor));
-                        //channelTwoValuePB.setProgressTintList(ColorStateList.valueOf(androidx.preference.PreferenceManager.getDefaultSharedPreferences(this).getInt("prefHighlightColor", R.color.colorAccent)));
-                        channelTwoValuePB.setProgressTintList(ColorStateList.valueOf(channel2PixelColor));
                         break;
                     default:
                         channelOneCL.setBackgroundResource(0);
@@ -387,18 +383,10 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
                         channelTwoValuePB.setProgressTintList(ColorStateList.valueOf(foregroundColor));
                         break;
                 }
-                if (channel1State == 128) {
-                    channelOneValuePB.setProgress(channel1ValueRaw);
-                } else {
-                    channelOneValuePB.setProgress(0);
-                }
-                if (channel2State == 128) {
-                    channelTwoValuePB.setProgress(channel2ValueRaw);
-                } else {
-                    channelTwoValuePB.setProgress(0);
-                }
+                channelOneValuePB.setProgress(channel1ValueRaw);
+                channelTwoValuePB.setProgress(channel2ValueRaw);
             } else {
-                BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, WLQ_C.GET_STATUS_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                //BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, WLQ_C.GET_STATUS_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
             }
         } else {
             // Request config

@@ -386,7 +386,7 @@
             android:dependency="prefTPMSAlert"
             android:title="@string/pref_tpmsAlertThreshold_name"
             android:summary="@string/pref_tpmsAlertThreshold_summary"
-            android:defaultValue="30"
+            android:defaultValue="30.0"
             android:inputType="number"
             android:key="prefTPMSAlertThreshold" />
         <CheckBoxPreference

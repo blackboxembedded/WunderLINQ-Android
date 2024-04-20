@@ -863,6 +863,11 @@ public class BluetoothLeService extends Service {
                     MyApplication.getContext().sendBroadcast(intent);
                 } else if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x53)) {
                     if(Data.wlq != null) {
+                        if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
+                            Log.d(TAG,"ACC STATUS RECEIVED");
+                            // Log data
+                            Log.d(TAG,Utils.ByteArraytoHexNoDelim(data));
+                        }
                         Data.wlq.setStatus(data);
                         final Intent intent = new Intent(ACTION_ACCSTATUS_AVAILABLE);
                         intent.putExtras(mBundle);
