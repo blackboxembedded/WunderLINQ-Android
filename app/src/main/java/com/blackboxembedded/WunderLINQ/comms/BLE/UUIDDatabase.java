@@ -34,6 +34,8 @@ public class UUIDDatabase {
 
     public static final UUID UUID_WUNDERLINQ_CANMESSAGE_CHARACTERISTIC = UUID
             .fromString(GattAttributes.WUNDERLINQ_CANMESSAGE_CHARACTERISTIC);
+    public static final UUID UUID_WUNDERLINQ_PERFORMANCE_CHARACTERISTIC = UUID
+            .fromString(GattAttributes.WUNDERLINQ_PERFORMANCE_CHARACTERISTIC);
 
     public final static UUID UUID_WUNDERLINQ_COMMAND_CHARACTERISTIC = UUID
             .fromString(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC);

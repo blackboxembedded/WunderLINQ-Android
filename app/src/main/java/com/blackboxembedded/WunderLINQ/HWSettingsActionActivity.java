@@ -41,6 +41,7 @@ import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_C;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_X;
 import com.blackboxembedded.WunderLINQ.protocols.KeyboardHID;
 
 import java.io.ByteArrayOutputStream;
@@ -61,6 +62,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
     private ArrayAdapter<String> keymodes;
     private ArrayAdapter<String> usb;
     private ArrayAdapter<Integer> sensitivity;
+    private ArrayAdapter<String> orientations;
     private ArrayAdapter<String> types;
     private ArrayAdapter<String> keyboard;
     private ArrayAdapter<String> consumer;
@@ -92,6 +94,12 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 getResources().getString(R.string.keymode_media_label),
                 getResources().getString(R.string.keymode_dmd2_label)});
 
+        orientations = new ArrayAdapter<String>(this,
+                R.layout.item_hwsettings_spinners, new String[]{getResources().getString(R.string.orientation_default_label),
+                getResources().getString(R.string.orientation_180_label),
+                getResources().getString(R.string.orientation_270_label),
+                getResources().getString(R.string.orientation_90_label)});
+
         usb = new ArrayAdapter<String>(this,
                 R.layout.item_hwsettings_spinners, new String[]{getResources().getString(R.string.usbcontrol_on_label),
                 getResources().getString(R.string.usbcontrol_engine_label),
@@ -107,7 +115,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         actionTypeSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE){
+                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE || actionID == WLQ_X.KEYMODE){
                     if(Data.wlq.getKeyMode() != pos){
                         saveBT.setVisibility(View.VISIBLE);
                     } else {
@@ -136,7 +144,13 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                         saveBT.setVisibility(View.VISIBLE);
                     }
                 } else if (actionID == WLQ_C.longPressSensitivity){
-                    if ((pos) == WLQ_N.fullSensitivity){
+                    if ((pos) == WLQ_C.lpSensitivity){
+                        saveBT.setVisibility(View.INVISIBLE);
+                    } else {
+                        saveBT.setVisibility(View.VISIBLE);
+                    }
+                } else if (actionID == WLQ_X.ORIENTATION){
+                    if ((pos) == WLQ_X.orientation){
                         saveBT.setVisibility(View.INVISIBLE);
                     } else {
                         saveBT.setVisibility(View.VISIBLE);
@@ -185,7 +199,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         actionKeySP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE){
+                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE || actionID == WLQ_X.KEYMODE){
 
                 } else if (actionID == WLQ_N.USB){
 
@@ -194,6 +208,8 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 } else if (actionID == WLQ_N.fullLongPressSensitivity){
 
                 } else if (actionID == WLQ_C.longPressSensitivity){
+
+                } else if (actionID == WLQ_X.ORIENTATION){
 
                 } else {
                     if (actionTypeSP.getSelectedItemPosition() == Data.wlq.KEYBOARD_HID()) {
@@ -231,7 +247,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
                 if (actionID == WLQ_N.OldSensitivity){
 
-                } else if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE){
+                } else if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE || actionID == WLQ_X.KEYMODE){
 
                 } else if (actionID == WLQ_N.USB){
 
@@ -240,6 +256,8 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 } else if (actionID == WLQ_N.fullLongPressSensitivity){
 
                 } else if (actionID == WLQ_C.longPressSensitivity){
+
+                } else if (actionID == WLQ_X.ORIENTATION){
 
                 } else {
                     saveBT.setVisibility(View.VISIBLE);
@@ -269,7 +287,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 Intent backIntent = new Intent(HWSettingsActionActivity.this, HWSettingsActivity.class);
                 startActivity(backIntent);
             } else if (v.getId() == R.id.btSave) {
-                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE){
+                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE || actionID == WLQ_X.KEYMODE){
                     setHWMode((byte) actionTypeSP.getSelectedItemPosition());
                     return;
                 } else if (actionID == WLQ_N.USB){
@@ -288,8 +306,18 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 } else if (actionID == WLQ_N.fullLongPressSensitivity){
                     Data.wlq.getTempConfig()[WLQ_N.fullSensitivity_INDEX] = (byte)((actionTypeSP.getSelectedItemPosition() + 1) / 50);
                 } else if (actionID == WLQ_C.longPressSensitivity){
-                    //TODO
-                    //Data.wlq.getTempConfig()[WLQ_C.lpSensitivity_INDEX] = (byte)(actionTypeSP.getSelectedItemPosition() + 1);
+                    // TODO
+                    //Data.wlq.getTempConfig()[WLQ_C.lpSensitivityHigh_INDEX] = (byte)(actionTypeSP.getSelectedItemPosition() + 1);
+                } else if (actionID == WLQ_X.ORIENTATION){
+                    if(actionTypeSP.getSelectedItemPosition() == 0){
+                        Data.wlq.getTempConfig()[WLQ_X.orientation_INDEX] = 0x00;
+                    } else if(actionTypeSP.getSelectedItemPosition() == 1){
+                        Data.wlq.getTempConfig()[WLQ_X.orientation_INDEX] = 0x01;
+                    } else if(actionTypeSP.getSelectedItemPosition() == 2){
+                        Data.wlq.getTempConfig()[WLQ_X.orientation_INDEX] = 0x02;
+                    } else if(actionTypeSP.getSelectedItemPosition() == 4){
+                        Data.wlq.getTempConfig()[WLQ_X.orientation_INDEX] = 0x04;
+                    }
                 } else {
                     byte type = (byte)actionTypeSP.getSelectedItemPosition();
                     byte key = 0x00;
@@ -340,7 +368,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
     private void updateDisplay(){
         saveBT.setVisibility(View.INVISIBLE);
         actionLabelTV.setText(Data.wlq.getActionName(actionID));
-        if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE){ //Key mode
+        if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE|| actionID == WLQ_X.KEYMODE){ //Key mode
             actionTypeSP.setAdapter(keymodes);
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
@@ -394,6 +422,19 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             actionModifiersSP.setVisibility(View.INVISIBLE);
             actionTypeSP.setSelection(WLQ_C.sensitivity - 1);
              */
+        } else if (actionID == WLQ_X.ORIENTATION){
+            actionTypeSP.setAdapter(orientations);
+            actionKeySP.setVisibility(View.INVISIBLE);
+            actionModifiersSP.setVisibility(View.INVISIBLE);
+            if(WLQ_X.orientation == 0x00){
+                actionTypeSP.setSelection(0);
+            } else if(WLQ_X.orientation == 0x01){
+                actionTypeSP.setSelection(1);
+            } else if(WLQ_X.orientation == 0x02){
+                actionTypeSP.setSelection(2);
+            } else if(WLQ_X.orientation == 0x04){
+                actionTypeSP.setSelection(3);
+            }
         } else {    // Keys
             if (Data.wlq.getHardwareVersion() != null) {
                 if (Data.wlq.getHardwareVersion().equals(WLQ_N.hardwareVersion1)){

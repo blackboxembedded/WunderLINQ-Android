@@ -78,6 +78,7 @@ import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_BASE;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_C;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_X;
 import com.blackboxembedded.WunderLINQ.protocols.CANbus;
 import com.blackboxembedded.WunderLINQ.protocols.LINbus;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -843,6 +844,13 @@ public class BluetoothLeService extends Service {
                     }
                 }
             }
+        } else if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_PERFORMANCE_CHARACTERISTIC)) {
+            if (data != null) {
+                if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
+                    // Log data
+                    Log.d(TAG,Utils.ByteArraytoHexNoDelim(data));
+                }
+            }
         } else if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_COMMAND_CHARACTERISTIC)) {
             if (data != null) {
                 //Read Config
@@ -857,17 +865,22 @@ public class BluetoothLeService extends Service {
                         if (Data.hardwareVersion != null) {
                             Data.wlq.setHardwareVersion(Data.hardwareVersion);
                         }
+                    } else if (connectedType == WLQ.TYPE_X) {
+                        Data.wlq = new WLQ_X(data);
+                        if (Data.hardwareVersion != null) {
+                            Data.wlq.setHardwareVersion(Data.hardwareVersion);
+                        }
                     }
                     final Intent intent = new Intent(ACTION_CMDSTATUS_AVAILABLE);
                     intent.putExtras(mBundle);
                     MyApplication.getContext().sendBroadcast(intent);
-                } else if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x53)) {
+                } else if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x41) && (data[3] == 0x50)) {
+                    if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
+                        Log.d(TAG,"ACC STATUS RECEIVED");
+                        // Log data
+                        Log.d(TAG,Utils.ByteArraytoHexNoDelim(data));
+                    }
                     if(Data.wlq != null) {
-                        if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
-                            Log.d(TAG,"ACC STATUS RECEIVED");
-                            // Log data
-                            Log.d(TAG,Utils.ByteArraytoHexNoDelim(data));
-                        }
                         Data.wlq.setStatus(data);
                         final Intent intent = new Intent(ACTION_ACCSTATUS_AVAILABLE);
                         intent.putExtras(mBundle);
@@ -1259,8 +1272,9 @@ public class BluetoothLeService extends Service {
                             setCharacteristicNotification(
                                     gattCharacteristic, true);
                         }
-                    } else if (UUID.fromString(GattAttributes.WUNDERLINQ_CANMESSAGE_CHARACTERISTIC).equals(gattCharacteristic.getUuid())) {
-                        connectedType = WLQ.TYPE_COMMANDER;
+
+                    } else if (UUID.fromString(GattAttributes.WUNDERLINQ_PERFORMANCE_CHARACTERISTIC).equals(gattCharacteristic.getUuid())) {
+                        connectedType = WLQ.TYPE_X;
                         int charaProp = gattCharacteristic.getProperties();
                         if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
                             // If there is an active notification on a characteristic, clear
