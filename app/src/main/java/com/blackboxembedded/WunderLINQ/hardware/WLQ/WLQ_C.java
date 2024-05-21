@@ -34,7 +34,7 @@ public class WLQ_C extends WLQ_BASE {
 
     public static String hardwareVersion1 = "2PCB7.0 11/19/21";
 
-    public static byte[] GET_STATUS_CMD = {0x57, 0x52, 0x53};
+    public static byte[] GET_STATUS_CMD = {0x57, 0x52, 0x41, 0x50};
 
     private static int configFlashSize = 46;
     private static int firmwareVersionMajor_INDEX = 0;
@@ -118,7 +118,7 @@ public class WLQ_C extends WLQ_BASE {
     private static int rocker2DownLongPressKeyModifier_INDEX = 44;
     private static int rocker2DownLongPressKey_INDEX = 45;
 
-    // Status message
+    // PDM Status message
     private static int statusSize = 3;
     public static int ACTIVE_CHAN_INDEX = 0;
     public static int LIN_ACC_CHANNEL1_VAL_RAW_INDEX = 1;
@@ -136,7 +136,7 @@ public class WLQ_C extends WLQ_BASE {
     private static String hardwareVersion;
     private static byte keyMode;
     private static int spSensitivity;
-    private static int lpSensitivity;
+    public static int lpSensitivity;
     public static byte wheelRightPressKeyType;
     public static byte wheelRightPressKeyModifier;
     public static byte wheelRightPressKey;
@@ -736,7 +736,7 @@ public class WLQ_C extends WLQ_BASE {
     @Override
     public void setStatus(byte[] status) {
         wunderLINQStatus = new byte[statusSize];
-        System.arraycopy(status, 3, wunderLINQStatus, 0, statusSize);
+        System.arraycopy(status, 4, wunderLINQStatus, 0, statusSize);
         activeChannel = (wunderLINQStatus[ACTIVE_CHAN_INDEX] & 0xFF);
         channe1ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
         channel2ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL2_VAL_RAW_INDEX] & 0xFF);

@@ -47,6 +47,7 @@ import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_BASE;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_C;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_X;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -191,7 +192,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
     private void updateDisplay(){
         actionItems.clear();
         if (Data.wlq != null) {
-            if (Data.wlq.getHardwareType() == 1) {
+            if (Data.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
                 if (Data.wlq.getFirmwareVersion() != null) {
                     fwVersionTV.setText(getString(R.string.fw_version_label) + " " + Data.wlq.getFirmwareVersion());
                     if (Double.parseDouble(Data.wlq.getFirmwareVersion()) >= 2.0) {
@@ -247,10 +248,11 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                         hwConfigBtn.setVisibility(View.VISIBLE);
                     }
                 }
-            } else if (Data.wlq.getHardwareType() == 2) {
+            } else if (Data.wlq.getHardwareType() == WLQ.TYPE_COMMANDER) {
                 if (Data.wlq.getKeyMode() == Data.wlq.KEYMODE_DEFAULT() || Data.wlq.getKeyMode() == Data.wlq.KEYMODE_CUSTOM()) {
-                    //actionItems.add(new ActionItem(WLQ_C.longPressSensitivity, getString(R.string.long_press_label), Data.wlq.getActionValue(WLQ_C.longPressSensitivity)));
                     actionItems.add(new ActionItem(WLQ_C.KEYMODE, getString(R.string.keymode_label), Data.wlq.getActionValue(WLQ_C.KEYMODE))); // Keymode
+                    //TODO
+                    //actionItems.add(new ActionItem(WLQ_C.longPressSensitivity, getString(R.string.long_press_label), Data.wlq.getActionValue(WLQ_C.longPressSensitivity)));
                     actionItems.add(new ActionItem(WLQ_C.wheelScrollUp, getString(R.string.full_scroll_up_label), Data.wlq.getActionValue(WLQ_C.wheelScrollUp)));
                     actionItems.add(new ActionItem(WLQ_C.wheelScrollDown, getString(R.string.full_scroll_down_label), Data.wlq.getActionValue(WLQ_C.wheelScrollDown)));
                     actionItems.add(new ActionItem(WLQ_C.wheelToggleRight, getString(R.string.full_toggle_right_label), Data.wlq.getActionValue(WLQ_C.wheelToggleRight)));
@@ -283,7 +285,36 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                     hwConfigBtn.setText(getString(R.string.reset_btn_label));
                     hwConfigBtn.setVisibility(View.VISIBLE);
                 }
+            } else if (Data.wlq.getHardwareType() == WLQ.TYPE_X) {
+                if (Data.wlq.getKeyMode() == Data.wlq.KEYMODE_DEFAULT() || Data.wlq.getKeyMode() == Data.wlq.KEYMODE_CUSTOM()) {
+                    actionItems.add(new ActionItem(WLQ_X.KEYMODE, getString(R.string.keymode_label), Data.wlq.getActionValue(WLQ_X.KEYMODE)));
+                    actionItems.add(new ActionItem(WLQ_X.ORIENTATION, getString(R.string.orientation_label), Data.wlq.getActionValue(WLQ_X.ORIENTATION)));
+                    actionItems.add(new ActionItem(WLQ_X.up, getString(R.string.up_label), Data.wlq.getActionValue(WLQ_X.up)));
+                    actionItems.add(new ActionItem(WLQ_X.down, getString(R.string.down_label), Data.wlq.getActionValue(WLQ_X.down)));
+                    actionItems.add(new ActionItem(WLQ_X.right, getString(R.string.right_label), Data.wlq.getActionValue(WLQ_X.right)));
+                    actionItems.add(new ActionItem(WLQ_X.left, getString(R.string.left_label), Data.wlq.getActionValue(WLQ_X.left)));
+                    actionItems.add(new ActionItem(WLQ_X.fx1, getString(R.string.fx1_label), Data.wlq.getActionValue(WLQ_X.fx1)));
+                    actionItems.add(new ActionItem(WLQ_X.fx2, getString(R.string.fx2_label), Data.wlq.getActionValue(WLQ_X.fx2)));
+
+                    resetButton.setVisibility(View.INVISIBLE);
+                    hwConfigBtn.setVisibility(View.INVISIBLE);
+                    if (Data.wlq.getKeyMode() == Data.wlq.KEYMODE_CUSTOM()) {
+                        resetButton.setVisibility(View.VISIBLE);
+                        if (!Arrays.equals(Data.wlq.getConfig(), Data.wlq.getTempConfig())) {
+                            Log.d(TAG, "New Config found");
+                            Log.d(TAG, "Config: " + Utils.ByteArraytoHex(Data.wlq.getConfig()));
+                            Log.d(TAG, "tempConfig: " + Utils.ByteArraytoHex(Data.wlq.getTempConfig()));
+                            hwConfigBtn.setText(getString(R.string.config_write_label));
+                            hwConfigBtn.setVisibility(View.VISIBLE);
+                        }
+                    }
+                } else {
+                    // Corrupt Config
+                    hwConfigBtn.setText(getString(R.string.reset_btn_label));
+                    hwConfigBtn.setVisibility(View.VISIBLE);
+                }
             }
+
         } else {
             //TODO: Add No Config msg & get Config button
             // Read config
@@ -323,6 +354,14 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                                     outputStream.write(Data.wlq.WRITE_CONFIG_CMD());
                                     outputStream.write(WLQ_C.defaultConfig);
+                                    outputStream.write(Data.wlq.CMD_EOM());
+                                    byte[] writeConfigCmd = outputStream.toByteArray();
+                                    Log.d(TAG, "Reset Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
+                                    BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
+                                } else if (Data.wlq.getHardwareType() == WLQ.TYPE_X) {
+                                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                                    outputStream.write(Data.wlq.WRITE_CONFIG_CMD());
+                                    outputStream.write(WLQ_X.defaultConfig);
                                     outputStream.write(Data.wlq.CMD_EOM());
                                     byte[] writeConfigCmd = outputStream.toByteArray();
                                     Log.d(TAG, "Reset Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
@@ -376,6 +415,19 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                 }
                             }
                         } else if (Data.wlq.getHardwareType() == WLQ.TYPE_COMMANDER){
+                            if (!Arrays.equals(Data.wlq.getConfig(), Data.wlq.getTempConfig())) {
+                                try {
+                                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                                    outputStream.write(Data.wlq.WRITE_CONFIG_CMD());
+                                    outputStream.write(Data.wlq.getTempConfig());
+                                    outputStream.write(Data.wlq.CMD_EOM());
+                                    byte[] writeConfigCmd = outputStream.toByteArray();
+                                    BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
+                                } catch (IOException e) {
+                                    Log.d(TAG, e.toString());
+                                }
+                            }
+                        } else if (Data.wlq.getHardwareType() == WLQ.TYPE_X){
                             if (!Arrays.equals(Data.wlq.getConfig(), Data.wlq.getTempConfig())) {
                                 try {
                                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
