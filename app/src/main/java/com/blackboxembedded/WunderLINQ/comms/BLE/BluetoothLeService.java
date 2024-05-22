@@ -786,13 +786,15 @@ public class BluetoothLeService extends Service {
         mBundle.putString(EXTRA_BYTE_UUID_VALUE,
                 characteristic.getUuid().toString());
 
+        if (data != null) {
+            if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
+                // Log data
+                Log.d(TAG, characteristic.getUuid().toString() + ": " + Utils.ByteArraytoHexNoDelim(data));
+            }
+        }
+
         if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_LINMESSAGE_CHARACTERISTIC)) {
             if (data != null) {
-                if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
-                    // Log data
-                    Log.d(TAG,Utils.ByteArraytoHexNoDelim(data));
-                }
-
                 //Check if message changed
                 boolean process = false;
                 int msgID = (data[0] & 0xFF);
@@ -816,11 +818,6 @@ public class BluetoothLeService extends Service {
             }
         } else if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_CANMESSAGE_CHARACTERISTIC)) {
             if (data != null) {
-                if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
-                    // Log data
-                    Log.d(TAG,Utils.ByteArraytoHexNoDelim(data));
-                }
-
                 //Check if message changed
                 boolean process = false;
                 if (data.length > 2) {
@@ -845,12 +842,7 @@ public class BluetoothLeService extends Service {
                 }
             }
         } else if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_PERFORMANCE_CHARACTERISTIC)) {
-            if (data != null) {
-                if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
-                    // Log data
-                    Log.d(TAG,Utils.ByteArraytoHexNoDelim(data));
-                }
-            }
+            //TODO
         } else if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_COMMAND_CHARACTERISTIC)) {
             if (data != null) {
                 //Read Config

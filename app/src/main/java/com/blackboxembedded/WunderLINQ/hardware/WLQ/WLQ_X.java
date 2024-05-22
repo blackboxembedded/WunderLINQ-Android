@@ -136,6 +136,9 @@ public class WLQ_X extends WLQ_BASE {
             Log.d(TAG, "New flashConfig: " + Utils.ByteArraytoHex(flashConfig));
 
             firmwareVersion = bytes[firmwareVersionMajor_INDEX] + "." + bytes[firmwareVersionMinor_INDEX];
+
+            Log.d(TAG, "Firmware Version: " + firmwareVersion);
+
             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext()).edit();
             editor.putString("firmwareVersion", firmwareVersion);
             editor.apply();
