@@ -108,7 +108,7 @@
     </string-array>
     <string name="reset_btn_label">Reset</string>
     <!-- HWSettingsActivity -->
-    <string name="fw_config_title">WunderLINQ Settings</string>
+    <string name="fw_config_title">HW Settings</string>
     <string name="fw_version_label">Firmware Version</string>
     <string name="wwtype_label">Wheel Type</string>
     <string name="wwMode1">Full</string>
@@ -1074,6 +1074,19 @@
     <string name="rtk_display_label">Display Off</string>
     <string name="rtk_display_double_label">Display Double Press</string>
     <string name="rtk_double_press_label">Double Press</string>
+
+    <string name="orientation_label">Orientation</string>
+    <string name="up_label">Up</string>
+    <string name="down_label">Down</string>
+    <string name="left_label">Left</string>
+    <string name="right_label">Right</string>
+    <string name="fx1_label">F1</string>
+    <string name="fx2_label">F2</string>
+
+    <string name="orientation_default_label">Default</string>
+    <string name="orientation_90_label">90</string>
+    <string name="orientation_180_label">180</string>
+    <string name="orientation_270_label">270</string>
 
     <string name="hid_0x00_label">Not Set</string>
     <string name="hid_keyboard_label">Standard</string>

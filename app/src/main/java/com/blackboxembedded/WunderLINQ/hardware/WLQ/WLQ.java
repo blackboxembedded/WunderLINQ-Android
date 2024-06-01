@@ -20,6 +20,7 @@ package com.blackboxembedded.WunderLINQ.hardware.WLQ;
 public interface WLQ {
     public int TYPE_NAVIGATOR = 1;
     public int TYPE_COMMANDER = 2;
+    public int TYPE_X = 3;
 
     public byte[] GET_CONFIG_CMD();
 
