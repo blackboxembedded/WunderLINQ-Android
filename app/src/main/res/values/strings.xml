@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">WunderLINQ</string>
+    <string name="automotive_app_desc" translatable="false">WunderLINQ</string>
     <string name="product" translatable="false">WunderLINQ</string>
     <string name="company_name" translatable="false">Black Box Embedded, LLC</string>
     <!-- <string name="device_name" translatable="false">WunderLINQ</string> -->

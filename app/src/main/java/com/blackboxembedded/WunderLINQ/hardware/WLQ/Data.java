@@ -25,7 +25,10 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.car.app.model.CarColor;
+import androidx.car.app.model.CarIcon;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.IconCompat;
 
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
@@ -900,6 +903,168 @@ public class Data {
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_cog);
         }
         return icon;
+    }
+
+    public static CarIcon getCarIcon(int dataPoint){
+        IconCompat icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_cog);
+        CarColor carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.white),MyApplication.getContext().getResources().getColor(R.color.black));
+
+        switch (dataPoint){
+            case DATA_GEAR:
+                icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_cog);
+                break;
+            case DATA_ENGINE_TEMP:
+                icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_engine_temp);
+                if(Data.getEngineTemperature() != null ){
+                    double engineTemp = Data.getEngineTemperature();
+                    if (engineTemp >= 104.0){
+                        carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_red),MyApplication.getContext().getResources().getColor(R.color.motorrad_red));
+                    }
+                }
+                break;
+            case DATA_AIR_TEMP:
+                if(Data.getAmbientTemperature() != null ){
+                    double ambientTemp = Data.getAmbientTemperature();
+                    if(ambientTemp <= 0){
+                        icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_snowflake);
+                        carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_blue),MyApplication.getContext().getResources().getColor(R.color.motorrad_blue));
+                    } else {
+                        icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_thermometer_half);
+                    }
+                } else {
+                    icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_thermometer_half);
+                }
+                break;
+            case DATA_FRONT_RDC:
+                icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tire);
+                if (Faults.getfrontTirePressureCriticalActive()){
+                    icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tire_alert);
+                    carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_red),MyApplication.getContext().getResources().getColor(R.color.motorrad_red));
+                } else if (Faults.getfrontTirePressureWarningActive()){
+                    icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tire_alert);
+                    carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.yellow),MyApplication.getContext().getResources().getColor(R.color.yellow));
+                }
+                break;
+            case DATA_REAR_RDC:
+                icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tire);
+                if (Faults.getrearTirePressureCriticalActive()){
+                    icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tire_alert);
+                    carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_red),MyApplication.getContext().getResources().getColor(R.color.motorrad_red));
+                } else if (Faults.getrearTirePressureWarningActive()){
+                    icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tire_alert);
+                    carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.yellow),MyApplication.getContext().getResources().getColor(R.color.yellow));
+                }
+                break;
+            case DATA_ODOMETER:
+                icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_dashboard_meter);
+                break;
+            case DATA_VOLTAGE:
+                icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_car_battery);
+                break;
+            case DATA_THROTTLE:
+                icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_signature);
+                break;
+            case DATA_FRONT_BRAKE:
+            case DATA_REAR_BRAKE:
+                icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_brakes);
+                break;
+            case DATA_AMBIENT_LIGHT:
+                icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_lightbulb);
+                break;
+            case DATA_TRIP_ONE:
+            case DATA_TRIP_TWO:
+            case DATA_TRIP_AUTO:
+                icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_suitcase);
+                break;
+            case DATA_SPEED:
+            case DATA_AVG_SPEED:
+            case DATA_SPEED_DEVICE:
+            case DATA_RPM:
+            case DATA_REAR_SPEED:
+                icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tachometer_alt);
+                break;
+            case DATA_CURRENT_CONSUMPTION:
+            case DATA_ECONOMY_ONE:
+            case DATA_ECONOMY_TWO:
+            case DATA_RANGE:
+                icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_gas_pump);
+                break;
+            case DATA_SHIFTS:
+                icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_arrows_alt_v);
+                break;
+            case DATA_LEAN_DEVICE:
+            case DATA_LEAN:
+                icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_angle);
+                break;
+            case DATA_GFORCE_DEVICE:
+                icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_accelerometer);
+                break;
+            case DATA_BEARING_DEVICE:
+                icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_compass);
+                break;
+            case DATA_TIME_DEVICE:
+                icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_clock);
+                break;
+            case DATA_BAROMETRIC_DEVICE:
+                icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_barometer);
+                break;
+            case DATA_ALTITUDE_DEVICE:
+                icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_mountain);
+                break;
+            case DATA_SUN_DEVICE:
+                if (Data.getLastLocation() != null && Data.getTime() != null) {
+                    Calendar[] sunriseSunset = ca.rmen.sunrisesunset.SunriseSunset.getSunriseSunset(Calendar.getInstance(), Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
+                    Date sunrise = sunriseSunset[0].getTime();
+                    Date sunset = sunriseSunset[1].getTime();
+                    if(Data.getTime().compareTo(sunrise) > 0 && Data.getTime().compareTo(sunset) < 0){
+                        icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_sun);
+                    } else {
+                        icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_moon);
+                    }
+
+                } else {
+                    icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_sun);
+                }
+                break;
+            case DATA_CELL_SIGNAL:
+                icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.signal_bar_0);
+                if(Data.getCellularSignal() != null){
+                    int signal = Data.getCellularSignal();
+                    if (signal > -79) {
+                        icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.signal_bar_4);
+                    } else if (signal > -89 && signal < -80) {
+                        icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.signal_bar_3);
+                    } else if (signal > -99 && signal < -90) {
+                        icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.signal_bar_2);
+                    } else if (signal > -109 && signal < -100) {
+                        icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.signal_bar_1);
+                    } else if (signal < -110) {
+                        icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.signal_bar_0);
+                    }
+                }
+                break;
+            case DATA_BATTERY_DEVICE:
+                icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.battery_empty);
+                if(Data.getLocalBattery() != null){
+                    double battery = Data.getLocalBattery();
+                    if(battery > 95){
+                        icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.battery_full);
+                    } else if(battery > 75 && battery < 95){
+                        icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.battery_three_quarters);
+                    } else if(battery > 50 && battery < 75){
+                        icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.battery_half);
+                    } else if(battery > 25 && battery < 50){
+                        icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.battery_quarter);
+                    } else if(battery > 0 && battery < 25){
+                        icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.battery_empty);
+                        carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_red),MyApplication.getContext().getResources().getColor(R.color.motorrad_red));
+                    }
+                }
+                break;
+            default:
+                icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_cog);
+        }
+        return new CarIcon.Builder(icon).setTint(carColor).build();
     }
 
     public static String getValue(int dataPoint){

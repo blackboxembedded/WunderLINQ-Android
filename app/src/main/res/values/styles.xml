@@ -9,4 +9,11 @@
 
     <style name="WLQTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
     </style>
+
+    <style name="CarAppTheme">
+        <item name="carColorPrimary">@color/white</item>
+        <item name="carColorPrimaryDark">@color/black</item>
+        <item name="carColorSecondary">@color/motorrad_blue</item>
+        <item name="carColorSecondaryDark">@color/motorrad_red</item>
+    </style>
 </resources>
