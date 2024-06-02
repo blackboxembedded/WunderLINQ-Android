@@ -1264,7 +1264,24 @@ public class BluetoothLeService extends Service {
                             setCharacteristicNotification(
                                     gattCharacteristic, true);
                         }
-
+                    } else if (UUID.fromString(GattAttributes.WUNDERLINQ_CANMESSAGE_CHARACTERISTIC).equals(gattCharacteristic.getUuid())) {
+                        connectedType = WLQ.TYPE_COMMANDER;
+                        int charaProp = gattCharacteristic.getProperties();
+                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
+                            // If there is an active notification on a characteristic, clear
+                            // it first so it doesn't update the data field on the user interface.
+                            if (mNotifyCharacteristic != null) {
+                                setCharacteristicNotification(
+                                        mNotifyCharacteristic, false);
+                                mNotifyCharacteristic = null;
+                            }
+                            readCharacteristic(gattCharacteristic);
+                        }
+                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
+                            mNotifyCharacteristic = gattCharacteristic;
+                            setCharacteristicNotification(
+                                    gattCharacteristic, true);
+                        }
                     } else if (UUID.fromString(GattAttributes.WUNDERLINQ_PERFORMANCE_CHARACTERISTIC).equals(gattCharacteristic.getUuid())) {
                         connectedType = WLQ.TYPE_X;
                         int charaProp = gattCharacteristic.getProperties();
