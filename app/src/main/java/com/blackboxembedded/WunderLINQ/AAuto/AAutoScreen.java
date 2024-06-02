@@ -55,11 +55,7 @@ public class AAutoScreen extends Screen {
         IntentFilter filter = new IntentFilter(BluetoothLeService.ACTION_PERFORMANCE_DATA_AVAILABLE);
         ContextCompat.registerReceiver(getCarContext(), bearingReceiver, filter, ContextCompat.RECEIVER_EXPORTED);
 
-        gridTemplate = new GridTemplate.Builder()
-                .setTitle(MyApplication.getContext().getString(R.string.app_name))
-                .setHeaderAction(Action.APP_ICON)
-                .setLoading(true)
-                .build();
+        updateUI();
     }
 
     @NonNull
