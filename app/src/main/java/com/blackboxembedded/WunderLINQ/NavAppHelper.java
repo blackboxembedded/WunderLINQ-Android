@@ -571,7 +571,7 @@ public class NavAppHelper {
                 break;
             case "24": //HERE WeGO
                 supported = true;
-                navUrl = "wego://route?geo=" + waypoint.getLatitude() + "," + waypoint.getLongitude() + "&back_url=wunderlinq://datagrid";
+                navUrl = "wego://view?geo=" + waypoint.getLatitude() + "," + waypoint.getLongitude() + "&back_url=wunderlinq://datagrid";
                 navIntent.setData(Uri.parse(navUrl));
                 break;
         }
