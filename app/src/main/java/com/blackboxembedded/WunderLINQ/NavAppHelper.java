@@ -147,7 +147,9 @@ public class NavAppHelper {
                 navIntent = activity.getPackageManager().getLaunchIntentForPackage("menion.android.locus");
                 break;
             case "24": //HERE WeGo
-                navIntent = activity.getPackageManager().getLaunchIntentForPackage("com.here.app.maps");
+                navIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                url = "wego://?&back_url=wunderlinq://datagrid";
+                navIntent.setData(Uri.parse(url));
                 break;
         }
         try {
@@ -420,7 +422,7 @@ public class NavAppHelper {
                 break;
             case "24": //HERE WeGO
                 supported = true;
-                homeNavIntent.setPackage("com.here.app.maps");
+                navUrl = "wego://route?geo=" + end.getLatitude() + "," + end.getLongitude() + "&back_url=wunderlinq://datagrid";
                 homeNavIntent.setData(Uri.parse(navUrl));
                 break;
         }
@@ -569,7 +571,7 @@ public class NavAppHelper {
                 break;
             case "24": //HERE WeGO
                 supported = true;
-                navIntent.setPackage("com.here.app.maps");
+                navUrl = "wego://view?geo=" + waypoint.getLatitude() + "," + waypoint.getLongitude() + "&back_url=wunderlinq://datagrid";
                 navIntent.setData(Uri.parse(navUrl));
                 break;
         }
