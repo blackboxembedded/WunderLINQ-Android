@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package com.blackboxembedded.WunderLINQ.hardware.WLQ;
 
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -168,7 +169,6 @@ public class Data {
     }
     public static void setRearTirePressure(Double pressure){
         Data.rearTirePressure = pressure;
-        Log.d("RearTirePressure","Value Set: " + Data.rearTirePressure);
     }
 
     // Ambient Temperature in C
@@ -1114,7 +1114,7 @@ public class Data {
                         // Psi
                         rdcFront = Utils.barToPsi(rdcFront);
                     }
-                    value = Utils.oneDigit.format(rdcFront);
+                    value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(rdcFront);
                 }
                 break;
             case DATA_REAR_RDC:
@@ -1130,7 +1130,7 @@ public class Data {
                         // Psi
                         rdcRear = Utils.barToPsi(rdcRear);
                     }
-                    value = Utils.oneDigit.format(rdcRear);
+                    value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(rdcRear);
                 }
                 break;
             case DATA_ODOMETER:
@@ -1145,7 +1145,7 @@ public class Data {
             case DATA_VOLTAGE:
                 if(Data.getvoltage() != null){
                     Double voltage = Data.getvoltage();
-                    value = String.valueOf(Utils.oneDigit.format(voltage));
+                    value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(voltage));
                 }
                 break;
             case DATA_THROTTLE:
@@ -1178,7 +1178,7 @@ public class Data {
                     if (distanceFormat.contains("1")) {
                         trip1 = Utils.kmToMiles(trip1);
                     }
-                    value = Utils.oneDigit.format(trip1);
+                    value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(trip1);
                 }
                 break;
             case DATA_TRIP_TWO:
@@ -1187,7 +1187,7 @@ public class Data {
                     if (distanceFormat.contains("1")) {
                         trip2 = Utils.kmToMiles(trip2);
                     }
-                    value = Utils.oneDigit.format(trip2);
+                    value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(trip2);
                 }
                 break;
             case DATA_TRIP_AUTO:
@@ -1196,7 +1196,7 @@ public class Data {
                     if (distanceFormat.contains("1")) {
                         tripauto = Utils.kmToMiles(tripauto);
                     }
-                    value = Utils.oneDigit.format(tripauto);
+                    value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(tripauto);
                 }
                 break;
             case DATA_SPEED:
@@ -1214,7 +1214,7 @@ public class Data {
                     if (distanceFormat.contains("1")) {
                         avgspeed = Utils.kmToMiles(avgspeed);
                     }
-                    value = Utils.oneDigit.format(avgspeed);
+                    value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(avgspeed);
                 }
                 break;
             case DATA_CURRENT_CONSUMPTION:
@@ -1227,7 +1227,7 @@ public class Data {
                     } else if (consumptionFormat.contains("3")) {
                         currentConsumption = Utils.l100Tokml(currentConsumption);
                     }
-                    value = String.valueOf(Utils.oneDigit.format(currentConsumption));
+                    value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(currentConsumption));
                 }
                 break;
             case DATA_ECONOMY_ONE:
@@ -1240,7 +1240,7 @@ public class Data {
                     } else if (consumptionFormat.contains("3")) {
                         fuelEconomyOne = Utils.l100Tokml(fuelEconomyOne);
                     }
-                    value = String.valueOf(Utils.oneDigit.format(fuelEconomyOne));
+                    value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(fuelEconomyOne));
                 }
                 break;
             case DATA_ECONOMY_TWO:
@@ -1253,7 +1253,7 @@ public class Data {
                     } else if (consumptionFormat.contains("3")) {
                         fuelEconomyTwo  = Utils.l100Tokml(fuelEconomyTwo);
                     }
-                    value = String.valueOf(Utils.oneDigit.format(fuelEconomyTwo));
+                    value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(fuelEconomyTwo));
                 }
                 break;
             case DATA_RANGE:
@@ -1280,7 +1280,7 @@ public class Data {
             case DATA_GFORCE_DEVICE:
                 if(Data.getGForce() != null){
                     Double gForce = Data.getGForce();
-                    value = String.valueOf(Utils.oneDigit.format(gForce));
+                    value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(gForce));
                 }
                 break;
             case DATA_BEARING_DEVICE:

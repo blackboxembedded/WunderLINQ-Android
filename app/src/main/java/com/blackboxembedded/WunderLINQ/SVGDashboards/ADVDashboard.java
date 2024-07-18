@@ -203,7 +203,7 @@ public class ADVDashboard {
                             if (distanceFormat.contains("1")) {
                                 trip1 = Utils.kmToMiles(trip1);
                             }
-                            doc.getElementById("dataValue").setTextContent(Utils.oneDigit.format(trip1));
+                            doc.getElementById("dataValue").setTextContent(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(trip1));
                         }
                     }
                     break;
@@ -214,7 +214,7 @@ public class ADVDashboard {
                             if (distanceFormat.contains("1")) {
                                 trip2 = Utils.kmToMiles(trip2);
                             }
-                            doc.getElementById("dataValue").setTextContent(Utils.oneDigit.format(trip2));
+                            doc.getElementById("dataValue").setTextContent(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(trip2));
                         }
                     }
                     break;

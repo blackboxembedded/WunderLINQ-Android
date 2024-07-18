@@ -180,7 +180,7 @@ public class StandardDashboard {
                             if (distanceFormat.contains("1")) {
                                 trip1 = Utils.kmToMiles(trip1);
                             }
-                            doc.getElementById("dataValue").setTextContent(Utils.oneDigit.format(trip1) + " " + distanceUnit);
+                            doc.getElementById("dataValue").setTextContent(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(trip1) + " " + distanceUnit);
                         }
                     }
                     break;
@@ -191,7 +191,7 @@ public class StandardDashboard {
                             if (distanceFormat.contains("1")) {
                                 trip2 = Utils.kmToMiles(trip2);
                             }
-                            doc.getElementById("dataValue").setTextContent(Utils.oneDigit.format(trip2) + " " + distanceUnit);
+                            doc.getElementById("dataValue").setTextContent(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(trip2) + " " + distanceUnit);
                         }
                     }
                     break;
@@ -307,7 +307,7 @@ public class StandardDashboard {
                     pressureUnit = "psi";
                     rdcFront = Utils.barToPsi(rdcFront);
                 }
-                doc.getElementById("rdcF").setTextContent(Utils.oneDigit.format(rdcFront) + pressureUnit);
+                doc.getElementById("rdcF").setTextContent(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(rdcFront) + pressureUnit);
                 if (Faults.getfrontTirePressureCriticalActive()) {
                     doc.getElementById("rdcF").setAttribute("style",
                             doc.getElementById("rdcF").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
@@ -334,7 +334,7 @@ public class StandardDashboard {
                     pressureUnit = "psi";
                     rdcRear = Utils.barToPsi(rdcRear);
                 }
-                doc.getElementById("rdcR").setTextContent(Utils.oneDigit.format(rdcRear) + pressureUnit);
+                doc.getElementById("rdcR").setTextContent(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(rdcRear) + pressureUnit);
                 if (Faults.getrearTirePressureCriticalActive()) {
                     doc.getElementById("rdcR").setAttribute("style",
                             doc.getElementById("rdcR").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")

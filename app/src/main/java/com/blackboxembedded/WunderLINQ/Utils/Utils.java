@@ -17,8 +17,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ.Utils;
 
+
+import android.content.res.Resources;
+import android.os.Build;
+
+import com.blackboxembedded.WunderLINQ.MyApplication;
+
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class Utils {
 
@@ -125,9 +133,6 @@ public class Utils {
         return l100 / 100;
     }
 
-    //format to 1 decimal place
-    public static DecimalFormat oneDigit = new DecimalFormat("###0.0");
-
     /*
      * @see http://en.wikipedia.org/wiki/Low-pass_filter#Algorithmic_implementation
      */
@@ -139,5 +144,22 @@ public class Utils {
             output[i] = output[i] + ALPHA * (input[i] - output[i]);
         }
         return output;
+    }
+
+    //Get Devices current Locale
+    public static Locale getCurrentLocale() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return MyApplication.getContext().getResources().getConfiguration().getLocales().get(0);
+        } else {
+            return MyApplication.getContext().getResources().getConfiguration().locale;
+        }
+    }
+
+    //format to 1 decimal place
+    public static NumberFormat getLocalizedOneDigitFormat(Locale locale) {
+        NumberFormat oneDigit = NumberFormat.getNumberInstance(locale);
+        oneDigit.setMinimumFractionDigits(1);
+        oneDigit.setMaximumFractionDigits(1);
+        return oneDigit;
     }
 }
