@@ -44,12 +44,15 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.BatteryManager;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.telephony.CellInfoGsm;
 import android.telephony.CellInfoLte;
@@ -63,6 +66,7 @@ import android.telephony.CellInfo;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -81,6 +85,8 @@ import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_X;
 import com.blackboxembedded.WunderLINQ.protocols.CANbus;
 import com.blackboxembedded.WunderLINQ.protocols.LINbus;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -161,6 +167,9 @@ public class BluetoothLeService extends Service {
 
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationRequest mLocationRequest;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
+
 
     private int lastDirection;
     private static HashMap<Integer, byte[]> messages = new HashMap<>();
@@ -267,13 +276,17 @@ public class BluetoothLeService extends Service {
             if (locationList.size() > 0) {
                 //The last location in the list is the newest
                 Location location = locationList.get(locationList.size() - 1);
-                Data.setLastLocation(location);
-                if (sharedPrefs.getBoolean("prefBearingOverride", false) && location.hasBearing()) {
-                    Data.setBearing((int) location.getBearing());
-                }
+                updateLocationData(location);
             }
         }
     };
+
+    private void updateLocationData(Location location) {
+        Data.setLastLocation(location);
+        if (sharedPrefs.getBoolean("prefBearingOverride", false) && location.hasBearing()) {
+            Data.setBearing((int) location.getBearing());
+        }
+    }
 
     private final PhoneStateListener signalListener = new PhoneStateListener() {
         @Override
@@ -348,11 +361,16 @@ public class BluetoothLeService extends Service {
         sensorManager.registerListener(sensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         // Location stuff
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         createLocationRequest();
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null /* Looper */);
+        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode == ConnectionResult.SUCCESS) {
+            startLocationUpdatesWithFusedLocationProvider();
+        } else {
+            startLocationUpdatesWithLocationManager();
         }
 
         // Update time Data field and send to the cluster if WLQ_N
@@ -1443,6 +1461,9 @@ public class BluetoothLeService extends Service {
         if (mFusedLocationClient != null) {
             mFusedLocationClient.removeLocationUpdates(mLocationCallback);
         }
+        if (locationManager != null && locationListener != null) {
+            locationManager.removeUpdates(locationListener);
+        }
     }
 
     protected void createLocationRequest() {
@@ -1450,6 +1471,37 @@ public class BluetoothLeService extends Service {
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(500);
         mLocationRequest.setFastestInterval(500);
+    }
+
+    private void startLocationUpdatesWithFusedLocationProvider() {
+        Log.d(TAG, "Starting location updates with FusedLocationProvider");
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+        }
+    }
+
+    private void startLocationUpdatesWithLocationManager() {
+        Log.d(TAG, "Starting location updates using LocationManager");
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                updateLocationData(location);
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) { }
+
+            @Override
+            public void onProviderEnabled(@NonNull String provider) { }
+
+            @Override
+            public void onProviderDisabled(@NonNull String provider) { }
+        };
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        }
     }
 
     public static boolean isConnected() {
