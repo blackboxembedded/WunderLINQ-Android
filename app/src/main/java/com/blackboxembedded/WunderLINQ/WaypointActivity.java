@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
@@ -56,7 +57,9 @@ public class WaypointActivity extends AppCompatActivity {
         waypointList.setLayoutManager(new LinearLayoutManager(this));
 
         datasource = new WaypointDatasource(this);
+        datasource.open();
         listValues = datasource.getAllRecords();
+        datasource.close();
         adapter = new WaypointsAdapter(this, listValues);
         waypointList.setAdapter(adapter);
         adapter.setClickListener(new WaypointsAdapter.ItemClickListener() {
@@ -158,7 +161,12 @@ public class WaypointActivity extends AppCompatActivity {
     };
 
     private void updateListing(){
+        datasource = new WaypointDatasource(this);
+        datasource.open();
         listValues = datasource.getAllRecords();
-        adapter.notifyDataSetChanged();
+        Log.d(TAG, listValues.toString());
+        datasource.close();
+        adapter = new WaypointsAdapter(this, listValues);
+        waypointList.setAdapter(adapter);
     }
 }
