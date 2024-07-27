@@ -56,22 +56,6 @@ public class WaypointActivity extends AppCompatActivity {
         waypointList = findViewById(R.id.rv_waypoints);
         waypointList.setLayoutManager(new LinearLayoutManager(this));
 
-        datasource = new WaypointDatasource(this);
-        datasource.open();
-        listValues = datasource.getAllRecords();
-        datasource.close();
-        adapter = new WaypointsAdapter(this, listValues);
-        waypointList.setAdapter(adapter);
-        adapter.setClickListener(new WaypointsAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Intent waypointViewIntent = new Intent(WaypointActivity.this, WaypointViewActivity.class);
-                WaypointRecord record = (WaypointRecord) listValues.get(position);
-                String recordID = Long.toString(record.getID());
-                waypointViewIntent.putExtra("RECORD_ID", recordID);
-                startActivity(waypointViewIntent);
-            }
-        });
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -168,5 +152,15 @@ public class WaypointActivity extends AppCompatActivity {
         datasource.close();
         adapter = new WaypointsAdapter(this, listValues);
         waypointList.setAdapter(adapter);
+        adapter.setClickListener(new WaypointsAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent waypointViewIntent = new Intent(WaypointActivity.this, WaypointViewActivity.class);
+                WaypointRecord record = (WaypointRecord) listValues.get(position);
+                String recordID = Long.toString(record.getID());
+                waypointViewIntent.putExtra("RECORD_ID", recordID);
+                startActivity(waypointViewIntent);
+            }
+        });
     }
 }
