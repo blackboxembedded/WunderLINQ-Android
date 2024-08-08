@@ -52,8 +52,14 @@ public class StandardDashboard {
 
     public final static String TAG = "StdDashboard";
 
-    private final static String SVGfilename = "standard-dashboard.svg";
+    private static String SVGfilename() {
+        String svg = "standard-dashboard.svg";
 
+        if (SVGHelper.isDevicePortrait()) {
+            svg  = "standard-dashboard-portrait.svg";
+        }
+        return svg;
+    }
     private static SharedPreferences sharedPrefs;
 
     private static String pressureFormat = "0";
@@ -75,7 +81,7 @@ public class StandardDashboard {
             // Read SVG File
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(MyApplication.getContext().getAssets().open(SVGfilename));
+            Document doc = builder.parse(MyApplication.getContext().getAssets().open(SVGfilename()));
 
             // Read Settings
             sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());

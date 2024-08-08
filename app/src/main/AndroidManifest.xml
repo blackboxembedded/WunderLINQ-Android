@@ -244,8 +244,7 @@
         <activity android:name=".TaskList.Activities.WeatherMapActivity" />
         <activity
             android:name=".DashActivity"
-            android:exported="false"
-            android:screenOrientation="sensorLandscape" />
+            android:exported="false" />
 
         <service
             android:name=".NotificationListener"
