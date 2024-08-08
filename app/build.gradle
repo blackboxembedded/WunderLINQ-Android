@@ -66,13 +66,13 @@ dependencies {
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1'
     implementation 'com.opencsv:opencsv:4.2'
     implementation 'ca.rmen:lib-sunrise-sunset:1.1.1'
-    implementation 'com.rarepebble:colorpicker:3.0.1'
+    implementation 'com.github.martin-stone:hsv-alpha-color-picker-android:3.1.0'
     implementation 'io.jenetics:jpx:2.3.0'
     implementation 'stax:stax:1.2.0'
     implementation 'com.github.ticofab:android-gpx-parser:2.3.1'
     implementation 'com.caverock:androidsvg-aar:1.4'
     implementation 'commons-io:commons-io:2.13.0'
-    implementation 'com.yarolegovich:discrete-scrollview:1.5.1'
+    implementation 'com.github.yarolegovich:DiscreteScrollView:1.5.1'
     implementation 'com.google.guava:guava:31.1-android'
     // For Android Auto
     implementation "androidx.car.app:app:1.4.0"
