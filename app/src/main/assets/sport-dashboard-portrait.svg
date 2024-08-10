@@ -8,10 +8,11 @@
    x="0px"
    id="sport-dashboard"
    version="1.1"
-   sodipodi:docname="sport-dashboard-p.svg"
-   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   sodipodi:docname="sport-dashboard-portrait.svg"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
    id="namedview314"
@@ -23,21 +24,70 @@
    inkscape:pagecheckerboard="true"
    inkscape:deskcolor="#d1d1d1"
    showgrid="false"
-   inkscape:zoom="0.30903185"
-   inkscape:cx="-66.336204"
-   inkscape:cy="930.32481"
-   inkscape:window-width="1920"
-   inkscape:window-height="1010"
-   inkscape:window-x="-6"
-   inkscape:window-y="-6"
+   inkscape:zoom="0.6180637"
+   inkscape:cx="694.10321"
+   inkscape:cy="1657.5961"
+   inkscape:window-width="1500"
+   inkscape:window-height="921"
+   inkscape:window-x="-7"
+   inkscape:window-y="-7"
    inkscape:window-maximized="1"
-   inkscape:current-layer="dashboard" />
+   inkscape:current-layer="g1" />
 
     <metadata
    id="metadata2490">
 </metadata>
     <defs
-   id="defs2488" />
+   id="defs2488"><clipPath
+     clipPathUnits="userSpaceOnUse"
+     id="clipPath2739">
+<path
+   id="use2741"
+   style="fill:none"
+   inkscape:label="needleMask"
+   d="m 540,1040.1992 a 500,500 0 0 0 -500,500 h 140 a 360,360 0 0 1 180,-311.7676 360,360 0 0 1 360,0 360,360 0 0 1 180,311.7676 h 140 a 500,500 0 0 0 -500,-500 z" />
+</clipPath><linearGradient
+     inkscape:collect="always"
+     xlink:href="#linearGradient1554"
+     id="linearGradient1556"
+     x1="65"
+     y1="1300"
+     x2="1015"
+     y2="1300"
+     gradientUnits="userSpaceOnUse" /><linearGradient
+     inkscape:collect="always"
+     id="linearGradient1554"><stop
+       style="stop-color:white"
+       offset="0"
+       id="stop1550" /><stop
+       style="stop-color:aqua"
+       offset="0.25"
+       id="stop1976" /><stop
+       style="stop-color:aqua"
+       offset="0.5"
+       id="stop1696" /><stop
+       style="stop-color:aqua"
+       offset="0.75"
+       id="stop1905" /><stop
+       style="stop-color:white"
+       offset="1"
+       id="stop1552" /></linearGradient><clipPath
+     clipPathUnits="userSpaceOnUse"
+     id="clipPath2739-5">
+<use
+   x="0"
+   y="0"
+   xlink:href="#needleMask"
+   id="use2741-9" />
+</clipPath><linearGradient
+     inkscape:collect="always"
+     xlink:href="#linearGradient1554"
+     id="linearGradient9"
+     gradientUnits="userSpaceOnUse"
+     x1="65"
+     y1="1300"
+     x2="1015"
+     y2="1300" /></defs>
 
     <style
    id="style833"
@@ -79,9 +129,6 @@
     .st34{fill:#FCC914;}
 </style>
 
-    <g
-   id="dashboard">
-
     <rect
    id="background"
    style="display:inline"
@@ -90,9 +137,22 @@
    x="0"
    y="-1080"
    inkscape:label="background"
-   transform="rotate(90)" />
+   transform="rotate(90)"
+   sodipodi:insensitive="true" /><g
+   id="dashboard">
 
-        <g
+    
+
+        <polygon
+   id="divider"
+   points="959.5,262.5 1193.6,262.7 1427.8,263.2 1661.9,264 1778.9,264.7 1837.5,265 1896,265.5 1837.5,266 1778.9,266.3 1661.9,267 1427.8,267.8 1193.6,268.3 959.5,268.5 725.4,268.3 491.3,267.8 257.1,267 140.1,266.3 81.5,266 23,265.5 81.5,265 140.1,264.7 257.1,264 491.3,263.2 725.4,262.7 "
+   class="st8"
+   transform="matrix(0.55205553,0,0,1,10.302719,-87.369635)" /><polygon
+   id="polygon836"
+   points="1427.8,263.2 1661.9,264 1778.9,264.7 1837.5,265 1896,265.5 1837.5,266 1778.9,266.3 1661.9,267 1427.8,267.8 1193.6,268.3 959.5,268.5 725.4,268.3 491.3,267.8 257.1,267 140.1,266.3 81.5,266 23,265.5 81.5,265 140.1,264.7 257.1,264 491.3,263.2 725.4,262.7 959.5,262.5 1193.6,262.7 "
+   class="st8"
+   transform="matrix(0.55205553,0,0,1,10.302719,1503.052)"
+   inkscape:label="dividerBottom" /><g
    id="gearDisplay"
    transform="matrix(0.82282777,0,0,1.0014634,-909.37003,548.50314)">
         <rect
@@ -102,333 +162,349 @@
    class="st13"
    y="51.941837"
    x="1665.9419" />
-</g>
-
-        <g
-   id="values">
-        <text
+<text
    id="gear"
    class="st34 st15 st16"
-   transform="scale(1.0343114,0.96682682)"
-   x="522.08649"
-   y="810.65955"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:208.675px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#fcc914;stroke-width:1.03431"><tspan
+   transform="scale(1.1410755,0.87636621)"
+   x="1543.5631"
+   y="268.06198"
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:229.879px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;fill:#fcc914;stroke-width:1.13941"><tspan
      sodipodi:role="line"
-     id="tspan2966"
-     x="522.08649"
-     y="810.65955"
-     style="text-align:center;text-anchor:middle">-</tspan></text>
+     id="tspan4"
+     x="1543.5631"
+     y="268.06198"
+     style="stroke-width:1.13941">6</tspan></text></g>
 
-            <text
-   id="clock"
-   class="st0 st17 st18"
-   x="1063"
-   y="1846.4249"
-   style="font-size:128px"><tspan
-     style="font-size:128px;text-align:end;text-anchor:end"
-     id="tspan1894">--:--</tspan></text>
+        
+        <g
+   id="g7"
+   inkscape:label="Value Labels"
+   style="display:inline"><g
+     id="values">
+        
 
-            <text
-   id="speed"
-   class="st0 st20 st21"
-   transform="translate(91.2725,194.7485)"
-   style="font-size:192px">---</text>
+            
+
+            
 
             <text
    id="dataValue"
    class="st0 st17 st23"
-   x="335.19067"
-   y="1855.9067"
-   style="font-size:128px"><tspan
-     style="font-size:128px;text-align:end;text-anchor:end"
-     id="tspan1896">---</tspan></text>
+   x="251.05695"
+   y="1898.1995"
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:128px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#ffffff"><tspan
+     sodipodi:role="line"
+     id="tspan7"
+     x="251.05695"
+     y="1898.1995">---</tspan></text>
 
-            <text
-   id="angle"
-   class="st0 st5 st6"
-   transform="scale(1.0336344,0.96746007)"
-   x="476.40042"
-   y="1480.9417"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:128px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;stroke-width:1.03363">00</text>
+            
 
-            <text
-   id="angleMaxL"
-   class="st8 st9 st10"
-   transform="scale(1.0336344,0.96746007)"
-   x="74.233017"
-   y="1675.3018"
-   style="stroke-width:1.03363;-inkscape-font-specification:'Agency FB, Normal';font-family:'Agency FB';font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:85.33333295px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">00</text>
+            
 
-            <text
-   id="angleMaxR"
-   class="st8 st9 st10"
-   transform="scale(1.0336344,0.96746007)"
-   x="915.92328"
-   y="1675.3018"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:85.3333px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:1.03363">00</text>
-    </g>
-        <g
-   id="labels">
+            
+    </g><g
+     id="labels">
         <text
    id="dataLabel"
    class="st0 st17 st23"
-   x="31.227373"
-   y="1855.9067"
-   style="font-size:85.3333px">TRIP1</text>
-            <text
-   id="dataUnit"
-   class="st0 st17 st24"
-   x="520.98956"
-   y="1855.9067"
-   style="font-size:85.3333px">mi</text>
-            <text
-   id="speedUnit"
-   class="st0 st20 st22"
-   x="275.12952"
-   y="195.66695"
-   style="font-size:85.3333px">MPH</text>
-    </g>
+   x="249.62491"
+   y="1898.2"
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:85.3333px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;text-anchor:end;fill:#ffffff"><tspan
+     sodipodi:role="line"
+     id="tspan6"
+     x="249.62491"
+     y="1898.2">Range:</tspan></text>
+            
+            
+    </g><text
+     id="clock"
+     class="st0 st17 st18"
+     x="1072.7078"
+     y="1898.1996"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:128px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;text-anchor:end;fill:#ffffff"><tspan
+       sodipodi:role="line"
+       id="tspan5"
+       x="1072.7078"
+       y="1898.1996">00:00</tspan></text><g
+     id="g3"
+     inkscape:label="speedo"><text
+       id="speed"
+       class="st0 st20 st21"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:192px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;text-anchor:end;fill:#ffffff"
+       x="250.3125"
+       y="158.71875"><tspan
+         sodipodi:role="line"
+         id="tspan3"
+         x="250.3125"
+         y="158.71875">00</tspan></text><text
+       id="speedUnit"
+       class="st0 st20 st22"
+       x="246.0063"
+       y="158.71831"
+       style="font-size:85.3333px">MPH</text></g></g>
         <!-- Status Icons -->
-    <path
-   id="iconBox"
-   d="M 618.05,187.56695 V 94.466949 c 0,-4.5 3.6,-8.1 8.1,-8.1 h 403.2 c 4.5,0 8.1,3.6 8.1,8.1 v 93.100001 c 0,4.5 -3.6,8.1 -8.1,8.1 h -403.2 c -4.4,0 -8.1,-3.6 -8.1,-8.1 z"
-   class="st29" />
+    
 
-            <g
-   id="icons"
-   transform="translate(-1108.7,-477.4)"
-   style="display:inline">
-                
-                <g
-   id="iconBT"
-   style="display:none"
-   transform="matrix(0.99999813,0,0,1,527.70311,-420.99211)">
-    <path
-   id="iconBTppath"
-   d="m 1587.2107,1029.6316 -5.961,5.961 -0.042,-11.9497 6.0027,5.9887 m -6.0027,30.5415 5.9888,-5.9888 -5.961,-5.961 z m 23.1492,-18.2721 c 0,28.5683 -9.9905,35.099 -25.7198,35.099 -15.7292,0 -27.6373,-6.5307 -27.6373,-35.099 0,-28.5683 11.5885,-36.0439 27.3178,-36.0439 15.7292,0 26.0393,7.4895 26.0393,36.0439 z m -22.0237,0 11.0327,-12.311 -17.3827,-18.6612 v 24.5805 l -10.2548,-10.2546 -3.7517,3.7378 12.8808,12.9224 -12.8808,12.9224 3.7378,3.7378 10.2546,-10.2546 0.3196,23.6217 17.7023,-17.7162 z"
-   class="st0" />
-    </g><g
-   id="iconTrip"
-   style="display:none"
-   transform="translate(310.83665,-276.56356)">
-    <path
-   id="path2349"
-   d="m 1757.7,918 c -6.4,-16 -12.8,-32 -19.2,-48 -0.7,-1.8 -1.8,-2.5 -3.7,-2.5 -4.4,0 -8.9,0 -13.3,0 -0.3,0 -0.6,0 -1.2,0 1,0.6 1.2,1.4 1.2,2.2 0.2,2.6 0.4,5.2 0.6,7.9 0.1,1.2 -0.4,1.7 -1.6,1.7 -2.4,0 -4.8,0 -7.1,0 -1.2,0 -1.7,-0.5 -1.6,-1.7 0.2,-2.6 0.4,-5.3 0.6,-7.9 0.1,-0.8 0.2,-1.5 1.2,-2.1 -5.1,0 -9.9,0 -14.6,0 -1.7,0 -2.9,0.8 -3.5,2.4 -6.4,16.1 -12.8,32.1 -19.2,48.2 -0.8,1.9 -1.2,4 -0.9,6.1 0.2,1.5 0.9,2.1 2.4,2.1 10.2,0 20.3,0 30.5,0 0.3,0 0.5,0 1.1,0 -1,-0.5 -1,-1.2 -1,-2 0.3,-3.7 0.6,-7.4 0.9,-11.1 0.1,-1 0.7,-1.6 1.8,-1.6 4,0 8.1,0 12.1,0 1.1,0 1.7,0.5 1.8,1.7 0.3,3.7 0.6,7.3 0.9,11 0.1,0.8 0.1,1.5 -0.9,2.1 0.5,0 0.8,0 1,0 10.2,0 20.3,0 30.5,0 1.5,0 2.2,-0.5 2.4,-2.1 0.1,-2.4 -0.4,-4.4 -1.2,-6.4 z m -35.4,-15.2 c -1.8,0 -3.6,0 -5.4,0 -1.8,0 -3.6,0 -5.4,0 -1.2,0 -1.7,-0.5 -1.6,-1.6 0.4,-4.8 0.7,-9.5 1.1,-14.3 0.1,-1.2 0.6,-1.7 1.8,-1.7 2.7,0 5.4,0 8,0 1.2,0 1.7,0.5 1.8,1.6 0.3,3.4 0.5,6.7 0.8,10.1 0.1,1.4 0.2,2.8 0.3,4.3 0.2,1.1 -0.2,1.6 -1.4,1.6 z"
-   class="st0" />
-
-</g>
-                
-
-                
-
-                <g
-   id="iconVideo"
-   style="display:none"
-   transform="translate(223.08637,-170.31356)">
-    <path
-   id="path2365"
-   d="m 1747.9,771.4 c -3.7,0 -7.4,0 -11,0 -0.5,0 -0.9,-0.1 -1.2,-0.5 -2.1,-2.2 -4.3,-4.4 -6.4,-6.5 -1.2,-1.2 -2.6,-2 -4.3,-2 -5,0 -10,0 -15,0 -1.6,0 -3,0.6 -4.1,1.8 -2.2,2.2 -4.4,4.4 -6.6,6.7 -0.4,0.4 -0.8,0.6 -1.4,0.6 -3.7,0 -7.4,0 -11,0 -3.8,0 -6.3,2.4 -6.3,6.3 0,11.7 0,23.3 0,35 0,3.8 2.5,6.3 6.3,6.3 10.1,0 20.3,0 30.4,0 10.2,0 20.4,0 30.6,0 3.6,0 6.2,-2.6 6.2,-6.2 0,-11.7 0,-23.5 0,-35.2 -0.1,-3.8 -2.6,-6.3 -6.2,-6.3 z m -30.6,38.6 c -9,0 -16.3,-7.3 -16.3,-16.3 0,-9 7.3,-16.4 16.2,-16.4 9,0 16.4,7.3 16.4,16.4 0,8.9 -7.3,16.2 -16.3,16.3 z m 29.7,-29.2 c -1.4,0 -2.5,-1.1 -2.5,-2.5 0,-1.4 1.2,-2.6 2.5,-2.5 1.3,0 2.4,1.2 2.4,2.5 0,1.4 -1.1,2.5 -2.4,2.5 z"
-   class="st0" />
-
-                    <path
-   id="path2367"
-   d="m 1717.3,781.3 c 6.8,0 12.3,5.5 12.3,12.4 0,6.8 -5.6,12.4 -12.4,12.4 -6.8,0 -12.3,-5.6 -12.3,-12.4 0.1,-6.9 5.6,-12.5 12.4,-12.4 z"
-   class="st0" />
-    </g><g
-   id="iconFault"
-   style="display:none"
-   transform="translate(138.13569,-62.618523)">
-    <path
-   id="path2357"
-   d="m 1717.7,716 c -11.3,0 -22.5,0 -33.8,0 -0.3,0 -0.7,0 -1,-0.1 -0.9,-0.2 -1.4,-0.8 -1.5,-1.7 0,-0.6 0.1,-1.1 0.4,-1.7 0.8,-1.6 1.7,-3.1 2.6,-4.6 9,-15.8 18,-31.6 27,-47.5 1.8,-3.2 3.6,-6.3 5.4,-9.5 0.3,-0.5 0.8,-0.8 1.4,-0.8 0.6,0 1,0.2 1.3,0.8 4.9,8.7 9.7,17.5 14.6,26.2 6.1,11 12.2,21.9 18.4,32.9 0.4,0.6 0.7,1.3 1.1,1.9 0.3,0.6 0.5,1.2 0.5,1.8 0,1.2 -0.9,2.2 -2.2,2.2 -7,0 -14,0 -21,0 -4.4,0.1 -8.8,0.1 -13.2,0.1 z"
-   class="st31" />
-
-                    <path
-   id="path2359"
-   d="m 1723.2,674.2 c -0.1,1.5 -0.2,3.2 -0.4,4.9 -0.1,1.2 -0.2,2.3 -0.3,3.5 -0.2,2.1 -0.3,4.1 -0.5,6.2 -0.1,1.2 -0.2,2.3 -0.3,3.5 -0.1,0.8 -0.1,1.6 -0.2,2.4 -0.1,1.5 -1.3,2.9 -2.9,3.2 -2,0.4 -3.9,-0.8 -4.3,-2.8 -0.1,-0.3 -0.1,-0.6 -0.1,-0.9 -0.2,-2.3 -0.4,-4.7 -0.6,-7 -0.2,-2.6 -0.5,-5.2 -0.7,-7.8 -0.1,-1.7 -0.3,-3.4 -0.4,-5.1 0,0 0,-0.1 0,-0.1 -0.2,-0.9 0.2,-1.7 0.8,-2.3 1,-0.9 2.2,-1.5 3.5,-1.7 1.5,-0.3 2.9,0.1 4.2,0.9 0.5,0.3 0.9,0.6 1.2,1 0.8,0.5 1,1 1,2.1 z"
-   class="st32" />
-
-                    <path
-   id="path2361"
-   d="m 1718.1,710.8 c -2.8,0 -5.1,-2.3 -5.1,-5.1 0,-2.8 2.3,-5.1 5.2,-5.1 2.8,0 5.1,2.3 5.1,5.1 -0.1,2.8 -2.4,5.1 -5.2,5.1 z"
-   class="st32" />
-
-</g><g
-   id="iconFuel"
-   style="display:none"
-   transform="translate(54.16046,41.186441)">
-    <path
-   id="path2353"
-   d="m 1753.2,561.7 c -2.9,-2.8 -5.7,-5.7 -8.6,-8.5 -0.9,-0.9 -2,-0.9 -2.9,-0.1 -1,0.9 -1.1,2 -0.2,3 0.7,0.8 1.5,1.6 2.3,2.3 0.6,0.6 0.8,1.1 0.6,2 -1.1,3.8 0.5,7.4 4.1,9.2 1,0.5 1.3,1.1 1.3,2.2 0,8.4 0,16.8 0,25.2 0,0.6 0,1.2 -0.2,1.8 -0.4,1.5 -1.5,2.2 -3,2.1 -1.5,-0.1 -2.4,-1 -2.6,-2.5 -0.1,-0.7 0,-1.3 0,-2 -0.1,-4.6 -2.6,-7.8 -7.2,-8.6 -1.4,-0.2 -1.3,-0.9 -1.3,-1.8 0,-10.3 0,-20.6 0,-31 0,-6.2 -3.8,-10 -10,-10 -7.1,0 -14.1,0 -21.2,0 -1,0 -1.9,0 -2.9,0.2 -4.6,1.2 -7.2,4.8 -7.2,9.9 0,17.2 0,34.5 0,51.7 0,1.1 -0.2,1.7 -1.4,1.9 -1.7,0.3 -2.7,1.5 -3.3,3 -0.4,1.1 -0.5,1.8 1.2,1.8 8.1,-0.1 16.3,0 24.4,0 8.1,0 16.2,0 24.3,0 1.8,0 2,-0.2 1.3,-1.9 -0.8,-1.8 -2.2,-2.9 -4.1,-3 -1,-0.1 -1.3,-0.4 -1.2,-1.4 0,-4.6 0.1,-9.1 0,-13.7 0,-1.7 0.7,-1.5 1.7,-1 2.1,1 2.4,2.9 2.4,5 0,4.4 3,7.6 7.1,7.7 4.2,0 7.3,-3.2 7.3,-7.7 0,-11.2 0,-22.5 0,-33.7 0.1,-0.8 -0.1,-1.5 -0.7,-2.1 z m -26.3,9.7 c -4,-0.1 -8,0 -11.9,0 -4,0 -8.1,0 -12.1,0 -1,0 -1.3,-0.3 -1.3,-1.3 0,-5 0,-10.1 0,-15.1 0,-2 0.7,-2.7 2.7,-2.7 7.1,0 14.2,0 21.3,0 1.8,0 2.6,0.8 2.6,2.6 0,5 0,10.1 0,15.1 0.1,1.1 -0.1,1.4 -1.3,1.4 z"
-   class="st28" />
-
-</g>
-    </g>
+            
         <!-- Lean Angle Dial -->
-        <path
-   id="angleDial"
-   d="m 196.59165,1334.9652 c 103.41045,-182.5256 345.1168,-251.9851 540.10156,-155.4271 147.32874,72.8857 225.82101,219.9029 210.8701,365.9858 l 71.32829,6.2295 c 17.4427,-172.2469 -75.06602,-345.4283 -248.55885,-431.7075 -229.87021,-114.0006 -514.8719,-31.7707 -636.65949,183.1487 -41.737952,73.8201 -58.869201,153.5582 -54.197042,231.4276 l 71.328282,-3.7378 c -4.04921,-65.7217 10.27875,-133.3122 45.78715,-195.9192 z"
-   class="st1"
-   style="stroke-width:3.11477" />
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+
+        
+
+        <!-- RPM Dial -->
+        
+
+        
+
+        
+
+        
 
         <g
+   id="g9"
+   inkscape:label="gauges"><g
+     id="inclinometer"
+     inkscape:label="inclinometer"
+     style="display:inline"
+     transform="translate(-0.612,-56.729275)">
+<g
+   inkscape:label="needleClip"
+   id="needleClip">
+
+		 
+		 
+		 <path
+   id="needleMask"
+   style="fill:none"
+   inkscape:label="needleMask"
+   d="m 540,1040.1992 a 500,500 0 0 0 -500,500 h 140 a 360,360 0 0 1 180,-311.7676 360,360 0 0 1 360,0 360,360 0 0 1 180,311.7676 h 140 a 500,500 0 0 0 -500,-500 z" />
+</g>
+<polygon
+   id="angleBottom"
+   points="257.1,264 491.3,263.2 725.4,262.7 959.5,262.5 1193.6,262.7 1427.8,263.2 1661.9,264 1778.9,264.7 1837.5,265 1896,265.5 1837.5,266 1778.9,266.3 1661.9,267 1427.8,267.8 1193.6,268.3 959.5,268.5 725.4,268.3 491.3,267.8 257.1,267 140.1,266.3 81.5,266 23,265.5 81.5,265 140.1,264.7 "
+   class="st8"
+   transform="matrix(0.53240563,0,0,1,29.156798,1272.755)"
+   inkscape:label="angleBottom"
+   style="font-variation-settings:normal;fill:url(#linearGradient9);stroke-width:1.37;-inkscape-stroke:none;stop-color:#000000;stop-opacity:1" /><path
+   id="path967"
+   style="fill:url(#linearGradient1556);fill-rule:evenodd"
+   d="m 540,1060 a 475,475 0 0 0 -238,70 475,475 0 0 0 -237,410 h 85 a 390,390 0 0 1 195,-340 390,390 0 0 1 390,0 390,390 0 0 1 195,340 h 85 A 475,475 0 0 0 777,1130 475,475 0 0 0 540,1060 Z"
+   inkscape:label="angleDial" />
+
+<g
    id="angleTicks"
-   transform="matrix(3.1147725,0,0,3.1147725,-2467.7848,-1329.0996)">
-        <path
-   id="angle9L"
-   style="display:none"
-   d="m 853.5,917.4 v 2.4 c 0,1.3 -1,2.3 -2.1,2.2 l -44.3,-0.7 c -1.2,0 -2.1,-1.1 -2.1,-2.3 v -2.4 c 0,-1.3 1,-2.3 2.1,-2.2 l 44.3,0.7 c 1.2,0 2.1,1.1 2.1,2.3 z"
-   class="st0" />
+   transform="matrix(3.1146015,-0.03261721,0.03261721,3.1146015,-2508.9613,-1310.1025)"
+   style="display:none;opacity:0.96;fill:#ffffff">
+	   
+	   
 
             <path
+   id="angle9L"
+   style="display:none;opacity:0.97;fill:#ffffff"
+   d="m 853.5,917.4 v 2.4 c 0,1.3 -1,2.3 -2.1,2.2 l -44.3,-0.7 c -1.2,0 -2.1,-1.1 -2.1,-2.3 v -2.4 c 0,-1.3 1,-2.3 2.1,-2.2 l 44.3,0.7 c 1.2,0 2.1,1.1 2.1,2.3 z"
+   class="st0" />
+<path
    id="angle8L"
-   style="display:none"
+   style="display:none;opacity:0.97;fill:#ffffff"
    d="m 855.7,897.2 -0.4,2.4 c -0.2,1.2 -1.3,2.1 -2.5,1.8 l -43.5,-8.5 c -1.1,-0.2 -1.9,-1.4 -1.6,-2.6 l 0.4,-2.4 c 0.2,-1.2 1.3,-2.1 2.5,-1.8 l 43.5,8.5 c 1.1,0.2 1.8,1.4 1.6,2.6 z"
    class="st0" />
 
             <path
    id="angle7L"
-   style="display:none"
+   style="display:none;opacity:0.97;fill:#ffffff"
    d="m 861.2,877.7 -0.8,2.2 c -0.4,1.2 -1.7,1.8 -2.8,1.4 l -41.4,-16 c -1.1,-0.4 -1.6,-1.7 -1.2,-2.9 l 0.8,-2.2 c 0.4,-1.2 1.7,-1.8 2.8,-1.4 l 41.4,16 c 1.2,0.4 1.7,1.7 1.2,2.9 z"
    class="st0" />
 
             <path
    id="angle6L"
-   style="display:none"
+   style="display:none;opacity:0.97;fill:#ffffff"
    d="m 870.1,859.5 -1.2,2.1 c -0.6,1.1 -2,1.5 -3,0.9 l -38,-23 c -1,-0.6 -1.3,-2 -0.7,-3.1 l 1.2,-2.1 c 0.6,-1.1 2,-1.5 3,-0.9 l 38,23 c 1,0.6 1.3,2 0.7,3.1 z"
    class="st0" />
 
             <path
    id="angle5L"
-   style="display:none"
+   style="display:none;opacity:0.97;fill:#ffffff"
    d="m 881.9,843.1 -1.6,1.8 c -0.8,1 -2.2,1.1 -3.1,0.3 l -33.4,-29.3 c -0.9,-0.8 -0.9,-2.2 -0.1,-3.1 l 1.6,-1.8 c 0.8,-1 2.2,-1.1 3.1,-0.3 l 33.4,29.3 c 0.9,0.7 0.9,2.1 0.1,3.1 z"
    class="st0" />
 
             <path
    id="angle4L"
-   style="display:none"
+   style="display:none;opacity:0.97;fill:#ffffff"
    d="m 896.4,829 -1.8,1.5 c -1,0.8 -2.3,0.7 -3.1,-0.2 l -27.9,-34.8 c -0.7,-0.9 -0.5,-2.3 0.4,-3.1 l 1.8,-1.5 c 1,-0.8 2.3,-0.7 3.1,0.2 l 27.9,34.8 c 0.8,0.9 0.6,2.3 -0.4,3.1 z"
    class="st0" />
 
             <path
    id="angle3L"
-   style="display:none"
+   style="display:none;opacity:0.97;fill:#ffffff"
    d="m 913.1,817.6 -2.1,1.2 c -1.1,0.6 -2.4,0.3 -3,-0.8 l -21.5,-39.1 c -0.6,-1 -0.1,-2.4 0.9,-3 l 2.1,-1.2 c 1.1,-0.6 2.4,-0.3 3,0.8 l 21.5,39.1 c 0.6,1.1 0.2,2.4 -0.9,3 z"
    class="st0" />
 
             <path
    id="angle2L"
-   style="display:none"
+   style="display:none;opacity:0.97;fill:#ffffff"
    d="m 931.5,809.4 -2.2,0.8 c -1.2,0.4 -2.4,-0.2 -2.8,-1.3 L 912,766.6 c -0.4,-1.1 0.3,-2.3 1.4,-2.8 l 2.2,-0.8 c 1.2,-0.4 2.4,0.2 2.8,1.3 l 14.5,42.3 c 0.4,1.2 -0.3,2.4 -1.4,2.8 z"
    class="st0" />
 
             <path
    id="angle1L"
-   style="display:none"
+   style="display:none;opacity:0.97;fill:#ffffff"
    d="m 951,804.5 -2.3,0.4 c -1.2,0.2 -2.4,-0.6 -2.6,-1.7 l -7,-44.2 c -0.2,-1.2 0.7,-2.3 1.9,-2.5 l 2.3,-0.4 c 1.2,-0.2 2.4,0.6 2.6,1.7 l 7,44.2 c 0.1,1.2 -0.7,2.3 -1.9,2.5 z"
    class="st0" />
-
             <path
    id="angle0"
-   style="display:none"
+   style="display:none;opacity:0.97;fill:#ffffff"
    d="m 971,803.2 h -2.4 c -1.2,0 -2.2,-1 -2.2,-2.2 l 0.7,-44.8 c 0,-1.2 1,-2.1 2.3,-2.1 h 2.4 c 1.2,0 2.2,1 2.2,2.2 l -0.7,44.8 c 0,1.1 -1,2.1 -2.3,2.1 z"
    class="st0" />
 
+
             <path
    id="angle1R"
-   style="display:none"
+   style="display:none;opacity:0.97;fill:#ffffff"
    d="m 991,805.3 -2.3,-0.5 c -1.2,-0.2 -2,-1.4 -1.8,-2.5 l 8.4,-44 c 0.2,-1.2 1.4,-1.9 2.6,-1.7 l 2.3,0.5 c 1.2,0.2 2,1.4 1.8,2.5 l -8.4,44 c -0.2,1.2 -1.4,2 -2.6,1.7 z"
    class="st0" />
 
             <path
    id="angle2R"
-   style="display:none"
+   style="display:none;opacity:0.97;fill:#ffffff"
    d="m 1010.3,811 -2.2,-0.9 c -1.2,-0.4 -1.8,-1.7 -1.4,-2.8 l 15.8,-41.8 c 0.4,-1.1 1.7,-1.6 2.9,-1.2 l 2.2,0.9 c 1.2,0.4 1.8,1.7 1.4,2.8 l -15.8,41.8 c -0.5,1.1 -1.7,1.6 -2.9,1.2 z"
    class="st0" />
 
             <path
    id="angle3R"
-   style="display:none"
+   style="display:none;opacity:0.97;fill:#ffffff"
    d="m 1028.3,819.9 -2,-1.2 c -1.1,-0.6 -1.4,-2 -0.9,-3 l 22.8,-38.4 c 0.6,-1 1.9,-1.3 3,-0.7 l 2,1.2 c 1.1,0.6 1.4,2 0.9,3 l -22.8,38.4 c -0.5,1 -1.9,1.3 -3,0.7 z"
    class="st0" />
 
             <path
    id="angle4R"
-   style="display:none"
+   style="display:none;opacity:0.97;fill:#ffffff"
    d="m 1044.6,831.9 -1.8,-1.6 c -0.9,-0.8 -1.1,-2.2 -0.3,-3.1 l 29,-33.8 c 0.8,-0.9 2.1,-0.9 3.1,-0.1 l 1.8,1.6 c 0.9,0.8 1.1,2.2 0.3,3.1 l -29,33.8 c -0.8,0.8 -2.2,0.9 -3.1,0.1 z"
    class="st0" />
 
             <path
    id="angle5R"
-   style="display:none"
+   style="display:none;opacity:0.97;fill:#ffffff"
    d="m 1058.5,846.5 -1.5,-1.9 c -0.8,-1 -0.7,-2.4 0.2,-3.1 l 34.4,-28.2 c 0.9,-0.7 2.3,-0.6 3.1,0.4 l 1.5,1.9 c 0.8,1 0.7,2.4 -0.2,3.1 l -34.4,28.2 c -0.9,0.8 -2.3,0.6 -3.1,-0.4 z"
    class="st0" />
 
             <path
    id="angle6R"
-   style="display:none"
+   style="display:none;opacity:0.97;fill:#ffffff"
    d="m 1069.7,863.4 -1.2,-2.1 c -0.6,-1.1 -0.3,-2.5 0.7,-3 l 38.7,-21.7 c 1,-0.6 2.3,-0.1 2.9,1 l 1.2,2.1 c 0.6,1.1 0.3,2.5 -0.7,3 l -38.7,21.7 c -1,0.5 -2.3,0.1 -2.9,-1 z"
    class="st0" />
 
             <path
    id="angle7R"
-   style="display:none"
+   style="display:none;opacity:0.97;fill:#ffffff"
    d="m 1077.8,882 -0.8,-2.3 c -0.4,-1.2 0.2,-2.5 1.3,-2.8 l 41.9,-14.6 c 1.1,-0.4 2.3,0.3 2.7,1.5 l 0.8,2.3 c 0.4,1.2 -0.2,2.5 -1.3,2.8 l -41.9,14.6 c -1,0.3 -2.2,-0.4 -2.7,-1.5 z"
    class="st0" />
 
             <path
    id="angle8R"
-   style="display:none"
+   style="display:none;opacity:0.97;fill:#ffffff"
    d="m 1082.7,901.7 -0.4,-2.4 c -0.2,-1.2 0.6,-2.4 1.7,-2.6 l 43.7,-7 c 1.1,-0.2 2.2,0.7 2.4,1.9 l 0.4,2.4 c 0.2,1.2 -0.6,2.4 -1.7,2.6 l -43.7,7 c -1.1,0.2 -2.2,-0.7 -2.4,-1.9 z"
    class="st0" />
 
             <path
    id="angle9R"
-   style="display:none"
+   style="display:none;opacity:0.97;fill:#ffffff"
    d="m 1084,922 v -2.4 c 0,-1.3 1,-2.3 2.1,-2.2 l 44.3,0.7 c 1.2,0 2.1,1.1 2.1,2.3 v 2.4 c 0,1.3 -1,2.3 -2.1,2.2 l -44.3,-0.7 c -1.2,-0.1 -2.1,-1.1 -2.1,-2.3 z"
    class="st0" />
     </g>
-
-        <path
+<path
    id="angleUnit"
    class="st7"
-   d="m 620.42214,1341.4559 c -2.45245,0.055 -4.87771,1.0673 -6.56628,2.8598 -1.76004,1.8354 -2.64985,4.4876 -2.26566,7.0129 0.35089,2.5883 1.99929,4.9247 4.25159,6.2279 2.63535,1.5564 6.05022,1.7089 8.8031,0.3585 2.41864,-1.1087 4.27393,-3.3799 4.84166,-5.9859 0.79369,-3.3364 -0.77201,-7.0016 -3.62327,-8.8671 -1.58447,-1.0853 -3.52278,-1.6513 -5.44114,-1.6061 z" />
-
-        <ellipse
+   d="m 620.42214,1341.4559 c -2.45245,0.055 -4.87771,1.0673 -6.56628,2.8598 -1.76004,1.8354 -2.64985,4.4876 -2.26566,7.0129 0.35089,2.5883 1.99929,4.9247 4.25159,6.2279 2.63535,1.5564 6.05022,1.7089 8.8031,0.3585 2.41864,-1.1087 4.27393,-3.3799 4.84166,-5.9859 0.79369,-3.3364 -0.77201,-7.0016 -3.62327,-8.8671 -1.58447,-1.0853 -3.52278,-1.6513 -5.44114,-1.6061 z"
+   style="fill:none;stroke:#ffffff;stroke-width:3;stroke-miterlimit:10" />
+<ellipse
    id="angleMaxLUnit"
    ry="4.9000001"
    rx="5.3000002"
-   cy="1580.9388"
-   cx="145.15997"
-   class="st11" />
-
-        <text
-   id="text1199"
+   cy="1566.4"
+   cx="166.8"
+   class="st11"
+   style="fill:none;stroke:#00ffff;stroke-width:3;stroke-miterlimit:10" />
+<text
+   id="max"
    class="st8 st9 st12"
-   transform="scale(1.0336344,0.96746009)"
-   x="496.00751"
+   transform="scale(1.0336344,0.96746007)"
+   x="496.58829"
    y="1673.2841"
-   style="stroke-width:1.03363">MAX</text>
-
-        <ellipse
+   style="font-size:39.0412px;font-family:'Agency FB';fill:#00ffff;stroke-width:1.03363"
+   inkscape:label="max">MAX</text>
+<ellipse
    id="angleMaxRUnit"
    ry="4.9000001"
    rx="5.3000002"
-   cy="1578.9868"
-   cx="1015.0947"
-   class="st11" />
-
-
-        <path
+   cy="1566.4"
+   cx="1036.8"
+   class="st11"
+   style="fill:none;stroke:#00ffff;stroke-width:3;stroke-miterlimit:10" />
+<path
    id="angleDivider"
-   d="m 404.27251,1637.1388 c 26.4,-1 52.7,-1.6 79.1,-1.9 13.2,-0.2 26.4,-0.3 39.5,-0.4 l 39.5,-0.1 39.5,0.1 c 13.2,0.1 26.4,0.2 39.5,0.4 26.4,0.4 52.7,0.9 79.1,2 -26.4,1 -52.7,1.6 -79.1,2 -13.2,0.2 -26.4,0.3 -39.5,0.4 l -39.5,0.1 -39.5,-0.1 c -13.2,-0.1 -26.4,-0.2 -39.5,-0.4 -26.4,-0.6 -52.7,-1.1 -79.1,-2.1 z"
+   d="m 381.9,959.9 c 26.4,-1 52.7,-1.6 79.1,-1.9 13.2,-0.2 26.4,-0.3 39.5,-0.4 l 39.5,-0.1 39.5,0.1 c 13.2,0.1 26.4,0.2 39.5,0.4 26.4,0.4 52.7,0.9 79.1,2 -26.4,1 -52.7,1.6 -79.1,2 -13.2,0.2 -26.4,0.3 -39.5,0.4 l -39.5,0.1 -39.5,-0.1 c -13.2,-0.1 -26.4,-0.2 -39.5,-0.4 -26.4,-0.6 -52.7,-1.1 -79.1,-2.1 z"
    class="st8"
-   style="display:none" />
+   style="display:none;fill:#00ffff" />
+<text
+   id="angle"
+   class="st0 st5 st6"
+   transform="scale(1.0336344,0.96746007)"
+   x="476.40042"
+   y="1480.9417"
+   style="font-size:128px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB, Normal';fill:#ffffff;stroke-width:1.03363">00</text>
+<text
+   id="angleMaxR"
+   class="st8 st9 st10"
+   transform="scale(1.0336344,0.96746007)"
+   x="923.55334"
+   y="1675.3018"
+   style="font-size:85.3333px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB, Normal';fill:#00ffff;stroke-width:1.03363">00</text>
+<text
+   id="angleMaxL"
+   class="st8 st9 st10"
+   transform="scale(1.0336344,0.96746007)"
+   x="52.839272"
+   y="1675.3018"
+   style="font-size:85.3333px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB, Normal';fill:#00ffff;stroke-width:1.03363">00</text>
+<g
+   id="needle"
+   clip-path="url(#clipPath2739-5)"
+   inkscape:label="needle"
+   transform="rotate(-90,540,1540)">
 
-        <!-- RPM Dial -->
-        <g
-   id="rpmTicks"
-   transform="matrix(0.91189994,0,0,0.91189994,-341.71606,-45.924012)">
+      <animateTransform
+   attributeType="xml"
+   attributeName="transform"
+   type="rotate"
+   from="0 540 1540"
+   to="180 540 1540"
+   dur="1.5s"
+   additive="sum"
+   repeatCount="indefinite" />
+<path
+   id="needleTick"
+   style="opacity:0.97;fill:#f2c217;stroke-width:5.78747"
+   d="m 543,1540 h -7 c -4,0 -7,-10 -7,-30 l 1,-480 c 0,-10 3,-20 7,-20 h 7 c 4,0 7,10 7,20 l -1,480 c 0,10 -3,30 -7,30 z"
+   class="st0"
+   inkscape:label="needleTick" />
+</g>
+</g><g
+     id="g1"
+     inkscape:label="tachometer"><g
+       id="rpmTicks"
+       transform="matrix(0.91189994,0,0,0.91189994,-341.71606,-45.924012)">
         <polygon
    id="rpmTick1"
    style="display:none"
@@ -1106,11 +1182,9 @@
    style="display:inline"
    points="1457,943.3 1457.4,937.7 1531.7,935.7 1531.3,941.3 "
    class="st28" />
-    </g>
-
-        <g
-   id="rpmNeedles"
-   transform="matrix(0.91189994,0,0,0.91189994,-341.71606,-45.924012)">
+    </g><g
+       id="rpmNeedles"
+       transform="matrix(0.91189994,0,0,0.91189994,-341.71606,-45.924012)">
         <path
    id="rpmNeedle0"
    style="display:none"
@@ -1512,11 +1586,9 @@
    style="display:none"
    d="m 1432.4,943.8 -0.2,-14 c 0,-1.2 1,-2.2 2.2,-2.2 l 144.9,1.9 c 1.2,0 2.2,1 2.2,2.2 l 0.2,14 c 0,1.2 -1,2.2 -2.2,2.2 L 1434.7,946 c -1.2,0 -2.2,-1 -2.3,-2.2 z"
    class="st0" />
-</g>
-
-        <g
-   id="rpmDialArc"
-   transform="matrix(0.91189994,0,0,0.91189994,-341.71606,-45.924012)">
+</g><g
+       id="rpmDialArc"
+       transform="matrix(0.91189994,0,0,0.91189994,-341.71606,-45.924012)">
     <path
    id="path1247"
    d="m 913.1,481.3 c 17.5,-1.8 35.2,-2.7 52.8,-2.7"
@@ -1557,11 +1629,9 @@
    d="m 1436.7,941.1 c 3.7,-45.7 -0.6,-90.7 -13.7,-134.9"
    class="st33" />
 
-</g>
-
-        <g
-   id="RPMdialLGTicks"
-   transform="matrix(0.91189994,0,0,0.91189994,-341.71606,-45.924012)">
+</g><g
+       id="RPMdialLGTicks"
+       transform="matrix(0.91189994,0,0,0.91189994,-341.71606,-45.924012)">
             <rect
    id="RPMdialLGTick1"
    height="10.3"
@@ -1615,11 +1685,9 @@
    id="RPMdialLGTick10"
    points="1354.3,937.7 1355.2,927.4 1418.1,931.1 1417.1,941.4 "
    class="st28" />
-</g>
-
-        <g
-   id="RPMdialSMTicks"
-   transform="matrix(0.91189994,0,0,0.91189994,-341.71606,-45.924012)">
+</g><g
+       id="RPMdialSMTicks"
+       transform="matrix(0.91189994,0,0,0.91189994,-341.71606,-45.924012)">
 
             <path
    id="path891"
@@ -1800,72 +1868,180 @@
    id="path1101"
    d="m 1354.2,828.9 46.8,-9.7 0.8,3.4 -46.8,9.7 c -0.2,-1.1 -0.5,-2.2 -0.8,-3.4 z"
    class="st28" />
-</g>
-
-        <g
-   id="rpmDialDigits"
-   transform="matrix(0.91189994,0,0,0.91189994,-341.71606,-45.924012)">
-        <text
+</g><g
+       id="rpmDialDigits"
+       transform="matrix(0.91189994,0,0,0.91189994,-347.32561,-45.924012)">
+        <path
+   style="display:none;fill:#00ff03;fill-opacity:1;fill-rule:evenodd;stroke:#6878ff;stroke-width:0.646215;stroke-opacity:1;paint-order:stroke fill markers"
+   id="path11"
+   sodipodi:type="arc"
+   sodipodi:cx="-972.22284"
+   sodipodi:cy="-945.68945"
+   sodipodi:rx="362.22955"
+   sodipodi:ry="362.68149"
+   sodipodi:start="0"
+   sodipodi:end="3.1415927"
+   sodipodi:arc-type="chord"
+   d="m -609.99329,-945.68945 a 362.22955,362.68149 0 0 1 -181.11478,314.09138 362.22955,362.68149 0 0 1 -362.22953,-10e-6 362.22955,362.68149 0 0 1 -181.1148,-314.09137 z"
+   sodipodi:open="true"
+   transform="scale(-1)"
+   inkscape:label="DigitAlignDial" /><text
    id="rpmDialDigit0"
    class="st0 st2 st3"
-   transform="matrix(1.0684,0,0,1,603.8179,951.9697)">0</text>
+   transform="scale(1.0336344,0.96746009)"
+   x="577.13318"
+   y="1000.4017"
+   style="stroke-width:1.03363">0</text>
 
             <text
    id="rpmDialDigit1"
    class="st0 st2 st3"
-   transform="matrix(1.0684,0,0,1,631.9463,843.0088)">2</text>
+   transform="scale(1.0336344,0.96746009)"
+   x="599.67242"
+   y="872.18518"
+   style="stroke-width:1.03363">2</text>
 
             <text
    id="rpmDialDigit2"
    class="st0 st2 st3"
-   transform="matrix(1.0684,0,0,1,687.9175,740.7832)">4</text>
+   transform="scale(1.0336344,0.96746009)"
+   x="660.74573"
+   y="759.43341"
+   style="stroke-width:1.03363">4</text>
 
             <text
    id="rpmDialDigit3"
    class="st0 st2 st4"
-   transform="matrix(1.0684,0,0,1,783.5767,681.5869)">8</text>
+   transform="scale(1.0336344,0.96746009)"
+   x="752.52936"
+   y="675.74744"
+   style="stroke-width:1.03363">8</text>
 
             <text
    id="rpmDialDigit4"
    class="st0 st2 st3"
-   transform="matrix(1.0684,0,0,1,887.2461,646.4961)">9</text>
+   transform="scale(1.0336344,0.96746009)"
+   x="867.17584"
+   y="631.21698"
+   style="stroke-width:1.03363">9</text>
 
             <text
    id="rpmDialDigit5"
    class="st0 st2 st3"
-   transform="matrix(1.0684,0,0,1,1006.2344,649.3525)">10</text>
+   transform="scale(1.0336344,0.96746009)"
+   x="982.99982"
+   y="631.21698"
+   style="stroke-width:1.03363">10</text>
 
             <text
    id="rpmDialDigit6"
    class="st0 st2 st3"
-   transform="matrix(1.0684,0,0,1,1118.1006,690.2852)">11</text>
+   transform="scale(1.0336344,0.96746009)"
+   x="1104.4364"
+   y="675.74609"
+   style="stroke-width:1.03363">11</text>
 
             <text
    id="rpmDialDigit7"
    class="st0 st2 st3"
-   transform="matrix(1.0684,0,0,1,1187.2568,766.4355)">12</text>
+   transform="scale(1.0336344,0.96746009)"
+   x="1191.4349"
+   y="759.43353"
+   style="stroke-width:1.03363">12</text>
 
             <text
    id="rpmDialDigit8"
    class="st0 st2 st3"
-   transform="matrix(1.0684,0,0,1,1243.1904,854.9619)">13</text>
+   transform="scale(1.0336344,0.96746009)"
+   x="1251.6593"
+   y="872.18524"
+   style="stroke-width:1.03363">13</text>
 
             <text
    id="rpmDialDigit9"
    class="st28 st2 st3"
-   transform="matrix(1.0684,0,0,1,1262.5117,955.8613)">15</text>
+   transform="scale(1.0336344,0.96746009)"
+   x="1273.1302"
+   y="1000.4017"
+   style="stroke-width:1.03363">15</text>
+    </g></g></g><g
+   id="icons"
+   transform="translate(-1121.6436,-537.40795)"
+   style="display:inline">
+                
+                <path
+   id="iconBox"
+   d="M 1726.75,673.02222 V 572.51169 c 0,-4.85819 3.8866,-8.74474 8.7447,-8.74474 h 435.2938 c 4.8581,0 8.7447,3.88655 8.7447,8.74474 v 100.51053 c 0,4.85817 -3.8866,8.74473 -8.7447,8.74473 h -435.2938 c -4.7501,0 -8.7447,-3.88656 -8.7447,-8.74473 z"
+   class="st29"
+   style="stroke-width:1.07959" /><g
+   id="iconBT"
+   style="display:inline"
+   transform="matrix(0.99999813,0,0,1,554.01667,-420.99215)">
+    <path
+   id="iconBTppath"
+   d="m 1587.2107,1029.6316 -5.961,5.961 -0.042,-11.9497 6.0027,5.9887 m -6.0027,30.5415 5.9888,-5.9888 -5.961,-5.961 z m 23.1492,-18.2721 c 0,28.5683 -9.9905,35.099 -25.7198,35.099 -15.7292,0 -27.6373,-6.5307 -27.6373,-35.099 0,-28.5683 11.5885,-36.0439 27.3178,-36.0439 15.7292,0 26.0393,7.4895 26.0393,36.0439 z m -22.0237,0 11.0327,-12.311 -17.3827,-18.6612 v 24.5805 l -10.2548,-10.2546 -3.7517,3.7378 12.8808,12.9224 -12.8808,12.9224 3.7378,3.7378 10.2546,-10.2546 0.3196,23.6217 17.7023,-17.7162 z"
+   class="st0" />
+    </g><g
+   id="iconTrip"
+   style="display:inline"
+   transform="translate(329.32182,-276.56356)">
+    <path
+   id="path2349"
+   d="m 1757.7,918 c -6.4,-16 -12.8,-32 -19.2,-48 -0.7,-1.8 -1.8,-2.5 -3.7,-2.5 -4.4,0 -8.9,0 -13.3,0 -0.3,0 -0.6,0 -1.2,0 1,0.6 1.2,1.4 1.2,2.2 0.2,2.6 0.4,5.2 0.6,7.9 0.1,1.2 -0.4,1.7 -1.6,1.7 -2.4,0 -4.8,0 -7.1,0 -1.2,0 -1.7,-0.5 -1.6,-1.7 0.2,-2.6 0.4,-5.3 0.6,-7.9 0.1,-0.8 0.2,-1.5 1.2,-2.1 -5.1,0 -9.9,0 -14.6,0 -1.7,0 -2.9,0.8 -3.5,2.4 -6.4,16.1 -12.8,32.1 -19.2,48.2 -0.8,1.9 -1.2,4 -0.9,6.1 0.2,1.5 0.9,2.1 2.4,2.1 10.2,0 20.3,0 30.5,0 0.3,0 0.5,0 1.1,0 -1,-0.5 -1,-1.2 -1,-2 0.3,-3.7 0.6,-7.4 0.9,-11.1 0.1,-1 0.7,-1.6 1.8,-1.6 4,0 8.1,0 12.1,0 1.1,0 1.7,0.5 1.8,1.7 0.3,3.7 0.6,7.3 0.9,11 0.1,0.8 0.1,1.5 -0.9,2.1 0.5,0 0.8,0 1,0 10.2,0 20.3,0 30.5,0 1.5,0 2.2,-0.5 2.4,-2.1 0.1,-2.4 -0.4,-4.4 -1.2,-6.4 z m -35.4,-15.2 c -1.8,0 -3.6,0 -5.4,0 -1.8,0 -3.6,0 -5.4,0 -1.2,0 -1.7,-0.5 -1.6,-1.6 0.4,-4.8 0.7,-9.5 1.1,-14.3 0.1,-1.2 0.6,-1.7 1.8,-1.7 2.7,0 5.4,0 8,0 1.2,0 1.7,0.5 1.8,1.6 0.3,3.4 0.5,6.7 0.8,10.1 0.1,1.4 0.2,2.8 0.3,4.3 0.2,1.1 -0.2,1.6 -1.4,1.6 z"
+   class="st0" />
+
+</g>
+                
+
+                
+
+                <g
+   id="iconVideo"
+   style="display:inline"
+   transform="translate(233.74315,-170.31356)">
+    <path
+   id="path2365"
+   d="m 1747.9,771.4 c -3.7,0 -7.4,0 -11,0 -0.5,0 -0.9,-0.1 -1.2,-0.5 -2.1,-2.2 -4.3,-4.4 -6.4,-6.5 -1.2,-1.2 -2.6,-2 -4.3,-2 -5,0 -10,0 -15,0 -1.6,0 -3,0.6 -4.1,1.8 -2.2,2.2 -4.4,4.4 -6.6,6.7 -0.4,0.4 -0.8,0.6 -1.4,0.6 -3.7,0 -7.4,0 -11,0 -3.8,0 -6.3,2.4 -6.3,6.3 0,11.7 0,23.3 0,35 0,3.8 2.5,6.3 6.3,6.3 10.1,0 20.3,0 30.4,0 10.2,0 20.4,0 30.6,0 3.6,0 6.2,-2.6 6.2,-6.2 0,-11.7 0,-23.5 0,-35.2 -0.1,-3.8 -2.6,-6.3 -6.2,-6.3 z m -30.6,38.6 c -9,0 -16.3,-7.3 -16.3,-16.3 0,-9 7.3,-16.4 16.2,-16.4 9,0 16.4,7.3 16.4,16.4 0,8.9 -7.3,16.2 -16.3,16.3 z m 29.7,-29.2 c -1.4,0 -2.5,-1.1 -2.5,-2.5 0,-1.4 1.2,-2.6 2.5,-2.5 1.3,0 2.4,1.2 2.4,2.5 0,1.4 -1.1,2.5 -2.4,2.5 z"
+   class="st0" />
+
+                    <path
+   id="path2367"
+   d="m 1717.3,781.3 c 6.8,0 12.3,5.5 12.3,12.4 0,6.8 -5.6,12.4 -12.4,12.4 -6.8,0 -12.3,-5.6 -12.3,-12.4 0.1,-6.9 5.6,-12.5 12.4,-12.4 z"
+   class="st0" />
+    </g><g
+   id="iconFault"
+   style="display:inline"
+   transform="translate(143.46408,-62.618523)">
+    <path
+   id="path2357"
+   d="m 1717.7,716 c -11.3,0 -22.5,0 -33.8,0 -0.3,0 -0.7,0 -1,-0.1 -0.9,-0.2 -1.4,-0.8 -1.5,-1.7 0,-0.6 0.1,-1.1 0.4,-1.7 0.8,-1.6 1.7,-3.1 2.6,-4.6 9,-15.8 18,-31.6 27,-47.5 1.8,-3.2 3.6,-6.3 5.4,-9.5 0.3,-0.5 0.8,-0.8 1.4,-0.8 0.6,0 1,0.2 1.3,0.8 4.9,8.7 9.7,17.5 14.6,26.2 6.1,11 12.2,21.9 18.4,32.9 0.4,0.6 0.7,1.3 1.1,1.9 0.3,0.6 0.5,1.2 0.5,1.8 0,1.2 -0.9,2.2 -2.2,2.2 -7,0 -14,0 -21,0 -4.4,0.1 -8.8,0.1 -13.2,0.1 z"
+   class="st31" />
+
+                    <path
+   id="path2359"
+   d="m 1723.2,674.2 c -0.1,1.5 -0.2,3.2 -0.4,4.9 -0.1,1.2 -0.2,2.3 -0.3,3.5 -0.2,2.1 -0.3,4.1 -0.5,6.2 -0.1,1.2 -0.2,2.3 -0.3,3.5 -0.1,0.8 -0.1,1.6 -0.2,2.4 -0.1,1.5 -1.3,2.9 -2.9,3.2 -2,0.4 -3.9,-0.8 -4.3,-2.8 -0.1,-0.3 -0.1,-0.6 -0.1,-0.9 -0.2,-2.3 -0.4,-4.7 -0.6,-7 -0.2,-2.6 -0.5,-5.2 -0.7,-7.8 -0.1,-1.7 -0.3,-3.4 -0.4,-5.1 0,0 0,-0.1 0,-0.1 -0.2,-0.9 0.2,-1.7 0.8,-2.3 1,-0.9 2.2,-1.5 3.5,-1.7 1.5,-0.3 2.9,0.1 4.2,0.9 0.5,0.3 0.9,0.6 1.2,1 0.8,0.5 1,1 1,2.1 z"
+   class="st32" />
+
+                    <path
+   id="path2361"
+   d="m 1718.1,710.8 c -2.8,0 -5.1,-2.3 -5.1,-5.1 0,-2.8 2.3,-5.1 5.2,-5.1 2.8,0 5.1,2.3 5.1,5.1 -0.1,2.8 -2.4,5.1 -5.2,5.1 z"
+   class="st32" />
+
+</g><g
+   id="iconFuel"
+   style="display:inline"
+   transform="translate(54.16046,41.186441)">
+    <path
+   id="path2353"
+   d="m 1753.2,561.7 c -2.9,-2.8 -5.7,-5.7 -8.6,-8.5 -0.9,-0.9 -2,-0.9 -2.9,-0.1 -1,0.9 -1.1,2 -0.2,3 0.7,0.8 1.5,1.6 2.3,2.3 0.6,0.6 0.8,1.1 0.6,2 -1.1,3.8 0.5,7.4 4.1,9.2 1,0.5 1.3,1.1 1.3,2.2 0,8.4 0,16.8 0,25.2 0,0.6 0,1.2 -0.2,1.8 -0.4,1.5 -1.5,2.2 -3,2.1 -1.5,-0.1 -2.4,-1 -2.6,-2.5 -0.1,-0.7 0,-1.3 0,-2 -0.1,-4.6 -2.6,-7.8 -7.2,-8.6 -1.4,-0.2 -1.3,-0.9 -1.3,-1.8 0,-10.3 0,-20.6 0,-31 0,-6.2 -3.8,-10 -10,-10 -7.1,0 -14.1,0 -21.2,0 -1,0 -1.9,0 -2.9,0.2 -4.6,1.2 -7.2,4.8 -7.2,9.9 0,17.2 0,34.5 0,51.7 0,1.1 -0.2,1.7 -1.4,1.9 -1.7,0.3 -2.7,1.5 -3.3,3 -0.4,1.1 -0.5,1.8 1.2,1.8 8.1,-0.1 16.3,0 24.4,0 8.1,0 16.2,0 24.3,0 1.8,0 2,-0.2 1.3,-1.9 -0.8,-1.8 -2.2,-2.9 -4.1,-3 -1,-0.1 -1.3,-0.4 -1.2,-1.4 0,-4.6 0.1,-9.1 0,-13.7 0,-1.7 0.7,-1.5 1.7,-1 2.1,1 2.4,2.9 2.4,5 0,4.4 3,7.6 7.1,7.7 4.2,0 7.3,-3.2 7.3,-7.7 0,-11.2 0,-22.5 0,-33.7 0.1,-0.8 -0.1,-1.5 -0.7,-2.1 z m -26.3,9.7 c -4,-0.1 -8,0 -11.9,0 -4,0 -8.1,0 -12.1,0 -1,0 -1.3,-0.3 -1.3,-1.3 0,-5 0,-10.1 0,-15.1 0,-2 0.7,-2.7 2.7,-2.7 7.1,0 14.2,0 21.3,0 1.8,0 2.6,0.8 2.6,2.6 0,5 0,10.1 0,15.1 0.1,1.1 -0.1,1.4 -1.3,1.4 z"
+   class="st28" />
+
+</g>
     </g>
 
-        <polygon
-   id="divider"
-   points="491.3,263.2 725.4,262.7 959.5,262.5 1193.6,262.7 1427.8,263.2 1661.9,264 1778.9,264.7 1837.5,265 1896,265.5 1837.5,266 1778.9,266.3 1661.9,267 1427.8,267.8 1193.6,268.3 959.5,268.5 725.4,268.3 491.3,267.8 257.1,267 140.1,266.3 81.5,266 23,265.5 81.5,265 140.1,264.7 257.1,264 "
-   class="st8"
-   transform="matrix(0.55205553,0,0,1,10.302723,0)" />
-    <polygon
-   id="polygon836"
-   points="959.5,262.5 1193.6,262.7 1427.8,263.2 1661.9,264 1778.9,264.7 1837.5,265 1896,265.5 1837.5,266 1778.9,266.3 1661.9,267 1427.8,267.8 1193.6,268.3 959.5,268.5 725.4,268.3 491.3,267.8 257.1,267 140.1,266.3 81.5,266 23,265.5 81.5,265 140.1,264.7 257.1,264 491.3,263.2 725.4,262.7 "
-   class="st8"
-   transform="matrix(0.55205553,0,0,1,33.948641,1451.2774)"
-   inkscape:label="dividerBottom" /></g>
+        
+
+        
+    </g>
 
 </svg>

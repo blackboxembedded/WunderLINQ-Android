@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 public class SVGSettings {
     public SharedPreferences sharedPrefs;
+
     public String pressureFormat = "0";
     public String temperatureFormat = "0";
     public String distanceFormat = "0";
@@ -17,7 +18,6 @@ public class SVGSettings {
     public String consumptionUnit = "L/100";
 
     public boolean tenK = false;
-
     public boolean twelveK = false;
     public boolean fifteenK = false;
 
