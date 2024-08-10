@@ -3,11 +3,11 @@
    enable-background="new"
    id="standard-dashboard"
    version="1.1"
-   viewBox="0 0 380.99999 677.33298"
-   height="677.33301"
-   width="381"
-   sodipodi:docname="standard-dashboard-p.svg"
-   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   viewBox="0 0 382 678"
+   height="678"
+   width="382"
+   sodipodi:docname="standard-dashboard-portrait.svg"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -20,18 +20,18 @@
      borderopacity="0.25"
      inkscape:showpageshadow="2"
      inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
+     inkscape:pagecheckerboard="true"
      inkscape:deskcolor="#d1d1d1"
      showgrid="false"
-     inkscape:zoom="1.2388451"
-     inkscape:cx="39.149366"
-     inkscape:cy="118.2553"
-     inkscape:window-width="1920"
-     inkscape:window-height="1010"
-     inkscape:window-x="-6"
-     inkscape:window-y="-6"
+     inkscape:zoom="0.87599577"
+     inkscape:cx="400.68687"
+     inkscape:cy="354.45377"
+     inkscape:window-width="1500"
+     inkscape:window-height="921"
+     inkscape:window-x="-7"
+     inkscape:window-y="-7"
      inkscape:window-maximized="1"
-     inkscape:current-layer="standard-dashboard" />
+     inkscape:current-layer="dashboard" />
   <metadata
      id="metadata7426" />
   <style
@@ -2540,13 +2540,11 @@
   </defs>
   <rect
      id="background"
-     style="display:inline;fill:#000000"
-     y="-1"
-     x="-678"
-     height="382"
-     width="678"
-     transform="rotate(-90)"
-     sodipodi:insensitive="true" />
+     style="display:inline;fill:#000000;stroke-width:1;stroke:none;stroke-opacity:1;stroke-dasharray:none;fill-opacity:1"
+     height="678"
+     width="382"
+     x="0"
+     y="0" />
   <g
      id="dashboard"
      transform="matrix(0,-1,-1,0,342.0916,675.14027)"
@@ -3802,64 +3800,6 @@
     </g>
     <!-- Variable Fields -->
     <g
-       id="values"
-       style="display:inline"
-       transform="matrix(0,-1,-1,0,568.63242,409.95652)">
-      <path
-         id="gearBox"
-         class="st3"
-         d="M 154.78107,444.25258 H 92.370977 a 8.4509467,9.6157005 0 0 0 -8.450943,9.61562 v 90.12217 a 8.4509467,9.6157005 0 0 0 8.450943,9.61562 h 62.410093 a 8.4509467,9.6157005 0 0 0 8.45094,-9.61562 V 453.8682 a 8.4509467,9.6157005 0 0 0 -8.45094,-9.61562 z"
-         style="display:inline" />
-      <text
-         id="gear"
-         xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:106.667px;line-height:1.25;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;vector-effect:none;fill:#fcc914;fill-opacity:1;stroke:none;stroke-width:0.214982;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-         x="124.79999"
-         y="539.68463">-</text>
-      <text
-         id="speed"
-         xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:162.278px;line-height:1.25;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:end;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:end;white-space:normal;shape-padding:0;display:inline;vector-effect:none;fill:#eef1f0;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-         x="338.66827"
-         y="310.9996">---</text>
-      <text
-         id="engineTemp"
-         xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:39.5111px;line-height:1.25;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:end;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:end;white-space:normal;shape-padding:0;vector-effect:none;fill:#eef1f0;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-         x="333.50497"
-         y="112.62733">-C</text>
-      <text
-         id="ambientTemp"
-         xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:39.5111px;line-height:1.25;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:end;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:end;white-space:normal;shape-padding:0;display:inline;vector-effect:none;fill:#eef1f0;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-         x="195.91219"
-         y="112.62733">-C</text>
-      <text
-         id="rdcR"
-         xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:39.5111px;line-height:1.25;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:end;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:end;white-space:normal;shape-padding:0;vector-effect:none;fill:#eef1f0;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-         x="333.86105"
-         y="59.55497">-psi</text>
-      <text
-         id="rdcF"
-         xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:39.5111px;line-height:1.25;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:end;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:end;white-space:normal;shape-padding:0;display:inline;vector-effect:none;fill:#eef1f0;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-         x="195.83502"
-         y="59.55497">-psi</text>
-      <text
-         id="dataValue"
-         xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:39.5111px;line-height:1.25;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:end;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:end;white-space:normal;shape-padding:0;display:inline;vector-effect:none;fill:#eef1f0;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-         x="333.2352"
-         y="2.4263151">-kms</text>
-      <text
-         id="clock"
-         xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:39.5111px;line-height:1.25;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;display:inline;vector-effect:none;fill:#eef1f0;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-         x="82.453804"
-         y="-69.091103">--:--</text>
-    </g>
-    <g
        id="labels"
        transform="matrix(0,-1,-1,0,439.58666,454.84299)"
        style="display:inline">
@@ -3918,7 +3858,7 @@
     <!-- Status Icons -->
     <g
        id="icons"
-       transform="matrix(0,-1,-1,0,738.26227,728.07338)">
+       transform="matrix(0,-1.1481485,-1.1481485,0,769.12071,904.10515)">
       <rect
          id="iconArea"
          class="st16"
@@ -3988,6 +3928,68 @@
            id="path12718"
            style="display:inline" />
       </g>
+    </g>
+    <g
+       id="values"
+       style="display:inline"
+       transform="matrix(0,-1,-1,0,568.63242,409.95652)">
+      <path
+         id="gearBox"
+         class="st3"
+         d="M 154.78107,444.25258 H 92.370977 a 8.4509467,9.6157005 0 0 0 -8.450943,9.61562 v 90.12217 a 8.4509467,9.6157005 0 0 0 8.450943,9.61562 h 62.410093 a 8.4509467,9.6157005 0 0 0 8.45094,-9.61562 V 453.8682 a 8.4509467,9.6157005 0 0 0 -8.45094,-9.61562 z"
+         style="display:inline" />
+      <text
+         id="gear"
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:106.667px;line-height:1.25;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;vector-effect:none;fill:#fcc914;fill-opacity:1;stroke:none;stroke-width:0.214982;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         x="124.79999"
+         y="539.68463">-</text>
+      <text
+         id="speed"
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:162.278px;line-height:1.25;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:end;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:end;white-space:normal;shape-padding:0;display:inline;vector-effect:none;fill:#eef1f0;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         x="338.66827"
+         y="310.9996">---</text>
+      <text
+         id="engineTemp"
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:39.5111px;line-height:1.25;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:end;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:end;white-space:normal;shape-padding:0;vector-effect:none;fill:#eef1f0;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         x="333.50497"
+         y="112.62733">-C</text>
+      <text
+         id="ambientTemp"
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:39.5111px;line-height:1.25;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:end;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:end;white-space:normal;shape-padding:0;display:inline;vector-effect:none;fill:#eef1f0;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         x="195.91219"
+         y="112.62733">-C</text>
+      <text
+         id="rdcR"
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:39.5111px;line-height:1.25;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:end;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:end;white-space:normal;shape-padding:0;vector-effect:none;fill:#eef1f0;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         x="333.86105"
+         y="59.55497">-psi</text>
+      <text
+         id="rdcF"
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:39.5111px;line-height:1.25;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:end;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:end;white-space:normal;shape-padding:0;display:inline;vector-effect:none;fill:#eef1f0;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         x="195.83502"
+         y="59.55497">-psi</text>
+      <text
+         id="dataValue"
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:39.5111px;line-height:1.25;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:end;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:end;white-space:normal;shape-padding:0;display:inline;vector-effect:none;fill:#eef1f0;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         x="333.2352"
+         y="2.4263151">-kms</text>
+      <text
+         id="clock"
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:39.5111px;line-height:1.25;font-family:'Agency FB';-inkscape-font-specification:'Agency FB, Bold Condensed';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;text-indent:0;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;display:inline;vector-effect:none;fill:#eef1f0;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         x="353.98825"
+         y="-76.315041"><tspan
+           sodipodi:role="line"
+           id="tspan1"
+           x="353.98825"
+           y="-76.315041">00:00</tspan></text>
     </g>
   </g>
 </svg>

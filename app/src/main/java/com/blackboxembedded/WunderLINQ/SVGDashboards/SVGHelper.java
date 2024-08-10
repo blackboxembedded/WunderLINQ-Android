@@ -13,7 +13,7 @@ import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
-import com.caverock.androidsvg.SVG;
+//import com.caverock.androidsvg.SVG;
 
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 
@@ -80,6 +80,20 @@ public class SVGHelper {
             Log.d(TAG, "Exception getting SVG Settings: " + e.toString());
         }
         return s;
+    }
+
+    public static String SVGfilename(String dashName) {
+        if (dashName == null || dashName.isEmpty()) {
+            dashName = "standard-dashboard";
+        }
+
+        if (isDevicePortrait()) {
+            dashName  += "-portrait.svg";
+        } else {
+            dashName += ".svg";
+        }
+
+        return dashName;
     }
 
     public static boolean isDevicePortrait() {
