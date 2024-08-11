@@ -81,6 +81,11 @@ public class Data {
     public static final int DATA_CELL_SIGNAL= 32;
     public static final int DATA_BATTERY_DEVICE = 33;
 
+    // Focus
+    private static boolean hasFocus;
+    public static boolean getHasFocus() { return hasFocus; }
+    public static void setHasFocus(boolean status) { Data.hasFocus = status; }
+
     // Last Message
     private static byte[] lastMessage;
     public static byte[] getLastMessage() {
@@ -445,39 +450,6 @@ public class Data {
     public static void setRearSpeed(Double rearSpeed){
         Data.rearSpeed = rearSpeed;
     }
-
-    // START of CAN only Data
-    // High Beam Status
-    private static boolean highBeam;
-    public static boolean getHighBeam() {
-        return highBeam;
-    }
-    public static void setHighBeam(boolean highBeam){
-        Data.highBeam = highBeam;
-    }
-
-    // Fog Light Status
-    private static boolean fogLight;
-    public static boolean getFogLight() {
-        return fogLight;
-    }
-    public static void setFogLight(boolean fogLight){
-        Data.fogLight = fogLight;
-    }
-
-    // Heated Grip Status
-    public static int GRIP_HIGH = 2;
-    public static int GRIP_LOW = 1;
-    public static int GRIP_OFF = 0;
-    private static int heatedGrips;
-    public static int getHeatedGrips() {
-        return heatedGrips;
-    }
-    public static void setHeatedGrips(int heatedGrips){
-        Data.heatedGrips = heatedGrips;
-    }
-
-    // END of CAN only Data
 
     // Utility functions
     public static String getLabel(int dataPoint){
