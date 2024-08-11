@@ -83,8 +83,7 @@ import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_BASE;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_C;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_X;
-import com.blackboxembedded.WunderLINQ.protocols.CANbus;
-import com.blackboxembedded.WunderLINQ.protocols.LINbus;
+import com.blackboxembedded.WunderLINQ.protocols.BLEbus;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -153,6 +152,8 @@ public class BluetoothLeService extends Service {
     static boolean itsDark = false;
     private long darkTimer = 0;
     private long lightTimer = 0;
+
+    private static long lastControlMessage;
 
     /*
      * time smoothing constant for low-pass filter
@@ -657,6 +658,7 @@ public class BluetoothLeService extends Service {
                 String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
                         "Disconnected";
                 Log.d(TAG,dataLog);
+                Data.setHasFocus(false);
             }
             // GATT Server Connecting
             if (newState == BluetoothProfile.STATE_CONNECTING) {
@@ -676,6 +678,7 @@ public class BluetoothLeService extends Service {
                     mConnectionState = STATE_DISCONNECTING;
                 }
                 broadcastConnectionUpdate(intentAction);
+                Data.setHasFocus(false);
             }
         }
 
@@ -811,35 +814,22 @@ public class BluetoothLeService extends Service {
             }
         }
 
-        if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_LINMESSAGE_CHARACTERISTIC)) {
+        if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_PERFORMANCE_CHARACTERISTIC)) {
             if (data != null) {
-                //Check if message changed
                 boolean process = false;
                 int msgID = (data[0] & 0xFF);
-                if(!messages.containsKey(msgID)){
-                    messages.put(msgID ,data);
-                    process = true;
-                } else {
-                    if(!Arrays.equals(messages.get(msgID), data)){
-                        process = true;
+                if (msgID == 0x04){
+                    if (!Data.getHasFocus()){
+                        Log.d(TAG,"Focus Gained");
                     }
-                }
-                //Process message
-                if(process) {
-                    LINbus.parseLINMessage(data);
-                    /*
-                     * Sending the broad cast so that it can be received on registered
-                     * receivers
-                     */
-                    sendDataBroadcast();
-                }
-            }
-        } else if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_CANMESSAGE_CHARACTERISTIC)) {
-            if (data != null) {
-                //Check if message changed
-                boolean process = false;
-                if (data.length > 2) {
-                    int msgID = ((data[0] & 0xFF) << 8) | (data[1] & 0xFF);
+                    Data.setHasFocus(true);
+                    lastControlMessage = System.currentTimeMillis();
+                } else {
+                    if (Data.getHasFocus() && ( System.currentTimeMillis() - lastControlMessage > 100)){
+                        Log.d(TAG,"Focus Gone");
+                        Data.setHasFocus(false);
+                    }
+                    //Check if message changed
                     if (!messages.containsKey(msgID)) {
                         messages.put(msgID, data);
                         process = true;
@@ -850,7 +840,7 @@ public class BluetoothLeService extends Service {
                     }
                     //Process message
                     if (process) {
-                        CANbus.parseCANMessage(data);
+                        BLEbus.parseBLEMessage(data);
                         /*
                          * Sending the broad cast so that it can be received on registered
                          * receivers
@@ -859,8 +849,6 @@ public class BluetoothLeService extends Service {
                     }
                 }
             }
-        } else if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_PERFORMANCE_CHARACTERISTIC)) {
-            //TODO
         } else if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_COMMAND_CHARACTERISTIC)) {
             if (data != null) {
                 //Read Config
@@ -1264,44 +1252,7 @@ public class BluetoothLeService extends Service {
                 for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
                     uuid = gattCharacteristic.getUuid().toString();
                     Log.d(TAG,"Characteristic Found: " + uuid);
-                    if (UUID.fromString(GattAttributes.WUNDERLINQ_LINMESSAGE_CHARACTERISTIC).equals(gattCharacteristic.getUuid())) {
-                        connectedType = WLQ.TYPE_NAVIGATOR;
-                        int charaProp = gattCharacteristic.getProperties();
-                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
-                            // If there is an active notification on a characteristic, clear
-                            // it first so it doesn't update the data field on the user interface.
-                            if (mNotifyCharacteristic != null) {
-                                setCharacteristicNotification(
-                                        mNotifyCharacteristic, false);
-                                mNotifyCharacteristic = null;
-                            }
-                            readCharacteristic(gattCharacteristic);
-                        }
-                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
-                            mNotifyCharacteristic = gattCharacteristic;
-                            setCharacteristicNotification(
-                                    gattCharacteristic, true);
-                        }
-                    } else if (UUID.fromString(GattAttributes.WUNDERLINQ_CANMESSAGE_CHARACTERISTIC).equals(gattCharacteristic.getUuid())) {
-                        connectedType = WLQ.TYPE_COMMANDER;
-                        int charaProp = gattCharacteristic.getProperties();
-                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
-                            // If there is an active notification on a characteristic, clear
-                            // it first so it doesn't update the data field on the user interface.
-                            if (mNotifyCharacteristic != null) {
-                                setCharacteristicNotification(
-                                        mNotifyCharacteristic, false);
-                                mNotifyCharacteristic = null;
-                            }
-                            readCharacteristic(gattCharacteristic);
-                        }
-                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
-                            mNotifyCharacteristic = gattCharacteristic;
-                            setCharacteristicNotification(
-                                    gattCharacteristic, true);
-                        }
-                    } else if (UUID.fromString(GattAttributes.WUNDERLINQ_PERFORMANCE_CHARACTERISTIC).equals(gattCharacteristic.getUuid())) {
-                        connectedType = WLQ.TYPE_X;
+                    if (UUID.fromString(GattAttributes.WUNDERLINQ_PERFORMANCE_CHARACTERISTIC).equals(gattCharacteristic.getUuid())) {
                         int charaProp = gattCharacteristic.getProperties();
                         if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
                             // If there is an active notification on a characteristic, clear
@@ -1319,6 +1270,51 @@ public class BluetoothLeService extends Service {
                                     gattCharacteristic, true);
                         }
                     } else if (UUID.fromString(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC).equals(gattCharacteristic.getUuid())){
+                        connectedType = WLQ.TYPE_NAVIGATOR;
+                        int charaProp = gattCharacteristic.getProperties();
+                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
+                            // If there is an active notification on a characteristic, clear
+                            // it first so it doesn't update the data field on the user interface.
+                            if (gattCommandCharacteristic != null) {
+                                setCharacteristicNotification(
+                                        gattCommandCharacteristic, false);
+                                gattCommandCharacteristic = null;
+                            }
+                            readCharacteristic(gattCharacteristic);
+                        }
+                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
+                            gattCommandCharacteristic = gattCharacteristic;
+                            setCharacteristicNotification(
+                                    gattCharacteristic, true);
+                        }
+
+                        gattCommandCharacteristic = gattCharacteristic;
+                        // Request config
+                        writeCharacteristic(gattCommandCharacteristic, WLQ_BASE.GET_CONFIG_CMD, WriteType.WITH_RESPONSE);
+                    } else if (UUID.fromString(GattAttributes.WUNDERLINQ_C_COMMAND_CHARACTERISTIC).equals(gattCharacteristic.getUuid())){
+                        connectedType = WLQ.TYPE_COMMANDER;
+                        int charaProp = gattCharacteristic.getProperties();
+                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
+                            // If there is an active notification on a characteristic, clear
+                            // it first so it doesn't update the data field on the user interface.
+                            if (gattCommandCharacteristic != null) {
+                                setCharacteristicNotification(
+                                        gattCommandCharacteristic, false);
+                                gattCommandCharacteristic = null;
+                            }
+                            readCharacteristic(gattCharacteristic);
+                        }
+                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
+                            gattCommandCharacteristic = gattCharacteristic;
+                            setCharacteristicNotification(
+                                    gattCharacteristic, true);
+                        }
+
+                        gattCommandCharacteristic = gattCharacteristic;
+                        // Request config
+                        writeCharacteristic(gattCommandCharacteristic, WLQ_BASE.GET_CONFIG_CMD, WriteType.WITH_RESPONSE);
+                    } else if (UUID.fromString(GattAttributes.WUNDERLINQ_X_COMMAND_CHARACTERISTIC).equals(gattCharacteristic.getUuid())){
+                        connectedType = WLQ.TYPE_X;
                         int charaProp = gattCharacteristic.getProperties();
                         if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
                             // If there is an active notification on a characteristic, clear
