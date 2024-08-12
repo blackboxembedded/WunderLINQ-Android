@@ -39,6 +39,7 @@ public class CANbus {
                 // RPM
                 int rpm = (((data[4] & 0xFF) + (((data[5] & 0xFF) & 0x0f) * 255)) * 5);
                 Data.setRPM(rpm);
+
                 // Lean Angle
                 double leanAngle = ((data[6] & 0xFF) + (((data[5] & 0xFF) >> 4) & 0x0f) * 0.1) * (Math.sqrt(2) / 2);
                 Data.setLeanAngleBike(leanAngle);

@@ -97,24 +97,6 @@ public class LINbus {
                     }
                     leanAngleBikeFixed = leanAngleBikeFixed * 0.045;
                     Data.setLeanAngleBike(leanAngleBikeFixed);
-                    //Store Max L and R lean angle
-                    if(leanAngleBikeFixed > 0){
-                        if (Data.getLeanAngleMaxR() != null) {
-                            if (leanAngleBikeFixed > Data.getLeanAngleMaxR()) {
-                                Data.setLeanAngleMaxR(leanAngleBikeFixed);
-                            }
-                        } else {
-                            Data.setLeanAngleMaxR(leanAngleBikeFixed);
-                        }
-                    } else if(leanAngleBikeFixed < 0){
-                        if (Data.getLeanAngleMaxL() != null) {
-                            if (Math.abs(leanAngleBikeFixed) > Data.getLeanAngleMaxL()) {
-                                Data.setLeanAngleMaxL(Math.abs(leanAngleBikeFixed));
-                            }
-                        } else {
-                            Data.setLeanAngleMaxL(Math.abs(leanAngleBikeFixed));
-                        }
-                    }
                 }
 
                 // Brakes

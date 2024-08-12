@@ -513,25 +513,7 @@ public class BluetoothLeService extends Service {
                 }
                 //Filter out impossible values, max sport bike lean is +/-60
                 if ((leanAngle >= -60.0) && (leanAngle <= 60.0)) {
-                    Data.setLeanAngle(leanAngle);
-                    //Store Max L and R lean angle
-                    if (leanAngle > 0) {
-                        if (Data.getLeanAngleMaxR() != null) {
-                            if (leanAngle > Data.getLeanAngleMaxR()) {
-                                Data.setLeanAngleMaxR(leanAngle);
-                            }
-                        } else {
-                            Data.setLeanAngleMaxR(leanAngle);
-                        }
-                    } else if (leanAngle < 0) {
-                        if (Data.getLeanAngleMaxL() != null) {
-                            if (Math.abs(leanAngle) > Data.getLeanAngleMaxL()) {
-                                Data.setLeanAngleMaxL(Math.abs(leanAngle));
-                            }
-                        } else {
-                            Data.setLeanAngleMaxL(Math.abs(leanAngle));
-                        }
-                    }
+                    Data.setLeanAngleBT(leanAngle);
                 }
             } else if (event.sensor.getType() == Sensor.TYPE_GRAVITY) {
                 mGravity = event.values.clone();

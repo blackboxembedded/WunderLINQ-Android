@@ -18,12 +18,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package com.blackboxembedded.WunderLINQ.hardware.WLQ;
 
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.car.app.model.CarColor;
@@ -352,28 +350,44 @@ public class Data {
     }
 
     // Lean Angle
-    private static Double leanAngle;
-    public static Double getLeanAngle() {
-        return leanAngle;
+    private static Double leanAngleBt;
+    public static Double getLeanAngleBT() {
+        return leanAngleBt;
     }
-    public static void setLeanAngle(Double leanAngle){
-        Data.leanAngle = leanAngle;
+    public static void setLeanAngleBT(Double leanAngle){
+        Data.leanAngleBt = leanAngle;
+
+
+        //Store Max L and R lean angle
+        if (leanAngle > 0) {
+            if (Data.getLeanAngleBtMaxR() == null) {
+                Data.setLeanAngleBtMaxR(leanAngle);
+            } else if (leanAngle > Data.getLeanAngleBtMaxR())  {
+                Data.setLeanAngleBtMaxR(leanAngle);
+            }
+        } else if (leanAngle < 0) {
+            if (Data.getLeanAngleBtMaxL() == null) {
+                Data.setLeanAngleBtMaxL(Math.abs(leanAngle));
+            } else if (Math.abs(leanAngle) > Data.getLeanAngleBtMaxL()) {
+                Data.setLeanAngleBtMaxL(Math.abs(leanAngle));
+            }
+        }
     }
 
     // Lean Angle Max
-    private static Double leanAngleMaxL;
-    public static Double getLeanAngleMaxL() {
-        return leanAngleMaxL;
+    private static Double leanAngleBtMaxL;
+    public static Double getLeanAngleBtMaxL() {
+        return leanAngleBtMaxL;
     }
-    public static void setLeanAngleMaxL(Double leanAngleMaxL){
-        Data.leanAngleMaxL = leanAngleMaxL;
+    public static void setLeanAngleBtMaxL(Double leanAngle){
+        Data.leanAngleBtMaxL = leanAngle;
     }
-    private static Double leanAngleMaxR;
-    public static Double getLeanAngleMaxR() {
-        return leanAngleMaxR;
+    private static Double leanAngleBtMaxR;
+    public static Double getLeanAngleBtMaxR() {
+        return leanAngleBtMaxR;
     }
-    public static void setLeanAngleMaxR(Double leanAngleMaxR){
-        Data.leanAngleMaxR = leanAngleMaxR;
+    public static void setLeanAngleBtMaxR(Double leanAngle){
+        Data.leanAngleBtMaxR = leanAngle;
     }
 
     // g-force
@@ -419,19 +433,36 @@ public class Data {
     }
     public static void setLeanAngleBike(Double leanAngleBike){
         Data.leanAngleBike = leanAngleBike;
+
+
+        //Store Max L and R lean angle
+        double leanAngleBikeFixed = leanAngleBike * 1;
+        if(leanAngleBikeFixed > 0){
+            if (Data.getLeanAngleBikeMaxR() == null) {
+                Data.setLeanAngleBikeMaxR(leanAngleBikeFixed);
+            } else if (leanAngleBikeFixed > Data.getLeanAngleBikeMaxR()) {
+                Data.setLeanAngleBikeMaxR(leanAngleBikeFixed);
+            }
+        } else if(leanAngleBikeFixed < 0){
+            if (Data.getLeanAngleBikeMaxL() == null) {
+                Data.setLeanAngleBikeMaxL(Math.abs(leanAngleBikeFixed));
+            } else if (Math.abs(leanAngleBikeFixed) > Data.getLeanAngleBikeMaxL()) {
+                Data.setLeanAngleBikeMaxL(Math.abs(leanAngleBikeFixed));
+            }
+        }
     }
 
     // Lean Angle Bike Max
     private static Double leanAngleBikeMaxL;
     public static Double getLeanAngleBikeMaxL() {
-        return leanAngleBikeMaxL;
+        return Data.leanAngleBikeMaxL;
     }
     public static void setLeanAngleBikeMaxL(Double leanAngleBikeMaxL){
         Data.leanAngleBikeMaxL = leanAngleBikeMaxL;
     }
     private static Double leanAngleBikeMaxR;
     public static Double getLeanAngleBikeMaxR() {
-        return leanAngleBikeMaxR;
+        return Data.leanAngleBikeMaxR;
     }
     public static void setLeanAngleBikeMaxR(Double leanAngleBikeMaxR){
         Data.leanAngleBikeMaxR = leanAngleBikeMaxR;
@@ -728,7 +759,7 @@ public class Data {
                 key = "rpm";
                 break;
             case DATA_LEAN:
-                key = "leanAngle";
+                key = "leanAngleBt";
                 break;
             case DATA_REAR_SPEED:
                 key = "rearSpeed";
@@ -1272,8 +1303,8 @@ public class Data {
                 }
                 break;
             case DATA_LEAN_DEVICE:
-                if(Data.getLeanAngle() != null){
-                    Double leanAngle = Data.getLeanAngle();
+                if(Data.getLeanAngleBT() != null){
+                    Double leanAngle = Data.getLeanAngleBT();
                     value = String.valueOf(Math.round(leanAngle));
                 }
                 break;
@@ -1418,7 +1449,7 @@ public class Data {
         Data.fuelEconomyOne = null;
         Data.fuelEconomyTwo = null;
         Data.fuelRange = null;
-        Data.leanAngle = null;
+        Data.leanAngleBt = null;
         Data.gForce = null;
         Data.bearing = null;
         Data.barometricPressure = null;
