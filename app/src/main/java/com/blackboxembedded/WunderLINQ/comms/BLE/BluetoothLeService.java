@@ -375,54 +375,63 @@ public class BluetoothLeService extends Service {
 
         // Update time Data field and send to the cluster if WLQ_N
         Timer t = new Timer();
-        t.scheduleAtFixedRate(new TimerTask() {
+        t.schedule(new TimerTask() {
             @Override
             public void run() {
                 Calendar c = Calendar.getInstance();
                 Data.setTime(c.getTime());
-
-                //Send time to cluster
-                if (Data.wlq != null) {
-                    if (Data.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
-                        if (gattCommandCharacteristic != null) {
-                            BluetoothGattCharacteristic characteristic = gattCommandCharacteristic;
-                            //Get Current Time
-                            Date date = new Date();
-                            Calendar calendar = new GregorianCalendar();
-                            calendar.setTime(date);
-                            int year = calendar.get(Calendar.YEAR);
-                            //Add one to month {0 - 11}
-                            int month = calendar.get(Calendar.MONTH) + 1;
-                            int day = calendar.get(Calendar.DAY_OF_MONTH);
-                            int hour = calendar.get(Calendar.HOUR_OF_DAY);
-                            int minute = calendar.get(Calendar.MINUTE);
-                            int second = calendar.get(Calendar.SECOND);
-                            int yearByte = (year >> 4);
-                            byte yearLByte = (byte) year;
-                            int yearNibble = (yearLByte & 0x0F);
-                            byte monthNibble = (byte) month;
-                            int monthYearByte = ((yearNibble & 0x0F) << 4 | (monthNibble & 0x0F));
-                            try {
-                                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                                outputStream.write(WLQ_N.SET_CLUSTER_CLOCK_CMD);
-                                outputStream.write((byte) second);
-                                outputStream.write((byte) minute);
-                                outputStream.write((byte) hour);
-                                outputStream.write((byte) day);
-                                outputStream.write((byte) monthYearByte);
-                                outputStream.write((byte) yearByte);
-                                outputStream.write(WLQ_N.CMD_EOM);
-                                byte[] setClusterClock = outputStream.toByteArray();
-                                writeCharacteristic(characteristic, setClusterClock, WriteType.WITH_RESPONSE);
-                            } catch (IOException e) {
-                                Log.d(TAG, e.toString());
-                            }
-                        }
-                    }
-                }
             }
         }, 1000, 1000); //Initial Delay and Period for update (in milliseconds)
     }
+
+
+    public static void setClusterClock(Date currTime) {
+
+        //Calendar c = Calendar.getInstance();
+        //Data.setTime(c.getTime());
+
+        //Send time to cluster
+        if (Data.wlq != null) {
+            if (Data.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
+                if (gattCommandCharacteristic != null) {
+                    BluetoothGattCharacteristic characteristic = gattCommandCharacteristic;
+                    //Get Current Time
+                    //Date date = new Date();
+                    Calendar calendar = new GregorianCalendar();
+                    calendar.setTime(currTime);
+                    int year = calendar.get(Calendar.YEAR);
+
+                    //Add one to month {0 - 11}
+                    int month = calendar.get(Calendar.MONTH) + 1;
+                    int day = calendar.get(Calendar.DAY_OF_MONTH);
+                    int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                    int minute = calendar.get(Calendar.MINUTE);
+                    int second = calendar.get(Calendar.SECOND);
+                    int yearByte = (year >> 4);
+                    byte yearLByte = (byte) year;
+                    int yearNibble = (yearLByte & 0x0F);
+                    byte monthNibble = (byte) month;
+                    int monthYearByte = ((yearNibble & 0x0F) << 4 | (monthNibble & 0x0F));
+                    try {
+                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                        outputStream.write(WLQ_N.SET_CLUSTER_CLOCK_CMD);
+                        outputStream.write((byte) second);
+                        outputStream.write((byte) minute);
+                        outputStream.write((byte) hour);
+                        outputStream.write((byte) day);
+                        outputStream.write((byte) monthYearByte);
+                        outputStream.write((byte) yearByte);
+                        outputStream.write(WLQ_N.CMD_EOM);
+                        byte[] setClusterClock = outputStream.toByteArray();
+                        BluetoothLeService.writeCharacteristic(characteristic, setClusterClock, BluetoothLeService.WriteType.WITH_RESPONSE);
+                    } catch (IOException e) {
+                        Log.d(TAG, e.toString());
+                    }
+                }
+            }
+        }
+    }
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {

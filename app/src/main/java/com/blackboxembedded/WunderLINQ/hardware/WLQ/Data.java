@@ -32,6 +32,7 @@ import androidx.core.graphics.drawable.IconCompat;
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
+import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -410,11 +411,23 @@ public class Data {
 
     // time
     private static Date time;
+    private static Date lastUpdateClusterClock;
     public static Date getTime() {
-        return time;
+        return Data.time;
     }
     public static void setTime(Date time){
+        final long MILLISECOND_DELAY_CLUSTER_UPDATE = 15 * 1000; // Every 15 seconds
+
         Data.time = time;
+
+        if ((Data.lastUpdateClusterClock == null) || ((Data.time.getTime() - Data.lastUpdateClusterClock.getTime()) > MILLISECOND_DELAY_CLUSTER_UPDATE)) {
+            try
+            {
+                BluetoothLeService.setClusterClock(time);
+            } finally {
+                Data.lastUpdateClusterClock = Data.time;
+            }
+        }
     }
 
     // barometric pressure
