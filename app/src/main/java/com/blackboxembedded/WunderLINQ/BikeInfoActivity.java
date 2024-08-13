@@ -41,11 +41,10 @@ import androidx.core.content.ContextCompat;
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.blackboxembedded.WunderLINQ.comms.BLE.GattAttributes;
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
 
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 
 public class BikeInfoActivity extends AppCompatActivity {
@@ -95,8 +94,8 @@ public class BikeInfoActivity extends AppCompatActivity {
         btReset.setOnClickListener(mClickListener);
 
         characteristic = BluetoothLeService.gattCommandCharacteristic;
-        if (Data.wlq != null) {
-            if ((characteristic != null) & (Data.wlq.getFirmwareVersion() == null)) {
+        if (MotorcycleData.wlq != null) {
+            if ((characteristic != null) & (MotorcycleData.wlq.getFirmwareVersion() == null)) {
                 // Get Config
                 BluetoothLeService.writeCharacteristic(characteristic, WLQ_N.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
             }
@@ -110,8 +109,8 @@ public class BikeInfoActivity extends AppCompatActivity {
 
         ContextCompat.registerReceiver(this, mGattUpdateReceiver, makeGattUpdateIntentFilter(), ContextCompat.RECEIVER_EXPORTED);
 
-        if (Data.wlq != null) {
-            if (Data.wlq.getFirmwareVersion() == null) {
+        if (MotorcycleData.wlq != null) {
+            if (MotorcycleData.wlq.getFirmwareVersion() == null) {
                 if (characteristic != null) {
                     // Get Config
                     BluetoothLeService.writeCharacteristic(characteristic, WLQ_N.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
@@ -186,10 +185,10 @@ public class BikeInfoActivity extends AppCompatActivity {
     };
 
     private void updateDisplay(){
-        if (Data.wlq != null) {
-            if (Data.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
-                if (Data.wlq.getFirmwareVersion() != null) {
-                    if (Double.parseDouble(Data.wlq.getFirmwareVersion()) >= 1.8) {
+        if (MotorcycleData.wlq != null) {
+            if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
+                if (MotorcycleData.wlq.getFirmwareVersion() != null) {
+                    if (Double.parseDouble(MotorcycleData.wlq.getFirmwareVersion()) >= 1.8) {
                         tvResetHeader.setVisibility(View.VISIBLE);
                         spReset.setVisibility(View.VISIBLE);
                         tvResetLabel.setVisibility(View.VISIBLE);
@@ -199,23 +198,23 @@ public class BikeInfoActivity extends AppCompatActivity {
             }
         }
 
-        if (Data.getVin() != null){
-            tvVIN.setText(Data.getVin());
+        if (MotorcycleData.getVin() != null){
+            tvVIN.setText(MotorcycleData.getVin());
         }
 
-        if (Data.getNextServiceDate() != null){
+        if (MotorcycleData.getNextServiceDate() != null){
             // Creating a DateTimeFormatter object with desired format
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
             // Formatting the date using the formatter
-            String formattedDate = Data.getNextServiceDate().format(formatter);
+            String formattedDate = MotorcycleData.getNextServiceDate().format(formatter);
             tvNextServiceDate.setText(formattedDate);
         }
 
-        if (Data.getNextService() != null){
+        if (MotorcycleData.getNextService() != null){
             String distanceFormat = sharedPrefs.getString("prefDistance", "0");
-            String nextService = Data.getNextService() + "(km)";
+            String nextService = MotorcycleData.getNextService() + "(km)";
             if (distanceFormat.contains("1")) {
-                nextService = Math.round(Utils.kmToMiles(Data.getNextService())) + "(mi)";
+                nextService = Math.round(Utils.kmToMiles(MotorcycleData.getNextService())) + "(mi)";
             }
             tvNextService.setText(nextService);
         }

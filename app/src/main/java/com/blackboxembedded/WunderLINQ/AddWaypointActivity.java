@@ -44,7 +44,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -135,9 +135,9 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
         SupportMapFragment mapFragment = (SupportMapFragment) myFragmentManager.findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        if (Data.getLastLocation() != null) {
-            etLatitude.setText(String.valueOf(Data.getLastLocation().getLatitude()));
-            etLongitude.setText(String.valueOf(Data.getLastLocation().getLongitude()));
+        if (MotorcycleData.getLastLocation() != null) {
+            etLatitude.setText(String.valueOf(MotorcycleData.getLastLocation().getLatitude()));
+            etLongitude.setText(String.valueOf(MotorcycleData.getLastLocation().getLongitude()));
         }
 
         Intent intent = getIntent();
@@ -290,8 +290,8 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
         });
 
         // Add a marker and move the camera
-        if(Data.getLastLocation() != null) {
-            LatLng location = new LatLng(Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
+        if(MotorcycleData.getLastLocation() != null) {
+            LatLng location = new LatLng(MotorcycleData.getLastLocation().getLatitude(), MotorcycleData.getLastLocation().getLongitude());
             googleMap.addMarker(new MarkerOptions().position(location));
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
         }

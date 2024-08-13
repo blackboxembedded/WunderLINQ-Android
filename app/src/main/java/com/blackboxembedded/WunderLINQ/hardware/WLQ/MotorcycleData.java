@@ -18,12 +18,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package com.blackboxembedded.WunderLINQ.hardware.WLQ;
 
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.car.app.model.CarColor;
@@ -41,7 +39,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class Data {
+public class MotorcycleData {
     // WunderLINQ HW
     public static WLQ wlq;
     public static String hardwareVersion;
@@ -84,7 +82,7 @@ public class Data {
     // Focus
     private static boolean hasFocus;
     public static boolean getHasFocus() { return hasFocus; }
-    public static void setHasFocus(boolean status) { Data.hasFocus = status; }
+    public static void setHasFocus(boolean status) { MotorcycleData.hasFocus = status; }
 
     // Last Message
     private static byte[] lastMessage;
@@ -92,7 +90,7 @@ public class Data {
         return lastMessage;
     }
     public static void setLastMessage(byte[] message){
-        Data.lastMessage = message;
+        MotorcycleData.lastMessage = message;
     }
 
     // Last Location
@@ -101,7 +99,7 @@ public class Data {
         return lastLocation;
     }
     public static void setLastLocation(Location location){
-        Data.lastLocation = location;
+        MotorcycleData.lastLocation = location;
     }
 
     // Mobile device battery
@@ -110,7 +108,7 @@ public class Data {
         return localBattery;
     }
     public static void setLocalBattery(Double localBattery){
-        Data.localBattery = localBattery;
+        MotorcycleData.localBattery = localBattery;
     }
 
     // Mobile device cell signal (dBm)
@@ -119,7 +117,7 @@ public class Data {
         return cellularSignal;
     }
     public static void setCellularSignal(Integer cellularSignal){
-        Data.cellularSignal = cellularSignal;
+        MotorcycleData.cellularSignal = cellularSignal;
     }
 
     // Ignition Status
@@ -128,7 +126,7 @@ public class Data {
         return ignitionStatus;
     }
     public static void setIgnitionStatus(Boolean ignitionStatus){
-        Data.ignitionStatus = ignitionStatus;
+        MotorcycleData.ignitionStatus = ignitionStatus;
     }
 
     // VIN
@@ -137,7 +135,7 @@ public class Data {
         return vin;
     }
     public static void setVin(String vin){
-        Data.vin = vin;
+        MotorcycleData.vin = vin;
     }
 
     // Next Service, km
@@ -146,7 +144,7 @@ public class Data {
         return nextService;
     }
     public static void setNextService(Integer nextService){
-        Data.nextService = nextService;
+        MotorcycleData.nextService = nextService;
     }
 
     // Next Service, Date
@@ -155,7 +153,7 @@ public class Data {
         return nextServiceDate;
     }
     public static void setNextServiceDate(LocalDate nextServiceDate){
-        Data.nextServiceDate = nextServiceDate;
+        MotorcycleData.nextServiceDate = nextServiceDate;
     }
 
     // Front Tire Pressure in bar
@@ -164,7 +162,7 @@ public class Data {
         return frontTirePressure;
     }
     public static void setFrontTirePressure(Double pressure){
-        Data.frontTirePressure = pressure;
+        MotorcycleData.frontTirePressure = pressure;
     }
 
     // Rear Tire Pressure in bar
@@ -173,7 +171,7 @@ public class Data {
         return rearTirePressure;
     }
     public static void setRearTirePressure(Double pressure){
-        Data.rearTirePressure = pressure;
+        MotorcycleData.rearTirePressure = pressure;
     }
 
     // Ambient Temperature in C
@@ -182,7 +180,7 @@ public class Data {
         return ambientTemperature;
     }
     public static void setAmbientTemperature(Double temperature){
-        Data.ambientTemperature = temperature;
+        MotorcycleData.ambientTemperature = temperature;
     }
 
     // Engine Temperature in C
@@ -191,7 +189,7 @@ public class Data {
         return engineTemperature;
     }
     public static void setEngineTemperature(Double temperature){
-        Data.engineTemperature = temperature;
+        MotorcycleData.engineTemperature = temperature;
     }
 
     // Odometer in km
@@ -200,7 +198,7 @@ public class Data {
         return odometer;
     }
     public static void setOdometer(Double distance){
-        Data.odometer = distance;
+        MotorcycleData.odometer = distance;
     }
 
     // Trip One Distance in km
@@ -209,7 +207,7 @@ public class Data {
         return tripOne;
     }
     public static void setTripOne(Double distance){
-        Data.tripOne = distance;
+        MotorcycleData.tripOne = distance;
     }
 
     // Trip Two Distance in km
@@ -218,7 +216,7 @@ public class Data {
         return tripTwo;
     }
     public static void setTripTwo(Double distance){
-        Data.tripTwo = distance;
+        MotorcycleData.tripTwo = distance;
     }
 
     // Trip Auto Distance in km
@@ -227,7 +225,7 @@ public class Data {
         return tripAuto;
     }
     public static void setTripAuto(Double distance){
-        Data.tripAuto = distance;
+        MotorcycleData.tripAuto = distance;
     }
 
     // Number of shifts
@@ -236,7 +234,7 @@ public class Data {
         return numberOfShifts;
     }
     public static void setNumberOfShifts(Integer shifts){
-        Data.numberOfShifts = shifts;
+        MotorcycleData.numberOfShifts = shifts;
     }
 
     // RPM
@@ -245,7 +243,7 @@ public class Data {
         return rpm;
     }
     public static void setRPM(Integer rpm){
-        Data.rpm = rpm;
+        MotorcycleData.rpm = rpm;
     }
 
     // Gear
@@ -254,7 +252,7 @@ public class Data {
         return gear;
     }
     public static void setGear(String gear){
-        Data.gear = gear;
+        MotorcycleData.gear = gear;
     }
 
     // Voltage
@@ -263,7 +261,7 @@ public class Data {
         return voltage;
     }
     public static void setvoltage(Double voltage){
-        Data.voltage = voltage;
+        MotorcycleData.voltage = voltage;
     }
 
     // Throttle Position
@@ -272,7 +270,7 @@ public class Data {
         return throttlePosition;
     }
     public static void setThrottlePosition(Double throttlePosition){
-        Data.throttlePosition = throttlePosition;
+        MotorcycleData.throttlePosition = throttlePosition;
     }
 
     // Front Brake
@@ -281,7 +279,7 @@ public class Data {
         return frontBrake;
     }
     public static void setFrontBrake(Integer frontBrake){
-        Data.frontBrake = frontBrake;
+        MotorcycleData.frontBrake = frontBrake;
     }
 
     // Rear Brake
@@ -290,7 +288,7 @@ public class Data {
         return rearBrake;
     }
     public static void setRearBrake(Integer rearBrake){
-        Data.rearBrake = rearBrake;
+        MotorcycleData.rearBrake = rearBrake;
     }
 
     // Ambient Light
@@ -299,7 +297,7 @@ public class Data {
         return ambientLight;
     }
     public static void setAmbientLight(Integer ambientLight){
-        Data.ambientLight = ambientLight;
+        MotorcycleData.ambientLight = ambientLight;
     }
 
     // Speed
@@ -308,7 +306,7 @@ public class Data {
         return speed;
     }
     public static void setSpeed(Double speed){
-        Data.speed = speed;
+        MotorcycleData.speed = speed;
     }
 
     // Average Speed
@@ -317,7 +315,7 @@ public class Data {
         return avgSpeed;
     }
     public static void setAvgSpeed(Double avgSpeed){
-        Data.avgSpeed = avgSpeed;
+        MotorcycleData.avgSpeed = avgSpeed;
     }
 
     // Current Consumption
@@ -326,7 +324,7 @@ public class Data {
         return currentConsumption;
     }
     public static void setCurrentConsumption(Double currentConsumption){
-        Data.currentConsumption = currentConsumption;
+        MotorcycleData.currentConsumption = currentConsumption;
     }
 
     // Fuel Economy 1
@@ -335,7 +333,7 @@ public class Data {
         return fuelEconomyOne;
     }
     public static void setFuelEconomyOne(Double fuelEconomyOne){
-        Data.fuelEconomyOne = fuelEconomyOne;
+        MotorcycleData.fuelEconomyOne = fuelEconomyOne;
     }
 
     // Fuel Economy 2
@@ -344,7 +342,7 @@ public class Data {
         return fuelEconomyTwo;
     }
     public static void setFuelEconomyTwo(Double fuelEconomyTwo){
-        Data.fuelEconomyTwo = fuelEconomyTwo;
+        MotorcycleData.fuelEconomyTwo = fuelEconomyTwo;
     }
 
     // Fuel Range
@@ -353,7 +351,7 @@ public class Data {
         return fuelRange;
     }
     public static void setFuelRange(Double fuelRange){
-        Data.fuelRange = fuelRange;
+        MotorcycleData.fuelRange = fuelRange;
     }
 
     // Lean Angle
@@ -362,7 +360,7 @@ public class Data {
         return leanAngle;
     }
     public static void setLeanAngle(Double leanAngle){
-        Data.leanAngle = leanAngle;
+        MotorcycleData.leanAngle = leanAngle;
     }
 
     // Lean Angle Max
@@ -371,14 +369,14 @@ public class Data {
         return leanAngleMaxL;
     }
     public static void setLeanAngleMaxL(Double leanAngleMaxL){
-        Data.leanAngleMaxL = leanAngleMaxL;
+        MotorcycleData.leanAngleMaxL = leanAngleMaxL;
     }
     private static Double leanAngleMaxR;
     public static Double getLeanAngleMaxR() {
         return leanAngleMaxR;
     }
     public static void setLeanAngleMaxR(Double leanAngleMaxR){
-        Data.leanAngleMaxR = leanAngleMaxR;
+        MotorcycleData.leanAngleMaxR = leanAngleMaxR;
     }
 
     // g-force
@@ -387,7 +385,7 @@ public class Data {
         return gForce;
     }
     public static void setGForce(Double gForce){
-        Data.gForce = gForce;
+        MotorcycleData.gForce = gForce;
     }
 
     // bearing
@@ -396,7 +394,7 @@ public class Data {
         return bearing;
     }
     public static void setBearing(Integer bearing){
-        Data.bearing = bearing;
+        MotorcycleData.bearing = bearing;
     }
 
     // time
@@ -405,7 +403,7 @@ public class Data {
         return time;
     }
     public static void setTime(Date time){
-        Data.time = time;
+        MotorcycleData.time = time;
     }
 
     // barometric pressure
@@ -414,7 +412,7 @@ public class Data {
         return barometricPressure;
     }
     public static void setBarometricPressure(Double barometricPressure){
-        Data.barometricPressure = barometricPressure;
+        MotorcycleData.barometricPressure = barometricPressure;
     }
 
     // Lean Angle Bike
@@ -423,7 +421,7 @@ public class Data {
         return leanAngleBike;
     }
     public static void setLeanAngleBike(Double leanAngleBike){
-        Data.leanAngleBike = leanAngleBike;
+        MotorcycleData.leanAngleBike = leanAngleBike;
     }
 
     // Lean Angle Bike Max
@@ -432,14 +430,14 @@ public class Data {
         return leanAngleBikeMaxL;
     }
     public static void setLeanAngleBikeMaxL(Double leanAngleBikeMaxL){
-        Data.leanAngleBikeMaxL = leanAngleBikeMaxL;
+        MotorcycleData.leanAngleBikeMaxL = leanAngleBikeMaxL;
     }
     private static Double leanAngleBikeMaxR;
     public static Double getLeanAngleBikeMaxR() {
         return leanAngleBikeMaxR;
     }
     public static void setLeanAngleBikeMaxR(Double leanAngleBikeMaxR){
-        Data.leanAngleBikeMaxR = leanAngleBikeMaxR;
+        MotorcycleData.leanAngleBikeMaxR = leanAngleBikeMaxR;
     }
 
     // Rear Speed
@@ -448,7 +446,7 @@ public class Data {
         return rearSpeed;
     }
     public static void setRearSpeed(Double rearSpeed){
-        Data.rearSpeed = rearSpeed;
+        MotorcycleData.rearSpeed = rearSpeed;
     }
 
     // Utility functions
@@ -725,16 +723,16 @@ public class Data {
                 break;
             case DATA_ENGINE_TEMP:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_engine_temp);
-                if(Data.getEngineTemperature() != null ){
-                    double engineTemp = Data.getEngineTemperature();
+                if(MotorcycleData.getEngineTemperature() != null ){
+                    double engineTemp = MotorcycleData.getEngineTemperature();
                     if (engineTemp >= 104.0){
                         icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
                     }
                 }
                 break;
             case DATA_AIR_TEMP:
-                if(Data.getAmbientTemperature() != null ){
-                    double ambientTemp = Data.getAmbientTemperature();
+                if(MotorcycleData.getAmbientTemperature() != null ){
+                    double ambientTemp = MotorcycleData.getAmbientTemperature();
                     if(ambientTemp <= 0){
                         icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_snowflake);
                         icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_blue), PorterDuff.Mode.SRC_ATOP);
@@ -822,11 +820,11 @@ public class Data {
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_mountain);
                 break;
             case DATA_SUN_DEVICE:
-                if (Data.getLastLocation() != null && Data.getTime() != null) {
-                    Calendar[] sunriseSunset = ca.rmen.sunrisesunset.SunriseSunset.getSunriseSunset(Calendar.getInstance(), Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
+                if (MotorcycleData.getLastLocation() != null && MotorcycleData.getTime() != null) {
+                    Calendar[] sunriseSunset = ca.rmen.sunrisesunset.SunriseSunset.getSunriseSunset(Calendar.getInstance(), MotorcycleData.getLastLocation().getLatitude(), MotorcycleData.getLastLocation().getLongitude());
                     Date sunrise = sunriseSunset[0].getTime();
                     Date sunset = sunriseSunset[1].getTime();
-                    if(Data.getTime().compareTo(sunrise) > 0 && Data.getTime().compareTo(sunset) < 0){
+                    if(MotorcycleData.getTime().compareTo(sunrise) > 0 && MotorcycleData.getTime().compareTo(sunset) < 0){
                         icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_sun);
                     } else {
                         icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_moon);
@@ -838,8 +836,8 @@ public class Data {
                 break;
             case DATA_CELL_SIGNAL:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.signal_bar_0);
-                if(Data.getCellularSignal() != null){
-                    int signal = Data.getCellularSignal();
+                if(MotorcycleData.getCellularSignal() != null){
+                    int signal = MotorcycleData.getCellularSignal();
                     if (signal > -79) {
                         icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.signal_bar_4);
                     } else if (signal > -89 && signal < -80) {
@@ -855,8 +853,8 @@ public class Data {
                 break;
             case DATA_BATTERY_DEVICE:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.battery_empty);
-                if(Data.getLocalBattery() != null){
-                    double battery = Data.getLocalBattery();
+                if(MotorcycleData.getLocalBattery() != null){
+                    double battery = MotorcycleData.getLocalBattery();
                     if(battery > 95){
                         icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.battery_full);
                     } else if(battery > 75 && battery < 95){
@@ -887,16 +885,16 @@ public class Data {
                 break;
             case DATA_ENGINE_TEMP:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_engine_temp);
-                if(Data.getEngineTemperature() != null ){
-                    double engineTemp = Data.getEngineTemperature();
+                if(MotorcycleData.getEngineTemperature() != null ){
+                    double engineTemp = MotorcycleData.getEngineTemperature();
                     if (engineTemp >= 104.0){
                         carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_red),MyApplication.getContext().getResources().getColor(R.color.motorrad_red));
                     }
                 }
                 break;
             case DATA_AIR_TEMP:
-                if(Data.getAmbientTemperature() != null ){
-                    double ambientTemp = Data.getAmbientTemperature();
+                if(MotorcycleData.getAmbientTemperature() != null ){
+                    double ambientTemp = MotorcycleData.getAmbientTemperature();
                     if(ambientTemp <= 0){
                         icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_snowflake);
                         carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_blue),MyApplication.getContext().getResources().getColor(R.color.motorrad_blue));
@@ -984,11 +982,11 @@ public class Data {
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_mountain);
                 break;
             case DATA_SUN_DEVICE:
-                if (Data.getLastLocation() != null && Data.getTime() != null) {
-                    Calendar[] sunriseSunset = ca.rmen.sunrisesunset.SunriseSunset.getSunriseSunset(Calendar.getInstance(), Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
+                if (MotorcycleData.getLastLocation() != null && MotorcycleData.getTime() != null) {
+                    Calendar[] sunriseSunset = ca.rmen.sunrisesunset.SunriseSunset.getSunriseSunset(Calendar.getInstance(), MotorcycleData.getLastLocation().getLatitude(), MotorcycleData.getLastLocation().getLongitude());
                     Date sunrise = sunriseSunset[0].getTime();
                     Date sunset = sunriseSunset[1].getTime();
-                    if(Data.getTime().compareTo(sunrise) > 0 && Data.getTime().compareTo(sunset) < 0){
+                    if(MotorcycleData.getTime().compareTo(sunrise) > 0 && MotorcycleData.getTime().compareTo(sunset) < 0){
                         icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_sun);
                     } else {
                         icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_moon);
@@ -1000,8 +998,8 @@ public class Data {
                 break;
             case DATA_CELL_SIGNAL:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.signal_bar_0);
-                if(Data.getCellularSignal() != null){
-                    int signal = Data.getCellularSignal();
+                if(MotorcycleData.getCellularSignal() != null){
+                    int signal = MotorcycleData.getCellularSignal();
                     if (signal > -79) {
                         icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.signal_bar_4);
                     } else if (signal > -89 && signal < -80) {
@@ -1017,8 +1015,8 @@ public class Data {
                 break;
             case DATA_BATTERY_DEVICE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.battery_empty);
-                if(Data.getLocalBattery() != null){
-                    double battery = Data.getLocalBattery();
+                if(MotorcycleData.getLocalBattery() != null){
+                    double battery = MotorcycleData.getLocalBattery();
                     if(battery > 95){
                         icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.battery_full);
                     } else if(battery > 75 && battery < 95){
@@ -1049,13 +1047,13 @@ public class Data {
         String value = "";
         switch (dataPoint){
             case DATA_GEAR:
-                if(Data.getGear() != null){
-                    value = Data.getGear();
+                if(MotorcycleData.getGear() != null){
+                    value = MotorcycleData.getGear();
                 }
                 break;
             case DATA_ENGINE_TEMP:
-                if(Data.getEngineTemperature() != null ){
-                    double engineTemp = Data.getEngineTemperature();
+                if(MotorcycleData.getEngineTemperature() != null ){
+                    double engineTemp = MotorcycleData.getEngineTemperature();
                     if (temperatureFormat.contains("1")) {
                         // F
                         engineTemp = Utils.celsiusToFahrenheit(engineTemp);
@@ -1064,8 +1062,8 @@ public class Data {
                 }
                 break;
             case DATA_AIR_TEMP:
-                if(Data.getAmbientTemperature() != null ){
-                    double ambientTemp = Data.getAmbientTemperature();
+                if(MotorcycleData.getAmbientTemperature() != null ){
+                    double ambientTemp = MotorcycleData.getAmbientTemperature();
                     if (temperatureFormat.contains("1")) {
                         // F
                         ambientTemp = Utils.celsiusToFahrenheit(ambientTemp);
@@ -1074,8 +1072,8 @@ public class Data {
                 }
                 break;
             case DATA_FRONT_RDC:
-                if(Data.getFrontTirePressure() != null){
-                    double rdcFront = Data.getFrontTirePressure();
+                if(MotorcycleData.getFrontTirePressure() != null){
+                    double rdcFront = MotorcycleData.getFrontTirePressure();
                     if (pressureFormat.contains("1")) {
                         // KPa
                         rdcFront = Utils.barTokPa(rdcFront);
@@ -1090,8 +1088,8 @@ public class Data {
                 }
                 break;
             case DATA_REAR_RDC:
-                if(Data.getRearTirePressure() != null){
-                    double rdcRear = Data.getRearTirePressure();
+                if(MotorcycleData.getRearTirePressure() != null){
+                    double rdcRear = MotorcycleData.getRearTirePressure();
                     if (pressureFormat.contains("1")) {
                         // KPa
                         rdcRear = Utils.barTokPa(rdcRear);
@@ -1106,8 +1104,8 @@ public class Data {
                 }
                 break;
             case DATA_ODOMETER:
-                if(Data.getOdometer() != null){
-                    double odometer = Data.getOdometer();
+                if(MotorcycleData.getOdometer() != null){
+                    double odometer = MotorcycleData.getOdometer();
                     if (distanceFormat.contains("1")) {
                         odometer = Utils.kmToMiles(odometer);
                     }
@@ -1115,38 +1113,38 @@ public class Data {
                 }
                 break;
             case DATA_VOLTAGE:
-                if(Data.getvoltage() != null){
-                    Double voltage = Data.getvoltage();
+                if(MotorcycleData.getvoltage() != null){
+                    Double voltage = MotorcycleData.getvoltage();
                     value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(voltage));
                 }
                 break;
             case DATA_THROTTLE:
-                if(Data.getThrottlePosition() != null){
-                    Double throttlePosition = Data.getThrottlePosition();
+                if(MotorcycleData.getThrottlePosition() != null){
+                    Double throttlePosition = MotorcycleData.getThrottlePosition();
                     value = String.valueOf(Math.round(throttlePosition));
                 }
                 break;
             case DATA_FRONT_BRAKE:
-                if((Data.getFrontBrake() != null) && (Data.getFrontBrake() != 0)){
-                    Integer frontBrakes = Data.getFrontBrake();
+                if((MotorcycleData.getFrontBrake() != null) && (MotorcycleData.getFrontBrake() != 0)){
+                    Integer frontBrakes = MotorcycleData.getFrontBrake();
                     value = String.valueOf(frontBrakes);
                 }
                 break;
             case DATA_REAR_BRAKE:
-                if((Data.getRearBrake() != null) && (Data.getRearBrake() != 0)){
-                    Integer rearBrakes = Data.getRearBrake();
+                if((MotorcycleData.getRearBrake() != null) && (MotorcycleData.getRearBrake() != 0)){
+                    Integer rearBrakes = MotorcycleData.getRearBrake();
                     value = String.valueOf(rearBrakes);
                 }
                 break;
             case DATA_AMBIENT_LIGHT:
-                if(Data.getAmbientLight() != null){
-                    Integer ambientLight = Data.getAmbientLight();
+                if(MotorcycleData.getAmbientLight() != null){
+                    Integer ambientLight = MotorcycleData.getAmbientLight();
                     value = String.valueOf(ambientLight);
                 }
                 break;
             case DATA_TRIP_ONE:
-                if(Data.getTripOne() != null) {
-                    double trip1 = Data.getTripOne();
+                if(MotorcycleData.getTripOne() != null) {
+                    double trip1 = MotorcycleData.getTripOne();
                     if (distanceFormat.contains("1")) {
                         trip1 = Utils.kmToMiles(trip1);
                     }
@@ -1154,8 +1152,8 @@ public class Data {
                 }
                 break;
             case DATA_TRIP_TWO:
-                if(Data.getTripTwo() != null){
-                    double trip2 = Data.getTripTwo();
+                if(MotorcycleData.getTripTwo() != null){
+                    double trip2 = MotorcycleData.getTripTwo();
                     if (distanceFormat.contains("1")) {
                         trip2 = Utils.kmToMiles(trip2);
                     }
@@ -1163,8 +1161,8 @@ public class Data {
                 }
                 break;
             case DATA_TRIP_AUTO:
-                if(Data.getTripAuto() != null){
-                    double tripauto = Data.getTripAuto();
+                if(MotorcycleData.getTripAuto() != null){
+                    double tripauto = MotorcycleData.getTripAuto();
                     if (distanceFormat.contains("1")) {
                         tripauto = Utils.kmToMiles(tripauto);
                     }
@@ -1172,8 +1170,8 @@ public class Data {
                 }
                 break;
             case DATA_SPEED:
-                if(Data.getSpeed() != null){
-                    double speed = Data.getSpeed();
+                if(MotorcycleData.getSpeed() != null){
+                    double speed = MotorcycleData.getSpeed();
                     if (distanceFormat.contains("1")) {
                         speed = Utils.kmToMiles(speed);
                     }
@@ -1181,8 +1179,8 @@ public class Data {
                 }
                 break;
             case DATA_AVG_SPEED:
-                if(Data.getAvgSpeed() != null){
-                    double avgspeed = Data.getAvgSpeed();
+                if(MotorcycleData.getAvgSpeed() != null){
+                    double avgspeed = MotorcycleData.getAvgSpeed();
                     if (distanceFormat.contains("1")) {
                         avgspeed = Utils.kmToMiles(avgspeed);
                     }
@@ -1190,8 +1188,8 @@ public class Data {
                 }
                 break;
             case DATA_CURRENT_CONSUMPTION:
-                if(Data.getCurrentConsumption() != null){
-                    double currentConsumption = Data.getCurrentConsumption();
+                if(MotorcycleData.getCurrentConsumption() != null){
+                    double currentConsumption = MotorcycleData.getCurrentConsumption();
                     if (consumptionFormat.contains("1")) {
                         currentConsumption = Utils.l100Tompg(currentConsumption);
                     } else if (consumptionFormat.contains("2")) {
@@ -1203,8 +1201,8 @@ public class Data {
                 }
                 break;
             case DATA_ECONOMY_ONE:
-                if(Data.getFuelEconomyOne() != null){
-                    double fuelEconomyOne = Data.getFuelEconomyOne();
+                if(MotorcycleData.getFuelEconomyOne() != null){
+                    double fuelEconomyOne = MotorcycleData.getFuelEconomyOne();
                     if (consumptionFormat.contains("1")) {
                         fuelEconomyOne = Utils.l100Tompg(fuelEconomyOne);
                     } else if (consumptionFormat.contains("2")) {
@@ -1216,8 +1214,8 @@ public class Data {
                 }
                 break;
             case DATA_ECONOMY_TWO:
-                if(Data.getFuelEconomyTwo() != null){
-                    double fuelEconomyTwo = Data.getFuelEconomyTwo();
+                if(MotorcycleData.getFuelEconomyTwo() != null){
+                    double fuelEconomyTwo = MotorcycleData.getFuelEconomyTwo();
                     if (consumptionFormat.contains("1")) {
                         fuelEconomyTwo = Utils.l100Tompg(fuelEconomyTwo);
                     } else if (consumptionFormat.contains("2")) {
@@ -1229,8 +1227,8 @@ public class Data {
                 }
                 break;
             case DATA_RANGE:
-                if(Data.getFuelRange() != null){
-                    double fuelrange = Data.getFuelRange();
+                if(MotorcycleData.getFuelRange() != null){
+                    double fuelrange = MotorcycleData.getFuelRange();
                     if (distanceFormat.contains("1")) {
                         fuelrange = Utils.kmToMiles(fuelrange);
                     }
@@ -1238,26 +1236,26 @@ public class Data {
                 }
                 break;
             case DATA_SHIFTS:
-                if(Data.getNumberOfShifts() != null){
-                    int shifts = Data.getNumberOfShifts();
+                if(MotorcycleData.getNumberOfShifts() != null){
+                    int shifts = MotorcycleData.getNumberOfShifts();
                     value = String.valueOf(shifts);
                 }
                 break;
             case DATA_LEAN_DEVICE:
-                if(Data.getLeanAngle() != null){
-                    Double leanAngle = Data.getLeanAngle();
+                if(MotorcycleData.getLeanAngle() != null){
+                    Double leanAngle = MotorcycleData.getLeanAngle();
                     value = String.valueOf(Math.round(leanAngle));
                 }
                 break;
             case DATA_GFORCE_DEVICE:
-                if(Data.getGForce() != null){
-                    Double gForce = Data.getGForce();
+                if(MotorcycleData.getGForce() != null){
+                    Double gForce = MotorcycleData.getGForce();
                     value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(gForce));
                 }
                 break;
             case DATA_BEARING_DEVICE:
-                if (Data.getBearing() != null) {
-                    Integer bearingValue = Data.getBearing();
+                if (MotorcycleData.getBearing() != null) {
+                    Integer bearingValue = MotorcycleData.getBearing();
                     String bearing = bearingValue.toString() + "°";
                     if (!sharedPrefs.getString("prefBearing", "0").contains("0")) {
                         if (bearingValue > 331 || bearingValue <= 28) {
@@ -1282,43 +1280,43 @@ public class Data {
                 }
                 break;
             case DATA_TIME_DEVICE:
-                if (Data.getTime() != null) {
+                if (MotorcycleData.getTime() != null) {
                     SimpleDateFormat dateformat = new SimpleDateFormat("h:mm aa", Locale.getDefault());
                     if (!sharedPrefs.getString("prefTime", "0").equals("0")) {
                         dateformat = new SimpleDateFormat("HH:mm", Locale.getDefault());
                     }
-                    value = dateformat.format(Data.getTime());
+                    value = dateformat.format(MotorcycleData.getTime());
                 }
                 break;
             case DATA_BAROMETRIC_DEVICE:
-                if (Data.getBarometricPressure() != null) {
-                    value = String.valueOf(Math.round(Data.getBarometricPressure()));
+                if (MotorcycleData.getBarometricPressure() != null) {
+                    value = String.valueOf(Math.round(MotorcycleData.getBarometricPressure()));
                 }
                 break;
             case DATA_SPEED_DEVICE:
                 String gpsSpeed = MyApplication.getContext().getString(R.string.gps_nofix);
-                if (Data.getLastLocation() != null){
-                    gpsSpeed = String.valueOf(Math.round(Data.getLastLocation().getSpeed() * 3.6));
+                if (MotorcycleData.getLastLocation() != null){
+                    gpsSpeed = String.valueOf(Math.round(MotorcycleData.getLastLocation().getSpeed() * 3.6));
                     if (distanceFormat.contains("1")) {
-                        gpsSpeed = String.valueOf(Math.round(Utils.kmToMiles(Data.getLastLocation().getSpeed() * 3.6)));
+                        gpsSpeed = String.valueOf(Math.round(Utils.kmToMiles(MotorcycleData.getLastLocation().getSpeed() * 3.6)));
                     }
                 }
                 value = gpsSpeed;
                 break;
             case DATA_ALTITUDE_DEVICE:
                 String altitude = MyApplication.getContext().getString(R.string.gps_nofix);
-                if (Data.getLastLocation() != null){
-                    altitude = String.valueOf(Math.round(Data.getLastLocation().getAltitude()));
+                if (MotorcycleData.getLastLocation() != null){
+                    altitude = String.valueOf(Math.round(MotorcycleData.getLastLocation().getAltitude()));
                     if (distanceFormat.contains("1")) {
-                        altitude = String.valueOf(Math.round(Utils.mToFeet(Data.getLastLocation().getAltitude())));
+                        altitude = String.valueOf(Math.round(Utils.mToFeet(MotorcycleData.getLastLocation().getAltitude())));
                     }
                 }
                 value = altitude;
                 break;
             case DATA_SUN_DEVICE:
                 value = MyApplication.getContext().getString(R.string.gps_nofix);
-                if (Data.getLastLocation() != null) {
-                    Calendar[] sunriseSunset = ca.rmen.sunrisesunset.SunriseSunset.getSunriseSunset(Calendar.getInstance(), Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
+                if (MotorcycleData.getLastLocation() != null) {
+                    Calendar[] sunriseSunset = ca.rmen.sunrisesunset.SunriseSunset.getSunriseSunset(Calendar.getInstance(), MotorcycleData.getLastLocation().getLatitude(), MotorcycleData.getLastLocation().getLongitude());
                     Date sunrise = sunriseSunset[0].getTime();
                     Date sunset = sunriseSunset[1].getTime();
                     SimpleDateFormat dateformat = new SimpleDateFormat("h:mm aa", Locale.getDefault());
@@ -1331,19 +1329,19 @@ public class Data {
                 }
                 break;
             case DATA_RPM:
-                if (Data.getRPM() > 0){
-                    value = String.valueOf(Data.getRPM());
+                if (MotorcycleData.getRPM() > 0){
+                    value = String.valueOf(MotorcycleData.getRPM());
                 }
                 break;
             case DATA_LEAN:
-                if(Data.getLeanAngleBike() != null){
-                    Double leanAngleBike = Data.getLeanAngleBike();
+                if(MotorcycleData.getLeanAngleBike() != null){
+                    Double leanAngleBike = MotorcycleData.getLeanAngleBike();
                     value = String.valueOf(Math.round(leanAngleBike));
                 }
                 break;
             case DATA_REAR_SPEED:
-                if(Data.getRearSpeed() != null){
-                    double speed = Data.getRearSpeed();
+                if(MotorcycleData.getRearSpeed() != null){
+                    double speed = MotorcycleData.getRearSpeed();
                     if (distanceFormat.contains("1")) {
                         speed = Utils.kmToMiles(speed);
                     }
@@ -1351,13 +1349,13 @@ public class Data {
                 }
                 break;
             case DATA_CELL_SIGNAL:
-                if(Data.getCellularSignal() != null){
-                    value = String.valueOf(Data.getCellularSignal());
+                if(MotorcycleData.getCellularSignal() != null){
+                    value = String.valueOf(MotorcycleData.getCellularSignal());
                 }
                 break;
             case DATA_BATTERY_DEVICE:
-                if(Data.getLocalBattery() != null){
-                    value = String.valueOf(Math.round(Data.getLocalBattery()));
+                if(MotorcycleData.getLocalBattery() != null){
+                    value = String.valueOf(Math.round(MotorcycleData.getLocalBattery()));
                 }
                 break;
             default:

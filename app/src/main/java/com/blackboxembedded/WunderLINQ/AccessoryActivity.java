@@ -37,7 +37,7 @@ import android.widget.TextView;
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_BASE;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_C;
@@ -345,15 +345,15 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
         } else {
             faultButton.setVisibility(View.GONE);
         }
-        if (Data.wlq != null){
-            if (Data.wlq.getStatus() != null) {
+        if (MotorcycleData.wlq != null){
+            if (MotorcycleData.wlq.getStatus() != null) {
                 channelOneHeaderTV.setText(sharedPrefs.getString("ACC_CHAN_1", getString(R.string.default_accessory_one_name)));
                 channelOneHeaderET.setText(sharedPrefs.getString("ACC_CHAN_1", getString(R.string.default_accessory_one_name)));
                 channelTwoHeaderTV.setText(sharedPrefs.getString("ACC_CHAN_2", getString(R.string.default_accessory_two_name)));
                 channelTwoHeaderET.setText(sharedPrefs.getString("ACC_CHAN_2", getString(R.string.default_accessory_two_name)));
-                int channelActive = (Data.wlq.getStatus()[WLQ_C.ACTIVE_CHAN_INDEX] & 0xFF);
-                int channel1ValueRaw = (Data.wlq.getStatus()[WLQ_C.LIN_ACC_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
-                int channel2ValueRaw = (Data.wlq.getStatus()[WLQ_C.LIN_ACC_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
+                int channelActive = (MotorcycleData.wlq.getStatus()[WLQ_C.ACTIVE_CHAN_INDEX] & 0xFF);
+                int channel1ValueRaw = (MotorcycleData.wlq.getStatus()[WLQ_C.LIN_ACC_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
+                int channel2ValueRaw = (MotorcycleData.wlq.getStatus()[WLQ_C.LIN_ACC_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
 
                 TypedValue typedValue = new TypedValue();
                 Resources.Theme theme = this.getTheme();

@@ -42,7 +42,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.blackboxembedded.WunderLINQ.comms.BLE.GattAttributes;
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_BASE;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_C;
@@ -107,7 +107,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
         }
 
         // Read HW Version
-        if (Data.hardwareVersion == null) {
+        if (MotorcycleData.hardwareVersion == null) {
             if (BluetoothLeService.gattHWCharacteristic != null) {
                 BluetoothLeService.readCharacteristic(BluetoothLeService.gattCommandCharacteristic);
             }
@@ -129,7 +129,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
     @Override
     public void onItemClick(View view, int position) {
         int actionID = adapter.getActionID(position);
-        if (Data.wlq.getKeyMode() == Data.wlq.KEYMODE_CUSTOM()) {
+        if (MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_CUSTOM()) {
             if (actionID != -1) {
                 Intent intent = new Intent(HWSettingsActivity.this, HWSettingsActionActivity.class);
                 intent.putExtra("ACTIONID", actionID);
@@ -184,54 +184,54 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
         resetButton = findViewById(R.id.action_reset);
         resetButton.setOnClickListener(mClickListener);
         resetButton.setVisibility(View.INVISIBLE);
-        if (Data.wlq != null) {
+        if (MotorcycleData.wlq != null) {
             resetButton.setVisibility(View.VISIBLE);
         }
     }
 
     private void updateDisplay(){
         actionItems.clear();
-        if (Data.wlq != null) {
-            if (Data.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
-                if (Data.wlq.getFirmwareVersion() != null) {
-                    fwVersionTV.setText(getString(R.string.fw_version_label) + " " + Data.wlq.getFirmwareVersion());
-                    if (Double.parseDouble(Data.wlq.getFirmwareVersion()) >= 2.0) {
-                        if (Data.wlq.getKeyMode() == Data.wlq.KEYMODE_DEFAULT() || Data.wlq.getKeyMode() == Data.wlq.KEYMODE_CUSTOM()
-                                || Data.wlq.getKeyMode() == Data.wlq.KEYMODE_MEDIA() || Data.wlq.getKeyMode() == Data.wlq.KEYMODE_DMD2()) {
-                            actionItems.add(new ActionItem(WLQ_N.KEYMODE, getString(R.string.keymode_label), Data.wlq.getActionValue(WLQ_N.KEYMODE))); // Key mode
-                            actionItems.add(new ActionItem(WLQ_N.USB, getString(R.string.usb_threshold_label), Data.wlq.getActionValue(WLQ_N.USB))); // USB
+        if (MotorcycleData.wlq != null) {
+            if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
+                if (MotorcycleData.wlq.getFirmwareVersion() != null) {
+                    fwVersionTV.setText(getString(R.string.fw_version_label) + " " + MotorcycleData.wlq.getFirmwareVersion());
+                    if (Double.parseDouble(MotorcycleData.wlq.getFirmwareVersion()) >= 2.0) {
+                        if (MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_DEFAULT() || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_CUSTOM()
+                                || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_MEDIA() || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_DMD2()) {
+                            actionItems.add(new ActionItem(WLQ_N.KEYMODE, getString(R.string.keymode_label), MotorcycleData.wlq.getActionValue(WLQ_N.KEYMODE))); // Key mode
+                            actionItems.add(new ActionItem(WLQ_N.USB, getString(R.string.usb_threshold_label), MotorcycleData.wlq.getActionValue(WLQ_N.USB))); // USB
                             actionItems.add(new ActionItem(-1, getString(R.string.wwMode1), "")); //Full
-                            actionItems.add(new ActionItem(WLQ_N.fullLongPressSensitivity, getString(R.string.long_press_label), Data.wlq.getActionValue(WLQ_N.fullLongPressSensitivity)));
-                            actionItems.add(new ActionItem(WLQ_N.fullScrollUp, getString(R.string.full_scroll_up_label), Data.wlq.getActionValue(WLQ_N.fullScrollUp)));
-                            actionItems.add(new ActionItem(WLQ_N.fullScrollDown, getString(R.string.full_scroll_down_label), Data.wlq.getActionValue(WLQ_N.fullScrollDown)));
-                            actionItems.add(new ActionItem(WLQ_N.fullToggleRight, getString(R.string.full_toggle_right_label), Data.wlq.getActionValue(WLQ_N.fullToggleRight)));
-                            actionItems.add(new ActionItem(WLQ_N.fullToggleRightLongPress, getString(R.string.full_toggle_right_long_label), Data.wlq.getActionValue(WLQ_N.fullToggleRightLongPress)));
-                            actionItems.add(new ActionItem(WLQ_N.fullToggleLeft, getString(R.string.full_toggle_left_label), Data.wlq.getActionValue(WLQ_N.fullToggleLeft)));
-                            actionItems.add(new ActionItem(WLQ_N.fullToggleLeftLongPress, getString(R.string.full_toggle_left_long_label), Data.wlq.getActionValue(WLQ_N.fullToggleLeftLongPress)));
-                            actionItems.add(new ActionItem(WLQ_N.fullSignalCancel, getString(R.string.full_signal_cancel_label), Data.wlq.getActionValue(WLQ_N.fullSignalCancel)));
-                            actionItems.add(new ActionItem(WLQ_N.fullSignalCancelLongPress, getString(R.string.full_signal_cancel_long_label), Data.wlq.getActionValue(WLQ_N.fullSignalCancelLongPress)));
+                            actionItems.add(new ActionItem(WLQ_N.fullLongPressSensitivity, getString(R.string.long_press_label), MotorcycleData.wlq.getActionValue(WLQ_N.fullLongPressSensitivity)));
+                            actionItems.add(new ActionItem(WLQ_N.fullScrollUp, getString(R.string.full_scroll_up_label), MotorcycleData.wlq.getActionValue(WLQ_N.fullScrollUp)));
+                            actionItems.add(new ActionItem(WLQ_N.fullScrollDown, getString(R.string.full_scroll_down_label), MotorcycleData.wlq.getActionValue(WLQ_N.fullScrollDown)));
+                            actionItems.add(new ActionItem(WLQ_N.fullToggleRight, getString(R.string.full_toggle_right_label), MotorcycleData.wlq.getActionValue(WLQ_N.fullToggleRight)));
+                            actionItems.add(new ActionItem(WLQ_N.fullToggleRightLongPress, getString(R.string.full_toggle_right_long_label), MotorcycleData.wlq.getActionValue(WLQ_N.fullToggleRightLongPress)));
+                            actionItems.add(new ActionItem(WLQ_N.fullToggleLeft, getString(R.string.full_toggle_left_label), MotorcycleData.wlq.getActionValue(WLQ_N.fullToggleLeft)));
+                            actionItems.add(new ActionItem(WLQ_N.fullToggleLeftLongPress, getString(R.string.full_toggle_left_long_label), MotorcycleData.wlq.getActionValue(WLQ_N.fullToggleLeftLongPress)));
+                            actionItems.add(new ActionItem(WLQ_N.fullSignalCancel, getString(R.string.full_signal_cancel_label), MotorcycleData.wlq.getActionValue(WLQ_N.fullSignalCancel)));
+                            actionItems.add(new ActionItem(WLQ_N.fullSignalCancelLongPress, getString(R.string.full_signal_cancel_long_label), MotorcycleData.wlq.getActionValue(WLQ_N.fullSignalCancelLongPress)));
                             actionItems.add(new ActionItem(-1, getString(R.string.wwMode2), ""));  //RTK1600
-                            actionItems.add(new ActionItem(WLQ_N.RTKDoublePressSensitivity, getString(R.string.double_press_label), Data.wlq.getActionValue(WLQ_N.RTKDoublePressSensitivity)));
-                            actionItems.add(new ActionItem(WLQ_N.RTKPage, getString(R.string.rtk_page_label), Data.wlq.getActionValue(WLQ_N.RTKPage)));
-                            actionItems.add(new ActionItem(WLQ_N.RTKPageDoublePress, getString(R.string.rtk_page_double_label), Data.wlq.getActionValue(WLQ_N.RTKPageDoublePress)));
-                            actionItems.add(new ActionItem(WLQ_N.RTKZoomPlus, getString(R.string.rtk_zoomp_label), Data.wlq.getActionValue(WLQ_N.RTKZoomPlus)));
-                            actionItems.add(new ActionItem(WLQ_N.RTKZoomPlusDoublePress, getString(R.string.rtk_zoomp_double_label), Data.wlq.getActionValue(WLQ_N.RTKZoomPlusDoublePress)));
-                            actionItems.add(new ActionItem(WLQ_N.RTKZoomMinus, getString(R.string.rtk_zoomm_label), Data.wlq.getActionValue(WLQ_N.RTKZoomMinus)));
-                            actionItems.add(new ActionItem(WLQ_N.RTKZoomMinusDoublePress, getString(R.string.rtk_zoomm_double_label), Data.wlq.getActionValue(WLQ_N.RTKZoomMinusDoublePress)));
-                            actionItems.add(new ActionItem(WLQ_N.RTKSpeak, getString(R.string.rtk_speak_label), Data.wlq.getActionValue(WLQ_N.RTKSpeak)));
-                            actionItems.add(new ActionItem(WLQ_N.RTKSpeakDoublePress, getString(R.string.rtk_speak_double_label), Data.wlq.getActionValue(WLQ_N.RTKSpeakDoublePress)));
-                            actionItems.add(new ActionItem(WLQ_N.RTKMute, getString(R.string.rtk_mute_label), Data.wlq.getActionValue(WLQ_N.RTKMute)));
-                            actionItems.add(new ActionItem(WLQ_N.RTKMuteDoublePress, getString(R.string.rtk_mute_double_label), Data.wlq.getActionValue(WLQ_N.RTKMuteDoublePress)));
-                            actionItems.add(new ActionItem(WLQ_N.RTKDisplayOff, getString(R.string.rtk_display_label), Data.wlq.getActionValue(WLQ_N.RTKDisplayOff)));
-                            actionItems.add(new ActionItem(WLQ_N.RTKDisplayOffDoublePress, getString(R.string.rtk_display_double_label), Data.wlq.getActionValue(WLQ_N.RTKDisplayOffDoublePress)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKDoublePressSensitivity, getString(R.string.double_press_label), MotorcycleData.wlq.getActionValue(WLQ_N.RTKDoublePressSensitivity)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKPage, getString(R.string.rtk_page_label), MotorcycleData.wlq.getActionValue(WLQ_N.RTKPage)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKPageDoublePress, getString(R.string.rtk_page_double_label), MotorcycleData.wlq.getActionValue(WLQ_N.RTKPageDoublePress)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKZoomPlus, getString(R.string.rtk_zoomp_label), MotorcycleData.wlq.getActionValue(WLQ_N.RTKZoomPlus)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKZoomPlusDoublePress, getString(R.string.rtk_zoomp_double_label), MotorcycleData.wlq.getActionValue(WLQ_N.RTKZoomPlusDoublePress)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKZoomMinus, getString(R.string.rtk_zoomm_label), MotorcycleData.wlq.getActionValue(WLQ_N.RTKZoomMinus)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKZoomMinusDoublePress, getString(R.string.rtk_zoomm_double_label), MotorcycleData.wlq.getActionValue(WLQ_N.RTKZoomMinusDoublePress)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKSpeak, getString(R.string.rtk_speak_label), MotorcycleData.wlq.getActionValue(WLQ_N.RTKSpeak)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKSpeakDoublePress, getString(R.string.rtk_speak_double_label), MotorcycleData.wlq.getActionValue(WLQ_N.RTKSpeakDoublePress)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKMute, getString(R.string.rtk_mute_label), MotorcycleData.wlq.getActionValue(WLQ_N.RTKMute)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKMuteDoublePress, getString(R.string.rtk_mute_double_label), MotorcycleData.wlq.getActionValue(WLQ_N.RTKMuteDoublePress)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKDisplayOff, getString(R.string.rtk_display_label), MotorcycleData.wlq.getActionValue(WLQ_N.RTKDisplayOff)));
+                            actionItems.add(new ActionItem(WLQ_N.RTKDisplayOffDoublePress, getString(R.string.rtk_display_double_label), MotorcycleData.wlq.getActionValue(WLQ_N.RTKDisplayOffDoublePress)));
 
                             resetButton.setVisibility(View.INVISIBLE);
                             hwConfigBtn.setVisibility(View.INVISIBLE);
-                            if (Data.wlq.getKeyMode() == Data.wlq.KEYMODE_CUSTOM()) {
+                            if (MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_CUSTOM()) {
                                 resetButton.setVisibility(View.VISIBLE);
-                                if (!Arrays.equals(Data.wlq.getConfig(), Data.wlq.getTempConfig())) {
+                                if (!Arrays.equals(MotorcycleData.wlq.getConfig(), MotorcycleData.wlq.getTempConfig())) {
                                     Log.d(TAG, "New Config found");
-                                    Log.d(TAG, "tempConfig: " + Utils.ByteArraytoHex(Data.wlq.getTempConfig()));
+                                    Log.d(TAG, "tempConfig: " + Utils.ByteArraytoHex(MotorcycleData.wlq.getTempConfig()));
                                     hwConfigBtn.setText(getString(R.string.config_write_label));
                                     hwConfigBtn.setVisibility(View.VISIBLE);
                                 }
@@ -248,34 +248,34 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                         hwConfigBtn.setVisibility(View.VISIBLE);
                     }
                 }
-            } else if (Data.wlq.getHardwareType() == WLQ.TYPE_COMMANDER) {
-                if (Data.wlq.getKeyMode() == Data.wlq.KEYMODE_DEFAULT() || Data.wlq.getKeyMode() == Data.wlq.KEYMODE_CUSTOM()) {
-                    actionItems.add(new ActionItem(WLQ_C.KEYMODE, getString(R.string.keymode_label), Data.wlq.getActionValue(WLQ_C.KEYMODE))); // Keymode
+            } else if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_COMMANDER) {
+                if (MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_DEFAULT() || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_CUSTOM()) {
+                    actionItems.add(new ActionItem(WLQ_C.KEYMODE, getString(R.string.keymode_label), MotorcycleData.wlq.getActionValue(WLQ_C.KEYMODE))); // Keymode
                     //TODO
                     //actionItems.add(new ActionItem(WLQ_C.longPressSensitivity, getString(R.string.long_press_label), Data.wlq.getActionValue(WLQ_C.longPressSensitivity)));
-                    actionItems.add(new ActionItem(WLQ_C.wheelScrollUp, getString(R.string.full_scroll_up_label), Data.wlq.getActionValue(WLQ_C.wheelScrollUp)));
-                    actionItems.add(new ActionItem(WLQ_C.wheelScrollDown, getString(R.string.full_scroll_down_label), Data.wlq.getActionValue(WLQ_C.wheelScrollDown)));
-                    actionItems.add(new ActionItem(WLQ_C.wheelToggleRight, getString(R.string.full_toggle_right_label), Data.wlq.getActionValue(WLQ_C.wheelToggleRight)));
-                    actionItems.add(new ActionItem(WLQ_C.wheelToggleRightLongPress, getString(R.string.full_toggle_right_long_label), Data.wlq.getActionValue(WLQ_C.wheelToggleRightLongPress)));
-                    actionItems.add(new ActionItem(WLQ_C.wheelToggleLeft, getString(R.string.full_toggle_left_label), Data.wlq.getActionValue(WLQ_C.wheelToggleLeft)));
-                    actionItems.add(new ActionItem(WLQ_C.wheelToggleLeftLongPress, getString(R.string.full_toggle_left_long_label), Data.wlq.getActionValue(WLQ_C.wheelToggleLeftLongPress)));
-                    actionItems.add(new ActionItem(WLQ_C.rocker1Up, getString(R.string.full_rocker1_up_label), Data.wlq.getActionValue(WLQ_C.rocker1Up)));
-                    actionItems.add(new ActionItem(WLQ_C.rocker1UpLongPress, getString(R.string.full_rocker1_up_long_label), Data.wlq.getActionValue(WLQ_C.rocker1UpLongPress)));
-                    actionItems.add(new ActionItem(WLQ_C.rocker1Down, getString(R.string.full_rocker1_down_label), Data.wlq.getActionValue(WLQ_C.rocker1Down)));
-                    actionItems.add(new ActionItem(WLQ_C.rocker1DownLongPress, getString(R.string.full_rocker1_down_long_label), Data.wlq.getActionValue(WLQ_C.rocker1DownLongPress)));
-                    actionItems.add(new ActionItem(WLQ_C.rocker2Up, getString(R.string.full_rocker2_up_label), Data.wlq.getActionValue(WLQ_C.rocker2Up)));
-                    actionItems.add(new ActionItem(WLQ_C.rocker2UpLongPress, getString(R.string.full_rocker2_up_long_label), Data.wlq.getActionValue(WLQ_C.rocker2UpLongPress)));
-                    actionItems.add(new ActionItem(WLQ_C.rocker2Down, getString(R.string.full_rocker2_down_label), Data.wlq.getActionValue(WLQ_C.rocker2Down)));
-                    actionItems.add(new ActionItem(WLQ_C.rocker2DownLongPress, getString(R.string.full_rocker2_down_long_label), Data.wlq.getActionValue(WLQ_C.rocker2DownLongPress)));
+                    actionItems.add(new ActionItem(WLQ_C.wheelScrollUp, getString(R.string.full_scroll_up_label), MotorcycleData.wlq.getActionValue(WLQ_C.wheelScrollUp)));
+                    actionItems.add(new ActionItem(WLQ_C.wheelScrollDown, getString(R.string.full_scroll_down_label), MotorcycleData.wlq.getActionValue(WLQ_C.wheelScrollDown)));
+                    actionItems.add(new ActionItem(WLQ_C.wheelToggleRight, getString(R.string.full_toggle_right_label), MotorcycleData.wlq.getActionValue(WLQ_C.wheelToggleRight)));
+                    actionItems.add(new ActionItem(WLQ_C.wheelToggleRightLongPress, getString(R.string.full_toggle_right_long_label), MotorcycleData.wlq.getActionValue(WLQ_C.wheelToggleRightLongPress)));
+                    actionItems.add(new ActionItem(WLQ_C.wheelToggleLeft, getString(R.string.full_toggle_left_label), MotorcycleData.wlq.getActionValue(WLQ_C.wheelToggleLeft)));
+                    actionItems.add(new ActionItem(WLQ_C.wheelToggleLeftLongPress, getString(R.string.full_toggle_left_long_label), MotorcycleData.wlq.getActionValue(WLQ_C.wheelToggleLeftLongPress)));
+                    actionItems.add(new ActionItem(WLQ_C.rocker1Up, getString(R.string.full_rocker1_up_label), MotorcycleData.wlq.getActionValue(WLQ_C.rocker1Up)));
+                    actionItems.add(new ActionItem(WLQ_C.rocker1UpLongPress, getString(R.string.full_rocker1_up_long_label), MotorcycleData.wlq.getActionValue(WLQ_C.rocker1UpLongPress)));
+                    actionItems.add(new ActionItem(WLQ_C.rocker1Down, getString(R.string.full_rocker1_down_label), MotorcycleData.wlq.getActionValue(WLQ_C.rocker1Down)));
+                    actionItems.add(new ActionItem(WLQ_C.rocker1DownLongPress, getString(R.string.full_rocker1_down_long_label), MotorcycleData.wlq.getActionValue(WLQ_C.rocker1DownLongPress)));
+                    actionItems.add(new ActionItem(WLQ_C.rocker2Up, getString(R.string.full_rocker2_up_label), MotorcycleData.wlq.getActionValue(WLQ_C.rocker2Up)));
+                    actionItems.add(new ActionItem(WLQ_C.rocker2UpLongPress, getString(R.string.full_rocker2_up_long_label), MotorcycleData.wlq.getActionValue(WLQ_C.rocker2UpLongPress)));
+                    actionItems.add(new ActionItem(WLQ_C.rocker2Down, getString(R.string.full_rocker2_down_label), MotorcycleData.wlq.getActionValue(WLQ_C.rocker2Down)));
+                    actionItems.add(new ActionItem(WLQ_C.rocker2DownLongPress, getString(R.string.full_rocker2_down_long_label), MotorcycleData.wlq.getActionValue(WLQ_C.rocker2DownLongPress)));
 
                     resetButton.setVisibility(View.INVISIBLE);
                     hwConfigBtn.setVisibility(View.INVISIBLE);
-                    if (Data.wlq.getKeyMode() == Data.wlq.KEYMODE_CUSTOM()) {
+                    if (MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_CUSTOM()) {
                         resetButton.setVisibility(View.VISIBLE);
-                        if (!Arrays.equals(Data.wlq.getConfig(), Data.wlq.getTempConfig())) {
+                        if (!Arrays.equals(MotorcycleData.wlq.getConfig(), MotorcycleData.wlq.getTempConfig())) {
                             Log.d(TAG, "New Config found");
-                            Log.d(TAG, "Config: " + Utils.ByteArraytoHex(Data.wlq.getConfig()));
-                            Log.d(TAG, "tempConfig: " + Utils.ByteArraytoHex(Data.wlq.getTempConfig()));
+                            Log.d(TAG, "Config: " + Utils.ByteArraytoHex(MotorcycleData.wlq.getConfig()));
+                            Log.d(TAG, "tempConfig: " + Utils.ByteArraytoHex(MotorcycleData.wlq.getTempConfig()));
                             hwConfigBtn.setText(getString(R.string.config_write_label));
                             hwConfigBtn.setVisibility(View.VISIBLE);
                         }
@@ -285,25 +285,25 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                     hwConfigBtn.setText(getString(R.string.reset_btn_label));
                     hwConfigBtn.setVisibility(View.VISIBLE);
                 }
-            } else if (Data.wlq.getHardwareType() == WLQ.TYPE_X) {
-                if (Data.wlq.getKeyMode() == Data.wlq.KEYMODE_DEFAULT() || Data.wlq.getKeyMode() == Data.wlq.KEYMODE_CUSTOM()) {
-                    actionItems.add(new ActionItem(WLQ_X.KEYMODE, getString(R.string.keymode_label), Data.wlq.getActionValue(WLQ_X.KEYMODE)));
-                    actionItems.add(new ActionItem(WLQ_X.ORIENTATION, getString(R.string.orientation_label), Data.wlq.getActionValue(WLQ_X.ORIENTATION)));
-                    actionItems.add(new ActionItem(WLQ_X.up, getString(R.string.up_label), Data.wlq.getActionValue(WLQ_X.up)));
-                    actionItems.add(new ActionItem(WLQ_X.down, getString(R.string.down_label), Data.wlq.getActionValue(WLQ_X.down)));
-                    actionItems.add(new ActionItem(WLQ_X.right, getString(R.string.right_label), Data.wlq.getActionValue(WLQ_X.right)));
-                    actionItems.add(new ActionItem(WLQ_X.left, getString(R.string.left_label), Data.wlq.getActionValue(WLQ_X.left)));
-                    actionItems.add(new ActionItem(WLQ_X.fx1, getString(R.string.fx1_label), Data.wlq.getActionValue(WLQ_X.fx1)));
-                    actionItems.add(new ActionItem(WLQ_X.fx2, getString(R.string.fx2_label), Data.wlq.getActionValue(WLQ_X.fx2)));
+            } else if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_X) {
+                if (MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_DEFAULT() || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_CUSTOM()) {
+                    actionItems.add(new ActionItem(WLQ_X.KEYMODE, getString(R.string.keymode_label), MotorcycleData.wlq.getActionValue(WLQ_X.KEYMODE)));
+                    actionItems.add(new ActionItem(WLQ_X.ORIENTATION, getString(R.string.orientation_label), MotorcycleData.wlq.getActionValue(WLQ_X.ORIENTATION)));
+                    actionItems.add(new ActionItem(WLQ_X.up, getString(R.string.up_label), MotorcycleData.wlq.getActionValue(WLQ_X.up)));
+                    actionItems.add(new ActionItem(WLQ_X.down, getString(R.string.down_label), MotorcycleData.wlq.getActionValue(WLQ_X.down)));
+                    actionItems.add(new ActionItem(WLQ_X.right, getString(R.string.right_label), MotorcycleData.wlq.getActionValue(WLQ_X.right)));
+                    actionItems.add(new ActionItem(WLQ_X.left, getString(R.string.left_label), MotorcycleData.wlq.getActionValue(WLQ_X.left)));
+                    actionItems.add(new ActionItem(WLQ_X.fx1, getString(R.string.fx1_label), MotorcycleData.wlq.getActionValue(WLQ_X.fx1)));
+                    actionItems.add(new ActionItem(WLQ_X.fx2, getString(R.string.fx2_label), MotorcycleData.wlq.getActionValue(WLQ_X.fx2)));
 
                     resetButton.setVisibility(View.INVISIBLE);
                     hwConfigBtn.setVisibility(View.INVISIBLE);
-                    if (Data.wlq.getKeyMode() == Data.wlq.KEYMODE_CUSTOM()) {
+                    if (MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_CUSTOM()) {
                         resetButton.setVisibility(View.VISIBLE);
-                        if (!Arrays.equals(Data.wlq.getConfig(), Data.wlq.getTempConfig())) {
+                        if (!Arrays.equals(MotorcycleData.wlq.getConfig(), MotorcycleData.wlq.getTempConfig())) {
                             Log.d(TAG, "New Config found");
-                            Log.d(TAG, "Config: " + Utils.ByteArraytoHex(Data.wlq.getConfig()));
-                            Log.d(TAG, "tempConfig: " + Utils.ByteArraytoHex(Data.wlq.getTempConfig()));
+                            Log.d(TAG, "Config: " + Utils.ByteArraytoHex(MotorcycleData.wlq.getConfig()));
+                            Log.d(TAG, "tempConfig: " + Utils.ByteArraytoHex(MotorcycleData.wlq.getTempConfig()));
                             hwConfigBtn.setText(getString(R.string.config_write_label));
                             hwConfigBtn.setVisibility(View.VISIBLE);
                         }
@@ -335,34 +335,34 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            if (Data.wlq != null) {
-                                if (Data.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
-                                    if (Data.wlq.getHardwareVersion() != null) {
+                            if (MotorcycleData.wlq != null) {
+                                if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
+                                    if (MotorcycleData.wlq.getHardwareVersion() != null) {
                                         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                                        outputStream.write(Data.wlq.WRITE_CONFIG_CMD());
-                                        if (Data.wlq.getHardwareVersion().equals(WLQ_N.hardwareVersion1)) {
+                                        outputStream.write(MotorcycleData.wlq.WRITE_CONFIG_CMD());
+                                        if (MotorcycleData.wlq.getHardwareVersion().equals(WLQ_N.hardwareVersion1)) {
                                             outputStream.write(WLQ_N.defaultConfig2HW1);
                                         } else {
                                             outputStream.write(WLQ_N.defaultConfig2);
                                         }
-                                        outputStream.write(Data.wlq.CMD_EOM());
+                                        outputStream.write(MotorcycleData.wlq.CMD_EOM());
                                         byte[] writeConfigCmd = outputStream.toByteArray();
                                         Log.d(TAG, "Reset Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
                                         BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                                     }
-                                } else if (Data.wlq.getHardwareType() == WLQ.TYPE_COMMANDER) {
+                                } else if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_COMMANDER) {
                                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                                    outputStream.write(Data.wlq.WRITE_CONFIG_CMD());
+                                    outputStream.write(MotorcycleData.wlq.WRITE_CONFIG_CMD());
                                     outputStream.write(WLQ_C.defaultConfig);
-                                    outputStream.write(Data.wlq.CMD_EOM());
+                                    outputStream.write(MotorcycleData.wlq.CMD_EOM());
                                     byte[] writeConfigCmd = outputStream.toByteArray();
                                     Log.d(TAG, "Reset Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
                                     BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
-                                } else if (Data.wlq.getHardwareType() == WLQ.TYPE_X) {
+                                } else if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_X) {
                                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                                    outputStream.write(Data.wlq.WRITE_CONFIG_CMD());
+                                    outputStream.write(MotorcycleData.wlq.WRITE_CONFIG_CMD());
                                     outputStream.write(WLQ_X.defaultConfig);
-                                    outputStream.write(Data.wlq.CMD_EOM());
+                                    outputStream.write(MotorcycleData.wlq.CMD_EOM());
                                     byte[] writeConfigCmd = outputStream.toByteArray();
                                     Log.d(TAG, "Reset Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
                                     BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
@@ -397,15 +397,15 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (Data.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
-                            if (Data.wlq.getFirmwareVersion() != null) {
-                                if (Double.parseDouble(Data.wlq.getFirmwareVersion()) >= 2.0) {
-                                    if (!Arrays.equals(Data.wlq.getConfig(), Data.wlq.getTempConfig())) {
+                        if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
+                            if (MotorcycleData.wlq.getFirmwareVersion() != null) {
+                                if (Double.parseDouble(MotorcycleData.wlq.getFirmwareVersion()) >= 2.0) {
+                                    if (!Arrays.equals(MotorcycleData.wlq.getConfig(), MotorcycleData.wlq.getTempConfig())) {
                                         try {
                                             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                                            outputStream.write(Data.wlq.WRITE_CONFIG_CMD());
-                                            outputStream.write(Data.wlq.getTempConfig());
-                                            outputStream.write(Data.wlq.CMD_EOM());
+                                            outputStream.write(MotorcycleData.wlq.WRITE_CONFIG_CMD());
+                                            outputStream.write(MotorcycleData.wlq.getTempConfig());
+                                            outputStream.write(MotorcycleData.wlq.CMD_EOM());
                                             byte[] writeConfigCmd = outputStream.toByteArray();
                                             BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                                         } catch (IOException e) {
@@ -414,26 +414,26 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                     }
                                 }
                             }
-                        } else if (Data.wlq.getHardwareType() == WLQ.TYPE_COMMANDER){
-                            if (!Arrays.equals(Data.wlq.getConfig(), Data.wlq.getTempConfig())) {
+                        } else if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_COMMANDER){
+                            if (!Arrays.equals(MotorcycleData.wlq.getConfig(), MotorcycleData.wlq.getTempConfig())) {
                                 try {
                                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                                    outputStream.write(Data.wlq.WRITE_CONFIG_CMD());
-                                    outputStream.write(Data.wlq.getTempConfig());
-                                    outputStream.write(Data.wlq.CMD_EOM());
+                                    outputStream.write(MotorcycleData.wlq.WRITE_CONFIG_CMD());
+                                    outputStream.write(MotorcycleData.wlq.getTempConfig());
+                                    outputStream.write(MotorcycleData.wlq.CMD_EOM());
                                     byte[] writeConfigCmd = outputStream.toByteArray();
                                     BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                                 } catch (IOException e) {
                                     Log.d(TAG, e.toString());
                                 }
                             }
-                        } else if (Data.wlq.getHardwareType() == WLQ.TYPE_X){
-                            if (!Arrays.equals(Data.wlq.getConfig(), Data.wlq.getTempConfig())) {
+                        } else if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_X){
+                            if (!Arrays.equals(MotorcycleData.wlq.getConfig(), MotorcycleData.wlq.getTempConfig())) {
                                 try {
                                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                                    outputStream.write(Data.wlq.WRITE_CONFIG_CMD());
-                                    outputStream.write(Data.wlq.getTempConfig());
-                                    outputStream.write(Data.wlq.CMD_EOM());
+                                    outputStream.write(MotorcycleData.wlq.WRITE_CONFIG_CMD());
+                                    outputStream.write(MotorcycleData.wlq.getTempConfig());
+                                    outputStream.write(MotorcycleData.wlq.CMD_EOM());
                                     byte[] writeConfigCmd = outputStream.toByteArray();
                                     BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                                 } catch (IOException e) {

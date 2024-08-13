@@ -38,7 +38,7 @@ import androidx.core.content.ContextCompat;
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 
 public class AAutoScreen extends Screen {
 
@@ -134,9 +134,9 @@ public class AAutoScreen extends Screen {
 
     public GridItem getCellData(int dataPoint){
         return new GridItem.Builder()
-                .setImage(Data.getCarIcon(dataPoint))
-                .setTitle(Data.getLabel(dataPoint))
-                .setText((!Data.getValue(dataPoint).isEmpty()) ? Data.getValue(dataPoint) : MyApplication.getContext().getString(R.string.blank_field))
+                .setImage(MotorcycleData.getCarIcon(dataPoint))
+                .setTitle(MotorcycleData.getLabel(dataPoint))
+                .setText((!MotorcycleData.getValue(dataPoint).isEmpty()) ? MotorcycleData.getValue(dataPoint) : MyApplication.getContext().getString(R.string.blank_field))
                 .build();
     }
 }

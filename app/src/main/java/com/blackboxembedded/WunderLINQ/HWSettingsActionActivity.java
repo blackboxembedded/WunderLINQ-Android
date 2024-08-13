@@ -38,7 +38,7 @@ import android.widget.TextView;
 
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_C;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_X;
@@ -116,7 +116,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
                 if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE || actionID == WLQ_X.KEYMODE){
-                    if(Data.wlq.getKeyMode() != pos){
+                    if(MotorcycleData.wlq.getKeyMode() != pos){
                         saveBT.setVisibility(View.VISIBLE);
                     } else {
                         saveBT.setVisibility(View.INVISIBLE);
@@ -156,32 +156,32 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                         saveBT.setVisibility(View.VISIBLE);
                     }
                 } else {
-                    if (pos == Data.wlq.UNDEFINED()){
+                    if (pos == MotorcycleData.wlq.UNDEFINED()){
                         actionKeySP.setVisibility(View.INVISIBLE);
                         actionModifiersSP.setVisibility(View.INVISIBLE);
-                        if(Data.wlq.getActionKeyType(actionID) == Data.wlq.UNDEFINED()){
+                        if(MotorcycleData.wlq.getActionKeyType(actionID) == MotorcycleData.wlq.UNDEFINED()){
                             saveBT.setVisibility(View.INVISIBLE);
                         } else {
                             saveBT.setVisibility(View.VISIBLE);
                         }
-                    } else if (pos == Data.wlq.KEYBOARD_HID()){
+                    } else if (pos == MotorcycleData.wlq.KEYBOARD_HID()){
                         actionKeySP.setVisibility(View.VISIBLE);
                         actionModifiersSP.setVisibility(View.VISIBLE);
                         int position = actionKeySP.getSelectedItemPosition();
                         actionKeySP.setAdapter(keyboard);
                         actionKeySP.setSelection(position);
-                        if(Data.wlq.getActionKeyType(actionID) == Data.wlq.KEYBOARD_HID()){
+                        if(MotorcycleData.wlq.getActionKeyType(actionID) == MotorcycleData.wlq.KEYBOARD_HID()){
                             saveBT.setVisibility(View.INVISIBLE);
                         } else {
                             saveBT.setVisibility(View.VISIBLE);
                         }
-                    } else if (pos == Data.wlq.CONSUMER_HID()){
+                    } else if (pos == MotorcycleData.wlq.CONSUMER_HID()){
                         actionKeySP.setVisibility(View.VISIBLE);
                         actionModifiersSP.setVisibility(View.INVISIBLE);
                         int position = actionKeySP.getSelectedItemPosition();
                         actionKeySP.setAdapter(consumer);
                         actionKeySP.setSelection(position);
-                        if(Data.wlq.getActionKeyType(actionID) == Data.wlq.CONSUMER_HID()){
+                        if(MotorcycleData.wlq.getActionKeyType(actionID) == MotorcycleData.wlq.CONSUMER_HID()){
                             saveBT.setVisibility(View.INVISIBLE);
                         } else {
                             saveBT.setVisibility(View.VISIBLE);
@@ -212,9 +212,9 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 } else if (actionID == WLQ_X.ORIENTATION){
 
                 } else {
-                    if (actionTypeSP.getSelectedItemPosition() == Data.wlq.KEYBOARD_HID()) {
-                        if (Data.wlq.getActionKeyType(actionID) == Data.wlq.KEYBOARD_HID()) {
-                            if (pos == KeyboardHID.getKeyboardKeyPositionByCode(Data.wlq.getActionKey(actionID))) {
+                    if (actionTypeSP.getSelectedItemPosition() == MotorcycleData.wlq.KEYBOARD_HID()) {
+                        if (MotorcycleData.wlq.getActionKeyType(actionID) == MotorcycleData.wlq.KEYBOARD_HID()) {
+                            if (pos == KeyboardHID.getKeyboardKeyPositionByCode(MotorcycleData.wlq.getActionKey(actionID))) {
                                 saveBT.setVisibility(View.INVISIBLE);
                             } else {
                                 saveBT.setVisibility(View.VISIBLE);
@@ -222,9 +222,9 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                         } else {
                             saveBT.setVisibility(View.VISIBLE);
                         }
-                    } else if (actionTypeSP.getSelectedItemPosition() == Data.wlq.CONSUMER_HID()) {
-                        if (Data.wlq.getActionKeyType(actionID) == Data.wlq.CONSUMER_HID()) {
-                            if (pos == KeyboardHID.getConsumerKeyPositionByCode(Data.wlq.getActionKey(actionID))) {
+                    } else if (actionTypeSP.getSelectedItemPosition() == MotorcycleData.wlq.CONSUMER_HID()) {
+                        if (MotorcycleData.wlq.getActionKeyType(actionID) == MotorcycleData.wlq.CONSUMER_HID()) {
+                            if (pos == KeyboardHID.getConsumerKeyPositionByCode(MotorcycleData.wlq.getActionKey(actionID))) {
                                 saveBT.setVisibility(View.INVISIBLE);
                             } else {
                                 saveBT.setVisibility(View.VISIBLE);
@@ -292,37 +292,37 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                     return;
                 } else if (actionID == WLQ_N.USB){
                     if(actionTypeSP.getSelectedItemPosition() == 0){
-                        Data.wlq.getTempConfig()[WLQ_N.USBVinThresholdHigh_INDEX] = 0x00;
-                        Data.wlq.getTempConfig()[WLQ_N.USBVinThresholdLow_INDEX] = 0x00;
+                        MotorcycleData.wlq.getTempConfig()[WLQ_N.USBVinThresholdHigh_INDEX] = 0x00;
+                        MotorcycleData.wlq.getTempConfig()[WLQ_N.USBVinThresholdLow_INDEX] = 0x00;
                     } else if(actionTypeSP.getSelectedItemPosition() == 1){
-                        Data.wlq.getTempConfig()[WLQ_N.USBVinThresholdHigh_INDEX] = 0x02;
-                        Data.wlq.getTempConfig()[WLQ_N.USBVinThresholdLow_INDEX] = (byte)0xBC;
+                        MotorcycleData.wlq.getTempConfig()[WLQ_N.USBVinThresholdHigh_INDEX] = 0x02;
+                        MotorcycleData.wlq.getTempConfig()[WLQ_N.USBVinThresholdLow_INDEX] = (byte)0xBC;
                     } else if(actionTypeSP.getSelectedItemPosition() == 2){
-                        Data.wlq.getTempConfig()[WLQ_N.USBVinThresholdHigh_INDEX] = (byte)0xFF;
-                        Data.wlq.getTempConfig()[WLQ_N.USBVinThresholdLow_INDEX] = (byte)0xFF;
+                        MotorcycleData.wlq.getTempConfig()[WLQ_N.USBVinThresholdHigh_INDEX] = (byte)0xFF;
+                        MotorcycleData.wlq.getTempConfig()[WLQ_N.USBVinThresholdLow_INDEX] = (byte)0xFF;
                     }
                 } else if (actionID == WLQ_N.RTKDoublePressSensitivity){
-                    Data.wlq.getTempConfig()[WLQ_N.RTKSensitivity_INDEX] = (byte)((actionTypeSP.getSelectedItemPosition() + 1) / 50);
+                    MotorcycleData.wlq.getTempConfig()[WLQ_N.RTKSensitivity_INDEX] = (byte)((actionTypeSP.getSelectedItemPosition() + 1) / 50);
                 } else if (actionID == WLQ_N.fullLongPressSensitivity){
-                    Data.wlq.getTempConfig()[WLQ_N.fullSensitivity_INDEX] = (byte)((actionTypeSP.getSelectedItemPosition() + 1) / 50);
+                    MotorcycleData.wlq.getTempConfig()[WLQ_N.fullSensitivity_INDEX] = (byte)((actionTypeSP.getSelectedItemPosition() + 1) / 50);
                 } else if (actionID == WLQ_C.longPressSensitivity){
                     // TODO
                     //Data.wlq.getTempConfig()[WLQ_C.lpSensitivityHigh_INDEX] = (byte)(actionTypeSP.getSelectedItemPosition() + 1);
                 } else if (actionID == WLQ_X.ORIENTATION){
                     if(actionTypeSP.getSelectedItemPosition() == 0){
-                        Data.wlq.getTempConfig()[WLQ_X.orientation_INDEX] = 0x00;
+                        MotorcycleData.wlq.getTempConfig()[WLQ_X.orientation_INDEX] = 0x00;
                     } else if(actionTypeSP.getSelectedItemPosition() == 1){
-                        Data.wlq.getTempConfig()[WLQ_X.orientation_INDEX] = 0x01;
+                        MotorcycleData.wlq.getTempConfig()[WLQ_X.orientation_INDEX] = 0x01;
                     } else if(actionTypeSP.getSelectedItemPosition() == 2){
-                        Data.wlq.getTempConfig()[WLQ_X.orientation_INDEX] = 0x02;
+                        MotorcycleData.wlq.getTempConfig()[WLQ_X.orientation_INDEX] = 0x02;
                     } else if(actionTypeSP.getSelectedItemPosition() == 4){
-                        Data.wlq.getTempConfig()[WLQ_X.orientation_INDEX] = 0x04;
+                        MotorcycleData.wlq.getTempConfig()[WLQ_X.orientation_INDEX] = 0x04;
                     }
                 } else {
                     byte type = (byte)actionTypeSP.getSelectedItemPosition();
                     byte key = 0x00;
                     byte modifiers = 0x00;
-                    if (type == Data.wlq.KEYBOARD_HID()) {
+                    if (type == MotorcycleData.wlq.KEYBOARD_HID()) {
                         key = Integer.decode(getResources().getStringArray(R.array.hid_keyboard_usage_table_codes_array)[actionKeySP.getSelectedItemPosition()]).byteValue();
                         int i = -1;
                         for (boolean cc: actionModifiersSP.selected) {
@@ -331,10 +331,10 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                                 modifiers = (byte) (Integer.decode(getResources().getStringArray(R.array.hid_keyboard_modifier_usage_table_codes_array)[i]).byteValue() + modifiers);
                             }
                         }
-                    } else if (type == Data.wlq.CONSUMER_HID()) {
+                    } else if (type == MotorcycleData.wlq.CONSUMER_HID()) {
                         key = Integer.decode(getResources().getStringArray(R.array.hid_consumer_usage_table_codes_array)[actionKeySP.getSelectedItemPosition()]).byteValue();
                     }
-                    Data.wlq.setActionKey(actionID, type, modifiers, key);
+                    MotorcycleData.wlq.setActionKey(actionID, type, modifiers, key);
                 }
                 Intent backIntent = new Intent(HWSettingsActionActivity.this, HWSettingsActivity.class);
                 startActivity(backIntent);
@@ -356,7 +356,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         actionBar.setCustomView(v);
 
         TextView navbarTitle = findViewById(R.id.action_title);
-        navbarTitle.setText(Data.wlq.getActionName(actionID));
+        navbarTitle.setText(MotorcycleData.wlq.getActionName(actionID));
 
         ImageButton backButton = findViewById(R.id.action_back);
         backButton.setOnClickListener(mClickListener);
@@ -367,12 +367,12 @@ public class HWSettingsActionActivity extends AppCompatActivity {
 
     private void updateDisplay(){
         saveBT.setVisibility(View.INVISIBLE);
-        actionLabelTV.setText(Data.wlq.getActionName(actionID));
+        actionLabelTV.setText(MotorcycleData.wlq.getActionName(actionID));
         if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE|| actionID == WLQ_X.KEYMODE){ //Key mode
             actionTypeSP.setAdapter(keymodes);
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
-            actionTypeSP.setSelection(Data.wlq.getKeyMode());
+            actionTypeSP.setSelection(MotorcycleData.wlq.getKeyMode());
         } else if (actionID ==  WLQ_N.USB){ //USB
             actionTypeSP.setAdapter(usb);
             actionKeySP.setVisibility(View.INVISIBLE);
@@ -436,27 +436,27 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 actionTypeSP.setSelection(3);
             }
         } else {    // Keys
-            if (Data.wlq.getHardwareVersion() != null) {
-                if (Data.wlq.getHardwareVersion().equals(WLQ_N.hardwareVersion1)){
+            if (MotorcycleData.wlq.getHardwareVersion() != null) {
+                if (MotorcycleData.wlq.getHardwareVersion().equals(WLQ_N.hardwareVersion1)){
                     types = new ArrayAdapter<String>(this,
                             R.layout.item_hwsettings_spinners, getResources().getStringArray(R.array.hw1_hid_type_names_array));
                 }
             }
             actionTypeSP.setAdapter(types);
-            if (Data.wlq.getActionKeyType(actionID) >= types.getCount()){
+            if (MotorcycleData.wlq.getActionKeyType(actionID) >= types.getCount()){
                 actionTypeSP.setSelection(0);
             } else {
-                actionTypeSP.setSelection(Data.wlq.getActionKeyType(actionID));
+                actionTypeSP.setSelection(MotorcycleData.wlq.getActionKeyType(actionID));
             }
 
-            updateModifierSpinner1(Data.wlq.getActionKeyModifiers(actionID));
-            if (Data.wlq.getActionKeyType(actionID) == WLQ_N.KEYBOARD_HID) {
+            updateModifierSpinner1(MotorcycleData.wlq.getActionKeyModifiers(actionID));
+            if (MotorcycleData.wlq.getActionKeyType(actionID) == WLQ_N.KEYBOARD_HID) {
                 actionKeySP.setAdapter(keyboard);
-                actionKeySP.setSelection(KeyboardHID.getKeyboardKeyPositionByCode(Data.wlq.getActionKey(actionID)));
+                actionKeySP.setSelection(KeyboardHID.getKeyboardKeyPositionByCode(MotorcycleData.wlq.getActionKey(actionID)));
                 actionModifiersSP.setVisibility(View.VISIBLE);
-            } else if (Data.wlq.getActionKeyType(actionID) == WLQ_N.CONSUMER_HID) {
+            } else if (MotorcycleData.wlq.getActionKeyType(actionID) == WLQ_N.CONSUMER_HID) {
                 actionKeySP.setAdapter(consumer);
-                actionKeySP.setSelection(KeyboardHID.getConsumerKeyPositionByCode(Data.wlq.getActionKey(actionID)));
+                actionKeySP.setSelection(KeyboardHID.getConsumerKeyPositionByCode(MotorcycleData.wlq.getActionKey(actionID)));
                 actionModifiersSP.setVisibility(View.INVISIBLE);
             }
         }
@@ -503,9 +503,9 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         try {
                             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                            outputStream.write(Data.wlq.WRITE_MODE_CMD());
+                            outputStream.write(MotorcycleData.wlq.WRITE_MODE_CMD());
                             outputStream.write(mode);
-                            outputStream.write(Data.wlq.CMD_EOM());
+                            outputStream.write(MotorcycleData.wlq.CMD_EOM());
                             byte[] writeConfigCmd = outputStream.toByteArray();
                             BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                         } catch (IOException e) {

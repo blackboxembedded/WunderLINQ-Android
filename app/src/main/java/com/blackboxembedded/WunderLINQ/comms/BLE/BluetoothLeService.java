@@ -77,7 +77,7 @@ import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_BASE;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_C;
@@ -282,9 +282,9 @@ public class BluetoothLeService extends Service {
     };
 
     private void updateLocationData(Location location) {
-        Data.setLastLocation(location);
+        MotorcycleData.setLastLocation(location);
         if (sharedPrefs.getBoolean("prefBearingOverride", false) && location.hasBearing()) {
-            Data.setBearing((int) location.getBearing());
+            MotorcycleData.setBearing((int) location.getBearing());
         }
     }
 
@@ -300,16 +300,16 @@ public class BluetoothLeService extends Service {
                     if (cellInfo instanceof CellInfoGsm) {
                         CellSignalStrengthGsm signalStrengthGsm = ((CellInfoGsm) cellInfo).getCellSignalStrength();
                         int dBm = signalStrengthGsm.getDbm();
-                        Data.setCellularSignal(dBm);
+                        MotorcycleData.setCellularSignal(dBm);
                     } else if (cellInfo instanceof CellInfoLte) {
                         CellSignalStrengthLte signalStrengthLte = ((CellInfoLte) cellInfo).getCellSignalStrength();
                         int dBm = signalStrengthLte.getDbm();
-                        Data.setCellularSignal(dBm);
+                        MotorcycleData.setCellularSignal(dBm);
                     } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         if (cellInfo instanceof CellInfoNr) {
                             CellSignalStrengthNr signalStrengthNr = (CellSignalStrengthNr) ((CellInfoNr) cellInfo).getCellSignalStrength();
                             int dBm = signalStrengthNr.getDbm();
-                            Data.setCellularSignal(dBm);
+                            MotorcycleData.setCellularSignal(dBm);
                         }
                     }
                 }
@@ -379,11 +379,11 @@ public class BluetoothLeService extends Service {
             @Override
             public void run() {
                 Calendar c = Calendar.getInstance();
-                Data.setTime(c.getTime());
+                MotorcycleData.setTime(c.getTime());
 
                 //Send time to cluster
-                if (Data.wlq != null) {
-                    if (Data.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
+                if (MotorcycleData.wlq != null) {
+                    if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
                         if (gattCommandCharacteristic != null) {
                             BluetoothGattCharacteristic characteristic = gattCommandCharacteristic;
                             //Get Current Time
@@ -480,7 +480,7 @@ public class BluetoothLeService extends Service {
             int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
             if (level != -1 && scale != -1) {
                 float batteryPct = level * 100 / (float)scale;
-                Data.setLocalBattery((double)batteryPct);
+                MotorcycleData.setLocalBattery((double)batteryPct);
             }
         }
     };
@@ -513,23 +513,23 @@ public class BluetoothLeService extends Service {
                 }
                 //Filter out impossible values, max sport bike lean is +/-60
                 if ((leanAngle >= -60.0) && (leanAngle <= 60.0)) {
-                    Data.setLeanAngle(leanAngle);
+                    MotorcycleData.setLeanAngle(leanAngle);
                     //Store Max L and R lean angle
                     if (leanAngle > 0) {
-                        if (Data.getLeanAngleMaxR() != null) {
-                            if (leanAngle > Data.getLeanAngleMaxR()) {
-                                Data.setLeanAngleMaxR(leanAngle);
+                        if (MotorcycleData.getLeanAngleMaxR() != null) {
+                            if (leanAngle > MotorcycleData.getLeanAngleMaxR()) {
+                                MotorcycleData.setLeanAngleMaxR(leanAngle);
                             }
                         } else {
-                            Data.setLeanAngleMaxR(leanAngle);
+                            MotorcycleData.setLeanAngleMaxR(leanAngle);
                         }
                     } else if (leanAngle < 0) {
-                        if (Data.getLeanAngleMaxL() != null) {
-                            if (Math.abs(leanAngle) > Data.getLeanAngleMaxL()) {
-                                Data.setLeanAngleMaxL(Math.abs(leanAngle));
+                        if (MotorcycleData.getLeanAngleMaxL() != null) {
+                            if (Math.abs(leanAngle) > MotorcycleData.getLeanAngleMaxL()) {
+                                MotorcycleData.setLeanAngleMaxL(Math.abs(leanAngle));
                             }
                         } else {
-                            Data.setLeanAngleMaxL(Math.abs(leanAngle));
+                            MotorcycleData.setLeanAngleMaxL(Math.abs(leanAngle));
                         }
                     }
                 }
@@ -539,11 +539,11 @@ public class BluetoothLeService extends Service {
                 mGeomagnetic = Utils.lowPass(event.values.clone(), mGeomagnetic, ALPHA);
             } else if (event.sensor.getType() == Sensor.TYPE_PRESSURE) {
                 float[] mBarometricPressure = event.values;
-                Data.setBarometricPressure((double) mBarometricPressure[0]);
+                MotorcycleData.setBarometricPressure((double) mBarometricPressure[0]);
             } else if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
                 mAcceleration = event.values.clone();
                 double gforce = Math.sqrt(mAcceleration[0] * mAcceleration[0] + mAcceleration[1] * mAcceleration[1] + mAcceleration[2] * mAcceleration[2]);
-                Data.setGForce(gforce);
+                MotorcycleData.setGForce(gforce);
             } else if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
                 if (sharedPrefs.getString("prefNightModeCombo", "0").equals("2")) {
                     int delay = (Integer.parseInt(sharedPrefs.getString("prefAutoNightModeDelay", "30")) * 1000);
@@ -593,7 +593,7 @@ public class BluetoothLeService extends Service {
                     if (direction != lastDirection) {
                         lastDirection = direction;
                         if (!sharedPrefs.getBoolean("prefBearingOverride", false)) {
-                            Data.setBearing(lastDirection);
+                            MotorcycleData.setBearing(lastDirection);
                         }
                     }
                 }
@@ -657,7 +657,7 @@ public class BluetoothLeService extends Service {
                 String dataLog = "[" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
                         "Disconnected";
                 Log.d(TAG,dataLog);
-                Data.setHasFocus(false);
+                MotorcycleData.setHasFocus(false);
             }
             // GATT Server Connecting
             if (newState == BluetoothProfile.STATE_CONNECTING) {
@@ -677,7 +677,7 @@ public class BluetoothLeService extends Service {
                     mConnectionState = STATE_DISCONNECTING;
                 }
                 broadcastConnectionUpdate(intentAction);
-                Data.setHasFocus(false);
+                MotorcycleData.setHasFocus(false);
             }
         }
 
@@ -747,7 +747,7 @@ public class BluetoothLeService extends Service {
                             && data[1] == WLQ_N.SET_CLUSTER_CLOCK_CMD[1]
                             && data[2] == WLQ_N.SET_CLUSTER_CLOCK_CMD[2]
                             && data[3] == WLQ_N.SET_CLUSTER_CLOCK_CMD[3]) {
-                        if (Data.wlq == null ) {
+                        if (MotorcycleData.wlq == null ) {
                             readCharacteristic(characteristic);
                         }
                     } else {
@@ -818,15 +818,15 @@ public class BluetoothLeService extends Service {
                 boolean process = false;
                 int msgID = (data[0] & 0xFF);
                 if (msgID == 0x04){
-                    if (!Data.getHasFocus()){
+                    if (!MotorcycleData.getHasFocus()){
                         Log.d(TAG,"Focus Gained");
                     }
-                    Data.setHasFocus(true);
+                    MotorcycleData.setHasFocus(true);
                     lastControlMessage = System.currentTimeMillis();
                 } else {
-                    if (Data.getHasFocus() && ( System.currentTimeMillis() - lastControlMessage > 100)){
+                    if (MotorcycleData.getHasFocus() && ( System.currentTimeMillis() - lastControlMessage > 100)){
                         Log.d(TAG,"Focus Gone");
-                        Data.setHasFocus(false);
+                        MotorcycleData.setHasFocus(false);
                     }
                     //Check if message changed
                     if (!messages.containsKey(msgID)) {
@@ -853,19 +853,19 @@ public class BluetoothLeService extends Service {
                 //Read Config
                 if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x57)) {
                     if (connectedType == WLQ.TYPE_NAVIGATOR) {
-                        Data.wlq = new WLQ_N(data);
-                        if (Data.hardwareVersion != null) {
-                            Data.wlq.setHardwareVersion(Data.hardwareVersion);
+                        MotorcycleData.wlq = new WLQ_N(data);
+                        if (MotorcycleData.hardwareVersion != null) {
+                            MotorcycleData.wlq.setHardwareVersion(MotorcycleData.hardwareVersion);
                         }
                     } else if (connectedType == WLQ.TYPE_COMMANDER) {
-                        Data.wlq = new WLQ_C(data);
-                        if (Data.hardwareVersion != null) {
-                            Data.wlq.setHardwareVersion(Data.hardwareVersion);
+                        MotorcycleData.wlq = new WLQ_C(data);
+                        if (MotorcycleData.hardwareVersion != null) {
+                            MotorcycleData.wlq.setHardwareVersion(MotorcycleData.hardwareVersion);
                         }
                     } else if (connectedType == WLQ.TYPE_X) {
-                        Data.wlq = new WLQ_X(data);
-                        if (Data.hardwareVersion != null) {
-                            Data.wlq.setHardwareVersion(Data.hardwareVersion);
+                        MotorcycleData.wlq = new WLQ_X(data);
+                        if (MotorcycleData.hardwareVersion != null) {
+                            MotorcycleData.wlq.setHardwareVersion(MotorcycleData.hardwareVersion);
                         }
                     }
                     final Intent intent = new Intent(ACTION_CMDSTATUS_AVAILABLE);
@@ -877,8 +877,8 @@ public class BluetoothLeService extends Service {
                         // Log data
                         Log.d(TAG,Utils.ByteArraytoHexNoDelim(data));
                     }
-                    if(Data.wlq != null) {
-                        Data.wlq.setStatus(data);
+                    if(MotorcycleData.wlq != null) {
+                        MotorcycleData.wlq.setStatus(data);
                         final Intent intent = new Intent(ACTION_ACCSTATUS_AVAILABLE);
                         intent.putExtras(mBundle);
                         MyApplication.getContext().sendBroadcast(intent);
@@ -890,7 +890,7 @@ public class BluetoothLeService extends Service {
             }
         } else if (characteristic.getUuid().equals(UUIDDatabase.UUID_HARDWARE_REVISION_STRING)) {
             if (data != null) {
-                Data.hardwareVersion = characteristic.getStringValue(0);
+                MotorcycleData.hardwareVersion = characteristic.getStringValue(0);
                 Log.d(TAG, "HW String Value: " + characteristic.getStringValue(0));
             }
         } else {
@@ -1564,29 +1564,29 @@ public class BluetoothLeService extends Service {
 
     private static void sendDataBroadcast() {
         final Intent intent = new Intent(ACTION_PERFORMANCE_DATA_AVAILABLE);
-        intent.putExtra(Data.getExtraKey(Data.DATA_GEAR), Data.getGear());
-        intent.putExtra(Data.getExtraKey(Data.DATA_ENGINE_TEMP), Data.getEngineTemperature());
-        intent.putExtra(Data.getExtraKey(Data.DATA_AIR_TEMP), Data.getAmbientTemperature());
-        intent.putExtra(Data.getExtraKey(Data.DATA_FRONT_RDC), Data.getFrontTirePressure());
-        intent.putExtra(Data.getExtraKey(Data.DATA_REAR_RDC), Data.getRearTirePressure());
-        intent.putExtra(Data.getExtraKey(Data.DATA_ODOMETER), Data.getOdometer());
-        intent.putExtra(Data.getExtraKey(Data.DATA_VOLTAGE), Data.getvoltage());
-        intent.putExtra(Data.getExtraKey(Data.DATA_THROTTLE), Data.getThrottlePosition());
-        intent.putExtra(Data.getExtraKey(Data.DATA_FRONT_BRAKE), Data.getFrontBrake());
-        intent.putExtra(Data.getExtraKey(Data.DATA_REAR_BRAKE), Data.getRearBrake());
-        intent.putExtra(Data.getExtraKey(Data.DATA_AMBIENT_LIGHT), Data.getAmbientLight());
-        intent.putExtra(Data.getExtraKey(Data.DATA_TRIP_ONE), Data.getTripOne());
-        intent.putExtra(Data.getExtraKey(Data.DATA_TRIP_TWO), Data.getTripTwo());
-        intent.putExtra(Data.getExtraKey(Data.DATA_TRIP_AUTO), Data.getTripAuto());
-        intent.putExtra(Data.getExtraKey(Data.DATA_SPEED), Data.getSpeed());
-        intent.putExtra(Data.getExtraKey(Data.DATA_AVG_SPEED), Data.getAvgSpeed());
-        intent.putExtra(Data.getExtraKey(Data.DATA_CURRENT_CONSUMPTION), Data.getCurrentConsumption());
-        intent.putExtra(Data.getExtraKey(Data.DATA_ECONOMY_ONE), Data.getFuelEconomyOne());
-        intent.putExtra(Data.getExtraKey(Data.DATA_ECONOMY_TWO), Data.getFuelEconomyTwo());
-        intent.putExtra(Data.getExtraKey(Data.DATA_RANGE), Data.getFuelRange());
-        intent.putExtra(Data.getExtraKey(Data.DATA_SHIFTS), Data.getNumberOfShifts());
-        intent.putExtra(Data.getExtraKey(Data.DATA_RPM), Data.getRPM());
-        intent.putExtra(Data.getExtraKey(Data.DATA_LEAN), Data.getLeanAngleBike());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_GEAR), MotorcycleData.getGear());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_ENGINE_TEMP), MotorcycleData.getEngineTemperature());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_AIR_TEMP), MotorcycleData.getAmbientTemperature());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_FRONT_RDC), MotorcycleData.getFrontTirePressure());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_REAR_RDC), MotorcycleData.getRearTirePressure());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_ODOMETER), MotorcycleData.getOdometer());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_VOLTAGE), MotorcycleData.getvoltage());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_THROTTLE), MotorcycleData.getThrottlePosition());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_FRONT_BRAKE), MotorcycleData.getFrontBrake());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_REAR_BRAKE), MotorcycleData.getRearBrake());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_AMBIENT_LIGHT), MotorcycleData.getAmbientLight());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_TRIP_ONE), MotorcycleData.getTripOne());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_TRIP_TWO), MotorcycleData.getTripTwo());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_TRIP_AUTO), MotorcycleData.getTripAuto());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_SPEED), MotorcycleData.getSpeed());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_AVG_SPEED), MotorcycleData.getAvgSpeed());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_CURRENT_CONSUMPTION), MotorcycleData.getCurrentConsumption());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_ECONOMY_ONE), MotorcycleData.getFuelEconomyOne());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_ECONOMY_TWO), MotorcycleData.getFuelEconomyTwo());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_RANGE), MotorcycleData.getFuelRange());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_SHIFTS), MotorcycleData.getNumberOfShifts());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_RPM), MotorcycleData.getRPM());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_LEAN), MotorcycleData.getLeanAngleBike());
         MyApplication.getContext().sendBroadcast(intent);
     }
 }

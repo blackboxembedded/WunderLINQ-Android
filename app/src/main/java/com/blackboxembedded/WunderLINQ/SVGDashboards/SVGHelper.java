@@ -8,7 +8,7 @@ import android.view.Surface;
 import android.view.WindowManager;
 
 
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
@@ -150,8 +150,8 @@ public class SVGHelper {
         try {
             switch (infoLine) {
                 case 1://Range
-                    if (Data.getFuelRange() != null) {
-                        double fuelrange = Data.getFuelRange();
+                    if (MotorcycleData.getFuelRange() != null) {
+                        double fuelrange = MotorcycleData.getFuelRange();
                         if (s.distanceFormat.contains("1")) {
                             fuelrange = Utils.kmToMiles(fuelrange);
                         }
@@ -159,9 +159,9 @@ public class SVGHelper {
                     }
                     break;
                 case 2://Trip1
-                    if (Data.getTripOne() != null) {
-                        if (Data.getTripOne() != null) {
-                            double trip1 = Data.getTripOne();
+                    if (MotorcycleData.getTripOne() != null) {
+                        if (MotorcycleData.getTripOne() != null) {
+                            double trip1 = MotorcycleData.getTripOne();
                             if (s.distanceFormat.contains("1")) {
                                 trip1 = Utils.kmToMiles(trip1);
                             }
@@ -170,9 +170,9 @@ public class SVGHelper {
                     }
                     break;
                 case 3://Trip2
-                    if (Data.getTripTwo() != null) {
-                        if (Data.getTripTwo() != null) {
-                            double trip2 = Data.getTripTwo();
+                    if (MotorcycleData.getTripTwo() != null) {
+                        if (MotorcycleData.getTripTwo() != null) {
+                            double trip2 = MotorcycleData.getTripTwo();
                             if (s.distanceFormat.contains("1")) {
                                 trip2 = Utils.kmToMiles(trip2);
                             }
@@ -181,8 +181,8 @@ public class SVGHelper {
                     }
                     break;
                 case 4://Altitude
-                    if (Data.getLastLocation() != null) {
-                        double altitude = Data.getLastLocation().getAltitude();
+                    if (MotorcycleData.getLastLocation() != null) {
+                        double altitude = MotorcycleData.getLastLocation().getAltitude();
                         if (s.distanceFormat.contains("1")) {
                             altitude = Utils.mToFeet(altitude);
                         }
@@ -206,16 +206,16 @@ public class SVGHelper {
 
         try {
             if (speedSource.contains("0")) {
-                if (Data.getSpeed() != null) {
-                    speed = Data.getSpeed();
+                if (MotorcycleData.getSpeed() != null) {
+                    speed = MotorcycleData.getSpeed();
                 }
             } else if (speedSource.contains("1")) {
-                if (Data.getRearSpeed() != null) {
-                    speed = Data.getRearSpeed();
+                if (MotorcycleData.getRearSpeed() != null) {
+                    speed = MotorcycleData.getRearSpeed();
                 }
             } else if (speedSource.contains("2")) {
-                if (Data.getLastLocation() != null) {
-                    speed = (Data.getLastLocation().getSpeed() * 3.6);
+                if (MotorcycleData.getLastLocation() != null) {
+                    speed = (MotorcycleData.getLastLocation().getSpeed() * 3.6);
                 }
             }
             if (speed != null) {
@@ -240,8 +240,8 @@ public class SVGHelper {
 
         try {
             //Ambient Temp
-            if (Data.getAmbientTemperature() != null) {
-                double ambientTemp = Data.getAmbientTemperature();
+            if (MotorcycleData.getAmbientTemperature() != null) {
+                double ambientTemp = MotorcycleData.getAmbientTemperature();
                 if (s.temperatureFormat.contains("1")) {
                     // F
                     s.temperatureUnit = "F";
@@ -355,278 +355,278 @@ public class SVGHelper {
     public void setupTachStandard(Document doc) {
         try {
             //RPM Gauge
-            if (Data.getRPM() != null) {
+            if (MotorcycleData.getRPM() != null) {
                 if (s.twelveK) {
-                    if (Data.getRPM() >= 666) {
+                    if (MotorcycleData.getRPM() >= 666) {
                         doc.getElementById("rpm333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 1333) {
+                    if (MotorcycleData.getRPM() >= 1333) {
                         doc.getElementById("rpm666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2000) {
+                    if (MotorcycleData.getRPM() >= 2000) {
                         doc.getElementById("rpm1000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2666) {
+                    if (MotorcycleData.getRPM() >= 2666) {
                         doc.getElementById("rpm1333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3333) {
+                    if (MotorcycleData.getRPM() >= 3333) {
                         doc.getElementById("rpm1666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4000) {
+                    if (MotorcycleData.getRPM() >= 4000) {
                         doc.getElementById("rpm2000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4333) {
+                    if (MotorcycleData.getRPM() >= 4333) {
                         doc.getElementById("rpm2333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4666) {
+                    if (MotorcycleData.getRPM() >= 4666) {
                         doc.getElementById("rpm2666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5000) {
+                    if (MotorcycleData.getRPM() >= 5000) {
                         doc.getElementById("rpm3000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5333) {
+                    if (MotorcycleData.getRPM() >= 5333) {
                         doc.getElementById("rpm3333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5666) {
+                    if (MotorcycleData.getRPM() >= 5666) {
                         doc.getElementById("rpm3666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6000) {
+                    if (MotorcycleData.getRPM() >= 6000) {
                         doc.getElementById("rpm4000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6333) {
+                    if (MotorcycleData.getRPM() >= 6333) {
                         doc.getElementById("rpm4333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6666) {
+                    if (MotorcycleData.getRPM() >= 6666) {
                         doc.getElementById("rpm4666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7000) {
+                    if (MotorcycleData.getRPM() >= 7000) {
                         doc.getElementById("rpm5000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7333) {
+                    if (MotorcycleData.getRPM() >= 7333) {
                         doc.getElementById("rpm5333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7666) {
+                    if (MotorcycleData.getRPM() >= 7666) {
                         doc.getElementById("rpm5666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8000) {
+                    if (MotorcycleData.getRPM() >= 8000) {
                         doc.getElementById("rpm6000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8333) {
+                    if (MotorcycleData.getRPM() >= 8333) {
                         doc.getElementById("rpm6333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8666) {
+                    if (MotorcycleData.getRPM() >= 8666) {
                         doc.getElementById("rpm6666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9000) {
+                    if (MotorcycleData.getRPM() >= 9000) {
                         doc.getElementById("rpm7000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9333) {
+                    if (MotorcycleData.getRPM() >= 9333) {
                         doc.getElementById("rpm7333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9666) {
+                    if (MotorcycleData.getRPM() >= 9666) {
                         doc.getElementById("rpm7666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10000) {
+                    if (MotorcycleData.getRPM() >= 10000) {
                         doc.getElementById("rpm8000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10333) {
+                    if (MotorcycleData.getRPM() >= 10333) {
                         doc.getElementById("rpm8333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10666) {
+                    if (MotorcycleData.getRPM() >= 10666) {
                         doc.getElementById("rpm8666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 11000) {
+                    if (MotorcycleData.getRPM() >= 11000) {
                         doc.getElementById("rpm9000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 11333) {
+                    if (MotorcycleData.getRPM() >= 11333) {
                         doc.getElementById("rpm9333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 11666) {
+                    if (MotorcycleData.getRPM() >= 11666) {
                         doc.getElementById("rpm9666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 12000) {
+                    if (MotorcycleData.getRPM() >= 12000) {
                         doc.getElementById("rpm10000").setAttribute("style", "display:inline");
                     }
                 } else if (s.fifteenK) {
-                    if (Data.getRPM() >= 666) {
+                    if (MotorcycleData.getRPM() >= 666) {
                         doc.getElementById("rpm333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 1333) {
+                    if (MotorcycleData.getRPM() >= 1333) {
                         doc.getElementById("rpm666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2000) {
+                    if (MotorcycleData.getRPM() >= 2000) {
                         doc.getElementById("rpm1000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2666) {
+                    if (MotorcycleData.getRPM() >= 2666) {
                         doc.getElementById("rpm1333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3333) {
+                    if (MotorcycleData.getRPM() >= 3333) {
                         doc.getElementById("rpm1666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4000) {
+                    if (MotorcycleData.getRPM() >= 4000) {
                         doc.getElementById("rpm2000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4666) {
+                    if (MotorcycleData.getRPM() >= 4666) {
                         doc.getElementById("rpm2333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5333) {
+                    if (MotorcycleData.getRPM() >= 5333) {
                         doc.getElementById("rpm2666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6000) {
+                    if (MotorcycleData.getRPM() >= 6000) {
                         doc.getElementById("rpm3000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6666) {
+                    if (MotorcycleData.getRPM() >= 6666) {
                         doc.getElementById("rpm3333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7333) {
+                    if (MotorcycleData.getRPM() >= 7333) {
                         doc.getElementById("rpm3666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8000) {
+                    if (MotorcycleData.getRPM() >= 8000) {
                         doc.getElementById("rpm4000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8333) {
+                    if (MotorcycleData.getRPM() >= 8333) {
                         doc.getElementById("rpm4333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8666) {
+                    if (MotorcycleData.getRPM() >= 8666) {
                         doc.getElementById("rpm4666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9000) {
+                    if (MotorcycleData.getRPM() >= 9000) {
                         doc.getElementById("rpm5000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9333) {
+                    if (MotorcycleData.getRPM() >= 9333) {
                         doc.getElementById("rpm5333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9666) {
+                    if (MotorcycleData.getRPM() >= 9666) {
                         doc.getElementById("rpm5666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10000) {
+                    if (MotorcycleData.getRPM() >= 10000) {
                         doc.getElementById("rpm6000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10333) {
+                    if (MotorcycleData.getRPM() >= 10333) {
                         doc.getElementById("rpm6333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10666) {
+                    if (MotorcycleData.getRPM() >= 10666) {
                         doc.getElementById("rpm6666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 11000) {
+                    if (MotorcycleData.getRPM() >= 11000) {
                         doc.getElementById("rpm7000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 11333) {
+                    if (MotorcycleData.getRPM() >= 11333) {
                         doc.getElementById("rpm7333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 11666) {
+                    if (MotorcycleData.getRPM() >= 11666) {
                         doc.getElementById("rpm7666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 12000) {
+                    if (MotorcycleData.getRPM() >= 12000) {
                         doc.getElementById("rpm8000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 12333) {
+                    if (MotorcycleData.getRPM() >= 12333) {
                         doc.getElementById("rpm8333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 12666) {
+                    if (MotorcycleData.getRPM() >= 12666) {
                         doc.getElementById("rpm8666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 13000) {
+                    if (MotorcycleData.getRPM() >= 13000) {
                         doc.getElementById("rpm9000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 13666) {
+                    if (MotorcycleData.getRPM() >= 13666) {
                         doc.getElementById("rpm9333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 14333) {
+                    if (MotorcycleData.getRPM() >= 14333) {
                         doc.getElementById("rpm9666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 15000) {
+                    if (MotorcycleData.getRPM() >= 15000) {
                         doc.getElementById("rpm10000").setAttribute("style", "display:inline");
                     }
                 } else {
-                    if (Data.getRPM() >= 333) {
+                    if (MotorcycleData.getRPM() >= 333) {
                         doc.getElementById("rpm333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 666) {
+                    if (MotorcycleData.getRPM() >= 666) {
                         doc.getElementById("rpm666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 1000) {
+                    if (MotorcycleData.getRPM() >= 1000) {
                         doc.getElementById("rpm1000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 1333) {
+                    if (MotorcycleData.getRPM() >= 1333) {
                         doc.getElementById("rpm1333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 1666) {
+                    if (MotorcycleData.getRPM() >= 1666) {
                         doc.getElementById("rpm1666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2000) {
+                    if (MotorcycleData.getRPM() >= 2000) {
                         doc.getElementById("rpm2000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2333) {
+                    if (MotorcycleData.getRPM() >= 2333) {
                         doc.getElementById("rpm2333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2666) {
+                    if (MotorcycleData.getRPM() >= 2666) {
                         doc.getElementById("rpm2666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3000) {
+                    if (MotorcycleData.getRPM() >= 3000) {
                         doc.getElementById("rpm3000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3333) {
+                    if (MotorcycleData.getRPM() >= 3333) {
                         doc.getElementById("rpm3333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3666) {
+                    if (MotorcycleData.getRPM() >= 3666) {
                         doc.getElementById("rpm3666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4000) {
+                    if (MotorcycleData.getRPM() >= 4000) {
                         doc.getElementById("rpm4000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4333) {
+                    if (MotorcycleData.getRPM() >= 4333) {
                         doc.getElementById("rpm4333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4666) {
+                    if (MotorcycleData.getRPM() >= 4666) {
                         doc.getElementById("rpm4666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5000) {
+                    if (MotorcycleData.getRPM() >= 5000) {
                         doc.getElementById("rpm5000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5333) {
+                    if (MotorcycleData.getRPM() >= 5333) {
                         doc.getElementById("rpm5333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5666) {
+                    if (MotorcycleData.getRPM() >= 5666) {
                         doc.getElementById("rpm5666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6000) {
+                    if (MotorcycleData.getRPM() >= 6000) {
                         doc.getElementById("rpm6000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6333) {
+                    if (MotorcycleData.getRPM() >= 6333) {
                         doc.getElementById("rpm6333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6666) {
+                    if (MotorcycleData.getRPM() >= 6666) {
                         doc.getElementById("rpm6666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7000) {
+                    if (MotorcycleData.getRPM() >= 7000) {
                         doc.getElementById("rpm7000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7333) {
+                    if (MotorcycleData.getRPM() >= 7333) {
                         doc.getElementById("rpm7333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7666) {
+                    if (MotorcycleData.getRPM() >= 7666) {
                         doc.getElementById("rpm7666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8000) {
+                    if (MotorcycleData.getRPM() >= 8000) {
                         doc.getElementById("rpm8000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8333) {
+                    if (MotorcycleData.getRPM() >= 8333) {
                         doc.getElementById("rpm8333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8666) {
+                    if (MotorcycleData.getRPM() >= 8666) {
                         doc.getElementById("rpm8666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9000) {
+                    if (MotorcycleData.getRPM() >= 9000) {
                         doc.getElementById("rpm9000").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9333) {
+                    if (MotorcycleData.getRPM() >= 9333) {
                         doc.getElementById("rpm9333").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9666) {
+                    if (MotorcycleData.getRPM() >= 9666) {
                         doc.getElementById("rpm9666").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10000) {
+                    if (MotorcycleData.getRPM() >= 10000) {
                         doc.getElementById("rpm10000").setAttribute("style", "display:inline");
                     }
                 }
@@ -641,7 +641,7 @@ public class SVGHelper {
             var e = doc.getElementById("gear");
             if (e != null) {
                 //Gear
-                String gear = Data.getGear();
+                String gear = MotorcycleData.getGear();
 
                 if (gear != null) {
                     if (gear.equals("N")) {
@@ -662,8 +662,8 @@ public class SVGHelper {
     public void setupRearRDC(Document doc) {
         try {
             //RDC Rear
-            if (Data.getRearTirePressure() != null) {
-                double rdcRear = Data.getRearTirePressure();
+            if (MotorcycleData.getRearTirePressure() != null) {
+                double rdcRear = MotorcycleData.getRearTirePressure();
                 if (s.pressureFormat.contains("1")) {
                     // KPa
                     s.pressureUnit = "KPa";
@@ -698,8 +698,8 @@ public class SVGHelper {
     public void setupFrontRDC(Document doc) {
         try {
             //RDC Front
-            if (Data.getFrontTirePressure() != null) {
-                double rdcFront = Data.getFrontTirePressure();
+            if (MotorcycleData.getFrontTirePressure() != null) {
+                double rdcFront = MotorcycleData.getFrontTirePressure();
                 if (s.pressureFormat.contains("1")) {
                     // KPa
                     s.pressureUnit = "KPa";
@@ -733,12 +733,12 @@ public class SVGHelper {
     public void setupClock(Document doc) {
         try {
             //Clock
-            if (Data.getTime() != null) {
+            if (MotorcycleData.getTime() != null) {
                 SimpleDateFormat dateformat = new SimpleDateFormat("h:mm", Locale.getDefault());
                 if (!s.sharedPrefs.getString("prefTime", "0").equals("0")) {
                     dateformat = new SimpleDateFormat("HH:mm", Locale.getDefault());
                 }
-                doc.getElementById("clock").setTextContent(dateformat.format(Data.getTime()));
+                doc.getElementById("clock").setTextContent(dateformat.format(MotorcycleData.getTime()));
             }
         } catch (Exception e) {
             Log.d(TAG, "Exception getting clock: " + e.toString());
@@ -751,15 +751,15 @@ public class SVGHelper {
     public void setupEngineTemp(Document doc) {
         try {
             //Engine Temp
-            if (Data.getEngineTemperature() != null) {
-                double engineTemp = Data.getEngineTemperature();
+            if (MotorcycleData.getEngineTemperature() != null) {
+                double engineTemp = MotorcycleData.getEngineTemperature();
                 if (s.temperatureFormat.contains("1")) {
                     // F
                     s.temperatureUnit = "F";
                     engineTemp = Utils.celsiusToFahrenheit(engineTemp);
                 }
                 doc.getElementById("engineTemp").setTextContent(Math.round(engineTemp) + s.temperatureUnit);
-                if (Data.getEngineTemperature() >= 104.0) {
+                if (MotorcycleData.getEngineTemperature() >= 104.0) {
                     doc.getElementById("engineTemp").setAttribute("style",
                             doc.getElementById("engineTemp").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
                     );
@@ -825,7 +825,7 @@ public class SVGHelper {
 
             //Data Value
             if (infoLine == 1) {
-                if (Data.getFuelRange() != null) {
+                if (MotorcycleData.getFuelRange() != null) {
                     if (Faults.getfuelFaultActive()) {
                         doc.getElementById("dataValue").setAttribute("style",
                                 doc.getElementById("dataValue").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
@@ -872,1533 +872,1533 @@ public class SVGHelper {
     public void setupTachSport(Document doc) {
         try {
             //RPM Dial
-            if (Data.getRPM() != null) {
+            if (MotorcycleData.getRPM() != null) {
                 if (s.tenK) {
-                    if (Data.getRPM() >= 0) {
+                    if (MotorcycleData.getRPM() >= 0) {
                         doc.getElementById("rpmTick1").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 154) {
+                    if (MotorcycleData.getRPM() >= 154) {
                         doc.getElementById("rpmTick2").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 308) {
+                    if (MotorcycleData.getRPM() >= 308) {
                         doc.getElementById("rpmTick3").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 462) {
+                    if (MotorcycleData.getRPM() >= 462) {
                         doc.getElementById("rpmTick4").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 616) {
+                    if (MotorcycleData.getRPM() >= 616) {
                         doc.getElementById("rpmTick5").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 770) {
+                    if (MotorcycleData.getRPM() >= 770) {
                         doc.getElementById("rpmTick6").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 924) {
+                    if (MotorcycleData.getRPM() >= 924) {
                         doc.getElementById("rpmTick7").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 1078) {
+                    if (MotorcycleData.getRPM() >= 1078) {
                         doc.getElementById("rpmTick8").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 1232) {
+                    if (MotorcycleData.getRPM() >= 1232) {
                         doc.getElementById("rpmTick9").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 1386) {
+                    if (MotorcycleData.getRPM() >= 1386) {
                         doc.getElementById("rpmTick10").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 1540) {
+                    if (MotorcycleData.getRPM() >= 1540) {
                         doc.getElementById("rpmTick11").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 1694) {
+                    if (MotorcycleData.getRPM() >= 1694) {
                         doc.getElementById("rpmTick12").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 1848) {
+                    if (MotorcycleData.getRPM() >= 1848) {
                         doc.getElementById("rpmTick13").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2000) {
+                    if (MotorcycleData.getRPM() >= 2000) {
                         doc.getElementById("rpmTick14").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2083) {
+                    if (MotorcycleData.getRPM() >= 2083) {
                         doc.getElementById("rpmTick15").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2167) {
+                    if (MotorcycleData.getRPM() >= 2167) {
                         doc.getElementById("rpmTick16").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2250) {
+                    if (MotorcycleData.getRPM() >= 2250) {
                         doc.getElementById("rpmTick17").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2334) {
+                    if (MotorcycleData.getRPM() >= 2334) {
                         doc.getElementById("rpmTick18").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2417) {
+                    if (MotorcycleData.getRPM() >= 2417) {
                         doc.getElementById("rpmTick19").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2501) {
+                    if (MotorcycleData.getRPM() >= 2501) {
                         doc.getElementById("rpmTick20").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2584) {
+                    if (MotorcycleData.getRPM() >= 2584) {
                         doc.getElementById("rpmTick21").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2668) {
+                    if (MotorcycleData.getRPM() >= 2668) {
                         doc.getElementById("rpmTick22").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2751) {
+                    if (MotorcycleData.getRPM() >= 2751) {
                         doc.getElementById("rpmTick23").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2835) {
+                    if (MotorcycleData.getRPM() >= 2835) {
                         doc.getElementById("rpmTick24").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2918) {
+                    if (MotorcycleData.getRPM() >= 2918) {
                         doc.getElementById("rpmTick25").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3000) {
+                    if (MotorcycleData.getRPM() >= 3000) {
                         doc.getElementById("rpmTick26").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3077) {
+                    if (MotorcycleData.getRPM() >= 3077) {
                         doc.getElementById("rpmTick27").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3154) {
+                    if (MotorcycleData.getRPM() >= 3154) {
                         doc.getElementById("rpmTick28").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3231) {
+                    if (MotorcycleData.getRPM() >= 3231) {
                         doc.getElementById("rpmTick29").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3308) {
+                    if (MotorcycleData.getRPM() >= 3308) {
                         doc.getElementById("rpmTick30").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3385) {
+                    if (MotorcycleData.getRPM() >= 3385) {
                         doc.getElementById("rpmTick31").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3462) {
+                    if (MotorcycleData.getRPM() >= 3462) {
                         doc.getElementById("rpmTick32").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3539) {
+                    if (MotorcycleData.getRPM() >= 3539) {
                         doc.getElementById("rpmTick33").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3616) {
+                    if (MotorcycleData.getRPM() >= 3616) {
                         doc.getElementById("rpmTick34").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3693) {
+                    if (MotorcycleData.getRPM() >= 3693) {
                         doc.getElementById("rpmTick35").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3770) {
+                    if (MotorcycleData.getRPM() >= 3770) {
                         doc.getElementById("rpmTick36").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3847) {
+                    if (MotorcycleData.getRPM() >= 3847) {
                         doc.getElementById("rpmTick37").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3924) {
+                    if (MotorcycleData.getRPM() >= 3924) {
                         doc.getElementById("rpmTick38").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4000) {
+                    if (MotorcycleData.getRPM() >= 4000) {
                         doc.getElementById("rpmTick39").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4077) {
+                    if (MotorcycleData.getRPM() >= 4077) {
                         doc.getElementById("rpmTick40").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4154) {
+                    if (MotorcycleData.getRPM() >= 4154) {
                         doc.getElementById("rpmTick41").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4231) {
+                    if (MotorcycleData.getRPM() >= 4231) {
                         doc.getElementById("rpmTick42").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4308) {
+                    if (MotorcycleData.getRPM() >= 4308) {
                         doc.getElementById("rpmTick43").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4385) {
+                    if (MotorcycleData.getRPM() >= 4385) {
                         doc.getElementById("rpmTick44").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4462) {
+                    if (MotorcycleData.getRPM() >= 4462) {
                         doc.getElementById("rpmTick45").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4539) {
+                    if (MotorcycleData.getRPM() >= 4539) {
                         doc.getElementById("rpmTick46").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4616) {
+                    if (MotorcycleData.getRPM() >= 4616) {
                         doc.getElementById("rpmTick47").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4693) {
+                    if (MotorcycleData.getRPM() >= 4693) {
                         doc.getElementById("rpmTick48").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4770) {
+                    if (MotorcycleData.getRPM() >= 4770) {
                         doc.getElementById("rpmTick49").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4847) {
+                    if (MotorcycleData.getRPM() >= 4847) {
                         doc.getElementById("rpmTick50").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4924) {
+                    if (MotorcycleData.getRPM() >= 4924) {
                         doc.getElementById("rpmTick51").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5000) {
+                    if (MotorcycleData.getRPM() >= 5000) {
                         doc.getElementById("rpmTick52").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5083) {
+                    if (MotorcycleData.getRPM() >= 5083) {
                         doc.getElementById("rpmTick53").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5166) {
+                    if (MotorcycleData.getRPM() >= 5166) {
                         doc.getElementById("rpmTick54").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5249) {
+                    if (MotorcycleData.getRPM() >= 5249) {
                         doc.getElementById("rpmTick55").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5332) {
+                    if (MotorcycleData.getRPM() >= 5332) {
                         doc.getElementById("rpmTick56").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5415) {
+                    if (MotorcycleData.getRPM() >= 5415) {
                         doc.getElementById("rpmTick57").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5498) {
+                    if (MotorcycleData.getRPM() >= 5498) {
                         doc.getElementById("rpmTick58").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5581) {
+                    if (MotorcycleData.getRPM() >= 5581) {
                         doc.getElementById("rpmTick59").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5664) {
+                    if (MotorcycleData.getRPM() >= 5664) {
                         doc.getElementById("rpmTick60").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5747) {
+                    if (MotorcycleData.getRPM() >= 5747) {
                         doc.getElementById("rpmTick61").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5830) {
+                    if (MotorcycleData.getRPM() >= 5830) {
                         doc.getElementById("rpmTick62").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5913) {
+                    if (MotorcycleData.getRPM() >= 5913) {
                         doc.getElementById("rpmTick63").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6000) {
+                    if (MotorcycleData.getRPM() >= 6000) {
                         doc.getElementById("rpmTick64").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6077) {
+                    if (MotorcycleData.getRPM() >= 6077) {
                         doc.getElementById("rpmTick65").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6154) {
+                    if (MotorcycleData.getRPM() >= 6154) {
                         doc.getElementById("rpmTick66").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6231) {
+                    if (MotorcycleData.getRPM() >= 6231) {
                         doc.getElementById("rpmTick67").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6308) {
+                    if (MotorcycleData.getRPM() >= 6308) {
                         doc.getElementById("rpmTick68").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6385) {
+                    if (MotorcycleData.getRPM() >= 6385) {
                         doc.getElementById("rpmTick69").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6462) {
+                    if (MotorcycleData.getRPM() >= 6462) {
                         doc.getElementById("rpmTick70").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6539) {
+                    if (MotorcycleData.getRPM() >= 6539) {
                         doc.getElementById("rpmTick71").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6616) {
+                    if (MotorcycleData.getRPM() >= 6616) {
                         doc.getElementById("rpmTick72").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6693) {
+                    if (MotorcycleData.getRPM() >= 6693) {
                         doc.getElementById("rpmTick73").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6770) {
+                    if (MotorcycleData.getRPM() >= 6770) {
                         doc.getElementById("rpmTick74").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6847) {
+                    if (MotorcycleData.getRPM() >= 6847) {
                         doc.getElementById("rpmTick75").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6924) {
+                    if (MotorcycleData.getRPM() >= 6924) {
                         doc.getElementById("rpmTick76").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7000) {
+                    if (MotorcycleData.getRPM() >= 7000) {
                         doc.getElementById("rpmTick77").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7083) {
+                    if (MotorcycleData.getRPM() >= 7083) {
                         doc.getElementById("rpmTick78").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7166) {
+                    if (MotorcycleData.getRPM() >= 7166) {
                         doc.getElementById("rpmTick79").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7249) {
+                    if (MotorcycleData.getRPM() >= 7249) {
                         doc.getElementById("rpmTick80").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7332) {
+                    if (MotorcycleData.getRPM() >= 7332) {
                         doc.getElementById("rpmTick81").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7415) {
+                    if (MotorcycleData.getRPM() >= 7415) {
                         doc.getElementById("rpmTick82").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7498) {
+                    if (MotorcycleData.getRPM() >= 7498) {
                         doc.getElementById("rpmTick83").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7581) {
+                    if (MotorcycleData.getRPM() >= 7581) {
                         doc.getElementById("rpmTick84").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7664) {
+                    if (MotorcycleData.getRPM() >= 7664) {
                         doc.getElementById("rpmTick85").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7747) {
+                    if (MotorcycleData.getRPM() >= 7747) {
                         doc.getElementById("rpmTick86").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7830) {
+                    if (MotorcycleData.getRPM() >= 7830) {
                         doc.getElementById("rpmTick87").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7913) {
+                    if (MotorcycleData.getRPM() >= 7913) {
                         doc.getElementById("rpmTick88").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8000) {
+                    if (MotorcycleData.getRPM() >= 8000) {
                         doc.getElementById("rpmTick89").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8083) {
+                    if (MotorcycleData.getRPM() >= 8083) {
                         doc.getElementById("rpmTick90").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8166) {
+                    if (MotorcycleData.getRPM() >= 8166) {
                         doc.getElementById("rpmTick91").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8249) {
+                    if (MotorcycleData.getRPM() >= 8249) {
                         doc.getElementById("rpmTick92").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8332) {
+                    if (MotorcycleData.getRPM() >= 8332) {
                         doc.getElementById("rpmTick93").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8415) {
+                    if (MotorcycleData.getRPM() >= 8415) {
                         doc.getElementById("rpmTick94").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8498) {
+                    if (MotorcycleData.getRPM() >= 8498) {
                         doc.getElementById("rpmTick95").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8581) {
+                    if (MotorcycleData.getRPM() >= 8581) {
                         doc.getElementById("rpmTick96").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8664) {
+                    if (MotorcycleData.getRPM() >= 8664) {
                         doc.getElementById("rpmTick97").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8747) {
+                    if (MotorcycleData.getRPM() >= 8747) {
                         doc.getElementById("rpmTick98").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8830) {
+                    if (MotorcycleData.getRPM() >= 8830) {
                         doc.getElementById("rpmTick99").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8913) {
+                    if (MotorcycleData.getRPM() >= 8913) {
                         doc.getElementById("rpmTick100").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9000) {
+                    if (MotorcycleData.getRPM() >= 9000) {
                         doc.getElementById("rpmTick101").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9066) {
+                    if (MotorcycleData.getRPM() >= 9066) {
                         doc.getElementById("rpmTick102").setAttribute("style", "display:inline");
                     }
                     // Needle
-                    if ((Data.getRPM() >= 0) && (Data.getRPM() <= 249)) {
+                    if ((MotorcycleData.getRPM() >= 0) && (MotorcycleData.getRPM() <= 249)) {
                         doc.getElementById("rpmNeedle0").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 250) && (Data.getRPM() <= 499)) {
+                    if ((MotorcycleData.getRPM() >= 250) && (MotorcycleData.getRPM() <= 499)) {
                         doc.getElementById("rpmNeedle1").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 500) && (Data.getRPM() <= 749)) {
+                    if ((MotorcycleData.getRPM() >= 500) && (MotorcycleData.getRPM() <= 749)) {
                         doc.getElementById("rpmNeedle2").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 750) && (Data.getRPM() <= 999)) {
+                    if ((MotorcycleData.getRPM() >= 750) && (MotorcycleData.getRPM() <= 999)) {
                         doc.getElementById("rpmNeedle3").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 1000) && (Data.getRPM() <= 1249)) {
+                    if ((MotorcycleData.getRPM() >= 1000) && (MotorcycleData.getRPM() <= 1249)) {
                         doc.getElementById("rpmNeedle4").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 1250) && (Data.getRPM() <= 1499)) {
+                    if ((MotorcycleData.getRPM() >= 1250) && (MotorcycleData.getRPM() <= 1499)) {
                         doc.getElementById("rpmNeedle5").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 1500) && (Data.getRPM() <= 1749)) {
+                    if ((MotorcycleData.getRPM() >= 1500) && (MotorcycleData.getRPM() <= 1749)) {
                         doc.getElementById("rpmNeedle6").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 1750) && (Data.getRPM() <= 1999)) {
+                    if ((MotorcycleData.getRPM() >= 1750) && (MotorcycleData.getRPM() <= 1999)) {
                         doc.getElementById("rpmNeedle7").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 2000) && (Data.getRPM() <= 2166)) {
+                    if ((MotorcycleData.getRPM() >= 2000) && (MotorcycleData.getRPM() <= 2166)) {
                         doc.getElementById("rpmNeedle8").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 2167) && (Data.getRPM() <= 2332)) {
+                    if ((MotorcycleData.getRPM() >= 2167) && (MotorcycleData.getRPM() <= 2332)) {
                         doc.getElementById("rpmNeedle9").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 2333) && (Data.getRPM() <= 2499)) {
+                    if ((MotorcycleData.getRPM() >= 2333) && (MotorcycleData.getRPM() <= 2499)) {
                         doc.getElementById("rpmNeedle10").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 2500) && (Data.getRPM() <= 2600)) {
+                    if ((MotorcycleData.getRPM() >= 2500) && (MotorcycleData.getRPM() <= 2600)) {
                         doc.getElementById("rpmNeedle11").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 2601) && (Data.getRPM() <= 2700)) {
+                    if ((MotorcycleData.getRPM() >= 2601) && (MotorcycleData.getRPM() <= 2700)) {
                         doc.getElementById("rpmNeedle12").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 2701) && (Data.getRPM() <= 2800)) {
+                    if ((MotorcycleData.getRPM() >= 2701) && (MotorcycleData.getRPM() <= 2800)) {
                         doc.getElementById("rpmNeedle13").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 2801) && (Data.getRPM() <= 2900)) {
+                    if ((MotorcycleData.getRPM() >= 2801) && (MotorcycleData.getRPM() <= 2900)) {
                         doc.getElementById("rpmNeedle14").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 3000) && (Data.getRPM() <= 3166)) {
+                    if ((MotorcycleData.getRPM() >= 3000) && (MotorcycleData.getRPM() <= 3166)) {
                         doc.getElementById("rpmNeedle15").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 3167) && (Data.getRPM() <= 3332)) {
+                    if ((MotorcycleData.getRPM() >= 3167) && (MotorcycleData.getRPM() <= 3332)) {
                         doc.getElementById("rpmNeedle16").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 3333) && (Data.getRPM() <= 3499)) {
+                    if ((MotorcycleData.getRPM() >= 3333) && (MotorcycleData.getRPM() <= 3499)) {
                         doc.getElementById("rpmNeedle17").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 3500) && (Data.getRPM() <= 3600)) {
+                    if ((MotorcycleData.getRPM() >= 3500) && (MotorcycleData.getRPM() <= 3600)) {
                         doc.getElementById("rpmNeedle18").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 3601) && (Data.getRPM() <= 3700)) {
+                    if ((MotorcycleData.getRPM() >= 3601) && (MotorcycleData.getRPM() <= 3700)) {
                         doc.getElementById("rpmNeedle19").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 3701) && (Data.getRPM() <= 3800)) {
+                    if ((MotorcycleData.getRPM() >= 3701) && (MotorcycleData.getRPM() <= 3800)) {
                         doc.getElementById("rpmNeedle20").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 3801) && (Data.getRPM() <= 3900)) {
+                    if ((MotorcycleData.getRPM() >= 3801) && (MotorcycleData.getRPM() <= 3900)) {
                         doc.getElementById("rpmNeedle21").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 3901) && (Data.getRPM() <= 4000)) {
+                    if ((MotorcycleData.getRPM() >= 3901) && (MotorcycleData.getRPM() <= 4000)) {
                         doc.getElementById("rpmNeedle22").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 4001) && (Data.getRPM() <= 4124)) {
+                    if ((MotorcycleData.getRPM() >= 4001) && (MotorcycleData.getRPM() <= 4124)) {
                         doc.getElementById("rpmNeedle23").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 4125) && (Data.getRPM() <= 4249)) {
+                    if ((MotorcycleData.getRPM() >= 4125) && (MotorcycleData.getRPM() <= 4249)) {
                         doc.getElementById("rpmNeedle24").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 4250) && (Data.getRPM() <= 4374)) {
+                    if ((MotorcycleData.getRPM() >= 4250) && (MotorcycleData.getRPM() <= 4374)) {
                         doc.getElementById("rpmNeedle25").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 4375) && (Data.getRPM() <= 4499)) {
+                    if ((MotorcycleData.getRPM() >= 4375) && (MotorcycleData.getRPM() <= 4499)) {
                         doc.getElementById("rpmNeedle26").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 4500) && (Data.getRPM() <= 4674)) {
+                    if ((MotorcycleData.getRPM() >= 4500) && (MotorcycleData.getRPM() <= 4674)) {
                         doc.getElementById("rpmNeedle27").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 4750) && (Data.getRPM() <= 4874)) {
+                    if ((MotorcycleData.getRPM() >= 4750) && (MotorcycleData.getRPM() <= 4874)) {
                         doc.getElementById("rpmNeedle28").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 4875) && (Data.getRPM() <= 4999)) {
+                    if ((MotorcycleData.getRPM() >= 4875) && (MotorcycleData.getRPM() <= 4999)) {
                         doc.getElementById("rpmNeedle29").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 5000) && (Data.getRPM() <= 5124)) {
+                    if ((MotorcycleData.getRPM() >= 5000) && (MotorcycleData.getRPM() <= 5124)) {
                         doc.getElementById("rpmNeedle30").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 5125) && (Data.getRPM() <= 5249)) {
+                    if ((MotorcycleData.getRPM() >= 5125) && (MotorcycleData.getRPM() <= 5249)) {
                         doc.getElementById("rpmNeedle31").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 5250) && (Data.getRPM() <= 5374)) {
+                    if ((MotorcycleData.getRPM() >= 5250) && (MotorcycleData.getRPM() <= 5374)) {
                         doc.getElementById("rpmNeedle32").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 5375) && (Data.getRPM() <= 5499)) {
+                    if ((MotorcycleData.getRPM() >= 5375) && (MotorcycleData.getRPM() <= 5499)) {
                         doc.getElementById("rpmNeedle33").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 5500) && (Data.getRPM() <= 5624)) {
+                    if ((MotorcycleData.getRPM() >= 5500) && (MotorcycleData.getRPM() <= 5624)) {
                         doc.getElementById("rpmNeedle34").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 5625) && (Data.getRPM() <= 5749)) {
+                    if ((MotorcycleData.getRPM() >= 5625) && (MotorcycleData.getRPM() <= 5749)) {
                         doc.getElementById("rpmNeedle35").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 5750) && (Data.getRPM() <= 5874)) {
+                    if ((MotorcycleData.getRPM() >= 5750) && (MotorcycleData.getRPM() <= 5874)) {
                         doc.getElementById("rpmNeedle36").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 5875) && (Data.getRPM() <= 6000)) {
+                    if ((MotorcycleData.getRPM() >= 5875) && (MotorcycleData.getRPM() <= 6000)) {
                         doc.getElementById("rpmNeedle37").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 6001) && (Data.getRPM() <= 6142)) {
+                    if ((MotorcycleData.getRPM() >= 6001) && (MotorcycleData.getRPM() <= 6142)) {
                         doc.getElementById("rpmNeedle38").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 6143) && (Data.getRPM() <= 6285)) {
+                    if ((MotorcycleData.getRPM() >= 6143) && (MotorcycleData.getRPM() <= 6285)) {
                         doc.getElementById("rpmNeedle39").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 6286) && (Data.getRPM() <= 6428)) {
+                    if ((MotorcycleData.getRPM() >= 6286) && (MotorcycleData.getRPM() <= 6428)) {
                         doc.getElementById("rpmNeedle40").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 6429) && (Data.getRPM() <= 6571)) {
+                    if ((MotorcycleData.getRPM() >= 6429) && (MotorcycleData.getRPM() <= 6571)) {
                         doc.getElementById("rpmNeedle41").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 6572) && (Data.getRPM() <= 6714)) {
+                    if ((MotorcycleData.getRPM() >= 6572) && (MotorcycleData.getRPM() <= 6714)) {
                         doc.getElementById("rpmNeedle42").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 6715) && (Data.getRPM() <= 6857)) {
+                    if ((MotorcycleData.getRPM() >= 6715) && (MotorcycleData.getRPM() <= 6857)) {
                         doc.getElementById("rpmNeedle43").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 6858) && (Data.getRPM() <= 6999)) {
+                    if ((MotorcycleData.getRPM() >= 6858) && (MotorcycleData.getRPM() <= 6999)) {
                         doc.getElementById("rpmNeedle44").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 7000) && (Data.getRPM() <= 7142)) {
+                    if ((MotorcycleData.getRPM() >= 7000) && (MotorcycleData.getRPM() <= 7142)) {
                         doc.getElementById("rpmNeedle45").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 7143) && (Data.getRPM() <= 7285)) {
+                    if ((MotorcycleData.getRPM() >= 7143) && (MotorcycleData.getRPM() <= 7285)) {
                         doc.getElementById("rpmNeedle46").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 7286) && (Data.getRPM() <= 7428)) {
+                    if ((MotorcycleData.getRPM() >= 7286) && (MotorcycleData.getRPM() <= 7428)) {
                         doc.getElementById("rpmNeedle47").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 7429) && (Data.getRPM() <= 7571)) {
+                    if ((MotorcycleData.getRPM() >= 7429) && (MotorcycleData.getRPM() <= 7571)) {
                         doc.getElementById("rpmNeedle48").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 7572) && (Data.getRPM() <= 7714)) {
+                    if ((MotorcycleData.getRPM() >= 7572) && (MotorcycleData.getRPM() <= 7714)) {
                         doc.getElementById("rpmNeedle49").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 7715) && (Data.getRPM() <= 7857)) {
+                    if ((MotorcycleData.getRPM() >= 7715) && (MotorcycleData.getRPM() <= 7857)) {
                         doc.getElementById("rpmNeedle50").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 7858) && (Data.getRPM() <= 7999)) {
+                    if ((MotorcycleData.getRPM() >= 7858) && (MotorcycleData.getRPM() <= 7999)) {
                         doc.getElementById("rpmNeedle51").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 8000) && (Data.getRPM() <= 8142)) {
+                    if ((MotorcycleData.getRPM() >= 8000) && (MotorcycleData.getRPM() <= 8142)) {
                         doc.getElementById("rpmNeedle52").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 8143) && (Data.getRPM() <= 8285)) {
+                    if ((MotorcycleData.getRPM() >= 8143) && (MotorcycleData.getRPM() <= 8285)) {
                         doc.getElementById("rpmNeedle53").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 8286) && (Data.getRPM() <= 8428)) {
+                    if ((MotorcycleData.getRPM() >= 8286) && (MotorcycleData.getRPM() <= 8428)) {
                         doc.getElementById("rpmNeedle54").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 8429) && (Data.getRPM() <= 8571)) {
+                    if ((MotorcycleData.getRPM() >= 8429) && (MotorcycleData.getRPM() <= 8571)) {
                         doc.getElementById("rpmNeedle55").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 8572) && (Data.getRPM() <= 8714)) {
+                    if ((MotorcycleData.getRPM() >= 8572) && (MotorcycleData.getRPM() <= 8714)) {
                         doc.getElementById("rpmNeedle56").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 8715) && (Data.getRPM() <= 8857)) {
+                    if ((MotorcycleData.getRPM() >= 8715) && (MotorcycleData.getRPM() <= 8857)) {
                         doc.getElementById("rpmNeedle57").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 8858) && (Data.getRPM() <= 8999)) {
+                    if ((MotorcycleData.getRPM() >= 8858) && (MotorcycleData.getRPM() <= 8999)) {
                         doc.getElementById("rpmNeedle58").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 9000) && (Data.getRPM() <= 9143)) {
+                    if ((MotorcycleData.getRPM() >= 9000) && (MotorcycleData.getRPM() <= 9143)) {
                         doc.getElementById("rpmNeedle59").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 9144) && (Data.getRPM() <= 9287)) {
+                    if ((MotorcycleData.getRPM() >= 9144) && (MotorcycleData.getRPM() <= 9287)) {
                         doc.getElementById("rpmNeedle60").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 9288) && (Data.getRPM() <= 9431)) {
+                    if ((MotorcycleData.getRPM() >= 9288) && (MotorcycleData.getRPM() <= 9431)) {
                         doc.getElementById("rpmNeedle61").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 9432) && (Data.getRPM() <= 9575)) {
+                    if ((MotorcycleData.getRPM() >= 9432) && (MotorcycleData.getRPM() <= 9575)) {
                         doc.getElementById("rpmNeedle62").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 9576) && (Data.getRPM() <= 9719)) {
+                    if ((MotorcycleData.getRPM() >= 9576) && (MotorcycleData.getRPM() <= 9719)) {
                         doc.getElementById("rpmNeedle63").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 9720) && (Data.getRPM() <= 9863)) {
+                    if ((MotorcycleData.getRPM() >= 9720) && (MotorcycleData.getRPM() <= 9863)) {
                         doc.getElementById("rpmNeedle64").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 9864) && (Data.getRPM() <= 9999)) {
+                    if ((MotorcycleData.getRPM() >= 9864) && (MotorcycleData.getRPM() <= 9999)) {
                         doc.getElementById("rpmNeedle65").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10000) {
+                    if (MotorcycleData.getRPM() >= 10000) {
                         doc.getElementById("rpmNeedle66").setAttribute("style", "display:inline");
                     }
                 } else if (s.twelveK) {
-                    if (Data.getRPM() >= 0) {
+                    if (MotorcycleData.getRPM() >= 0) {
                         doc.getElementById("rpmTick1").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 154) {
+                    if (MotorcycleData.getRPM() >= 154) {
                         doc.getElementById("rpmTick2").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 308) {
+                    if (MotorcycleData.getRPM() >= 308) {
                         doc.getElementById("rpmTick3").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 462) {
+                    if (MotorcycleData.getRPM() >= 462) {
                         doc.getElementById("rpmTick4").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 616) {
+                    if (MotorcycleData.getRPM() >= 616) {
                         doc.getElementById("rpmTick5").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 770) {
+                    if (MotorcycleData.getRPM() >= 770) {
                         doc.getElementById("rpmTick6").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 924) {
+                    if (MotorcycleData.getRPM() >= 924) {
                         doc.getElementById("rpmTick7").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 1078) {
+                    if (MotorcycleData.getRPM() >= 1078) {
                         doc.getElementById("rpmTick8").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 1232) {
+                    if (MotorcycleData.getRPM() >= 1232) {
                         doc.getElementById("rpmTick9").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 1386) {
+                    if (MotorcycleData.getRPM() >= 1386) {
                         doc.getElementById("rpmTick10").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 1540) {
+                    if (MotorcycleData.getRPM() >= 1540) {
                         doc.getElementById("rpmTick11").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 1694) {
+                    if (MotorcycleData.getRPM() >= 1694) {
                         doc.getElementById("rpmTick12").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 1848) {
+                    if (MotorcycleData.getRPM() >= 1848) {
                         doc.getElementById("rpmTick13").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2000) {
+                    if (MotorcycleData.getRPM() >= 2000) {
                         doc.getElementById("rpmTick14").setAttribute("style", "display:inline");
                     }
 
-                    if (Data.getRPM() >= 2167) {
+                    if (MotorcycleData.getRPM() >= 2167) {
                         doc.getElementById("rpmTick15").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2167) {
+                    if (MotorcycleData.getRPM() >= 2167) {
                         doc.getElementById("rpmTick16").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2334) {
+                    if (MotorcycleData.getRPM() >= 2334) {
                         doc.getElementById("rpmTick17").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2501) {
+                    if (MotorcycleData.getRPM() >= 2501) {
                         doc.getElementById("rpmTick18").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2668) {
+                    if (MotorcycleData.getRPM() >= 2668) {
                         doc.getElementById("rpmTick19").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2835) {
+                    if (MotorcycleData.getRPM() >= 2835) {
                         doc.getElementById("rpmTick20").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3002) {
+                    if (MotorcycleData.getRPM() >= 3002) {
                         doc.getElementById("rpmTick21").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3169) {
+                    if (MotorcycleData.getRPM() >= 3169) {
                         doc.getElementById("rpmTick22").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3503) {
+                    if (MotorcycleData.getRPM() >= 3503) {
                         doc.getElementById("rpmTick23").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3670) {
+                    if (MotorcycleData.getRPM() >= 3670) {
                         doc.getElementById("rpmTick24").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3837) {
+                    if (MotorcycleData.getRPM() >= 3837) {
                         doc.getElementById("rpmTick25").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4000) {
+                    if (MotorcycleData.getRPM() >= 4000) {
                         doc.getElementById("rpmTick26").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4154) {
+                    if (MotorcycleData.getRPM() >= 4154) {
                         doc.getElementById("rpmTick27").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4308) {
+                    if (MotorcycleData.getRPM() >= 4308) {
                         doc.getElementById("rpmTick28").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4462) {
+                    if (MotorcycleData.getRPM() >= 4462) {
                         doc.getElementById("rpmTick29").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4616) {
+                    if (MotorcycleData.getRPM() >= 4616) {
                         doc.getElementById("rpmTick30").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4770) {
+                    if (MotorcycleData.getRPM() >= 4770) {
                         doc.getElementById("rpmTick31").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4924) {
+                    if (MotorcycleData.getRPM() >= 4924) {
                         doc.getElementById("rpmTick32").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5078) {
+                    if (MotorcycleData.getRPM() >= 5078) {
                         doc.getElementById("rpmTick33").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5232) {
+                    if (MotorcycleData.getRPM() >= 5232) {
                         doc.getElementById("rpmTick34").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5386) {
+                    if (MotorcycleData.getRPM() >= 5386) {
                         doc.getElementById("rpmTick35").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5540) {
+                    if (MotorcycleData.getRPM() >= 5540) {
                         doc.getElementById("rpmTick36").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5694) {
+                    if (MotorcycleData.getRPM() >= 5694) {
                         doc.getElementById("rpmTick37").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5848) {
+                    if (MotorcycleData.getRPM() >= 5848) {
                         doc.getElementById("rpmTick38").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6000) {
+                    if (MotorcycleData.getRPM() >= 6000) {
                         doc.getElementById("rpmTick39").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6077) {
+                    if (MotorcycleData.getRPM() >= 6077) {
                         doc.getElementById("rpmTick40").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6154) {
+                    if (MotorcycleData.getRPM() >= 6154) {
                         doc.getElementById("rpmTick41").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6231) {
+                    if (MotorcycleData.getRPM() >= 6231) {
                         doc.getElementById("rpmTick42").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6308) {
+                    if (MotorcycleData.getRPM() >= 6308) {
                         doc.getElementById("rpmTick43").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6385) {
+                    if (MotorcycleData.getRPM() >= 6385) {
                         doc.getElementById("rpmTick44").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6462) {
+                    if (MotorcycleData.getRPM() >= 6462) {
                         doc.getElementById("rpmTick45").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6539) {
+                    if (MotorcycleData.getRPM() >= 6539) {
                         doc.getElementById("rpmTick46").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6616) {
+                    if (MotorcycleData.getRPM() >= 6616) {
                         doc.getElementById("rpmTick47").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6693) {
+                    if (MotorcycleData.getRPM() >= 6693) {
                         doc.getElementById("rpmTick48").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6770) {
+                    if (MotorcycleData.getRPM() >= 6770) {
                         doc.getElementById("rpmTick49").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6847) {
+                    if (MotorcycleData.getRPM() >= 6847) {
                         doc.getElementById("rpmTick50").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6924) {
+                    if (MotorcycleData.getRPM() >= 6924) {
                         doc.getElementById("rpmTick51").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7000) {
+                    if (MotorcycleData.getRPM() >= 7000) {
                         doc.getElementById("rpmTick52").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7083) {
+                    if (MotorcycleData.getRPM() >= 7083) {
                         doc.getElementById("rpmTick53").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7166) {
+                    if (MotorcycleData.getRPM() >= 7166) {
                         doc.getElementById("rpmTick54").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7249) {
+                    if (MotorcycleData.getRPM() >= 7249) {
                         doc.getElementById("rpmTick55").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7332) {
+                    if (MotorcycleData.getRPM() >= 7332) {
                         doc.getElementById("rpmTick56").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7415) {
+                    if (MotorcycleData.getRPM() >= 7415) {
                         doc.getElementById("rpmTick57").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7498) {
+                    if (MotorcycleData.getRPM() >= 7498) {
                         doc.getElementById("rpmTick58").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7581) {
+                    if (MotorcycleData.getRPM() >= 7581) {
                         doc.getElementById("rpmTick59").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7664) {
+                    if (MotorcycleData.getRPM() >= 7664) {
                         doc.getElementById("rpmTick60").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7747) {
+                    if (MotorcycleData.getRPM() >= 7747) {
                         doc.getElementById("rpmTick61").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7830) {
+                    if (MotorcycleData.getRPM() >= 7830) {
                         doc.getElementById("rpmTick62").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7913) {
+                    if (MotorcycleData.getRPM() >= 7913) {
                         doc.getElementById("rpmTick63").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8000) {
+                    if (MotorcycleData.getRPM() >= 8000) {
                         doc.getElementById("rpmTick64").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8077) {
+                    if (MotorcycleData.getRPM() >= 8077) {
                         doc.getElementById("rpmTick65").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8154) {
+                    if (MotorcycleData.getRPM() >= 8154) {
                         doc.getElementById("rpmTick66").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8231) {
+                    if (MotorcycleData.getRPM() >= 8231) {
                         doc.getElementById("rpmTick67").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8308) {
+                    if (MotorcycleData.getRPM() >= 8308) {
                         doc.getElementById("rpmTick68").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8385) {
+                    if (MotorcycleData.getRPM() >= 8385) {
                         doc.getElementById("rpmTick69").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8462) {
+                    if (MotorcycleData.getRPM() >= 8462) {
                         doc.getElementById("rpmTick70").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8539) {
+                    if (MotorcycleData.getRPM() >= 8539) {
                         doc.getElementById("rpmTick71").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8616) {
+                    if (MotorcycleData.getRPM() >= 8616) {
                         doc.getElementById("rpmTick72").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8693) {
+                    if (MotorcycleData.getRPM() >= 8693) {
                         doc.getElementById("rpmTick73").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8770) {
+                    if (MotorcycleData.getRPM() >= 8770) {
                         doc.getElementById("rpmTick74").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8847) {
+                    if (MotorcycleData.getRPM() >= 8847) {
                         doc.getElementById("rpmTick75").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8924) {
+                    if (MotorcycleData.getRPM() >= 8924) {
                         doc.getElementById("rpmTick76").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9000) {
+                    if (MotorcycleData.getRPM() >= 9000) {
                         doc.getElementById("rpmTick77").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9083) {
+                    if (MotorcycleData.getRPM() >= 9083) {
                         doc.getElementById("rpmTick78").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9166) {
+                    if (MotorcycleData.getRPM() >= 9166) {
                         doc.getElementById("rpmTick79").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9249) {
+                    if (MotorcycleData.getRPM() >= 9249) {
                         doc.getElementById("rpmTick80").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9332) {
+                    if (MotorcycleData.getRPM() >= 9332) {
                         doc.getElementById("rpmTick81").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9415) {
+                    if (MotorcycleData.getRPM() >= 9415) {
                         doc.getElementById("rpmTick82").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9498) {
+                    if (MotorcycleData.getRPM() >= 9498) {
                         doc.getElementById("rpmTick83").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9581) {
+                    if (MotorcycleData.getRPM() >= 9581) {
                         doc.getElementById("rpmTick84").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9664) {
+                    if (MotorcycleData.getRPM() >= 9664) {
                         doc.getElementById("rpmTick85").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9747) {
+                    if (MotorcycleData.getRPM() >= 9747) {
                         doc.getElementById("rpmTick86").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9830) {
+                    if (MotorcycleData.getRPM() >= 9830) {
                         doc.getElementById("rpmTick87").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9913) {
+                    if (MotorcycleData.getRPM() >= 9913) {
                         doc.getElementById("rpmTick88").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10000) {
+                    if (MotorcycleData.getRPM() >= 10000) {
                         doc.getElementById("rpmTick89").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10083) {
+                    if (MotorcycleData.getRPM() >= 10083) {
                         doc.getElementById("rpmTick90").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10166) {
+                    if (MotorcycleData.getRPM() >= 10166) {
                         doc.getElementById("rpmTick91").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10249) {
+                    if (MotorcycleData.getRPM() >= 10249) {
                         doc.getElementById("rpmTick92").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10332) {
+                    if (MotorcycleData.getRPM() >= 10332) {
                         doc.getElementById("rpmTick93").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10415) {
+                    if (MotorcycleData.getRPM() >= 10415) {
                         doc.getElementById("rpmTick94").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10498) {
+                    if (MotorcycleData.getRPM() >= 10498) {
                         doc.getElementById("rpmTick95").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10581) {
+                    if (MotorcycleData.getRPM() >= 10581) {
                         doc.getElementById("rpmTick96").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10664) {
+                    if (MotorcycleData.getRPM() >= 10664) {
                         doc.getElementById("rpmTick97").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10747) {
+                    if (MotorcycleData.getRPM() >= 10747) {
                         doc.getElementById("rpmTick98").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10830) {
+                    if (MotorcycleData.getRPM() >= 10830) {
                         doc.getElementById("rpmTick99").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10913) {
+                    if (MotorcycleData.getRPM() >= 10913) {
                         doc.getElementById("rpmTick100").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 11000) {
+                    if (MotorcycleData.getRPM() >= 11000) {
                         doc.getElementById("rpmTick101").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 11066) {
+                    if (MotorcycleData.getRPM() >= 11066) {
                         doc.getElementById("rpmTick102").setAttribute("style", "display:inline");
                     }
                     // Needle
-                    if ((Data.getRPM() >= 0) && (Data.getRPM() <= 249)) {
+                    if ((MotorcycleData.getRPM() >= 0) && (MotorcycleData.getRPM() <= 249)) {
                         doc.getElementById("rpmNeedle0").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 250) && (Data.getRPM() <= 499)) {
+                    if ((MotorcycleData.getRPM() >= 250) && (MotorcycleData.getRPM() <= 499)) {
                         doc.getElementById("rpmNeedle1").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 500) && (Data.getRPM() <= 749)) {
+                    if ((MotorcycleData.getRPM() >= 500) && (MotorcycleData.getRPM() <= 749)) {
                         doc.getElementById("rpmNeedle2").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 750) && (Data.getRPM() <= 999)) {
+                    if ((MotorcycleData.getRPM() >= 750) && (MotorcycleData.getRPM() <= 999)) {
                         doc.getElementById("rpmNeedle3").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 1000) && (Data.getRPM() <= 1249)) {
+                    if ((MotorcycleData.getRPM() >= 1000) && (MotorcycleData.getRPM() <= 1249)) {
                         doc.getElementById("rpmNeedle4").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 1250) && (Data.getRPM() <= 1499)) {
+                    if ((MotorcycleData.getRPM() >= 1250) && (MotorcycleData.getRPM() <= 1499)) {
                         doc.getElementById("rpmNeedle5").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 1500) && (Data.getRPM() <= 1749)) {
+                    if ((MotorcycleData.getRPM() >= 1500) && (MotorcycleData.getRPM() <= 1749)) {
                         doc.getElementById("rpmNeedle6").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 1750) && (Data.getRPM() <= 1999)) {
+                    if ((MotorcycleData.getRPM() >= 1750) && (MotorcycleData.getRPM() <= 1999)) {
                         doc.getElementById("rpmNeedle7").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 2000) && (Data.getRPM() <= 2286)) {
+                    if ((MotorcycleData.getRPM() >= 2000) && (MotorcycleData.getRPM() <= 2286)) {
                         doc.getElementById("rpmNeedle8").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 2287) && (Data.getRPM() <= 2573)) {
+                    if ((MotorcycleData.getRPM() >= 2287) && (MotorcycleData.getRPM() <= 2573)) {
                         doc.getElementById("rpmNeedle9").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 2574) && (Data.getRPM() <= 2860)) {
+                    if ((MotorcycleData.getRPM() >= 2574) && (MotorcycleData.getRPM() <= 2860)) {
                         doc.getElementById("rpmNeedle10").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 2861) && (Data.getRPM() <= 3147)) {
+                    if ((MotorcycleData.getRPM() >= 2861) && (MotorcycleData.getRPM() <= 3147)) {
                         doc.getElementById("rpmNeedle11").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 3148) && (Data.getRPM() <= 3434)) {
+                    if ((MotorcycleData.getRPM() >= 3148) && (MotorcycleData.getRPM() <= 3434)) {
                         doc.getElementById("rpmNeedle12").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 3435) && (Data.getRPM() <= 3721)) {
+                    if ((MotorcycleData.getRPM() >= 3435) && (MotorcycleData.getRPM() <= 3721)) {
                         doc.getElementById("rpmNeedle13").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 3722) && (Data.getRPM() <= 3999)) {
+                    if ((MotorcycleData.getRPM() >= 3722) && (MotorcycleData.getRPM() <= 3999)) {
                         doc.getElementById("rpmNeedle14").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 4000) && (Data.getRPM() <= 4249)) {
+                    if ((MotorcycleData.getRPM() >= 4000) && (MotorcycleData.getRPM() <= 4249)) {
                         doc.getElementById("rpmNeedle15").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 4250) && (Data.getRPM() <= 4499)) {
+                    if ((MotorcycleData.getRPM() >= 4250) && (MotorcycleData.getRPM() <= 4499)) {
                         doc.getElementById("rpmNeedle16").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 4500) && (Data.getRPM() <= 4749)) {
+                    if ((MotorcycleData.getRPM() >= 4500) && (MotorcycleData.getRPM() <= 4749)) {
                         doc.getElementById("rpmNeedle17").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 4750) && (Data.getRPM() <= 4999)) {
+                    if ((MotorcycleData.getRPM() >= 4750) && (MotorcycleData.getRPM() <= 4999)) {
                         doc.getElementById("rpmNeedle18").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 5000) && (Data.getRPM() <= 5249)) {
+                    if ((MotorcycleData.getRPM() >= 5000) && (MotorcycleData.getRPM() <= 5249)) {
                         doc.getElementById("rpmNeedle19").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 5250) && (Data.getRPM() <= 5499)) {
+                    if ((MotorcycleData.getRPM() >= 5250) && (MotorcycleData.getRPM() <= 5499)) {
                         doc.getElementById("rpmNeedle20").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 5500) && (Data.getRPM() <= 5749)) {
+                    if ((MotorcycleData.getRPM() >= 5500) && (MotorcycleData.getRPM() <= 5749)) {
                         doc.getElementById("rpmNeedle21").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 5750) && (Data.getRPM() <= 6000)) {
+                    if ((MotorcycleData.getRPM() >= 5750) && (MotorcycleData.getRPM() <= 6000)) {
                         doc.getElementById("rpmNeedle22").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 6001) && (Data.getRPM() <= 6124)) {
+                    if ((MotorcycleData.getRPM() >= 6001) && (MotorcycleData.getRPM() <= 6124)) {
                         doc.getElementById("rpmNeedle23").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 6125) && (Data.getRPM() <= 6249)) {
+                    if ((MotorcycleData.getRPM() >= 6125) && (MotorcycleData.getRPM() <= 6249)) {
                         doc.getElementById("rpmNeedle24").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 6250) && (Data.getRPM() <= 6374)) {
+                    if ((MotorcycleData.getRPM() >= 6250) && (MotorcycleData.getRPM() <= 6374)) {
                         doc.getElementById("rpmNeedle25").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 6375) && (Data.getRPM() <= 6499)) {
+                    if ((MotorcycleData.getRPM() >= 6375) && (MotorcycleData.getRPM() <= 6499)) {
                         doc.getElementById("rpmNeedle26").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 6500) && (Data.getRPM() <= 6674)) {
+                    if ((MotorcycleData.getRPM() >= 6500) && (MotorcycleData.getRPM() <= 6674)) {
                         doc.getElementById("rpmNeedle27").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 6750) && (Data.getRPM() <= 6874)) {
+                    if ((MotorcycleData.getRPM() >= 6750) && (MotorcycleData.getRPM() <= 6874)) {
                         doc.getElementById("rpmNeedle28").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 6875) && (Data.getRPM() <= 6999)) {
+                    if ((MotorcycleData.getRPM() >= 6875) && (MotorcycleData.getRPM() <= 6999)) {
                         doc.getElementById("rpmNeedle29").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 7000) && (Data.getRPM() <= 7124)) {
+                    if ((MotorcycleData.getRPM() >= 7000) && (MotorcycleData.getRPM() <= 7124)) {
                         doc.getElementById("rpmNeedle30").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 7125) && (Data.getRPM() <= 7249)) {
+                    if ((MotorcycleData.getRPM() >= 7125) && (MotorcycleData.getRPM() <= 7249)) {
                         doc.getElementById("rpmNeedle31").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 7250) && (Data.getRPM() <= 7374)) {
+                    if ((MotorcycleData.getRPM() >= 7250) && (MotorcycleData.getRPM() <= 7374)) {
                         doc.getElementById("rpmNeedle32").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 7375) && (Data.getRPM() <= 7499)) {
+                    if ((MotorcycleData.getRPM() >= 7375) && (MotorcycleData.getRPM() <= 7499)) {
                         doc.getElementById("rpmNeedle33").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 7500) && (Data.getRPM() <= 7624)) {
+                    if ((MotorcycleData.getRPM() >= 7500) && (MotorcycleData.getRPM() <= 7624)) {
                         doc.getElementById("rpmNeedle34").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 7625) && (Data.getRPM() <= 7749)) {
+                    if ((MotorcycleData.getRPM() >= 7625) && (MotorcycleData.getRPM() <= 7749)) {
                         doc.getElementById("rpmNeedle35").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 7750) && (Data.getRPM() <= 7874)) {
+                    if ((MotorcycleData.getRPM() >= 7750) && (MotorcycleData.getRPM() <= 7874)) {
                         doc.getElementById("rpmNeedle36").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 7875) && (Data.getRPM() <= 8000)) {
+                    if ((MotorcycleData.getRPM() >= 7875) && (MotorcycleData.getRPM() <= 8000)) {
                         doc.getElementById("rpmNeedle37").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 8001) && (Data.getRPM() <= 6142)) {
+                    if ((MotorcycleData.getRPM() >= 8001) && (MotorcycleData.getRPM() <= 6142)) {
                         doc.getElementById("rpmNeedle38").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 6143) && (Data.getRPM() <= 6285)) {
+                    if ((MotorcycleData.getRPM() >= 6143) && (MotorcycleData.getRPM() <= 6285)) {
                         doc.getElementById("rpmNeedle39").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 6286) && (Data.getRPM() <= 6428)) {
+                    if ((MotorcycleData.getRPM() >= 6286) && (MotorcycleData.getRPM() <= 6428)) {
                         doc.getElementById("rpmNeedle40").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 6429) && (Data.getRPM() <= 6571)) {
+                    if ((MotorcycleData.getRPM() >= 6429) && (MotorcycleData.getRPM() <= 6571)) {
                         doc.getElementById("rpmNeedle41").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 6572) && (Data.getRPM() <= 6714)) {
+                    if ((MotorcycleData.getRPM() >= 6572) && (MotorcycleData.getRPM() <= 6714)) {
                         doc.getElementById("rpmNeedle42").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 6715) && (Data.getRPM() <= 6857)) {
+                    if ((MotorcycleData.getRPM() >= 6715) && (MotorcycleData.getRPM() <= 6857)) {
                         doc.getElementById("rpmNeedle43").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 6858) && (Data.getRPM() <= 6999)) {
+                    if ((MotorcycleData.getRPM() >= 6858) && (MotorcycleData.getRPM() <= 6999)) {
                         doc.getElementById("rpmNeedle44").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 9000) && (Data.getRPM() <= 9142)) {
+                    if ((MotorcycleData.getRPM() >= 9000) && (MotorcycleData.getRPM() <= 9142)) {
                         doc.getElementById("rpmNeedle45").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 9143) && (Data.getRPM() <= 9285)) {
+                    if ((MotorcycleData.getRPM() >= 9143) && (MotorcycleData.getRPM() <= 9285)) {
                         doc.getElementById("rpmNeedle46").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 9286) && (Data.getRPM() <= 9428)) {
+                    if ((MotorcycleData.getRPM() >= 9286) && (MotorcycleData.getRPM() <= 9428)) {
                         doc.getElementById("rpmNeedle47").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 9429) && (Data.getRPM() <= 9571)) {
+                    if ((MotorcycleData.getRPM() >= 9429) && (MotorcycleData.getRPM() <= 9571)) {
                         doc.getElementById("rpmNeedle48").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 9572) && (Data.getRPM() <= 9714)) {
+                    if ((MotorcycleData.getRPM() >= 9572) && (MotorcycleData.getRPM() <= 9714)) {
                         doc.getElementById("rpmNeedle49").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 9715) && (Data.getRPM() <= 9857)) {
+                    if ((MotorcycleData.getRPM() >= 9715) && (MotorcycleData.getRPM() <= 9857)) {
                         doc.getElementById("rpmNeedle50").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 9858) && (Data.getRPM() <= 9999)) {
+                    if ((MotorcycleData.getRPM() >= 9858) && (MotorcycleData.getRPM() <= 9999)) {
                         doc.getElementById("rpmNeedle51").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 10000) && (Data.getRPM() <= 10142)) {
+                    if ((MotorcycleData.getRPM() >= 10000) && (MotorcycleData.getRPM() <= 10142)) {
                         doc.getElementById("rpmNeedle52").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 10143) && (Data.getRPM() <= 10285)) {
+                    if ((MotorcycleData.getRPM() >= 10143) && (MotorcycleData.getRPM() <= 10285)) {
                         doc.getElementById("rpmNeedle53").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 10286) && (Data.getRPM() <= 10428)) {
+                    if ((MotorcycleData.getRPM() >= 10286) && (MotorcycleData.getRPM() <= 10428)) {
                         doc.getElementById("rpmNeedle54").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 10429) && (Data.getRPM() <= 10571)) {
+                    if ((MotorcycleData.getRPM() >= 10429) && (MotorcycleData.getRPM() <= 10571)) {
                         doc.getElementById("rpmNeedle55").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 10572) && (Data.getRPM() <= 10714)) {
+                    if ((MotorcycleData.getRPM() >= 10572) && (MotorcycleData.getRPM() <= 10714)) {
                         doc.getElementById("rpmNeedle56").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 10715) && (Data.getRPM() <= 10857)) {
+                    if ((MotorcycleData.getRPM() >= 10715) && (MotorcycleData.getRPM() <= 10857)) {
                         doc.getElementById("rpmNeedle57").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 10858) && (Data.getRPM() <= 10999)) {
+                    if ((MotorcycleData.getRPM() >= 10858) && (MotorcycleData.getRPM() <= 10999)) {
                         doc.getElementById("rpmNeedle58").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 11000) && (Data.getRPM() <= 11143)) {
+                    if ((MotorcycleData.getRPM() >= 11000) && (MotorcycleData.getRPM() <= 11143)) {
                         doc.getElementById("rpmNeedle59").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 11144) && (Data.getRPM() <= 11287)) {
+                    if ((MotorcycleData.getRPM() >= 11144) && (MotorcycleData.getRPM() <= 11287)) {
                         doc.getElementById("rpmNeedle60").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 11288) && (Data.getRPM() <= 11431)) {
+                    if ((MotorcycleData.getRPM() >= 11288) && (MotorcycleData.getRPM() <= 11431)) {
                         doc.getElementById("rpmNeedle61").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 11432) && (Data.getRPM() <= 11575)) {
+                    if ((MotorcycleData.getRPM() >= 11432) && (MotorcycleData.getRPM() <= 11575)) {
                         doc.getElementById("rpmNeedle62").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 11576) && (Data.getRPM() <= 11719)) {
+                    if ((MotorcycleData.getRPM() >= 11576) && (MotorcycleData.getRPM() <= 11719)) {
                         doc.getElementById("rpmNeedle63").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 11720) && (Data.getRPM() <= 11863)) {
+                    if ((MotorcycleData.getRPM() >= 11720) && (MotorcycleData.getRPM() <= 11863)) {
                         doc.getElementById("rpmNeedle64").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 11864) && (Data.getRPM() <= 11999)) {
+                    if ((MotorcycleData.getRPM() >= 11864) && (MotorcycleData.getRPM() <= 11999)) {
                         doc.getElementById("rpmNeedle65").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 12000) {
+                    if (MotorcycleData.getRPM() >= 12000) {
                         doc.getElementById("rpmNeedle66").setAttribute("style", "display:inline");
                     }
                 } else {
-                    if (Data.getRPM() >= 0) {
+                    if (MotorcycleData.getRPM() >= 0) {
                         doc.getElementById("rpmTick1").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 154) {
+                    if (MotorcycleData.getRPM() >= 154) {
                         doc.getElementById("rpmTick2").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 308) {
+                    if (MotorcycleData.getRPM() >= 308) {
                         doc.getElementById("rpmTick3").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 462) {
+                    if (MotorcycleData.getRPM() >= 462) {
                         doc.getElementById("rpmTick4").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 616) {
+                    if (MotorcycleData.getRPM() >= 616) {
                         doc.getElementById("rpmTick5").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 770) {
+                    if (MotorcycleData.getRPM() >= 770) {
                         doc.getElementById("rpmTick6").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 924) {
+                    if (MotorcycleData.getRPM() >= 924) {
                         doc.getElementById("rpmTick7").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 1078) {
+                    if (MotorcycleData.getRPM() >= 1078) {
                         doc.getElementById("rpmTick8").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 1232) {
+                    if (MotorcycleData.getRPM() >= 1232) {
                         doc.getElementById("rpmTick9").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 1386) {
+                    if (MotorcycleData.getRPM() >= 1386) {
                         doc.getElementById("rpmTick10").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 1540) {
+                    if (MotorcycleData.getRPM() >= 1540) {
                         doc.getElementById("rpmTick11").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 1694) {
+                    if (MotorcycleData.getRPM() >= 1694) {
                         doc.getElementById("rpmTick12").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 1848) {
+                    if (MotorcycleData.getRPM() >= 1848) {
                         doc.getElementById("rpmTick13").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2000) {
+                    if (MotorcycleData.getRPM() >= 2000) {
                         doc.getElementById("rpmTick14").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2167) {
+                    if (MotorcycleData.getRPM() >= 2167) {
                         doc.getElementById("rpmTick15").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2334) {
+                    if (MotorcycleData.getRPM() >= 2334) {
                         doc.getElementById("rpmTick16").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2501) {
+                    if (MotorcycleData.getRPM() >= 2501) {
                         doc.getElementById("rpmTick17").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2668) {
+                    if (MotorcycleData.getRPM() >= 2668) {
                         doc.getElementById("rpmTick18").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 2835) {
+                    if (MotorcycleData.getRPM() >= 2835) {
                         doc.getElementById("rpmTick19").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3002) {
+                    if (MotorcycleData.getRPM() >= 3002) {
                         doc.getElementById("rpmTick20").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3169) {
+                    if (MotorcycleData.getRPM() >= 3169) {
                         doc.getElementById("rpmTick21").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3336) {
+                    if (MotorcycleData.getRPM() >= 3336) {
                         doc.getElementById("rpmTick22").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3503) {
+                    if (MotorcycleData.getRPM() >= 3503) {
                         doc.getElementById("rpmTick23").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3670) {
+                    if (MotorcycleData.getRPM() >= 3670) {
                         doc.getElementById("rpmTick24").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 3837) {
+                    if (MotorcycleData.getRPM() >= 3837) {
                         doc.getElementById("rpmTick25").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4000) {
+                    if (MotorcycleData.getRPM() >= 4000) {
                         doc.getElementById("rpmTick26").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4308) {
+                    if (MotorcycleData.getRPM() >= 4308) {
                         doc.getElementById("rpmTick27").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4616) {
+                    if (MotorcycleData.getRPM() >= 4616) {
                         doc.getElementById("rpmTick28").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 4924) {
+                    if (MotorcycleData.getRPM() >= 4924) {
                         doc.getElementById("rpmTick29").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5232) {
+                    if (MotorcycleData.getRPM() >= 5232) {
                         doc.getElementById("rpmTick30").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5540) {
+                    if (MotorcycleData.getRPM() >= 5540) {
                         doc.getElementById("rpmTick31").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 5848) {
+                    if (MotorcycleData.getRPM() >= 5848) {
                         doc.getElementById("rpmTick32").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6156) {
+                    if (MotorcycleData.getRPM() >= 6156) {
                         doc.getElementById("rpmTick33").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6464) {
+                    if (MotorcycleData.getRPM() >= 6464) {
                         doc.getElementById("rpmTick34").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 6772) {
+                    if (MotorcycleData.getRPM() >= 6772) {
                         doc.getElementById("rpmTick35").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7080) {
+                    if (MotorcycleData.getRPM() >= 7080) {
                         doc.getElementById("rpmTick36").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7388) {
+                    if (MotorcycleData.getRPM() >= 7388) {
                         doc.getElementById("rpmTick37").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 7696) {
+                    if (MotorcycleData.getRPM() >= 7696) {
                         doc.getElementById("rpmTick38").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8000) {
+                    if (MotorcycleData.getRPM() >= 8000) {
                         doc.getElementById("rpmTick39").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8077) {
+                    if (MotorcycleData.getRPM() >= 8077) {
                         doc.getElementById("rpmTick40").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8154) {
+                    if (MotorcycleData.getRPM() >= 8154) {
                         doc.getElementById("rpmTick41").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8231) {
+                    if (MotorcycleData.getRPM() >= 8231) {
                         doc.getElementById("rpmTick42").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8308) {
+                    if (MotorcycleData.getRPM() >= 8308) {
                         doc.getElementById("rpmTick43").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8385) {
+                    if (MotorcycleData.getRPM() >= 8385) {
                         doc.getElementById("rpmTick44").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8462) {
+                    if (MotorcycleData.getRPM() >= 8462) {
                         doc.getElementById("rpmTick45").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8539) {
+                    if (MotorcycleData.getRPM() >= 8539) {
                         doc.getElementById("rpmTick46").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8616) {
+                    if (MotorcycleData.getRPM() >= 8616) {
                         doc.getElementById("rpmTick47").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8693) {
+                    if (MotorcycleData.getRPM() >= 8693) {
                         doc.getElementById("rpmTick48").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8770) {
+                    if (MotorcycleData.getRPM() >= 8770) {
                         doc.getElementById("rpmTick49").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8847) {
+                    if (MotorcycleData.getRPM() >= 8847) {
                         doc.getElementById("rpmTick50").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 8924) {
+                    if (MotorcycleData.getRPM() >= 8924) {
                         doc.getElementById("rpmTick51").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9000) {
+                    if (MotorcycleData.getRPM() >= 9000) {
                         doc.getElementById("rpmTick52").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9083) {
+                    if (MotorcycleData.getRPM() >= 9083) {
                         doc.getElementById("rpmTick53").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9166) {
+                    if (MotorcycleData.getRPM() >= 9166) {
                         doc.getElementById("rpmTick54").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9249) {
+                    if (MotorcycleData.getRPM() >= 9249) {
                         doc.getElementById("rpmTick55").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9332) {
+                    if (MotorcycleData.getRPM() >= 9332) {
                         doc.getElementById("rpmTick56").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9415) {
+                    if (MotorcycleData.getRPM() >= 9415) {
                         doc.getElementById("rpmTick57").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9498) {
+                    if (MotorcycleData.getRPM() >= 9498) {
                         doc.getElementById("rpmTick58").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9581) {
+                    if (MotorcycleData.getRPM() >= 9581) {
                         doc.getElementById("rpmTick59").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9664) {
+                    if (MotorcycleData.getRPM() >= 9664) {
                         doc.getElementById("rpmTick60").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9747) {
+                    if (MotorcycleData.getRPM() >= 9747) {
                         doc.getElementById("rpmTick61").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9830) {
+                    if (MotorcycleData.getRPM() >= 9830) {
                         doc.getElementById("rpmTick62").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 9913) {
+                    if (MotorcycleData.getRPM() >= 9913) {
                         doc.getElementById("rpmTick63").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10000) {
+                    if (MotorcycleData.getRPM() >= 10000) {
                         doc.getElementById("rpmTick64").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10077) {
+                    if (MotorcycleData.getRPM() >= 10077) {
                         doc.getElementById("rpmTick65").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10154) {
+                    if (MotorcycleData.getRPM() >= 10154) {
                         doc.getElementById("rpmTick66").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10231) {
+                    if (MotorcycleData.getRPM() >= 10231) {
                         doc.getElementById("rpmTick67").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10308) {
+                    if (MotorcycleData.getRPM() >= 10308) {
                         doc.getElementById("rpmTick68").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10385) {
+                    if (MotorcycleData.getRPM() >= 10385) {
                         doc.getElementById("rpmTick69").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10462) {
+                    if (MotorcycleData.getRPM() >= 10462) {
                         doc.getElementById("rpmTick70").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10539) {
+                    if (MotorcycleData.getRPM() >= 10539) {
                         doc.getElementById("rpmTick71").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10616) {
+                    if (MotorcycleData.getRPM() >= 10616) {
                         doc.getElementById("rpmTick72").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10693) {
+                    if (MotorcycleData.getRPM() >= 10693) {
                         doc.getElementById("rpmTick73").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10770) {
+                    if (MotorcycleData.getRPM() >= 10770) {
                         doc.getElementById("rpmTick74").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10847) {
+                    if (MotorcycleData.getRPM() >= 10847) {
                         doc.getElementById("rpmTick75").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 10924) {
+                    if (MotorcycleData.getRPM() >= 10924) {
                         doc.getElementById("rpmTick76").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 11000) {
+                    if (MotorcycleData.getRPM() >= 11000) {
                         doc.getElementById("rpmTick77").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 11083) {
+                    if (MotorcycleData.getRPM() >= 11083) {
                         doc.getElementById("rpmTick78").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 11166) {
+                    if (MotorcycleData.getRPM() >= 11166) {
                         doc.getElementById("rpmTick79").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 11249) {
+                    if (MotorcycleData.getRPM() >= 11249) {
                         doc.getElementById("rpmTick80").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 11332) {
+                    if (MotorcycleData.getRPM() >= 11332) {
                         doc.getElementById("rpmTick81").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 11415) {
+                    if (MotorcycleData.getRPM() >= 11415) {
                         doc.getElementById("rpmTick82").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 11498) {
+                    if (MotorcycleData.getRPM() >= 11498) {
                         doc.getElementById("rpmTick83").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 11581) {
+                    if (MotorcycleData.getRPM() >= 11581) {
                         doc.getElementById("rpmTick84").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 11664) {
+                    if (MotorcycleData.getRPM() >= 11664) {
                         doc.getElementById("rpmTick85").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 11747) {
+                    if (MotorcycleData.getRPM() >= 11747) {
                         doc.getElementById("rpmTick86").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 11830) {
+                    if (MotorcycleData.getRPM() >= 11830) {
                         doc.getElementById("rpmTick87").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 11913) {
+                    if (MotorcycleData.getRPM() >= 11913) {
                         doc.getElementById("rpmTick88").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 12000) {
+                    if (MotorcycleData.getRPM() >= 12000) {
                         doc.getElementById("rpmTick89").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 12083) {
+                    if (MotorcycleData.getRPM() >= 12083) {
                         doc.getElementById("rpmTick90").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 12166) {
+                    if (MotorcycleData.getRPM() >= 12166) {
                         doc.getElementById("rpmTick91").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 12249) {
+                    if (MotorcycleData.getRPM() >= 12249) {
                         doc.getElementById("rpmTick92").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 12332) {
+                    if (MotorcycleData.getRPM() >= 12332) {
                         doc.getElementById("rpmTick93").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 12415) {
+                    if (MotorcycleData.getRPM() >= 12415) {
                         doc.getElementById("rpmTick94").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 12498) {
+                    if (MotorcycleData.getRPM() >= 12498) {
                         doc.getElementById("rpmTick95").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 12581) {
+                    if (MotorcycleData.getRPM() >= 12581) {
                         doc.getElementById("rpmTick96").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 12664) {
+                    if (MotorcycleData.getRPM() >= 12664) {
                         doc.getElementById("rpmTick97").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 12747) {
+                    if (MotorcycleData.getRPM() >= 12747) {
                         doc.getElementById("rpmTick98").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 12830) {
+                    if (MotorcycleData.getRPM() >= 12830) {
                         doc.getElementById("rpmTick99").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 12913) {
+                    if (MotorcycleData.getRPM() >= 12913) {
                         doc.getElementById("rpmTick100").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 13000) {
+                    if (MotorcycleData.getRPM() >= 13000) {
                         doc.getElementById("rpmTick101").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 13133) {
+                    if (MotorcycleData.getRPM() >= 13133) {
                         doc.getElementById("rpmTick102").setAttribute("style", "display:inline");
                     }
                     //Needle
-                    if ((Data.getRPM() >= 0) && (Data.getRPM() <= 249)) {
+                    if ((MotorcycleData.getRPM() >= 0) && (MotorcycleData.getRPM() <= 249)) {
                         doc.getElementById("rpmNeedle0").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 250) && (Data.getRPM() <= 499)) {
+                    if ((MotorcycleData.getRPM() >= 250) && (MotorcycleData.getRPM() <= 499)) {
                         doc.getElementById("rpmNeedle1").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 500) && (Data.getRPM() <= 749)) {
+                    if ((MotorcycleData.getRPM() >= 500) && (MotorcycleData.getRPM() <= 749)) {
                         doc.getElementById("rpmNeedle2").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 750) && (Data.getRPM() <= 999)) {
+                    if ((MotorcycleData.getRPM() >= 750) && (MotorcycleData.getRPM() <= 999)) {
                         doc.getElementById("rpmNeedle3").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 1000) && (Data.getRPM() <= 1249)) {
+                    if ((MotorcycleData.getRPM() >= 1000) && (MotorcycleData.getRPM() <= 1249)) {
                         doc.getElementById("rpmNeedle4").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 1250) && (Data.getRPM() <= 1499)) {
+                    if ((MotorcycleData.getRPM() >= 1250) && (MotorcycleData.getRPM() <= 1499)) {
                         doc.getElementById("rpmNeedle5").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 1500) && (Data.getRPM() <= 1749)) {
+                    if ((MotorcycleData.getRPM() >= 1500) && (MotorcycleData.getRPM() <= 1749)) {
                         doc.getElementById("rpmNeedle6").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 1750) && (Data.getRPM() <= 1999)) {
+                    if ((MotorcycleData.getRPM() >= 1750) && (MotorcycleData.getRPM() <= 1999)) {
                         doc.getElementById("rpmNeedle7").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 2000) && (Data.getRPM() <= 2332)) {
+                    if ((MotorcycleData.getRPM() >= 2000) && (MotorcycleData.getRPM() <= 2332)) {
                         doc.getElementById("rpmNeedle8").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 2333) && (Data.getRPM() <= 2665)) {
+                    if ((MotorcycleData.getRPM() >= 2333) && (MotorcycleData.getRPM() <= 2665)) {
                         doc.getElementById("rpmNeedle9").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 2666) && (Data.getRPM() <= 2998)) {
+                    if ((MotorcycleData.getRPM() >= 2666) && (MotorcycleData.getRPM() <= 2998)) {
                         doc.getElementById("rpmNeedle10").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 3000) && (Data.getRPM() <= 3249)) {
+                    if ((MotorcycleData.getRPM() >= 3000) && (MotorcycleData.getRPM() <= 3249)) {
                         doc.getElementById("rpmNeedle11").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 3250) && (Data.getRPM() <= 3499)) {
+                    if ((MotorcycleData.getRPM() >= 3250) && (MotorcycleData.getRPM() <= 3499)) {
                         doc.getElementById("rpmNeedle12").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 3500) && (Data.getRPM() <= 3749)) {
+                    if ((MotorcycleData.getRPM() >= 3500) && (MotorcycleData.getRPM() <= 3749)) {
                         doc.getElementById("rpmNeedle13").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 3750) && (Data.getRPM() <= 3999)) {
+                    if ((MotorcycleData.getRPM() >= 3750) && (MotorcycleData.getRPM() <= 3999)) {
                         doc.getElementById("rpmNeedle14").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 4000) && (Data.getRPM() <= 4499)) {
+                    if ((MotorcycleData.getRPM() >= 4000) && (MotorcycleData.getRPM() <= 4499)) {
                         doc.getElementById("rpmNeedle15").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 4500) && (Data.getRPM() <= 4999)) {
+                    if ((MotorcycleData.getRPM() >= 4500) && (MotorcycleData.getRPM() <= 4999)) {
                         doc.getElementById("rpmNeedle16").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 5000) && (Data.getRPM() <= 5499)) {
+                    if ((MotorcycleData.getRPM() >= 5000) && (MotorcycleData.getRPM() <= 5499)) {
                         doc.getElementById("rpmNeedle17").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 5500) && (Data.getRPM() <= 5999)) {
+                    if ((MotorcycleData.getRPM() >= 5500) && (MotorcycleData.getRPM() <= 5999)) {
                         doc.getElementById("rpmNeedle18").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 6000) && (Data.getRPM() <= 6499)) {
+                    if ((MotorcycleData.getRPM() >= 6000) && (MotorcycleData.getRPM() <= 6499)) {
                         doc.getElementById("rpmNeedle19").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 6500) && (Data.getRPM() <= 6999)) {
+                    if ((MotorcycleData.getRPM() >= 6500) && (MotorcycleData.getRPM() <= 6999)) {
                         doc.getElementById("rpmNeedle20").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 7000) && (Data.getRPM() <= 7499)) {
+                    if ((MotorcycleData.getRPM() >= 7000) && (MotorcycleData.getRPM() <= 7499)) {
                         doc.getElementById("rpmNeedle21").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 7500) && (Data.getRPM() <= 8000)) {
+                    if ((MotorcycleData.getRPM() >= 7500) && (MotorcycleData.getRPM() <= 8000)) {
                         doc.getElementById("rpmNeedle22").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 8001) && (Data.getRPM() <= 8124)) {
+                    if ((MotorcycleData.getRPM() >= 8001) && (MotorcycleData.getRPM() <= 8124)) {
                         doc.getElementById("rpmNeedle23").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 8125) && (Data.getRPM() <= 8249)) {
+                    if ((MotorcycleData.getRPM() >= 8125) && (MotorcycleData.getRPM() <= 8249)) {
                         doc.getElementById("rpmNeedle24").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 8250) && (Data.getRPM() <= 8374)) {
+                    if ((MotorcycleData.getRPM() >= 8250) && (MotorcycleData.getRPM() <= 8374)) {
                         doc.getElementById("rpmNeedle25").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 8375) && (Data.getRPM() <= 8499)) {
+                    if ((MotorcycleData.getRPM() >= 8375) && (MotorcycleData.getRPM() <= 8499)) {
                         doc.getElementById("rpmNeedle26").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 8500) && (Data.getRPM() <= 8674)) {
+                    if ((MotorcycleData.getRPM() >= 8500) && (MotorcycleData.getRPM() <= 8674)) {
                         doc.getElementById("rpmNeedle27").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 8750) && (Data.getRPM() <= 8874)) {
+                    if ((MotorcycleData.getRPM() >= 8750) && (MotorcycleData.getRPM() <= 8874)) {
                         doc.getElementById("rpmNeedle28").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 8875) && (Data.getRPM() <= 8999)) {
+                    if ((MotorcycleData.getRPM() >= 8875) && (MotorcycleData.getRPM() <= 8999)) {
                         doc.getElementById("rpmNeedle29").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 9000) && (Data.getRPM() <= 9124)) {
+                    if ((MotorcycleData.getRPM() >= 9000) && (MotorcycleData.getRPM() <= 9124)) {
                         doc.getElementById("rpmNeedle30").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 9125) && (Data.getRPM() <= 9249)) {
+                    if ((MotorcycleData.getRPM() >= 9125) && (MotorcycleData.getRPM() <= 9249)) {
                         doc.getElementById("rpmNeedle31").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 9250) && (Data.getRPM() <= 9374)) {
+                    if ((MotorcycleData.getRPM() >= 9250) && (MotorcycleData.getRPM() <= 9374)) {
                         doc.getElementById("rpmNeedle32").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 9375) && (Data.getRPM() <= 9499)) {
+                    if ((MotorcycleData.getRPM() >= 9375) && (MotorcycleData.getRPM() <= 9499)) {
                         doc.getElementById("rpmNeedle33").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 9500) && (Data.getRPM() <= 9624)) {
+                    if ((MotorcycleData.getRPM() >= 9500) && (MotorcycleData.getRPM() <= 9624)) {
                         doc.getElementById("rpmNeedle34").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 9625) && (Data.getRPM() <= 9749)) {
+                    if ((MotorcycleData.getRPM() >= 9625) && (MotorcycleData.getRPM() <= 9749)) {
                         doc.getElementById("rpmNeedle35").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 9750) && (Data.getRPM() <= 9874)) {
+                    if ((MotorcycleData.getRPM() >= 9750) && (MotorcycleData.getRPM() <= 9874)) {
                         doc.getElementById("rpmNeedle36").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 9875) && (Data.getRPM() <= 10000)) {
+                    if ((MotorcycleData.getRPM() >= 9875) && (MotorcycleData.getRPM() <= 10000)) {
                         doc.getElementById("rpmNeedle37").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 10001) && (Data.getRPM() <= 10142)) {
+                    if ((MotorcycleData.getRPM() >= 10001) && (MotorcycleData.getRPM() <= 10142)) {
                         doc.getElementById("rpmNeedle38").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 10143) && (Data.getRPM() <= 10285)) {
+                    if ((MotorcycleData.getRPM() >= 10143) && (MotorcycleData.getRPM() <= 10285)) {
                         doc.getElementById("rpmNeedle39").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 10286) && (Data.getRPM() <= 10428)) {
+                    if ((MotorcycleData.getRPM() >= 10286) && (MotorcycleData.getRPM() <= 10428)) {
                         doc.getElementById("rpmNeedle40").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 10429) && (Data.getRPM() <= 10571)) {
+                    if ((MotorcycleData.getRPM() >= 10429) && (MotorcycleData.getRPM() <= 10571)) {
                         doc.getElementById("rpmNeedle41").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 10572) && (Data.getRPM() <= 10714)) {
+                    if ((MotorcycleData.getRPM() >= 10572) && (MotorcycleData.getRPM() <= 10714)) {
                         doc.getElementById("rpmNeedle42").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 10715) && (Data.getRPM() <= 10857)) {
+                    if ((MotorcycleData.getRPM() >= 10715) && (MotorcycleData.getRPM() <= 10857)) {
                         doc.getElementById("rpmNeedle43").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 10858) && (Data.getRPM() <= 10999)) {
+                    if ((MotorcycleData.getRPM() >= 10858) && (MotorcycleData.getRPM() <= 10999)) {
                         doc.getElementById("rpmNeedle44").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 11000) && (Data.getRPM() <= 11142)) {
+                    if ((MotorcycleData.getRPM() >= 11000) && (MotorcycleData.getRPM() <= 11142)) {
                         doc.getElementById("rpmNeedle45").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 11143) && (Data.getRPM() <= 11285)) {
+                    if ((MotorcycleData.getRPM() >= 11143) && (MotorcycleData.getRPM() <= 11285)) {
                         doc.getElementById("rpmNeedle46").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 11286) && (Data.getRPM() <= 11428)) {
+                    if ((MotorcycleData.getRPM() >= 11286) && (MotorcycleData.getRPM() <= 11428)) {
                         doc.getElementById("rpmNeedle47").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 11429) && (Data.getRPM() <= 11571)) {
+                    if ((MotorcycleData.getRPM() >= 11429) && (MotorcycleData.getRPM() <= 11571)) {
                         doc.getElementById("rpmNeedle48").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 11572) && (Data.getRPM() <= 11714)) {
+                    if ((MotorcycleData.getRPM() >= 11572) && (MotorcycleData.getRPM() <= 11714)) {
                         doc.getElementById("rpmNeedle49").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 11715) && (Data.getRPM() <= 11857)) {
+                    if ((MotorcycleData.getRPM() >= 11715) && (MotorcycleData.getRPM() <= 11857)) {
                         doc.getElementById("rpmNeedle50").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 11858) && (Data.getRPM() <= 11999)) {
+                    if ((MotorcycleData.getRPM() >= 11858) && (MotorcycleData.getRPM() <= 11999)) {
                         doc.getElementById("rpmNeedle51").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 12000) && (Data.getRPM() <= 12142)) {
+                    if ((MotorcycleData.getRPM() >= 12000) && (MotorcycleData.getRPM() <= 12142)) {
                         doc.getElementById("rpmNeedle52").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 12143) && (Data.getRPM() <= 12285)) {
+                    if ((MotorcycleData.getRPM() >= 12143) && (MotorcycleData.getRPM() <= 12285)) {
                         doc.getElementById("rpmNeedle53").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 12286) && (Data.getRPM() <= 12428)) {
+                    if ((MotorcycleData.getRPM() >= 12286) && (MotorcycleData.getRPM() <= 12428)) {
                         doc.getElementById("rpmNeedle54").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 12429) && (Data.getRPM() <= 12571)) {
+                    if ((MotorcycleData.getRPM() >= 12429) && (MotorcycleData.getRPM() <= 12571)) {
                         doc.getElementById("rpmNeedle55").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 12572) && (Data.getRPM() <= 12714)) {
+                    if ((MotorcycleData.getRPM() >= 12572) && (MotorcycleData.getRPM() <= 12714)) {
                         doc.getElementById("rpmNeedle56").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 12715) && (Data.getRPM() <= 12857)) {
+                    if ((MotorcycleData.getRPM() >= 12715) && (MotorcycleData.getRPM() <= 12857)) {
                         doc.getElementById("rpmNeedle57").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 12858) && (Data.getRPM() <= 12999)) {
+                    if ((MotorcycleData.getRPM() >= 12858) && (MotorcycleData.getRPM() <= 12999)) {
                         doc.getElementById("rpmNeedle58").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 13000) && (Data.getRPM() <= 13285)) {
+                    if ((MotorcycleData.getRPM() >= 13000) && (MotorcycleData.getRPM() <= 13285)) {
                         doc.getElementById("rpmNeedle59").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 13286) && (Data.getRPM() <= 13571)) {
+                    if ((MotorcycleData.getRPM() >= 13286) && (MotorcycleData.getRPM() <= 13571)) {
                         doc.getElementById("rpmNeedle60").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 13572) && (Data.getRPM() <= 13857)) {
+                    if ((MotorcycleData.getRPM() >= 13572) && (MotorcycleData.getRPM() <= 13857)) {
                         doc.getElementById("rpmNeedle61").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 13858) && (Data.getRPM() <= 14143)) {
+                    if ((MotorcycleData.getRPM() >= 13858) && (MotorcycleData.getRPM() <= 14143)) {
                         doc.getElementById("rpmNeedle62").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 14144) && (Data.getRPM() <= 14429)) {
+                    if ((MotorcycleData.getRPM() >= 14144) && (MotorcycleData.getRPM() <= 14429)) {
                         doc.getElementById("rpmNeedle63").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 14430) && (Data.getRPM() <= 14715)) {
+                    if ((MotorcycleData.getRPM() >= 14430) && (MotorcycleData.getRPM() <= 14715)) {
                         doc.getElementById("rpmNeedle64").setAttribute("style", "display:inline");
                     }
-                    if ((Data.getRPM() >= 14716) && (Data.getRPM() <= 14999)) {
+                    if ((MotorcycleData.getRPM() >= 14716) && (MotorcycleData.getRPM() <= 14999)) {
                         doc.getElementById("rpmNeedle65").setAttribute("style", "display:inline");
                     }
-                    if (Data.getRPM() >= 15000) {
+                    if (MotorcycleData.getRPM() >= 15000) {
                         doc.getElementById("rpmNeedle66").setAttribute("style", "display:inline");
                     }
                 }
@@ -2416,27 +2416,27 @@ public class SVGHelper {
 
         try {
             //Compass
-            Double leanAngle = Data.getLeanAngleBike();
+            Double leanAngle = MotorcycleData.getLeanAngleBike();
             String centerRadius = ", 540, 1540)";
             String angle = "0";
 
 
             //Lean Angle
-            if (Data.getLeanAngleBike() != null) {
-                setText(doc, "angle", String.format("%02d", Math.abs(Math.round(Data.getLeanAngleBike()))));
+            if (MotorcycleData.getLeanAngleBike() != null) {
+                setText(doc, "angle", String.format("%02d", Math.abs(Math.round(MotorcycleData.getLeanAngleBike()))));
                 //Log.d("angle","Current Angle: " +  String.valueOf(Data.getLeanAngleBike()));
             }
             //Left Max Angle
-            if (Data.getLeanAngleBikeMaxL() != null) {
-                setText(doc, "angleMaxL", String.valueOf(Math.round(Data.getLeanAngleBikeMaxL())));
-                Log.d("angleMaxL", "Max Left Angle: " + String.valueOf(Data.getLeanAngleBikeMaxL()));
+            if (MotorcycleData.getLeanAngleBikeMaxL() != null) {
+                setText(doc, "angleMaxL", String.valueOf(Math.round(MotorcycleData.getLeanAngleBikeMaxL())));
+                Log.d("angleMaxL", "Max Left Angle: " + String.valueOf(MotorcycleData.getLeanAngleBikeMaxL()));
             } else {
                 setText(doc, "angleMaxL", "...");
             }
             //Right Max Angle
-            if (Data.getLeanAngleBikeMaxR() != null) {
-                setText(doc, "angleMaxR", String.valueOf(Math.round(Data.getLeanAngleBikeMaxR())));
-                Log.d("angleMaxR", "Max Right Angle: " + String.valueOf(Data.getLeanAngleBikeMaxR()));
+            if (MotorcycleData.getLeanAngleBikeMaxR() != null) {
+                setText(doc, "angleMaxR", String.valueOf(Math.round(MotorcycleData.getLeanAngleBikeMaxR())));
+                Log.d("angleMaxR", "Max Right Angle: " + String.valueOf(MotorcycleData.getLeanAngleBikeMaxR()));
             } else {
                 setText(doc, "angleMaxR", "...");
             }
@@ -2473,8 +2473,8 @@ public class SVGHelper {
             String centerRadius = ",960,1080)";
             String bearing = "0";
 
-            if (Data.getBearing() != null) {
-                bearing = String.valueOf(Data.getBearing() * -1);
+            if (MotorcycleData.getBearing() != null) {
+                bearing = String.valueOf(MotorcycleData.getBearing() * -1);
                 if (isDevicePortrait()) {
                     centerRadius = ",528,960)";
                 }
