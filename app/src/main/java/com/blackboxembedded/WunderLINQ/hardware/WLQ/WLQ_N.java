@@ -21,11 +21,10 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.blackboxembedded.WunderLINQ.protocols.KeyboardHID;
+import com.blackboxembedded.WunderLINQ.comms.BLE.KeyboardHID;
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
-import com.google.android.material.shadow.ShadowRenderer;
 
 import java.util.Arrays;
 
