@@ -83,7 +83,6 @@ import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_BASE;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_C;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_X;
-import com.blackboxembedded.WunderLINQ.protocols.BLEbus;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;

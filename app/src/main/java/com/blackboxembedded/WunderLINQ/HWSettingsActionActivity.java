@@ -42,7 +42,7 @@ import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_C;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_X;
-import com.blackboxembedded.WunderLINQ.protocols.KeyboardHID;
+import com.blackboxembedded.WunderLINQ.comms.BLE.KeyboardHID;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
