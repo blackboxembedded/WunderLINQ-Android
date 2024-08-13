@@ -36,8 +36,8 @@ public class BLEbus {
         int msgID = (data[0] & 0xFF) ;
         switch (msgID) {
             case 0x00:
-                if ((data[1] & 0xFF) != 0xFF || (data[2] & 0xFF) != 0xFF || (data[3] & 0xFF) != 0xFF || (data[4] & 0xFF) != 0xFF
-                        || (data[5] & 0xFF) != 0xFF || (data[6] & 0xFF) != 0xFF || (data[7] & 0xFF) != 0xFF) {
+                if ((data[1] & 0xFF) != 0xFF && (data[2] & 0xFF) != 0xFF && (data[3] & 0xFF) != 0xFF && (data[4] & 0xFF) != 0xFF
+                        && (data[5] & 0xFF) != 0xFF && (data[6] & 0xFF) != 0xFF && (data[7] & 0xFF) != 0xFF) {
                     byte[] vinValue = new byte[7];
                     for (int x = 1; x <= 7; x++) {
                         vinValue[x - 1] = data[x];
@@ -68,13 +68,13 @@ public class BLEbus {
                 }
 
                 //Rear Speed
-                if (((data[3] & 0xFF) != 0xFF) || ((data[4] & 0xFF) & 0x0f) != 0xF) {
+                if (((data[3] & 0xFF) != 0xFF) && ((data[4] & 0xFF) & 0x0f) != 0xF) {
                     double rearSpeed = ((data[3] & 0xFF) | (((data[4] & 0xFF) & 0x0f) << 8)) * 0.14;
                     Data.setRearSpeed(rearSpeed);
                 }
 
                 //Fuel Range
-                if ((((data[4] & 0xFF) >> 4) & 0x0f)  != 0xF && (data[5] & 0xFF) != 0xFF) {
+                if ((((data[4] & 0xFF) >> 4) & 0x0f) != 0xF && (data[5] & 0xFF) != 0xFF) {
                     double fuelRange = (((data[4] & 0xFF) >> 4) & 0x0f) + (((data[5] & 0xFF) & 0x0f) * 16) + ((((data[5] & 0xFF) >> 4) & 0x0f) * 256);
                     Data.setFuelRange(fuelRange);
                 }
@@ -358,7 +358,7 @@ public class BLEbus {
                 break;
             case 0x06:
                 //RPM
-                if (((data[1] & 0xFF) != 0xFF) || ((data[2] & 0xFF) & 0x0f) != 0xF) {
+                if (((data[1] & 0xFF) != 0xFF) && ((data[2] & 0xFF) & 0x0f) != 0xF) {
                     int rpm = (((data[1] & 0xFF) + (((data[2] & 0xFF) & 0x0f) * 255)) * 5);
                     Data.setRPM(rpm);
                 }
@@ -474,7 +474,7 @@ public class BLEbus {
                 break;
             case 0x07:
                 //Average Speed
-                if ((data[1] & 0xFF) != 0xFF || ((data[2] & 0xFF) & 0x0f) != 0xF) {
+                if ((data[1] & 0xFF) != 0xFF && ((data[2] & 0xFF) & 0x0f) != 0xF) {
                     double avgSpeed = ((((data[1] & 0xFF) >> 4) & 0x0f) * 2) + (((data[1] & 0xFF) & 0x0f) * 0.125) + (((data[2] & 0xFF) & 0x0f) * 32);
                     Data.setAvgSpeed(avgSpeed);
                 }
@@ -1096,18 +1096,18 @@ public class BLEbus {
                 }
                 break;
             case 0x0a:
-                if ((data[3] & 0xFF) != 0xFF || (data[2] & 0xFF) != 0xFF || (data[1] & 0xFF) != 0xFF) {
+                if ((data[3] & 0xFF) != 0xFF && (data[2] & 0xFF) != 0xFF && (data[1] & 0xFF) != 0xFF) {
                     double odometer = Utils.bytesToInt16(data[3], data[2], data[1]);
                     Data.setOdometer(odometer);
                 }
 
-                if ((data[6] & 0xFF) != 0xFF || (data[5] & 0xFF) != 0xFF || (data[4] & 0xFF) != 0xFF) {
+                if ((data[6] & 0xFF) != 0xFF && (data[5] & 0xFF) != 0xFF && (data[4] & 0xFF) != 0xFF) {
                     double tripAuto = Utils.bytesToInt16(data[6], data[5], data[4]) / 10.0;
                     Data.setTripAuto(tripAuto);
                 }
                 break;
             case 0x0b:
-                if ((data[3] & 0xFF) != 0xFF || (data[2] & 0xFF) != 0xFF || (data[1] & 0xFF) != 0xFF) {
+                if ((data[3] & 0xFF) != 0xFF && (data[2] & 0xFF) != 0xFF && (data[1] & 0xFF) != 0xFF) {
                     int year = (((data[2] & 0xFF) & 0x0f) << 8) |(data[1] & 0xFF);
                     int month = ((data[2] & 0xFF) >> 4 & 0x0f) - 1;
                     int day = (data[3] & 0xFF);
@@ -1131,11 +1131,11 @@ public class BLEbus {
                 }
                 break;
             case 0x0c:
-                if ((data[3] & 0xFF) != 0xFF || (data[2] & 0xFF) != 0xFF || (data[1] & 0xFF) != 0xFF) {
+                if ((data[3] & 0xFF) != 0xFF && (data[2] & 0xFF) != 0xFF && (data[1] & 0xFF) != 0xFF) {
                     double trip1 = Utils.bytesToInt16(data[3], data[2], data[1]) / 10.0;
                     Data.setTripOne(trip1);
                 }
-                if ((data[6] & 0xFF) != 0xFF || (data[5] & 0xFF) != 0xFF || (data[4] & 0xFF) != 0xFF) {
+                if ((data[6] & 0xFF) != 0xFF && (data[5] & 0xFF) != 0xFF && (data[4] & 0xFF) != 0xFF) {
                     double trip2 = Utils.bytesToInt16(data[6], data[5], data[4]) / 10.0;
                     Data.setTripTwo(trip2);
                 }
