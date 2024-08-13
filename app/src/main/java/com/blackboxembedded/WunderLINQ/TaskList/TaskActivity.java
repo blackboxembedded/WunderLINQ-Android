@@ -81,7 +81,7 @@ import com.blackboxembedded.WunderLINQ.TaskList.Activities.WaypointNavActivity;
 import com.blackboxembedded.WunderLINQ.WaypointRecord;
 import com.blackboxembedded.WunderLINQ.TaskList.Activities.WeatherMapActivity;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.google.android.gms.maps.model.LatLng;
 import com.yarolegovich.discretescrollview.DiscreteScrollView;
@@ -377,8 +377,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
     private void goForward(){
         SoundManager.playSound(this, R.raw.directional);
         Intent forwardIntent = new Intent(this, MainActivity.class);
-        if (Data.wlq != null) {
-            if (Data.wlq.getStatus() != null) {
+        if (MotorcycleData.wlq != null) {
+            if (MotorcycleData.wlq.getStatus() != null) {
                 forwardIntent = new Intent(this, AccessoryActivity.class);
             }
         }
@@ -894,7 +894,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 break;
             case 20:
                 // Open Navigation App to Fuel
-                if (!NavAppHelper.navigateToFuel(this,Data.getLastLocation())) {
+                if (!NavAppHelper.navigateToFuel(this, MotorcycleData.getLastLocation())) {
                     Toast.makeText(TaskActivity.this, R.string.nav_app_feature_not_supported, Toast.LENGTH_LONG).show();
                 }
                 break;

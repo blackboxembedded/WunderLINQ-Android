@@ -20,7 +20,7 @@ package com.blackboxembedded.WunderLINQ.comms.BLE;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
@@ -31,7 +31,7 @@ public class BLEbus {
     private static int prevBrakeValue = 0;
     public static void parseBLEMessage(byte[] data){
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
-        Data.setLastMessage(data);
+        MotorcycleData.setLastMessage(data);
         int msgID = (data[0] & 0xFF) ;
         switch (msgID) {
             case 0x00:
@@ -42,7 +42,7 @@ public class BLEbus {
                         vinValue[x - 1] = data[x];
                     }
                     String vin = new String(vinValue);
-                    Data.setVin(vin);
+                    MotorcycleData.setVin(vin);
                 }
                 break;
             case 0x01:
@@ -51,36 +51,36 @@ public class BLEbus {
                 switch (ignitionValue){
                     case 0x0: case 0x1: case 0x2: case 0x3:
                         //Ignition Off
-                        if (Data.getIgnitionStatus()){
+                        if (MotorcycleData.getIgnitionStatus()){
                             BluetoothLeService.ignitionAlert();
                         }
-                        Data.setIgnitionStatus(false);
+                        MotorcycleData.setIgnitionStatus(false);
                         break;
                     case 0x4: case 0x5: case 0x6: case 0x7:
                         //Ignition On
-                        Data.setIgnitionStatus(true);
+                        MotorcycleData.setIgnitionStatus(true);
                         break;
                     default:
                         //Unknown
-                        Data.setIgnitionStatus(false);
+                        MotorcycleData.setIgnitionStatus(false);
                         break;
                 }
 
                 //Rear Speed
                 if (((data[3] & 0xFF) != 0xFF) && ((data[4] & 0xFF) & 0x0f) != 0xF) {
                     double rearSpeed = ((data[3] & 0xFF) | (((data[4] & 0xFF) & 0x0f) << 8)) * 0.14;
-                    Data.setRearSpeed(rearSpeed);
+                    MotorcycleData.setRearSpeed(rearSpeed);
                 }
 
                 //Fuel Range
                 if ((((data[4] & 0xFF) >> 4) & 0x0f) != 0xF && (data[5] & 0xFF) != 0xFF) {
                     double fuelRange = (((data[4] & 0xFF) >> 4) & 0x0f) + (((data[5] & 0xFF) & 0x0f) * 16) + ((((data[5] & 0xFF) >> 4) & 0x0f) * 256);
-                    Data.setFuelRange(fuelRange);
+                    MotorcycleData.setFuelRange(fuelRange);
                 }
                 // Ambient Light
                 if (((data[6] & 0xFF) & 0x0f) != 0xF) {
                     int ambientLightValue = (data[6] & 0xFF) & 0x0f; // the lowest 4 bits
-                    Data.setAmbientLight(ambientLightValue);
+                    MotorcycleData.setAmbientLight(ambientLightValue);
                 }
                 break;
             case 0x05:
@@ -95,7 +95,25 @@ public class BLEbus {
                         leanAngleBikeFixed = (2048 - leanAngleBike) * -1.0;
                     }
                     leanAngleBikeFixed = leanAngleBikeFixed * 0.045;
-                    Data.setLeanAngleBike(leanAngleBikeFixed);
+                    MotorcycleData.setLeanAngleBike(leanAngleBikeFixed);
+                    //Store Max L and R lean angle
+                    if(leanAngleBikeFixed > 0){
+                        if (MotorcycleData.getLeanAngleMaxR() != null) {
+                            if (leanAngleBikeFixed > MotorcycleData.getLeanAngleMaxR()) {
+                                MotorcycleData.setLeanAngleMaxR(leanAngleBikeFixed);
+                            }
+                        } else {
+                            MotorcycleData.setLeanAngleMaxR(leanAngleBikeFixed);
+                        }
+                    } else if(leanAngleBikeFixed < 0){
+                        if (MotorcycleData.getLeanAngleMaxL() != null) {
+                            if (Math.abs(leanAngleBikeFixed) > MotorcycleData.getLeanAngleMaxL()) {
+                                MotorcycleData.setLeanAngleMaxL(Math.abs(leanAngleBikeFixed));
+                            }
+                        } else {
+                            MotorcycleData.setLeanAngleMaxL(Math.abs(leanAngleBikeFixed));
+                        }
+                    }
                 }
 
                 // Brakes
@@ -109,16 +127,16 @@ public class BLEbus {
                         switch (brakes) {
                             case 0x6:
                                 //Front
-                                Data.setFrontBrake(Data.getFrontBrake() + 1);
+                                MotorcycleData.setFrontBrake(MotorcycleData.getFrontBrake() + 1);
                                 break;
                             case 0x9:
                                 //Back
-                                Data.setRearBrake(Data.getRearBrake() + 1);
+                                MotorcycleData.setRearBrake(MotorcycleData.getRearBrake() + 1);
                                 break;
                             case 0xA:
                                 //Both
-                                Data.setFrontBrake(Data.getFrontBrake() + 1);
-                                Data.setRearBrake(Data.getRearBrake() + 1);
+                                MotorcycleData.setFrontBrake(MotorcycleData.getFrontBrake() + 1);
+                                MotorcycleData.setRearBrake(MotorcycleData.getRearBrake() + 1);
                                 break;
                             default:
                                 break;
@@ -162,7 +180,7 @@ public class BLEbus {
                 // Tire Pressure
                 if ((data[4] & 0xFF) != 0xFF) {
                     double rdcFront = (data[4] & 0xFF) / 50.0;
-                    Data.setFrontTirePressure(rdcFront);
+                    MotorcycleData.setFrontTirePressure(rdcFront);
                     if (sharedPrefs.getBoolean("prefTPMSAlert", false)) {
                         Double pressureThreshold = Double.parseDouble(sharedPrefs.getString("prefTPMSAlertThreshold", "30.0"));
                         if (pressureThreshold >= 0) {
@@ -174,7 +192,7 @@ public class BLEbus {
                                 }
                             } else if (pressureFormat.contains("2")) {
                                 // Kg-f
-                                if (pressureThreshold >= Utils.barToKgf(rdcFront)) {
+                                if (pressureThreshold >= Utils.barTokgf(rdcFront)) {
                                     Faults.setfrontTirePressureCriticalActive(true);
                                 }
                             } else if (pressureFormat.contains("3")) {
@@ -201,7 +219,7 @@ public class BLEbus {
                 }
                 if ((data[5] & 0xFF) != 0xFF){
                     double rdcRear = (data[5] & 0xFF) / 50.0;
-                    Data.setRearTirePressure(rdcRear);
+                    MotorcycleData.setRearTirePressure(rdcRear);
                     if (sharedPrefs.getBoolean("prefTPMSAlert",false)) {
                         Double pressureThreshold = Double.parseDouble(sharedPrefs.getString("prefTPMSAlertThreshold", "30.0"));
                         if (pressureThreshold >= 0) {
@@ -213,7 +231,7 @@ public class BLEbus {
                                 }
                             } else if (pressureFormat.contains("2")) {
                                 // Kg-f
-                                if (pressureThreshold >= Utils.barToKgf(rdcRear)){
+                                if (pressureThreshold >= Utils.barTokgf(rdcRear)){
                                     Faults.setrearTirePressureCriticalActive(true);
                                 }
                             } else if (pressureFormat.contains("3")) {
@@ -359,7 +377,7 @@ public class BLEbus {
                 //RPM
                 if (((data[1] & 0xFF) != 0xFF) && ((data[2] & 0xFF) & 0x0f) != 0xF) {
                     int rpm = (((data[1] & 0xFF) + (((data[2] & 0xFF) & 0x0f) * 255)) * 5);
-                    Data.setRPM(rpm);
+                    MotorcycleData.setRPM(rpm);
                 }
                 //Gear
                 if ((((data[2] & 0xFF) >> 4) & 0x0f) != 0xF) {
@@ -390,25 +408,25 @@ public class BLEbus {
                         default:
                             gear = "-";
                     }
-                    if (Data.getGear() != null) {
-                        if (!Data.getGear().equals(gear) && !gear.equals("-")) {
-                            Data.setNumberOfShifts(Data.getNumberOfShifts() + 1);
+                    if (MotorcycleData.getGear() != null) {
+                        if (!MotorcycleData.getGear().equals(gear) && !gear.equals("-")) {
+                            MotorcycleData.setNumberOfShifts(MotorcycleData.getNumberOfShifts() + 1);
                         }
                     }
-                    Data.setGear(gear);
+                    MotorcycleData.setGear(gear);
                 }
                 // Throttle Position
                 if ((data[3] & 0xFF) != 0xFF) {
                     int minPosition = 36;
                     int maxPosition = 236;
                     double throttlePosition = (((data[3] & 0xFF) - minPosition) * 100.0) / (maxPosition - minPosition);
-                    Data.setThrottlePosition(throttlePosition);
+                    MotorcycleData.setThrottlePosition(throttlePosition);
                 }
 
                 // Engine Temperature
                 if ((data[4] & 0xFF) != 0xFF) {
                     double engineTemp = ((data[4] & 0xFF) * 0.75) - 25;
-                    Data.setEngineTemperature(engineTemp);
+                    MotorcycleData.setEngineTemperature(engineTemp);
                 }
 
                 // ASC Fault
@@ -475,19 +493,19 @@ public class BLEbus {
                 //Average Speed
                 if ((data[1] & 0xFF) != 0xFF && ((data[2] & 0xFF) & 0x0f) != 0xF) {
                     double avgSpeed = ((((data[1] & 0xFF) >> 4) & 0x0f) * 2) + (((data[1] & 0xFF) & 0x0f) * 0.125) + (((data[2] & 0xFF) & 0x0f) * 32);
-                    Data.setAvgSpeed(avgSpeed);
+                    MotorcycleData.setAvgSpeed(avgSpeed);
                 }
 
                 //Speed
                 if ((data[3] & 0xFF) != 0xFF) {
                     double speed = (data[3] & 0xFF) * 2;
-                    Data.setSpeed(speed);
+                    MotorcycleData.setSpeed(speed);
                 }
 
                 //Voltage
                 if ((data[4] & 0xFF) != 0xFF) {
                     double voltage = (data[4] & 0xFF) / 10.0;
-                    Data.setVoltage(voltage);
+                    MotorcycleData.setvoltage(voltage);
                 }
 
                 // Fuel Fault
@@ -662,7 +680,7 @@ public class BLEbus {
             case 0x08:
                 if ((data[1] & 0xFF) != 0xFF) {
                     double ambientTemp = ((data[1] & 0xFF) * 0.50) - 40;
-                    Data.setAmbientTemperature(ambientTemp);
+                    MotorcycleData.setAmbientTemperature(ambientTemp);
                     if(ambientTemp <= 0.0){
                         Faults.seticeWarnActive(true);
                     } else {
@@ -1075,34 +1093,34 @@ public class BLEbus {
                 //Fuel Economy 1
                 if ((data[2] & 0xFF) != 0xFF) {
                     double fuelEconomyOne = ((((data[2] & 0xFF) >> 4) & 0x0f) * 1.6) + (((data[2] & 0xFF) & 0x0f) * 0.1);
-                    Data.setFuelEconomyOne(fuelEconomyOne);
+                    MotorcycleData.setFuelEconomyOne(fuelEconomyOne);
                 } else {
-                    Data.setFuelEconomyOne(null);
+                    MotorcycleData.setFuelEconomyOne(null);
                 }
                 //Fuel Economy 2
                 if ((data[3] & 0xFF) != 0xFF) {
                     double fuelEconomyTwo = ((((data[3] & 0xFF) >> 4) & 0x0f) * 1.6) + (((data[3] & 0xFF) & 0x0f) * 0.1);
-                    Data.setFuelEconomyTwo(fuelEconomyTwo);
+                    MotorcycleData.setFuelEconomyTwo(fuelEconomyTwo);
                 } else {
-                    Data.setFuelEconomyTwo(null);
+                    MotorcycleData.setFuelEconomyTwo(null);
                 }
                 //Current Consumption
                 if ((data[4] & 0xFF) != 0xFF) {
                     double cConsumption = ((((data[4] & 0xFF) >> 4) & 0x0f) * 1.6) + (((data[4] & 0xFF) & 0x0f) * 0.1);
-                    Data.setCurrentConsumption(cConsumption);
+                    MotorcycleData.setCurrentConsumption(cConsumption);
                 } else {
-                    Data.setCurrentConsumption(null);
+                    MotorcycleData.setCurrentConsumption(null);
                 }
                 break;
             case 0x0a:
                 if ((data[3] & 0xFF) != 0xFF && (data[2] & 0xFF) != 0xFF && (data[1] & 0xFF) != 0xFF) {
                     double odometer = Utils.bytesToInt16(data[3], data[2], data[1]);
-                    Data.setOdometer(odometer);
+                    MotorcycleData.setOdometer(odometer);
                 }
 
                 if ((data[6] & 0xFF) != 0xFF && (data[5] & 0xFF) != 0xFF && (data[4] & 0xFF) != 0xFF) {
                     double tripAuto = Utils.bytesToInt16(data[6], data[5], data[4]) / 10.0;
-                    Data.setTripAuto(tripAuto);
+                    MotorcycleData.setTripAuto(tripAuto);
                 }
                 break;
             case 0x0b:
@@ -1111,7 +1129,7 @@ public class BLEbus {
                     int month = ((data[2] & 0xFF) >> 4 & 0x0f) - 1;
                     int day = (data[3] & 0xFF);
                     LocalDate nextServiceDate = LocalDate.of(year, month, day);
-                    Data.setNextServiceDate(nextServiceDate);
+                    MotorcycleData.setNextServiceDate(nextServiceDate);
 
                     // Getting the current date
                     LocalDate currentDate = LocalDate.now();
@@ -1126,17 +1144,17 @@ public class BLEbus {
                 }
                 if ((data[4] & 0xFF) != 0xFF){
                     int nextService = data[4] * 100;
-                    Data.setNextService(nextService);
+                    MotorcycleData.setNextService(nextService);
                 }
                 break;
             case 0x0c:
                 if ((data[3] & 0xFF) != 0xFF && (data[2] & 0xFF) != 0xFF && (data[1] & 0xFF) != 0xFF) {
                     double trip1 = Utils.bytesToInt16(data[3], data[2], data[1]) / 10.0;
-                    Data.setTripOne(trip1);
+                    MotorcycleData.setTripOne(trip1);
                 }
                 if ((data[6] & 0xFF) != 0xFF && (data[5] & 0xFF) != 0xFF && (data[4] & 0xFF) != 0xFF) {
                     double trip2 = Utils.bytesToInt16(data[6], data[5], data[4]) / 10.0;
-                    Data.setTripTwo(trip2);
+                    MotorcycleData.setTripTwo(trip2);
                 }
                 break;
             default:

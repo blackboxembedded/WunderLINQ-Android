@@ -40,7 +40,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.blackboxembedded.WunderLINQ.FaultActivity;
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -202,8 +202,8 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
         mMap = googleMap;
         Log.d(TAG,"onMapReady()");
         // Move the camera
-        if (Data.getLastLocation() != null) {
-            LatLng location = new LatLng(Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
+        if (MotorcycleData.getLastLocation() != null) {
+            LatLng location = new LatLng(MotorcycleData.getLastLocation().getLatitude(), MotorcycleData.getLastLocation().getLongitude());
             MarkerOptions mMarkerOptions= new MarkerOptions().position(location);
             mMarker = mMap.addMarker(mMarkerOptions);
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, currentZoom));
@@ -246,8 +246,8 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
                 l -= l % (10*60*1000);
                 long unixtime = l / 1000L;
                 timestamp = String.valueOf(unixtime);
-                if (Data.getLastLocation() != null) {
-                    LatLng location = new LatLng(Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
+                if (MotorcycleData.getLastLocation() != null) {
+                    LatLng location = new LatLng(MotorcycleData.getLastLocation().getLatitude(), MotorcycleData.getLastLocation().getLongitude());
                     mMarker.setPosition(location);
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
                     tileOverlay.clearTileCache();
@@ -340,9 +340,9 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
                 SoundManager.playSound(this, R.raw.directional);
                 //Zoom Out
                 if (currentZoom > 3){
-                    if (Data.getLastLocation() != null) {
+                    if (MotorcycleData.getLastLocation() != null) {
                         currentZoom = currentZoom - 1;
-                        LatLng location = new LatLng(Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
+                        LatLng location = new LatLng(MotorcycleData.getLastLocation().getLatitude(), MotorcycleData.getLastLocation().getLongitude());
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, currentZoom));
                     }
                 }
@@ -353,9 +353,9 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
                 SoundManager.playSound(this, R.raw.directional);
                 //Zoom In
                 if (currentZoom < 16){
-                    if (Data.getLastLocation() != null) {
+                    if (MotorcycleData.getLastLocation() != null) {
                         currentZoom = currentZoom + 1;
-                        LatLng location = new LatLng(Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
+                        LatLng location = new LatLng(MotorcycleData.getLastLocation().getLatitude(), MotorcycleData.getLastLocation().getLongitude());
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, currentZoom));
                     }
                 }
@@ -363,8 +363,8 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
             case KeyEvent.KEYCODE_ENTER:
                 //Center
                 SoundManager.playSound(this, R.raw.enter);
-                if (Data.getLastLocation() != null) {
-                    LatLng location = new LatLng(Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
+                if (MotorcycleData.getLastLocation() != null) {
+                    LatLng location = new LatLng(MotorcycleData.getLastLocation().getLatitude(), MotorcycleData.getLastLocation().getLongitude());
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 10));
                 }
                 return true;

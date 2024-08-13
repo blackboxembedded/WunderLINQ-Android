@@ -38,7 +38,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 
 public class AlertActivity extends AppCompatActivity {
 
@@ -178,7 +178,7 @@ public class AlertActivity extends AppCompatActivity {
                     break;
                 case R.id.btnOK:
                     if (type == ALERT_FUEL) {
-                        if (!NavAppHelper.navigateToFuel(AlertActivity.this, Data.getLastLocation())) {
+                        if (!NavAppHelper.navigateToFuel(AlertActivity.this, MotorcycleData.getLastLocation())) {
                             tvAlertbody.setText(getString(R.string.nav_app_feature_not_supported));
                         }
                     } else if (type == ALERT_IGNITION) {
