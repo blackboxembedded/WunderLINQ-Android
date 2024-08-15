@@ -25,7 +25,6 @@ import com.blackboxembedded.WunderLINQ.protocols.KeyboardHID;
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
-import com.google.android.material.shadow.ShadowRenderer;
 
 import java.util.Arrays;
 
@@ -257,7 +256,7 @@ public class WLQ_N extends WLQ_BASE {
         wunderLINQConfig = new byte[bytes.length];
         System.arraycopy(bytes, 0, wunderLINQConfig, 0, bytes.length);
 
-        Log.d(TAG, "WLQConfig: " + Utils.ByteArraytoHex(wunderLINQConfig));
+        Log.d(TAG, "WLQConfig: " + Utils.ByteArrayToHex(wunderLINQConfig));
 
         byte[] flashConfigPart = new byte[configFlashSize];
         System.arraycopy(bytes, 26, flashConfigPart, 0, configFlashSize);
@@ -269,7 +268,7 @@ public class WLQ_N extends WLQ_BASE {
             tempConfig = new byte[flashConfig.length];
             System.arraycopy(flashConfig, 0, tempConfig, 0, flashConfig.length);
 
-            Log.d(TAG, "New flashConfig: " + Utils.ByteArraytoHex(flashConfig));
+            Log.d(TAG, "New flashConfig: " + Utils.ByteArrayToHex(flashConfig));
 
             firmwareVersion = bytes[firmwareVersionMajor_INDEX] + "." + bytes[firmwareVersionMinor_INDEX];
             Log.d(TAG, "Firmware Version: " + firmwareVersion);
@@ -993,6 +992,6 @@ public class WLQ_N extends WLQ_BASE {
 
     @Override
     public void setStatus(byte[] status) {
-        Log.d(TAG, "WLQ_N_STATUS: " + Utils.ByteArraytoHex(status));
+        Log.d(TAG, "WLQ_N_STATUS: " + Utils.ByteArrayToHex(status));
     }
 }

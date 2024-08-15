@@ -29,56 +29,96 @@ import androidx.car.app.model.CarIcon;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.IconCompat;
 
+import com.blackboxembedded.WunderLINQ.MemCache;
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import org.apache.commons.lang3.StringUtils;
+
+import ca.rmen.sunrisesunset.SunriseSunset;
+
 public class Data {
+    // Constants
+    private final static long MILLISECOND_DELAY_CLUSTER_UPDATE = 15 * 1000; // Every 15 seconds
+    private final static double CRITICAL_ENGINE_TEMP_C = 104.0; //219F hot engine
+    private final static double CRITICAL_ENGINE_TEMP_LOW_C = 50.0; //140F cold engine
+
+    private final static double CRITICAL_AIR_TEMP_HIGH_C = 37.5; //99.5F hot human
+    private final static double CRITICAL_AIR_TEMP_LOW_C = 4.0; //39F cold human watch for frost
+    private final static double CRITICAL_BATTERY_VOLTAGE_HIGH = 15.0;
+    private final static double CRITICAL_BATTERY_VOLTAGE_LOW = 12.0;
+    private final static double RANGE_CRITICAL = 5.0;
+    private final static double RANGE_LOW = 50.0;
+
+
+
     // WunderLINQ HW
     public static WLQ wlq;
     public static String hardwareVersion;
 
-    public static final int DATA_GEAR = 0;
-    public static final int DATA_ENGINE_TEMP = 1;
-    public static final int DATA_AIR_TEMP = 2;
-    public static final int DATA_FRONT_RDC = 3;
-    public static final int DATA_REAR_RDC = 4;
-    public static final int DATA_ODOMETER = 5;
-    public static final int DATA_VOLTAGE = 6;
-    public static final int DATA_THROTTLE = 7;
-    public static final int DATA_FRONT_BRAKE = 8;
-    public static final int DATA_REAR_BRAKE = 9;
-    public static final int DATA_AMBIENT_LIGHT = 10;
-    public static final int DATA_TRIP_ONE = 11;
-    public static final int DATA_TRIP_TWO = 12;
-    public static final int DATA_TRIP_AUTO = 13;
-    public static final int DATA_SPEED = 14;
-    public static final int DATA_AVG_SPEED = 15;
-    public static final int DATA_CURRENT_CONSUMPTION = 16;
-    public static final int DATA_ECONOMY_ONE = 17;
-    public static final int DATA_ECONOMY_TWO = 18;
-    public static final int DATA_RANGE = 19;
-    public static final int DATA_SHIFTS = 20;
-    public static final int DATA_LEAN_DEVICE = 21;
-    public static final int DATA_GFORCE_DEVICE = 22;
-    public static final int DATA_BEARING_DEVICE = 23;
-    public static final int DATA_TIME_DEVICE = 24;
-    public static final int DATA_BAROMETRIC_DEVICE = 25;
-    public static final int DATA_SPEED_DEVICE = 26;
-    public static final int DATA_ALTITUDE_DEVICE = 27;
-    public static final int DATA_SUN_DEVICE = 28;
-    public static final int DATA_RPM = 29;
-    public static final int DATA_LEAN = 30;
-    public static final int DATA_REAR_SPEED = 31;
-    public static final int DATA_CELL_SIGNAL= 32;
-    public static final int DATA_BATTERY_DEVICE = 33;
+    public enum DataType {
+        GEAR(0),
+        ENGINE_TEMP(1),
+        AIR_TEMP(2),
+        FRONT_RDC(3),
+        REAR_RDC(4),
+        ODOMETER(5),
+        VOLTAGE(6),
+        THROTTLE(7),
+        FRONT_BRAKE(8),
+        REAR_BRAKE(9),
+        AMBIENT_LIGHT(10),
+        TRIP_ONE(11),
+        TRIP_TWO(12),
+        TRIP_AUTO(13),
+        SPEED(14),
+        AVG_SPEED(15),
+        CURRENT_CONSUMPTION(16),
+        ECONOMY_ONE(17),
+        ECONOMY_TWO(18),
+        RANGE(19),
+        SHIFTS(20),
+        LEAN_BT(21),
+        GFORCE_DEVICE(22),
+        BEARING_DEVICE(23),
+        TIME_DEVICE(24),
+        BAROMETRIC_DEVICE(25),
+        SPEED_DEVICE(26),
+        ALTITUDE_DEVICE(27),
+        SUN_DEVICE(28),
+        RPM(29),
+        LEAN_BIKE(30),
+        REAR_SPEED(31),
+        CELL_SIGNAL(32),
+        BATTERY_DEVICE(33);
+
+
+        private final int value;
+
+        // Constructor is private; cannot be called from outside the enum
+        DataType(int value) {
+            this.value = value;
+        }
+
+        // Getter method for the value
+        public int getValue() {
+            return value;
+        }
+
+        public String getString() {
+            return "";
+        }
+
+    }
 
     // Last Message
     private static byte[] lastMessage;
@@ -253,10 +293,10 @@ public class Data {
 
     // Voltage
     private static Double voltage;
-    public static Double getvoltage() {
+    public static Double getVoltage() {
         return voltage;
     }
-    public static void setvoltage(Double voltage){
+    public static void setVoltage(Double voltage){
         Data.voltage = voltage;
     }
 
@@ -416,8 +456,6 @@ public class Data {
         return Data.time;
     }
     public static void setTime(Date time){
-        final long MILLISECOND_DELAY_CLUSTER_UPDATE = 15 * 1000; // Every 15 seconds
-
         Data.time = time;
 
         if ((Data.lastUpdateClusterClock == null) || ((Data.time.getTime() - Data.lastUpdateClusterClock.getTime()) > MILLISECOND_DELAY_CLUSTER_UPDATE)) {
@@ -569,107 +607,107 @@ public class Data {
         String barometricUnit = "mBar";
 
         String label = " ";
-        switch (dataPoint){
-            case DATA_GEAR:
-                label = MyApplication.getContext().getString(R.string.gear_label);
+        switch (DataType.values()[dataPoint]){
+            case GEAR:
+                label = MemCache.gear();
                 break;
-            case DATA_ENGINE_TEMP:
-                label = MyApplication.getContext().getString(R.string.engine_temp_label) + "(" + temperatureUnit + ")";
+            case ENGINE_TEMP:
+                label = MemCache.temperatureUnitEngine();
                 break;
-            case DATA_AIR_TEMP:
-                label = MyApplication.getContext().getString(R.string.ambient_temp_label) + "(" + temperatureUnit + ")";
+            case AIR_TEMP:
+                label = MemCache.temperatureUnitAir();
                 break;
-            case DATA_FRONT_RDC:
-                label = MyApplication.getContext().getString(R.string.frontpressure_header) + "(" + pressureUnit + ")";
+            case FRONT_RDC:
+                label = MemCache.pressureUnitLabelF();
                 break;
-            case DATA_REAR_RDC:
-                label = MyApplication.getContext().getString(R.string.rearpressure_header) + "(" + pressureUnit + ")";
+            case REAR_RDC:
+                label = MemCache.pressureUnitLabelR();
                 break;
-            case DATA_ODOMETER:
-                label = MyApplication.getContext().getString(R.string.odometer_label) + "(" + distanceUnit + ")";
+            case ODOMETER:
+                label = MemCache.odometerLabel();
                 break;
-            case DATA_VOLTAGE:
-                label = MyApplication.getContext().getString(R.string.voltage_label) + "(" + voltageUnit + ")";
+            case VOLTAGE:
+                label = MemCache.voltageUnitLabel();
                 break;
-            case DATA_THROTTLE:
-                label = MyApplication.getContext().getString(R.string.throttle_label) + "(" + throttleUnit + ")";
+            case THROTTLE:
+                label = MemCache.throttleUnitLabel();
                 break;
-            case DATA_FRONT_BRAKE:
-                label = MyApplication.getContext().getString(R.string.frontbrakes_label);
+            case FRONT_BRAKE:
+                label = MemCache.brakeLabelF();
                 break;
-            case DATA_REAR_BRAKE:
-                label = MyApplication.getContext().getString(R.string.rearbrakes_label);
+            case REAR_BRAKE:
+                label = MemCache.brakeLabelR();
                 break;
-            case DATA_AMBIENT_LIGHT:
+            case AMBIENT_LIGHT:
                 label = MyApplication.getContext().getString(R.string.ambientlight_label);
                 break;
-            case DATA_TRIP_ONE:
-                label = MyApplication.getContext().getString(R.string.trip1_label) + "(" + distanceUnit + ")";
+            case TRIP_ONE:
+                label = MemCache.trip1Label();
                 break;
-            case DATA_TRIP_TWO:
-                label = MyApplication.getContext().getString(R.string.trip2_label) + "(" + distanceUnit + ")";
+            case TRIP_TWO:
+                label = MemCache.trip2Label();
                 break;
-            case DATA_TRIP_AUTO:
-                label = MyApplication.getContext().getString(R.string.tripauto_label) + "(" + distanceUnit + ")";
+            case TRIP_AUTO:
+                label = MemCache.tripAutoLabel();
                 break;
-            case DATA_SPEED:
-                label = MyApplication.getContext().getString(R.string.speed_label) + "(" + distanceTimeUnit + ")";
+            case SPEED:
+                label = MemCache.speedLabel();
                 break;
-            case DATA_AVG_SPEED:
+            case AVG_SPEED:
                 label = MyApplication.getContext().getString(R.string.avgspeed_label) + "(" + distanceTimeUnit + ")";
                 break;
-            case DATA_CURRENT_CONSUMPTION:
+            case CURRENT_CONSUMPTION:
                 label = MyApplication.getContext().getString(R.string.cconsumption_label) + "(" + consumptionUnit + ")";
                 break;
-            case DATA_ECONOMY_ONE:
+            case ECONOMY_ONE:
                 label = MyApplication.getContext().getString(R.string.fueleconomyone_label) + "(" + consumptionUnit + ")";
                 break;
-            case DATA_ECONOMY_TWO:
+            case ECONOMY_TWO:
                 label = MyApplication.getContext().getString(R.string.fueleconomytwo_label) + "(" + consumptionUnit + ")";
                 break;
-            case DATA_RANGE:
+            case RANGE:
                 label = MyApplication.getContext().getString(R.string.fuelrange_label) + "(" + distanceUnit + ")";
                 break;
-            case DATA_SHIFTS:
+            case SHIFTS:
                 label = MyApplication.getContext().getString(R.string.shifts_header);
                 break;
-            case DATA_LEAN_DEVICE:
+            case LEAN_BT:
                 label = MyApplication.getContext().getString(R.string.leanangle_header);
                 break;
-            case DATA_GFORCE_DEVICE:
+            case GFORCE_DEVICE:
                 label = MyApplication.getContext().getString(R.string.gforce_header);
                 break;
-            case DATA_BEARING_DEVICE:
+            case BEARING_DEVICE:
                 label = MyApplication.getContext().getString(R.string.bearing_header);
                 break;
-            case DATA_TIME_DEVICE:
+            case TIME_DEVICE:
                 label = MyApplication.getContext().getString(R.string.time_header);
                 break;
-            case DATA_BAROMETRIC_DEVICE:
+            case BAROMETRIC_DEVICE:
                 label = MyApplication.getContext().getString(R.string.barometricpressure_header) + "(" + barometricUnit + ")";
                 break;
-            case DATA_SPEED_DEVICE:
+            case SPEED_DEVICE:
                 label = MyApplication.getContext().getString(R.string.gpsspeed_header) + "(" + distanceTimeUnit + ")";
                 break;
-            case DATA_ALTITUDE_DEVICE:
+            case ALTITUDE_DEVICE:
                 label = MyApplication.getContext().getString(R.string.altitude_header) + "(" + heightUnit + ")";
                 break;
-            case DATA_SUN_DEVICE:
+            case SUN_DEVICE:
                 label = MyApplication.getContext().getString(R.string.sunrisesunset_header);
                 break;
-            case DATA_RPM:
+            case RPM:
                 label = MyApplication.getContext().getString(R.string.rpm_header);
                 break;
-            case DATA_LEAN:
+            case LEAN_BIKE:
                 label = MyApplication.getContext().getString(R.string.leanangle_bike_header);
                 break;
-            case DATA_REAR_SPEED:
+            case REAR_SPEED:
                 label = MyApplication.getContext().getString(R.string.rearwheel_speed_header) + "(" + distanceTimeUnit + ")";
                 break;
-            case DATA_CELL_SIGNAL:
+            case CELL_SIGNAL:
                 label = MyApplication.getContext().getString(R.string.cellular_signal_header) + "(" + signalUnit + ")";
                 break;
-            case DATA_BATTERY_DEVICE:
+            case BATTERY_DEVICE:
                 label = MyApplication.getContext().getString(R.string.local_battery_header) + "(" + batteryUnit + ")";
                 break;
             default:
@@ -678,109 +716,109 @@ public class Data {
         return label;
     }
 
-    public static String getExtraKey(int dataPoint){
+    public static String getExtraKey(Data.DataType dataPoint){
         String key = "";
         switch (dataPoint){
-            case DATA_GEAR:
+            case GEAR:
                 key = "gear";
                 break;
-            case DATA_ENGINE_TEMP:
+            case ENGINE_TEMP:
                 key = "engineTemperature";
                 break;
-            case DATA_AIR_TEMP:
+            case AIR_TEMP:
                 key = "ambientTemperature";
                 break;
-            case DATA_FRONT_RDC:
+            case FRONT_RDC:
                 key = "frontTirePressure";
                 break;
-            case DATA_REAR_RDC:
+            case REAR_RDC:
                 key = "rearTirePressure";
                 break;
-            case DATA_ODOMETER:
+            case ODOMETER:
                 key = "odometer";
                 break;
-            case DATA_VOLTAGE:
+            case VOLTAGE:
                 key = "voltage";
                 break;
-            case DATA_THROTTLE:
+            case THROTTLE:
                 key = "throttlePosition";
                 break;
-            case DATA_FRONT_BRAKE:
+            case FRONT_BRAKE:
                 key = "frontBrake";
                 break;
-            case DATA_REAR_BRAKE:
+            case REAR_BRAKE:
                 key = "rearBrake";
                 break;
-            case DATA_AMBIENT_LIGHT:
+            case AMBIENT_LIGHT:
                 key = "ambientLight";
                 break;
-            case DATA_TRIP_ONE:
+            case TRIP_ONE:
                 key = "tripOne";
                 break;
-            case DATA_TRIP_TWO:
+            case TRIP_TWO:
                 key = "tripTwo";
                 break;
-            case DATA_TRIP_AUTO:
+            case TRIP_AUTO:
                 key = "tripAuto";
                 break;
-            case DATA_SPEED:
+            case SPEED:
                 key = "speed";
                 break;
-            case DATA_AVG_SPEED:
+            case AVG_SPEED:
                 key = "avgSpeed";
                 break;
-            case DATA_CURRENT_CONSUMPTION:
+            case CURRENT_CONSUMPTION:
                 key = "currentConsumption";
                 break;
-            case DATA_ECONOMY_ONE:
+            case ECONOMY_ONE:
                 key = "fuelEconomyOne";
                 break;
-            case DATA_ECONOMY_TWO:
+            case ECONOMY_TWO:
                 key = "fuelEconomyTwo";
                 break;
-            case DATA_RANGE:
+            case RANGE:
                 key = "fuelRange";
                 break;
-            case DATA_SHIFTS:
+            case SHIFTS:
                 key = "numberOfShifts";
                 break;
-            case DATA_LEAN_DEVICE:
+            case LEAN_BT:
                 key = "leanAngleDevice";
                 break;
-            case DATA_GFORCE_DEVICE:
+            case GFORCE_DEVICE:
                 key = "gForce";
                 break;
-            case DATA_BEARING_DEVICE:
+            case BEARING_DEVICE:
                 key = "bearing";
                 break;
-            case DATA_TIME_DEVICE:
+            case TIME_DEVICE:
                 key = "time";
                 break;
-            case DATA_BAROMETRIC_DEVICE:
+            case BAROMETRIC_DEVICE:
                 key = "barometricPressure";
                 break;
-            case DATA_SPEED_DEVICE:
+            case SPEED_DEVICE:
                 key = "gpsSpeed";
                 break;
-            case DATA_ALTITUDE_DEVICE:
+            case ALTITUDE_DEVICE:
                 key = "gpsAltitude";
                 break;
-            case DATA_SUN_DEVICE:
+            case SUN_DEVICE:
                 key = "sunRiseSet";
                 break;
-            case DATA_RPM:
+            case RPM:
                 key = "rpm";
                 break;
-            case DATA_LEAN:
+            case LEAN_BIKE:
                 key = "leanAngleBt";
                 break;
-            case DATA_REAR_SPEED:
+            case REAR_SPEED:
                 key = "rearSpeed";
                 break;
-            case DATA_CELL_SIGNAL:
+            case CELL_SIGNAL:
                 key = "cellSignal";
                 break;
-            case DATA_BATTERY_DEVICE:
+            case BATTERY_DEVICE:
                 key = "battery";
                 break;
             default:
@@ -791,20 +829,20 @@ public class Data {
 
     public static Drawable getIcon(int dataPoint){
         Drawable icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_cog);
-        switch (dataPoint){
-            case DATA_GEAR:
+        switch (DataType.values()[dataPoint]){
+            case GEAR:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_cog);
                 break;
-            case DATA_ENGINE_TEMP:
+            case ENGINE_TEMP:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_engine_temp);
                 if(Data.getEngineTemperature() != null ){
                     double engineTemp = Data.getEngineTemperature();
-                    if (engineTemp >= 104.0){
+                    if (engineTemp >= CRITICAL_ENGINE_TEMP_C){
                         icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
                     }
                 }
                 break;
-            case DATA_AIR_TEMP:
+            case AIR_TEMP:
                 if(Data.getAmbientTemperature() != null ){
                     double ambientTemp = Data.getAmbientTemperature();
                     if(ambientTemp <= 0){
@@ -817,7 +855,7 @@ public class Data {
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_thermometer_half);
                 }
                 break;
-            case DATA_FRONT_RDC:
+            case FRONT_RDC:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire);
                 if (Faults.getfrontTirePressureCriticalActive()){
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire_alert);
@@ -827,7 +865,7 @@ public class Data {
                     icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
                 }
                 break;
-            case DATA_REAR_RDC:
+            case REAR_RDC:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire);
                 if (Faults.getrearTirePressureCriticalActive()){
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire_alert);
@@ -837,65 +875,65 @@ public class Data {
                     icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
                 }
                 break;
-            case DATA_ODOMETER:
+            case ODOMETER:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_dashboard_meter);
                 break;
-            case DATA_VOLTAGE:
+            case VOLTAGE:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_car_battery);
                 break;
-            case DATA_THROTTLE:
+            case THROTTLE:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_signature);
                 break;
-            case DATA_FRONT_BRAKE:
-            case DATA_REAR_BRAKE:
+            case FRONT_BRAKE:
+            case REAR_BRAKE:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_brakes);
                 break;
-            case DATA_AMBIENT_LIGHT:
+            case AMBIENT_LIGHT:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_lightbulb);
                 break;
-            case DATA_TRIP_ONE:
-            case DATA_TRIP_TWO:
-            case DATA_TRIP_AUTO:
+            case TRIP_ONE:
+            case TRIP_TWO:
+            case TRIP_AUTO:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_suitcase);
                 break;
-            case DATA_SPEED:
-            case DATA_AVG_SPEED:
-            case DATA_SPEED_DEVICE:
-            case DATA_RPM:
-            case DATA_REAR_SPEED:
+            case SPEED:
+            case AVG_SPEED:
+            case SPEED_DEVICE:
+            case RPM:
+            case REAR_SPEED:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tachometer_alt);
                 break;
-            case DATA_CURRENT_CONSUMPTION:
-            case DATA_ECONOMY_ONE:
-            case DATA_ECONOMY_TWO:
-            case DATA_RANGE:
+            case CURRENT_CONSUMPTION:
+            case ECONOMY_ONE:
+            case ECONOMY_TWO:
+            case RANGE:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_gas_pump);
                 break;
-            case DATA_SHIFTS:
+            case SHIFTS:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_arrows_alt_v);
                 break;
-            case DATA_LEAN_DEVICE:
-            case DATA_LEAN:
+            case LEAN_BT:
+            case LEAN_BIKE:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_angle);
                 break;
-            case DATA_GFORCE_DEVICE:
+            case GFORCE_DEVICE:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_accelerometer);
                 break;
-            case DATA_BEARING_DEVICE:
+            case BEARING_DEVICE:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_compass);
                 break;
-            case DATA_TIME_DEVICE:
+            case TIME_DEVICE:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_clock);
                 break;
-            case DATA_BAROMETRIC_DEVICE:
+            case BAROMETRIC_DEVICE:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_barometer);
                 break;
-            case DATA_ALTITUDE_DEVICE:
+            case ALTITUDE_DEVICE:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_mountain);
                 break;
-            case DATA_SUN_DEVICE:
+            case SUN_DEVICE:
                 if (Data.getLastLocation() != null && Data.getTime() != null) {
-                    Calendar[] sunriseSunset = ca.rmen.sunrisesunset.SunriseSunset.getSunriseSunset(Calendar.getInstance(), Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
+                    Calendar[] sunriseSunset = SunriseSunset.getSunriseSunset(Calendar.getInstance(), Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
                     Date sunrise = sunriseSunset[0].getTime();
                     Date sunset = sunriseSunset[1].getTime();
                     if(Data.getTime().compareTo(sunrise) > 0 && Data.getTime().compareTo(sunset) < 0){
@@ -908,7 +946,7 @@ public class Data {
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_sun);
                 }
                 break;
-            case DATA_CELL_SIGNAL:
+            case CELL_SIGNAL:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.signal_bar_0);
                 if(Data.getCellularSignal() != null){
                     int signal = Data.getCellularSignal();
@@ -925,7 +963,7 @@ public class Data {
                     }
                 }
                 break;
-            case DATA_BATTERY_DEVICE:
+            case BATTERY_DEVICE:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.battery_empty);
                 if(Data.getLocalBattery() != null){
                     double battery = Data.getLocalBattery();
@@ -953,20 +991,20 @@ public class Data {
         IconCompat icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_cog);
         CarColor carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.white),MyApplication.getContext().getResources().getColor(R.color.black));
 
-        switch (dataPoint){
-            case DATA_GEAR:
+        switch (DataType.values()[dataPoint]){
+            case GEAR:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_cog);
                 break;
-            case DATA_ENGINE_TEMP:
+            case ENGINE_TEMP:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_engine_temp);
                 if(Data.getEngineTemperature() != null ){
                     double engineTemp = Data.getEngineTemperature();
-                    if (engineTemp >= 104.0){
+                    if (engineTemp >= CRITICAL_ENGINE_TEMP_C){
                         carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_red),MyApplication.getContext().getResources().getColor(R.color.motorrad_red));
                     }
                 }
                 break;
-            case DATA_AIR_TEMP:
+            case AIR_TEMP:
                 if(Data.getAmbientTemperature() != null ){
                     double ambientTemp = Data.getAmbientTemperature();
                     if(ambientTemp <= 0){
@@ -979,7 +1017,7 @@ public class Data {
                     icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_thermometer_half);
                 }
                 break;
-            case DATA_FRONT_RDC:
+            case FRONT_RDC:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tire);
                 if (Faults.getfrontTirePressureCriticalActive()){
                     icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tire_alert);
@@ -989,7 +1027,7 @@ public class Data {
                     carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.yellow),MyApplication.getContext().getResources().getColor(R.color.yellow));
                 }
                 break;
-            case DATA_REAR_RDC:
+            case REAR_RDC:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tire);
                 if (Faults.getrearTirePressureCriticalActive()){
                     icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tire_alert);
@@ -999,65 +1037,65 @@ public class Data {
                     carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.yellow),MyApplication.getContext().getResources().getColor(R.color.yellow));
                 }
                 break;
-            case DATA_ODOMETER:
+            case ODOMETER:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_dashboard_meter);
                 break;
-            case DATA_VOLTAGE:
+            case VOLTAGE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_car_battery);
                 break;
-            case DATA_THROTTLE:
+            case THROTTLE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_signature);
                 break;
-            case DATA_FRONT_BRAKE:
-            case DATA_REAR_BRAKE:
+            case FRONT_BRAKE:
+            case REAR_BRAKE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_brakes);
                 break;
-            case DATA_AMBIENT_LIGHT:
+            case AMBIENT_LIGHT:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_lightbulb);
                 break;
-            case DATA_TRIP_ONE:
-            case DATA_TRIP_TWO:
-            case DATA_TRIP_AUTO:
+            case TRIP_ONE:
+            case TRIP_TWO:
+            case TRIP_AUTO:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_suitcase);
                 break;
-            case DATA_SPEED:
-            case DATA_AVG_SPEED:
-            case DATA_SPEED_DEVICE:
-            case DATA_RPM:
-            case DATA_REAR_SPEED:
+            case SPEED:
+            case AVG_SPEED:
+            case SPEED_DEVICE:
+            case RPM:
+            case REAR_SPEED:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tachometer_alt);
                 break;
-            case DATA_CURRENT_CONSUMPTION:
-            case DATA_ECONOMY_ONE:
-            case DATA_ECONOMY_TWO:
-            case DATA_RANGE:
+            case CURRENT_CONSUMPTION:
+            case ECONOMY_ONE:
+            case ECONOMY_TWO:
+            case RANGE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_gas_pump);
                 break;
-            case DATA_SHIFTS:
+            case SHIFTS:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_arrows_alt_v);
                 break;
-            case DATA_LEAN_DEVICE:
-            case DATA_LEAN:
+            case LEAN_BT:
+            case LEAN_BIKE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_angle);
                 break;
-            case DATA_GFORCE_DEVICE:
+            case GFORCE_DEVICE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_accelerometer);
                 break;
-            case DATA_BEARING_DEVICE:
+            case BEARING_DEVICE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_compass);
                 break;
-            case DATA_TIME_DEVICE:
+            case TIME_DEVICE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_clock);
                 break;
-            case DATA_BAROMETRIC_DEVICE:
+            case BAROMETRIC_DEVICE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_barometer);
                 break;
-            case DATA_ALTITUDE_DEVICE:
+            case ALTITUDE_DEVICE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_mountain);
                 break;
-            case DATA_SUN_DEVICE:
+            case SUN_DEVICE:
                 if (Data.getLastLocation() != null && Data.getTime() != null) {
-                    Calendar[] sunriseSunset = ca.rmen.sunrisesunset.SunriseSunset.getSunriseSunset(Calendar.getInstance(), Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
+                    Calendar[] sunriseSunset = SunriseSunset.getSunriseSunset(Calendar.getInstance(), Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
                     Date sunrise = sunriseSunset[0].getTime();
                     Date sunset = sunriseSunset[1].getTime();
                     if(Data.getTime().compareTo(sunrise) > 0 && Data.getTime().compareTo(sunset) < 0){
@@ -1070,7 +1108,7 @@ public class Data {
                     icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_sun);
                 }
                 break;
-            case DATA_CELL_SIGNAL:
+            case CELL_SIGNAL:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.signal_bar_0);
                 if(Data.getCellularSignal() != null){
                     int signal = Data.getCellularSignal();
@@ -1087,7 +1125,7 @@ public class Data {
                     }
                 }
                 break;
-            case DATA_BATTERY_DEVICE:
+            case BATTERY_DEVICE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.battery_empty);
                 if(Data.getLocalBattery() != null){
                     double battery = Data.getLocalBattery();
@@ -1111,7 +1149,12 @@ public class Data {
         return new CarIcon.Builder(icon).setTint(carColor).build();
     }
 
-    public static String getValue(int dataPoint){
+
+    public static String getValue(int dataPoint) {
+        return getValue(DataType.values()[dataPoint]);
+    }
+
+    public static String getValue(DataType dataPoint){
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
         String pressureFormat = sharedPrefs.getString("prefPressureF", "0");
         String temperatureFormat = sharedPrefs.getString("prefTempF", "0");
@@ -1120,32 +1163,32 @@ public class Data {
 
         String value = "";
         switch (dataPoint){
-            case DATA_GEAR:
+            case GEAR:
                 if(Data.getGear() != null){
                     value = Data.getGear();
                 }
                 break;
-            case DATA_ENGINE_TEMP:
+            case ENGINE_TEMP:
                 if(Data.getEngineTemperature() != null ){
                     double engineTemp = Data.getEngineTemperature();
                     if (temperatureFormat.contains("1")) {
                         // F
                         engineTemp = Utils.celsiusToFahrenheit(engineTemp);
                     }
-                    value = String.valueOf(Math.round(engineTemp));
+                    value = Utils.toZeroDecimalString(engineTemp);
                 }
                 break;
-            case DATA_AIR_TEMP:
+            case AIR_TEMP:
                 if(Data.getAmbientTemperature() != null ){
                     double ambientTemp = Data.getAmbientTemperature();
                     if (temperatureFormat.contains("1")) {
                         // F
                         ambientTemp = Utils.celsiusToFahrenheit(ambientTemp);
                     }
-                    value = String.valueOf(Math.round(ambientTemp));
+                    value = Utils.toZeroDecimalString(ambientTemp);
                 }
                 break;
-            case DATA_FRONT_RDC:
+            case FRONT_RDC:
                 if(Data.getFrontTirePressure() != null){
                     double rdcFront = Data.getFrontTirePressure();
                     if (pressureFormat.contains("1")) {
@@ -1153,15 +1196,15 @@ public class Data {
                         rdcFront = Utils.barTokPa(rdcFront);
                     } else if (pressureFormat.contains("2")) {
                         // Kg-f
-                        rdcFront = Utils.barTokgf(rdcFront);
+                        rdcFront = Utils.barToKgf(rdcFront);
                     } else if (pressureFormat.contains("3")) {
                         // Psi
                         rdcFront = Utils.barToPsi(rdcFront);
                     }
-                    value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(rdcFront);
+                    value = Utils.toOneDecimalString(rdcFront);
                 }
                 break;
-            case DATA_REAR_RDC:
+            case REAR_RDC:
                 if(Data.getRearTirePressure() != null){
                     double rdcRear = Data.getRearTirePressure();
                     if (pressureFormat.contains("1")) {
@@ -1169,273 +1212,836 @@ public class Data {
                         rdcRear = Utils.barTokPa(rdcRear);
                     } else if (pressureFormat.contains("2")) {
                         // Kg-f
-                        rdcRear = Utils.barTokgf(rdcRear);
+                        rdcRear = Utils.barToKgf(rdcRear);
                     } else if (pressureFormat.contains("3")) {
                         // Psi
                         rdcRear = Utils.barToPsi(rdcRear);
                     }
-                    value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(rdcRear);
+                    value = Utils.toOneDecimalString(rdcRear);
                 }
                 break;
-            case DATA_ODOMETER:
+            case ODOMETER:
                 if(Data.getOdometer() != null){
                     double odometer = Data.getOdometer();
                     if (distanceFormat.contains("1")) {
                         odometer = Utils.kmToMiles(odometer);
                     }
-                    value = String.valueOf(Math.round(odometer));
+                    value = Utils.toZeroDecimalString(odometer);
                 }
                 break;
-            case DATA_VOLTAGE:
-                if(Data.getvoltage() != null){
-                    Double voltage = Data.getvoltage();
-                    value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(voltage));
+            case VOLTAGE:
+                if(Data.getVoltage() != null){
+                    Double voltage = Data.getVoltage();
+                    value = Utils.toOneDecimalString((voltage));
                 }
                 break;
-            case DATA_THROTTLE:
+            case THROTTLE:
                 if(Data.getThrottlePosition() != null){
                     Double throttlePosition = Data.getThrottlePosition();
-                    value = String.valueOf(Math.round(throttlePosition));
+                    value = Utils.toZeroDecimalString(throttlePosition);
                 }
                 break;
-            case DATA_FRONT_BRAKE:
+            case FRONT_BRAKE:
                 if((Data.getFrontBrake() != null) && (Data.getFrontBrake() != 0)){
                     Integer frontBrakes = Data.getFrontBrake();
                     value = String.valueOf(frontBrakes);
                 }
                 break;
-            case DATA_REAR_BRAKE:
+            case REAR_BRAKE:
                 if((Data.getRearBrake() != null) && (Data.getRearBrake() != 0)){
                     Integer rearBrakes = Data.getRearBrake();
                     value = String.valueOf(rearBrakes);
                 }
                 break;
-            case DATA_AMBIENT_LIGHT:
+            case AMBIENT_LIGHT:
                 if(Data.getAmbientLight() != null){
                     Integer ambientLight = Data.getAmbientLight();
                     value = String.valueOf(ambientLight);
                 }
                 break;
-            case DATA_TRIP_ONE:
+            case TRIP_ONE:
                 if(Data.getTripOne() != null) {
                     double trip1 = Data.getTripOne();
                     if (distanceFormat.contains("1")) {
                         trip1 = Utils.kmToMiles(trip1);
                     }
-                    value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(trip1);
+                    value = Utils.toOneDecimalString(trip1);
                 }
                 break;
-            case DATA_TRIP_TWO:
+            case TRIP_TWO:
                 if(Data.getTripTwo() != null){
                     double trip2 = Data.getTripTwo();
                     if (distanceFormat.contains("1")) {
                         trip2 = Utils.kmToMiles(trip2);
                     }
-                    value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(trip2);
+                    value = Utils.toOneDecimalString(trip2);
                 }
                 break;
-            case DATA_TRIP_AUTO:
+            case TRIP_AUTO:
                 if(Data.getTripAuto() != null){
-                    double tripauto = Data.getTripAuto();
+                    double tripAuto = Data.getTripAuto();
                     if (distanceFormat.contains("1")) {
-                        tripauto = Utils.kmToMiles(tripauto);
+                        tripAuto = Utils.kmToMiles(tripAuto);
                     }
-                    value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(tripauto);
+                    value = Utils.toOneDecimalString(tripAuto);
                 }
                 break;
-            case DATA_SPEED:
+            case SPEED:
                 if(Data.getSpeed() != null){
                     double speed = Data.getSpeed();
                     if (distanceFormat.contains("1")) {
                         speed = Utils.kmToMiles(speed);
                     }
-                    value = String.valueOf(Math.round(speed));
+                    value = Utils.toZeroDecimalString(speed);
                 }
                 break;
-            case DATA_AVG_SPEED:
+            case AVG_SPEED:
                 if(Data.getAvgSpeed() != null){
-                    double avgspeed = Data.getAvgSpeed();
+                    double avgSpeed = Data.getAvgSpeed();
                     if (distanceFormat.contains("1")) {
-                        avgspeed = Utils.kmToMiles(avgspeed);
+                        avgSpeed = Utils.kmToMiles(avgSpeed);
                     }
-                    value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(avgspeed);
+                    value = Utils.toOneDecimalString(avgSpeed);
                 }
                 break;
-            case DATA_CURRENT_CONSUMPTION:
+            case CURRENT_CONSUMPTION:
                 if(Data.getCurrentConsumption() != null){
                     double currentConsumption = Data.getCurrentConsumption();
                     if (consumptionFormat.contains("1")) {
-                        currentConsumption = Utils.l100Tompg(currentConsumption);
+                        currentConsumption = Utils.l100ToMpg(currentConsumption);
                     } else if (consumptionFormat.contains("2")) {
-                        currentConsumption = Utils.l100Tompgi(currentConsumption);
+                        currentConsumption = Utils.l100ToMpgI(currentConsumption);
                     } else if (consumptionFormat.contains("3")) {
-                        currentConsumption = Utils.l100Tokml(currentConsumption);
+                        currentConsumption = Utils.l100ToKml(currentConsumption);
                     }
-                    value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(currentConsumption));
+                    value = Utils.toOneDecimalString(currentConsumption);
                 }
                 break;
-            case DATA_ECONOMY_ONE:
+            case ECONOMY_ONE:
                 if(Data.getFuelEconomyOne() != null){
                     double fuelEconomyOne = Data.getFuelEconomyOne();
                     if (consumptionFormat.contains("1")) {
-                        fuelEconomyOne = Utils.l100Tompg(fuelEconomyOne);
+                        fuelEconomyOne = Utils.l100ToMpg(fuelEconomyOne);
                     } else if (consumptionFormat.contains("2")) {
-                        fuelEconomyOne = Utils.l100Tompgi(fuelEconomyOne);
+                        fuelEconomyOne = Utils.l100ToMpgI(fuelEconomyOne);
                     } else if (consumptionFormat.contains("3")) {
-                        fuelEconomyOne = Utils.l100Tokml(fuelEconomyOne);
+                        fuelEconomyOne = Utils.l100ToKml(fuelEconomyOne);
                     }
-                    value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(fuelEconomyOne));
+                    value = Utils.toOneDecimalString(fuelEconomyOne);
                 }
                 break;
-            case DATA_ECONOMY_TWO:
+            case ECONOMY_TWO:
                 if(Data.getFuelEconomyTwo() != null){
                     double fuelEconomyTwo = Data.getFuelEconomyTwo();
                     if (consumptionFormat.contains("1")) {
-                        fuelEconomyTwo = Utils.l100Tompg(fuelEconomyTwo);
+                        fuelEconomyTwo = Utils.l100ToMpg(fuelEconomyTwo);
                     } else if (consumptionFormat.contains("2")) {
-                        fuelEconomyTwo  = Utils.l100Tompgi(fuelEconomyTwo);
+                        fuelEconomyTwo  = Utils.l100ToMpgI(fuelEconomyTwo);
                     } else if (consumptionFormat.contains("3")) {
-                        fuelEconomyTwo  = Utils.l100Tokml(fuelEconomyTwo);
+                        fuelEconomyTwo  = Utils.l100ToKml(fuelEconomyTwo);
                     }
-                    value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(fuelEconomyTwo));
+                    value = Utils.toOneDecimalString(fuelEconomyTwo);
                 }
                 break;
-            case DATA_RANGE:
+            case RANGE:
                 if(Data.getFuelRange() != null){
-                    double fuelrange = Data.getFuelRange();
+                    double fuelRange = Data.getFuelRange();
                     if (distanceFormat.contains("1")) {
-                        fuelrange = Utils.kmToMiles(fuelrange);
+                        fuelRange = Utils.kmToMiles(fuelRange);
                     }
-                    value = String.valueOf(Math.round(fuelrange));
+                    value = Utils.toZeroDecimalString(fuelRange);
                 }
                 break;
-            case DATA_SHIFTS:
+            case SHIFTS:
                 if(Data.getNumberOfShifts() != null){
                     int shifts = Data.getNumberOfShifts();
                     value = String.valueOf(shifts);
                 }
                 break;
-            case DATA_LEAN_DEVICE:
+            case LEAN_BT:
                 if(Data.getLeanAngleBT() != null){
                     Double leanAngle = Data.getLeanAngleBT();
-                    value = String.valueOf(Math.round(leanAngle));
+                    value = Utils.toZeroDecimalString(leanAngle);
                 }
                 break;
-            case DATA_GFORCE_DEVICE:
+            case GFORCE_DEVICE:
                 if(Data.getGForce() != null){
                     Double gForce = Data.getGForce();
-                    value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(gForce));
+                    value = Utils.toOneDecimalString((gForce));
                 }
                 break;
-            case DATA_BEARING_DEVICE:
+            case BEARING_DEVICE:
                 if (Data.getBearing() != null) {
                     Integer bearingValue = Data.getBearing();
-                    String bearing = bearingValue.toString() + "°";
+                    String bearing = String.format("%s °", bearingValue);
                     if (!sharedPrefs.getString("prefBearing", "0").contains("0")) {
-                        if (bearingValue > 331 || bearingValue <= 28) {
-                            bearing = MyApplication.getContext().getString(R.string.north);
-                        } else if (bearingValue > 28 && bearingValue <= 73) {
-                            bearing = MyApplication.getContext().getString(R.string.north_east);
-                        } else if (bearingValue > 73 && bearingValue <= 118) {
-                            bearing = MyApplication.getContext().getString(R.string.east);
-                        } else if (bearingValue > 118 && bearingValue <= 163) {
-                            bearing = MyApplication.getContext().getString(R.string.south_east);
-                        } else if (bearingValue > 163 && bearingValue <= 208) {
-                            bearing = MyApplication.getContext().getString(R.string.south);
-                        } else if (bearingValue > 208 && bearingValue <= 253) {
-                            bearing = MyApplication.getContext().getString(R.string.south_west);
-                        } else if (bearingValue > 253 && bearingValue <= 298) {
-                            bearing = MyApplication.getContext().getString(R.string.west);
-                        } else if (bearingValue > 298 && bearingValue <= 331) {
-                            bearing = MyApplication.getContext().getString(R.string.north_west);
-                        }
+                        bearing = Utils.bearingToCardinal(bearingValue);
                     }
                     value = bearing;
                 }
                 break;
-            case DATA_TIME_DEVICE:
+            case TIME_DEVICE:
                 if (Data.getTime() != null) {
-                    SimpleDateFormat dateformat = new SimpleDateFormat("h:mm aa", Locale.getDefault());
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("h:mm aa", Locale.getDefault());
                     if (!sharedPrefs.getString("prefTime", "0").equals("0")) {
-                        dateformat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                        dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
                     }
-                    value = dateformat.format(Data.getTime());
+                    value = dateFormat.format(Data.getTime());
                 }
                 break;
-            case DATA_BAROMETRIC_DEVICE:
+            case BAROMETRIC_DEVICE:
                 if (Data.getBarometricPressure() != null) {
-                    value = String.valueOf(Math.round(Data.getBarometricPressure()));
+                    value = Utils.toZeroDecimalString(Data.getBarometricPressure());
                 }
                 break;
-            case DATA_SPEED_DEVICE:
+            case SPEED_DEVICE:
                 String gpsSpeed = MyApplication.getContext().getString(R.string.gps_nofix);
                 if (Data.getLastLocation() != null){
-                    gpsSpeed = String.valueOf(Math.round(Data.getLastLocation().getSpeed() * 3.6));
+                    gpsSpeed = Utils.toZeroDecimalString(Data.getLastLocation().getSpeed() * 3.6);
                     if (distanceFormat.contains("1")) {
-                        gpsSpeed = String.valueOf(Math.round(Utils.kmToMiles(Data.getLastLocation().getSpeed() * 3.6)));
+                        gpsSpeed = Utils.toZeroDecimalString(Utils.kmToMiles(Data.getLastLocation().getSpeed() * 3.6));
                     }
                 }
                 value = gpsSpeed;
                 break;
-            case DATA_ALTITUDE_DEVICE:
+            case ALTITUDE_DEVICE:
                 String altitude = MyApplication.getContext().getString(R.string.gps_nofix);
                 if (Data.getLastLocation() != null){
-                    altitude = String.valueOf(Math.round(Data.getLastLocation().getAltitude()));
+                    altitude = Utils.toZeroDecimalString(Data.getLastLocation().getAltitude());
                     if (distanceFormat.contains("1")) {
-                        altitude = String.valueOf(Math.round(Utils.mToFeet(Data.getLastLocation().getAltitude())));
+                        altitude = Utils.toZeroDecimalString(Utils.mToFeet(Data.getLastLocation().getAltitude()));
                     }
                 }
                 value = altitude;
                 break;
-            case DATA_SUN_DEVICE:
+            case SUN_DEVICE:
                 value = MyApplication.getContext().getString(R.string.gps_nofix);
                 if (Data.getLastLocation() != null) {
-                    Calendar[] sunriseSunset = ca.rmen.sunrisesunset.SunriseSunset.getSunriseSunset(Calendar.getInstance(), Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
+                    Calendar[] sunriseSunset = SunriseSunset.getSunriseSunset(Calendar.getInstance(), Data.getLastLocation().getLatitude(), Data.getLastLocation().getLongitude());
                     Date sunrise = sunriseSunset[0].getTime();
                     Date sunset = sunriseSunset[1].getTime();
-                    SimpleDateFormat dateformat = new SimpleDateFormat("h:mm aa", Locale.getDefault());
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("h:mm aa", Locale.getDefault());
                     if (!sharedPrefs.getString("prefTime", "0").equals("0")) {
-                        dateformat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                        dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
                     }
-                    String sunriseString = dateformat.format(sunrise);
-                    String sunsetString = dateformat.format(sunset);
+                    String sunriseString = dateFormat.format(sunrise);
+                    String sunsetString = dateFormat.format(sunset);
                     value = sunriseString + "/" + sunsetString;
                 }
                 break;
-            case DATA_RPM:
+            case RPM:
                 if (Data.getRPM() > 0){
                     value = String.valueOf(Data.getRPM());
                 }
                 break;
-            case DATA_LEAN:
+            case LEAN_BIKE:
                 if(Data.getLeanAngleBike() != null){
                     Double leanAngleBike = Data.getLeanAngleBike();
-                    value = String.valueOf(Math.round(leanAngleBike));
+                    value = Utils.toZeroDecimalString(leanAngleBike);
                 }
                 break;
-            case DATA_REAR_SPEED:
+            case REAR_SPEED:
                 if(Data.getRearSpeed() != null){
                     double speed = Data.getRearSpeed();
                     if (distanceFormat.contains("1")) {
                         speed = Utils.kmToMiles(speed);
                     }
-                    value = String.valueOf(Math.round(speed));
+                    value = Utils.toZeroDecimalString(speed);
                 }
                 break;
-            case DATA_CELL_SIGNAL:
+            case CELL_SIGNAL:
                 if(Data.getCellularSignal() != null){
                     value = String.valueOf(Data.getCellularSignal());
                 }
                 break;
-            case DATA_BATTERY_DEVICE:
+            case BATTERY_DEVICE:
                 if(Data.getLocalBattery() != null){
-                    value = String.valueOf(Math.round(Data.getLocalBattery()));
+                    value = Utils.toZeroDecimalString(Data.getLocalBattery());
                 }
                 break;
             default:
                 value = MyApplication.getContext().getString(R.string.blank_field);
         }
         return value;
+    }
+
+
+
+    public static  Object[] getCombinedData(DataType dataPoint){
+        String value = "";
+        String label = "  "; //default label is empty
+        Drawable icon = null; //default icon is always null
+        Integer valueColor = null; //default text color is null
+
+        try {
+            switch ( dataPoint){
+
+                case GEAR:
+                    value = Data.getGear();
+                    label = MyApplication.getContext().getString(R.string.gear_label);
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_cog);
+
+                    if(!StringUtils.isEmpty(value)){
+                        if (value.equals("N")) {
+                            valueColor =  ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.green) ;
+                        } else if ("123456".contains(value)) {
+                            valueColor =  ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow);
+                        }
+                    }
+                    break;
+
+
+                case ENGINE_TEMP:
+                    Double engineTemp = Data.getEngineTemperature();
+                    label = MemCache.temperatureUnitEngine();
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_engine_temp);
+
+                    if(engineTemp != null ) {
+                        if (engineTemp >= CRITICAL_ENGINE_TEMP_C){
+                            icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
+                            valueColor =  ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red);
+                        } else if (engineTemp <= CRITICAL_ENGINE_TEMP_LOW_C) {
+                            icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_blue), PorterDuff.Mode.SRC_ATOP);
+                            valueColor =  ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_blue);
+                        }
+                        if (MemCache.temperatureFormat().equals("1")) {// F
+                            engineTemp = Utils.celsiusToFahrenheit(engineTemp);
+                        }
+                        value = Utils.toZeroDecimalString(engineTemp);
+                    }
+                    break;
+
+
+                case AIR_TEMP:
+                    Double ambientTemp = Data.getAmbientTemperature();
+                    label = MemCache.temperatureUnitAir();
+
+                    if(ambientTemp != null ){
+                        if(ambientTemp <= CRITICAL_AIR_TEMP_LOW_C){
+                            icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_snowflake);
+                            icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_blue), PorterDuff.Mode.SRC_ATOP);
+                             valueColor = ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_blue);
+                        } else {
+                            icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_thermometer_half);
+                            if (ambientTemp > CRITICAL_AIR_TEMP_HIGH_C) {
+                                icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
+                                 valueColor = ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red);
+                            }
+                        }
+                        if (MemCache.temperatureFormat().equals("1")) {// F
+                            ambientTemp = Utils.celsiusToFahrenheit(ambientTemp);
+                        }
+                        value = Utils.toZeroDecimalString(ambientTemp);
+                    }
+                    break;
+
+
+                case FRONT_RDC:
+                    Double rdcFront = Data.getFrontTirePressure();
+                    label = MemCache.pressureUnitLabelF();
+                    if (Faults.getfrontTirePressureCriticalActive()){
+                        icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire_alert);
+                        icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
+                         valueColor = ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red);
+                    } else if (Faults.getfrontTirePressureWarningActive()){
+                        icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire_alert);
+                        icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
+                         valueColor = ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow);
+                    } else {
+                        icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire);
+                    }
+                    if(rdcFront != null) {
+                        switch (MemCache.pressureFormat()) {
+                            case "1": // KPa
+                                rdcFront = Utils.barTokPa(rdcFront); break;
+                            case "2": // Kg-f
+                                rdcFront = Utils.barToKgf(rdcFront); break;
+                            case "3": // Psi
+                                rdcFront = Utils.barToPsi(rdcFront); break;
+                        }
+                        value = Utils.toOneDecimalString(rdcFront);
+                    }
+                    break;
+
+
+                case REAR_RDC:
+                    Double rdcRear = Data.getRearTirePressure();
+                    label = MemCache.pressureUnitLabelR();
+                    if (Faults.getrearTirePressureCriticalActive()){
+                        icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire_alert);
+                        icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
+                         valueColor = ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red);
+                    } else if (Faults.getrearTirePressureWarningActive()){
+                        icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire_alert);
+                        icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
+                         valueColor = ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow);
+                    } else {
+                        icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire);
+                    }
+                    if(rdcRear != null) {
+                        switch (MemCache.pressureFormat()) {
+                            case "1": // KPa
+                                rdcRear = Utils.barTokPa(rdcRear);break;
+                            case "2":// Kg-f
+                                rdcRear = Utils.barToKgf(rdcRear);break;
+                            case "3":// Psi
+                                rdcRear = Utils.barToPsi(rdcRear);break;
+                        }
+                        value = Utils.toOneDecimalString(rdcRear);
+                    }
+                    break;
+
+
+                case ODOMETER:
+                    Double odometer = Data.getOdometer();
+                    label = MemCache.odometerLabel();
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_dashboard_meter);
+                    if(odometer != null){
+                        if (MemCache.distanceFormat().equals("1")) {
+                            odometer = Utils.kmToMiles(odometer);
+                        }
+
+                        // Wrap odometer across two lines for easier reading in cell
+                        // consider checking if the display is in portrait mode as well
+                        value = Utils.toZeroDecimalString(odometer,true);
+                    }
+                    break;
+
+
+
+                case VOLTAGE:
+                    Double voltage = Data.getVoltage();
+                    label = MemCache.voltageUnitLabel();
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_car_battery);
+                    if(voltage != null){
+                        value = Utils.toOneDecimalString(voltage);
+
+                        if (voltage >= CRITICAL_BATTERY_VOLTAGE_HIGH) {
+                             valueColor = ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red);
+                            icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
+                        } else if (voltage < CRITICAL_BATTERY_VOLTAGE_LOW) {
+                             valueColor = ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow);
+                            icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
+                        }
+                    }
+                    break;
+
+
+
+                case THROTTLE:
+                    Double throttlePosition = Data.getThrottlePosition();
+                    label = MemCache.throttleUnitLabel();
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_signature);
+                    if (throttlePosition != null){
+                        value = Utils.toZeroDecimalString(throttlePosition);
+                    }
+                    break;
+
+
+
+                case FRONT_BRAKE:
+                    Integer frontBrakes = Data.getFrontBrake();
+                    label = MemCache.brakeLabelF();
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_brakes);
+
+                    if((frontBrakes != null) && (frontBrakes != 0)){
+                        value = String.valueOf(frontBrakes);
+                    }
+                    break;
+
+
+                case REAR_BRAKE:
+                    Integer rearBrakes = Data.getRearBrake();
+                    label = MemCache.brakeLabelR();
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_brakes);
+                    if((rearBrakes != null) && (rearBrakes != 0)){
+                        value = String.valueOf(rearBrakes);
+                    }
+                    break;
+
+
+
+                case AMBIENT_LIGHT:
+                    Integer ambientLight = Data.getAmbientLight();
+                    label = MyApplication.getContext().getString(R.string.ambientlight_label);
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_lightbulb);
+                    if(ambientLight != null){
+                        value = String.valueOf(ambientLight);
+                    }
+                    break;
+
+
+
+                case TRIP_ONE:
+                    Double trip1 = Data.getTripOne();
+                    label = MemCache.distanceUnitLabel(); // MyApplication.getContext().getString(R.string.trip1_label) + " (" + distanceUnit + ")";
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_suitcase);
+                    if(trip1 != null) {
+                        if (MemCache. distanceFormat().equals("1")) {
+                            trip1 = Utils.kmToMiles(trip1);
+                        }
+                        value = Utils.toZeroDecimalString(trip1);
+                    }
+                    break;
+
+
+
+                case TRIP_TWO:
+                    Double trip2 = Data.getTripTwo();
+                    label = MemCache.trip2Label(); // MyApplication.getContext().getString(R.string.trip2_label) + " (" + distanceUnit + ")";
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_suitcase);
+                    if(trip2 != null){
+                        if (MemCache. distanceFormat().equals("1")) {
+                            trip2 = Utils.kmToMiles(trip2);
+                        }
+
+                        value = Utils.toZeroDecimalString(trip2);
+                    }
+                    break;
+
+
+
+                case TRIP_AUTO:
+                    Double tripAuto = Data.getTripAuto();
+                    label = MemCache.tripAutoLabel(); // MyApplication.getContext().getString(R.string.trip_auto_label) + " (" + distanceUnit + ")";
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_suitcase);
+                    if(tripAuto != null){
+                        if (MemCache.distanceFormat().equals("1")) {
+                            tripAuto = Utils.kmToMiles(tripAuto);
+                        }
+
+                        value = Utils.toZeroDecimalString(tripAuto);
+                    }
+                    break;
+
+
+
+                case SPEED:
+                    Double speedo = Data.getSpeed();
+                    label = MemCache.speedLabel(); // MyApplication.getContext().getString(R.string.speed_label) + " (" + distanceTimeUnit + ")";
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tachometer_alt);
+
+                    if (speedo != null){
+                        if (MemCache.distanceFormat().equals("1")) {
+                            speedo = Utils.kmToMiles(speedo);
+                        }
+                        value = Utils.toZeroDecimalString(speedo);
+                    }
+                    break;
+
+
+
+                case AVG_SPEED:
+                    Double avgSpeed = Data.getAvgSpeed();
+                    label = MemCache.avgSpeedLabel(); // MyApplication.getContext().getString(R.string.avg_speed_label) + " (" + distanceTimeUnit + ")";
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tachometer_alt);
+
+                    if (avgSpeed != null) {
+                        if (MemCache.distanceFormat().equals("1")) {
+                            avgSpeed = Utils.kmToMiles(avgSpeed);
+                        }
+                        value = Utils.toOneDecimalString(avgSpeed);
+                    }
+                    break;
+
+
+                case CURRENT_CONSUMPTION:
+                    Double currentConsumption = Data.getCurrentConsumption();
+                    label = MemCache.consumptionLabel(); // MyApplication.getContext().getString(R.string.cConsumption_label) + " (" + consumptionUnit + ")";
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_gas_pump);
+
+                    if (currentConsumption != null){
+                        switch (MemCache.consumptionFormat()) {
+                            case "1":
+                                currentConsumption = Utils.l100ToMpg(currentConsumption); break;
+                            case "2":
+                                currentConsumption = Utils.l100ToMpgI(currentConsumption); break;
+                            case "3":
+                                currentConsumption = Utils.l100ToKml(currentConsumption); break;
+                        }
+                        value = Utils.toOneDecimalString(currentConsumption);
+                    }
+                    break;
+
+
+                case ECONOMY_ONE:
+                    Double fuelEconomyOne = Data.getFuelEconomyOne();
+                    label = MemCache.economy1Label(); // MyApplication.getContext().getString(R.string.fuel_economy_one_label) + " (" + consumptionUnit + ")";
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_gas_pump);
+
+                    if(Data.getFuelEconomyOne() != null){
+                        switch (MemCache.consumptionFormat()) {
+                            case "1":
+                                fuelEconomyOne = Utils.l100ToMpg(fuelEconomyOne); break;
+                            case "2":
+                                fuelEconomyOne = Utils.l100ToMpgI(fuelEconomyOne); break;
+                            case "3":
+                                fuelEconomyOne = Utils.l100ToKml(fuelEconomyOne); break;
+                        }
+                        value = Utils.toOneDecimalString(fuelEconomyOne);
+                    }
+                    break;
+
+
+                case ECONOMY_TWO:
+                    Double fuelEconomyTwo = Data.getFuelEconomyTwo();
+                    label = MemCache.economy2Label(); // MyApplication.getContext().getString(R.string.fuel_economy_two_label) + " (" + consumptionUnit + ")";
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_gas_pump);
+
+                    if(fuelEconomyTwo != null){
+                        switch (MemCache.consumptionFormat()) {
+                            case "1":
+                                fuelEconomyTwo = Utils.l100ToMpg(fuelEconomyTwo); break;
+                            case "2":
+                                fuelEconomyTwo = Utils.l100ToMpgI(fuelEconomyTwo); break;
+                            case "3":
+                                fuelEconomyTwo = Utils.l100ToKml(fuelEconomyTwo); break;
+                        }
+                        value = Utils.toOneDecimalString(fuelEconomyTwo);
+                    }
+                    break;
+
+
+                case RANGE:
+                    Double fuelRange = Data.getFuelRange();
+                    label = MemCache.rangeLabel(); // MyApplication.getContext().getString(R.string.fuel_range_label) + " (" + distanceUnit + ")";
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_gas_pump);
+
+                    if(fuelRange != null){
+                        if (MemCache.distanceFormat().equals("1")) {
+                            fuelRange = Utils.kmToMiles(fuelRange);
+                        }
+                        if (fuelRange < RANGE_CRITICAL) {
+                            valueColor = ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red);
+                            icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
+                        } else if (fuelRange < RANGE_LOW) {
+                            valueColor = ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow);
+                            icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
+                        }
+                        value = Utils.toZeroDecimalString(fuelRange);
+                    }
+                    break;
+
+
+                case SHIFTS:
+                    Integer shifts = Data.getNumberOfShifts();
+                    label = MyApplication.getContext().getString(R.string.shifts_header);
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_arrows_alt_v);
+
+                    if(shifts != null){
+                        value = Utils.toZeroDecimalString(shifts);
+                    }
+                    break;
+
+
+                case LEAN_BT:
+                    Double leanAngle = Data.getLeanAngleBT();
+                    label = MyApplication.getContext().getString(R.string.leanangle_header);
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_angle);
+
+                    if(leanAngle != null){
+                        value = Utils.toZeroDecimalString(leanAngle);
+                    }
+                    break;
+
+
+                case GFORCE_DEVICE:
+                    Double gForce = Data.getGForce();
+                    label = MyApplication.getContext().getString(R.string.gforce_header);
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_accelerometer);
+                    if(gForce != null){
+                        value = Utils.toOneDecimalString(gForce);
+                    }
+                    break;
+
+
+                case BEARING_DEVICE:
+                    Integer bearingValue = Data.getBearing();
+                    label = MemCache.bearingLabel(); // MyApplication.getContext().getString(R.string.bearing_header);
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_compass);
+
+                    if (bearingValue != null) {
+                        String bearing = String.format("%s°",bearingValue);
+                        if (!MemCache.bearingPref().equals("0")) {
+                            bearing = Utils.bearingToCardinal(bearingValue);
+                        }
+                        value = bearing;
+                    }
+                    break;
+
+
+                case TIME_DEVICE:
+                    label = MyApplication.getContext().getString(R.string.time_header);
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_clock);
+                    if (Data.getTime() != null) {
+                        SimpleDateFormat dateFormat = Utils.getCachedLocalizedDateFormat();
+                        value = dateFormat.format(Data.getTime());
+                    }
+                    break;
+
+
+                case BAROMETRIC_DEVICE:
+                    label = MemCache.barometricLabel(); // MyApplication.getContext().getString(R.string.barometric_pressure_header) + "(" + barometricUnit + ")"
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_barometer);
+                    if (Data.getBarometricPressure() != null) {
+                        value = Utils.toZeroDecimalString(Data.getBarometricPressure());
+                    }
+                    break;
+
+
+
+                case SPEED_DEVICE:
+                    label = MemCache.speedLabel(); // MyApplication.getContext().getString(R.string.gps_speed_header) + "(" + distanceTimeUnit + ")";
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tachometer_alt);
+                    String gpsSpeed = MyApplication.getContext().getString(R.string.gps_nofix);
+
+                    if (Data.getLastLocation() != null){
+                        gpsSpeed = Utils.toZeroDecimalString(Data.getLastLocation().getSpeed() * 3.6);
+                        if (MemCache.distanceFormat().equals("1")) {
+                            gpsSpeed = Utils.toZeroDecimalString(Utils.kmToMiles(Data.getLastLocation().getSpeed() * 3.6));
+                        }
+                    }
+                    value = gpsSpeed;
+                    break;
+
+
+
+                case ALTITUDE_DEVICE:
+                    String altitude = MyApplication.getContext().getString(R.string.gps_nofix);
+                    label = MemCache.altitudeLabel(); // MyApplication.getContext().getString(R.string.altitude_header) + "(" + heightUnit + ")";
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_mountain);
+
+                    if (Data.getLastLocation() != null){
+                        altitude = Utils.toZeroDecimalString(Data.getLastLocation().getAltitude());
+                        if (MemCache.distanceFormat().equals("1")) {
+                            altitude = Utils.toZeroDecimalString(Utils.mToFeet(Data.getLastLocation().getAltitude()));
+                        }
+                    }
+                    value = altitude;
+                    break;
+
+
+
+                case SUN_DEVICE:
+                    Location loc = Data.getLastLocation();
+                    label = MyApplication.getContext().getString(R.string.sunrisesunset_header);
+                    value = MyApplication.getContext().getString(R.string.gps_nofix);
+                    if (loc != null) {
+                        Calendar[] sunriseSunset = SunriseSunset.getSunriseSunset(Calendar.getInstance(), loc.getLatitude(), loc.getLongitude());
+
+                        Date sunrise = sunriseSunset[0].getTime();
+                        Date sunset = sunriseSunset[1].getTime();
+                        Date current = Data.getTime();
+
+                        Duration sunriseDur = Duration.between(current.toInstant(), sunrise.toInstant());
+                        Duration sunsetDur = Duration.between(current.toInstant(), sunset.toInstant());
+
+                        float sunriseHrs = sunriseDur.toMinutes() / 60.0f;
+                        float sunsetHrs = sunsetDur.toMinutes() / 60.0f;
+
+
+
+                        SimpleDateFormat dateFormat = Utils.getCachedLocalizedDateFormat();
+
+                        String sunriseString = dateFormat.format(sunrise) + " (" + Utils.toOneDecimalString(sunriseHrs) + ")";
+                        String sunsetString = dateFormat.format(sunset) + " (" + Utils.toOneDecimalString(sunsetHrs) + ")";
+                        value = sunriseString + "\n" + sunsetString;
+
+                        if(current.compareTo(sunrise) > 0 && current.compareTo(sunset) < 0){
+                            icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_sun);
+                            icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
+                        } else {
+                            icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_moon);
+                            icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_blue), PorterDuff.Mode.SRC_ATOP);
+                        }
+                    }
+                    break;
+
+
+
+                case RPM:
+                    Integer rpm = Data.getRPM();
+                    label = MyApplication.getContext().getString(R.string.rpm_header) + " (x1000)";
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tachometer_alt);
+                    if ((rpm != null) && (rpm > 0)){
+                        value = Utils.toOneDecimalString(rpm / 1000d);
+                    }
+                    break;
+
+
+                case LEAN_BIKE:
+                    Double leanAngleBike = Data.getLeanAngleBike();
+                    label = MyApplication.getContext().getString(R.string.leanangle_bike_header);
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_angle);
+                    if (leanAngleBike != null){
+                        value = Utils.toZeroDecimalString(leanAngleBike);
+                    }
+                    break;
+
+
+                case REAR_SPEED:
+                    Double rSpeed = Data.getRearSpeed();
+                    label = MemCache.speedLabelW(); // MyApplication.getContext().getString(R.string.rear_wheel_speed_header) + "(" + distanceTimeUnit + ")";
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tachometer_alt);
+
+                    if(rSpeed != null){
+                        if (MemCache.distanceFormat().equals("1")) {
+                            rSpeed = Utils.kmToMiles(rSpeed);
+                        }
+                        value = Utils.toZeroDecimalString(rSpeed);
+                    }
+                    break;
+
+
+
+                case CELL_SIGNAL:
+                    Integer signal = Data.getCellularSignal();
+                    label = MemCache.signalLabel(); // MyApplication.getContext().getString(R.string.cellular_signal_header) + "(" + signalUnit + ")";
+                    if(signal != null){
+                        if (signal > -79) {
+                            icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.signal_bar_4);
+                        } else if (signal > -89 && signal < -80) {
+                            icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.signal_bar_3);
+                        } else if (signal > -99 && signal < -90) {
+                            icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.signal_bar_2);
+                        } else if (signal > -109 && signal < -100) {
+                            icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.signal_bar_1);
+                        } else if (signal < -110) {
+                            icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.signal_bar_0);
+                        }
+                        value = Utils.toZeroDecimalString(signal);
+                    }
+                    break;
+
+
+                case BATTERY_DEVICE:
+                    Double battery = Data.getLocalBattery();
+                    label = MemCache.batteryUnitLabel(); // MyApplication.getContext().getString(R.string.local_battery_header) + "(" + batteryUnit + ")";
+                    if(battery != null){
+                        if(battery > 95){
+                            icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.battery_full);
+                        } else if(battery > 75 && battery < 95){
+                            icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.battery_three_quarters);
+                        } else if(battery > 50 && battery < 75){
+                            icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.battery_half);
+                        } else if(battery > 25 && battery < 50){
+                            icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.battery_quarter);
+                        } else if(battery > 0 && battery < 25){
+                            icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.battery_empty);
+                            icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
+                        }
+                        value = Utils.toZeroDecimalString(battery);
+                    }
+                    break;
+            }
+        } catch (Exception e) {
+            value = "";
+        }
+        if ((value == null) || (value.isBlank())) {
+            value = MyApplication.getContext().getString(R.string.blank_field);
+        }
+
+        return new Object[]{value, label, icon, valueColor};
     }
 
     /*

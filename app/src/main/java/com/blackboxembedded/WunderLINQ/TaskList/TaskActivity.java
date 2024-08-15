@@ -302,8 +302,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
 
     //Build ActionBar
     private void showActionBar(){
-        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflator.inflate(R.layout.actionbar_nav, null);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.actionbar_nav, null);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled (false);
@@ -603,7 +603,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             case 1:
                 // Navigate Home
                 String address = sharedPrefs.getString("prefHomeAddress","");
-                if (!address.equals("")) {
+                if (!address.isEmpty()) {
                     LatLng location = getLocationFromAddress(TaskActivity.this, address);
                     if (location != null) {
                         Location destination = new Location(LocationManager.GPS_PROVIDER);
@@ -645,9 +645,9 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
-                    String phonenumber = sharedPrefs.getString("prefHomePhone", "");
-                    if (!phonenumber.equals("")) {
-                        String encodedPhoneNumber = String.format("tel:%s", Uri.encode(phonenumber));
+                    String phoneNumber = sharedPrefs.getString("prefHomePhone", "");
+                    if (!phoneNumber.isEmpty()) {
+                        String encodedPhoneNumber = String.format("tel:%s", Uri.encode(phoneNumber));
                         Uri number = Uri.parse(encodedPhoneNumber);
                         Intent callHomeIntent = new Intent(Intent.ACTION_CALL);
                         callHomeIntent.setData(number);
@@ -751,13 +751,13 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                             Calendar cal = Calendar.getInstance();
                             Date date = cal.getTime();
                             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ");
-                            String curdatetime = formatter.format(date);
+                            String curDateTime = formatter.format(date);
 
                             // Open database
                             WaypointDatasource datasource = new WaypointDatasource(TaskActivity.this);
                             datasource.open();
 
-                            WaypointRecord record = new WaypointRecord(curdatetime, waypoint, "");
+                            WaypointRecord record = new WaypointRecord(curDateTime, waypoint, "");
                             datasource.addRecord(record);
                             datasource.close();
 

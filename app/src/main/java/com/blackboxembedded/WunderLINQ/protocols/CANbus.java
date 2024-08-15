@@ -484,7 +484,7 @@ public class CANbus {
                                 }
                             } else if (pressureFormat.contains("2")) {
                                 // Kg-f
-                                if (pressureThreshold >= Utils.barTokgf(rdcFront)) {
+                                if (pressureThreshold >= Utils.barToKgf(rdcFront)) {
                                     Faults.setfrontTirePressureCriticalActive(true);
                                 }
                             } else if (pressureFormat.contains("3")) {
@@ -523,7 +523,7 @@ public class CANbus {
                                 }
                             } else if (pressureFormat.contains("2")) {
                                 // Kg-f
-                                if (pressureThreshold >= Utils.barTokgf(rdcRear)){
+                                if (pressureThreshold >= Utils.barToKgf(rdcRear)){
                                     Faults.setrearTirePressureCriticalActive(true);
                                 }
                             } else if (pressureFormat.contains("3")) {

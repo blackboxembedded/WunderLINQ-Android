@@ -178,39 +178,39 @@ public class LoggingService extends Service {
                         } else {
                             outFile.write(curdatetime + "," +
                                     lat + "," + lon + "," +
-                                    Data.getValue(Data.DATA_ALTITUDE_DEVICE) + "," +
-                                    Data.getValue(Data.DATA_SPEED_DEVICE) + "," +
-                                    Data.getValue(Data.DATA_GEAR) + "," +
-                                    Data.getValue(Data.DATA_ENGINE_TEMP) + "," +
-                                    Data.getValue(Data.DATA_AIR_TEMP) + "," +
-                                    Data.getValue(Data.DATA_FRONT_RDC) + "," +
-                                    Data.getValue(Data.DATA_REAR_RDC) + "," +
-                                    Data.getValue(Data.DATA_ODOMETER) + "," +
-                                    Data.getValue(Data.DATA_VOLTAGE) + "," +
-                                    Data.getValue(Data.DATA_THROTTLE) + "," +
-                                    Data.getValue(Data.DATA_FRONT_BRAKE) + "," +
-                                    Data.getValue(Data.DATA_REAR_BRAKE) + "," +
-                                    Data.getValue(Data.DATA_SHIFTS) + "," +
+                                    Data.getValue(Data.DataType.ALTITUDE_DEVICE) + "," +
+                                    Data.getValue(Data.DataType.SPEED_DEVICE) + "," +
+                                    Data.getValue(Data.DataType.GEAR) + "," +
+                                    Data.getValue(Data.DataType.ENGINE_TEMP) + "," +
+                                    Data.getValue(Data.DataType.AIR_TEMP) + "," +
+                                    Data.getValue(Data.DataType.FRONT_RDC) + "," +
+                                    Data.getValue(Data.DataType.REAR_RDC) + "," +
+                                    Data.getValue(Data.DataType.ODOMETER) + "," +
+                                    Data.getValue(Data.DataType.VOLTAGE) + "," +
+                                    Data.getValue(Data.DataType.THROTTLE) + "," +
+                                    Data.getValue(Data.DataType.FRONT_BRAKE) + "," +
+                                    Data.getValue(Data.DataType.REAR_BRAKE) + "," +
+                                    Data.getValue(Data.DataType.SHIFTS) + "," +
                                     Data.getVin() + "," +
-                                    Data.getValue(Data.DATA_AMBIENT_LIGHT) + "," +
-                                    Data.getValue(Data.DATA_TRIP_ONE) + "," +
-                                    Data.getValue(Data.DATA_TRIP_TWO) + "," +
-                                    Data.getValue(Data.DATA_TRIP_AUTO) + "," +
-                                    Data.getValue(Data.DATA_SPEED) + "," +
-                                    Data.getValue(Data.DATA_AVG_SPEED) + "," +
-                                    Data.getValue(Data.DATA_CURRENT_CONSUMPTION) + "," +
-                                    Data.getValue(Data.DATA_ECONOMY_ONE) + "," +
-                                    Data.getValue(Data.DATA_ECONOMY_TWO) + "," +
-                                    Data.getValue(Data.DATA_RANGE) + "," +
-                                    Data.getValue(Data.DATA_LEAN_DEVICE) + "," +
-                                    Data.getValue(Data.DATA_GFORCE_DEVICE) + "," +
-                                    Data.getValue(Data.DATA_BEARING_DEVICE) + "," +
-                                    Data.getValue(Data.DATA_BAROMETRIC_DEVICE) + "," +
-                                    Data.getValue(Data.DATA_RPM) + "," +
-                                    Data.getValue(Data.DATA_LEAN) + "," +
-                                    Data.getValue(Data.DATA_REAR_SPEED) + "," +
-                                    Data.getValue(Data.DATA_CELL_SIGNAL) + "," +
-                                    Data.getValue(Data.DATA_BATTERY_DEVICE) +
+                                    Data.getValue(Data.DataType.AMBIENT_LIGHT) + "," +
+                                    Data.getValue(Data.DataType.TRIP_ONE) + "," +
+                                    Data.getValue(Data.DataType.TRIP_TWO) + "," +
+                                    Data.getValue(Data.DataType.TRIP_AUTO) + "," +
+                                    Data.getValue(Data.DataType.SPEED) + "," +
+                                    Data.getValue(Data.DataType.AVG_SPEED) + "," +
+                                    Data.getValue(Data.DataType.CURRENT_CONSUMPTION) + "," +
+                                    Data.getValue(Data.DataType.ECONOMY_ONE) + "," +
+                                    Data.getValue(Data.DataType.ECONOMY_TWO) + "," +
+                                    Data.getValue(Data.DataType.RANGE) + "," +
+                                    Data.getValue(Data.DataType.LEAN_BT) + "," +
+                                    Data.getValue(Data.DataType.GFORCE_DEVICE) + "," +
+                                    Data.getValue(Data.DataType.BEARING_DEVICE) + "," +
+                                    Data.getValue(Data.DataType.BAROMETRIC_DEVICE) + "," +
+                                    Data.getValue(Data.DataType.RPM) + "," +
+                                    Data.getValue(Data.DataType.LEAN_BIKE) + "," +
+                                    Data.getValue(Data.DataType.REAR_SPEED) + "," +
+                                    Data.getValue(Data.DataType.CELL_SIGNAL) + "," +
+                                    Data.getValue(Data.DataType.BATTERY_DEVICE) +
                                     "\n");
                             outFile.flush();
                         }
@@ -270,39 +270,39 @@ public class LoggingService extends Service {
                 String header = MyApplication.getContext().getResources().getString(R.string.time_header) + "," +
                         MyApplication.getContext().getResources().getString(R.string.latitude_header) + "," +
                         MyApplication.getContext().getResources().getString(R.string.longitude_header) + "," +
-                        Data.getLabel(Data.DATA_ALTITUDE_DEVICE) + "," +
-                        Data.getLabel(Data.DATA_SPEED_DEVICE) + "," +
-                        Data.getLabel(Data.DATA_GEAR) + "," +
-                        Data.getLabel(Data.DATA_ENGINE_TEMP) + "," +
-                        Data.getLabel(Data.DATA_AIR_TEMP) + "," +
-                        Data.getLabel(Data.DATA_FRONT_RDC) + "," +
-                        Data.getLabel(Data.DATA_REAR_RDC) + "," +
-                        Data.getLabel(Data.DATA_ODOMETER) + "," +
-                        Data.getLabel(Data.DATA_VOLTAGE) + "," +
-                        Data.getLabel(Data.DATA_THROTTLE) + "," +
-                        Data.getLabel(Data.DATA_FRONT_BRAKE) + "," +
-                        Data.getLabel(Data.DATA_REAR_BRAKE) + "," +
-                        Data.getLabel(Data.DATA_SHIFTS) + "," +
+                        Data.getLabel(Data.DataType.ALTITUDE_DEVICE.getValue()) + "," +
+                        Data.getLabel(Data.DataType.SPEED_DEVICE.getValue()) + "," +
+                        Data.getLabel(Data.DataType.GEAR.getValue()) + "," +
+                        Data.getLabel(Data.DataType.ENGINE_TEMP.getValue()) + "," +
+                        Data.getLabel(Data.DataType.AIR_TEMP.getValue()) + "," +
+                        Data.getLabel(Data.DataType.FRONT_RDC.getValue()) + "," +
+                        Data.getLabel(Data.DataType.REAR_RDC.getValue()) + "," +
+                        Data.getLabel(Data.DataType.ODOMETER.getValue()) + "," +
+                        Data.getLabel(Data.DataType.VOLTAGE.getValue()) + "," +
+                        Data.getLabel(Data.DataType.THROTTLE.getValue()) + "," +
+                        Data.getLabel(Data.DataType.FRONT_BRAKE.getValue()) + "," +
+                        Data.getLabel(Data.DataType.REAR_BRAKE.getValue()) + "," +
+                        Data.getLabel(Data.DataType.SHIFTS.getValue()) + "," +
                         MyApplication.getContext().getResources().getString(R.string.vin_header) + "," +
-                        Data.getLabel(Data.DATA_AMBIENT_LIGHT) + "," +
-                        Data.getLabel(Data.DATA_TRIP_ONE) + "," +
-                        Data.getLabel(Data.DATA_TRIP_TWO) + "," +
-                        Data.getLabel(Data.DATA_TRIP_AUTO) + "," +
-                        Data.getLabel(Data.DATA_SPEED) + "," +
-                        Data.getLabel(Data.DATA_AVG_SPEED) + "," +
-                        Data.getLabel(Data.DATA_CURRENT_CONSUMPTION) + "," +
-                        Data.getLabel(Data.DATA_ECONOMY_ONE) + "," +
-                        Data.getLabel(Data.DATA_ECONOMY_TWO) + "," +
-                        Data.getLabel(Data.DATA_RANGE) + "," +
-                        Data.getLabel(Data.DATA_LEAN_DEVICE) + "," +
-                        Data.getLabel(Data.DATA_GFORCE_DEVICE) + "," +
-                        Data.getLabel(Data.DATA_BEARING_DEVICE) + "," +
-                        Data.getLabel(Data.DATA_BAROMETRIC_DEVICE) + "," +
-                        Data.getLabel(Data.DATA_RPM) + "," +
-                        Data.getLabel(Data.DATA_LEAN) + "," +
-                        Data.getLabel(Data.DATA_REAR_SPEED) + "," +
-                        Data.getLabel(Data.DATA_CELL_SIGNAL) + "," +
-                        Data.getLabel(Data.DATA_BATTERY_DEVICE) +
+                        Data.getLabel(Data.DataType.AMBIENT_LIGHT.getValue()) + "," +
+                        Data.getLabel(Data.DataType.TRIP_ONE.getValue()) + "," +
+                        Data.getLabel(Data.DataType.TRIP_TWO.getValue()) + "," +
+                        Data.getLabel(Data.DataType.TRIP_AUTO.getValue()) + "," +
+                        Data.getLabel(Data.DataType.SPEED.getValue()) + "," +
+                        Data.getLabel(Data.DataType.AVG_SPEED.getValue()) + "," +
+                        Data.getLabel(Data.DataType.CURRENT_CONSUMPTION.getValue()) + "," +
+                        Data.getLabel(Data.DataType.ECONOMY_ONE.getValue()) + "," +
+                        Data.getLabel(Data.DataType.ECONOMY_TWO.getValue()) + "," +
+                        Data.getLabel(Data.DataType.RANGE.getValue()) + "," +
+                        Data.getLabel(Data.DataType.LEAN_BT.getValue()) + "," +
+                        Data.getLabel(Data.DataType.GFORCE_DEVICE.getValue()) + "," +
+                        Data.getLabel(Data.DataType.BEARING_DEVICE.getValue()) + "," +
+                        Data.getLabel(Data.DataType.BAROMETRIC_DEVICE.getValue()) + "," +
+                        Data.getLabel(Data.DataType.RPM.getValue()) + "," +
+                        Data.getLabel(Data.DataType.LEAN_BIKE.getValue()) + "," +
+                        Data.getLabel(Data.DataType.REAR_SPEED.getValue()) + "," +
+                        Data.getLabel(Data.DataType.CELL_SIGNAL.getValue()) + "," +
+                        Data.getLabel(Data.DataType.BATTERY_DEVICE.getValue()) +
                         "\n";
 
                 File logFile = new File( root, filename + curdatetime + ".csv" );

@@ -798,7 +798,7 @@ public class BluetoothLeService extends Service {
         if (data != null) {
             if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
                 // Log data
-                Log.d(TAG, characteristic.getUuid().toString() + ": " + Utils.ByteArraytoHexNoDelim(data));
+                Log.d(TAG, characteristic.getUuid().toString() + ": " + Utils.ByteArrayToHexNoDelim(data));
             }
         }
 
@@ -879,7 +879,7 @@ public class BluetoothLeService extends Service {
                     if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
                         Log.d(TAG,"ACC STATUS RECEIVED");
                         // Log data
-                        Log.d(TAG,Utils.ByteArraytoHexNoDelim(data));
+                        Log.d(TAG,Utils.ByteArrayToHexNoDelim(data));
                     }
                     if(Data.wlq != null) {
                         Data.wlq.setStatus(data);
@@ -1102,7 +1102,7 @@ public class BluetoothLeService extends Service {
                             Log.d(TAG, String.format("writeCharacteristic failed for characteristic: %s", characteristic.getUuid()));
                             completedCommand();
                         } else {
-                            //Log.d(TAG, String.format("Writing <%s> to characteristic <%s>", Utils.ByteArraytoHex(bytesToWrite), characteristic.getUuid()));
+                            //Log.d(TAG, String.format("Writing <%s> to characteristic <%s>", Utils.ByteArrayToHex(bytesToWrite), characteristic.getUuid()));
                             nrTries++;
                         }
                     }
@@ -1560,29 +1560,29 @@ public class BluetoothLeService extends Service {
 
     private static void sendDataBroadcast() {
         final Intent intent = new Intent(ACTION_PERFORMANCE_DATA_AVAILABLE);
-        intent.putExtra(Data.getExtraKey(Data.DATA_GEAR), Data.getGear());
-        intent.putExtra(Data.getExtraKey(Data.DATA_ENGINE_TEMP), Data.getEngineTemperature());
-        intent.putExtra(Data.getExtraKey(Data.DATA_AIR_TEMP), Data.getAmbientTemperature());
-        intent.putExtra(Data.getExtraKey(Data.DATA_FRONT_RDC), Data.getFrontTirePressure());
-        intent.putExtra(Data.getExtraKey(Data.DATA_REAR_RDC), Data.getRearTirePressure());
-        intent.putExtra(Data.getExtraKey(Data.DATA_ODOMETER), Data.getOdometer());
-        intent.putExtra(Data.getExtraKey(Data.DATA_VOLTAGE), Data.getvoltage());
-        intent.putExtra(Data.getExtraKey(Data.DATA_THROTTLE), Data.getThrottlePosition());
-        intent.putExtra(Data.getExtraKey(Data.DATA_FRONT_BRAKE), Data.getFrontBrake());
-        intent.putExtra(Data.getExtraKey(Data.DATA_REAR_BRAKE), Data.getRearBrake());
-        intent.putExtra(Data.getExtraKey(Data.DATA_AMBIENT_LIGHT), Data.getAmbientLight());
-        intent.putExtra(Data.getExtraKey(Data.DATA_TRIP_ONE), Data.getTripOne());
-        intent.putExtra(Data.getExtraKey(Data.DATA_TRIP_TWO), Data.getTripTwo());
-        intent.putExtra(Data.getExtraKey(Data.DATA_TRIP_AUTO), Data.getTripAuto());
-        intent.putExtra(Data.getExtraKey(Data.DATA_SPEED), Data.getSpeed());
-        intent.putExtra(Data.getExtraKey(Data.DATA_AVG_SPEED), Data.getAvgSpeed());
-        intent.putExtra(Data.getExtraKey(Data.DATA_CURRENT_CONSUMPTION), Data.getCurrentConsumption());
-        intent.putExtra(Data.getExtraKey(Data.DATA_ECONOMY_ONE), Data.getFuelEconomyOne());
-        intent.putExtra(Data.getExtraKey(Data.DATA_ECONOMY_TWO), Data.getFuelEconomyTwo());
-        intent.putExtra(Data.getExtraKey(Data.DATA_RANGE), Data.getFuelRange());
-        intent.putExtra(Data.getExtraKey(Data.DATA_SHIFTS), Data.getNumberOfShifts());
-        intent.putExtra(Data.getExtraKey(Data.DATA_RPM), Data.getRPM());
-        intent.putExtra(Data.getExtraKey(Data.DATA_LEAN), Data.getLeanAngleBike());
+        intent.putExtra(Data.getExtraKey(Data.DataType.GEAR), Data.getGear());
+        intent.putExtra(Data.getExtraKey(Data.DataType.ENGINE_TEMP), Data.getEngineTemperature());
+        intent.putExtra(Data.getExtraKey(Data.DataType.AIR_TEMP), Data.getAmbientTemperature());
+        intent.putExtra(Data.getExtraKey(Data.DataType.FRONT_RDC), Data.getFrontTirePressure());
+        intent.putExtra(Data.getExtraKey(Data.DataType.REAR_RDC), Data.getRearTirePressure());
+        intent.putExtra(Data.getExtraKey(Data.DataType.ODOMETER), Data.getOdometer());
+        intent.putExtra(Data.getExtraKey(Data.DataType.VOLTAGE), Data.getVoltage());
+        intent.putExtra(Data.getExtraKey(Data.DataType.THROTTLE), Data.getThrottlePosition());
+        intent.putExtra(Data.getExtraKey(Data.DataType.FRONT_BRAKE), Data.getFrontBrake());
+        intent.putExtra(Data.getExtraKey(Data.DataType.REAR_BRAKE), Data.getRearBrake());
+        intent.putExtra(Data.getExtraKey(Data.DataType.AMBIENT_LIGHT), Data.getAmbientLight());
+        intent.putExtra(Data.getExtraKey(Data.DataType.TRIP_ONE), Data.getTripOne());
+        intent.putExtra(Data.getExtraKey(Data.DataType.TRIP_TWO), Data.getTripTwo());
+        intent.putExtra(Data.getExtraKey(Data.DataType.TRIP_AUTO), Data.getTripAuto());
+        intent.putExtra(Data.getExtraKey(Data.DataType.SPEED), Data.getSpeed());
+        intent.putExtra(Data.getExtraKey(Data.DataType.AVG_SPEED), Data.getAvgSpeed());
+        intent.putExtra(Data.getExtraKey(Data.DataType.CURRENT_CONSUMPTION), Data.getCurrentConsumption());
+        intent.putExtra(Data.getExtraKey(Data.DataType.ECONOMY_ONE), Data.getFuelEconomyOne());
+        intent.putExtra(Data.getExtraKey(Data.DataType.ECONOMY_TWO), Data.getFuelEconomyTwo());
+        intent.putExtra(Data.getExtraKey(Data.DataType.RANGE), Data.getFuelRange());
+        intent.putExtra(Data.getExtraKey(Data.DataType.SHIFTS), Data.getNumberOfShifts());
+        intent.putExtra(Data.getExtraKey(Data.DataType.RPM), Data.getRPM());
+        intent.putExtra(Data.getExtraKey(Data.DataType.LEAN_BIKE), Data.getLeanAngleBike());
         MyApplication.getContext().sendBroadcast(intent);
     }
 }

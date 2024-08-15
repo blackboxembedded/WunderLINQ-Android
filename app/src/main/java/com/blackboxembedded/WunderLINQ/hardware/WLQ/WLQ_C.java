@@ -184,7 +184,7 @@ public class WLQ_C extends WLQ_BASE {
         wunderLINQConfig = new byte[bytes.length];
         System.arraycopy(bytes, 0, wunderLINQConfig, 0, bytes.length);
 
-        Log.d(TAG, "WLQConfig: " + Utils.ByteArraytoHex(wunderLINQConfig));
+        Log.d(TAG, "WLQConfig: " + Utils.ByteArrayToHex(wunderLINQConfig));
 
         byte[] flashConfigPart = new byte[configFlashSize];
         System.arraycopy(bytes, 6, flashConfigPart, 0, configFlashSize);
@@ -196,7 +196,7 @@ public class WLQ_C extends WLQ_BASE {
             tempConfig = new byte[flashConfig.length];
             System.arraycopy(flashConfig, 0, tempConfig, 0, flashConfig.length);
 
-            Log.d(TAG, "New flashConfig: " + Utils.ByteArraytoHex(flashConfig));
+            Log.d(TAG, "New flashConfig: " + Utils.ByteArrayToHex(flashConfig));
 
             firmwareVersion = bytes[firmwareVersionMajor_INDEX] + "." + bytes[firmwareVersionMinor_INDEX];
 

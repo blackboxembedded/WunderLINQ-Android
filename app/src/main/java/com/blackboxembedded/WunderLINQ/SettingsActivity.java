@@ -437,6 +437,8 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
             if (key.equals("prefPIPCellCount")){
                 prefPIPCellCount.setSummary(prefPIPCellCount.getEntry());
             }
+
+            MemCache.invalidate();
         }
 
         @Override

@@ -231,7 +231,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                 resetButton.setVisibility(View.VISIBLE);
                                 if (!Arrays.equals(Data.wlq.getConfig(), Data.wlq.getTempConfig())) {
                                     Log.d(TAG, "New Config found");
-                                    Log.d(TAG, "tempConfig: " + Utils.ByteArraytoHex(Data.wlq.getTempConfig()));
+                                    Log.d(TAG, "tempConfig: " + Utils.ByteArrayToHex(Data.wlq.getTempConfig()));
                                     hwConfigBtn.setText(getString(R.string.config_write_label));
                                     hwConfigBtn.setVisibility(View.VISIBLE);
                                 }
@@ -274,8 +274,8 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                         resetButton.setVisibility(View.VISIBLE);
                         if (!Arrays.equals(Data.wlq.getConfig(), Data.wlq.getTempConfig())) {
                             Log.d(TAG, "New Config found");
-                            Log.d(TAG, "Config: " + Utils.ByteArraytoHex(Data.wlq.getConfig()));
-                            Log.d(TAG, "tempConfig: " + Utils.ByteArraytoHex(Data.wlq.getTempConfig()));
+                            Log.d(TAG, "Config: " + Utils.ByteArrayToHex(Data.wlq.getConfig()));
+                            Log.d(TAG, "tempConfig: " + Utils.ByteArrayToHex(Data.wlq.getTempConfig()));
                             hwConfigBtn.setText(getString(R.string.config_write_label));
                             hwConfigBtn.setVisibility(View.VISIBLE);
                         }
@@ -302,8 +302,8 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                         resetButton.setVisibility(View.VISIBLE);
                         if (!Arrays.equals(Data.wlq.getConfig(), Data.wlq.getTempConfig())) {
                             Log.d(TAG, "New Config found");
-                            Log.d(TAG, "Config: " + Utils.ByteArraytoHex(Data.wlq.getConfig()));
-                            Log.d(TAG, "tempConfig: " + Utils.ByteArraytoHex(Data.wlq.getTempConfig()));
+                            Log.d(TAG, "Config: " + Utils.ByteArrayToHex(Data.wlq.getConfig()));
+                            Log.d(TAG, "tempConfig: " + Utils.ByteArrayToHex(Data.wlq.getTempConfig()));
                             hwConfigBtn.setText(getString(R.string.config_write_label));
                             hwConfigBtn.setVisibility(View.VISIBLE);
                         }
@@ -347,7 +347,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                         }
                                         outputStream.write(Data.wlq.CMD_EOM());
                                         byte[] writeConfigCmd = outputStream.toByteArray();
-                                        Log.d(TAG, "Reset Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
+                                        Log.d(TAG, "Reset Command Sent: " + Utils.ByteArrayToHex(writeConfigCmd));
                                         BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                                     }
                                 } else if (Data.wlq.getHardwareType() == WLQ.TYPE_COMMANDER) {
@@ -356,7 +356,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                     outputStream.write(WLQ_C.defaultConfig);
                                     outputStream.write(Data.wlq.CMD_EOM());
                                     byte[] writeConfigCmd = outputStream.toByteArray();
-                                    Log.d(TAG, "Reset Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
+                                    Log.d(TAG, "Reset Command Sent: " + Utils.ByteArrayToHex(writeConfigCmd));
                                     BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                                 } else if (Data.wlq.getHardwareType() == WLQ.TYPE_X) {
                                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -364,7 +364,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                     outputStream.write(WLQ_X.defaultConfig);
                                     outputStream.write(Data.wlq.CMD_EOM());
                                     byte[] writeConfigCmd = outputStream.toByteArray();
-                                    Log.d(TAG, "Reset Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
+                                    Log.d(TAG, "Reset Command Sent: " + Utils.ByteArrayToHex(writeConfigCmd));
                                     BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                                 }
                             }

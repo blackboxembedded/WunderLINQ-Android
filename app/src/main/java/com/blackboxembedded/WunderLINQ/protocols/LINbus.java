@@ -164,7 +164,7 @@ public class LINbus {
                                 }
                             } else if (pressureFormat.contains("2")) {
                                 // Kg-f
-                                if (pressureThreshold >= Utils.barTokgf(rdcFront)) {
+                                if (pressureThreshold >= Utils.barToKgf(rdcFront)) {
                                     Faults.setfrontTirePressureCriticalActive(true);
                                 }
                             } else if (pressureFormat.contains("3")) {
@@ -203,7 +203,7 @@ public class LINbus {
                                 }
                             } else if (pressureFormat.contains("2")) {
                                 // Kg-f
-                                if (pressureThreshold >= Utils.barTokgf(rdcRear)){
+                                if (pressureThreshold >= Utils.barToKgf(rdcRear)){
                                     Faults.setrearTirePressureCriticalActive(true);
                                 }
                             } else if (pressureFormat.contains("3")) {
@@ -466,7 +466,7 @@ public class LINbus {
                 //Voltage
                 if ((data[4] & 0xFF) != 0xFF) {
                     double voltage = (data[4] & 0xFF) / 10.0;
-                    Data.setvoltage(voltage);
+                    Data.setVoltage(voltage);
                 }
 
                 // Fuel Fault

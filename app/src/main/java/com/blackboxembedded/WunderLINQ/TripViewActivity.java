@@ -289,11 +289,11 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                         avgSpeed = avgSpeed + speed;
                     }
                     avgSpeed = avgSpeed / speeds.size();
-                    tvSpeed.setText(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(avgSpeed) + "/" + Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(maxSpeed) + " (" + speedUnit + ")");
+                    tvSpeed.setText(Utils.toOneDecimalString(avgSpeed) + "/" + Utils.toOneDecimalString(maxSpeed) + " (" + speedUnit + ")");
                 }
 
                 if (maxLean != null){
-                    tvLean.setText(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(maxLean));
+                    tvLean.setText(Utils.toOneDecimalString(maxLean));
                 }
 
                 if(endShiftCnt != null){
@@ -321,7 +321,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                     minEngineTemp = 0.0;
                     maxEngineTemp = 0.0;
                 }
-                tvEngine.setText(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(minEngineTemp) + "/" + Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(avgEngineTemp) + "/" + Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(maxEngineTemp) + " (" + temperatureUnit + ")");
+                tvEngine.setText(Utils.toOneDecimalString(minEngineTemp) + "/" + Utils.toOneDecimalString(avgEngineTemp) + "/" + Utils.toOneDecimalString(maxEngineTemp) + " (" + temperatureUnit + ")");
 
                 double avgAmbientTemp = 0.0;
                 if (ambientTemps.size() > 0) {
@@ -334,7 +334,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                     minAmbientTemp = 0.0;
                     maxAmbientTemp = 0.0;
                 }
-                tvAmbient.setText(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(minAmbientTemp) + "/" + Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(avgAmbientTemp) + "/" + Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(maxAmbientTemp) + " (" + temperatureUnit + ")");
+                tvAmbient.setText(Utils.toOneDecimalString(minAmbientTemp) + "/" + Utils.toOneDecimalString(avgAmbientTemp) + "/" + Utils.toOneDecimalString(maxAmbientTemp) + " (" + temperatureUnit + ")");
 
                 // Calculate Distance
                 double distance = 0;
@@ -344,7 +344,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 if (distance == 0 && totalDistance != 0.0){
                     distance = totalDistance / 1000.0;
                 }
-                tvDistance.setText(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(distance) + " " + distanceUnit);
+                tvDistance.setText(Utils.toOneDecimalString(distance) + " " + distanceUnit);
 
                 // Calculate Duration
                 if (startTime != null && endTime != null) {
