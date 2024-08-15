@@ -98,20 +98,20 @@ public class BLEbus {
                     MotorcycleData.setLeanAngleBike(leanAngleBikeFixed);
                     //Store Max L and R lean angle
                     if(leanAngleBikeFixed > 0){
-                        if (MotorcycleData.getLeanAngleMaxR() != null) {
-                            if (leanAngleBikeFixed > MotorcycleData.getLeanAngleMaxR()) {
-                                MotorcycleData.setLeanAngleMaxR(leanAngleBikeFixed);
+                        if (MotorcycleData.getLeanAngleDeviceMaxR() != null) {
+                            if (leanAngleBikeFixed > MotorcycleData.getLeanAngleDeviceMaxR()) {
+                                MotorcycleData.setLeanAngleDeviceMaxR(leanAngleBikeFixed);
                             }
                         } else {
-                            MotorcycleData.setLeanAngleMaxR(leanAngleBikeFixed);
+                            MotorcycleData.setLeanAngleDeviceMaxR(leanAngleBikeFixed);
                         }
                     } else if(leanAngleBikeFixed < 0){
-                        if (MotorcycleData.getLeanAngleMaxL() != null) {
-                            if (Math.abs(leanAngleBikeFixed) > MotorcycleData.getLeanAngleMaxL()) {
-                                MotorcycleData.setLeanAngleMaxL(Math.abs(leanAngleBikeFixed));
+                        if (MotorcycleData.getLeanAngleDeviceMaxL() != null) {
+                            if (Math.abs(leanAngleBikeFixed) > MotorcycleData.getLeanAngleDeviceMaxL()) {
+                                MotorcycleData.setLeanAngleDeviceMaxL(Math.abs(leanAngleBikeFixed));
                             }
                         } else {
-                            MotorcycleData.setLeanAngleMaxL(Math.abs(leanAngleBikeFixed));
+                            MotorcycleData.setLeanAngleDeviceMaxL(Math.abs(leanAngleBikeFixed));
                         }
                     }
                 }
@@ -192,7 +192,7 @@ public class BLEbus {
                                 }
                             } else if (pressureFormat.contains("2")) {
                                 // Kg-f
-                                if (pressureThreshold >= Utils.barTokgf(rdcFront)) {
+                                if (pressureThreshold >= Utils.barToKgf(rdcFront)) {
                                     Faults.setfrontTirePressureCriticalActive(true);
                                 }
                             } else if (pressureFormat.contains("3")) {
@@ -231,7 +231,7 @@ public class BLEbus {
                                 }
                             } else if (pressureFormat.contains("2")) {
                                 // Kg-f
-                                if (pressureThreshold >= Utils.barTokgf(rdcRear)){
+                                if (pressureThreshold >= Utils.barToKgf(rdcRear)){
                                     Faults.setrearTirePressureCriticalActive(true);
                                 }
                             } else if (pressureFormat.contains("3")) {
@@ -505,7 +505,7 @@ public class BLEbus {
                 //Voltage
                 if ((data[4] & 0xFF) != 0xFF) {
                     double voltage = (data[4] & 0xFF) / 10.0;
-                    MotorcycleData.setvoltage(voltage);
+                    MotorcycleData.setVoltage(voltage);
                 }
 
                 // Fuel Fault

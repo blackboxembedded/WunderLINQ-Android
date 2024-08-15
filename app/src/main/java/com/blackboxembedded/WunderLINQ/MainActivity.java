@@ -79,7 +79,7 @@ import com.blackboxembedded.WunderLINQ.TaskList.TaskActivity;
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ;
 import com.blackboxembedded.WunderLINQ.TaskList.GridItem;
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private int[] valueTextViewIDs = new int[maxNumCells];
     private int[] headerLabelViewIDs = new int[maxNumCells];
     private int[] iconImageViewIDs = new int[maxNumCells];
-    private Data.DataType[] cellDataPref = new Data.DataType[maxNumCells];
+    private MotorcycleData.DataType[] cellDataPref = new MotorcycleData.DataType[maxNumCells];
     GridItem[] cellsData = new GridItem[maxNumCells];
 
 
@@ -815,8 +815,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (Data.wlq != null) {
-                                if (Data.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
+                            if ( MotorcycleData.wlq != null) {
+                                if ( MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
                                     mMenu.findItem(id.action_bike_info).setVisible(true);
                                 }
                                 mMenu.findItem(id.action_hwsettings).setVisible(true);
@@ -943,8 +943,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private void goBack(){
         SoundManager.playSound(this, R.raw.directional);
         Intent backIntent = new Intent(this, com.blackboxembedded.WunderLINQ.TaskList.TaskActivity.class);
-        if (Data.wlq != null) {
-            if (Data.wlq.getStatus() != null) {
+        if ( MotorcycleData.wlq != null) {
+            if ( MotorcycleData.wlq.getStatus() != null) {
                 backIntent = new Intent(this, AccessoryActivity.class);
             }
         }
@@ -1059,7 +1059,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             int[] valueTextViewIDs = new int[maxNumCells];
             int[] headerLabelViewIDs = new int[maxNumCells];
             int[] iconImageViewIDs = new int[maxNumCells];
-            Data.DataType[] cellDataPref = new Data.DataType[maxNumCells];
+            MotorcycleData.DataType[] cellDataPref = new MotorcycleData.DataType[maxNumCells];
 
             //Probably unnecessary but why not
             MemCache.invalidate();
@@ -1173,7 +1173,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         for (int cellNumber = 0; cellNumber < maxNumCells; cellNumber++) {
             String prefKey = "prefCell" + numberWords[cellNumber];
-            cellDataPref[cellNumber] = Data.DataType.values()[ Integer.parseInt(sharedPrefs.getString(prefKey, String.valueOf(defaultCellData[cellNumber]))) ];
+            cellDataPref[cellNumber] = MotorcycleData.DataType.values()[ Integer.parseInt(sharedPrefs.getString(prefKey, String.valueOf(defaultCellData[cellNumber]))) ];
         }
 
 
@@ -1207,9 +1207,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             valueTextViewIDs[cellNumber] = valueTextView.getId();
             headerLabelViewIDs[cellNumber] = headerLabelView.getId();
             iconImageViewIDs[cellNumber] = iconImageView.getId();
-
-
-            Log.d ("GRID ADDED", "Grid Cell Added: " + String.valueOf(gridCell.getId()) );
         }
 
         gridChange( false);
@@ -1239,7 +1236,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             } else {
                 valueTextView.setMaxLines(1);
             }
-            Log.d(TAG, String.format( "font : width : screen : value = %s : %s : %s : %s", valueTextView.getTextSize(), valueTextView.getMeasuredWidth(), gridLayout.getMeasuredWidth(), value));
 
             if (valueColor == null) valueColor = valueTextView.getTextColors().getDefaultColor();
             valueTextView.setTextColor(valueColor);

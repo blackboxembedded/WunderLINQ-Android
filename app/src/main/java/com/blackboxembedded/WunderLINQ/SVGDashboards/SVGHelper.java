@@ -151,33 +151,29 @@ public class SVGHelper {
             switch (infoLine) {
                 case 1://Range
                     if (MotorcycleData.getFuelRange() != null) {
-                        double fuelrange = MotorcycleData.getFuelRange();
+                        double fuelRange = MotorcycleData.getFuelRange();
                         if (s.distanceFormat.contains("1")) {
-                            fuelrange = Utils.kmToMiles(fuelrange);
+                            fuelRange = Utils.kmToMiles(fuelRange);
                         }
-                        dataVal = String.valueOf(Math.round(fuelrange)) + " " + s.distanceUnit;
+                        dataVal = Utils.toZeroDecimalString((fuelRange)) + " " + s.distanceUnit;
                     }
                     break;
                 case 2://Trip1
                     if (MotorcycleData.getTripOne() != null) {
-                        if (MotorcycleData.getTripOne() != null) {
-                            double trip1 = MotorcycleData.getTripOne();
-                            if (s.distanceFormat.contains("1")) {
-                                trip1 = Utils.kmToMiles(trip1);
-                            }
-                            dataVal = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(trip1) + " " + s.distanceUnit;
+                        double trip1 = MotorcycleData.getTripOne();
+                        if (s.distanceFormat.contains("1")) {
+                            trip1 = Utils.kmToMiles(trip1);
                         }
+                        dataVal = Utils.toZeroDecimalString(trip1) + " " + s.distanceUnit;
                     }
                     break;
                 case 3://Trip2
                     if (MotorcycleData.getTripTwo() != null) {
-                        if (MotorcycleData.getTripTwo() != null) {
-                            double trip2 = MotorcycleData.getTripTwo();
-                            if (s.distanceFormat.contains("1")) {
-                                trip2 = Utils.kmToMiles(trip2);
-                            }
-                            dataVal = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(trip2) + " " + s.distanceUnit;
+                        double trip2 = MotorcycleData.getTripTwo();
+                        if (s.distanceFormat.contains("1")) {
+                            trip2 = Utils.kmToMiles(trip2);
                         }
+                        dataVal = Utils.toZeroDecimalString(trip2) + " " + s.distanceUnit;
                     }
                     break;
                 case 4://Altitude
@@ -186,7 +182,7 @@ public class SVGHelper {
                         if (s.distanceFormat.contains("1")) {
                             altitude = Utils.mToFeet(altitude);
                         }
-                        dataVal = (String.valueOf(Math.round(altitude) + " " + s.heightUnit));
+                        dataVal = Utils.toZeroDecimalString(altitude) + " " + s.heightUnit;
                     }
                     break;
                 default:
@@ -222,10 +218,7 @@ public class SVGHelper {
                 if (s.distanceFormat.contains("1")) {
                     speed = Utils.kmToMiles(speed);
                 }
-                speedValue = String.valueOf(Math.round(speed));
-                if (speed < 10) {
-                    speedValue = String.format("%02d", Math.round(speed));
-                }
+                speedValue = Utils.toZeroDecimalString(speed);
             }
         } catch (Exception e) {
             Log.d(TAG, "Exception getting speed value: " + e.toString());
@@ -247,7 +240,7 @@ public class SVGHelper {
                     s.temperatureUnit = "F";
                     ambientTemp = Utils.celsiusToFahrenheit(ambientTemp);
                 }
-                val = (Math.round(ambientTemp) + s.temperatureUnit);
+                val = (Utils.toZeroDecimalString(ambientTemp) + s.temperatureUnit);
             }
         } catch (Exception e) {
             Log.d(TAG, "Exception getting ambient temp: " + e.toString());
@@ -671,13 +664,13 @@ public class SVGHelper {
                 } else if (s.pressureFormat.contains("2")) {
                     // Kg-f
                     s.pressureUnit = "Kgf";
-                    rdcRear = Utils.barTokgf(rdcRear);
+                    rdcRear = Utils.barToKgf(rdcRear);
                 } else if (s.pressureFormat.contains("3")) {
                     // Psi
                     s.pressureUnit = "psi";
                     rdcRear = Utils.barToPsi(rdcRear);
                 }
-                doc.getElementById("rdcR").setTextContent(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(rdcRear) + s.pressureUnit);
+                doc.getElementById("rdcR").setTextContent(Utils.toZeroDecimalString(rdcRear) + s.pressureUnit);
                 if (Faults.getrearTirePressureCriticalActive()) {
                     doc.getElementById("rdcR").setAttribute("style",
                             doc.getElementById("rdcR").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
@@ -707,13 +700,13 @@ public class SVGHelper {
                 } else if (s.pressureFormat.contains("2")) {
                     // Kg-f
                     s.pressureUnit = "Kgf";
-                    rdcFront = Utils.barTokgf(rdcFront);
+                    rdcFront = Utils.barToKgf(rdcFront);
                 } else if (s.pressureFormat.contains("3")) {
                     // Psi
                     s.pressureUnit = "psi";
                     rdcFront = Utils.barToPsi(rdcFront);
                 }
-                doc.getElementById("rdcF").setTextContent(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(rdcFront) + s.pressureUnit);
+                doc.getElementById("rdcF").setTextContent(Utils.toZeroDecimalString(rdcFront) + s.pressureUnit);
                 if (Faults.getfrontTirePressureCriticalActive()) {
                     doc.getElementById("rdcF").setAttribute("style",
                             doc.getElementById("rdcF").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
@@ -734,11 +727,11 @@ public class SVGHelper {
         try {
             //Clock
             if (MotorcycleData.getTime() != null) {
-                SimpleDateFormat dateformat = new SimpleDateFormat("h:mm", Locale.getDefault());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("h:mm", Locale.getDefault());
                 if (!s.sharedPrefs.getString("prefTime", "0").equals("0")) {
-                    dateformat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                    dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
                 }
-                doc.getElementById("clock").setTextContent(dateformat.format(MotorcycleData.getTime()));
+                doc.getElementById("clock").setTextContent(dateFormat.format(MotorcycleData.getTime()));
             }
         } catch (Exception e) {
             Log.d(TAG, "Exception getting clock: " + e.toString());
@@ -758,7 +751,7 @@ public class SVGHelper {
                     s.temperatureUnit = "F";
                     engineTemp = Utils.celsiusToFahrenheit(engineTemp);
                 }
-                doc.getElementById("engineTemp").setTextContent(Math.round(engineTemp) + s.temperatureUnit);
+                doc.getElementById("engineTemp").setTextContent(Utils.toZeroDecimalString(engineTemp) + s.temperatureUnit);
                 if (MotorcycleData.getEngineTemperature() >= 104.0) {
                     doc.getElementById("engineTemp").setAttribute("style",
                             doc.getElementById("engineTemp").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
@@ -2417,53 +2410,61 @@ public class SVGHelper {
         try {
             //Compass
             Double leanAngle = MotorcycleData.getLeanAngleBike();
-            String centerRadius = ", 540, 1540)";
-            String angle = "0";
+            Double leanAngleMaxL = MotorcycleData.getLeanAngleBikeMaxL();
+            Double leanAngleMaxR = MotorcycleData.getLeanAngleBikeMaxR();
+            String blank = MyApplication.getContext().getString(R.string.blank_field);
+            String centerRadius;
+            String angle;
+            String angleMaxL;
+            String angleMaxR;
 
-
-            //Lean Angle
-            if (MotorcycleData.getLeanAngleBike() != null) {
-                setText(doc, "angle", String.format("%02d", Math.abs(Math.round(MotorcycleData.getLeanAngleBike()))));
-                //Log.d("angle","Current Angle: " +  String.valueOf(Data.getLeanAngleBike()));
-            }
-            //Left Max Angle
-            if (MotorcycleData.getLeanAngleBikeMaxL() != null) {
-                setText(doc, "angleMaxL", String.valueOf(Math.round(MotorcycleData.getLeanAngleBikeMaxL())));
-                Log.d("angleMaxL", "Max Left Angle: " + String.valueOf(MotorcycleData.getLeanAngleBikeMaxL()));
-            } else {
-                setText(doc, "angleMaxL", "...");
-            }
-            //Right Max Angle
-            if (MotorcycleData.getLeanAngleBikeMaxR() != null) {
-                setText(doc, "angleMaxR", String.valueOf(Math.round(MotorcycleData.getLeanAngleBikeMaxR())));
-                Log.d("angleMaxR", "Max Right Angle: " + String.valueOf(MotorcycleData.getLeanAngleBikeMaxR()));
-            } else {
-                setText(doc, "angleMaxR", "...");
-            }
-
-            if (leanAngle != null) {
-                if (leanAngle >  60) {
-                    leanAngle = 60.0;
-                } else if (leanAngle < -60) {
-                    leanAngle = -60.0;
-                }
-                leanAngle *= 1.5;
-                angle = leanAngle.toString();
-            }
 
             if (isDevicePortrait()) {
                 centerRadius = ",540, 1540)";
+            } else {
+                centerRadius = ", 540, 1540)";
             }
-            doc.getElementById("needle").setAttribute("transform",
-                    "rotate(" + angle + centerRadius);
 
-
-
+            //Lean Angle
+            if (leanAngle != null) {
+                angle = leanAngleToRotateAngle(leanAngle);
+                setText(doc, "angle", Utils.toOneDecimalString(leanAngle));
+                doc.getElementById("needle").setAttribute("transform","rotate(" + angle + centerRadius);
+            } else {
+                setText(doc, "angle", blank);
+            }
+            //Left Max Angle
+            if (leanAngleMaxL != null) {
+                angleMaxL = leanAngleToRotateAngle(leanAngleMaxL * -1);
+                setText(doc, "angleMaxL", Utils.toOneDecimalString(leanAngleMaxL));
+                doc.getElementById("needleMaxL").setAttribute("transform","rotate(" + angleMaxL + centerRadius);
+            } else {
+                setText(doc, "angleMaxL", blank);
+            }
+            //Right Max Angle
+            if (leanAngleMaxR != null) {
+                angleMaxR = leanAngleToRotateAngle(leanAngleMaxR * 1);
+                setText(doc, "angleMaxR", Utils.toOneDecimalString(leanAngleMaxR));
+                doc.getElementById("needleMaxR").setAttribute("transform","rotate(" + angleMaxR + centerRadius);
+            } else {
+                setText(doc, "angleMaxR", blank);
+            }
         } catch (Exception e) {
             Log.d(TAG, "Exception Setting Up Compass: " + e.toString());
         }
     }
 
+    private static String leanAngleToRotateAngle(Double leanAngle) {
+        final double maxLean = 50.0;
+
+        if (leanAngle >  maxLean) {
+            leanAngle = maxLean;
+        } else if (leanAngle < (maxLean * -1)) {
+            leanAngle = (maxLean * -1);
+        }
+        leanAngle *= (90 / maxLean);
+        return leanAngle.toString();
+    }
 
     public void setupCompass(Document doc) {
         try {

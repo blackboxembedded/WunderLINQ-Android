@@ -211,7 +211,7 @@ public class MemCache {
             //SHIFTS:
             putString("shiftsLabel", MyApplication.getContext().getString(R.string.shifts_header));
 
-            //LEAN_BT:
+            //LEAN_DEVICE:
             putString("leanLabelBt", MyApplication.getContext().getString(R.string.leanangle_header));
 
             //GFORCE_DEVICE:
@@ -401,7 +401,7 @@ public class MemCache {
         return getString("shiftsLabel");
     }
 
-    //LEAN_BT:
+    //LEAN_DEVICE:
     public static String leanLabelBt(){
         return getString("leanLabelBt");
     }

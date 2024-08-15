@@ -373,53 +373,14 @@ public class BluetoothLeService extends Service {
             startLocationUpdatesWithLocationManager();
         }
 
+
         // Update time Data field and send to the cluster if WLQ_N
         Timer t = new Timer();
-        t.scheduleAtFixedRate(new TimerTask() {
+        t.schedule(new TimerTask() {
             @Override
             public void run() {
                 Calendar c = Calendar.getInstance();
                 MotorcycleData.setTime(c.getTime());
-
-                //Send time to cluster
-                if (MotorcycleData.wlq != null) {
-                    if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
-                        if (gattCommandCharacteristic != null) {
-                            BluetoothGattCharacteristic characteristic = gattCommandCharacteristic;
-                            //Get Current Time
-                            Date date = new Date();
-                            Calendar calendar = new GregorianCalendar();
-                            calendar.setTime(date);
-                            int year = calendar.get(Calendar.YEAR);
-                            //Add one to month {0 - 11}
-                            int month = calendar.get(Calendar.MONTH) + 1;
-                            int day = calendar.get(Calendar.DAY_OF_MONTH);
-                            int hour = calendar.get(Calendar.HOUR_OF_DAY);
-                            int minute = calendar.get(Calendar.MINUTE);
-                            int second = calendar.get(Calendar.SECOND);
-                            int yearByte = (year >> 4);
-                            byte yearLByte = (byte) year;
-                            int yearNibble = (yearLByte & 0x0F);
-                            byte monthNibble = (byte) month;
-                            int monthYearByte = ((yearNibble & 0x0F) << 4 | (monthNibble & 0x0F));
-                            try {
-                                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                                outputStream.write(WLQ_N.SET_CLUSTER_CLOCK_CMD);
-                                outputStream.write((byte) second);
-                                outputStream.write((byte) minute);
-                                outputStream.write((byte) hour);
-                                outputStream.write((byte) day);
-                                outputStream.write((byte) monthYearByte);
-                                outputStream.write((byte) yearByte);
-                                outputStream.write(WLQ_N.CMD_EOM);
-                                byte[] setClusterClock = outputStream.toByteArray();
-                                writeCharacteristic(characteristic, setClusterClock, WriteType.WITH_RESPONSE);
-                            } catch (IOException e) {
-                                Log.d(TAG, e.toString());
-                            }
-                        }
-                    }
-                }
             }
         }, 1000, 1000); //Initial Delay and Period for update (in milliseconds)
     }
@@ -513,23 +474,23 @@ public class BluetoothLeService extends Service {
                 }
                 //Filter out impossible values, max sport bike lean is +/-60
                 if ((leanAngle >= -60.0) && (leanAngle <= 60.0)) {
-                    MotorcycleData.setLeanAngle(leanAngle);
+                    MotorcycleData.setLeanAngleDevice(leanAngle);
                     //Store Max L and R lean angle
                     if (leanAngle > 0) {
-                        if (MotorcycleData.getLeanAngleMaxR() != null) {
-                            if (leanAngle > MotorcycleData.getLeanAngleMaxR()) {
-                                MotorcycleData.setLeanAngleMaxR(leanAngle);
+                        if (MotorcycleData.getLeanAngleDeviceMaxR() != null) {
+                            if (leanAngle > MotorcycleData.getLeanAngleDeviceMaxR()) {
+                                MotorcycleData.setLeanAngleDeviceMaxR(leanAngle);
                             }
                         } else {
-                            MotorcycleData.setLeanAngleMaxR(leanAngle);
+                            MotorcycleData.setLeanAngleDeviceMaxR(leanAngle);
                         }
                     } else if (leanAngle < 0) {
-                        if (MotorcycleData.getLeanAngleMaxL() != null) {
-                            if (Math.abs(leanAngle) > MotorcycleData.getLeanAngleMaxL()) {
-                                MotorcycleData.setLeanAngleMaxL(Math.abs(leanAngle));
+                        if (MotorcycleData.getLeanAngleDeviceMaxL() != null) {
+                            if (Math.abs(leanAngle) > MotorcycleData.getLeanAngleDeviceMaxL()) {
+                                MotorcycleData.setLeanAngleDeviceMaxL(Math.abs(leanAngle));
                             }
                         } else {
-                            MotorcycleData.setLeanAngleMaxL(Math.abs(leanAngle));
+                            MotorcycleData.setLeanAngleDeviceMaxL(Math.abs(leanAngle));
                         }
                     }
                 }
@@ -809,7 +770,7 @@ public class BluetoothLeService extends Service {
         if (data != null) {
             if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
                 // Log data
-                Log.d(TAG, characteristic.getUuid().toString() + ": " + Utils.ByteArraytoHexNoDelim(data));
+                Log.d(TAG, characteristic.getUuid().toString() + ": " + Utils.ByteArrayToHexNoDelim(data));
             }
         }
 
@@ -875,7 +836,7 @@ public class BluetoothLeService extends Service {
                     if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
                         Log.d(TAG,"ACC STATUS RECEIVED");
                         // Log data
-                        Log.d(TAG,Utils.ByteArraytoHexNoDelim(data));
+                        Log.d(TAG,Utils.ByteArrayToHexNoDelim(data));
                     }
                     if(MotorcycleData.wlq != null) {
                         MotorcycleData.wlq.setStatus(data);
@@ -912,7 +873,7 @@ public class BluetoothLeService extends Service {
      * {@code BluetoothGattCallback#onConnectionStateChange(android.bluetooth.BluetoothGatt, int, int)}
      * callback.
      */
-    public static void connect(final String address, final String devicename) {
+    public static void connect(final String address, final String deviceName) {
         if (mBluetoothAdapter == null || address == null) {
             return;
         }
@@ -930,9 +891,9 @@ public class BluetoothLeService extends Service {
         || (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)) {
             mBluetoothGatt = device.connectGatt(MyApplication.getContext(), false, mGattCallback);
             mBluetoothDeviceAddress = address;
-            mBluetoothDeviceName = devicename;
+            mBluetoothDeviceName = deviceName;
 
-            String dataLog = "[" + devicename + "|" + address + "] " +
+            String dataLog = "[" + deviceName + "|" + address + "] " +
                     "Connection request sent";
             Log.d(TAG, dataLog);
         } else {
@@ -1098,7 +1059,7 @@ public class BluetoothLeService extends Service {
                             Log.d(TAG, String.format("writeCharacteristic failed for characteristic: %s", characteristic.getUuid()));
                             completedCommand();
                         } else {
-                            //Log.d(TAG, String.format("Writing <%s> to characteristic <%s>", Utils.ByteArraytoHex(bytesToWrite), characteristic.getUuid()));
+                            //Log.d(TAG, String.format("Writing <%s> to characteristic <%s>", Utils.ByteArrayToHex(bytesToWrite), characteristic.getUuid()));
                             nrTries++;
                         }
                     }
@@ -1355,7 +1316,7 @@ public class BluetoothLeService extends Service {
         if(Faults.getgeneralShowsRedActive()){
             body.append(MyApplication.getContext().getResources().getString(R.string.fault_GENWARNSHRED)).append("\n");
         }
-        if(!body.toString().equals("")){
+        if(!body.toString().isEmpty()){
             showNotification(MyApplication.getContext(), MyApplication.getContext().getResources().getString(R.string.fault_title), body.toString());
         } else {
             Log.d(TAG,"Clearing notification");
@@ -1564,29 +1525,78 @@ public class BluetoothLeService extends Service {
 
     private static void sendDataBroadcast() {
         final Intent intent = new Intent(ACTION_PERFORMANCE_DATA_AVAILABLE);
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_GEAR), MotorcycleData.getGear());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_ENGINE_TEMP), MotorcycleData.getEngineTemperature());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_AIR_TEMP), MotorcycleData.getAmbientTemperature());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_FRONT_RDC), MotorcycleData.getFrontTirePressure());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_REAR_RDC), MotorcycleData.getRearTirePressure());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_ODOMETER), MotorcycleData.getOdometer());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_VOLTAGE), MotorcycleData.getvoltage());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_THROTTLE), MotorcycleData.getThrottlePosition());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_FRONT_BRAKE), MotorcycleData.getFrontBrake());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_REAR_BRAKE), MotorcycleData.getRearBrake());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_AMBIENT_LIGHT), MotorcycleData.getAmbientLight());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_TRIP_ONE), MotorcycleData.getTripOne());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_TRIP_TWO), MotorcycleData.getTripTwo());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_TRIP_AUTO), MotorcycleData.getTripAuto());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_SPEED), MotorcycleData.getSpeed());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_AVG_SPEED), MotorcycleData.getAvgSpeed());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_CURRENT_CONSUMPTION), MotorcycleData.getCurrentConsumption());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_ECONOMY_ONE), MotorcycleData.getFuelEconomyOne());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_ECONOMY_TWO), MotorcycleData.getFuelEconomyTwo());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_RANGE), MotorcycleData.getFuelRange());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_SHIFTS), MotorcycleData.getNumberOfShifts());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_RPM), MotorcycleData.getRPM());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_LEAN), MotorcycleData.getLeanAngleBike());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.GEAR), MotorcycleData.getGear());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.ENGINE_TEMP), MotorcycleData.getEngineTemperature());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.AIR_TEMP), MotorcycleData.getAmbientTemperature());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.FRONT_RDC), MotorcycleData.getFrontTirePressure());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.REAR_RDC), MotorcycleData.getRearTirePressure());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.ODOMETER), MotorcycleData.getOdometer());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.VOLTAGE), MotorcycleData.getVoltage());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.THROTTLE), MotorcycleData.getThrottlePosition());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.FRONT_BRAKE), MotorcycleData.getFrontBrake());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.REAR_BRAKE), MotorcycleData.getRearBrake());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.AMBIENT_LIGHT), MotorcycleData.getAmbientLight());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.TRIP_ONE), MotorcycleData.getTripOne());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.TRIP_TWO), MotorcycleData.getTripTwo());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.TRIP_AUTO), MotorcycleData.getTripAuto());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.SPEED), MotorcycleData.getSpeed());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.AVG_SPEED), MotorcycleData.getAvgSpeed());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.CURRENT_CONSUMPTION), MotorcycleData.getCurrentConsumption());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.ECONOMY_ONE), MotorcycleData.getFuelEconomyOne());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.ECONOMY_TWO), MotorcycleData.getFuelEconomyTwo());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.RANGE), MotorcycleData.getFuelRange());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.SHIFTS), MotorcycleData.getNumberOfShifts());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.RPM), MotorcycleData.getRPM());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.LEAN_BIKE), MotorcycleData.getLeanAngleBike());
         MyApplication.getContext().sendBroadcast(intent);
     }
+
+
+    public static void setClusterClock(Date currTime) {
+
+        //Calendar c = Calendar.getInstance();
+        //Data.setTime(c.getTime());
+
+        //Send time to cluster
+        if (MotorcycleData.wlq != null) {
+            if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
+                if (gattCommandCharacteristic != null) {
+                    BluetoothGattCharacteristic characteristic = gattCommandCharacteristic;
+                    //Get Current Time
+                    //Date date = new Date();
+                    Calendar calendar = new GregorianCalendar();
+                    calendar.setTime(currTime);
+                    int year = calendar.get(Calendar.YEAR);
+
+                    //Add one to month {0 - 11}
+                    int month = calendar.get(Calendar.MONTH) + 1;
+                    int day = calendar.get(Calendar.DAY_OF_MONTH);
+                    int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                    int minute = calendar.get(Calendar.MINUTE);
+                    int second = calendar.get(Calendar.SECOND);
+                    int yearByte = (year >> 4);
+                    byte yearLByte = (byte) year;
+                    int yearNibble = (yearLByte & 0x0F);
+                    byte monthNibble = (byte) month;
+                    int monthYearByte = ((yearNibble & 0x0F) << 4 | (monthNibble & 0x0F));
+                    try {
+                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                        outputStream.write(WLQ_N.SET_CLUSTER_CLOCK_CMD);
+                        outputStream.write((byte) second);
+                        outputStream.write((byte) minute);
+                        outputStream.write((byte) hour);
+                        outputStream.write((byte) day);
+                        outputStream.write((byte) monthYearByte);
+                        outputStream.write((byte) yearByte);
+                        outputStream.write(WLQ_N.CMD_EOM);
+                        byte[] setClusterClock = outputStream.toByteArray();
+                        BluetoothLeService.writeCharacteristic(characteristic, setClusterClock, BluetoothLeService.WriteType.WITH_RESPONSE);
+                    } catch (IOException e) {
+                        Log.d(TAG, e.toString());
+                    }
+                }
+            }
+        }
+    }
+
 }
