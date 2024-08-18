@@ -1564,29 +1564,29 @@ public class BluetoothLeService extends Service {
 
     private static void sendDataBroadcast() {
         final Intent intent = new Intent(ACTION_PERFORMANCE_DATA_AVAILABLE);
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_GEAR), MotorcycleData.getGear());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_ENGINE_TEMP), MotorcycleData.getEngineTemperature());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_AIR_TEMP), MotorcycleData.getAmbientTemperature());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_FRONT_RDC), MotorcycleData.getFrontTirePressure());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_REAR_RDC), MotorcycleData.getRearTirePressure());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_ODOMETER), MotorcycleData.getOdometer());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_VOLTAGE), MotorcycleData.getVoltage());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_THROTTLE), MotorcycleData.getThrottlePosition());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_FRONT_BRAKE), MotorcycleData.getFrontBrake());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_REAR_BRAKE), MotorcycleData.getRearBrake());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_AMBIENT_LIGHT), MotorcycleData.getAmbientLight());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_TRIP_ONE), MotorcycleData.getTripOne());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_TRIP_TWO), MotorcycleData.getTripTwo());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_TRIP_AUTO), MotorcycleData.getTripAuto());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_SPEED), MotorcycleData.getSpeed());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_AVG_SPEED), MotorcycleData.getAvgSpeed());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_CURRENT_CONSUMPTION), MotorcycleData.getCurrentConsumption());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_ECONOMY_ONE), MotorcycleData.getFuelEconomyOne());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_ECONOMY_TWO), MotorcycleData.getFuelEconomyTwo());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_RANGE), MotorcycleData.getFuelRange());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_SHIFTS), MotorcycleData.getNumberOfShifts());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_RPM), MotorcycleData.getRPM());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_LEAN), MotorcycleData.getLeanAngleBike());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.GEAR), MotorcycleData.getGear());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.ENGINE_TEMP), MotorcycleData.getEngineTemperature());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.AIR_TEMP), MotorcycleData.getAmbientTemperature());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.FRONT_RDC), MotorcycleData.getFrontTirePressure());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.REAR_RDC), MotorcycleData.getRearTirePressure());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.ODOMETER), MotorcycleData.getOdometer());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.VOLTAGE), MotorcycleData.getVoltage());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.THROTTLE), MotorcycleData.getThrottlePosition());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.FRONT_BRAKE), MotorcycleData.getFrontBrake());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.REAR_BRAKE), MotorcycleData.getRearBrake());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.AMBIENT_LIGHT), MotorcycleData.getAmbientLight());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.TRIP_ONE), MotorcycleData.getTripOne());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.TRIP_TWO), MotorcycleData.getTripTwo());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.TRIP_AUTO), MotorcycleData.getTripAuto());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.SPEED), MotorcycleData.getSpeed());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.AVG_SPEED), MotorcycleData.getAvgSpeed());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.CURRENT_CONSUMPTION), MotorcycleData.getCurrentConsumption());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.ECONOMY_ONE), MotorcycleData.getFuelEconomyOne());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.ECONOMY_TWO), MotorcycleData.getFuelEconomyTwo());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.RANGE), MotorcycleData.getFuelRange());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.SHIFTS), MotorcycleData.getNumberOfShifts());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.RPM), MotorcycleData.getRPM());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.LEAN_BIKE), MotorcycleData.getLeanAngleBike());
         MyApplication.getContext().sendBroadcast(intent);
     }
 }

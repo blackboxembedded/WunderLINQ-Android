@@ -44,40 +44,60 @@ public class MotorcycleData {
     public static WLQ wlq;
     public static String hardwareVersion;
 
-    public static final int DATA_GEAR = 0;
-    public static final int DATA_ENGINE_TEMP = 1;
-    public static final int DATA_AIR_TEMP = 2;
-    public static final int DATA_FRONT_RDC = 3;
-    public static final int DATA_REAR_RDC = 4;
-    public static final int DATA_ODOMETER = 5;
-    public static final int DATA_VOLTAGE = 6;
-    public static final int DATA_THROTTLE = 7;
-    public static final int DATA_FRONT_BRAKE = 8;
-    public static final int DATA_REAR_BRAKE = 9;
-    public static final int DATA_AMBIENT_LIGHT = 10;
-    public static final int DATA_TRIP_ONE = 11;
-    public static final int DATA_TRIP_TWO = 12;
-    public static final int DATA_TRIP_AUTO = 13;
-    public static final int DATA_SPEED = 14;
-    public static final int DATA_AVG_SPEED = 15;
-    public static final int DATA_CURRENT_CONSUMPTION = 16;
-    public static final int DATA_ECONOMY_ONE = 17;
-    public static final int DATA_ECONOMY_TWO = 18;
-    public static final int DATA_RANGE = 19;
-    public static final int DATA_SHIFTS = 20;
-    public static final int DATA_LEAN_DEVICE = 21;
-    public static final int DATA_GFORCE_DEVICE = 22;
-    public static final int DATA_BEARING_DEVICE = 23;
-    public static final int DATA_TIME_DEVICE = 24;
-    public static final int DATA_BAROMETRIC_DEVICE = 25;
-    public static final int DATA_SPEED_DEVICE = 26;
-    public static final int DATA_ALTITUDE_DEVICE = 27;
-    public static final int DATA_SUN_DEVICE = 28;
-    public static final int DATA_RPM = 29;
-    public static final int DATA_LEAN = 30;
-    public static final int DATA_REAR_SPEED = 31;
-    public static final int DATA_CELL_SIGNAL= 32;
-    public static final int DATA_BATTERY_DEVICE = 33;
+    public enum DataType {
+        GEAR(0),
+        ENGINE_TEMP(1),
+        AIR_TEMP(2),
+        FRONT_RDC(3),
+        REAR_RDC(4),
+        ODOMETER(5),
+        VOLTAGE(6),
+        THROTTLE(7),
+        FRONT_BRAKE(8),
+        REAR_BRAKE(9),
+        AMBIENT_LIGHT(10),
+        TRIP_ONE(11),
+        TRIP_TWO(12),
+        TRIP_AUTO(13),
+        SPEED(14),
+        AVG_SPEED(15),
+        CURRENT_CONSUMPTION(16),
+        ECONOMY_ONE(17),
+        ECONOMY_TWO(18),
+        RANGE(19),
+        SHIFTS(20),
+        LEAN_DEVICE(21),
+        GFORCE_DEVICE(22),
+        BEARING_DEVICE(23),
+        TIME_DEVICE(24),
+        BAROMETRIC_DEVICE(25),
+        SPEED_DEVICE(26),
+        ALTITUDE_DEVICE(27),
+        SUN_DEVICE(28),
+        RPM(29),
+        LEAN_BIKE(30),
+        REAR_SPEED(31),
+        CELL_SIGNAL(32),
+        BATTERY_DEVICE(33);
+
+
+        private final int value;
+
+        // Constructor is private; cannot be called from outside the enum
+        DataType(int value) {
+            this.value = value;
+        }
+
+        // Getter method for the value
+        public int getValue() {
+            return value;
+        }
+
+        public String getString() {
+            return "";
+        }
+
+    }
 
     // Focus
     private static boolean hasFocus;
@@ -450,7 +470,7 @@ public class MotorcycleData {
     }
 
     // Utility functions
-    public static String getLabel(int dataPoint){
+    public static String getLabel(DataType dataPoint){
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
         String pressureUnit = "bar";
         String pressureFormat = sharedPrefs.getString("prefPressureF", "0");
@@ -496,106 +516,106 @@ public class MotorcycleData {
 
         String label = " ";
         switch (dataPoint){
-            case DATA_GEAR:
+            case GEAR:
                 label = MyApplication.getContext().getString(R.string.gear_label);
                 break;
-            case DATA_ENGINE_TEMP:
+            case ENGINE_TEMP:
                 label = MyApplication.getContext().getString(R.string.engine_temp_label) + "(" + temperatureUnit + ")";
                 break;
-            case DATA_AIR_TEMP:
+            case AIR_TEMP:
                 label = MyApplication.getContext().getString(R.string.ambient_temp_label) + "(" + temperatureUnit + ")";
                 break;
-            case DATA_FRONT_RDC:
+            case FRONT_RDC:
                 label = MyApplication.getContext().getString(R.string.frontpressure_header) + "(" + pressureUnit + ")";
                 break;
-            case DATA_REAR_RDC:
+            case REAR_RDC:
                 label = MyApplication.getContext().getString(R.string.rearpressure_header) + "(" + pressureUnit + ")";
                 break;
-            case DATA_ODOMETER:
+            case ODOMETER:
                 label = MyApplication.getContext().getString(R.string.odometer_label) + "(" + distanceUnit + ")";
                 break;
-            case DATA_VOLTAGE:
+            case VOLTAGE:
                 label = MyApplication.getContext().getString(R.string.voltage_label) + "(" + voltageUnit + ")";
                 break;
-            case DATA_THROTTLE:
+            case THROTTLE:
                 label = MyApplication.getContext().getString(R.string.throttle_label) + "(" + throttleUnit + ")";
                 break;
-            case DATA_FRONT_BRAKE:
+            case FRONT_BRAKE:
                 label = MyApplication.getContext().getString(R.string.frontbrakes_label);
                 break;
-            case DATA_REAR_BRAKE:
+            case REAR_BRAKE:
                 label = MyApplication.getContext().getString(R.string.rearbrakes_label);
                 break;
-            case DATA_AMBIENT_LIGHT:
+            case AMBIENT_LIGHT:
                 label = MyApplication.getContext().getString(R.string.ambientlight_label);
                 break;
-            case DATA_TRIP_ONE:
+            case TRIP_ONE:
                 label = MyApplication.getContext().getString(R.string.trip1_label) + "(" + distanceUnit + ")";
                 break;
-            case DATA_TRIP_TWO:
+            case TRIP_TWO:
                 label = MyApplication.getContext().getString(R.string.trip2_label) + "(" + distanceUnit + ")";
                 break;
-            case DATA_TRIP_AUTO:
+            case TRIP_AUTO:
                 label = MyApplication.getContext().getString(R.string.tripauto_label) + "(" + distanceUnit + ")";
                 break;
-            case DATA_SPEED:
+            case SPEED:
                 label = MyApplication.getContext().getString(R.string.speed_label) + "(" + distanceTimeUnit + ")";
                 break;
-            case DATA_AVG_SPEED:
+            case AVG_SPEED:
                 label = MyApplication.getContext().getString(R.string.avgspeed_label) + "(" + distanceTimeUnit + ")";
                 break;
-            case DATA_CURRENT_CONSUMPTION:
+            case CURRENT_CONSUMPTION:
                 label = MyApplication.getContext().getString(R.string.cconsumption_label) + "(" + consumptionUnit + ")";
                 break;
-            case DATA_ECONOMY_ONE:
+            case ECONOMY_ONE:
                 label = MyApplication.getContext().getString(R.string.fueleconomyone_label) + "(" + consumptionUnit + ")";
                 break;
-            case DATA_ECONOMY_TWO:
+            case ECONOMY_TWO:
                 label = MyApplication.getContext().getString(R.string.fueleconomytwo_label) + "(" + consumptionUnit + ")";
                 break;
-            case DATA_RANGE:
+            case RANGE:
                 label = MyApplication.getContext().getString(R.string.fuelrange_label) + "(" + distanceUnit + ")";
                 break;
-            case DATA_SHIFTS:
+            case SHIFTS:
                 label = MyApplication.getContext().getString(R.string.shifts_header);
                 break;
-            case DATA_LEAN_DEVICE:
+            case LEAN_DEVICE:
                 label = MyApplication.getContext().getString(R.string.leanangle_header);
                 break;
-            case DATA_GFORCE_DEVICE:
+            case GFORCE_DEVICE:
                 label = MyApplication.getContext().getString(R.string.gforce_header);
                 break;
-            case DATA_BEARING_DEVICE:
+            case BEARING_DEVICE:
                 label = MyApplication.getContext().getString(R.string.bearing_header);
                 break;
-            case DATA_TIME_DEVICE:
+            case TIME_DEVICE:
                 label = MyApplication.getContext().getString(R.string.time_header);
                 break;
-            case DATA_BAROMETRIC_DEVICE:
+            case BAROMETRIC_DEVICE:
                 label = MyApplication.getContext().getString(R.string.barometricpressure_header) + "(" + barometricUnit + ")";
                 break;
-            case DATA_SPEED_DEVICE:
+            case SPEED_DEVICE:
                 label = MyApplication.getContext().getString(R.string.gpsspeed_header) + "(" + distanceTimeUnit + ")";
                 break;
-            case DATA_ALTITUDE_DEVICE:
+            case ALTITUDE_DEVICE:
                 label = MyApplication.getContext().getString(R.string.altitude_header) + "(" + heightUnit + ")";
                 break;
-            case DATA_SUN_DEVICE:
+            case SUN_DEVICE:
                 label = MyApplication.getContext().getString(R.string.sunrisesunset_header);
                 break;
-            case DATA_RPM:
+            case RPM:
                 label = MyApplication.getContext().getString(R.string.rpm_header);
                 break;
-            case DATA_LEAN:
+            case LEAN_BIKE:
                 label = MyApplication.getContext().getString(R.string.leanangle_bike_header);
                 break;
-            case DATA_REAR_SPEED:
+            case REAR_SPEED:
                 label = MyApplication.getContext().getString(R.string.rearwheel_speed_header) + "(" + distanceTimeUnit + ")";
                 break;
-            case DATA_CELL_SIGNAL:
+            case CELL_SIGNAL:
                 label = MyApplication.getContext().getString(R.string.cellular_signal_header) + "(" + signalUnit + ")";
                 break;
-            case DATA_BATTERY_DEVICE:
+            case BATTERY_DEVICE:
                 label = MyApplication.getContext().getString(R.string.local_battery_header) + "(" + batteryUnit + ")";
                 break;
             default:
@@ -604,109 +624,109 @@ public class MotorcycleData {
         return label;
     }
 
-    public static String getExtraKey(int dataPoint){
+    public static String getExtraKey(DataType dataPoint){
         String key = "";
         switch (dataPoint){
-            case DATA_GEAR:
+            case GEAR:
                 key = "gear";
                 break;
-            case DATA_ENGINE_TEMP:
+            case ENGINE_TEMP:
                 key = "engineTemperature";
                 break;
-            case DATA_AIR_TEMP:
+            case AIR_TEMP:
                 key = "ambientTemperature";
                 break;
-            case DATA_FRONT_RDC:
+            case FRONT_RDC:
                 key = "frontTirePressure";
                 break;
-            case DATA_REAR_RDC:
+            case REAR_RDC:
                 key = "rearTirePressure";
                 break;
-            case DATA_ODOMETER:
+            case ODOMETER:
                 key = "odometer";
                 break;
-            case DATA_VOLTAGE:
+            case VOLTAGE:
                 key = "voltage";
                 break;
-            case DATA_THROTTLE:
+            case THROTTLE:
                 key = "throttlePosition";
                 break;
-            case DATA_FRONT_BRAKE:
+            case FRONT_BRAKE:
                 key = "frontBrake";
                 break;
-            case DATA_REAR_BRAKE:
+            case REAR_BRAKE:
                 key = "rearBrake";
                 break;
-            case DATA_AMBIENT_LIGHT:
+            case AMBIENT_LIGHT:
                 key = "ambientLight";
                 break;
-            case DATA_TRIP_ONE:
+            case TRIP_ONE:
                 key = "tripOne";
                 break;
-            case DATA_TRIP_TWO:
+            case TRIP_TWO:
                 key = "tripTwo";
                 break;
-            case DATA_TRIP_AUTO:
+            case TRIP_AUTO:
                 key = "tripAuto";
                 break;
-            case DATA_SPEED:
+            case SPEED:
                 key = "speed";
                 break;
-            case DATA_AVG_SPEED:
+            case AVG_SPEED:
                 key = "avgSpeed";
                 break;
-            case DATA_CURRENT_CONSUMPTION:
+            case CURRENT_CONSUMPTION:
                 key = "currentConsumption";
                 break;
-            case DATA_ECONOMY_ONE:
+            case ECONOMY_ONE:
                 key = "fuelEconomyOne";
                 break;
-            case DATA_ECONOMY_TWO:
+            case ECONOMY_TWO:
                 key = "fuelEconomyTwo";
                 break;
-            case DATA_RANGE:
+            case RANGE:
                 key = "fuelRange";
                 break;
-            case DATA_SHIFTS:
+            case SHIFTS:
                 key = "numberOfShifts";
                 break;
-            case DATA_LEAN_DEVICE:
+            case LEAN_DEVICE:
                 key = "leanAngleDevice";
                 break;
-            case DATA_GFORCE_DEVICE:
+            case GFORCE_DEVICE:
                 key = "gForce";
                 break;
-            case DATA_BEARING_DEVICE:
+            case BEARING_DEVICE:
                 key = "bearing";
                 break;
-            case DATA_TIME_DEVICE:
+            case TIME_DEVICE:
                 key = "time";
                 break;
-            case DATA_BAROMETRIC_DEVICE:
+            case BAROMETRIC_DEVICE:
                 key = "barometricPressure";
                 break;
-            case DATA_SPEED_DEVICE:
+            case SPEED_DEVICE:
                 key = "gpsSpeed";
                 break;
-            case DATA_ALTITUDE_DEVICE:
+            case ALTITUDE_DEVICE:
                 key = "gpsAltitude";
                 break;
-            case DATA_SUN_DEVICE:
+            case SUN_DEVICE:
                 key = "sunRiseSet";
                 break;
-            case DATA_RPM:
+            case RPM:
                 key = "rpm";
                 break;
-            case DATA_LEAN:
+            case LEAN_BIKE:
                 key = "leanAngle";
                 break;
-            case DATA_REAR_SPEED:
+            case REAR_SPEED:
                 key = "rearSpeed";
                 break;
-            case DATA_CELL_SIGNAL:
+            case CELL_SIGNAL:
                 key = "cellSignal";
                 break;
-            case DATA_BATTERY_DEVICE:
+            case BATTERY_DEVICE:
                 key = "battery";
                 break;
             default:
@@ -715,13 +735,13 @@ public class MotorcycleData {
         return key;
     }
 
-    public static Drawable getIcon(int dataPoint){
+    public static Drawable getIcon(DataType dataPoint){
         Drawable icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_cog);
         switch (dataPoint){
-            case DATA_GEAR:
+            case GEAR:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_cog);
                 break;
-            case DATA_ENGINE_TEMP:
+            case ENGINE_TEMP:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_engine_temp);
                 if(MotorcycleData.getEngineTemperature() != null ){
                     double engineTemp = MotorcycleData.getEngineTemperature();
@@ -730,7 +750,7 @@ public class MotorcycleData {
                     }
                 }
                 break;
-            case DATA_AIR_TEMP:
+            case AIR_TEMP:
                 if(MotorcycleData.getAmbientTemperature() != null ){
                     double ambientTemp = MotorcycleData.getAmbientTemperature();
                     if(ambientTemp <= 0){
@@ -743,7 +763,7 @@ public class MotorcycleData {
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_thermometer_half);
                 }
                 break;
-            case DATA_FRONT_RDC:
+            case FRONT_RDC:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire);
                 if (Faults.getFrontTirePressureCriticalActive()){
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire_alert);
@@ -753,7 +773,7 @@ public class MotorcycleData {
                     icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
                 }
                 break;
-            case DATA_REAR_RDC:
+            case REAR_RDC:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire);
                 if (Faults.getRearTirePressureCriticalActive()){
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire_alert);
@@ -763,63 +783,63 @@ public class MotorcycleData {
                     icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
                 }
                 break;
-            case DATA_ODOMETER:
+            case ODOMETER:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_dashboard_meter);
                 break;
-            case DATA_VOLTAGE:
+            case VOLTAGE:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_car_battery);
                 break;
-            case DATA_THROTTLE:
+            case THROTTLE:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_signature);
                 break;
-            case DATA_FRONT_BRAKE:
-            case DATA_REAR_BRAKE:
+            case FRONT_BRAKE:
+            case REAR_BRAKE:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_brakes);
                 break;
-            case DATA_AMBIENT_LIGHT:
+            case AMBIENT_LIGHT:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_lightbulb);
                 break;
-            case DATA_TRIP_ONE:
-            case DATA_TRIP_TWO:
-            case DATA_TRIP_AUTO:
+            case TRIP_ONE:
+            case TRIP_TWO:
+            case TRIP_AUTO:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_suitcase);
                 break;
-            case DATA_SPEED:
-            case DATA_AVG_SPEED:
-            case DATA_SPEED_DEVICE:
-            case DATA_RPM:
-            case DATA_REAR_SPEED:
+            case SPEED:
+            case AVG_SPEED:
+            case SPEED_DEVICE:
+            case RPM:
+            case REAR_SPEED:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tachometer_alt);
                 break;
-            case DATA_CURRENT_CONSUMPTION:
-            case DATA_ECONOMY_ONE:
-            case DATA_ECONOMY_TWO:
-            case DATA_RANGE:
+            case CURRENT_CONSUMPTION:
+            case ECONOMY_ONE:
+            case ECONOMY_TWO:
+            case RANGE:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_gas_pump);
                 break;
-            case DATA_SHIFTS:
+            case SHIFTS:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_arrows_alt_v);
                 break;
-            case DATA_LEAN_DEVICE:
-            case DATA_LEAN:
+            case LEAN_DEVICE:
+            case LEAN_BIKE:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_angle);
                 break;
-            case DATA_GFORCE_DEVICE:
+            case GFORCE_DEVICE:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_accelerometer);
                 break;
-            case DATA_BEARING_DEVICE:
+            case BEARING_DEVICE:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_compass);
                 break;
-            case DATA_TIME_DEVICE:
+            case TIME_DEVICE:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_clock);
                 break;
-            case DATA_BAROMETRIC_DEVICE:
+            case BAROMETRIC_DEVICE:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_barometer);
                 break;
-            case DATA_ALTITUDE_DEVICE:
+            case ALTITUDE_DEVICE:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_mountain);
                 break;
-            case DATA_SUN_DEVICE:
+            case SUN_DEVICE:
                 if (MotorcycleData.getLastLocation() != null && MotorcycleData.getTime() != null) {
                     Calendar[] sunriseSunset = ca.rmen.sunrisesunset.SunriseSunset.getSunriseSunset(Calendar.getInstance(), MotorcycleData.getLastLocation().getLatitude(), MotorcycleData.getLastLocation().getLongitude());
                     Date sunrise = sunriseSunset[0].getTime();
@@ -834,7 +854,7 @@ public class MotorcycleData {
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_sun);
                 }
                 break;
-            case DATA_CELL_SIGNAL:
+            case CELL_SIGNAL:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.signal_bar_0);
                 if(MotorcycleData.getCellularSignal() != null){
                     int signal = MotorcycleData.getCellularSignal();
@@ -851,7 +871,7 @@ public class MotorcycleData {
                     }
                 }
                 break;
-            case DATA_BATTERY_DEVICE:
+            case BATTERY_DEVICE:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.battery_empty);
                 if(MotorcycleData.getLocalBattery() != null){
                     double battery = MotorcycleData.getLocalBattery();
@@ -875,15 +895,15 @@ public class MotorcycleData {
         return icon;
     }
 
-    public static CarIcon getCarIcon(int dataPoint){
+    public static CarIcon getCarIcon(DataType dataPoint){
         IconCompat icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_cog);
         CarColor carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.white),MyApplication.getContext().getResources().getColor(R.color.black));
 
         switch (dataPoint){
-            case DATA_GEAR:
+            case GEAR:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_cog);
                 break;
-            case DATA_ENGINE_TEMP:
+            case ENGINE_TEMP:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_engine_temp);
                 if(MotorcycleData.getEngineTemperature() != null ){
                     double engineTemp = MotorcycleData.getEngineTemperature();
@@ -892,7 +912,7 @@ public class MotorcycleData {
                     }
                 }
                 break;
-            case DATA_AIR_TEMP:
+            case AIR_TEMP:
                 if(MotorcycleData.getAmbientTemperature() != null ){
                     double ambientTemp = MotorcycleData.getAmbientTemperature();
                     if(ambientTemp <= 0){
@@ -905,7 +925,7 @@ public class MotorcycleData {
                     icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_thermometer_half);
                 }
                 break;
-            case DATA_FRONT_RDC:
+            case FRONT_RDC:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tire);
                 if (Faults.getFrontTirePressureCriticalActive()){
                     icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tire_alert);
@@ -915,7 +935,7 @@ public class MotorcycleData {
                     carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.yellow),MyApplication.getContext().getResources().getColor(R.color.yellow));
                 }
                 break;
-            case DATA_REAR_RDC:
+            case REAR_RDC:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tire);
                 if (Faults.getRearTirePressureCriticalActive()){
                     icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tire_alert);
@@ -925,63 +945,63 @@ public class MotorcycleData {
                     carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.yellow),MyApplication.getContext().getResources().getColor(R.color.yellow));
                 }
                 break;
-            case DATA_ODOMETER:
+            case ODOMETER:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_dashboard_meter);
                 break;
-            case DATA_VOLTAGE:
+            case VOLTAGE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_car_battery);
                 break;
-            case DATA_THROTTLE:
+            case THROTTLE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_signature);
                 break;
-            case DATA_FRONT_BRAKE:
-            case DATA_REAR_BRAKE:
+            case FRONT_BRAKE:
+            case REAR_BRAKE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_brakes);
                 break;
-            case DATA_AMBIENT_LIGHT:
+            case AMBIENT_LIGHT:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_lightbulb);
                 break;
-            case DATA_TRIP_ONE:
-            case DATA_TRIP_TWO:
-            case DATA_TRIP_AUTO:
+            case TRIP_ONE:
+            case TRIP_TWO:
+            case TRIP_AUTO:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_suitcase);
                 break;
-            case DATA_SPEED:
-            case DATA_AVG_SPEED:
-            case DATA_SPEED_DEVICE:
-            case DATA_RPM:
-            case DATA_REAR_SPEED:
+            case SPEED:
+            case AVG_SPEED:
+            case SPEED_DEVICE:
+            case RPM:
+            case REAR_SPEED:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tachometer_alt);
                 break;
-            case DATA_CURRENT_CONSUMPTION:
-            case DATA_ECONOMY_ONE:
-            case DATA_ECONOMY_TWO:
-            case DATA_RANGE:
+            case CURRENT_CONSUMPTION:
+            case ECONOMY_ONE:
+            case ECONOMY_TWO:
+            case RANGE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_gas_pump);
                 break;
-            case DATA_SHIFTS:
+            case SHIFTS:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_arrows_alt_v);
                 break;
-            case DATA_LEAN_DEVICE:
-            case DATA_LEAN:
+            case LEAN_DEVICE:
+            case LEAN_BIKE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_angle);
                 break;
-            case DATA_GFORCE_DEVICE:
+            case GFORCE_DEVICE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_accelerometer);
                 break;
-            case DATA_BEARING_DEVICE:
+            case BEARING_DEVICE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_compass);
                 break;
-            case DATA_TIME_DEVICE:
+            case TIME_DEVICE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_clock);
                 break;
-            case DATA_BAROMETRIC_DEVICE:
+            case BAROMETRIC_DEVICE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_barometer);
                 break;
-            case DATA_ALTITUDE_DEVICE:
+            case ALTITUDE_DEVICE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_mountain);
                 break;
-            case DATA_SUN_DEVICE:
+            case SUN_DEVICE:
                 if (MotorcycleData.getLastLocation() != null && MotorcycleData.getTime() != null) {
                     Calendar[] sunriseSunset = ca.rmen.sunrisesunset.SunriseSunset.getSunriseSunset(Calendar.getInstance(), MotorcycleData.getLastLocation().getLatitude(), MotorcycleData.getLastLocation().getLongitude());
                     Date sunrise = sunriseSunset[0].getTime();
@@ -996,7 +1016,7 @@ public class MotorcycleData {
                     icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_sun);
                 }
                 break;
-            case DATA_CELL_SIGNAL:
+            case CELL_SIGNAL:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.signal_bar_0);
                 if(MotorcycleData.getCellularSignal() != null){
                     int signal = MotorcycleData.getCellularSignal();
@@ -1013,7 +1033,7 @@ public class MotorcycleData {
                     }
                 }
                 break;
-            case DATA_BATTERY_DEVICE:
+            case BATTERY_DEVICE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.battery_empty);
                 if(MotorcycleData.getLocalBattery() != null){
                     double battery = MotorcycleData.getLocalBattery();
@@ -1037,7 +1057,7 @@ public class MotorcycleData {
         return new CarIcon.Builder(icon).setTint(carColor).build();
     }
 
-    public static String getValue(int dataPoint){
+    public static String getValue(DataType dataPoint){
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
         String pressureFormat = sharedPrefs.getString("prefPressureF", "0");
         String temperatureFormat = sharedPrefs.getString("prefTempF", "0");
@@ -1046,12 +1066,12 @@ public class MotorcycleData {
 
         String value = "";
         switch (dataPoint){
-            case DATA_GEAR:
+            case GEAR:
                 if(MotorcycleData.getGear() != null){
                     value = MotorcycleData.getGear();
                 }
                 break;
-            case DATA_ENGINE_TEMP:
+            case ENGINE_TEMP:
                 if(MotorcycleData.getEngineTemperature() != null ){
                     double engineTemp = MotorcycleData.getEngineTemperature();
                     if (temperatureFormat.contains("1")) {
@@ -1061,7 +1081,7 @@ public class MotorcycleData {
                     value = String.valueOf(Math.round(engineTemp));
                 }
                 break;
-            case DATA_AIR_TEMP:
+            case AIR_TEMP:
                 if(MotorcycleData.getAmbientTemperature() != null ){
                     double ambientTemp = MotorcycleData.getAmbientTemperature();
                     if (temperatureFormat.contains("1")) {
@@ -1071,7 +1091,7 @@ public class MotorcycleData {
                     value = String.valueOf(Math.round(ambientTemp));
                 }
                 break;
-            case DATA_FRONT_RDC:
+            case FRONT_RDC:
                 if(MotorcycleData.getFrontTirePressure() != null){
                     double rdcFront = MotorcycleData.getFrontTirePressure();
                     if (pressureFormat.contains("1")) {
@@ -1087,7 +1107,7 @@ public class MotorcycleData {
                     value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(rdcFront);
                 }
                 break;
-            case DATA_REAR_RDC:
+            case REAR_RDC:
                 if(MotorcycleData.getRearTirePressure() != null){
                     double rdcRear = MotorcycleData.getRearTirePressure();
                     if (pressureFormat.contains("1")) {
@@ -1103,7 +1123,7 @@ public class MotorcycleData {
                     value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(rdcRear);
                 }
                 break;
-            case DATA_ODOMETER:
+            case ODOMETER:
                 if(MotorcycleData.getOdometer() != null){
                     double odometer = MotorcycleData.getOdometer();
                     if (distanceFormat.contains("1")) {
@@ -1112,37 +1132,37 @@ public class MotorcycleData {
                     value = String.valueOf(Math.round(odometer));
                 }
                 break;
-            case DATA_VOLTAGE:
+            case VOLTAGE:
                 if(MotorcycleData.getVoltage() != null){
                     Double voltage = MotorcycleData.getVoltage();
                     value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(voltage));
                 }
                 break;
-            case DATA_THROTTLE:
+            case THROTTLE:
                 if(MotorcycleData.getThrottlePosition() != null){
                     Double throttlePosition = MotorcycleData.getThrottlePosition();
                     value = String.valueOf(Math.round(throttlePosition));
                 }
                 break;
-            case DATA_FRONT_BRAKE:
+            case FRONT_BRAKE:
                 if((MotorcycleData.getFrontBrake() != null) && (MotorcycleData.getFrontBrake() != 0)){
                     Integer frontBrakes = MotorcycleData.getFrontBrake();
                     value = String.valueOf(frontBrakes);
                 }
                 break;
-            case DATA_REAR_BRAKE:
+            case REAR_BRAKE:
                 if((MotorcycleData.getRearBrake() != null) && (MotorcycleData.getRearBrake() != 0)){
                     Integer rearBrakes = MotorcycleData.getRearBrake();
                     value = String.valueOf(rearBrakes);
                 }
                 break;
-            case DATA_AMBIENT_LIGHT:
+            case AMBIENT_LIGHT:
                 if(MotorcycleData.getAmbientLight() != null){
                     Integer ambientLight = MotorcycleData.getAmbientLight();
                     value = String.valueOf(ambientLight);
                 }
                 break;
-            case DATA_TRIP_ONE:
+            case TRIP_ONE:
                 if(MotorcycleData.getTripOne() != null) {
                     double trip1 = MotorcycleData.getTripOne();
                     if (distanceFormat.contains("1")) {
@@ -1151,7 +1171,7 @@ public class MotorcycleData {
                     value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(trip1);
                 }
                 break;
-            case DATA_TRIP_TWO:
+            case TRIP_TWO:
                 if(MotorcycleData.getTripTwo() != null){
                     double trip2 = MotorcycleData.getTripTwo();
                     if (distanceFormat.contains("1")) {
@@ -1160,7 +1180,7 @@ public class MotorcycleData {
                     value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(trip2);
                 }
                 break;
-            case DATA_TRIP_AUTO:
+            case TRIP_AUTO:
                 if(MotorcycleData.getTripAuto() != null){
                     double tripAuto = MotorcycleData.getTripAuto();
                     if (distanceFormat.contains("1")) {
@@ -1169,7 +1189,7 @@ public class MotorcycleData {
                     value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(tripAuto);
                 }
                 break;
-            case DATA_SPEED:
+            case SPEED:
                 if(MotorcycleData.getSpeed() != null){
                     double speed = MotorcycleData.getSpeed();
                     if (distanceFormat.contains("1")) {
@@ -1178,7 +1198,7 @@ public class MotorcycleData {
                     value = String.valueOf(Math.round(speed));
                 }
                 break;
-            case DATA_AVG_SPEED:
+            case AVG_SPEED:
                 if(MotorcycleData.getAvgSpeed() != null){
                     double avgSpeed = MotorcycleData.getAvgSpeed();
                     if (distanceFormat.contains("1")) {
@@ -1187,7 +1207,7 @@ public class MotorcycleData {
                     value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(avgSpeed);
                 }
                 break;
-            case DATA_CURRENT_CONSUMPTION:
+            case CURRENT_CONSUMPTION:
                 if(MotorcycleData.getCurrentConsumption() != null){
                     double currentConsumption = MotorcycleData.getCurrentConsumption();
                     if (consumptionFormat.contains("1")) {
@@ -1200,7 +1220,7 @@ public class MotorcycleData {
                     value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(currentConsumption));
                 }
                 break;
-            case DATA_ECONOMY_ONE:
+            case ECONOMY_ONE:
                 if(MotorcycleData.getFuelEconomyOne() != null){
                     double fuelEconomyOne = MotorcycleData.getFuelEconomyOne();
                     if (consumptionFormat.contains("1")) {
@@ -1213,7 +1233,7 @@ public class MotorcycleData {
                     value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(fuelEconomyOne));
                 }
                 break;
-            case DATA_ECONOMY_TWO:
+            case ECONOMY_TWO:
                 if(MotorcycleData.getFuelEconomyTwo() != null){
                     double fuelEconomyTwo = MotorcycleData.getFuelEconomyTwo();
                     if (consumptionFormat.contains("1")) {
@@ -1226,7 +1246,7 @@ public class MotorcycleData {
                     value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(fuelEconomyTwo));
                 }
                 break;
-            case DATA_RANGE:
+            case RANGE:
                 if(MotorcycleData.getFuelRange() != null){
                     double fuelRange = MotorcycleData.getFuelRange();
                     if (distanceFormat.contains("1")) {
@@ -1235,25 +1255,25 @@ public class MotorcycleData {
                     value = String.valueOf(Math.round(fuelRange));
                 }
                 break;
-            case DATA_SHIFTS:
+            case SHIFTS:
                 if(MotorcycleData.getNumberOfShifts() != null){
                     int shifts = MotorcycleData.getNumberOfShifts();
                     value = String.valueOf(shifts);
                 }
                 break;
-            case DATA_LEAN_DEVICE:
+            case LEAN_DEVICE:
                 if(MotorcycleData.getLeanAngle() != null){
                     Double leanAngle = MotorcycleData.getLeanAngle();
                     value = String.valueOf(Math.round(leanAngle));
                 }
                 break;
-            case DATA_GFORCE_DEVICE:
+            case GFORCE_DEVICE:
                 if(MotorcycleData.getGForce() != null){
                     Double gForce = MotorcycleData.getGForce();
                     value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(gForce));
                 }
                 break;
-            case DATA_BEARING_DEVICE:
+            case BEARING_DEVICE:
                 if (MotorcycleData.getBearing() != null) {
                     Integer bearingValue = MotorcycleData.getBearing();
                     String bearing = bearingValue.toString() + "°";
@@ -1279,7 +1299,7 @@ public class MotorcycleData {
                     value = bearing;
                 }
                 break;
-            case DATA_TIME_DEVICE:
+            case TIME_DEVICE:
                 if (MotorcycleData.getTime() != null) {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("h:mm aa", Locale.getDefault());
                     if (!sharedPrefs.getString("prefTime", "0").equals("0")) {
@@ -1288,12 +1308,12 @@ public class MotorcycleData {
                     value = dateFormat.format(MotorcycleData.getTime());
                 }
                 break;
-            case DATA_BAROMETRIC_DEVICE:
+            case BAROMETRIC_DEVICE:
                 if (MotorcycleData.getBarometricPressure() != null) {
                     value = String.valueOf(Math.round(MotorcycleData.getBarometricPressure()));
                 }
                 break;
-            case DATA_SPEED_DEVICE:
+            case SPEED_DEVICE:
                 String gpsSpeed = MyApplication.getContext().getString(R.string.gps_nofix);
                 if (MotorcycleData.getLastLocation() != null){
                     gpsSpeed = String.valueOf(Math.round(MotorcycleData.getLastLocation().getSpeed() * 3.6));
@@ -1303,7 +1323,7 @@ public class MotorcycleData {
                 }
                 value = gpsSpeed;
                 break;
-            case DATA_ALTITUDE_DEVICE:
+            case ALTITUDE_DEVICE:
                 String altitude = MyApplication.getContext().getString(R.string.gps_nofix);
                 if (MotorcycleData.getLastLocation() != null){
                     altitude = String.valueOf(Math.round(MotorcycleData.getLastLocation().getAltitude()));
@@ -1313,7 +1333,7 @@ public class MotorcycleData {
                 }
                 value = altitude;
                 break;
-            case DATA_SUN_DEVICE:
+            case SUN_DEVICE:
                 value = MyApplication.getContext().getString(R.string.gps_nofix);
                 if (MotorcycleData.getLastLocation() != null) {
                     Calendar[] sunriseSunset = ca.rmen.sunrisesunset.SunriseSunset.getSunriseSunset(Calendar.getInstance(), MotorcycleData.getLastLocation().getLatitude(), MotorcycleData.getLastLocation().getLongitude());
@@ -1328,18 +1348,18 @@ public class MotorcycleData {
                     value = sunriseString + "/" + sunsetString;
                 }
                 break;
-            case DATA_RPM:
+            case RPM:
                 if (MotorcycleData.getRPM() > 0){
                     value = String.valueOf(MotorcycleData.getRPM());
                 }
                 break;
-            case DATA_LEAN:
+            case LEAN_BIKE:
                 if(MotorcycleData.getLeanAngleBike() != null){
                     Double leanAngleBike = MotorcycleData.getLeanAngleBike();
                     value = String.valueOf(Math.round(leanAngleBike));
                 }
                 break;
-            case DATA_REAR_SPEED:
+            case REAR_SPEED:
                 if(MotorcycleData.getRearSpeed() != null){
                     double speed = MotorcycleData.getRearSpeed();
                     if (distanceFormat.contains("1")) {
@@ -1348,12 +1368,12 @@ public class MotorcycleData {
                     value = String.valueOf(Math.round(speed));
                 }
                 break;
-            case DATA_CELL_SIGNAL:
+            case CELL_SIGNAL:
                 if(MotorcycleData.getCellularSignal() != null){
                     value = String.valueOf(MotorcycleData.getCellularSignal());
                 }
                 break;
-            case DATA_BATTERY_DEVICE:
+            case BATTERY_DEVICE:
                 if(MotorcycleData.getLocalBattery() != null){
                     value = String.valueOf(Math.round(MotorcycleData.getLocalBattery()));
                 }
@@ -1362,6 +1382,27 @@ public class MotorcycleData {
                 value = MyApplication.getContext().getString(R.string.blank_field);
         }
         return value;
+    }
+
+
+
+    public static String  getLabel(int dataPoint) {
+        return getLabel(DataType.values()[dataPoint]);
+    }
+
+    public static String  getExtraKey(int dataPoint) {
+        return getExtraKey(DataType.values()[dataPoint]);
+    }
+
+    public static Drawable  getIcon(int dataPoint) {
+        return getIcon(DataType.values()[dataPoint]);
+    }
+
+    public static CarIcon getCarIcon(int dataPoint){
+        return getCarIcon(DataType.values()[dataPoint]);
+    }
+    public static String getValue(int dataPoint) {
+        return getValue(DataType.values()[dataPoint]);
     }
 
     /*
