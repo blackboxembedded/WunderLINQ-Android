@@ -375,51 +375,11 @@ public class BluetoothLeService extends Service {
 
         // Update time Data field and send to the cluster if WLQ_N
         Timer t = new Timer();
-        t.scheduleAtFixedRate(new TimerTask() {
+        t.schedule(new TimerTask() {
             @Override
             public void run() {
                 Calendar c = Calendar.getInstance();
                 MotorcycleData.setTime(c.getTime());
-
-                //Send time to cluster
-                if (MotorcycleData.wlq != null) {
-                    if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
-                        if (gattCommandCharacteristic != null) {
-                            BluetoothGattCharacteristic characteristic = gattCommandCharacteristic;
-                            //Get Current Time
-                            Date date = new Date();
-                            Calendar calendar = new GregorianCalendar();
-                            calendar.setTime(date);
-                            int year = calendar.get(Calendar.YEAR);
-                            //Add one to month {0 - 11}
-                            int month = calendar.get(Calendar.MONTH) + 1;
-                            int day = calendar.get(Calendar.DAY_OF_MONTH);
-                            int hour = calendar.get(Calendar.HOUR_OF_DAY);
-                            int minute = calendar.get(Calendar.MINUTE);
-                            int second = calendar.get(Calendar.SECOND);
-                            int yearByte = (year >> 4);
-                            byte yearLByte = (byte) year;
-                            int yearNibble = (yearLByte & 0x0F);
-                            byte monthNibble = (byte) month;
-                            int monthYearByte = ((yearNibble & 0x0F) << 4 | (monthNibble & 0x0F));
-                            try {
-                                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                                outputStream.write(WLQ_N.SET_CLUSTER_CLOCK_CMD);
-                                outputStream.write((byte) second);
-                                outputStream.write((byte) minute);
-                                outputStream.write((byte) hour);
-                                outputStream.write((byte) day);
-                                outputStream.write((byte) monthYearByte);
-                                outputStream.write((byte) yearByte);
-                                outputStream.write(WLQ_N.CMD_EOM);
-                                byte[] setClusterClock = outputStream.toByteArray();
-                                writeCharacteristic(characteristic, setClusterClock, WriteType.WITH_RESPONSE);
-                            } catch (IOException e) {
-                                Log.d(TAG, e.toString());
-                            }
-                        }
-                    }
-                }
             }
         }, 1000, 1000); //Initial Delay and Period for update (in milliseconds)
     }
@@ -513,23 +473,23 @@ public class BluetoothLeService extends Service {
                 }
                 //Filter out impossible values, max sport bike lean is +/-60
                 if ((leanAngle >= -60.0) && (leanAngle <= 60.0)) {
-                    MotorcycleData.setLeanAngle(leanAngle);
+                    MotorcycleData.setLeanAngleDevice(leanAngle);
                     //Store Max L and R lean angle
                     if (leanAngle > 0) {
-                        if (MotorcycleData.getLeanAngleMaxR() != null) {
-                            if (leanAngle > MotorcycleData.getLeanAngleMaxR()) {
-                                MotorcycleData.setLeanAngleMaxR(leanAngle);
+                        if (MotorcycleData.getLeanAngleDeviceMaxR() != null) {
+                            if (leanAngle > MotorcycleData.getLeanAngleDeviceMaxR()) {
+                                MotorcycleData.setLeanAngleDeviceMaxR(leanAngle);
                             }
                         } else {
-                            MotorcycleData.setLeanAngleMaxR(leanAngle);
+                            MotorcycleData.setLeanAngleDeviceMaxR(leanAngle);
                         }
                     } else if (leanAngle < 0) {
-                        if (MotorcycleData.getLeanAngleMaxL() != null) {
-                            if (Math.abs(leanAngle) > MotorcycleData.getLeanAngleMaxL()) {
-                                MotorcycleData.setLeanAngleMaxL(Math.abs(leanAngle));
+                        if (MotorcycleData.getLeanAngleDeviceMaxL() != null) {
+                            if (Math.abs(leanAngle) > MotorcycleData.getLeanAngleDeviceMaxL()) {
+                                MotorcycleData.setLeanAngleDeviceMaxL(Math.abs(leanAngle));
                             }
                         } else {
-                            MotorcycleData.setLeanAngleMaxL(Math.abs(leanAngle));
+                            MotorcycleData.setLeanAngleDeviceMaxL(Math.abs(leanAngle));
                         }
                     }
                 }
@@ -1588,5 +1548,53 @@ public class BluetoothLeService extends Service {
         intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.RPM), MotorcycleData.getRPM());
         intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.LEAN_BIKE), MotorcycleData.getLeanAngleBike());
         MyApplication.getContext().sendBroadcast(intent);
+    }
+
+
+    public static void setClusterClock(Date currTime) {
+
+        //Calendar c = Calendar.getInstance();
+        //Data.setTime(c.getTime());
+
+        //Send time to cluster
+        if (MotorcycleData.wlq != null) {
+            if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
+                if (gattCommandCharacteristic != null) {
+                    BluetoothGattCharacteristic characteristic = gattCommandCharacteristic;
+                    //Get Current Time
+                    //Date date = new Date();
+                    Calendar calendar = new GregorianCalendar();
+                    calendar.setTime(currTime);
+                    int year = calendar.get(Calendar.YEAR);
+
+                    //Add one to month {0 - 11}
+                    int month = calendar.get(Calendar.MONTH) + 1;
+                    int day = calendar.get(Calendar.DAY_OF_MONTH);
+                    int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                    int minute = calendar.get(Calendar.MINUTE);
+                    int second = calendar.get(Calendar.SECOND);
+                    int yearByte = (year >> 4);
+                    byte yearLByte = (byte) year;
+                    int yearNibble = (yearLByte & 0x0F);
+                    byte monthNibble = (byte) month;
+                    int monthYearByte = ((yearNibble & 0x0F) << 4 | (monthNibble & 0x0F));
+                    try {
+                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                        outputStream.write(WLQ_N.SET_CLUSTER_CLOCK_CMD);
+                        outputStream.write((byte) second);
+                        outputStream.write((byte) minute);
+                        outputStream.write((byte) hour);
+                        outputStream.write((byte) day);
+                        outputStream.write((byte) monthYearByte);
+                        outputStream.write((byte) yearByte);
+                        outputStream.write(WLQ_N.CMD_EOM);
+                        byte[] setClusterClock = outputStream.toByteArray();
+                        BluetoothLeService.writeCharacteristic(characteristic, setClusterClock, BluetoothLeService.WriteType.WITH_RESPONSE);
+                    } catch (IOException e) {
+                        Log.d(TAG, e.toString());
+                    }
+                }
+            }
+        }
     }
 }

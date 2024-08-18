@@ -98,20 +98,20 @@ public class BLEBus {
                     MotorcycleData.setLeanAngleBike(leanAngleBikeFixed);
                     //Store Max L and R lean angle
                     if(leanAngleBikeFixed > 0){
-                        if (MotorcycleData.getLeanAngleMaxR() != null) {
-                            if (leanAngleBikeFixed > MotorcycleData.getLeanAngleMaxR()) {
-                                MotorcycleData.setLeanAngleMaxR(leanAngleBikeFixed);
+                        if (MotorcycleData.getLeanAngleDeviceMaxR() != null) {
+                            if (leanAngleBikeFixed > MotorcycleData.getLeanAngleDeviceMaxR()) {
+                                MotorcycleData.setLeanAngleDeviceMaxR(leanAngleBikeFixed);
                             }
                         } else {
-                            MotorcycleData.setLeanAngleMaxR(leanAngleBikeFixed);
+                            MotorcycleData.setLeanAngleDeviceMaxR(leanAngleBikeFixed);
                         }
                     } else if(leanAngleBikeFixed < 0){
-                        if (MotorcycleData.getLeanAngleMaxL() != null) {
-                            if (Math.abs(leanAngleBikeFixed) > MotorcycleData.getLeanAngleMaxL()) {
-                                MotorcycleData.setLeanAngleMaxL(Math.abs(leanAngleBikeFixed));
+                        if (MotorcycleData.getLeanAngleDeviceMaxL() != null) {
+                            if (Math.abs(leanAngleBikeFixed) > MotorcycleData.getLeanAngleDeviceMaxL()) {
+                                MotorcycleData.setLeanAngleDeviceMaxL(Math.abs(leanAngleBikeFixed));
                             }
                         } else {
-                            MotorcycleData.setLeanAngleMaxL(Math.abs(leanAngleBikeFixed));
+                            MotorcycleData.setLeanAngleDeviceMaxL(Math.abs(leanAngleBikeFixed));
                         }
                     }
                 }
