@@ -35,6 +35,9 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -77,7 +80,7 @@ import com.blackboxembedded.WunderLINQ.TaskList.TaskActivity;
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.Data;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ;
 
@@ -875,8 +878,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if(Data.wlq != null) {
-                                if(Data.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
+                            if(MotorcycleData.wlq != null) {
+                                if(MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
                                     mMenu.findItem(R.id.action_bike_info).setVisible(true);
                                 }
                                 mMenu.findItem(R.id.action_hwsettings).setVisible(true);
@@ -1444,9 +1447,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     public GridItem getCellData(int dataPoint){
-        return new GridItem(Data.getIcon(dataPoint),
-                Data.getLabel(dataPoint),
-                (!Data.getValue(dataPoint).equals("")) ? Data.getValue(dataPoint) : getString(R.string.blank_field));
+        return new GridItem(MotorcycleData.getIcon(dataPoint),
+                MotorcycleData.getLabel(dataPoint),
+                (!MotorcycleData.getValue(dataPoint).equals("")) ? MotorcycleData.getValue(dataPoint) : getString(R.string.blank_field));
     }
 
     @Override
@@ -1537,8 +1540,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private void goBack(){
         SoundManager.playSound(this, R.raw.directional);
         Intent backIntent = new Intent(this, com.blackboxembedded.WunderLINQ.TaskList.TaskActivity.class);
-        if (Data.wlq != null) {
-            if (Data.wlq.getStatus() != null) {
+        if (MotorcycleData.wlq != null) {
+            if (MotorcycleData.wlq.getStatus() != null) {
                 backIntent = new Intent(this, AccessoryActivity.class);
             }
         }
