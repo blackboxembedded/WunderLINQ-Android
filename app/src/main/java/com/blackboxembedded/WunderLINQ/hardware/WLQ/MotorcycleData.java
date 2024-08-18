@@ -1078,7 +1078,7 @@ public class MotorcycleData {
                         // F
                         engineTemp = Utils.celsiusToFahrenheit(engineTemp);
                     }
-                    value = String.valueOf(Math.round(engineTemp));
+                    value = (Utils.toZeroDecimalString(engineTemp));
                 }
                 break;
             case AIR_TEMP:
@@ -1088,7 +1088,7 @@ public class MotorcycleData {
                         // F
                         ambientTemp = Utils.celsiusToFahrenheit(ambientTemp);
                     }
-                    value = String.valueOf(Math.round(ambientTemp));
+                    value = (Utils.toZeroDecimalString(ambientTemp));
                 }
                 break;
             case FRONT_RDC:
@@ -1104,7 +1104,7 @@ public class MotorcycleData {
                         // Psi
                         rdcFront = Utils.barToPsi(rdcFront);
                     }
-                    value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(rdcFront);
+                    value = Utils.toOneDecimalString(rdcFront);
                 }
                 break;
             case REAR_RDC:
@@ -1120,7 +1120,7 @@ public class MotorcycleData {
                         // Psi
                         rdcRear = Utils.barToPsi(rdcRear);
                     }
-                    value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(rdcRear);
+                    value = Utils.toOneDecimalString(rdcRear);
                 }
                 break;
             case ODOMETER:
@@ -1129,19 +1129,19 @@ public class MotorcycleData {
                     if (distanceFormat.contains("1")) {
                         odometer = Utils.kmToMiles(odometer);
                     }
-                    value = String.valueOf(Math.round(odometer));
+                    value = (Utils.toZeroDecimalString(odometer));
                 }
                 break;
             case VOLTAGE:
                 if(MotorcycleData.getVoltage() != null){
                     Double voltage = MotorcycleData.getVoltage();
-                    value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(voltage));
+                    value = (Utils.toOneDecimalString(voltage));
                 }
                 break;
             case THROTTLE:
                 if(MotorcycleData.getThrottlePosition() != null){
                     Double throttlePosition = MotorcycleData.getThrottlePosition();
-                    value = String.valueOf(Math.round(throttlePosition));
+                    value = (Utils.toZeroDecimalString(throttlePosition));
                 }
                 break;
             case FRONT_BRAKE:
@@ -1168,7 +1168,7 @@ public class MotorcycleData {
                     if (distanceFormat.contains("1")) {
                         trip1 = Utils.kmToMiles(trip1);
                     }
-                    value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(trip1);
+                    value = Utils.toOneDecimalString(trip1);
                 }
                 break;
             case TRIP_TWO:
@@ -1177,7 +1177,7 @@ public class MotorcycleData {
                     if (distanceFormat.contains("1")) {
                         trip2 = Utils.kmToMiles(trip2);
                     }
-                    value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(trip2);
+                    value = Utils.toOneDecimalString(trip2);
                 }
                 break;
             case TRIP_AUTO:
@@ -1186,7 +1186,7 @@ public class MotorcycleData {
                     if (distanceFormat.contains("1")) {
                         tripAuto = Utils.kmToMiles(tripAuto);
                     }
-                    value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(tripAuto);
+                    value = Utils.toOneDecimalString(tripAuto);
                 }
                 break;
             case SPEED:
@@ -1195,7 +1195,7 @@ public class MotorcycleData {
                     if (distanceFormat.contains("1")) {
                         speed = Utils.kmToMiles(speed);
                     }
-                    value = String.valueOf(Math.round(speed));
+                    value = (Utils.toZeroDecimalString(speed));
                 }
                 break;
             case AVG_SPEED:
@@ -1204,7 +1204,7 @@ public class MotorcycleData {
                     if (distanceFormat.contains("1")) {
                         avgSpeed = Utils.kmToMiles(avgSpeed);
                     }
-                    value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(avgSpeed);
+                    value = Utils.toOneDecimalString(avgSpeed);
                 }
                 break;
             case CURRENT_CONSUMPTION:
@@ -1217,7 +1217,7 @@ public class MotorcycleData {
                     } else if (consumptionFormat.contains("3")) {
                         currentConsumption = Utils.l100ToKmL(currentConsumption);
                     }
-                    value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(currentConsumption));
+                    value = (Utils.toOneDecimalString(currentConsumption));
                 }
                 break;
             case ECONOMY_ONE:
@@ -1230,7 +1230,7 @@ public class MotorcycleData {
                     } else if (consumptionFormat.contains("3")) {
                         fuelEconomyOne = Utils.l100ToKmL(fuelEconomyOne);
                     }
-                    value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(fuelEconomyOne));
+                    value = (Utils.toOneDecimalString(fuelEconomyOne));
                 }
                 break;
             case ECONOMY_TWO:
@@ -1243,7 +1243,7 @@ public class MotorcycleData {
                     } else if (consumptionFormat.contains("3")) {
                         fuelEconomyTwo  = Utils.l100ToKmL(fuelEconomyTwo);
                     }
-                    value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(fuelEconomyTwo));
+                    value = (Utils.toOneDecimalString(fuelEconomyTwo));
                 }
                 break;
             case RANGE:
@@ -1252,7 +1252,7 @@ public class MotorcycleData {
                     if (distanceFormat.contains("1")) {
                         fuelRange = Utils.kmToMiles(fuelRange);
                     }
-                    value = String.valueOf(Math.round(fuelRange));
+                    value = (Utils.toZeroDecimalString(fuelRange));
                 }
                 break;
             case SHIFTS:
@@ -1264,13 +1264,13 @@ public class MotorcycleData {
             case LEAN_DEVICE:
                 if(MotorcycleData.getLeanAngle() != null){
                     Double leanAngle = MotorcycleData.getLeanAngle();
-                    value = String.valueOf(Math.round(leanAngle));
+                    value = (Utils.toZeroDecimalString(leanAngle));
                 }
                 break;
             case GFORCE_DEVICE:
                 if(MotorcycleData.getGForce() != null){
                     Double gForce = MotorcycleData.getGForce();
-                    value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(gForce));
+                    value = (Utils.toOneDecimalString(gForce));
                 }
                 break;
             case BEARING_DEVICE:
@@ -1310,15 +1310,15 @@ public class MotorcycleData {
                 break;
             case BAROMETRIC_DEVICE:
                 if (MotorcycleData.getBarometricPressure() != null) {
-                    value = String.valueOf(Math.round(MotorcycleData.getBarometricPressure()));
+                    value = (Utils.toZeroDecimalString(MotorcycleData.getBarometricPressure()));
                 }
                 break;
             case SPEED_DEVICE:
                 String gpsSpeed = MyApplication.getContext().getString(R.string.gps_nofix);
                 if (MotorcycleData.getLastLocation() != null){
-                    gpsSpeed = String.valueOf(Math.round(MotorcycleData.getLastLocation().getSpeed() * 3.6));
+                    gpsSpeed = (Utils.toZeroDecimalString(MotorcycleData.getLastLocation().getSpeed() * 3.6));
                     if (distanceFormat.contains("1")) {
-                        gpsSpeed = String.valueOf(Math.round(Utils.kmToMiles(MotorcycleData.getLastLocation().getSpeed() * 3.6)));
+                        gpsSpeed = (Utils.toZeroDecimalString(Utils.kmToMiles(MotorcycleData.getLastLocation().getSpeed() * 3.6)));
                     }
                 }
                 value = gpsSpeed;
@@ -1326,9 +1326,9 @@ public class MotorcycleData {
             case ALTITUDE_DEVICE:
                 String altitude = MyApplication.getContext().getString(R.string.gps_nofix);
                 if (MotorcycleData.getLastLocation() != null){
-                    altitude = String.valueOf(Math.round(MotorcycleData.getLastLocation().getAltitude()));
+                    altitude = (Utils.toZeroDecimalString(MotorcycleData.getLastLocation().getAltitude()));
                     if (distanceFormat.contains("1")) {
-                        altitude = String.valueOf(Math.round(Utils.mToFeet(MotorcycleData.getLastLocation().getAltitude())));
+                        altitude = (Utils.toZeroDecimalString(Utils.mToFeet(MotorcycleData.getLastLocation().getAltitude())));
                     }
                 }
                 value = altitude;
@@ -1356,7 +1356,7 @@ public class MotorcycleData {
             case LEAN_BIKE:
                 if(MotorcycleData.getLeanAngleBike() != null){
                     Double leanAngleBike = MotorcycleData.getLeanAngleBike();
-                    value = String.valueOf(Math.round(leanAngleBike));
+                    value = (Utils.toZeroDecimalString(leanAngleBike));
                 }
                 break;
             case REAR_SPEED:
@@ -1365,7 +1365,7 @@ public class MotorcycleData {
                     if (distanceFormat.contains("1")) {
                         speed = Utils.kmToMiles(speed);
                     }
-                    value = String.valueOf(Math.round(speed));
+                    value = (Utils.toZeroDecimalString(speed));
                 }
                 break;
             case CELL_SIGNAL:
@@ -1375,7 +1375,7 @@ public class MotorcycleData {
                 break;
             case BATTERY_DEVICE:
                 if(MotorcycleData.getLocalBattery() != null){
-                    value = String.valueOf(Math.round(MotorcycleData.getLocalBattery()));
+                    value = (Utils.toZeroDecimalString(MotorcycleData.getLocalBattery()));
                 }
                 break;
             default:

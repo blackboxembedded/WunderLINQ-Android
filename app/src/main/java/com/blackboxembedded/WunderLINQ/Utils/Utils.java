@@ -20,9 +20,14 @@ package com.blackboxembedded.WunderLINQ.Utils;
 
 import android.os.Build;
 
+import com.blackboxembedded.WunderLINQ.MemCache;
 import com.blackboxembedded.WunderLINQ.MyApplication;
+import com.blackboxembedded.WunderLINQ.R;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
@@ -153,11 +158,90 @@ public class Utils {
         }
     }
 
+
     //format to 1 decimal place
-    public static NumberFormat getLocalizedOneDigitFormat(Locale locale) {
-        NumberFormat oneDigit = NumberFormat.getNumberInstance(locale);
+    private static NumberFormat getLocalizedOneDigitFormat() {
+        NumberFormat oneDigit = MemCache.getLocalizedNumberFormat();
+
         oneDigit.setMinimumFractionDigits(1);
         oneDigit.setMaximumFractionDigits(1);
+
         return oneDigit;
+    }
+
+    //format to 0 decimal place
+    private static NumberFormat getLocalizedZeroDecimalFormat() {
+        NumberFormat zeroDecimal = MemCache.getLocalizedNumberFormat();
+
+        zeroDecimal.setMaximumFractionDigits(0);
+
+        return zeroDecimal;
+    }
+
+    public static String toOneDecimalString(double num) {
+        DecimalFormat decimalFormat =  (DecimalFormat) Utils.getLocalizedOneDigitFormat();
+        String value  = decimalFormat.format(Math.round(num * 100d)/100d );
+
+        return value;
+    }
+
+
+
+    public static String toZeroDecimalString(double num) {
+        return toZeroDecimalString(num, false);
+    }
+
+    // Outputs big number to string with consistent formatting.  Use when number scale can vary greatly eg trip can go from 0.1 - 999,999
+    public static String toZeroDecimalString(double num, boolean wrapGrouping) {
+        String groupChar = "";
+        DecimalFormat decimalFormat =  (DecimalFormat) Utils.getLocalizedOneDigitFormat();
+        String value;
+
+        if ((num > 0 && num < 10) || (num < 0 && num > -10)) {
+            value = decimalFormat.format(Math.round(num * 100d)/100d );
+        } else if (((num > 0 && num < 10000) || (num < 0 && num > -10000))) {
+            decimalFormat.setMaximumFractionDigits(0);
+            value = decimalFormat.format(Math.round(num * 10d)/10d );
+        } else {
+            decimalFormat.setMaximumFractionDigits(0);
+            value = decimalFormat.format(Math.round(num * 10d)/10d );
+            if (wrapGrouping && decimalFormat.isGroupingUsed()) {
+                DecimalFormatSymbols symbols = decimalFormat.getDecimalFormatSymbols();
+                groupChar =  String.valueOf(symbols.getGroupingSeparator());
+                value = value.replace(groupChar, "\n" + groupChar);
+            }
+        }
+
+        return value;
+    }
+
+    public static SimpleDateFormat getCachedLocalizedDateFormat() {
+        return MemCache.getCachedLocalizedDateFormat();
+    }
+
+    public static String bearingToCardinal(Integer bearingValue) {
+        String bearing;
+
+        if (bearingValue > 331 || bearingValue <= 28) {
+            bearing = MyApplication.getContext().getString(R.string.north);
+        } else if (bearingValue > 28 && bearingValue <= 73) {
+            bearing = MyApplication.getContext().getString(R.string.north_east);
+        } else if (bearingValue > 73 && bearingValue <= 118) {
+            bearing = MyApplication.getContext().getString(R.string.east);
+        } else if (bearingValue > 118 && bearingValue <= 163) {
+            bearing = MyApplication.getContext().getString(R.string.south_east);
+        } else if (bearingValue > 163 && bearingValue <= 208) {
+            bearing = MyApplication.getContext().getString(R.string.south);
+        } else if (bearingValue > 208 && bearingValue <= 253) {
+            bearing = MyApplication.getContext().getString(R.string.south_west);
+        } else if (bearingValue > 253 && bearingValue <= 298) {
+            bearing = MyApplication.getContext().getString(R.string.west);
+        } else if (bearingValue > 298 && bearingValue <= 331) {
+            bearing = MyApplication.getContext().getString(R.string.north_west);
+        } else {
+            bearing = MyApplication.getContext().getString(R.string.blank_field);
+        }
+
+        return bearing;
     }
 }

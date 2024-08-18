@@ -168,11 +168,11 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
             if (latLong.length > 2){
                 elev = Double.parseDouble(latLong[2]);
                 String heightUnit = "m";
-                String elevation = Math.round(Float.parseFloat(latLong[2])) + heightUnit;
+                String elevation = Utils.toZeroDecimalString(Float.parseFloat(latLong[2])) + heightUnit;
                 String distanceFormat = PreferenceManager.getDefaultSharedPreferences(this).getString("prefDistance", "0");
                 if (distanceFormat.contains("1")) {
                     heightUnit = "ft";
-                    elevation = Math.round(Utils.mToFeet(Float.parseFloat(latLong[2]))) + heightUnit;
+                    elevation = Utils.toZeroDecimalString(Utils.mToFeet(Float.parseFloat(latLong[2]))) + heightUnit;
                 }
                 tvElevation.setText(elevation);
             }

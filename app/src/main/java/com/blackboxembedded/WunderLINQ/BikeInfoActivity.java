@@ -214,7 +214,7 @@ public class BikeInfoActivity extends AppCompatActivity {
             String distanceFormat = sharedPrefs.getString("prefDistance", "0");
             String nextService = MotorcycleData.getNextService() + "(km)";
             if (distanceFormat.contains("1")) {
-                nextService = Math.round(Utils.kmToMiles(MotorcycleData.getNextService())) + "(mi)";
+                nextService = Utils.toZeroDecimalString(Utils.kmToMiles(MotorcycleData.getNextService())) + "(mi)";
             }
             tvNextService.setText(nextService);
         }
