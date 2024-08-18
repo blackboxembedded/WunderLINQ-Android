@@ -23,6 +23,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.KeyEvent;
@@ -76,6 +77,8 @@ public class AlertActivity extends AppCompatActivity {
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final int ACTIVITY_CLOSE_TIMER = 10000;  //MS to close activity
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alert);
         View view = findViewById(R.id.layout_alert);
@@ -130,16 +133,24 @@ public class AlertActivity extends AppCompatActivity {
         }
         showActionBar();
 
-        // Close after some seconds
-        handler  = new Handler();
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                finish();;
-            }
-        };
 
-        handler.postDelayed(runnable, 10000);
+        final CountDownTimer countDownTimer = new CountDownTimer(ACTIVITY_CLOSE_TIMER, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                final String closeBtnWithCountDown = (String) btnClose.getText() + "  ( " + millisUntilFinished / 1000 + " )";
+
+                btnClose.setText(closeBtnWithCountDown);
+            }
+
+            @Override
+            public void onFinish() {
+                // Previously was being called rather than close.  Need to investigate the differences
+                // finish();
+                if (btnClose != null) {
+                    btnClose.performClick();
+                }
+            }
+        }.start();
     }
 
     @Override

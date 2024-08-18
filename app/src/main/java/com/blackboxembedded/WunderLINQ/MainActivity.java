@@ -55,6 +55,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -221,43 +222,75 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             return;
         }
 
-        // Daily Disclaimer Warning
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        final String currentDate = sdf.format(new Date());
-        if (sharedPrefs.getString("LAST_LAUNCH_DATE", "nodate").contains(currentDate)) {
-            // Date matches. User has already Launched the app once today. So do nothing.
-        } else {
-            // Display dialog text here......
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(getString(R.string.disclaimer_alert_title));
-            builder.setMessage(getString(R.string.disclaimer_alert_body));
-            builder.setPositiveButton(R.string.disclaimer_ok,
-                    new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Set the last Launched date to today.
-                            SharedPreferences.Editor editor = sharedPrefs.edit();
-                            editor.putString("LAST_LAUNCH_DATE", currentDate);
-                            editor.apply();
-                            dialog.cancel();
-                        }
-                    });
-            builder.setNegativeButton(R.string.disclaimer_quit,
-                    new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // End App
-                            finishAffinity();
-                        }
-                    });
-            builder.show();
-        }
+        dailyDisclaimerWarning();
 
         ContextCompat.registerReceiver(this, mGattUpdateReceiver, makeGattUpdateIntentFilter(), ContextCompat.RECEIVER_EXPORTED);
 
         bluetoothLeService = new Intent(MainActivity.this, BluetoothLeService.class);
+    }
+
+
+    private void dailyDisclaimerWarning() {
+        final int DISCLAIMER_COUNTDOWN = 15000; //MS to auto accept
+        // Daily Disclaimer Warning
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        final String currentDate = sdf.format(new Date());
+        String lastLaunch = sharedPrefs.getString("LAST_LAUNCH_DATE", "nodate");
+
+        // Check if the disclaimer has already been shown today
+        if (currentDate.equals(lastLaunch)) {
+            return;
+        }
+
+        // Display the disclaimer dialog
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.disclaimer_alert_title);
+        builder.setMessage(R.string.disclaimer_alert_body);
+        builder.setPositiveButton(R.string.disclaimer_ok, null); // Set null initially to handle clicks programmatically
+        builder.setNegativeButton(R.string.disclaimer_quit,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // End the app
+                        finishAffinity();
+                    }
+                });
+
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        final Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+
+        final CountDownTimer countDownTimer = new CountDownTimer(DISCLAIMER_COUNTDOWN, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // Update button text with the remaining time
+                final String positiveButtonWithCountdown = getString(R.string.disclaimer_ok) + "  ( " + millisUntilFinished / 1000 + " )";
+                positiveButton.setText(positiveButtonWithCountdown);
+            }
+
+            @Override
+            public void onFinish() {
+                // Automatically click the positive button when the countdown finishes
+                if (dialog.isShowing()) {
+                    positiveButton.performClick();
+                }
+            }
+        }.start();
+
+        // Set the positive button's click listener
+        positiveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Set the last launched date to today
+                SharedPreferences.Editor editor = sharedPrefs.edit();
+                editor.putString("LAST_LAUNCH_DATE", currentDate);
+                editor.apply();
+
+                countDownTimer.cancel();  // Cancel the countdown timer if button is clicked manually
+                dialog.dismiss();  // Use dismiss() instead of cancel() to properly close the dialog
+            }
+        });
     }
 
     private void showCellSelector(int cell) {
