@@ -52,7 +52,7 @@ public class SportDashboard {
             // Read SVG File
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(MyApplication.getContext().getAssets().open(SVGHelper.SVGfilename(TAG)));
+            Document doc = builder.parse(MyApplication.getContext().getAssets().open(SVGHelper.svgFilename(TAG)));
 
 
 

@@ -162,7 +162,7 @@ public class LoggingService extends Service {
                     Calendar cal = Calendar.getInstance();
                     Date date = cal.getTime();
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-                    String curdatetime = formatter.format(date);
+                    String curDateTime = formatter.format(date);
                     String lat = getString(R.string.gps_nofix);
                     String lon = getString(R.string.gps_nofix);
                     if (lastLocation != null){
@@ -176,7 +176,7 @@ public class LoggingService extends Service {
                                 || startDate.get(Calendar.DAY_OF_YEAR) != cal.get(Calendar.DAY_OF_YEAR)){
                             initializeFile();
                         } else {
-                            outFile.write(curdatetime + "," +
+                            outFile.write(curDateTime + "," +
                                     lat + "," + lon + "," +
                                     MotorcycleData.getValue(MotorcycleData.DATA_ALTITUDE_DEVICE) + "," +
                                     MotorcycleData.getValue(MotorcycleData.DATA_SPEED_DEVICE) + "," +
@@ -264,7 +264,7 @@ public class LoggingService extends Service {
                 Calendar cal = Calendar.getInstance();
                 logStartDate = cal.getTime();
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-HH-mm-ss");
-                String curdatetime = formatter.format(logStartDate);
+                String curDateTime = formatter.format(logStartDate);
                 String filename = "WunderLINQ-TripLog-";
 
                 String header = MyApplication.getContext().getResources().getString(R.string.time_header) + "," +
@@ -305,7 +305,7 @@ public class LoggingService extends Service {
                         MotorcycleData.getLabel(MotorcycleData.DATA_BATTERY_DEVICE) +
                         "\n";
 
-                File logFile = new File( root, filename + curdatetime + ".csv" );
+                File logFile = new File( root, filename + curDateTime + ".csv" );
                 FileWriter logWriter = new FileWriter( logFile );
                 outFile = new PrintWriter( logWriter );
                 outFile.write(header);

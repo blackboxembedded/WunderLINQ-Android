@@ -35,9 +35,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -537,7 +534,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 int pipWidth = width;
                 int pipHeight = height;
 
-                if (sharedPrefs.getString("prefPIPorientation", "0").equals("0")) {
+                if (sharedPrefs.getString("prefPIPOrientation", "0").equals("0")) {
                     if (height > width) {
                         pipWidth = height;
                         pipHeight = width;
@@ -885,7 +882,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                                 mMenu.findItem(R.id.action_hwsettings).setVisible(true);
                             }
                             //Check for active faults
-                            if (!Faults.getallActiveDesc().isEmpty()) {
+                            if (!Faults.getAllActiveDesc().isEmpty()) {
                                 faultButton.setVisibility(View.VISIBLE);
                             } else {
                                 faultButton.setVisibility(View.GONE);

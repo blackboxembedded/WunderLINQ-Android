@@ -82,7 +82,7 @@ public class SVGHelper {
         return s;
     }
 
-    public static String SVGfilename(String dashName) {
+    public static String svgFilename(String dashName) {
         if (dashName == null || dashName.isEmpty()) {
             dashName = "standard-dashboard";
         }
@@ -151,11 +151,11 @@ public class SVGHelper {
             switch (infoLine) {
                 case 1://Range
                     if (MotorcycleData.getFuelRange() != null) {
-                        double fuelrange = MotorcycleData.getFuelRange();
+                        double fuelRange = MotorcycleData.getFuelRange();
                         if (s.distanceFormat.contains("1")) {
-                            fuelrange = Utils.kmToMiles(fuelrange);
+                            fuelRange = Utils.kmToMiles(fuelRange);
                         }
-                        dataVal = String.valueOf(Math.round(fuelrange)) + " " + s.distanceUnit;
+                        dataVal = String.valueOf(Math.round(fuelRange)) + " " + s.distanceUnit;
                     }
                     break;
                 case 2://Trip1
@@ -283,7 +283,7 @@ public class SVGHelper {
             //Fault Icon
             e = doc.getElementById("iconFault");
             if (e != null) {
-                ArrayList<String> faultListData = Faults.getallActiveDesc();
+                ArrayList<String> faultListData = Faults.getAllActiveDesc();
                 if (!faultListData.isEmpty()) {
                     e.setAttribute("style", "display:inline");
                 } else {
@@ -294,7 +294,7 @@ public class SVGHelper {
             //Fuel Icon
             e = doc.getElementById("iconFuel");
             if (e != null) {
-                if (Faults.getfuelFaultActive()) {
+                if (Faults.getFuelFaultActive()) {
                     e.setAttribute("style", "display:inline");
                 } else {
                     e.setAttribute("style", "display:none");
@@ -671,19 +671,19 @@ public class SVGHelper {
                 } else if (s.pressureFormat.contains("2")) {
                     // Kg-f
                     s.pressureUnit = "Kgf";
-                    rdcRear = Utils.barTokgf(rdcRear);
+                    rdcRear = Utils.barToKgF(rdcRear);
                 } else if (s.pressureFormat.contains("3")) {
                     // Psi
                     s.pressureUnit = "psi";
                     rdcRear = Utils.barToPsi(rdcRear);
                 }
                 doc.getElementById("rdcR").setTextContent(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(rdcRear) + s.pressureUnit);
-                if (Faults.getrearTirePressureCriticalActive()) {
+                if (Faults.getRearTirePressureCriticalActive()) {
                     doc.getElementById("rdcR").setAttribute("style",
                             doc.getElementById("rdcR").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
                     );
 
-                } else if (Faults.getrearTirePressureWarningActive()) {
+                } else if (Faults.getRearTirePressureWarningActive()) {
                     doc.getElementById("rdcR").setAttribute("style",
                             doc.getElementById("rdcR").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#fcc914;")
                     );
@@ -707,18 +707,18 @@ public class SVGHelper {
                 } else if (s.pressureFormat.contains("2")) {
                     // Kg-f
                     s.pressureUnit = "Kgf";
-                    rdcFront = Utils.barTokgf(rdcFront);
+                    rdcFront = Utils.barToKgF(rdcFront);
                 } else if (s.pressureFormat.contains("3")) {
                     // Psi
                     s.pressureUnit = "psi";
                     rdcFront = Utils.barToPsi(rdcFront);
                 }
                 doc.getElementById("rdcF").setTextContent(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(rdcFront) + s.pressureUnit);
-                if (Faults.getfrontTirePressureCriticalActive()) {
+                if (Faults.getFrontTirePressureCriticalActive()) {
                     doc.getElementById("rdcF").setAttribute("style",
                             doc.getElementById("rdcF").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
                     );
-                } else if (Faults.getfrontTirePressureWarningActive()) {
+                } else if (Faults.getFrontTirePressureWarningActive()) {
                     doc.getElementById("rdcF").setAttribute("style",
                             doc.getElementById("rdcF").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#fcc914;")
                     );
@@ -734,11 +734,11 @@ public class SVGHelper {
         try {
             //Clock
             if (MotorcycleData.getTime() != null) {
-                SimpleDateFormat dateformat = new SimpleDateFormat("h:mm", Locale.getDefault());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("h:mm", Locale.getDefault());
                 if (!s.sharedPrefs.getString("prefTime", "0").equals("0")) {
-                    dateformat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                    dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
                 }
-                doc.getElementById("clock").setTextContent(dateformat.format(MotorcycleData.getTime()));
+                doc.getElementById("clock").setTextContent(dateFormat.format(MotorcycleData.getTime()));
             }
         } catch (Exception e) {
             Log.d(TAG, "Exception getting clock: " + e.toString());
@@ -826,7 +826,7 @@ public class SVGHelper {
             //Data Value
             if (infoLine == 1) {
                 if (MotorcycleData.getFuelRange() != null) {
-                    if (Faults.getfuelFaultActive()) {
+                    if (Faults.getFuelFaultActive()) {
                         doc.getElementById("dataValue").setAttribute("style",
                                 doc.getElementById("dataValue").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
                         );

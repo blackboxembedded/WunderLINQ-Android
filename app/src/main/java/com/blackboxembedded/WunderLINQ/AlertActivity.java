@@ -53,7 +53,7 @@ public class AlertActivity extends AppCompatActivity {
     String body = "";
     String backgroundPath = "";
 
-    TextView tvAlertbody;
+    TextView tvAlertBody;
     Button btnOK;
     Button btnClose;
     TextView navbarTitle;
@@ -99,7 +99,7 @@ public class AlertActivity extends AppCompatActivity {
             }
         }
 
-        tvAlertbody = findViewById(R.id.tvAlertBody);
+        tvAlertBody = findViewById(R.id.tvAlertBody);
         btnClose = findViewById(R.id.btnClose);
         btnOK = findViewById(R.id.btnOK);
         btnClose.setOnClickListener(mClickListener);
@@ -112,7 +112,7 @@ public class AlertActivity extends AppCompatActivity {
             body = extras.getString("BODY");
             backgroundPath = extras.getString("BACKGROUND");
         }
-        tvAlertbody.setText(body);
+        tvAlertBody.setText(body);
 
         switch (type){
             case ALERT_FUEL:
@@ -179,7 +179,7 @@ public class AlertActivity extends AppCompatActivity {
                 case R.id.btnOK:
                     if (type == ALERT_FUEL) {
                         if (!NavAppHelper.navigateToFuel(AlertActivity.this, MotorcycleData.getLastLocation())) {
-                            tvAlertbody.setText(getString(R.string.nav_app_feature_not_supported));
+                            tvAlertBody.setText(getString(R.string.nav_app_feature_not_supported));
                         }
                     } else if (type == ALERT_IGNITION) {
                         //Stop Service
@@ -193,8 +193,8 @@ public class AlertActivity extends AppCompatActivity {
     };
 
     private void showActionBar(){
-        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflator.inflate(R.layout.actionbar_nav, null);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.actionbar_nav, null);
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled (false);

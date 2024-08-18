@@ -257,10 +257,10 @@ public class MotorcycleData {
 
     // Voltage
     private static Double voltage;
-    public static Double getvoltage() {
+    public static Double getVoltage() {
         return voltage;
     }
-    public static void setvoltage(Double voltage){
+    public static void setVoltage(Double voltage){
         MotorcycleData.voltage = voltage;
     }
 
@@ -745,20 +745,20 @@ public class MotorcycleData {
                 break;
             case DATA_FRONT_RDC:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire);
-                if (Faults.getfrontTirePressureCriticalActive()){
+                if (Faults.getFrontTirePressureCriticalActive()){
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire_alert);
                     icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
-                } else if (Faults.getfrontTirePressureWarningActive()){
+                } else if (Faults.getFrontTirePressureWarningActive()){
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire_alert);
                     icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
                 }
                 break;
             case DATA_REAR_RDC:
                 icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire);
-                if (Faults.getrearTirePressureCriticalActive()){
+                if (Faults.getRearTirePressureCriticalActive()){
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire_alert);
                     icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
-                } else if (Faults.getrearTirePressureWarningActive()){
+                } else if (Faults.getRearTirePressureWarningActive()){
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire_alert);
                     icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
                 }
@@ -907,20 +907,20 @@ public class MotorcycleData {
                 break;
             case DATA_FRONT_RDC:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tire);
-                if (Faults.getfrontTirePressureCriticalActive()){
+                if (Faults.getFrontTirePressureCriticalActive()){
                     icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tire_alert);
                     carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_red),MyApplication.getContext().getResources().getColor(R.color.motorrad_red));
-                } else if (Faults.getfrontTirePressureWarningActive()){
+                } else if (Faults.getFrontTirePressureWarningActive()){
                     icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tire_alert);
                     carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.yellow),MyApplication.getContext().getResources().getColor(R.color.yellow));
                 }
                 break;
             case DATA_REAR_RDC:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tire);
-                if (Faults.getrearTirePressureCriticalActive()){
+                if (Faults.getRearTirePressureCriticalActive()){
                     icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tire_alert);
                     carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_red),MyApplication.getContext().getResources().getColor(R.color.motorrad_red));
-                } else if (Faults.getrearTirePressureWarningActive()){
+                } else if (Faults.getRearTirePressureWarningActive()){
                     icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tire_alert);
                     carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.yellow),MyApplication.getContext().getResources().getColor(R.color.yellow));
                 }
@@ -1079,7 +1079,7 @@ public class MotorcycleData {
                         rdcFront = Utils.barTokPa(rdcFront);
                     } else if (pressureFormat.contains("2")) {
                         // Kg-f
-                        rdcFront = Utils.barTokgf(rdcFront);
+                        rdcFront = Utils.barToKgF(rdcFront);
                     } else if (pressureFormat.contains("3")) {
                         // Psi
                         rdcFront = Utils.barToPsi(rdcFront);
@@ -1095,7 +1095,7 @@ public class MotorcycleData {
                         rdcRear = Utils.barTokPa(rdcRear);
                     } else if (pressureFormat.contains("2")) {
                         // Kg-f
-                        rdcRear = Utils.barTokgf(rdcRear);
+                        rdcRear = Utils.barToKgF(rdcRear);
                     } else if (pressureFormat.contains("3")) {
                         // Psi
                         rdcRear = Utils.barToPsi(rdcRear);
@@ -1113,8 +1113,8 @@ public class MotorcycleData {
                 }
                 break;
             case DATA_VOLTAGE:
-                if(MotorcycleData.getvoltage() != null){
-                    Double voltage = MotorcycleData.getvoltage();
+                if(MotorcycleData.getVoltage() != null){
+                    Double voltage = MotorcycleData.getVoltage();
                     value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(voltage));
                 }
                 break;
@@ -1162,11 +1162,11 @@ public class MotorcycleData {
                 break;
             case DATA_TRIP_AUTO:
                 if(MotorcycleData.getTripAuto() != null){
-                    double tripauto = MotorcycleData.getTripAuto();
+                    double tripAuto = MotorcycleData.getTripAuto();
                     if (distanceFormat.contains("1")) {
-                        tripauto = Utils.kmToMiles(tripauto);
+                        tripAuto = Utils.kmToMiles(tripAuto);
                     }
-                    value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(tripauto);
+                    value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(tripAuto);
                 }
                 break;
             case DATA_SPEED:
@@ -1180,22 +1180,22 @@ public class MotorcycleData {
                 break;
             case DATA_AVG_SPEED:
                 if(MotorcycleData.getAvgSpeed() != null){
-                    double avgspeed = MotorcycleData.getAvgSpeed();
+                    double avgSpeed = MotorcycleData.getAvgSpeed();
                     if (distanceFormat.contains("1")) {
-                        avgspeed = Utils.kmToMiles(avgspeed);
+                        avgSpeed = Utils.kmToMiles(avgSpeed);
                     }
-                    value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(avgspeed);
+                    value = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(avgSpeed);
                 }
                 break;
             case DATA_CURRENT_CONSUMPTION:
                 if(MotorcycleData.getCurrentConsumption() != null){
                     double currentConsumption = MotorcycleData.getCurrentConsumption();
                     if (consumptionFormat.contains("1")) {
-                        currentConsumption = Utils.l100Tompg(currentConsumption);
+                        currentConsumption = Utils.l100ToMpg(currentConsumption);
                     } else if (consumptionFormat.contains("2")) {
-                        currentConsumption = Utils.l100Tompgi(currentConsumption);
+                        currentConsumption = Utils.l100ToMpgI(currentConsumption);
                     } else if (consumptionFormat.contains("3")) {
-                        currentConsumption = Utils.l100Tokml(currentConsumption);
+                        currentConsumption = Utils.l100ToKmL(currentConsumption);
                     }
                     value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(currentConsumption));
                 }
@@ -1204,11 +1204,11 @@ public class MotorcycleData {
                 if(MotorcycleData.getFuelEconomyOne() != null){
                     double fuelEconomyOne = MotorcycleData.getFuelEconomyOne();
                     if (consumptionFormat.contains("1")) {
-                        fuelEconomyOne = Utils.l100Tompg(fuelEconomyOne);
+                        fuelEconomyOne = Utils.l100ToMpg(fuelEconomyOne);
                     } else if (consumptionFormat.contains("2")) {
-                        fuelEconomyOne = Utils.l100Tompgi(fuelEconomyOne);
+                        fuelEconomyOne = Utils.l100ToMpgI(fuelEconomyOne);
                     } else if (consumptionFormat.contains("3")) {
-                        fuelEconomyOne = Utils.l100Tokml(fuelEconomyOne);
+                        fuelEconomyOne = Utils.l100ToKmL(fuelEconomyOne);
                     }
                     value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(fuelEconomyOne));
                 }
@@ -1217,22 +1217,22 @@ public class MotorcycleData {
                 if(MotorcycleData.getFuelEconomyTwo() != null){
                     double fuelEconomyTwo = MotorcycleData.getFuelEconomyTwo();
                     if (consumptionFormat.contains("1")) {
-                        fuelEconomyTwo = Utils.l100Tompg(fuelEconomyTwo);
+                        fuelEconomyTwo = Utils.l100ToMpg(fuelEconomyTwo);
                     } else if (consumptionFormat.contains("2")) {
-                        fuelEconomyTwo  = Utils.l100Tompgi(fuelEconomyTwo);
+                        fuelEconomyTwo  = Utils.l100ToMpgI(fuelEconomyTwo);
                     } else if (consumptionFormat.contains("3")) {
-                        fuelEconomyTwo  = Utils.l100Tokml(fuelEconomyTwo);
+                        fuelEconomyTwo  = Utils.l100ToKmL(fuelEconomyTwo);
                     }
                     value = String.valueOf(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(fuelEconomyTwo));
                 }
                 break;
             case DATA_RANGE:
                 if(MotorcycleData.getFuelRange() != null){
-                    double fuelrange = MotorcycleData.getFuelRange();
+                    double fuelRange = MotorcycleData.getFuelRange();
                     if (distanceFormat.contains("1")) {
-                        fuelrange = Utils.kmToMiles(fuelrange);
+                        fuelRange = Utils.kmToMiles(fuelRange);
                     }
-                    value = String.valueOf(Math.round(fuelrange));
+                    value = String.valueOf(Math.round(fuelRange));
                 }
                 break;
             case DATA_SHIFTS:
@@ -1281,11 +1281,11 @@ public class MotorcycleData {
                 break;
             case DATA_TIME_DEVICE:
                 if (MotorcycleData.getTime() != null) {
-                    SimpleDateFormat dateformat = new SimpleDateFormat("h:mm aa", Locale.getDefault());
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("h:mm aa", Locale.getDefault());
                     if (!sharedPrefs.getString("prefTime", "0").equals("0")) {
-                        dateformat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                        dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
                     }
-                    value = dateformat.format(MotorcycleData.getTime());
+                    value = dateFormat.format(MotorcycleData.getTime());
                 }
                 break;
             case DATA_BAROMETRIC_DEVICE:
@@ -1319,12 +1319,12 @@ public class MotorcycleData {
                     Calendar[] sunriseSunset = ca.rmen.sunrisesunset.SunriseSunset.getSunriseSunset(Calendar.getInstance(), MotorcycleData.getLastLocation().getLatitude(), MotorcycleData.getLastLocation().getLongitude());
                     Date sunrise = sunriseSunset[0].getTime();
                     Date sunset = sunriseSunset[1].getTime();
-                    SimpleDateFormat dateformat = new SimpleDateFormat("h:mm aa", Locale.getDefault());
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("h:mm aa", Locale.getDefault());
                     if (!sharedPrefs.getString("prefTime", "0").equals("0")) {
-                        dateformat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                        dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
                     }
-                    String sunriseString = dateformat.format(sunrise);
-                    String sunsetString = dateformat.format(sunset);
+                    String sunriseString = dateFormat.format(sunrise);
+                    String sunsetString = dateFormat.format(sunset);
                     value = sunriseString + "/" + sunsetString;
                 }
                 break;

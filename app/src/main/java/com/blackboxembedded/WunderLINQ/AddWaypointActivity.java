@@ -317,8 +317,8 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
     };
 
     private void showActionBar(){
-        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflator.inflate(R.layout.actionbar_nav, null);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.actionbar_nav, null);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled (false);
@@ -371,8 +371,8 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
             // Get current date/time
             Calendar cal = Calendar.getInstance();
             Date date = cal.getTime();
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ");
-            String curdatetime = formatter.format(date);
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ");
+            String curDateTime = formatter.format(date);
 
             // Open database
             WaypointDatasource datasource = new WaypointDatasource(this);
@@ -380,7 +380,7 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
 
             String waypoint = etLatitude.getText().toString() + "," + etLongitude.getText().toString();
             String label = etLabel.getText().toString();
-            WaypointRecord record = new WaypointRecord(curdatetime, waypoint, label);
+            WaypointRecord record = new WaypointRecord(curDateTime, waypoint, label);
             datasource.addRecord(record);
             datasource.close();
 

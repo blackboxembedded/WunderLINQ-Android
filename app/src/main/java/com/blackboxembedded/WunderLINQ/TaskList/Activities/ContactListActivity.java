@@ -197,7 +197,7 @@ public class ContactListActivity extends AppCompatActivity {
         // Check the SDK version and whether the permission is already granted or not.
         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(ContactListActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
-            //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
+            //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overridden method
         } else {
             // Android version is lesser than 6.0 or the permission is already granted.
             String sortOrder = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
@@ -396,8 +396,8 @@ public class ContactListActivity extends AppCompatActivity {
     }
 
     private void showActionBar(){
-        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflator.inflate(R.layout.actionbar_nav, null);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.actionbar_nav, null);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled(false);
@@ -417,7 +417,7 @@ public class ContactListActivity extends AppCompatActivity {
         faultButton.setOnClickListener(mClickListener);
 
         //Check for active faults
-        if (!Faults.getallActiveDesc().isEmpty()) {
+        if (!Faults.getAllActiveDesc().isEmpty()) {
             faultButton.setVisibility(View.VISIBLE);
         } else {
             faultButton.setVisibility(View.GONE);

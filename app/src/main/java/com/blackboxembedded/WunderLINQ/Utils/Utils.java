@@ -18,12 +18,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package com.blackboxembedded.WunderLINQ.Utils;
 
 
-import android.content.res.Resources;
 import android.os.Build;
 
 import com.blackboxembedded.WunderLINQ.MyApplication;
 
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -37,7 +35,7 @@ public class Utils {
         return ( (value & bit) == bit );
     }
 
-    public static String ByteArraytoHex(byte[] bytes) {
+    public static String ByteArrayToHex(byte[] bytes) {
         if(bytes!=null){
             StringBuilder sb = new StringBuilder();
             for (byte b : bytes) {
@@ -48,7 +46,7 @@ public class Utils {
         return "";
     }
 
-    public static String ByteArraytoHexNoDelim(byte[] bytes) {
+    public static String ByteArrayToHexNoDelim(byte[] bytes) {
         if(bytes!=null){
             StringBuilder sb = new StringBuilder();
             for (byte b : bytes) {
@@ -67,7 +65,7 @@ public class Utils {
         return (a & 0xFF) << 8 | (b & 0xFF);
     }
 
-    // Take two dates and calulate the duration in hours, min, sec
+    // Take two dates and calculate the duration in hours, min, sec
     public static long [] calculateDuration(Date startDate, Date endDate){
         //milliseconds
         long different = endDate.getTime() - startDate.getTime();
@@ -105,7 +103,7 @@ public class Utils {
         return bar * 100;
     }
     // bar to kg-f
-    public static double barTokgf(double bar){
+    public static double barToKgF(double bar){
         return bar * 1.0197162129779;
     }
     // kilometers to miles
@@ -121,22 +119,22 @@ public class Utils {
         return (celsius * 1.8) + 32.0;
     }
     // L/100 to MPG
-    public static double l100Tompg(double l100){
+    public static double l100ToMpg(double l100){
         return 235.215 / l100;
     }
     // L/100 to MPG Imperial
-    public static double l100Tompgi(double l100){
+    public static double l100ToMpgI(double l100){
         return (235.215 / l100) * 1.20095;
     }
     // L/100 to km/L
-    public static double l100Tokml(double l100){
+    public static double l100ToKmL(double l100){
         return l100 / 100;
     }
 
     /*
      * @see http://en.wikipedia.org/wiki/Low-pass_filter#Algorithmic_implementation
      */
-    // Lowpass filter
+    // lowPass filter
     public static float[] lowPass(float[] input, float[] output, float ALPHA) {
         if ( output == null ) return input;
 

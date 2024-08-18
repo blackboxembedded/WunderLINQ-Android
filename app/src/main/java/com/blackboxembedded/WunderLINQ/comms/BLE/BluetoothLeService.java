@@ -809,7 +809,7 @@ public class BluetoothLeService extends Service {
         if (data != null) {
             if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
                 // Log data
-                Log.d(TAG, characteristic.getUuid().toString() + ": " + Utils.ByteArraytoHexNoDelim(data));
+                Log.d(TAG, characteristic.getUuid().toString() + ": " + Utils.ByteArrayToHexNoDelim(data));
             }
         }
 
@@ -839,7 +839,7 @@ public class BluetoothLeService extends Service {
                     }
                     //Process message
                     if (process) {
-                        BLEbus.parseBLEMessage(data);
+                        BLEBus.parseBLEMessage(data);
                         /*
                          * Sending the broad cast so that it can be received on registered
                          * receivers
@@ -875,7 +875,7 @@ public class BluetoothLeService extends Service {
                     if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
                         Log.d(TAG,"ACC STATUS RECEIVED");
                         // Log data
-                        Log.d(TAG,Utils.ByteArraytoHexNoDelim(data));
+                        Log.d(TAG,Utils.ByteArrayToHexNoDelim(data));
                     }
                     if(MotorcycleData.wlq != null) {
                         MotorcycleData.wlq.setStatus(data);
@@ -912,7 +912,7 @@ public class BluetoothLeService extends Service {
      * {@code BluetoothGattCallback#onConnectionStateChange(android.bluetooth.BluetoothGatt, int, int)}
      * callback.
      */
-    public static void connect(final String address, final String devicename) {
+    public static void connect(final String address, final String deviceName) {
         if (mBluetoothAdapter == null || address == null) {
             return;
         }
@@ -930,9 +930,9 @@ public class BluetoothLeService extends Service {
         || (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)) {
             mBluetoothGatt = device.connectGatt(MyApplication.getContext(), false, mGattCallback);
             mBluetoothDeviceAddress = address;
-            mBluetoothDeviceName = devicename;
+            mBluetoothDeviceName = deviceName;
 
-            String dataLog = "[" + devicename + "|" + address + "] " +
+            String dataLog = "[" + deviceName + "|" + address + "] " +
                     "Connection request sent";
             Log.d(TAG, dataLog);
         } else {
@@ -1098,7 +1098,7 @@ public class BluetoothLeService extends Service {
                             Log.d(TAG, String.format("writeCharacteristic failed for characteristic: %s", characteristic.getUuid()));
                             completedCommand();
                         } else {
-                            //Log.d(TAG, String.format("Writing <%s> to characteristic <%s>", Utils.ByteArraytoHex(bytesToWrite), characteristic.getUuid()));
+                            //Log.d(TAG, String.format("Writing <%s> to characteristic <%s>", Utils.ByteArrayToHex(bytesToWrite), characteristic.getUuid()));
                             nrTries++;
                         }
                     }
@@ -1174,7 +1174,7 @@ public class BluetoothLeService extends Service {
             Class class1 = Class.forName("android.bluetooth.BluetoothDevice");
             Method createBondMethod = class1.getMethod("createBond");
             Boolean returnValue = (Boolean) createBondMethod.invoke(mBluetoothGatt.getDevice());
-            Log.d(TAG,"Pair initates status-->" + returnValue);
+            Log.d(TAG,"Pair initiates status-->" + returnValue);
         } catch (Exception e) {
             Log.d(TAG,"Exception Pair" + e.getMessage());
         }
@@ -1343,16 +1343,16 @@ public class BluetoothLeService extends Service {
     static public void updateNotification(){
         StringBuilder body = new StringBuilder();
         body.append("");
-        if(Faults.getfrontTirePressureCriticalActive()){
+        if(Faults.getFrontTirePressureCriticalActive()){
             body.append(MyApplication.getContext().getResources().getString(R.string.fault_TIREFCF)).append("\n");
         }
-        if(Faults.getrearTirePressureCriticalActive()){
+        if(Faults.getRearTirePressureCriticalActive()){
             body.append(MyApplication.getContext().getResources().getString(R.string.fault_TIRERCF)).append("\n");
         }
-        if(Faults.getgeneralFlashingRedActive()){
+        if(Faults.getGeneralFlashingRedActive()){
             body.append(MyApplication.getContext().getResources().getString(R.string.fault_GENWARNFSRED)).append("\n");
         }
-        if(Faults.getgeneralShowsRedActive()){
+        if(Faults.getGeneralShowsRedActive()){
             body.append(MyApplication.getContext().getResources().getString(R.string.fault_GENWARNSHRED)).append("\n");
         }
         if(!body.toString().equals("")){
@@ -1570,7 +1570,7 @@ public class BluetoothLeService extends Service {
         intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_FRONT_RDC), MotorcycleData.getFrontTirePressure());
         intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_REAR_RDC), MotorcycleData.getRearTirePressure());
         intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_ODOMETER), MotorcycleData.getOdometer());
-        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_VOLTAGE), MotorcycleData.getvoltage());
+        intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_VOLTAGE), MotorcycleData.getVoltage());
         intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_THROTTLE), MotorcycleData.getThrottlePosition());
         intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_FRONT_BRAKE), MotorcycleData.getFrontBrake());
         intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DATA_REAR_BRAKE), MotorcycleData.getRearBrake());
