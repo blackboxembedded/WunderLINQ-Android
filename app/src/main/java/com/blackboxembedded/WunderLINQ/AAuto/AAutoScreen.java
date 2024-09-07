@@ -18,12 +18,21 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package com.blackboxembedded.WunderLINQ.AAuto;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.OptIn;
 import androidx.car.app.CarContext;
 import androidx.car.app.Screen;
+import androidx.car.app.annotations.ExperimentalCarApi;
 import androidx.car.app.model.Action;
+import androidx.car.app.model.CarColor;
+import androidx.car.app.model.CarIcon;
 import androidx.car.app.model.GridItem;
 import androidx.car.app.model.GridTemplate;
 import androidx.car.app.model.ItemList;
+import androidx.car.app.model.ListTemplate;
+import androidx.car.app.model.Row;
+import androidx.car.app.model.Tab;
+import androidx.car.app.model.TabContents;
+import androidx.car.app.model.TabTemplate;
 import androidx.car.app.model.Template;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -34,26 +43,41 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.IconCompat;
 
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AAutoScreen extends Screen {
 
     public final static String TAG = "AAutoScreen";
-    private GridTemplate gridTemplate;
+    private TabTemplate tabTemplate;
     ItemList.Builder listBuilder;
     private final SharedPreferences sharedPrefs;
+
+    private final Map<String, Tab> mTabs;
+    private final Map<String, TabContents> mTabContentsMap;
+    private TabTemplate.Builder mTabTemplateBuilder;
+    private String mActiveContentId;
 
     public AAutoScreen(CarContext carContext) {
         super(carContext);
         Log.d(TAG,"AAutoScreen Create");
+        mTabs = new HashMap<>();
+        mTabContentsMap = new HashMap<>();
+        mActiveContentId = null;
+
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
         // Initialize your BroadcastReceiver
         IntentFilter filter = new IntentFilter(BluetoothLeService.ACTION_PERFORMANCE_DATA_AVAILABLE);
-        ContextCompat.registerReceiver(getCarContext(), bearingReceiver, filter, ContextCompat.RECEIVER_EXPORTED);
+        ContextCompat.registerReceiver(getCarContext(), dataReceiver, filter, ContextCompat.RECEIVER_EXPORTED);
 
         updateUI();
     }
@@ -61,22 +85,10 @@ public class AAutoScreen extends Screen {
     @NonNull
     @Override
     public Template onGetTemplate() {
-        return gridTemplate;
+        return tabTemplate;
     }
 
-    // BroadcastReceiver to handle the incoming intents
-    private final BroadcastReceiver bearingReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // Handle the intent and update the UI
-            if (intent.getAction() != null && intent.getAction().equals(BluetoothLeService.ACTION_PERFORMANCE_DATA_AVAILABLE)) {
-                updateUI();
-            }
-        }
-    };
-
-    // Method to update the UI components
-    private void updateUI() {
+    private GridTemplate dataGridTemplate() {
         listBuilder = new ItemList.Builder();
         // Cell One
         int cell1Data = Integer.parseInt(sharedPrefs.getString("prefCellOne", "14"));//Default:Speed
@@ -124,11 +136,88 @@ public class AAutoScreen extends Screen {
         int cell15Data = Integer.parseInt(sharedPrefs.getString("prefCellFifteen", "22"));//Default:g-force
         listBuilder.addItem(getCellData(cell15Data));
 
-        gridTemplate = new GridTemplate.Builder()
-                .setTitle(MyApplication.getContext().getString(R.string.app_name))
-                .setHeaderAction(Action.APP_ICON)
+        return new GridTemplate.Builder()
                 .setSingleList(listBuilder.build())
                 .build();
+    }
+
+    private ListTemplate faultListTemplate() {
+        ItemList.Builder listBuilder = new ItemList.Builder();
+        Faults faults;
+        faults = (new Faults(MyApplication.getContext()));
+        ArrayList<String> activeDesc = faults.getallActiveDesc();
+        for (String desc : activeDesc) {
+                listBuilder.addItem(new Row.Builder()
+                        .setTitle(desc).build());
+        }
+        return new ListTemplate.Builder()
+                .setSingleList(listBuilder.build())
+                .build();
+    }
+
+    // BroadcastReceiver to handle the incoming intents
+    private final BroadcastReceiver dataReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Handle the intent and update the UI
+            if (intent.getAction() != null && intent.getAction().equals(BluetoothLeService.ACTION_PERFORMANCE_DATA_AVAILABLE)) {
+                updateUI();
+            }
+        }
+    };
+
+    // Method to update the UI components
+    private void updateUI() {
+        mTabTemplateBuilder = new TabTemplate.Builder(new TabTemplate.TabCallback() {
+            @Override
+            public void onTabSelected(@NonNull String tabContentId) {
+                mActiveContentId = tabContentId;
+                invalidate();
+            }
+        }).setHeaderAction(Action.APP_ICON);
+
+        mTabContentsMap.clear();
+        mTabs.clear();
+
+        String contentId = "DATA";
+        Template contentTemplate = dataGridTemplate();
+        TabContents tabContents = new TabContents.Builder(contentTemplate).build();
+        mTabContentsMap.put(contentId, tabContents);
+
+        Tab.Builder tabBuilder = new Tab.Builder()
+                .setTitle(MyApplication.getContext().getString(R.string.main_title))
+                .setIcon(MotorcycleData.getCarIcon(MotorcycleData.DATA_ODOMETER))
+                .setContentId(contentId);
+        if (mActiveContentId == null) {
+            mActiveContentId = contentId;
+            mTabTemplateBuilder.setTabContents(tabContents);
+        } else if (mActiveContentId.equals(contentId)) {
+            mTabTemplateBuilder.setTabContents(tabContents);
+        }
+        Tab tab = tabBuilder.build();
+        mTabs.put(tab.getContentId(), tab);
+        mTabTemplateBuilder.addTab(tab);
+        contentTemplate = faultListTemplate();
+        tabContents = new TabContents.Builder(contentTemplate).build();
+        mTabContentsMap.put(contentId, tabContents);
+
+        contentId = "FAULTS";
+        IconCompat icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_warning);
+        CarColor carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.white),MyApplication.getContext().getResources().getColor(R.color.black));
+        CarIcon carIcon = new CarIcon.Builder(icon).setTint(carColor).build();
+        tabBuilder = new Tab.Builder()
+                .setTitle(MyApplication.getContext().getString(R.string.fault_title))
+                .setIcon(carIcon)
+                .setContentId(contentId);
+        if (mActiveContentId.equals(contentId)) {
+            mTabTemplateBuilder.setTabContents(tabContents);
+        }
+        tab = tabBuilder.build();
+        mTabs.put(tab.getContentId(), tab);
+        mTabTemplateBuilder.addTab(tab);
+
+        tabTemplate = mTabTemplateBuilder.setActiveTabContentId(mActiveContentId).build();
+
         invalidate();  // Request the system to call onGetTemplate again
     }
 
@@ -139,4 +228,14 @@ public class AAutoScreen extends Screen {
                 .setText((!MotorcycleData.getValue(dataPoint).isEmpty()) ? MotorcycleData.getValue(dataPoint) : MyApplication.getContext().getString(R.string.blank_field))
                 .build();
     }
+
+    private Action createFabBackAction() {
+        Action action = new Action.Builder()
+                .setIcon(CarIcon.BACK)
+                .setBackgroundColor(CarColor.BLUE)
+                .setOnClickListener(() -> getScreenManager().pop())
+                .build();
+        return action;
+    }
+
 }
