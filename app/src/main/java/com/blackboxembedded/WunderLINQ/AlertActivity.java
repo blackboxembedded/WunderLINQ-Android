@@ -23,6 +23,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.KeyEvent;
@@ -53,7 +54,7 @@ public class AlertActivity extends AppCompatActivity {
     String body = "";
     String backgroundPath = "";
 
-    TextView tvAlertbody;
+    TextView tvAlertBody;
     Button btnOK;
     Button btnClose;
     TextView navbarTitle;
@@ -76,6 +77,8 @@ public class AlertActivity extends AppCompatActivity {
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final int ACTIVITY_CLOSE_TIMER = 10000;  //MS to close activity
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alert);
         View view = findViewById(R.id.layout_alert);
@@ -99,7 +102,7 @@ public class AlertActivity extends AppCompatActivity {
             }
         }
 
-        tvAlertbody = findViewById(R.id.tvAlertBody);
+        tvAlertBody = findViewById(R.id.tvAlertBody);
         btnClose = findViewById(R.id.btnClose);
         btnOK = findViewById(R.id.btnOK);
         btnClose.setOnClickListener(mClickListener);
@@ -112,7 +115,7 @@ public class AlertActivity extends AppCompatActivity {
             body = extras.getString("BODY");
             backgroundPath = extras.getString("BACKGROUND");
         }
-        tvAlertbody.setText(body);
+        tvAlertBody.setText(body);
 
         switch (type){
             case ALERT_FUEL:
@@ -130,16 +133,24 @@ public class AlertActivity extends AppCompatActivity {
         }
         showActionBar();
 
-        // Close after some seconds
-        handler  = new Handler();
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                finish();;
-            }
-        };
 
-        handler.postDelayed(runnable, 10000);
+        final CountDownTimer countDownTimer = new CountDownTimer(ACTIVITY_CLOSE_TIMER, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                final String closeBtnWithCountDown = (String) btnClose.getText() + "  ( " + millisUntilFinished / 1000 + " )";
+
+                btnClose.setText(closeBtnWithCountDown);
+            }
+
+            @Override
+            public void onFinish() {
+                // Previously was being called rather than close.  Need to investigate the differences
+                // finish();
+                if (btnClose != null) {
+                    btnClose.performClick();
+                }
+            }
+        }.start();
     }
 
     @Override
@@ -179,7 +190,7 @@ public class AlertActivity extends AppCompatActivity {
                 case R.id.btnOK:
                     if (type == ALERT_FUEL) {
                         if (!NavAppHelper.navigateToFuel(AlertActivity.this, MotorcycleData.getLastLocation())) {
-                            tvAlertbody.setText(getString(R.string.nav_app_feature_not_supported));
+                            tvAlertBody.setText(getString(R.string.nav_app_feature_not_supported));
                         }
                     } else if (type == ALERT_IGNITION) {
                         //Stop Service
@@ -193,8 +204,8 @@ public class AlertActivity extends AppCompatActivity {
     };
 
     private void showActionBar(){
-        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflator.inflate(R.layout.actionbar_nav, null);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.actionbar_nav, null);
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled (false);

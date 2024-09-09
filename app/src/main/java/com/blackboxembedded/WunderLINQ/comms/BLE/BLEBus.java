@@ -27,7 +27,7 @@ import com.blackboxembedded.WunderLINQ.Utils.Utils;
 
 import java.time.LocalDate;
 
-public class BLEbus {
+public class BLEBus {
     private static int prevBrakeValue = 0;
     public static void parseBLEMessage(byte[] data){
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
@@ -98,20 +98,20 @@ public class BLEbus {
                     MotorcycleData.setLeanAngleBike(leanAngleBikeFixed);
                     //Store Max L and R lean angle
                     if(leanAngleBikeFixed > 0){
-                        if (MotorcycleData.getLeanAngleMaxR() != null) {
-                            if (leanAngleBikeFixed > MotorcycleData.getLeanAngleMaxR()) {
-                                MotorcycleData.setLeanAngleMaxR(leanAngleBikeFixed);
+                        if (MotorcycleData.getLeanAngleDeviceMaxR() != null) {
+                            if (leanAngleBikeFixed > MotorcycleData.getLeanAngleDeviceMaxR()) {
+                                MotorcycleData.setLeanAngleDeviceMaxR(leanAngleBikeFixed);
                             }
                         } else {
-                            MotorcycleData.setLeanAngleMaxR(leanAngleBikeFixed);
+                            MotorcycleData.setLeanAngleDeviceMaxR(leanAngleBikeFixed);
                         }
                     } else if(leanAngleBikeFixed < 0){
-                        if (MotorcycleData.getLeanAngleMaxL() != null) {
-                            if (Math.abs(leanAngleBikeFixed) > MotorcycleData.getLeanAngleMaxL()) {
-                                MotorcycleData.setLeanAngleMaxL(Math.abs(leanAngleBikeFixed));
+                        if (MotorcycleData.getLeanAngleDeviceMaxL() != null) {
+                            if (Math.abs(leanAngleBikeFixed) > MotorcycleData.getLeanAngleDeviceMaxL()) {
+                                MotorcycleData.setLeanAngleDeviceMaxL(Math.abs(leanAngleBikeFixed));
                             }
                         } else {
-                            MotorcycleData.setLeanAngleMaxL(Math.abs(leanAngleBikeFixed));
+                            MotorcycleData.setLeanAngleDeviceMaxL(Math.abs(leanAngleBikeFixed));
                         }
                     }
                 }
@@ -156,24 +156,24 @@ public class BLEbus {
                         case 0xE:
                             Faults.setAbsSelfDiagActive(false);
                             Faults.setAbsDeactivatedActive(false);
-                            Faults.setabsErrorActive(true);
+                            Faults.setAbsErrorActive(true);
                             break;
                         case 0x3:
                         case 0xB:
                             Faults.setAbsSelfDiagActive(true);
                             Faults.setAbsDeactivatedActive(false);
-                            Faults.setabsErrorActive(false);
+                            Faults.setAbsErrorActive(false);
                             break;
                         case 0x8:
                             Faults.setAbsSelfDiagActive(false);
                             Faults.setAbsDeactivatedActive(true);
-                            Faults.setabsErrorActive(false);
+                            Faults.setAbsErrorActive(false);
                             break;
                         case 0xF:
                         default:
                             Faults.setAbsSelfDiagActive(false);
                             Faults.setAbsDeactivatedActive(false);
-                            Faults.setabsErrorActive(false);
+                            Faults.setAbsErrorActive(false);
                             break;
                     }
                 }
@@ -188,29 +188,29 @@ public class BLEbus {
                             if (pressureFormat.contains("1")) {
                                 // KPa
                                 if (pressureThreshold >= Utils.barTokPa(rdcFront)) {
-                                    Faults.setfrontTirePressureCriticalActive(true);
+                                    Faults.setFrontTirePressureCriticalActive(true);
                                 }
                             } else if (pressureFormat.contains("2")) {
                                 // Kg-f
-                                if (pressureThreshold >= Utils.barTokgf(rdcFront)) {
-                                    Faults.setfrontTirePressureCriticalActive(true);
+                                if (pressureThreshold >= Utils.barToKgF(rdcFront)) {
+                                    Faults.setFrontTirePressureCriticalActive(true);
                                 }
                             } else if (pressureFormat.contains("3")) {
                                 // Psi
                                 if (pressureThreshold >= Utils.barToPsi(rdcFront)) {
-                                    Faults.setfrontTirePressureCriticalActive(true);
+                                    Faults.setFrontTirePressureCriticalActive(true);
                                 }
                             }
                             if (sharedPrefs.getBoolean("prefNotifications", true)) {
-                                if (!(Faults.getfrontTirePressureCriticalNotificationActive())) {
+                                if (!(Faults.getFrontTirePressureCriticalNotificationActive())) {
                                     BluetoothLeService.updateNotification();
-                                    Faults.setfrontTirePressureCriticalNotificationActive(true);
+                                    Faults.setFrontTirePressureCriticalNotificationActive(true);
                                 }
                             }
                         } else {
                             if (sharedPrefs.getBoolean("prefNotifications", true)) {
-                                Faults.setfrontTirePressureCriticalNotificationActive(false);
-                                if (Faults.getfrontTirePressureCriticalNotificationActive()) {
+                                Faults.setFrontTirePressureCriticalNotificationActive(false);
+                                if (Faults.getFrontTirePressureCriticalNotificationActive()) {
                                     BluetoothLeService.updateNotification();
                                 }
                             }
@@ -227,29 +227,29 @@ public class BLEbus {
                             if (pressureFormat.contains("1")) {
                                 // KPa
                                 if (pressureThreshold >= Utils.barTokPa(rdcRear)){
-                                    Faults.setrearTirePressureCriticalActive(true);
+                                    Faults.setRearTirePressureCriticalActive(true);
                                 }
                             } else if (pressureFormat.contains("2")) {
                                 // Kg-f
-                                if (pressureThreshold >= Utils.barTokgf(rdcRear)){
-                                    Faults.setrearTirePressureCriticalActive(true);
+                                if (pressureThreshold >= Utils.barToKgF(rdcRear)){
+                                    Faults.setRearTirePressureCriticalActive(true);
                                 }
                             } else if (pressureFormat.contains("3")) {
                                 // Psi
                                 if (pressureThreshold >= Utils.barToPsi(rdcRear)){
-                                    Faults.setrearTirePressureCriticalActive(true);
+                                    Faults.setRearTirePressureCriticalActive(true);
                                 }
                             }
                             if (sharedPrefs.getBoolean("prefNotifications", true)) {
-                                if (!(Faults.getrearTirePressureCriticalNotificationActive())) {
+                                if (!(Faults.getRearTirePressureCriticalNotificationActive())) {
                                     BluetoothLeService.updateNotification();
-                                    Faults.setrearTirePressureCriticalNotificationActive(true);
+                                    Faults.setRearTirePressureCriticalNotificationActive(true);
                                 }
                             }
                         } else {
                             if (sharedPrefs.getBoolean("prefNotifications", true)) {
-                                Faults.setrearTirePressureCriticalNotificationActive(false);
-                                if (Faults.getrearTirePressureCriticalNotificationActive()) {
+                                Faults.setRearTirePressureCriticalNotificationActive(false);
+                                if (Faults.getRearTirePressureCriticalNotificationActive()) {
                                     BluetoothLeService.updateNotification();
                                 }
                             }
@@ -261,111 +261,111 @@ public class BLEbus {
                         // Tire Pressure Faults
                         switch (data[6] & 0xFF) {
                             case 0xC9:
-                                Faults.setfrontTirePressureWarningActive(true);
-                                Faults.setrearTirePressureWarningActive(false);
-                                Faults.setfrontTirePressureCriticalActive(false);
-                                Faults.setrearTirePressureCriticalActive(false);
+                                Faults.setFrontTirePressureWarningActive(true);
+                                Faults.setRearTirePressureWarningActive(false);
+                                Faults.setFrontTirePressureCriticalActive(false);
+                                Faults.setRearTirePressureCriticalActive(false);
                                 if (sharedPrefs.getBoolean("prefNotifications", true)) {
-                                    if (Faults.getfrontTirePressureCriticalNotificationActive()) {
+                                    if (Faults.getFrontTirePressureCriticalNotificationActive()) {
                                         BluetoothLeService.updateNotification();
-                                        Faults.setfrontTirePressureCriticalNotificationActive(false);
+                                        Faults.setFrontTirePressureCriticalNotificationActive(false);
                                     }
-                                    if (Faults.getrearTirePressureCriticalNotificationActive()) {
+                                    if (Faults.getRearTirePressureCriticalNotificationActive()) {
                                         BluetoothLeService.updateNotification();
-                                        Faults.setrearTirePressureCriticalNotificationActive(false);
+                                        Faults.setRearTirePressureCriticalNotificationActive(false);
                                     }
                                 }
                                 break;
                             case 0xCA:
-                                Faults.setfrontTirePressureWarningActive(false);
-                                Faults.setrearTirePressureWarningActive(true);
-                                Faults.setfrontTirePressureCriticalActive(false);
-                                Faults.setrearTirePressureCriticalActive(false);
+                                Faults.setFrontTirePressureWarningActive(false);
+                                Faults.setRearTirePressureWarningActive(true);
+                                Faults.setFrontTirePressureCriticalActive(false);
+                                Faults.setRearTirePressureCriticalActive(false);
                                 if (sharedPrefs.getBoolean("prefNotifications", true)) {
-                                    if (Faults.getfrontTirePressureCriticalNotificationActive()) {
+                                    if (Faults.getFrontTirePressureCriticalNotificationActive()) {
                                         BluetoothLeService.updateNotification();
-                                        Faults.setfrontTirePressureCriticalNotificationActive(false);
+                                        Faults.setFrontTirePressureCriticalNotificationActive(false);
                                     }
-                                    if (Faults.getrearTirePressureCriticalNotificationActive()) {
+                                    if (Faults.getRearTirePressureCriticalNotificationActive()) {
                                         BluetoothLeService.updateNotification();
-                                        Faults.setrearTirePressureCriticalNotificationActive(false);
+                                        Faults.setRearTirePressureCriticalNotificationActive(false);
                                     }
                                 }
                                 break;
                             case 0xCB:
-                                Faults.setfrontTirePressureWarningActive(true);
-                                Faults.setrearTirePressureWarningActive(true);
-                                Faults.setfrontTirePressureCriticalActive(false);
-                                Faults.setrearTirePressureCriticalActive(false);
+                                Faults.setFrontTirePressureWarningActive(true);
+                                Faults.setRearTirePressureWarningActive(true);
+                                Faults.setFrontTirePressureCriticalActive(false);
+                                Faults.setRearTirePressureCriticalActive(false);
                                 if (sharedPrefs.getBoolean("prefNotifications", true)) {
-                                    if (Faults.getfrontTirePressureCriticalNotificationActive()) {
+                                    if (Faults.getFrontTirePressureCriticalNotificationActive()) {
                                         BluetoothLeService.updateNotification();
-                                        Faults.setfrontTirePressureCriticalNotificationActive(false);
+                                        Faults.setFrontTirePressureCriticalNotificationActive(false);
                                     }
-                                    if (Faults.getrearTirePressureCriticalNotificationActive()) {
+                                    if (Faults.getRearTirePressureCriticalNotificationActive()) {
                                         BluetoothLeService.updateNotification();
-                                        Faults.setrearTirePressureCriticalNotificationActive(false);
+                                        Faults.setRearTirePressureCriticalNotificationActive(false);
                                     }
                                 }
                                 break;
                             case 0xD1:
-                                Faults.setfrontTirePressureWarningActive(false);
-                                Faults.setrearTirePressureWarningActive(false);
-                                Faults.setfrontTirePressureCriticalActive(true);
-                                Faults.setrearTirePressureCriticalActive(false);
+                                Faults.setFrontTirePressureWarningActive(false);
+                                Faults.setRearTirePressureWarningActive(false);
+                                Faults.setFrontTirePressureCriticalActive(true);
+                                Faults.setRearTirePressureCriticalActive(false);
                                 if (sharedPrefs.getBoolean("prefNotifications", true)) {
-                                    if (!(Faults.getfrontTirePressureCriticalNotificationActive())) {
+                                    if (!(Faults.getFrontTirePressureCriticalNotificationActive())) {
                                         BluetoothLeService.updateNotification();
-                                        Faults.setfrontTirePressureCriticalNotificationActive(true);
+                                        Faults.setFrontTirePressureCriticalNotificationActive(true);
                                     }
-                                    if (Faults.getrearTirePressureCriticalNotificationActive()) {
+                                    if (Faults.getRearTirePressureCriticalNotificationActive()) {
                                         BluetoothLeService.updateNotification();
-                                        Faults.setrearTirePressureCriticalNotificationActive(false);
+                                        Faults.setRearTirePressureCriticalNotificationActive(false);
                                     }
                                 }
                                 break;
                             case 0xD2:
-                                Faults.setfrontTirePressureWarningActive(false);
-                                Faults.setrearTirePressureWarningActive(false);
-                                Faults.setfrontTirePressureCriticalActive(false);
-                                Faults.setrearTirePressureCriticalActive(true);
+                                Faults.setFrontTirePressureWarningActive(false);
+                                Faults.setRearTirePressureWarningActive(false);
+                                Faults.setFrontTirePressureCriticalActive(false);
+                                Faults.setRearTirePressureCriticalActive(true);
                                 if (sharedPrefs.getBoolean("prefNotifications", true)) {
-                                    if (Faults.getfrontTirePressureCriticalNotificationActive()) {
+                                    if (Faults.getFrontTirePressureCriticalNotificationActive()) {
                                         BluetoothLeService.updateNotification();
-                                        Faults.setfrontTirePressureCriticalNotificationActive(false);
+                                        Faults.setFrontTirePressureCriticalNotificationActive(false);
                                     }
-                                    if (!(Faults.getrearTirePressureCriticalNotificationActive())) {
+                                    if (!(Faults.getRearTirePressureCriticalNotificationActive())) {
                                         BluetoothLeService.updateNotification();
-                                        Faults.setrearTirePressureCriticalNotificationActive(true);
+                                        Faults.setRearTirePressureCriticalNotificationActive(true);
                                     }
                                 }
                                 break;
                             case 0xD3:
-                                Faults.setfrontTirePressureWarningActive(false);
-                                Faults.setrearTirePressureWarningActive(false);
-                                Faults.setfrontTirePressureCriticalActive(true);
-                                Faults.setrearTirePressureCriticalActive(true);
+                                Faults.setFrontTirePressureWarningActive(false);
+                                Faults.setRearTirePressureWarningActive(false);
+                                Faults.setFrontTirePressureCriticalActive(true);
+                                Faults.setRearTirePressureCriticalActive(true);
                                 if (sharedPrefs.getBoolean("prefNotifications", true)) {
-                                    if (!(Faults.getfrontTirePressureCriticalNotificationActive()) && !(Faults.getrearTirePressureCriticalNotificationActive())) {
+                                    if (!(Faults.getFrontTirePressureCriticalNotificationActive()) && !(Faults.getRearTirePressureCriticalNotificationActive())) {
                                         BluetoothLeService.updateNotification();
-                                        Faults.setfrontTirePressureCriticalNotificationActive(true);
-                                        Faults.setrearTirePressureCriticalNotificationActive(true);
+                                        Faults.setFrontTirePressureCriticalNotificationActive(true);
+                                        Faults.setRearTirePressureCriticalNotificationActive(true);
                                     }
                                 }
                                 break;
                             default:
-                                Faults.setfrontTirePressureWarningActive(false);
-                                Faults.setrearTirePressureWarningActive(false);
-                                Faults.setfrontTirePressureCriticalActive(false);
-                                Faults.setrearTirePressureCriticalActive(false);
+                                Faults.setFrontTirePressureWarningActive(false);
+                                Faults.setRearTirePressureWarningActive(false);
+                                Faults.setFrontTirePressureCriticalActive(false);
+                                Faults.setRearTirePressureCriticalActive(false);
                                 if (sharedPrefs.getBoolean("prefNotifications", true)) {
-                                    if (Faults.getfrontTirePressureCriticalNotificationActive()) {
+                                    if (Faults.getFrontTirePressureCriticalNotificationActive()) {
                                         BluetoothLeService.updateNotification();
-                                        Faults.setfrontTirePressureCriticalNotificationActive(false);
+                                        Faults.setFrontTirePressureCriticalNotificationActive(false);
                                     }
-                                    if (Faults.getrearTirePressureCriticalNotificationActive()) {
+                                    if (Faults.getRearTirePressureCriticalNotificationActive()) {
                                         BluetoothLeService.updateNotification();
-                                        Faults.setrearTirePressureCriticalNotificationActive(false);
+                                        Faults.setRearTirePressureCriticalNotificationActive(false);
                                     }
                                 }
                                 break;
@@ -438,7 +438,7 @@ public class BLEbus {
                             Faults.setAscSelfDiagActive(false);
                             Faults.setAscInterventionActive(true);
                             Faults.setAscDeactivatedActive(false);
-                            Faults.setascErrorActive(false);
+                            Faults.setAscErrorActive(false);
                             break;
                         case 0x2:
                         case 0x5:
@@ -450,26 +450,26 @@ public class BLEbus {
                             Faults.setAscSelfDiagActive(false);
                             Faults.setAscInterventionActive(false);
                             Faults.setAscDeactivatedActive(false);
-                            Faults.setascErrorActive(true);
+                            Faults.setAscErrorActive(true);
                             break;
                         case 0x3:
                         case 0xB:
                             Faults.setAscSelfDiagActive(true);
                             Faults.setAscInterventionActive(false);
                             Faults.setAscDeactivatedActive(false);
-                            Faults.setascErrorActive(false);
+                            Faults.setAscErrorActive(false);
                             break;
                         case 0x8:
                             Faults.setAscSelfDiagActive(false);
                             Faults.setAscInterventionActive(false);
                             Faults.setAscDeactivatedActive(true);
-                            Faults.setascErrorActive(false);
+                            Faults.setAscErrorActive(false);
                             break;
                         default:
                             Faults.setAscSelfDiagActive(false);
                             Faults.setAscInterventionActive(false);
                             Faults.setAscDeactivatedActive(false);
-                            Faults.setascErrorActive(false);
+                            Faults.setAscErrorActive(false);
                             break;
                     }
                 }
@@ -505,7 +505,7 @@ public class BLEbus {
                 //Voltage
                 if ((data[4] & 0xFF) != 0xFF) {
                     double voltage = (data[4] & 0xFF) / 10.0;
-                    MotorcycleData.setvoltage(voltage);
+                    MotorcycleData.setVoltage(voltage);
                 }
 
                 // Fuel Fault
@@ -516,11 +516,11 @@ public class BLEbus {
                         case 0x6:
                         case 0xA:
                         case 0xE:
-                            Faults.setfuelFaultActive(true);
+                            Faults.setFuelFaultActive(true);
                             BluetoothLeService.fuelAlert();
                             break;
                         default:
-                            Faults.setfuelFaultActive(false);
+                            Faults.setFuelFaultActive(false);
                             BluetoothLeService.fuelAlertSent = false;
                             break;
                     }
@@ -536,11 +536,11 @@ public class BLEbus {
                             Faults.setGeneralFlashingRedActive(false);
                             Faults.setGeneralShowsRedActive(false);
                             if (sharedPrefs.getBoolean("prefNotifications", true)) {
-                                if (Faults.getgeneralFlashingRedNotificationActive()) {
+                                if (Faults.getGeneralFlashingRedNotificationActive()) {
                                     BluetoothLeService.updateNotification();
                                     Faults.setGeneralFlashingRedNotificationActive(false);
                                 }
-                                if (Faults.getgeneralShowsRedNotificationActive()) {
+                                if (Faults.getGeneralShowsRedNotificationActive()) {
                                     BluetoothLeService.updateNotification();
                                     Faults.setGeneralShowsRedNotificationActive(false);
                                 }
@@ -553,11 +553,11 @@ public class BLEbus {
                             Faults.setGeneralFlashingRedActive(false);
                             Faults.setGeneralShowsRedActive(false);
                             if (sharedPrefs.getBoolean("prefNotifications", true)) {
-                                if (Faults.getgeneralFlashingRedNotificationActive()) {
+                                if (Faults.getGeneralFlashingRedNotificationActive()) {
                                     BluetoothLeService.updateNotification();
                                     Faults.setGeneralFlashingRedNotificationActive(false);
                                 }
-                                if (Faults.getgeneralShowsRedNotificationActive()) {
+                                if (Faults.getGeneralShowsRedNotificationActive()) {
                                     BluetoothLeService.updateNotification();
                                     Faults.setGeneralShowsRedNotificationActive(false);
                                 }
@@ -570,11 +570,11 @@ public class BLEbus {
                             Faults.setGeneralFlashingRedActive(true);
                             Faults.setGeneralShowsRedActive(false);
                             if (sharedPrefs.getBoolean("prefNotifications", true)) {
-                                if (!(Faults.getgeneralFlashingRedNotificationActive())) {
+                                if (!(Faults.getGeneralFlashingRedNotificationActive())) {
                                     BluetoothLeService.updateNotification();
                                     Faults.setGeneralFlashingRedNotificationActive(true);
                                 }
-                                if (Faults.getgeneralShowsRedNotificationActive()) {
+                                if (Faults.getGeneralShowsRedNotificationActive()) {
                                     BluetoothLeService.updateNotification();
                                     Faults.setGeneralShowsRedNotificationActive(false);
                                 }
@@ -586,11 +586,11 @@ public class BLEbus {
                             Faults.setGeneralFlashingRedActive(true);
                             Faults.setGeneralShowsRedActive(false);
                             if (sharedPrefs.getBoolean("prefNotifications", true)) {
-                                if (!(Faults.getgeneralFlashingRedNotificationActive())) {
+                                if (!(Faults.getGeneralFlashingRedNotificationActive())) {
                                     BluetoothLeService.updateNotification();
                                     Faults.setGeneralFlashingRedNotificationActive(true);
                                 }
-                                if (Faults.getgeneralShowsRedNotificationActive()) {
+                                if (Faults.getGeneralShowsRedNotificationActive()) {
                                     BluetoothLeService.updateNotification();
                                     Faults.setGeneralShowsRedNotificationActive(false);
                                 }
@@ -602,11 +602,11 @@ public class BLEbus {
                             Faults.setGeneralFlashingRedActive(true);
                             Faults.setGeneralShowsRedActive(false);
                             if (sharedPrefs.getBoolean("prefNotifications", true)) {
-                                if (!(Faults.getgeneralFlashingRedNotificationActive())) {
+                                if (!(Faults.getGeneralFlashingRedNotificationActive())) {
                                     BluetoothLeService.updateNotification();
                                     Faults.setGeneralFlashingRedNotificationActive(true);
                                 }
-                                if (Faults.getgeneralShowsRedNotificationActive()) {
+                                if (Faults.getGeneralShowsRedNotificationActive()) {
                                     BluetoothLeService.updateNotification();
                                     Faults.setGeneralShowsRedNotificationActive(false);
                                 }
@@ -619,11 +619,11 @@ public class BLEbus {
                             Faults.setGeneralFlashingRedActive(false);
                             Faults.setGeneralShowsRedActive(true);
                             if (sharedPrefs.getBoolean("prefNotifications", true)) {
-                                if (Faults.getgeneralFlashingRedNotificationActive()) {
+                                if (Faults.getGeneralFlashingRedNotificationActive()) {
                                     BluetoothLeService.updateNotification();
                                     Faults.setGeneralFlashingRedNotificationActive(false);
                                 }
-                                if (!(Faults.getgeneralShowsRedNotificationActive())) {
+                                if (!(Faults.getGeneralShowsRedNotificationActive())) {
                                     BluetoothLeService.updateNotification();
                                     Faults.setGeneralShowsRedNotificationActive(true);
                                 }
@@ -635,7 +635,7 @@ public class BLEbus {
                             Faults.setGeneralFlashingRedActive(true);
                             Faults.setGeneralShowsRedActive(true);
                             if (sharedPrefs.getBoolean("prefNotifications", true)) {
-                                if (!Faults.getgeneralShowsRedNotificationActive() && !Faults.getgeneralFlashingRedNotificationActive()) {
+                                if (!Faults.getGeneralShowsRedNotificationActive() && !Faults.getGeneralFlashingRedNotificationActive()) {
                                     BluetoothLeService.updateNotification();
                                     Faults.setGeneralFlashingRedNotificationActive(true);
                                     Faults.setGeneralShowsRedNotificationActive(true);
@@ -648,11 +648,11 @@ public class BLEbus {
                             Faults.setGeneralFlashingRedActive(false);
                             Faults.setGeneralShowsRedActive(true);
                             if (sharedPrefs.getBoolean("prefNotifications", true)) {
-                                if (Faults.getgeneralFlashingRedNotificationActive()) {
+                                if (Faults.getGeneralFlashingRedNotificationActive()) {
                                     BluetoothLeService.updateNotification();
                                     Faults.setGeneralFlashingRedNotificationActive(false);
                                 }
-                                if (!(Faults.getgeneralShowsRedNotificationActive())) {
+                                if (!(Faults.getGeneralShowsRedNotificationActive())) {
                                     BluetoothLeService.updateNotification();
                                     Faults.setGeneralShowsRedNotificationActive(true);
                                 }
@@ -664,11 +664,11 @@ public class BLEbus {
                             Faults.setGeneralFlashingRedActive(false);
                             Faults.setGeneralShowsRedActive(false);
                             if (sharedPrefs.getBoolean("prefNotifications", true)) {
-                                if (Faults.getgeneralFlashingRedNotificationActive()) {
+                                if (Faults.getGeneralFlashingRedNotificationActive()) {
                                     BluetoothLeService.updateNotification();
                                     Faults.setGeneralFlashingRedNotificationActive(false);
                                 }
-                                if (Faults.getgeneralShowsRedNotificationActive()) {
+                                if (Faults.getGeneralShowsRedNotificationActive()) {
                                     BluetoothLeService.updateNotification();
                                     Faults.setGeneralShowsRedNotificationActive(false);
                                 }
@@ -682,9 +682,9 @@ public class BLEbus {
                     double ambientTemp = ((data[1] & 0xFF) * 0.50) - 40;
                     MotorcycleData.setAmbientTemperature(ambientTemp);
                     if(ambientTemp <= 0.0){
-                        Faults.seticeWarnActive(true);
+                        Faults.setIceWarnActive(true);
                     } else {
-                        Faults.seticeWarnActive(false);
+                        Faults.setIceWarnActive(false);
                     }
                 }
 
@@ -718,49 +718,49 @@ public class BLEbus {
                         case 0x1:
                         case 0x9:
                             Faults.setDaytimeRunningActive(true);
-                            Faults.setfrontLeftSignalActive(false);
-                            Faults.setfrontRightSignalActive(false);
+                            Faults.setFrontLeftSignalActive(false);
+                            Faults.setFrontRightSignalActive(false);
                             break;
                         case 0x2:
                         case 0xA:
                             Faults.setDaytimeRunningActive(false);
-                            Faults.setfrontLeftSignalActive(true);
-                            Faults.setfrontRightSignalActive(false);
+                            Faults.setFrontLeftSignalActive(true);
+                            Faults.setFrontRightSignalActive(false);
                             break;
                         case 0x3:
                         case 0xB:
                             Faults.setDaytimeRunningActive(true);
-                            Faults.setfrontLeftSignalActive(true);
-                            Faults.setfrontRightSignalActive(false);
+                            Faults.setFrontLeftSignalActive(true);
+                            Faults.setFrontRightSignalActive(false);
                             break;
                         case 0x4:
                         case 0xC:
                             Faults.setDaytimeRunningActive(false);
-                            Faults.setfrontLeftSignalActive(false);
-                            Faults.setfrontRightSignalActive(true);
+                            Faults.setFrontLeftSignalActive(false);
+                            Faults.setFrontRightSignalActive(true);
                             break;
                         case 0x5:
                         case 0xD:
                             Faults.setDaytimeRunningActive(true);
-                            Faults.setfrontLeftSignalActive(false);
-                            Faults.setfrontRightSignalActive(true);
+                            Faults.setFrontLeftSignalActive(false);
+                            Faults.setFrontRightSignalActive(true);
                             break;
                         case 0x6:
                         case 0xE:
                             Faults.setDaytimeRunningActive(false);
-                            Faults.setfrontLeftSignalActive(true);
-                            Faults.setfrontRightSignalActive(true);
+                            Faults.setFrontLeftSignalActive(true);
+                            Faults.setFrontRightSignalActive(true);
                             break;
                         case 0x7:
                         case 0xF:
                             Faults.setDaytimeRunningActive(true);
-                            Faults.setfrontLeftSignalActive(true);
-                            Faults.setfrontRightSignalActive(true);
+                            Faults.setFrontLeftSignalActive(true);
+                            Faults.setFrontRightSignalActive(true);
                             break;
                         default:
                             Faults.setDaytimeRunningActive(false);
-                            Faults.setfrontLeftSignalActive(false);
-                            Faults.setfrontRightSignalActive(false);
+                            Faults.setFrontLeftSignalActive(false);
+                            Faults.setFrontRightSignalActive(false);
                             break;
                     }
                 }
@@ -878,10 +878,10 @@ public class BLEbus {
                         case 0xB:
                         case 0xD:
                         case 0xF:
-                            Faults.setrearRightSignalActive(true);
+                            Faults.setRearRightSignalActive(true);
                             break;
                         default:
-                            Faults.setrearRightSignalActive(false);
+                            Faults.setRearRightSignalActive(false);
                             break;
                     }
                 }
@@ -889,85 +889,85 @@ public class BLEbus {
                     int lampfThreeLowValue = (data[5] & 0xFF) & 0x0f; // the lowest 4 bits
                     switch (lampfThreeLowValue) {
                         case 0x1:
-                            Faults.setrearLeftSignalActive(false);
+                            Faults.setRearLeftSignalActive(false);
                             Faults.setRearLightActive(true);
                             Faults.setBrakeLightActive(false);
                             Faults.setLicenseLightActive(false);
                             break;
                         case 0x2:
-                            Faults.setrearLeftSignalActive(false);
+                            Faults.setRearLeftSignalActive(false);
                             Faults.setRearLightActive(false);
                             Faults.setBrakeLightActive(true);
                             Faults.setLicenseLightActive(false);
                             break;
                         case 0x3:
-                            Faults.setrearLeftSignalActive(false);
+                            Faults.setRearLeftSignalActive(false);
                             Faults.setRearLightActive(true);
                             Faults.setBrakeLightActive(true);
                             Faults.setLicenseLightActive(false);
                             break;
                         case 0x4:
-                            Faults.setrearLeftSignalActive(false);
+                            Faults.setRearLeftSignalActive(false);
                             Faults.setRearLightActive(false);
                             Faults.setBrakeLightActive(false);
                             Faults.setLicenseLightActive(true);
                             break;
                         case 0x5: case 0xC:
-                            Faults.setrearLeftSignalActive(true);
+                            Faults.setRearLeftSignalActive(true);
                             Faults.setRearLightActive(false);
                             Faults.setBrakeLightActive(false);
                             Faults.setLicenseLightActive(true);
                             break;
                         case 0x6:
-                            Faults.setrearLeftSignalActive(false);
+                            Faults.setRearLeftSignalActive(false);
                             Faults.setRearLightActive(false);
                             Faults.setBrakeLightActive(true);
                             Faults.setLicenseLightActive(true);
                             break;
                         case 0x7:
-                            Faults.setrearLeftSignalActive(false);
+                            Faults.setRearLeftSignalActive(false);
                             Faults.setRearLightActive(true);
                             Faults.setBrakeLightActive(true);
                             Faults.setLicenseLightActive(true);
                             break;
                         case 0x8:
-                            Faults.setrearLeftSignalActive(true);
+                            Faults.setRearLeftSignalActive(true);
                             Faults.setRearLightActive(false);
                             Faults.setBrakeLightActive(false);
                             Faults.setLicenseLightActive(false);
                             break;
                         case 0x9:
-                            Faults.setrearLeftSignalActive(true);
+                            Faults.setRearLeftSignalActive(true);
                             Faults.setRearLightActive(true);
                             Faults.setBrakeLightActive(false);
                             Faults.setLicenseLightActive(false);
                             break;
                         case 0xA:
-                            Faults.setrearLeftSignalActive(true);
+                            Faults.setRearLeftSignalActive(true);
                             Faults.setRearLightActive(false);
                             Faults.setBrakeLightActive(true);
                             Faults.setLicenseLightActive(false);
                             break;
                         case 0xD:
-                            Faults.setrearLeftSignalActive(true);
+                            Faults.setRearLeftSignalActive(true);
                             Faults.setRearLightActive(true);
                             Faults.setBrakeLightActive(true);
                             Faults.setLicenseLightActive(false);
                             break;
                         case 0xE:
-                            Faults.setrearLeftSignalActive(true);
+                            Faults.setRearLeftSignalActive(true);
                             Faults.setRearLightActive(false);
                             Faults.setBrakeLightActive(true);
                             Faults.setLicenseLightActive(true);
                             break;
                         case 0xF:
-                            Faults.setrearLeftSignalActive(true);
+                            Faults.setRearLeftSignalActive(true);
                             Faults.setRearLightActive(true);
                             Faults.setBrakeLightActive(true);
                             Faults.setLicenseLightActive(true);
                             break;
                         default:
-                            Faults.setrearLeftSignalActive(false);
+                            Faults.setRearLeftSignalActive(false);
                             Faults.setRearLightActive(false);
                             Faults.setBrakeLightActive(false);
                             Faults.setLicenseLightActive(false);

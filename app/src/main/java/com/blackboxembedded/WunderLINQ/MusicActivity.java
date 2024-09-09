@@ -308,8 +308,8 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
     }
 
     private void showActionBar(){
-        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflator.inflate(R.layout.actionbar_nav, null);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.actionbar_nav, null);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled (false);
@@ -328,7 +328,7 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         faultButton.setOnClickListener(mClickListener);
 
         //Check for active faults
-        if (!Faults.getallActiveDesc().isEmpty()) {
+        if (!Faults.getAllActiveDesc().isEmpty()) {
             faultButton.setVisibility(View.VISIBLE);
         } else {
             faultButton.setVisibility(View.GONE);
@@ -373,7 +373,7 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         @Override
         public void run() {
             //Check for active faults
-            if (!Faults.getallActiveDesc().isEmpty()) {
+            if (!Faults.getAllActiveDesc().isEmpty()) {
                 faultButton.setVisibility(View.VISIBLE);
             } else {
                 faultButton.setVisibility(View.GONE);

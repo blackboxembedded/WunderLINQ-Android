@@ -162,22 +162,22 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
             });
 
             tvDate.setText(record.getDate());
-            String[] latlong = record.getData().split(",");
-            lat = Double.parseDouble(latlong[0]);
-            lon = Double.parseDouble(latlong[1]);
-            if (latlong.length > 2){
-                elev = Double.parseDouble(latlong[2]);
+            String[] latLong = record.getData().split(",");
+            lat = Double.parseDouble(latLong[0]);
+            lon = Double.parseDouble(latLong[1]);
+            if (latLong.length > 2){
+                elev = Double.parseDouble(latLong[2]);
                 String heightUnit = "m";
-                String elevation = Math.round(Float.parseFloat(latlong[2])) + heightUnit;
+                String elevation = Utils.toZeroDecimalString(Float.parseFloat(latLong[2])) + heightUnit;
                 String distanceFormat = PreferenceManager.getDefaultSharedPreferences(this).getString("prefDistance", "0");
                 if (distanceFormat.contains("1")) {
                     heightUnit = "ft";
-                    elevation = Math.round(Utils.mToFeet(Float.parseFloat(latlong[2]))) + heightUnit;
+                    elevation = Utils.toZeroDecimalString(Utils.mToFeet(Float.parseFloat(latLong[2]))) + heightUnit;
                 }
                 tvElevation.setText(elevation);
             }
-            tvLatitude.setText(latlong[0]);
-            tvLongitude.setText(latlong[1]);
+            tvLatitude.setText(latLong[0]);
+            tvLongitude.setText(latLong[1]);
             etLabel.setText(record.getLabel());
 
             MapsInitializer.initialize(getApplicationContext(), Renderer.LATEST, this);
@@ -223,8 +223,8 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
     }
 
     private void showActionBar(){
-        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflator.inflate(R.layout.actionbar_nav_menu, null);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.actionbar_nav_menu, null);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled (false);
@@ -292,8 +292,8 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
     // Open In Map app
     public void open() {
         //Open waypoint in map app
-        String[] latlon = record.getData().split(",");
-        LatLng location = new LatLng(Double.parseDouble(latlon[0]), Double.parseDouble(latlon[1]));
+        String[] latLon = record.getData().split(",");
+        LatLng location = new LatLng(Double.parseDouble(latLon[0]), Double.parseDouble(latLon[1]));
         Location destination = new Location(LocationManager.GPS_PROVIDER);
         destination.setLatitude(location.latitude);
         destination.setLongitude(location.longitude);
@@ -320,8 +320,8 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
                 String bestProvider = locationManager.getBestProvider(criteria, false);
                 Location currentLocation = locationManager.getLastKnownLocation(bestProvider);
 
-                String[] latlon = record.getData().split(",");
-                LatLng location = new LatLng(Double.parseDouble(latlon[0]), Double.parseDouble(latlon[1]));
+                String[] latLon = record.getData().split(",");
+                LatLng location = new LatLng(Double.parseDouble(latLon[0]), Double.parseDouble(latLon[1]));
                 Location destination = new Location(LocationManager.GPS_PROVIDER);
                 destination.setLatitude(location.latitude);
                 destination.setLongitude(location.longitude);

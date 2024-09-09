@@ -13,39 +13,49 @@
         android:id="@+id/textView1label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textSize="36sp"
+        android:textAlignment="textStart"
         android:textStyle="bold"
         android:textColor="?attr/primaryTextColor"
         android:text=""
-        android:maxLines="1"
+        android:maxLines="2"
         app:autoSizeTextType="uniform"
         app:autoSizeMinTextSize="12sp"
-        app:autoSizeMaxTextSize="200sp"
-        app:autoSizeStepGranularity="2sp"
+        app:autoSizeMaxTextSize="16sp"
+        app:autoSizeStepGranularity="1sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:labelFor="@id/imageView1"
+        android:singleLine="false"
+        android:paddingStart= "6dp"
+        android:paddingEnd ="6dp"
+        android:ellipsize="none"
+        app:layout_constraintHeight_percent="0.15"/>
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:gravity="center"
-        android:maxLines="1"
-        android:text="@string/blank_field"
+        android:maxLines="2"
         android:textAlignment="center"
         android:textColor="?attr/primaryTextColor"
         android:textSize="36sp"
         android:textStyle="bold"
         app:autoSizeMaxTextSize="200sp"
         app:autoSizeMinTextSize="12sp"
-        app:autoSizeStepGranularity="2sp"
+        app:autoSizeStepGranularity="1sp"
         app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toTopOf="@+id/imageView1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView1label" />
+        app:layout_constraintTop_toBottomOf="@+id/textView1label"
+        android:singleLine="false"
+        android:paddingStart = "6dp"
+        android:paddingEnd ="6dp"
+        android:paddingTop = "12dp"
+        android:paddingBottom ="6dp"
+        android:ellipsize="none" />
 
     <ImageView
         android:id="@+id/imageView1"
@@ -60,5 +70,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.15"
         app:tint="?attr/iconTintColor"
-        app:srcCompat="@drawable/ic_cog" />
+        app:srcCompat="@drawable/ic_cog"
+        android:importantForAccessibility="no"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

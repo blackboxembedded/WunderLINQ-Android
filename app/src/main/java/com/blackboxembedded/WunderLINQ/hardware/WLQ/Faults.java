@@ -189,7 +189,7 @@ public class Faults extends ContextWrapper {
         serviceDesc = MyApplication.getContext().getResources().getString(R.string.fault_SERVICE);
     }
 
-    public static ArrayList<String> getallActiveDesc() {
+    public static ArrayList<String> getAllActiveDesc() {
         ArrayList<String> allActiveDesc = new ArrayList<String>();
 
         // Motorcycle faults
@@ -315,229 +315,229 @@ public class Faults extends ContextWrapper {
     public static void setAbsSelfDiagActive(boolean absSelfDiagActive){
         Faults.absSelfDiagActive = absSelfDiagActive;
     }
-    public static boolean getabsSelfDiagActive() {
+    public static boolean getAbsSelfDiagActive() {
         return absSelfDiagActive;
     }
-    public static String getabsSelfDiagDesc() {
+    public static String getAbsSelfDiagDesc() {
         return absSelfDiagDesc;
     }
 
     public static void setAbsDeactivatedActive(boolean absDeactivatedActive){
         Faults.ascDeactivatedActive = absDeactivatedActive;
     }
-    public static boolean getabsDeactivatedActive() {
+    public static boolean getAbsDeactivatedActive() {
         return absDeactivatedActive;
     }
-    public static String getabsDeactivatedDesc() {
+    public static String getAbsDeactivatedDesc() {
         return absDeactivatedDesc;
     }
 
-    public static void setabsErrorActive(boolean absErrorActive){
+    public static void setAbsErrorActive(boolean absErrorActive){
         Faults.absErrorActive = absErrorActive;
     }
-    public static boolean getabsErrorActive() {
+    public static boolean getAbsErrorActive() {
         return absErrorActive;
     }
-    public static String getabsErrorDesc() {
+    public static String getAbsErrorDesc() {
         return absErrorDesc;
     }
 
     public static void setAscSelfDiagActive(boolean ascSelfDiagActive){
         Faults.ascSelfDiagActive = ascSelfDiagActive;
     }
-    public static boolean getascSelfDiagActive() {
+    public static boolean getAscSelfDiagActive() {
         return ascSelfDiagActive;
     }
-    public static String getascSelfDiagDesc() {
+    public static String getAscSelfDiagDesc() {
         return ascSelfDiagDesc;
     }
 
     public static void setAscInterventionActive(boolean ascInterventionActive){
         Faults.ascInterventionActive = ascInterventionActive;
     }
-    public static boolean getascInterventionActive() {
+    public static boolean getAscInterventionActive() {
         return ascInterventionActive;
     }
-    public static String getascInterventionDesc() {
+    public static String getAscInterventionDesc() {
         return ascInterventionDesc;
     }
 
     public static void setAscDeactivatedActive(boolean ascDeactivatedActive){
         Faults.ascDeactivatedActive = ascDeactivatedActive;
     }
-    public static boolean getascDeactivatedActive() {
+    public static boolean getAscDeactivatedActive() {
         return ascDeactivatedActive;
     }
-    public static String getascDeactivatedDesc() {
+    public static String getAscDeactivatedDesc() {
         return ascDeactivatedDesc;
     }
 
-    public static void setascErrorActive(boolean ascErrorActive){
+    public static void setAscErrorActive(boolean ascErrorActive){
         Faults.ascErrorActive = ascErrorActive;
     }
-    public static boolean getascErrorActive() {
+    public static boolean getAscErrorActive() {
         return ascErrorActive;
     }
-    public static String getascErrorDesc() {
+    public static String getAscErrorDesc() {
         return ascErrorDesc;
     }
 
-    public static void setfuelFaultActive(boolean fuelFaultActive){
+    public static void setFuelFaultActive(boolean fuelFaultActive){
         Faults.fuelFaultActive = fuelFaultActive;
     }
-    public static boolean getfuelFaultActive() {
+    public static boolean getFuelFaultActive() {
         return fuelFaultActive;
     }
-    public static String getfuelFaultDesc() {
+    public static String getFuelFaultDesc() {
         return fuelFaultDesc;
     }
 
-    public static void setfrontTirePressureWarningActive(boolean frontTirePressureWarningActive){
+    public static void setFrontTirePressureWarningActive(boolean frontTirePressureWarningActive){
         Faults.frontTirePressureWarningActive = frontTirePressureWarningActive;
     }
-    public static boolean getfrontTirePressureWarningActive() {
+    public static boolean getFrontTirePressureWarningActive() {
         return frontTirePressureWarningActive;
     }
-    public static String getfrontTirePressureWarningDesc() {
+    public static String getFrontTirePressureWarningDesc() {
         return frontTirePressureWarningDesc;
     }
 
-    public static void setrearTirePressureWarningActive(boolean rearTirePressureWarningActive){
+    public static void setRearTirePressureWarningActive(boolean rearTirePressureWarningActive){
         Faults.rearTirePressureWarningActive = rearTirePressureWarningActive;
     }
-    public static boolean getrearTirePressureWarningActive() {
+    public static boolean getRearTirePressureWarningActive() {
         return rearTirePressureWarningActive;
     }
-    public static String getrearTirePressureWarningDesc() {
+    public static String getRearTirePressureWarningDesc() {
         return rearTirePressureWarningDesc;
     }
 
-    public static void setfrontTirePressureCriticalActive(boolean frontTirePressureCriticalActive){
+    public static void setFrontTirePressureCriticalActive(boolean frontTirePressureCriticalActive){
         Faults.frontTirePressureCriticalActive = frontTirePressureCriticalActive;
     }
-    public static boolean getfrontTirePressureCriticalActive() {
+    public static boolean getFrontTirePressureCriticalActive() {
         return frontTirePressureCriticalActive;
     }
-    public static String getfrontTirePressureCriticalDesc() {
+    public static String getFrontTirePressureCriticalDesc() {
         return frontTirePressureCriticalDesc;
     }
-    public static void setfrontTirePressureCriticalNotificationActive(boolean frontTirePressureCriticalNotificationActive){
+    public static void setFrontTirePressureCriticalNotificationActive(boolean frontTirePressureCriticalNotificationActive){
         Faults.frontTirePressureCriticalNotificationActive = frontTirePressureCriticalNotificationActive;
     }
-    public static boolean getfrontTirePressureCriticalNotificationActive() {
+    public static boolean getFrontTirePressureCriticalNotificationActive() {
         return frontTirePressureCriticalNotificationActive;
     }
 
-    public static void setrearTirePressureCriticalActive(boolean rearTirePressureCriticalActive){
+    public static void setRearTirePressureCriticalActive(boolean rearTirePressureCriticalActive){
         Faults.rearTirePressureCriticalActive = rearTirePressureCriticalActive;
     }
-    public static boolean getrearTirePressureCriticalActive() {
+    public static boolean getRearTirePressureCriticalActive() {
         return rearTirePressureCriticalActive;
     }
-    public static String getrearTirePressureCriticalDesc() {
+    public static String getRearTirePressureCriticalDesc() {
         return rearTirePressureCriticalDesc;
     }
-    public static void setrearTirePressureCriticalNotificationActive(boolean rearTirePressureCriticalNotificationActive){
+    public static void setRearTirePressureCriticalNotificationActive(boolean rearTirePressureCriticalNotificationActive){
         Faults.rearTirePressureCriticalNotificationActive = rearTirePressureCriticalNotificationActive;
     }
-    public static boolean getrearTirePressureCriticalNotificationActive() {
+    public static boolean getRearTirePressureCriticalNotificationActive() {
         return rearTirePressureCriticalNotificationActive;
     }
 
     public static void setAddFrontLightOneActive(boolean addFrontLightOneActive){
         Faults.addFrontLightOneActive = addFrontLightOneActive;
     }
-    public static boolean getaddFrontLightOneActive() {
+    public static boolean getAddFrontLightOneActive() {
         return addFrontLightOneActive;
     }
-    public static String getaddFrontLightOneDesc() {
+    public static String getAddFrontLightOneDesc() {
         return addFrontLightOneDesc;
     }
 
     public static void setAddFrontLightTwoActive(boolean addFrontLightTwoActive){
         Faults.addFrontLightTwoActive = addFrontLightTwoActive;
     }
-    public static boolean getaddFrontLightTwoActive() {
+    public static boolean getAddFrontLightTwoActive() {
         return addFrontLightTwoActive;
     }
-    public static String getaddFrontLightTwoDesc() {
+    public static String getAddFrontLightTwoDesc() {
         return addFrontLightTwoDesc;
     }
 
     public static void setDaytimeRunningActive(boolean daytimeRunningActive){
         Faults.daytimeRunningActive = daytimeRunningActive;
     }
-    public static boolean getdaytimeRunningActive() {
+    public static boolean getDaytimeRunningActive() {
         return daytimeRunningActive;
     }
-    public static String getdaytimeRunninDesc() {
+    public static String getDaytimeRunningDesc() {
         return daytimeRunningDesc;
     }
 
-    public static void setfrontLeftSignalActive(boolean frontLeftSignalActive){
+    public static void setFrontLeftSignalActive(boolean frontLeftSignalActive){
         Faults.frontLeftSignalActive = frontLeftSignalActive;
     }
-    public static boolean getfrontLeftSignalActive() {
+    public static boolean getFrontLeftSignalActive() {
         return frontLeftSignalActive;
     }
-    public static String getfrontLeftSignalDesc() {
+    public static String getFrontLeftSignalDesc() {
         return frontLeftSignalDesc;
     }
 
-    public static void setfrontRightSignalActive(boolean frontRightSignalActive){
+    public static void setFrontRightSignalActive(boolean frontRightSignalActive){
         Faults.frontRightSignalActive = frontRightSignalActive;
     }
-    public static boolean getfrontRightSignalActive() {
+    public static boolean getFrontRightSignalActive() {
         return frontRightSignalActive;
     }
-    public static String getfrontRightSignalDesc() {
+    public static String getFrontRightSignalDesc() {
         return frontRightSignalDesc;
     }
 
-    public static void setrearLeftSignalActive(boolean rearLeftSignalActive){
+    public static void setRearLeftSignalActive(boolean rearLeftSignalActive){
         Faults.rearLeftSignalActive = rearLeftSignalActive;
     }
-    public static boolean getrearLeftSignalActive() {
+    public static boolean getRearLeftSignalActive() {
         return rearLeftSignalActive;
     }
-    public static String getrearLeftSignalDesc() {
+    public static String getRearLeftSignalDesc() {
         return rearLeftSignalDesc;
     }
 
-    public static void setrearRightSignalActive(boolean rearRightSignalActive){
+    public static void setRearRightSignalActive(boolean rearRightSignalActive){
         Faults.rearRightSignalActive = rearRightSignalActive;
     }
-    public static boolean getrearRightSignalActive() {
+    public static boolean getRearRightSignalActive() {
         return rearRightSignalActive;
     }
-    public static String getrearRightSignalDesc() {
+    public static String getRearRightSignalDesc() {
         return rearRightSignalDesc;
     }
 
     public static void setFrontParkingLightOneActive(boolean frontParkingLightOneActive){
         Faults.frontParkingLightOneActive = frontParkingLightOneActive;
     }
-    public static boolean getfrontParkingLightOneActive() {
+    public static boolean getFrontParkingLightOneActive() {
         return frontParkingLightOneActive;
     }
-    public static String getfrontParkingLightOneDesc() {
+    public static String getFrontParkingLightOneDesc() {
         return frontParkingLightOneDesc;
     }
 
     public static void setFrontParkingLightTwoActive(boolean frontParkingLightTwoActive){
         Faults.frontParkingLightTwoActive = frontParkingLightTwoActive;
     }
-    public static boolean getfrontParkingLightTwoActive() {
+    public static boolean getFrontParkingLightTwoActive() {
         return frontParkingLightTwoActive;
     }
-    public static String getfrontParkingLightTwoDesc() {
+    public static String getFrontParkingLightTwoDesc() {
         return frontParkingLightTwoDesc;
     }
 
     public static void setLowBeamActive(boolean lowBeamActive){
         Faults.lowBeamActive = lowBeamActive;
     }
-    public static boolean getlowBeamActive() {
+    public static boolean getLowBeamActive() {
         return lowBeamActive;
     }
     public static String getLowBeamDesc() {
@@ -547,7 +547,7 @@ public class Faults extends ContextWrapper {
     public static void setHighBeamActive(boolean highBeamActive){
         Faults.highBeamActive = highBeamActive;
     }
-    public static boolean gethighBeamActive() {
+    public static boolean getHighBeamActive() {
         return highBeamActive;
     }
     public static String getHighBeamDesc() {
@@ -557,7 +557,7 @@ public class Faults extends ContextWrapper {
     public static void setRearLightActive(boolean rearLightActive){
         Faults.rearLightActive = rearLightActive;
     }
-    public static boolean getrearLightActive() {
+    public static boolean getRearLightActive() {
         return rearLightActive;
     }
     public static String getRearLightDescDesc() {
@@ -627,27 +627,27 @@ public class Faults extends ContextWrapper {
     public static void setFrontLampTwoLightActive(boolean frontLampTwoLightActive){
         Faults.frontLampTwoLightActive = frontLampTwoLightActive;
     }
-    public static boolean getFrontLampvLightActive() {
+    public static boolean getFrontLampTwoLightActive() {
         return frontLampTwoLightActive;
     }
     public static String getFrontLampTwoLightDescDesc() {
         return frontLampTwoLightDesc;
     }
 
-    public static void seticeWarnActive(boolean iceWarningActive){
+    public static void setIceWarnActive(boolean iceWarningActive){
         Faults.iceWarningActive = iceWarningActive;
     }
-    public static boolean geticeWarningActive() {
+    public static boolean getIceWarningActive() {
         return iceWarningActive;
     }
-    public static String geticeWarningDesc() {
+    public static String getIceWarningDesc() {
         return iceWarningDesc;
     }
 
     public static void setGeneralFlashingYellowActive(boolean generalFlashingYellowActive){
         Faults.generalFlashingYellowActive = generalFlashingYellowActive;
     }
-    public static boolean getgeneralFlashingYellowActive() {
+    public static boolean getGeneralFlashingYellowActive() {
         return generalFlashingYellowActive;
     }
     public static String getGeneralFlashingYellowDesc() {
@@ -657,7 +657,7 @@ public class Faults extends ContextWrapper {
     public static void setGeneralShowsYellowActive(boolean generalShowsYellowActive){
         Faults.generalShowsYellowActive = generalShowsYellowActive;
     }
-    public static boolean getgeneralShowsYellowActive() {
+    public static boolean getGeneralShowsYellowActive() {
         return generalShowsYellowActive;
     }
     public static String getGeneralShowsYellowDesc() {
@@ -667,7 +667,7 @@ public class Faults extends ContextWrapper {
     public static void setGeneralFlashingRedActive(boolean generalFlashingRedActive){
         Faults.generalFlashingRedActive = generalFlashingRedActive;
     }
-    public static boolean getgeneralFlashingRedActive() {
+    public static boolean getGeneralFlashingRedActive() {
         return generalFlashingRedActive;
     }
     public static String getGeneralFlashingRedDesc() {
@@ -676,14 +676,14 @@ public class Faults extends ContextWrapper {
     public static void setGeneralFlashingRedNotificationActive(boolean generalFlashingRedNotificationActive){
         Faults.generalFlashingRedNotificationActive = generalFlashingRedNotificationActive;
     }
-    public static boolean getgeneralFlashingRedNotificationActive() {
+    public static boolean getGeneralFlashingRedNotificationActive() {
         return generalFlashingRedNotificationActive;
     }
 
     public static void setGeneralShowsRedActive(boolean generalShowsRedActive){
         Faults.generalShowsRedActive = generalShowsRedActive;
     }
-    public static boolean getgeneralShowsRedActive() {
+    public static boolean getGeneralShowsRedActive() {
         return generalShowsRedActive;
     }
     public static String getGeneralShowsRedDesc() {
@@ -692,7 +692,7 @@ public class Faults extends ContextWrapper {
     public static void setGeneralShowsRedNotificationActive(boolean generalShowsRedNotificationActive){
         Faults.generalShowsRedNotificationActive = generalShowsRedNotificationActive;
     }
-    public static boolean getgeneralShowsRedNotificationActive() {
+    public static boolean getGeneralShowsRedNotificationActive() {
         return generalShowsRedNotificationActive;
     }
 

@@ -146,7 +146,7 @@ public class VolumeActivity extends AppCompatActivity {
         faultButton.setOnClickListener(mClickListener);
 
         //Check for active faults
-        if (!Faults.getallActiveDesc().isEmpty()) {
+        if (!Faults.getAllActiveDesc().isEmpty()) {
             faultButton.setVisibility(View.VISIBLE);
         } else {
             faultButton.setVisibility(View.GONE);
@@ -155,7 +155,7 @@ public class VolumeActivity extends AppCompatActivity {
 
     private void updateUI(){
         //Check for active faults
-        if (!Faults.getallActiveDesc().isEmpty()) {
+        if (!Faults.getAllActiveDesc().isEmpty()) {
             faultButton.setVisibility(View.VISIBLE);
         } else {
             faultButton.setVisibility(View.GONE);

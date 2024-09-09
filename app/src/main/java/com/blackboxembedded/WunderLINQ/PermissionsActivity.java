@@ -63,7 +63,7 @@ public class PermissionsActivity extends AppCompatActivity {
     public static final int PERMISSION_PHONE = 6;
     public static final int PERMISSION_NOTIFICATION = 7;
     public static final int PERMISSION_OVERLAY = 8;
-    public static final int PERMISSION_USAGESTATS = 9;
+    public static final int PERMISSION_USAGE_STATS = 9;
     public static final int PERMISSION_BLUETOOTH_CONNECT = 11;
     public static final int PERMISSION_READ_PHONE_STATE = 12;
 
@@ -130,7 +130,7 @@ public class PermissionsActivity extends AppCompatActivity {
                             }
                         }
                         break;
-                    case PERMISSION_USAGESTATS:
+                    case PERMISSION_USAGE_STATS:
                         AppOpsManager appOps = (AppOpsManager) getApplication().getSystemService(Context.APP_OPS_SERVICE);
                         int mode = appOps.checkOpNoThrow(OPSTR_GET_USAGE_STATS, myUid(), getApplication().getPackageName());
                         if (mode != MODE_ALLOWED) {
@@ -171,8 +171,8 @@ public class PermissionsActivity extends AppCompatActivity {
     }
 
     private void showActionBar(){
-        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflator.inflate(R.layout.actionbar_nav, null);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.actionbar_nav, null);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled (false);
@@ -268,16 +268,16 @@ public class PermissionsActivity extends AppCompatActivity {
         if (mode == MODE_ALLOWED) {
             usageStatsPermission = true;
         }
-        listValues.add(new PermissionRecord(PERMISSION_USAGESTATS, getString(R.string.permission_usagestats_label), usageStatsPermission));
+        listValues.add(new PermissionRecord(PERMISSION_USAGE_STATS, getString(R.string.permission_usagestats_label), usageStatsPermission));
 
         //Bluetooth Connect
-        boolean btconnectPermission = false;
+        boolean btConnectPermission = false;
         if (ActivityCompat.checkSelfPermission(this,Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
-            btconnectPermission = true;
+            btConnectPermission = true;
         } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-            btconnectPermission = true;
+            btConnectPermission = true;
         }
-        listValues.add(new PermissionRecord(PERMISSION_BLUETOOTH_CONNECT, getString(R.string.permission_btconnect_label), btconnectPermission));
+        listValues.add(new PermissionRecord(PERMISSION_BLUETOOTH_CONNECT, getString(R.string.permission_btconnect_label), btConnectPermission));
 
         //READ_PHONE_STATE
         boolean phoneStatePermission = false;

@@ -18,13 +18,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package com.blackboxembedded.WunderLINQ.Utils;
 
 
-import android.content.res.Resources;
 import android.os.Build;
 
+import com.blackboxembedded.WunderLINQ.MemCache;
 import com.blackboxembedded.WunderLINQ.MyApplication;
+import com.blackboxembedded.WunderLINQ.R;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
@@ -37,7 +40,7 @@ public class Utils {
         return ( (value & bit) == bit );
     }
 
-    public static String ByteArraytoHex(byte[] bytes) {
+    public static String ByteArrayToHex(byte[] bytes) {
         if(bytes!=null){
             StringBuilder sb = new StringBuilder();
             for (byte b : bytes) {
@@ -48,7 +51,7 @@ public class Utils {
         return "";
     }
 
-    public static String ByteArraytoHexNoDelim(byte[] bytes) {
+    public static String ByteArrayToHexNoDelim(byte[] bytes) {
         if(bytes!=null){
             StringBuilder sb = new StringBuilder();
             for (byte b : bytes) {
@@ -67,7 +70,7 @@ public class Utils {
         return (a & 0xFF) << 8 | (b & 0xFF);
     }
 
-    // Take two dates and calulate the duration in hours, min, sec
+    // Take two dates and calculate the duration in hours, min, sec
     public static long [] calculateDuration(Date startDate, Date endDate){
         //milliseconds
         long different = endDate.getTime() - startDate.getTime();
@@ -105,7 +108,7 @@ public class Utils {
         return bar * 100;
     }
     // bar to kg-f
-    public static double barTokgf(double bar){
+    public static double barToKgF(double bar){
         return bar * 1.0197162129779;
     }
     // kilometers to miles
@@ -121,22 +124,22 @@ public class Utils {
         return (celsius * 1.8) + 32.0;
     }
     // L/100 to MPG
-    public static double l100Tompg(double l100){
+    public static double l100ToMpg(double l100){
         return 235.215 / l100;
     }
     // L/100 to MPG Imperial
-    public static double l100Tompgi(double l100){
+    public static double l100ToMpgI(double l100){
         return (235.215 / l100) * 1.20095;
     }
     // L/100 to km/L
-    public static double l100Tokml(double l100){
+    public static double l100ToKmL(double l100){
         return l100 / 100;
     }
 
     /*
      * @see http://en.wikipedia.org/wiki/Low-pass_filter#Algorithmic_implementation
      */
-    // Lowpass filter
+    // lowPass filter
     public static float[] lowPass(float[] input, float[] output, float ALPHA) {
         if ( output == null ) return input;
 
@@ -155,11 +158,90 @@ public class Utils {
         }
     }
 
+
     //format to 1 decimal place
-    public static NumberFormat getLocalizedOneDigitFormat(Locale locale) {
-        NumberFormat oneDigit = NumberFormat.getNumberInstance(locale);
+    private static NumberFormat getLocalizedOneDigitFormat() {
+        NumberFormat oneDigit = MemCache.getLocalizedNumberFormat();
+
         oneDigit.setMinimumFractionDigits(1);
         oneDigit.setMaximumFractionDigits(1);
+
         return oneDigit;
+    }
+
+    //format to 0 decimal place
+    private static NumberFormat getLocalizedZeroDecimalFormat() {
+        NumberFormat zeroDecimal = MemCache.getLocalizedNumberFormat();
+
+        zeroDecimal.setMaximumFractionDigits(0);
+
+        return zeroDecimal;
+    }
+
+    public static String toOneDecimalString(double num) {
+        DecimalFormat decimalFormat =  (DecimalFormat) Utils.getLocalizedOneDigitFormat();
+        String value  = decimalFormat.format(Math.round(num * 100d)/100d );
+
+        return value;
+    }
+
+
+
+    public static String toZeroDecimalString(double num) {
+        return toZeroDecimalString(num, false);
+    }
+
+    // Outputs big number to string with consistent formatting.  Use when number scale can vary greatly eg trip can go from 0.1 - 999,999
+    public static String toZeroDecimalString(double num, boolean wrapGrouping) {
+        String groupChar = "";
+        DecimalFormat decimalFormat =  (DecimalFormat) Utils.getLocalizedOneDigitFormat();
+        String value;
+
+        if ((num > 0 && num < 10) || (num < 0 && num > -10)) {
+            value = decimalFormat.format(Math.round(num * 100d)/100d );
+        } else if (((num > 0 && num < 10000) || (num < 0 && num > -10000))) {
+            decimalFormat.setMaximumFractionDigits(0);
+            value = decimalFormat.format(Math.round(num * 10d)/10d );
+        } else {
+            decimalFormat.setMaximumFractionDigits(0);
+            value = decimalFormat.format(Math.round(num * 10d)/10d );
+            if (wrapGrouping && decimalFormat.isGroupingUsed()) {
+                DecimalFormatSymbols symbols = decimalFormat.getDecimalFormatSymbols();
+                groupChar =  String.valueOf(symbols.getGroupingSeparator());
+                value = value.replace(groupChar, "\n" + groupChar);
+            }
+        }
+
+        return value;
+    }
+
+    public static SimpleDateFormat getCachedLocalizedDateFormat() {
+        return MemCache.getCachedLocalizedDateFormat();
+    }
+
+    public static String bearingToCardinal(Integer bearingValue) {
+        String bearing;
+
+        if (bearingValue > 331 || bearingValue <= 28) {
+            bearing = MyApplication.getContext().getString(R.string.north);
+        } else if (bearingValue > 28 && bearingValue <= 73) {
+            bearing = MyApplication.getContext().getString(R.string.north_east);
+        } else if (bearingValue > 73 && bearingValue <= 118) {
+            bearing = MyApplication.getContext().getString(R.string.east);
+        } else if (bearingValue > 118 && bearingValue <= 163) {
+            bearing = MyApplication.getContext().getString(R.string.south_east);
+        } else if (bearingValue > 163 && bearingValue <= 208) {
+            bearing = MyApplication.getContext().getString(R.string.south);
+        } else if (bearingValue > 208 && bearingValue <= 253) {
+            bearing = MyApplication.getContext().getString(R.string.south_west);
+        } else if (bearingValue > 253 && bearingValue <= 298) {
+            bearing = MyApplication.getContext().getString(R.string.west);
+        } else if (bearingValue > 298 && bearingValue <= 331) {
+            bearing = MyApplication.getContext().getString(R.string.north_west);
+        } else {
+            bearing = MyApplication.getContext().getString(R.string.blank_field);
+        }
+
+        return bearing;
     }
 }

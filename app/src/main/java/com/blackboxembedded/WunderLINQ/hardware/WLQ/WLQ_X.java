@@ -88,7 +88,7 @@ public class WLQ_X extends WLQ_BASE {
 
     private static byte[] wunderLINQStatus;
     public static int activeChannel;
-    public static int channe1ValueRaw;
+    public static int channel1ValueRaw;
     public static int channel2ValueRaw;
 
     private static byte[] wunderLINQConfig;
@@ -121,7 +121,7 @@ public class WLQ_X extends WLQ_BASE {
         wunderLINQConfig = new byte[bytes.length];
         System.arraycopy(bytes, 0, wunderLINQConfig, 0, bytes.length);
 
-        Log.d(TAG, "WLQConfig: " + Utils.ByteArraytoHex(wunderLINQConfig));
+        Log.d(TAG, "WLQConfig: " + Utils.ByteArrayToHex(wunderLINQConfig));
 
         byte[] flashConfigPart = new byte[configFlashSize];
         System.arraycopy(bytes, 6, flashConfigPart, 0, configFlashSize);
@@ -133,7 +133,7 @@ public class WLQ_X extends WLQ_BASE {
             tempConfig = new byte[flashConfig.length];
             System.arraycopy(flashConfig, 0, tempConfig, 0, flashConfig.length);
 
-            Log.d(TAG, "New flashConfig: " + Utils.ByteArraytoHex(flashConfig));
+            Log.d(TAG, "New flashConfig: " + Utils.ByteArrayToHex(flashConfig));
 
             firmwareVersion = bytes[firmwareVersionMajor_INDEX] + "." + bytes[firmwareVersionMinor_INDEX];
 
@@ -487,7 +487,7 @@ public class WLQ_X extends WLQ_BASE {
         wunderLINQStatus = new byte[statusSize];
         System.arraycopy(status, 4, wunderLINQStatus, 0, statusSize);
         activeChannel = (wunderLINQStatus[ACTIVE_CHAN_INDEX] & 0xFF);
-        channe1ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
+        channel1ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
         channel2ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
     }
 }

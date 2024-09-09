@@ -17,6 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -99,8 +100,8 @@ public class AboutActivity extends AppCompatActivity {
                 // Get current date
                 Calendar cal = Calendar.getInstance();
                 Date date = cal.getTime();
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-HH:mm");
-                String curdatetime = formatter.format(date);
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-HH:mm");
+                String curDateTime = formatter.format(date);
                 //Send file(s) using email
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
                 emailIntent.setType("text/plain");
@@ -111,7 +112,7 @@ public class AboutActivity extends AppCompatActivity {
                 if(outputFile.exists()) {
                     emailIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(AboutActivity.this, "com.blackboxembedded.wunderlinq.fileprovider", outputFile));
                 }
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sendlogs_subject) + " " + curdatetime);
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.sendlogs_subject) + " " + curDateTime);
                 emailIntent.putExtra(Intent.EXTRA_TEXT, "App Version: " + BuildConfig.VERSION_NAME + "\n"
                         + "Firmware Version: " + fwVersion + "\n"
                         + "Android Version: " + Build.VERSION.RELEASE + "\n"
