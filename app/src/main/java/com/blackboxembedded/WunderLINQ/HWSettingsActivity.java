@@ -41,13 +41,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
-import com.blackboxembedded.WunderLINQ.comms.BLE.GattAttributes;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_BASE;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_C;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_X;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_U;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -192,7 +191,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
     private void updateDisplay(){
         actionItems.clear();
         if (MotorcycleData.wlq != null) {
-            if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
+            if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_N || MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_X) {
                 if (MotorcycleData.wlq.getFirmwareVersion() != null) {
                     fwVersionTV.setText(getString(R.string.fw_version_label) + " " + MotorcycleData.wlq.getFirmwareVersion());
                     if (Double.parseDouble(MotorcycleData.wlq.getFirmwareVersion()) >= 2.0) {
@@ -248,7 +247,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                         hwConfigBtn.setVisibility(View.VISIBLE);
                     }
                 }
-            } else if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_COMMANDER) {
+            } else if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_C) {
                 if (MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_DEFAULT() || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_CUSTOM()) {
                     actionItems.add(new ActionItem(WLQ_C.KEYMODE, getString(R.string.keymode_label), MotorcycleData.wlq.getActionValue(WLQ_C.KEYMODE))); // Keymode
                     //TODO
@@ -285,16 +284,16 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                     hwConfigBtn.setText(getString(R.string.reset_btn_label));
                     hwConfigBtn.setVisibility(View.VISIBLE);
                 }
-            } else if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_X) {
+            } else if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_U) {
                 if (MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_DEFAULT() || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_CUSTOM()) {
-                    actionItems.add(new ActionItem(WLQ_X.KEYMODE, getString(R.string.keymode_label), MotorcycleData.wlq.getActionValue(WLQ_X.KEYMODE)));
-                    actionItems.add(new ActionItem(WLQ_X.ORIENTATION, getString(R.string.orientation_label), MotorcycleData.wlq.getActionValue(WLQ_X.ORIENTATION)));
-                    actionItems.add(new ActionItem(WLQ_X.up, getString(R.string.up_label), MotorcycleData.wlq.getActionValue(WLQ_X.up)));
-                    actionItems.add(new ActionItem(WLQ_X.down, getString(R.string.down_label), MotorcycleData.wlq.getActionValue(WLQ_X.down)));
-                    actionItems.add(new ActionItem(WLQ_X.right, getString(R.string.right_label), MotorcycleData.wlq.getActionValue(WLQ_X.right)));
-                    actionItems.add(new ActionItem(WLQ_X.left, getString(R.string.left_label), MotorcycleData.wlq.getActionValue(WLQ_X.left)));
-                    actionItems.add(new ActionItem(WLQ_X.fx1, getString(R.string.fx1_label), MotorcycleData.wlq.getActionValue(WLQ_X.fx1)));
-                    actionItems.add(new ActionItem(WLQ_X.fx2, getString(R.string.fx2_label), MotorcycleData.wlq.getActionValue(WLQ_X.fx2)));
+                    actionItems.add(new ActionItem(WLQ_U.KEYMODE, getString(R.string.keymode_label), MotorcycleData.wlq.getActionValue(WLQ_U.KEYMODE)));
+                    actionItems.add(new ActionItem(WLQ_U.ORIENTATION, getString(R.string.orientation_label), MotorcycleData.wlq.getActionValue(WLQ_U.ORIENTATION)));
+                    actionItems.add(new ActionItem(WLQ_U.up, getString(R.string.up_label), MotorcycleData.wlq.getActionValue(WLQ_U.up)));
+                    actionItems.add(new ActionItem(WLQ_U.down, getString(R.string.down_label), MotorcycleData.wlq.getActionValue(WLQ_U.down)));
+                    actionItems.add(new ActionItem(WLQ_U.right, getString(R.string.right_label), MotorcycleData.wlq.getActionValue(WLQ_U.right)));
+                    actionItems.add(new ActionItem(WLQ_U.left, getString(R.string.left_label), MotorcycleData.wlq.getActionValue(WLQ_U.left)));
+                    actionItems.add(new ActionItem(WLQ_U.fx1, getString(R.string.fx1_label), MotorcycleData.wlq.getActionValue(WLQ_U.fx1)));
+                    actionItems.add(new ActionItem(WLQ_U.fx2, getString(R.string.fx2_label), MotorcycleData.wlq.getActionValue(WLQ_U.fx2)));
 
                     resetButton.setVisibility(View.INVISIBLE);
                     hwConfigBtn.setVisibility(View.INVISIBLE);
@@ -336,7 +335,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                     public void onClick(DialogInterface dialog, int which) {
                         try {
                             if (MotorcycleData.wlq != null) {
-                                if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
+                                if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_N) {
                                     if (MotorcycleData.wlq.getHardwareVersion() != null) {
                                         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                                         outputStream.write(MotorcycleData.wlq.WRITE_CONFIG_CMD());
@@ -350,7 +349,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                         Log.d(TAG, "Reset Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
                                         BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                                     }
-                                } else if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_COMMANDER) {
+                                } else if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_C) {
                                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                                     outputStream.write(MotorcycleData.wlq.WRITE_CONFIG_CMD());
                                     outputStream.write(WLQ_C.defaultConfig);
@@ -358,10 +357,10 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                     byte[] writeConfigCmd = outputStream.toByteArray();
                                     Log.d(TAG, "Reset Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
                                     BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
-                                } else if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_X) {
+                                } else if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_U) {
                                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                                     outputStream.write(MotorcycleData.wlq.WRITE_CONFIG_CMD());
-                                    outputStream.write(WLQ_X.defaultConfig);
+                                    outputStream.write(WLQ_U.defaultConfig);
                                     outputStream.write(MotorcycleData.wlq.CMD_EOM());
                                     byte[] writeConfigCmd = outputStream.toByteArray();
                                     Log.d(TAG, "Reset Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
@@ -397,7 +396,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
+                        if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_N) {
                             if (MotorcycleData.wlq.getFirmwareVersion() != null) {
                                 if (Double.parseDouble(MotorcycleData.wlq.getFirmwareVersion()) >= 2.0) {
                                     if (!Arrays.equals(MotorcycleData.wlq.getConfig(), MotorcycleData.wlq.getTempConfig())) {
@@ -414,7 +413,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                     }
                                 }
                             }
-                        } else if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_COMMANDER){
+                        } else if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_C){
                             if (!Arrays.equals(MotorcycleData.wlq.getConfig(), MotorcycleData.wlq.getTempConfig())) {
                                 try {
                                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -427,7 +426,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                     Log.d(TAG, e.toString());
                                 }
                             }
-                        } else if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_X){
+                        } else if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_U){
                             if (!Arrays.equals(MotorcycleData.wlq.getConfig(), MotorcycleData.wlq.getTempConfig())) {
                                 try {
                                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -469,9 +468,9 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
             if (BluetoothLeService.ACTION_CMDSTATUS_AVAILABLE.equals(action)) {
                 Bundle bd = intent.getExtras();
                 if(bd != null){
-                    if(bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE).contains(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC)) {
+                   // if(bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE).contains(GattAttributes.WUNDERLINQ_N_COMMAND_CHARACTERISTIC)) {
                         updateDisplay();
-                    }
+                   // }
                 }
             }
         }

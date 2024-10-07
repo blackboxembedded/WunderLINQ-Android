@@ -40,7 +40,6 @@ import androidx.core.content.ContextCompat;
 
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
-import com.blackboxembedded.WunderLINQ.comms.BLE.GattAttributes;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
@@ -186,7 +185,7 @@ public class BikeInfoActivity extends AppCompatActivity {
 
     private void updateDisplay(){
         if (MotorcycleData.wlq != null) {
-            if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
+            if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_N || MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_X) {
                 if (MotorcycleData.wlq.getFirmwareVersion() != null) {
                     if (Double.parseDouble(MotorcycleData.wlq.getFirmwareVersion()) >= 1.8) {
                         tvResetHeader.setVisibility(View.VISIBLE);
@@ -231,9 +230,9 @@ public class BikeInfoActivity extends AppCompatActivity {
             if (BluetoothLeService.ACTION_CMDSTATUS_AVAILABLE.equals(action)) {
                 Bundle bd = intent.getExtras();
                 if(bd != null){
-                    if(bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE).contains(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC)) {
+                    //if(bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE).contains(GattAttributes.WUNDERLINQ_N_COMMAND_CHARACTERISTIC)) {
                         updateDisplay();
-                    }
+                    //}
                 }
             }
         }

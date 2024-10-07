@@ -35,9 +35,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -879,7 +876,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         @Override
                         public void run() {
                             if(MotorcycleData.wlq != null) {
-                                if(MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
+                                if(MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_N) {
                                     mMenu.findItem(R.id.action_bike_info).setVisible(true);
                                 }
                                 mMenu.findItem(R.id.action_hwsettings).setVisible(true);

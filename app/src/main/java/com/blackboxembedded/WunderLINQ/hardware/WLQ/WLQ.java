@@ -18,9 +18,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package com.blackboxembedded.WunderLINQ.hardware.WLQ;
 
 public interface WLQ {
-    public int TYPE_NAVIGATOR = 1;
-    public int TYPE_COMMANDER = 2;
+    public int TYPE_N = 1;
     public int TYPE_X = 3;
+    public int TYPE_C = 3;
+    public int TYPE_U = 4;
 
     public byte[] GET_CONFIG_CMD();
 
