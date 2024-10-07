@@ -249,7 +249,6 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                     }
                 }
             } else if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_X) {
-                Log.d(TAG,"update WLQX display");
                 if (MotorcycleData.wlq.getFirmwareVersion() != null) {
                     fwVersionTV.setText(getString(R.string.fw_version_label) + " " + MotorcycleData.wlq.getFirmwareVersion());
                 }
