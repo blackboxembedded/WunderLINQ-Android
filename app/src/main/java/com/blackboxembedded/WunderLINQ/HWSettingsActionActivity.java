@@ -208,8 +208,6 @@ public class HWSettingsActionActivity extends AppCompatActivity {
 
                 } else if (actionID == WLQ_N.fullLongPressSensitivity){
 
-                } else if (actionID == WLQ_X.USB){
-
                 } else if (actionID == WLQ_X.RTKDoublePressSensitivity){
 
                 } else if (actionID == WLQ_X.fullLongPressSensitivity){
@@ -262,8 +260,6 @@ public class HWSettingsActionActivity extends AppCompatActivity {
 
                 } else if (actionID == WLQ_N.fullLongPressSensitivity){
 
-                } else if (actionID == WLQ_X.USB){
-
                 } else if (actionID == WLQ_X.RTKDoublePressSensitivity){
 
                 } else if (actionID == WLQ_X.fullLongPressSensitivity){
@@ -303,7 +299,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 if (actionID == WLQ_N.KEYMODE || actionID == WLQ_X.KEYMODE || actionID == WLQ_C.KEYMODE || actionID == WLQ_U.KEYMODE){
                     setHWMode((byte) actionTypeSP.getSelectedItemPosition());
                     return;
-                } else if (actionID == WLQ_N.USB || actionID == WLQ_X.USB){
+                } else if (actionID == WLQ_N.USB){
                     if(actionTypeSP.getSelectedItemPosition() == 0){
                         MotorcycleData.wlq.getTempConfig()[WLQ_N.USBVinThresholdHigh_INDEX] = 0x00;
                         MotorcycleData.wlq.getTempConfig()[WLQ_N.USBVinThresholdLow_INDEX] = 0x00;

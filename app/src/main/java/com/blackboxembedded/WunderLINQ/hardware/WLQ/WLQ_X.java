@@ -50,9 +50,8 @@ public class WLQ_X extends WLQ_BASE {
     public static byte sensitivity;
     public static byte tempSensitivity;
 
-    public static int configFlashSize = 64;
-    public static byte[] defaultConfig2 = {
-            0x00, 0x00, // USB Input Voltage threshold
+    public static int configFlashSize = 62;
+    public static byte[] defaultConfig1 = {
             0x07, // RT/K Start // Sensitivity
             0x01, 0x00, 0x4F, 0x01, 0x00, 0x28, // Menu
             0x01, 0x00, 0x52, 0x00, 0x00, 0x00, // Zoom+
@@ -66,21 +65,6 @@ public class WLQ_X extends WLQ_BASE {
             0x01, 0x00, 0x52, 0x01, 0x00, 0x51, // Scroll
             0x02, 0x00, (byte) 0xB8, 0x02, 0x00, (byte) 0xE2}; // Signal Cancel
 
-    public static byte[] defaultConfig2HW1 = {
-            0x00, 0x00, // USB Input Voltage threshold
-            0x07, // RT/K Start // Sensitivity
-            0x01, 0x00, 0x4F, 0x01, 0x00, 0x28, // Menu
-            0x01, 0x00, 0x52, 0x00, 0x00, 0x00, // Zoom+
-            0x01, 0x00, 0x51, 0x00, 0x00, 0x00, // Zoom-
-            0x01, 0x00, 0x50, 0x01, 0x00, 0x29, // Speak
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // Mute
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // Display
-            0x11, // Full Start // Sensitivity
-            0x01, 0x00, 0x4F, 0x01, 0x00, 0x28, // Right Toggle
-            0x01, 0x00, 0x50, 0x01, 0x00, 0x29, // Left Toggle
-            0x01, 0x00, 0x52, 0x01, 0x00, 0x51, // Scroll
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; // Signal Cancel
-
     public static byte KEYMODE_DEFAULT = 0x00;
     public static byte KEYMODE_CUSTOM = 0x01;
 
@@ -88,9 +72,7 @@ public class WLQ_X extends WLQ_BASE {
     public static byte CONSUMER_HID = 0x02;
     public static byte UNDEFINED = 0x00;
 
-    public static final int OldSensitivity = 0;
     public static final int KEYMODE = 100;
-    public static final int USB = 1;
     public static final int RTKDoublePressSensitivity = 2;
     public static final int fullLongPressSensitivity = 3;
     public static final int RTKPage = 4;
@@ -115,70 +97,68 @@ public class WLQ_X extends WLQ_BASE {
     public static final int fullSignalCancelLongPress = 23;
 
     public static int keyMode_INDEX = 5;
-    public static int USBVinThresholdHigh_INDEX = 0;
-    public static int USBVinThresholdLow_INDEX = 1;
-    public static int RTKSensitivity_INDEX = 2;
-    public static int RTKPagePressKeyType_INDEX = 3;
-    public static int RTKPagePressKeyModifier_INDEX = 4;
-    public static int RTKPagePressKey_INDEX = 5;
-    public static int RTKPageDoublePressKeyType_INDEX = 6;
-    public static int RTKPageDoublePressKeyModifier_INDEX = 7;
-    public static int RTKPageDoublePressKey_INDEX = 8;
-    public static int RTKZoomPPressKeyType_INDEX = 9;
-    public static int RTKZoomPPressKeyModifier_INDEX = 10;
-    public static int RTKZoomPPressKey_INDEX = 11;
-    public static int RTKZoomPDoublePressKeyType_INDEX = 12;
-    public static int RTKZoomPDoublePressKeyModifier_INDEX = 13;
-    public static int RTKZoomPDoublePressKey_INDEX = 14;
-    public static int RTKZoomMPressKeyType_INDEX = 15;
-    public static int RTKZoomMPressKeyModifier_INDEX = 16;
-    public static int RTKZoomMPressKey_INDEX = 17;
-    public static int RTKZoomMDoublePressKeyType_INDEX = 18;
-    public static int RTKZoomMDoublePressKeyModifier_INDEX = 19;
-    public static int RTKZoomMDoublePressKey_INDEX = 20;
-    public static int RTKSpeakPressKeyType_INDEX = 21;
-    public static int RTKSpeakPressKeyModifier_INDEX = 22;
-    public static int RTKSpeakPressKey_INDEX = 23;
-    public static int RTKSpeakDoublePressKeyType_INDEX = 24;
-    public static int RTKSpeakDoublePressKeyModifier_INDEX = 25;
-    public static int RTKSpeakDoublePressKey_INDEX = 26;
-    public static int RTKMutePressKeyType_INDEX = 27;
-    public static int RTKMutePressKeyModifier_INDEX = 28;
-    public static int RTKMutePressKey_INDEX = 29;
-    public static int RTKMuteDoublePressKeyType_INDEX = 30;
-    public static int RTKMuteDoublePressKeyModifier_INDEX = 31;
-    public static int RTKMuteDoublePressKey_INDEX = 32;
-    public static int RTKDisplayPressKeyType_INDEX = 33;
-    public static int RTKDisplayPressKeyModifier_INDEX = 34;
-    public static int RTKDisplayPressKey_INDEX = 35;
-    public static int RTKDisplayDoublePressKeyType_INDEX = 36;
-    public static int RTKDisplayDoublePressKeyModifier_INDEX = 37;
-    public static int RTKDisplayDoublePressKey_INDEX = 38;
-    public static int fullSensitivity_INDEX = 39;
-    public static int fullRightPressKeyType_INDEX = 40;
-    public static int fullRightPressKeyModifier_INDEX = 41;
-    public static int fullRightPressKey_INDEX = 42;
-    public static int fullRightLongPressKeyType_INDEX = 43;
-    public static int fullRightLongPressKeyModifier_INDEX = 44;
-    public static int fullRightLongPressKey_INDEX = 45;
-    public static int fullLeftPressKeyType_INDEX = 46;
-    public static int fullLeftPressKeyModifier_INDEX = 47;
-    public static int fullLeftPressKey_INDEX = 48;
-    public static int fullLeftLongPressKeyType_INDEX = 49;
-    public static int fullLeftLongPressKeyModifier_INDEX = 50;
-    public static int fullLeftLongPressKey_INDEX = 51;
-    public static int fullScrollUpKeyType_INDEX = 52;
-    public static int fullScrollUpKeyModifier_INDEX = 53;
-    public static int fullScrollUpKey_INDEX = 54;
-    public static int fullScrollDownKeyType_INDEX = 55;
-    public static int fullScrollDownKeyModifier_INDEX = 56;
-    public static int fullScrollDownKey_INDEX = 57;
-    public static int fullSignalPressKeyType_INDEX = 58;
-    public static int fullSignalPressKeyModifier_INDEX = 59;
-    public static int fullSignalPressKey_INDEX = 60;
-    public static int fullSignalLongPressKeyType_INDEX = 61;
-    public static int fullSignalLongPressKeyModifier_INDEX = 62;
-    public static int fullSignalLongPressKey_INDEX = 63;
+    public static int RTKSensitivity_INDEX = 0;
+    public static int RTKPagePressKeyType_INDEX = 1;
+    public static int RTKPagePressKeyModifier_INDEX = 2;
+    public static int RTKPagePressKey_INDEX = 3;
+    public static int RTKPageDoublePressKeyType_INDEX = 4;
+    public static int RTKPageDoublePressKeyModifier_INDEX = 5;
+    public static int RTKPageDoublePressKey_INDEX = 6;
+    public static int RTKZoomPPressKeyType_INDEX = 7;
+    public static int RTKZoomPPressKeyModifier_INDEX = 8;
+    public static int RTKZoomPPressKey_INDEX = 9;
+    public static int RTKZoomPDoublePressKeyType_INDEX = 10;
+    public static int RTKZoomPDoublePressKeyModifier_INDEX = 11;
+    public static int RTKZoomPDoublePressKey_INDEX = 12;
+    public static int RTKZoomMPressKeyType_INDEX = 13;
+    public static int RTKZoomMPressKeyModifier_INDEX = 14;
+    public static int RTKZoomMPressKey_INDEX = 15;
+    public static int RTKZoomMDoublePressKeyType_INDEX = 16;
+    public static int RTKZoomMDoublePressKeyModifier_INDEX = 17;
+    public static int RTKZoomMDoublePressKey_INDEX = 18;
+    public static int RTKSpeakPressKeyType_INDEX = 19;
+    public static int RTKSpeakPressKeyModifier_INDEX = 20;
+    public static int RTKSpeakPressKey_INDEX = 21;
+    public static int RTKSpeakDoublePressKeyType_INDEX = 22;
+    public static int RTKSpeakDoublePressKeyModifier_INDEX = 23;
+    public static int RTKSpeakDoublePressKey_INDEX = 24;
+    public static int RTKMutePressKeyType_INDEX = 25;
+    public static int RTKMutePressKeyModifier_INDEX = 26;
+    public static int RTKMutePressKey_INDEX = 27;
+    public static int RTKMuteDoublePressKeyType_INDEX = 28;
+    public static int RTKMuteDoublePressKeyModifier_INDEX = 29;
+    public static int RTKMuteDoublePressKey_INDEX = 30;
+    public static int RTKDisplayPressKeyType_INDEX = 31;
+    public static int RTKDisplayPressKeyModifier_INDEX = 32;
+    public static int RTKDisplayPressKey_INDEX = 33;
+    public static int RTKDisplayDoublePressKeyType_INDEX = 34;
+    public static int RTKDisplayDoublePressKeyModifier_INDEX = 35;
+    public static int RTKDisplayDoublePressKey_INDEX = 36;
+    public static int fullSensitivity_INDEX = 37;
+    public static int fullRightPressKeyType_INDEX = 38;
+    public static int fullRightPressKeyModifier_INDEX = 39;
+    public static int fullRightPressKey_INDEX = 40;
+    public static int fullRightLongPressKeyType_INDEX = 41;
+    public static int fullRightLongPressKeyModifier_INDEX = 42;
+    public static int fullRightLongPressKey_INDEX = 43;
+    public static int fullLeftPressKeyType_INDEX = 44;
+    public static int fullLeftPressKeyModifier_INDEX = 45;
+    public static int fullLeftPressKey_INDEX = 46;
+    public static int fullLeftLongPressKeyType_INDEX = 47;
+    public static int fullLeftLongPressKeyModifier_INDEX = 48;
+    public static int fullLeftLongPressKey_INDEX = 49;
+    public static int fullScrollUpKeyType_INDEX = 50;
+    public static int fullScrollUpKeyModifier_INDEX = 51;
+    public static int fullScrollUpKey_INDEX = 52;
+    public static int fullScrollDownKeyType_INDEX = 53;
+    public static int fullScrollDownKeyModifier_INDEX = 54;
+    public static int fullScrollDownKey_INDEX = 55;
+    public static int fullSignalPressKeyType_INDEX = 56;
+    public static int fullSignalPressKeyModifier_INDEX = 57;
+    public static int fullSignalPressKey_INDEX = 58;
+    public static int fullSignalLongPressKeyType_INDEX = 59;
+    public static int fullSignalLongPressKeyModifier_INDEX = 60;
+    public static int fullSignalLongPressKey_INDEX = 61;
 
     private static byte[] wunderLINQConfig;
     private static byte[] flashConfig;
@@ -276,7 +256,6 @@ public class WLQ_X extends WLQ_BASE {
             editor.apply();
 
             keyMode = bytes[keyMode_INDEX];
-            USBVinThreshold = ((flashConfig[USBVinThresholdHigh_INDEX] & 0xFF) << 8) | (flashConfig[USBVinThresholdLow_INDEX] & 0xFF);
             RTKSensitivity = flashConfig[RTKSensitivity_INDEX];
             RTKPagePressKeyType = flashConfig[RTKPagePressKeyType_INDEX];
             RTKPagePressKeyModifier = flashConfig[RTKPagePressKeyModifier_INDEX];
@@ -346,12 +325,8 @@ public class WLQ_X extends WLQ_BASE {
     @Override
     public String getActionName(int id){
         switch (id){
-            case OldSensitivity:
-                return MyApplication.getContext().getString(R.string.sensitivity_label);
             case KEYMODE:
                 return MyApplication.getContext().getString(R.string.keymode_label);
-            case USB:
-                return MyApplication.getContext().getString(R.string.usb_threshold_label);
             case RTKDoublePressSensitivity:
                 return MyApplication.getContext().getString(R.string.double_press_label);
             case fullLongPressSensitivity:
@@ -405,8 +380,6 @@ public class WLQ_X extends WLQ_BASE {
     @Override
     public String getActionValue(int id){
         switch (id){
-            case OldSensitivity:
-                return String.valueOf(sensitivity);
             case KEYMODE:
                 switch (keyMode){
                     case 0:
@@ -419,14 +392,6 @@ public class WLQ_X extends WLQ_BASE {
                         return MyApplication.getContext().getString(R.string.keymode_dmd2_label);
                     default:
                         return "";
-                }
-            case USB:
-                if (USBVinThreshold == 0x0000){
-                    return MyApplication.getContext().getString(R.string.usbcontrol_on_label);
-                } else if (USBVinThreshold == 0xFFFF){
-                    return MyApplication.getContext().getString(R.string.usbcontrol_off_label);
-                } else {
-                    return MyApplication.getContext().getString(R.string.usbcontrol_engine_label);
                 }
             case RTKDoublePressSensitivity:
                 return String.valueOf(RTKSensitivity * 50) + "ms";
