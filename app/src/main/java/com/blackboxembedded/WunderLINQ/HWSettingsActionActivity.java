@@ -390,7 +390,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 actionTypeSP.setSelection(0);
             } else if(WLQ_N.USBVinThreshold == 0xFFFF){
                 actionTypeSP.setSelection(2);
-            } else if(WLQ_N.USBVinThreshold != 0xFFFF && WLQ_N.USBVinThreshold != 0x0000){
+            } else {
                 actionTypeSP.setSelection(1);
             }
         } else if (actionID == WLQ_N.RTKDoublePressSensitivity){  //RTK Sensitivity

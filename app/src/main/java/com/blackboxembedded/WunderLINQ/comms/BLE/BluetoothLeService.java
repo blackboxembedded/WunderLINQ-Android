@@ -405,7 +405,7 @@ public class BluetoothLeService extends Service {
                             int monthYearByte = ((yearNibble & 0x0F) << 4 | (monthNibble & 0x0F));
                             try {
                                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                                outputStream.write(WLQ_N.SET_CLUSTER_CLOCK_CMD);
+                                outputStream.write(WLQ_BASE.SET_CLUSTER_CLOCK_CMD);
                                 outputStream.write((byte) second);
                                 outputStream.write((byte) minute);
                                 outputStream.write((byte) hour);
@@ -744,10 +744,10 @@ public class BluetoothLeService extends Service {
                         "" + status);
                 intent.putExtras(mBundle);
                 if (characteristic.getUuid().toString().contains(GattAttributes.WUNDERLINQ_N_COMMAND_CHARACTERISTIC) || characteristic.getUuid().toString().contains(GattAttributes.WUNDERLINQ_X_COMMAND_CHARACTERISTIC)){
-                    if(data[0] == WLQ_N.SET_CLUSTER_CLOCK_CMD[0]
-                            && data[1] == WLQ_N.SET_CLUSTER_CLOCK_CMD[1]
-                            && data[2] == WLQ_N.SET_CLUSTER_CLOCK_CMD[2]
-                            && data[3] == WLQ_N.SET_CLUSTER_CLOCK_CMD[3]) {
+                    if(data[0] == WLQ_BASE.SET_CLUSTER_CLOCK_CMD[0]
+                            && data[1] == WLQ_BASE.SET_CLUSTER_CLOCK_CMD[1]
+                            && data[2] == WLQ_BASE.SET_CLUSTER_CLOCK_CMD[2]
+                            && data[3] == WLQ_BASE.SET_CLUSTER_CLOCK_CMD[3]) {
                         if (MotorcycleData.wlq == null ) {
                             readCharacteristic(characteristic);
                         }

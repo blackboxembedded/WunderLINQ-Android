@@ -41,13 +41,6 @@ public class WLQ_N extends WLQ_BASE {
     private static int firmwareVersionMajor_INDEX = 9;
     private static int firmwareVersionMinor_INDEX = 10;
 
-    public static byte[] SET_CLUSTER_CLOCK_CMD = {0x57, 0x57, 0x44, 0x43};
-    public static byte[] RESET_CLUSTER_SPEED_CMD = {0x57, 0x57, 0x44, 0x52, 0x53};
-    public static byte[] RESET_CLUSTER_ECONO1_CMD = {0x57, 0x57, 0x44, 0x52, 0x45, 0x01};
-    public static byte[] RESET_CLUSTER_ECONO2_CMD = {0x57, 0x57, 0x44, 0x52, 0x45, 0x02};
-    public static byte[] RESET_CLUSTER_TRIP1_CMD = {0x57, 0x57, 0x44, 0x52, 0x54, 0x01};
-    public static byte[] RESET_CLUSTER_TRIP2_CMD = {0x57, 0x57, 0x44, 0x52, 0x54, 0x02};
-
     public static byte wheelMode;
     public static byte sensitivity;
     public static byte tempSensitivity;
@@ -982,7 +975,7 @@ public class WLQ_N extends WLQ_BASE {
 
     @Override
     public int getHardwareType() {
-        return 1;
+        return WLQ.TYPE_N;
     }
 
     @Override

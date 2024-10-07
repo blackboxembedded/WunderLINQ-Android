@@ -42,6 +42,7 @@ import com.blackboxembedded.WunderLINQ.Utils.Utils;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_BASE;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
 
 import java.time.format.DateTimeFormatter;
@@ -161,19 +162,19 @@ public class BikeInfoActivity extends AppCompatActivity {
                 case R.id.btReset:
                     switch(spReset.getSelectedItemPosition()){
                         case 0: // Reset Cluster Average Speed
-                            BluetoothLeService.writeCharacteristic(characteristic, WLQ_N.RESET_CLUSTER_SPEED_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                            BluetoothLeService.writeCharacteristic(characteristic, WLQ_BASE.RESET_CLUSTER_SPEED_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
                             break;
                         case 1: // Reset Cluster Economy 1
-                            BluetoothLeService.writeCharacteristic(characteristic, WLQ_N.RESET_CLUSTER_ECONO1_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                            BluetoothLeService.writeCharacteristic(characteristic, WLQ_BASE.RESET_CLUSTER_ECONO1_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
                             break;
                         case 2: // Reset Cluster Economy 2
-                            BluetoothLeService.writeCharacteristic(characteristic, WLQ_N.RESET_CLUSTER_ECONO2_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                            BluetoothLeService.writeCharacteristic(characteristic, WLQ_BASE.RESET_CLUSTER_ECONO2_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
                             break;
                         case 3: // Reset Cluster Trip 1
-                            BluetoothLeService.writeCharacteristic(characteristic, WLQ_N.RESET_CLUSTER_TRIP1_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                            BluetoothLeService.writeCharacteristic(characteristic, WLQ_BASE.RESET_CLUSTER_TRIP1_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
                             break;
                         case 4: // Reset Cluster Trip 2
-                            BluetoothLeService.writeCharacteristic(characteristic, WLQ_N.RESET_CLUSTER_TRIP2_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                            BluetoothLeService.writeCharacteristic(characteristic, WLQ_BASE.RESET_CLUSTER_TRIP2_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
                             break;
                         default:
                             break;

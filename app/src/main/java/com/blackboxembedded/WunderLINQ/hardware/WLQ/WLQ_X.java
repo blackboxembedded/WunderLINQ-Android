@@ -32,26 +32,17 @@ public class WLQ_X extends WLQ_BASE {
 
     public final static String TAG = "WLQ_X";
 
-    public static int USBVinThreshold;
-
     public static String hardwareVersion1 = "WLQX1.0";
 
     private static int firmwareVersionMajor_INDEX = 3;
     private static int firmwareVersionMinor_INDEX = 4;
-
-    public static byte[] SET_CLUSTER_CLOCK_CMD = {0x57, 0x57, 0x44, 0x43};
-    public static byte[] RESET_CLUSTER_SPEED_CMD = {0x57, 0x57, 0x44, 0x52, 0x53};
-    public static byte[] RESET_CLUSTER_ECONO1_CMD = {0x57, 0x57, 0x44, 0x52, 0x45, 0x01};
-    public static byte[] RESET_CLUSTER_ECONO2_CMD = {0x57, 0x57, 0x44, 0x52, 0x45, 0x02};
-    public static byte[] RESET_CLUSTER_TRIP1_CMD = {0x57, 0x57, 0x44, 0x52, 0x54, 0x01};
-    public static byte[] RESET_CLUSTER_TRIP2_CMD = {0x57, 0x57, 0x44, 0x52, 0x54, 0x02};
 
     public static byte wheelMode;
     public static byte sensitivity;
     public static byte tempSensitivity;
 
     public static int configFlashSize = 62;
-    public static byte[] defaultConfig1 = {
+    public static byte[] defaultConfig = {
             0x07, // RT/K Start // Sensitivity
             0x01, 0x00, 0x4F, 0x01, 0x00, 0x28, // Menu
             0x01, 0x00, 0x52, 0x00, 0x00, 0x00, // Zoom+
@@ -945,7 +936,7 @@ public class WLQ_X extends WLQ_BASE {
 
     @Override
     public int getHardwareType() {
-        return 1;
+        return WLQ.TYPE_X;
     }
 
     @Override

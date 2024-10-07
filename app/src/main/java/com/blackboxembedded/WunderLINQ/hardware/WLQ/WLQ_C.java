@@ -728,7 +728,7 @@ public class WLQ_C extends WLQ_BASE {
 
     @Override
     public int getHardwareType() {
-        return 2;
+        return WLQ.TYPE_C;
     }
 
     @Override

@@ -474,7 +474,7 @@ public class WLQ_U extends WLQ_BASE {
 
     @Override
     public int getHardwareType() {
-        return 3;
+        return WLQ.TYPE_U;
     }
 
     @Override
