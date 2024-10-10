@@ -187,14 +187,10 @@ public class BikeInfoActivity extends AppCompatActivity {
     private void updateDisplay(){
         if (MotorcycleData.wlq != null) {
             if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_N || MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_X) {
-                if (MotorcycleData.wlq.getFirmwareVersion() != null) {
-                    if (Double.parseDouble(MotorcycleData.wlq.getFirmwareVersion()) >= 1.8) {
-                        tvResetHeader.setVisibility(View.VISIBLE);
-                        spReset.setVisibility(View.VISIBLE);
-                        tvResetLabel.setVisibility(View.VISIBLE);
-                        btReset.setVisibility(View.VISIBLE);
-                    }
-                }
+                tvResetHeader.setVisibility(View.VISIBLE);
+                spReset.setVisibility(View.VISIBLE);
+                tvResetLabel.setVisibility(View.VISIBLE);
+                btReset.setVisibility(View.VISIBLE);
             }
         }
 

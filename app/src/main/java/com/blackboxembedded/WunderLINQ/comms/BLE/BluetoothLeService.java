@@ -743,18 +743,7 @@ public class BluetoothLeService extends Service {
                 mBundle.putString("ACTION_WRITE_SUCCESS",
                         "" + status);
                 intent.putExtras(mBundle);
-                if (characteristic.getUuid().toString().contains(GattAttributes.WUNDERLINQ_N_COMMAND_CHARACTERISTIC) || characteristic.getUuid().toString().contains(GattAttributes.WUNDERLINQ_X_COMMAND_CHARACTERISTIC)){
-                    if(data[0] == WLQ_BASE.SET_CLUSTER_CLOCK_CMD[0]
-                            && data[1] == WLQ_BASE.SET_CLUSTER_CLOCK_CMD[1]
-                            && data[2] == WLQ_BASE.SET_CLUSTER_CLOCK_CMD[2]
-                            && data[3] == WLQ_BASE.SET_CLUSTER_CLOCK_CMD[3]) {
-                        if (MotorcycleData.wlq == null ) {
-                            readCharacteristic(characteristic);
-                        }
-                    } else {
-                        readCharacteristic(characteristic);
-                    }
-                }
+
                 MyApplication.getContext().sendBroadcast(intent);
                 completedCommand();
             }
@@ -825,8 +814,8 @@ public class BluetoothLeService extends Service {
                     MotorcycleData.setHasFocus(true);
                     lastControlMessage = System.currentTimeMillis();
                 } else {
-                    if (MotorcycleData.getHasFocus() && ( System.currentTimeMillis() - lastControlMessage > 100)){
-                        Log.d(TAG,"Focus Gone");
+                    if (MotorcycleData.getHasFocus() && ( System.currentTimeMillis() - lastControlMessage > 1000)){
+                        Log.d(TAG,"Focus Gone" );
                         MotorcycleData.setHasFocus(false);
                     }
                     //Check if message changed
