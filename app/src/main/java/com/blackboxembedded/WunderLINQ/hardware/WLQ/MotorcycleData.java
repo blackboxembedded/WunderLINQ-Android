@@ -1710,7 +1710,7 @@ public class MotorcycleData {
 
                 case TRIP_ONE:
                     Double trip1 = MotorcycleData.getTripOne();
-                    label = MemCache.distanceUnitLabel(); // MyApplication.getContext().getString(R.string.trip1_label) + " (" + distanceUnit + ")";
+                    label = MemCache.trip1Label(); // MyApplication.getContext().getString(R.string.trip1_label) + " (" + distanceUnit + ")";
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_suitcase);
                     if(trip1 != null) {
                         if (MemCache. distanceFormat().equals("1")) {
