@@ -922,7 +922,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     //start timer function
     void startTimer() {
-        if (sharedPrefs.getBoolean("prefHideNavBar", true)) {
+        if (sharedPrefs.getBoolean("prefHideNavBar", false)) {
             if (!timerRunning) {
                 cTimer = new CountDownTimer(10000, 1000) {
                     public void onTick(long millisUntilFinished) {
@@ -1095,11 +1095,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private void reloadGridLayout() {
         //Use layout grid item1 as template and copy as needed
-        final int templateLayoutResource = R.layout.layout_griditem1;
-        final int templateLayoutID = id.layout_1;
-        final int templateTextViewID = id.textView1;
-        final int templateTextViewLabelID = id.textView1label;
-        final int templateImageViewID = id.imageView1;
+        final int templateLayoutResource = R.layout.item_grid;
+        final int templateLayoutID = id.cell_layout;
+        final int templateTextViewID = id.cell_value;
+        final int templateTextViewLabelID = id.cell_label;
+        final int templateImageViewID = id.cell_icon;
 
 
         int[] defaultCellData = {

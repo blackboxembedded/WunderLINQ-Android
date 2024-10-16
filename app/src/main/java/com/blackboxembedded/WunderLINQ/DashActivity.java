@@ -333,7 +333,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
 
     //start timer function
     void startTimer() {
-        if (sharedPrefs.getBoolean("prefHideNavBar", true)) {
+        if (sharedPrefs.getBoolean("prefHideNavBar", false)) {
             if (!timerRunning) {
                 cTimer = new CountDownTimer(10000, 1000) {
                     public void onTick(long millisUntilFinished) {

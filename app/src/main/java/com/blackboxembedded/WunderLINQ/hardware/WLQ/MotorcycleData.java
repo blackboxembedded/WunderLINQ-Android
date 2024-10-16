@@ -795,168 +795,8 @@ public class MotorcycleData {
         return key;
     }
 
-    public static Drawable getIcon(DataType dataPoint){
-        Drawable icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_cog);
-        switch (dataPoint){
-            case GEAR:
-                icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_cog);
-                break;
-            case ENGINE_TEMP:
-                icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_engine_temp);
-                if(MotorcycleData.getEngineTemperature() != null ){
-                    double engineTemp = MotorcycleData.getEngineTemperature();
-                    if (engineTemp >= 104.0){
-                        icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
-                    }
-                }
-                break;
-            case AIR_TEMP:
-                if(MotorcycleData.getAmbientTemperature() != null ){
-                    double ambientTemp = MotorcycleData.getAmbientTemperature();
-                    if(ambientTemp <= 0){
-                        icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_snowflake);
-                        icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_blue), PorterDuff.Mode.SRC_ATOP);
-                    } else {
-                        icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_thermometer_half);
-                    }
-                } else {
-                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_thermometer_half);
-                }
-                break;
-            case FRONT_RDC:
-                icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire);
-                if (Faults.getFrontTirePressureCriticalActive()){
-                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire_alert);
-                    icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
-                } else if (Faults.getFrontTirePressureWarningActive()){
-                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire_alert);
-                    icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
-                }
-                break;
-            case REAR_RDC:
-                icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire);
-                if (Faults.getRearTirePressureCriticalActive()){
-                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire_alert);
-                    icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
-                } else if (Faults.getRearTirePressureWarningActive()){
-                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire_alert);
-                    icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
-                }
-                break;
-            case ODOMETER:
-                icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_dashboard_meter);
-                break;
-            case VOLTAGE:
-                icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_car_battery);
-                break;
-            case THROTTLE:
-                icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_signature);
-                break;
-            case FRONT_BRAKE:
-            case REAR_BRAKE:
-                icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_brakes);
-                break;
-            case AMBIENT_LIGHT:
-                icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_lightbulb);
-                break;
-            case TRIP_ONE:
-            case TRIP_TWO:
-            case TRIP_AUTO:
-                icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_suitcase);
-                break;
-            case SPEED:
-            case AVG_SPEED:
-            case SPEED_DEVICE:
-            case RPM:
-            case REAR_SPEED:
-                icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tachometer_alt);
-                break;
-            case CURRENT_CONSUMPTION:
-            case ECONOMY_ONE:
-            case ECONOMY_TWO:
-            case RANGE:
-                icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_gas_pump);
-                break;
-            case SHIFTS:
-                icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_arrows_alt_v);
-                break;
-            case LEAN_DEVICE:
-            case LEAN_BIKE:
-                icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_angle);
-                break;
-            case GFORCE_DEVICE:
-                icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_accelerometer);
-                break;
-            case BEARING_DEVICE:
-                icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_compass);
-                break;
-            case TIME_DEVICE:
-                icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_clock);
-                break;
-            case BAROMETRIC_DEVICE:
-                icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_barometer);
-                break;
-            case ALTITUDE_DEVICE:
-                icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_mountain);
-                break;
-            case SUN_DEVICE:
-                if (MotorcycleData.getLastLocation() != null && MotorcycleData.getTime() != null) {
-                    Calendar[] sunriseSunset = ca.rmen.sunrisesunset.SunriseSunset.getSunriseSunset(Calendar.getInstance(), MotorcycleData.getLastLocation().getLatitude(), MotorcycleData.getLastLocation().getLongitude());
-                    Date sunrise = sunriseSunset[0].getTime();
-                    Date sunset = sunriseSunset[1].getTime();
-                    if(MotorcycleData.getTime().compareTo(sunrise) > 0 && MotorcycleData.getTime().compareTo(sunset) < 0){
-                        icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_sun);
-                    } else {
-                        icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_moon);
-                    }
-
-                } else {
-                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_sun);
-                }
-                break;
-            case CELL_SIGNAL:
-                icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.signal_bar_0);
-                if(MotorcycleData.getCellularSignal() != null){
-                    int signal = MotorcycleData.getCellularSignal();
-                    if (signal > -79) {
-                        icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.signal_bar_4);
-                    } else if (signal > -89 && signal < -80) {
-                        icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.signal_bar_3);
-                    } else if (signal > -99 && signal < -90) {
-                        icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.signal_bar_2);
-                    } else if (signal > -109 && signal < -100) {
-                        icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.signal_bar_1);
-                    } else if (signal < -110) {
-                        icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.signal_bar_0);
-                    }
-                }
-                break;
-            case BATTERY_DEVICE:
-                icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.battery_empty);
-                if(MotorcycleData.getLocalBattery() != null){
-                    double battery = MotorcycleData.getLocalBattery();
-                    if(battery > 95){
-                        icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.battery_full);
-                    } else if(battery > 75 && battery < 95){
-                        icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.battery_three_quarters);
-                    } else if(battery > 50 && battery < 75){
-                        icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.battery_half);
-                    } else if(battery > 25 && battery < 50){
-                        icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.battery_quarter);
-                    } else if(battery > 0 && battery < 25){
-                        icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.battery_empty);
-                        icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
-                    }
-                }
-                break;
-            default:
-                icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_cog);
-        }
-        return icon;
-    }
-
     public static CarIcon getCarIcon(DataType dataPoint){
-        IconCompat icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_cog);
+        IconCompat icon;
         CarColor carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.white),MyApplication.getContext().getResources().getColor(R.color.black));
 
         switch (dataPoint){
@@ -967,22 +807,27 @@ public class MotorcycleData {
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_engine_temp);
                 if(MotorcycleData.getEngineTemperature() != null ){
                     double engineTemp = MotorcycleData.getEngineTemperature();
-                    if (engineTemp >= 104.0){
+                    if (engineTemp >= CRITICAL_ENGINE_TEMP_C){
                         carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_red),MyApplication.getContext().getResources().getColor(R.color.motorrad_red));
+                    } else if (engineTemp <= CRITICAL_ENGINE_TEMP_LOW_C) {
+                        carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_blue),MyApplication.getContext().getResources().getColor(R.color.motorrad_blue));
                     }
                 }
                 break;
             case AIR_TEMP:
+                icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_thermometer_half);
                 if(MotorcycleData.getAmbientTemperature() != null ){
                     double ambientTemp = MotorcycleData.getAmbientTemperature();
-                    if(ambientTemp <= 0){
+                    if(ambientTemp <= CRITICAL_AIR_TEMP_LOW_C){
                         icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_snowflake);
                         carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_blue),MyApplication.getContext().getResources().getColor(R.color.motorrad_blue));
+
                     } else {
                         icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_thermometer_half);
+                        if (ambientTemp > CRITICAL_AIR_TEMP_HIGH_C) {
+                            carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_red),MyApplication.getContext().getResources().getColor(R.color.motorrad_red));
+                        }
                     }
-                } else {
-                    icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_thermometer_half);
                 }
                 break;
             case FRONT_RDC:
@@ -1113,6 +958,7 @@ public class MotorcycleData {
                 break;
             default:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_cog);
+                break;
         }
         return new CarIcon.Builder(icon).setTint(carColor).build();
     }
@@ -1450,58 +1296,12 @@ public class MotorcycleData {
         return getLabel(DataType.values()[dataPoint]);
     }
 
-    public static String  getExtraKey(int dataPoint) {
-        return getExtraKey(DataType.values()[dataPoint]);
-    }
-
-    public static Drawable  getIcon(int dataPoint) {
-        return getIcon(DataType.values()[dataPoint]);
-    }
-
     public static CarIcon getCarIcon(int dataPoint){
         return getCarIcon(DataType.values()[dataPoint]);
     }
     public static String getValue(int dataPoint) {
         return getValue(DataType.values()[dataPoint]);
     }
-
-    /*
-    public static void clear(){
-        Data.lastLocation = null;
-        Data.lastMessage = null;
-        Data.vin = null;
-        Data.nextService = null;
-        Data.nextServiceDate = null;
-        Data.frontTirePressure = null;
-        Data.rearTirePressure = null;
-        Data.ambientTemperature = null;
-        Data.engineTemperature = null;
-        Data.odometer = null;
-        Data.tripOne = null;
-        Data.tripTwo = null;
-        Data.gear = null;
-        Data.voltage = null;
-        Data.throttlePosition = null;
-        Data.ambientLight = null;
-        Data.speed = null;
-        Data.avgSpeed = null;
-        Data.currentConsumption = null;
-        Data.fuelEconomyOne = null;
-        Data.fuelEconomyTwo = null;
-        Data.fuelRange = null;
-        Data.leanAngleDevice = null;
-        Data.gForce = null;
-        Data.bearing = null;
-        Data.barometricPressure = null;
-        Data.leanAngleBike = null;
-        Data.rearSpeed = null;
-    }
-     */
-
-
-
-
-
 
     public static  Object[] getCombinedData(DataType dataPoint){
         String value = "";
@@ -1551,6 +1351,7 @@ public class MotorcycleData {
                 case AIR_TEMP:
                     Double ambientTemp = MotorcycleData.getAmbientTemperature();
                     label = MemCache.temperatureUnitAir();
+                    icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_thermometer_half);
 
                     if(ambientTemp != null ){
                         if(ambientTemp <= CRITICAL_AIR_TEMP_LOW_C){

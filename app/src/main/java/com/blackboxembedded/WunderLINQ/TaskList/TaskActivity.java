@@ -350,7 +350,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
 
     //Start Timer to hide the ActionBar
     void startTimer() {
-        if (sharedPrefs.getBoolean("prefHideNavBar", true)) {
+        if (sharedPrefs.getBoolean("prefHideNavBar", false)) {
             if (!timerRunning) {
                 cTimer = new CountDownTimer(10000, 1000) {
                     public void onTick(long millisUntilFinished) {
