@@ -29,9 +29,10 @@ public class GattAttributes {
      */
     public static final String WUNDERLINQ_SERVICE = "02997340-015f-11e5-8c2b-0002a5d5c51b";
     public static final String WUNDERLINQ_PERFORMANCE_CHARACTERISTIC = "00000003-0000-1000-8000-00805f9b34fb";
-    public static final String WUNDERLINQ_COMMAND_CHARACTERISTIC = "00000004-0000-1000-8000-00805f9b34fb";
+    public static final String WUNDERLINQ_N_COMMAND_CHARACTERISTIC = "00000004-0000-1000-8000-00805f9b34fb";
     public static final String WUNDERLINQ_C_COMMAND_CHARACTERISTIC = "00000004-0000-1000-8000-00805f9b34fc";
-    public static final String WUNDERLINQ_X_COMMAND_CHARACTERISTIC = "00000004-0000-1000-8000-00805f9b34fd";
+    public static final String WUNDERLINQ_U_COMMAND_CHARACTERISTIC = "00000004-0000-1000-8000-00805f9b34fd";
+    public static final String WUNDERLINQ_X_COMMAND_CHARACTERISTIC = "00000004-0000-1000-8000-00805f9b34fe";
 
     /**
      * Descriptor UUID's
@@ -61,8 +62,9 @@ public class GattAttributes {
         // WunderLINQ
         attributesUUID.put(UUIDDatabase.UUID_WUNDERLINQ_SERVICE, "WunderLINQ Service");
         attributesUUID.put(UUIDDatabase.UUID_WUNDERLINQ_PERFORMANCE_CHARACTERISTIC, "Performance Messages");
-        attributesUUID.put(UUIDDatabase.UUID_WUNDERLINQ_COMMAND_CHARACTERISTIC, "WunderLINQ N Commands");
+        attributesUUID.put(UUIDDatabase.UUID_WUNDERLINQ_N_COMMAND_CHARACTERISTIC, "WunderLINQ N Commands");
         attributesUUID.put(UUIDDatabase.UUID_WUNDERLINQ_C_COMMAND_CHARACTERISTIC, "WunderLINQ C Commands");
+        attributesUUID.put(UUIDDatabase.UUID_WUNDERLINQ_U_COMMAND_CHARACTERISTIC, "WunderLINQ U Commands");
         attributesUUID.put(UUIDDatabase.UUID_WUNDERLINQ_X_COMMAND_CHARACTERISTIC, "WunderLINQ X Commands");
 
         // Descriptors

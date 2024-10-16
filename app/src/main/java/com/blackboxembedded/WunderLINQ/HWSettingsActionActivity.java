@@ -41,8 +41,9 @@ import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_C;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_X;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_U;
 import com.blackboxembedded.WunderLINQ.comms.BLE.KeyboardHID;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_X;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -115,7 +116,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         actionTypeSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE || actionID == WLQ_X.KEYMODE){
+                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE || actionID == WLQ_U.KEYMODE){
                     if(MotorcycleData.wlq.getKeyMode() != pos){
                         saveBT.setVisibility(View.VISIBLE);
                     } else {
@@ -149,8 +150,8 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                     } else {
                         saveBT.setVisibility(View.VISIBLE);
                     }
-                } else if (actionID == WLQ_X.ORIENTATION){
-                    if ((pos) == WLQ_X.orientation){
+                } else if (actionID == WLQ_U.ORIENTATION){
+                    if ((pos) == WLQ_U.orientation){
                         saveBT.setVisibility(View.INVISIBLE);
                     } else {
                         saveBT.setVisibility(View.VISIBLE);
@@ -199,7 +200,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         actionKeySP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE || actionID == WLQ_X.KEYMODE){
+                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_X.KEYMODE || actionID == WLQ_C.KEYMODE || actionID == WLQ_U.KEYMODE){
 
                 } else if (actionID == WLQ_N.USB){
 
@@ -207,9 +208,13 @@ public class HWSettingsActionActivity extends AppCompatActivity {
 
                 } else if (actionID == WLQ_N.fullLongPressSensitivity){
 
+                } else if (actionID == WLQ_X.RTKDoublePressSensitivity){
+
+                } else if (actionID == WLQ_X.fullLongPressSensitivity){
+
                 } else if (actionID == WLQ_C.longPressSensitivity){
 
-                } else if (actionID == WLQ_X.ORIENTATION){
+                } else if (actionID == WLQ_U.ORIENTATION){
 
                 } else {
                     if (actionTypeSP.getSelectedItemPosition() == MotorcycleData.wlq.KEYBOARD_HID()) {
@@ -247,7 +252,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
                 if (actionID == WLQ_N.OldSensitivity){
 
-                } else if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE || actionID == WLQ_X.KEYMODE){
+                } else if (actionID == WLQ_N.KEYMODE || actionID == WLQ_X.KEYMODE || actionID == WLQ_C.KEYMODE || actionID == WLQ_U.KEYMODE){
 
                 } else if (actionID == WLQ_N.USB){
 
@@ -255,9 +260,13 @@ public class HWSettingsActionActivity extends AppCompatActivity {
 
                 } else if (actionID == WLQ_N.fullLongPressSensitivity){
 
+                } else if (actionID == WLQ_X.RTKDoublePressSensitivity){
+
+                } else if (actionID == WLQ_X.fullLongPressSensitivity){
+
                 } else if (actionID == WLQ_C.longPressSensitivity){
 
-                } else if (actionID == WLQ_X.ORIENTATION){
+                } else if (actionID == WLQ_U.ORIENTATION){
 
                 } else {
                     saveBT.setVisibility(View.VISIBLE);
@@ -287,7 +296,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 Intent backIntent = new Intent(HWSettingsActionActivity.this, HWSettingsActivity.class);
                 startActivity(backIntent);
             } else if (v.getId() == R.id.btSave) {
-                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE || actionID == WLQ_X.KEYMODE){
+                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_X.KEYMODE || actionID == WLQ_C.KEYMODE || actionID == WLQ_U.KEYMODE){
                     setHWMode((byte) actionTypeSP.getSelectedItemPosition());
                     return;
                 } else if (actionID == WLQ_N.USB){
@@ -308,15 +317,15 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 } else if (actionID == WLQ_C.longPressSensitivity){
                     // TODO
                     //Data.wlq.getTempConfig()[WLQ_C.lpSensitivityHigh_INDEX] = (byte)(actionTypeSP.getSelectedItemPosition() + 1);
-                } else if (actionID == WLQ_X.ORIENTATION){
+                } else if (actionID == WLQ_U.ORIENTATION){
                     if(actionTypeSP.getSelectedItemPosition() == 0){
-                        MotorcycleData.wlq.getTempConfig()[WLQ_X.orientation_INDEX] = 0x00;
+                        MotorcycleData.wlq.getTempConfig()[WLQ_U.orientation_INDEX] = 0x00;
                     } else if(actionTypeSP.getSelectedItemPosition() == 1){
-                        MotorcycleData.wlq.getTempConfig()[WLQ_X.orientation_INDEX] = 0x01;
+                        MotorcycleData.wlq.getTempConfig()[WLQ_U.orientation_INDEX] = 0x01;
                     } else if(actionTypeSP.getSelectedItemPosition() == 2){
-                        MotorcycleData.wlq.getTempConfig()[WLQ_X.orientation_INDEX] = 0x02;
+                        MotorcycleData.wlq.getTempConfig()[WLQ_U.orientation_INDEX] = 0x02;
                     } else if(actionTypeSP.getSelectedItemPosition() == 4){
-                        MotorcycleData.wlq.getTempConfig()[WLQ_X.orientation_INDEX] = 0x04;
+                        MotorcycleData.wlq.getTempConfig()[WLQ_U.orientation_INDEX] = 0x04;
                     }
                 } else {
                     byte type = (byte)actionTypeSP.getSelectedItemPosition();
@@ -368,8 +377,8 @@ public class HWSettingsActionActivity extends AppCompatActivity {
     private void updateDisplay(){
         saveBT.setVisibility(View.INVISIBLE);
         actionLabelTV.setText(MotorcycleData.wlq.getActionName(actionID));
-        if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE|| actionID == WLQ_X.KEYMODE){ //Key mode
-            actionTypeSP.setAdapter(keyModes);
+        if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE || actionID == WLQ_X.KEYMODE || actionID == WLQ_U.KEYMODE){ //Key mode
+            actionTypeSP.setAdapter(keymodes);
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
             actionTypeSP.setSelection(MotorcycleData.wlq.getKeyMode());
@@ -381,7 +390,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 actionTypeSP.setSelection(0);
             } else if(WLQ_N.USBVinThreshold == 0xFFFF){
                 actionTypeSP.setSelection(2);
-            } else if(WLQ_N.USBVinThreshold != 0xFFFF && WLQ_N.USBVinThreshold != 0x0000){
+            } else {
                 actionTypeSP.setSelection(1);
             }
         } else if (actionID == WLQ_N.RTKDoublePressSensitivity){  //RTK Sensitivity
@@ -422,17 +431,17 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             actionModifiersSP.setVisibility(View.INVISIBLE);
             actionTypeSP.setSelection(WLQ_C.sensitivity - 1);
              */
-        } else if (actionID == WLQ_X.ORIENTATION){
+        } else if (actionID == WLQ_U.ORIENTATION){
             actionTypeSP.setAdapter(orientations);
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
-            if(WLQ_X.orientation == 0x00){
+            if(WLQ_U.orientation == 0x00){
                 actionTypeSP.setSelection(0);
-            } else if(WLQ_X.orientation == 0x01){
+            } else if(WLQ_U.orientation == 0x01){
                 actionTypeSP.setSelection(1);
-            } else if(WLQ_X.orientation == 0x02){
+            } else if(WLQ_U.orientation == 0x02){
                 actionTypeSP.setSelection(2);
-            } else if(WLQ_X.orientation == 0x04){
+            } else if(WLQ_U.orientation == 0x04){
                 actionTypeSP.setSelection(3);
             }
         } else {    // Keys

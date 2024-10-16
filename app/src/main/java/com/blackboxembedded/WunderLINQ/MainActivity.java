@@ -834,9 +834,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if ( MotorcycleData.wlq != null) {
-                                if ( MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_NAVIGATOR) {
-                                    mMenu.findItem(id.action_bike_info).setVisible(true);
+                            if(MotorcycleData.wlq != null) {
+                                if(MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_N) {
+                                    mMenu.findItem(R.id.action_bike_info).setVisible(true);
                                 }
                                 mMenu.findItem(id.action_hwsettings).setVisible(true);
                             }

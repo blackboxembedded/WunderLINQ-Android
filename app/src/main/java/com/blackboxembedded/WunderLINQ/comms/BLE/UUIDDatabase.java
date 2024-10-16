@@ -33,14 +33,17 @@ public class UUIDDatabase {
     public static final UUID UUID_WUNDERLINQ_PERFORMANCE_CHARACTERISTIC = UUID
             .fromString(GattAttributes.WUNDERLINQ_PERFORMANCE_CHARACTERISTIC);
 
-    public final static UUID UUID_WUNDERLINQ_COMMAND_CHARACTERISTIC = UUID
-            .fromString(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC);
-
-    public final static UUID UUID_WUNDERLINQ_C_COMMAND_CHARACTERISTIC = UUID
-            .fromString(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC);
+    public final static UUID UUID_WUNDERLINQ_N_COMMAND_CHARACTERISTIC = UUID
+            .fromString(GattAttributes.WUNDERLINQ_N_COMMAND_CHARACTERISTIC);
 
     public final static UUID UUID_WUNDERLINQ_X_COMMAND_CHARACTERISTIC = UUID
-            .fromString(GattAttributes.WUNDERLINQ_COMMAND_CHARACTERISTIC);
+            .fromString(GattAttributes.WUNDERLINQ_X_COMMAND_CHARACTERISTIC);
+
+    public final static UUID UUID_WUNDERLINQ_C_COMMAND_CHARACTERISTIC = UUID
+            .fromString(GattAttributes.WUNDERLINQ_C_COMMAND_CHARACTERISTIC);
+
+    public final static UUID UUID_WUNDERLINQ_U_COMMAND_CHARACTERISTIC = UUID
+            .fromString(GattAttributes.WUNDERLINQ_U_COMMAND_CHARACTERISTIC);
 
     /**
      * Descriptor UUID
