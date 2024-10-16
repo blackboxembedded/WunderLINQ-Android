@@ -23,7 +23,7 @@ import android.content.Intent;
 import android.util.Log;
 
 public class LoggingNotificationReceiver extends BroadcastReceiver {
-    private static final String TAG = "LogNotfiRec";
+    private static final String TAG = "LogNotificationRec";
     public static int REQUEST_CODE_NOTIFICATION = 1234;
     public static final String RESUME_ACTION = "RESUME_ACTION";
     public static final String STOP_ACTION = "STOP_ACTION";

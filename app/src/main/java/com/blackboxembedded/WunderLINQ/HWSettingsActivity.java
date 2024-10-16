@@ -166,8 +166,8 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
     };
 
     private void showActionBar(){
-        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflator.inflate(R.layout.actionbar_nav_hwsettings, null);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.actionbar_nav_hwsettings, null);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled(false);
@@ -231,7 +231,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                 resetButton.setVisibility(View.VISIBLE);
                                 if (!Arrays.equals(MotorcycleData.wlq.getConfig(), MotorcycleData.wlq.getTempConfig())) {
                                     Log.d(TAG, "New Config found");
-                                    Log.d(TAG, "tempConfig: " + Utils.ByteArraytoHex(MotorcycleData.wlq.getTempConfig()));
+                                    Log.d(TAG, "tempConfig: " + Utils.ByteArrayToHex(MotorcycleData.wlq.getTempConfig()));
                                     hwConfigBtn.setText(getString(R.string.config_write_label));
                                     hwConfigBtn.setVisibility(View.VISIBLE);
                                 }
@@ -325,8 +325,8 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                         resetButton.setVisibility(View.VISIBLE);
                         if (!Arrays.equals(MotorcycleData.wlq.getConfig(), MotorcycleData.wlq.getTempConfig())) {
                             Log.d(TAG, "New Config found");
-                            Log.d(TAG, "Config: " + Utils.ByteArraytoHex(MotorcycleData.wlq.getConfig()));
-                            Log.d(TAG, "tempConfig: " + Utils.ByteArraytoHex(MotorcycleData.wlq.getTempConfig()));
+                            Log.d(TAG, "Config: " + Utils.ByteArrayToHex(MotorcycleData.wlq.getConfig()));
+                            Log.d(TAG, "tempConfig: " + Utils.ByteArrayToHex(MotorcycleData.wlq.getTempConfig()));
                             hwConfigBtn.setText(getString(R.string.config_write_label));
                             hwConfigBtn.setVisibility(View.VISIBLE);
                         }
@@ -356,8 +356,8 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                         resetButton.setVisibility(View.VISIBLE);
                         if (!Arrays.equals(MotorcycleData.wlq.getConfig(), MotorcycleData.wlq.getTempConfig())) {
                             Log.d(TAG, "New Config found");
-                            Log.d(TAG, "Config: " + Utils.ByteArraytoHex(MotorcycleData.wlq.getConfig()));
-                            Log.d(TAG, "tempConfig: " + Utils.ByteArraytoHex(MotorcycleData.wlq.getTempConfig()));
+                            Log.d(TAG, "Config: " + Utils.ByteArrayToHex(MotorcycleData.wlq.getConfig()));
+                            Log.d(TAG, "tempConfig: " + Utils.ByteArrayToHex(MotorcycleData.wlq.getTempConfig()));
                             hwConfigBtn.setText(getString(R.string.config_write_label));
                             hwConfigBtn.setVisibility(View.VISIBLE);
                         }
@@ -401,7 +401,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                         }
                                         outputStream.write(MotorcycleData.wlq.CMD_EOM());
                                         byte[] writeConfigCmd = outputStream.toByteArray();
-                                        Log.d(TAG, "Reset Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
+                                        Log.d(TAG, "Reset Command Sent: " + Utils.ByteArrayToHex(writeConfigCmd));
                                         BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                                     }
                                 } else if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_X) {
@@ -418,7 +418,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                     outputStream.write(WLQ_C.defaultConfig);
                                     outputStream.write(MotorcycleData.wlq.CMD_EOM());
                                     byte[] writeConfigCmd = outputStream.toByteArray();
-                                    Log.d(TAG, "Reset Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
+                                    Log.d(TAG, "Reset Command Sent: " + Utils.ByteArrayToHex(writeConfigCmd));
                                     BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                                 } else if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_U) {
                                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -426,7 +426,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                     outputStream.write(WLQ_U.defaultConfig);
                                     outputStream.write(MotorcycleData.wlq.CMD_EOM());
                                     byte[] writeConfigCmd = outputStream.toByteArray();
-                                    Log.d(TAG, "Reset Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
+                                    Log.d(TAG, "Reset Command Sent: " + Utils.ByteArrayToHex(writeConfigCmd));
                                     BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                                 }
                             }

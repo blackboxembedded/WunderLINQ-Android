@@ -24,7 +24,7 @@
             android:defaultValue="#0059ff"
             />
         <PreferenceScreen
-            android:key="prefScreenGrid"
+            android:key="prefScreenMain"
             android:title="@string/pref_main_settings_title"
             android:summary="@string/pref_main_settings_summary">
             <CheckBoxPreference
@@ -459,7 +459,7 @@
         </CheckBoxPreference>
         <ListPreference
             android:dependency="prefPIP"
-            android:key="prefPIPorientation"
+            android:key="prefPIPOrientation"
             android:title="@string/pref_piporientation_name"
             android:entries="@array/piporientation_array"
             android:entryValues="@array/piporientation_arrayValues"

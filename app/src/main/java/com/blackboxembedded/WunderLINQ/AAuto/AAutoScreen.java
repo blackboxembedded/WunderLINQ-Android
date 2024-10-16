@@ -145,7 +145,7 @@ public class AAutoScreen extends Screen {
         ItemList.Builder listBuilder = new ItemList.Builder();
         Faults faults;
         faults = (new Faults(MyApplication.getContext()));
-        ArrayList<String> activeDesc = faults.getallActiveDesc();
+        ArrayList<String> activeDesc = faults.getAllActiveDesc();
         for (String desc : activeDesc) {
                 listBuilder.addItem(new Row.Builder()
                         .setTitle(desc).build());
@@ -186,7 +186,7 @@ public class AAutoScreen extends Screen {
 
         Tab.Builder tabBuilder = new Tab.Builder()
                 .setTitle(MyApplication.getContext().getString(R.string.main_title))
-                .setIcon(MotorcycleData.getCarIcon(MotorcycleData.DATA_ODOMETER))
+                .setIcon(MotorcycleData.getCarIcon(MotorcycleData.DataType.ODOMETER))
                 .setContentId(contentId);
         if (mActiveContentId == null) {
             mActiveContentId = contentId;

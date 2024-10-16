@@ -60,7 +60,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
     private MultiSpinner actionModifiersSP;
     private Button saveBT;
     private Button cancelBT;
-    private ArrayAdapter<String> keymodes;
+    private ArrayAdapter<String> keyModes;
     private ArrayAdapter<String> usb;
     private ArrayAdapter<Integer> sensitivity;
     private ArrayAdapter<String> orientations;
@@ -89,7 +89,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         saveBT = findViewById(R.id.btSave);
         cancelBT = findViewById(R.id.btCancel);
 
-        keymodes = new ArrayAdapter<String>(this,
+        keyModes = new ArrayAdapter<String>(this,
                 R.layout.item_hwsettings_spinners, new String[]{getResources().getString(R.string.keymode_default_label),
                 getResources().getString(R.string.keymode_custom_label),
                 getResources().getString(R.string.keymode_media_label),
@@ -355,8 +355,8 @@ public class HWSettingsActionActivity extends AppCompatActivity {
     };
 
     private void showActionBar(){
-        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflator.inflate(R.layout.actionbar_nav, null);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.actionbar_nav, null);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled(false);
@@ -377,7 +377,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
     private void updateDisplay(){
         saveBT.setVisibility(View.INVISIBLE);
         actionLabelTV.setText(MotorcycleData.wlq.getActionName(actionID));
-        if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE|| actionID == WLQ_U.KEYMODE){ //Key mode
+        if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE || actionID == WLQ_X.KEYMODE || actionID == WLQ_U.KEYMODE){ //Key mode
             actionTypeSP.setAdapter(keymodes);
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);

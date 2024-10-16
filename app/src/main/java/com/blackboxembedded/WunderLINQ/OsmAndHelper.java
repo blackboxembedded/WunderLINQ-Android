@@ -490,16 +490,16 @@ public class OsmAndHelper {
     }
 
     /**
-     * Mute voice guidance. Stays muted until unmute manually or via the api.
+     * Mute voice guidance. Stays muted until unMute manually or via the api.
      */
     public void muteNavigation() {
         sendRequest(new OsmAndIntentBuilder(MUTE_NAVIGATION));
     }
 
     /**
-     * Unmute voice guidance.
+     * UnMute voice guidance.
      */
-    public void umuteNavigation() {
+    public void unMuteNavigation() {
         sendRequest(new OsmAndIntentBuilder(UNMUTE_NAVIGATION));
     }
 

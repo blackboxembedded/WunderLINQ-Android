@@ -280,9 +280,9 @@ public class FirstRunActivity extends AppCompatActivity {
                     spSelector.setVisibility(View.INVISIBLE);
                     step = step + 1;
                     if (v.getId() == R.id.buttonOK) {
-                        String[] navappIDs = getResources().getStringArray(R.array.nav_apps_arrayValues);
+                        String[] navAppIDs = getResources().getStringArray(R.array.nav_apps_arrayValues);
                         String selected = "1";
-                        selected = navappIDs[spSelector.getSelectedItemPosition()];
+                        selected = navAppIDs[spSelector.getSelectedItemPosition()];
                         SharedPreferences.Editor editor = sharedPrefs.edit();
                         editor.putString("prefNavApp", selected);
                         editor.apply();
