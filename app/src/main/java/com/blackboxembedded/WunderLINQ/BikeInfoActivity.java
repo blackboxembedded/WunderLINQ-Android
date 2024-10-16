@@ -49,7 +49,7 @@ import java.time.format.DateTimeFormatter;
 
 public class BikeInfoActivity extends AppCompatActivity {
 
-    private final static String TAG = "BikeInfoActvity";
+    private final static String TAG = "BikeInfoActivity";
 
     BluetoothGattCharacteristic characteristic;
 
@@ -132,8 +132,8 @@ public class BikeInfoActivity extends AppCompatActivity {
     }
 
     private void showActionBar(){
-        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflator.inflate(R.layout.actionbar_nav, null);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.actionbar_nav, null);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled (false);
@@ -214,7 +214,7 @@ public class BikeInfoActivity extends AppCompatActivity {
             String distanceFormat = sharedPrefs.getString("prefDistance", "0");
             String nextService = MotorcycleData.getNextService() + "(km)";
             if (distanceFormat.contains("1")) {
-                nextService = Math.round(Utils.kmToMiles(MotorcycleData.getNextService())) + "(mi)";
+                nextService = Utils.toZeroDecimalString(Utils.kmToMiles(MotorcycleData.getNextService())) + "(mi)";
             }
             tvNextService.setText(nextService);
         }

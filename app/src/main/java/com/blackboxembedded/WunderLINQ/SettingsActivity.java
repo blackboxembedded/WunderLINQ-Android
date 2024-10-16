@@ -153,7 +153,7 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
         ListPreference prefDashSpeedSource;
         ListPreference prefNavApp;
         ListPreference prefRoadBookApp;
-        ListPreference prefPIPorientation;
+        ListPreference prefPIPOrientation;
         ListPreference prefPIPCellCount;
 
         @Override
@@ -272,15 +272,15 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
             prefNavApp.setSummary(prefNavApp.getEntry());
             prefRoadBookApp = findPreference("prefRoadBookApp");
             prefRoadBookApp.setSummary(prefRoadBookApp.getEntry());
-            prefPIPorientation = findPreference("prefPIPorientation");
-            prefPIPorientation.setSummary(prefPIPorientation.getEntry());
+            prefPIPOrientation = findPreference("prefPIPOrientation");
+            prefPIPOrientation.setSummary(prefPIPOrientation.getEntry());
             prefPIPCellCount = findPreference("prefPIPCellCount");
             prefPIPCellCount.setSummary(prefPIPCellCount.getEntry());
 
             if (Build.VERSION.SDK_INT >= 24) {
                 PreferenceScreen preferenceScreen = getPreferenceScreen();
                 Preference pipPreference = findPreference("prefPIP");
-                Preference pipOrientationPreference = findPreference("prefPIPorientation");
+                Preference pipOrientationPreference = findPreference("prefPIPOrientation");
                 Preference pipCellCountPreference = findPreference("prefPIPCellCount") ;
                 preferenceScreen.removePreference(pipPreference);
                 preferenceScreen.removePreference(pipOrientationPreference);
@@ -431,8 +431,8 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
             if (key.equals("prefRoadBookApp")){
                 prefRoadBookApp.setSummary(prefRoadBookApp.getEntry());
             }
-            if (key.equals("prefPIPorientation")){
-                prefPIPorientation.setSummary(prefPIPorientation.getEntry());
+            if (key.equals("prefPIPOrientation")){
+                prefPIPOrientation.setSummary(prefPIPOrientation.getEntry());
             }
             if (key.equals("prefPIPCellCount")){
                 prefPIPCellCount.setSummary(prefPIPCellCount.getEntry());

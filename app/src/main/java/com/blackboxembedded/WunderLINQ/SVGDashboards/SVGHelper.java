@@ -82,7 +82,7 @@ public class SVGHelper {
         return s;
     }
 
-    public static String SVGfilename(String dashName) {
+    public static String svgFilename(String dashName) {
         if (dashName == null || dashName.isEmpty()) {
             dashName = "standard-dashboard";
         }
@@ -151,11 +151,11 @@ public class SVGHelper {
             switch (infoLine) {
                 case 1://Range
                     if (MotorcycleData.getFuelRange() != null) {
-                        double fuelrange = MotorcycleData.getFuelRange();
+                        double fuelRange = MotorcycleData.getFuelRange();
                         if (s.distanceFormat.contains("1")) {
-                            fuelrange = Utils.kmToMiles(fuelrange);
+                            fuelRange = Utils.kmToMiles(fuelRange);
                         }
-                        dataVal = String.valueOf(Math.round(fuelrange)) + " " + s.distanceUnit;
+                        dataVal = (Utils.toZeroDecimalString(fuelRange)) + " " + s.distanceUnit;
                     }
                     break;
                 case 2://Trip1
@@ -165,7 +165,7 @@ public class SVGHelper {
                             if (s.distanceFormat.contains("1")) {
                                 trip1 = Utils.kmToMiles(trip1);
                             }
-                            dataVal = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(trip1) + " " + s.distanceUnit;
+                            dataVal = Utils.toOneDecimalString(trip1) + " " + s.distanceUnit;
                         }
                     }
                     break;
@@ -176,7 +176,7 @@ public class SVGHelper {
                             if (s.distanceFormat.contains("1")) {
                                 trip2 = Utils.kmToMiles(trip2);
                             }
-                            dataVal = Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(trip2) + " " + s.distanceUnit;
+                            dataVal = Utils.toOneDecimalString(trip2) + " " + s.distanceUnit;
                         }
                     }
                     break;
@@ -186,7 +186,7 @@ public class SVGHelper {
                         if (s.distanceFormat.contains("1")) {
                             altitude = Utils.mToFeet(altitude);
                         }
-                        dataVal = (String.valueOf(Math.round(altitude) + " " + s.heightUnit));
+                        dataVal = ((Utils.toZeroDecimalString(altitude) + " " + s.heightUnit));
                     }
                     break;
                 default:
@@ -222,10 +222,7 @@ public class SVGHelper {
                 if (s.distanceFormat.contains("1")) {
                     speed = Utils.kmToMiles(speed);
                 }
-                speedValue = String.valueOf(Math.round(speed));
-                if (speed < 10) {
-                    speedValue = String.format("%02d", Math.round(speed));
-                }
+                speedValue = (Utils.toZeroDecimalString(speed));
             }
         } catch (Exception e) {
             Log.d(TAG, "Exception getting speed value: " + e.toString());
@@ -247,7 +244,7 @@ public class SVGHelper {
                     s.temperatureUnit = "F";
                     ambientTemp = Utils.celsiusToFahrenheit(ambientTemp);
                 }
-                val = (Math.round(ambientTemp) + s.temperatureUnit);
+                val = (Utils.toZeroDecimalString(ambientTemp) + s.temperatureUnit);
             }
         } catch (Exception e) {
             Log.d(TAG, "Exception getting ambient temp: " + e.toString());
@@ -283,7 +280,7 @@ public class SVGHelper {
             //Fault Icon
             e = doc.getElementById("iconFault");
             if (e != null) {
-                ArrayList<String> faultListData = Faults.getallActiveDesc();
+                ArrayList<String> faultListData = Faults.getAllActiveDesc();
                 if (!faultListData.isEmpty()) {
                     e.setAttribute("style", "display:inline");
                 } else {
@@ -294,7 +291,7 @@ public class SVGHelper {
             //Fuel Icon
             e = doc.getElementById("iconFuel");
             if (e != null) {
-                if (Faults.getfuelFaultActive()) {
+                if (Faults.getFuelFaultActive()) {
                     e.setAttribute("style", "display:inline");
                 } else {
                     e.setAttribute("style", "display:none");
@@ -671,19 +668,19 @@ public class SVGHelper {
                 } else if (s.pressureFormat.contains("2")) {
                     // Kg-f
                     s.pressureUnit = "Kgf";
-                    rdcRear = Utils.barTokgf(rdcRear);
+                    rdcRear = Utils.barToKgF(rdcRear);
                 } else if (s.pressureFormat.contains("3")) {
                     // Psi
                     s.pressureUnit = "psi";
                     rdcRear = Utils.barToPsi(rdcRear);
                 }
-                doc.getElementById("rdcR").setTextContent(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(rdcRear) + s.pressureUnit);
-                if (Faults.getrearTirePressureCriticalActive()) {
+                doc.getElementById("rdcR").setTextContent(Utils.toOneDecimalString(rdcRear) + s.pressureUnit);
+                if (Faults.getRearTirePressureCriticalActive()) {
                     doc.getElementById("rdcR").setAttribute("style",
                             doc.getElementById("rdcR").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
                     );
 
-                } else if (Faults.getrearTirePressureWarningActive()) {
+                } else if (Faults.getRearTirePressureWarningActive()) {
                     doc.getElementById("rdcR").setAttribute("style",
                             doc.getElementById("rdcR").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#fcc914;")
                     );
@@ -707,18 +704,18 @@ public class SVGHelper {
                 } else if (s.pressureFormat.contains("2")) {
                     // Kg-f
                     s.pressureUnit = "Kgf";
-                    rdcFront = Utils.barTokgf(rdcFront);
+                    rdcFront = Utils.barToKgF(rdcFront);
                 } else if (s.pressureFormat.contains("3")) {
                     // Psi
                     s.pressureUnit = "psi";
                     rdcFront = Utils.barToPsi(rdcFront);
                 }
-                doc.getElementById("rdcF").setTextContent(Utils.getLocalizedOneDigitFormat(Utils.getCurrentLocale()).format(rdcFront) + s.pressureUnit);
-                if (Faults.getfrontTirePressureCriticalActive()) {
+                doc.getElementById("rdcF").setTextContent(Utils.toOneDecimalString(rdcFront) + s.pressureUnit);
+                if (Faults.getFrontTirePressureCriticalActive()) {
                     doc.getElementById("rdcF").setAttribute("style",
                             doc.getElementById("rdcF").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
                     );
-                } else if (Faults.getfrontTirePressureWarningActive()) {
+                } else if (Faults.getFrontTirePressureWarningActive()) {
                     doc.getElementById("rdcF").setAttribute("style",
                             doc.getElementById("rdcF").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#fcc914;")
                     );
@@ -734,11 +731,11 @@ public class SVGHelper {
         try {
             //Clock
             if (MotorcycleData.getTime() != null) {
-                SimpleDateFormat dateformat = new SimpleDateFormat("h:mm", Locale.getDefault());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("h:mm", Locale.getDefault());
                 if (!s.sharedPrefs.getString("prefTime", "0").equals("0")) {
-                    dateformat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                    dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
                 }
-                doc.getElementById("clock").setTextContent(dateformat.format(MotorcycleData.getTime()));
+                doc.getElementById("clock").setTextContent(dateFormat.format(MotorcycleData.getTime()));
             }
         } catch (Exception e) {
             Log.d(TAG, "Exception getting clock: " + e.toString());
@@ -758,7 +755,7 @@ public class SVGHelper {
                     s.temperatureUnit = "F";
                     engineTemp = Utils.celsiusToFahrenheit(engineTemp);
                 }
-                doc.getElementById("engineTemp").setTextContent(Math.round(engineTemp) + s.temperatureUnit);
+                doc.getElementById("engineTemp").setTextContent(Utils.toZeroDecimalString(engineTemp) + s.temperatureUnit);
                 if (MotorcycleData.getEngineTemperature() >= 104.0) {
                     doc.getElementById("engineTemp").setAttribute("style",
                             doc.getElementById("engineTemp").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
@@ -826,7 +823,7 @@ public class SVGHelper {
             //Data Value
             if (infoLine == 1) {
                 if (MotorcycleData.getFuelRange() != null) {
-                    if (Faults.getfuelFaultActive()) {
+                    if (Faults.getFuelFaultActive()) {
                         doc.getElementById("dataValue").setAttribute("style",
                                 doc.getElementById("dataValue").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
                         );
@@ -2423,19 +2420,19 @@ public class SVGHelper {
 
             //Lean Angle
             if (MotorcycleData.getLeanAngleBike() != null) {
-                setText(doc, "angle", String.format("%02d", Math.abs(Math.round(MotorcycleData.getLeanAngleBike()))));
+                setText(doc, "angle", Utils.toZeroDecimalString(Math.abs(MotorcycleData.getLeanAngleBike())));
                 //Log.d("angle","Current Angle: " +  String.valueOf(Data.getLeanAngleBike()));
             }
             //Left Max Angle
             if (MotorcycleData.getLeanAngleBikeMaxL() != null) {
-                setText(doc, "angleMaxL", String.valueOf(Math.round(MotorcycleData.getLeanAngleBikeMaxL())));
+                setText(doc, "angleMaxL", (Utils.toZeroDecimalString(MotorcycleData.getLeanAngleBikeMaxL())));
                 Log.d("angleMaxL", "Max Left Angle: " + String.valueOf(MotorcycleData.getLeanAngleBikeMaxL()));
             } else {
                 setText(doc, "angleMaxL", "...");
             }
             //Right Max Angle
             if (MotorcycleData.getLeanAngleBikeMaxR() != null) {
-                setText(doc, "angleMaxR", String.valueOf(Math.round(MotorcycleData.getLeanAngleBikeMaxR())));
+                setText(doc, "angleMaxR", (Utils.toZeroDecimalString(MotorcycleData.getLeanAngleBikeMaxR())));
                 Log.d("angleMaxR", "Max Right Angle: " + String.valueOf(MotorcycleData.getLeanAngleBikeMaxR()));
             } else {
                 setText(doc, "angleMaxR", "...");
