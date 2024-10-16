@@ -873,13 +873,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         }.start();
     }
 
-
-    public GridItem getCellData(int dataPoint){
-        return new GridItem(MotorcycleData.getIcon(dataPoint),
-                MotorcycleData.getLabel(dataPoint),
-                (!MotorcycleData.getValue(dataPoint).equals("")) ? MotorcycleData.getValue(dataPoint) : getString(R.string.blank_field));
-    }
-
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         switch (keyCode) {

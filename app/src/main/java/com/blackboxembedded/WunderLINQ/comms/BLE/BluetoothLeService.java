@@ -1614,13 +1614,9 @@ public class BluetoothLeService extends Service {
 
 
     public static void setClusterClock(Date currTime) {
-
-        //Calendar c = Calendar.getInstance();
-        //Data.setTime(c.getTime());
-
         //Send time to cluster
         if (MotorcycleData.wlq != null) {
-            if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_N) {
+            if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_N || MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_X) {
                 if (gattCommandCharacteristic != null) {
                     BluetoothGattCharacteristic characteristic = gattCommandCharacteristic;
                     //Get Current Time
