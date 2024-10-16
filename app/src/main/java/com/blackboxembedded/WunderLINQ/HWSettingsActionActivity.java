@@ -378,7 +378,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         saveBT.setVisibility(View.INVISIBLE);
         actionLabelTV.setText(MotorcycleData.wlq.getActionName(actionID));
         if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE || actionID == WLQ_X.KEYMODE || actionID == WLQ_U.KEYMODE){ //Key mode
-            actionTypeSP.setAdapter(keymodes);
+            actionTypeSP.setAdapter(keyModes);
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
             actionTypeSP.setSelection(MotorcycleData.wlq.getKeyMode());

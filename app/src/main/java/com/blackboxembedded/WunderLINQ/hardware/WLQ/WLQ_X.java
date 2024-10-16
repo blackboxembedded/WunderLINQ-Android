@@ -946,6 +946,6 @@ public class WLQ_X extends WLQ_BASE {
 
     @Override
     public void setStatus(byte[] status) {
-        Log.d(TAG, "WLQ_X_STATUS: " + Utils.ByteArraytoHex(status));
+        Log.d(TAG, "WLQ_X_STATUS: " + Utils.ByteArrayToHex(status));
     }
 }

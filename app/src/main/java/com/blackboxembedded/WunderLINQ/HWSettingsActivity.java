@@ -286,7 +286,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                         resetButton.setVisibility(View.VISIBLE);
                         if (!Arrays.equals(MotorcycleData.wlq.getConfig(), MotorcycleData.wlq.getTempConfig())) {
                             Log.d(TAG, "New Config found");
-                            Log.d(TAG, "tempConfig: " + Utils.ByteArraytoHex(MotorcycleData.wlq.getTempConfig()));
+                            Log.d(TAG, "tempConfig: " + Utils.ByteArrayToHex(MotorcycleData.wlq.getTempConfig()));
                             hwConfigBtn.setText(getString(R.string.config_write_label));
                             hwConfigBtn.setVisibility(View.VISIBLE);
                         }
@@ -410,7 +410,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                                     outputStream.write(WLQ_X.defaultConfig);
                                     outputStream.write(MotorcycleData.wlq.CMD_EOM());
                                     byte[] writeConfigCmd = outputStream.toByteArray();
-                                    Log.d(TAG, "Reset Command Sent: " + Utils.ByteArraytoHex(writeConfigCmd));
+                                    Log.d(TAG, "Reset Command Sent: " + Utils.ByteArrayToHex(writeConfigCmd));
                                     BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                                 } else if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_C) {
                                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
