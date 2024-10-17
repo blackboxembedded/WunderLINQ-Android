@@ -1663,15 +1663,15 @@ public class MotorcycleData {
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_gas_pump);
 
                     if(fuelRange != null){
-                        if (MemCache.distanceFormat().equals("1")) {
-                            fuelRange = Utils.kmToMiles(fuelRange);
-                        }
                         if (fuelRange < RANGE_CRITICAL) {
                             valueColor = ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red);
                             icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
                         } else if (fuelRange < RANGE_LOW) {
                             valueColor = ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow);
                             icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
+                        }
+                        if (MemCache.distanceFormat().equals("1")) {
+                            fuelRange = Utils.kmToMiles(fuelRange);
                         }
                         value = Utils.toZeroDecimalString(fuelRange);
                     }
