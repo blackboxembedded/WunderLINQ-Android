@@ -855,6 +855,14 @@ public class MotorcycleData {
                 break;
             case VOLTAGE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_car_battery);
+                Double voltage = MotorcycleData.getVoltage();
+                if(voltage != null) {
+                    if (voltage >= CRITICAL_BATTERY_VOLTAGE_HIGH) {
+                        carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_red), MyApplication.getContext().getResources().getColor(R.color.motorrad_red));
+                    } else if (voltage < CRITICAL_BATTERY_VOLTAGE_LOW) {
+                        carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.yellow), MyApplication.getContext().getResources().getColor(R.color.yellow));
+                    }
+                }
                 break;
             case THROTTLE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_signature);
@@ -881,8 +889,18 @@ public class MotorcycleData {
             case CURRENT_CONSUMPTION:
             case ECONOMY_ONE:
             case ECONOMY_TWO:
+                icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_gas_pump);
+                break;
             case RANGE:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_gas_pump);
+                Double fuelRange = MotorcycleData.getFuelRange();
+                if(fuelRange != null){
+                    if (fuelRange < RANGE_CRITICAL) {
+                        carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_red), MyApplication.getContext().getResources().getColor(R.color.motorrad_red));
+                    } else if (fuelRange < RANGE_LOW) {
+                        carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.yellow), MyApplication.getContext().getResources().getColor(R.color.yellow));
+                    }
+                }
                 break;
             case SHIFTS:
                 icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_arrows_alt_v);
