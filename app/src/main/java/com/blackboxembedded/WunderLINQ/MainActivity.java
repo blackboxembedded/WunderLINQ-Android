@@ -299,7 +299,15 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 editor.apply();
 
                 countDownTimer.cancel();  // Cancel the countdown timer if button is clicked manually
-                dialog.dismiss();  // Use dismiss() instead of cancel() to properly close the dialog
+                try {
+                    if (dialog != null && dialog.isShowing()) {
+                        dialog.dismiss();
+                    }
+                } catch (IllegalArgumentException e) {
+                    // Log the exception or handle gracefully
+                    Log.e(TAG, "Dialog not attached to window manager", e);
+                }
+                //dialog.dismiss();  // Use dismiss() instead of cancel() to properly close the dialog
             }
         });
     }
