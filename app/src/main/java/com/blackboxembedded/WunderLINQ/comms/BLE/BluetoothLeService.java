@@ -774,7 +774,7 @@ public class BluetoothLeService extends Service {
                     MotorcycleData.setHasFocus(true);
                     lastControlMessage = System.currentTimeMillis();
                 } else {
-                    if (MotorcycleData.getHasFocus() && ( System.currentTimeMillis() - lastControlMessage > 1000)){
+                    if (MotorcycleData.getHasFocus() && ( System.currentTimeMillis() - lastControlMessage > 100)){
                         Log.d(TAG,"Focus Gone" );
                         MotorcycleData.setHasFocus(false);
                     }
