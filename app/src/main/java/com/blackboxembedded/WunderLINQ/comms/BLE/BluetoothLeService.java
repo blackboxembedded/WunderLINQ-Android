@@ -1098,7 +1098,12 @@ public class BluetoothLeService extends Service {
                             Log.d(TAG, String.format("writeCharacteristic failed for characteristic: %s", characteristic.getUuid()));
                             completedCommand();
                         } else {
-                            //Log.d(TAG, String.format("Writing <%s> to characteristic <%s>", Utils.ByteArrayToHex(bytesToWrite), characteristic.getUuid()));
+                            if (bytesToWrite[3] != 0x43) { //Hack notification not working.
+                                readCharacteristic(characteristic);
+                            }
+                            if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
+                                Log.d(TAG, String.format("Writing <%s> to characteristic <%s>", Utils.ByteArrayToHex(bytesToWrite), characteristic.getUuid()));
+                            }
                             nrTries++;
                         }
                     }
