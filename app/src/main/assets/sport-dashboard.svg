@@ -168,7 +168,7 @@
                 
                 <g
    id="iconBT"
-   style="display:inline"
+   style="display:none"
    transform="matrix(0.99999813,0,0,1,517.7031,-420.99211)">
     <path
    id="iconBTppath"
@@ -178,7 +178,7 @@
     </g>
 <g
    id="iconTrip"
-   style="display:inline"
+   style="display:none"
    transform="translate(290.9079,-276.56356)">
     <path
    id="path2349"
@@ -193,7 +193,7 @@
 
                 <g
    id="iconVideo"
-   style="display:inline"
+   style="display:none"
    transform="translate(193.22887,-170.31356)">
     <path
    id="path2365"
@@ -209,7 +209,7 @@
     </g>
 <g
    id="iconFault"
-   style="display:inline"
+   style="display:none"
    transform="translate(100.84945,-62.618523)">
     <path
    id="path2357"
@@ -232,7 +232,7 @@
 </g>
 <g
    id="iconFuel"
-   style="display:inline"
+   style="display:none"
    transform="translate(9.4454729,41.186441)">
     <path
    id="path2353"
@@ -252,11 +252,7 @@
    class="st0 st17 st23"
    x="862.4881"
    y="178.35097"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:76.2271px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;text-anchor:end;fill:#ffffff"><tspan
-     sodipodi:role="line"
-     id="tspan7"
-     x="862.4881"
-     y="178.35097">Trip1:</tspan></text>
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:76.2271px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;text-anchor:end;fill:#ffffff">Trip1:</text>
 			
 			
 	</g><g
@@ -273,9 +269,7 @@
    class="st0 st17 st23"
    x="862.49353"
    y="178.35097"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:124px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:inline;fill:#ffffff"><tspan
-     sodipodi:role="line"
-     id="tspan12">0000000</tspan></text>
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:124px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:inline;fill:#ffffff">---</text>
 
 			
 
@@ -293,18 +287,12 @@
        class="st0 st20 st21"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:212px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#ffffff"
        x="-3.9394531"
-       y="178.35097"><tspan
-         sodipodi:role="line"
-         id="tspan13">00</tspan></text></g><text
+       y="178.35097">---</text></g><text
      id="clock"
      class="st0 st17 st18"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:124px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;fill:#ffffff"
      x="1790.9773"
-     y="178.35097"><tspan
-       sodipodi:role="line"
-       id="tspan1"
-       x="1790.9773"
-       y="178.35097">00:00</tspan></text></g>
+     y="178.35097">00:00</text></g>
 		<!-- Lean Angle Dial -->
 		
 
@@ -1984,11 +1972,7 @@
    transform="scale(1.1729747,0.85253331)"
    style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:242px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;fill:#fcc914;stroke-width:1.17297"
    x="1565.6825"
-   y="258.05444"><tspan
-     sodipodi:role="line"
-     id="tspan6"
-     x="1565.6825"
-     y="258.05444">0</tspan></text>
+   y="258.05444">-</text>
 </g>
 	</g>
 
