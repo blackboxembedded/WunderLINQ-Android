@@ -837,7 +837,7 @@ public class MotorcycleData {
                     carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_red),MyApplication.getContext().getResources().getColor(R.color.motorrad_red));
                 } else if (Faults.getFrontTirePressureWarningActive()){
                     icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tire_alert);
-                    carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.yellow),MyApplication.getContext().getResources().getColor(R.color.yellow));
+                    carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_yellow),MyApplication.getContext().getResources().getColor(R.color.motorrad_yellow));
                 }
                 break;
             case REAR_RDC:
@@ -847,7 +847,7 @@ public class MotorcycleData {
                     carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_red),MyApplication.getContext().getResources().getColor(R.color.motorrad_red));
                 } else if (Faults.getRearTirePressureWarningActive()){
                     icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_tire_alert);
-                    carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.yellow),MyApplication.getContext().getResources().getColor(R.color.yellow));
+                    carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_yellow),MyApplication.getContext().getResources().getColor(R.color.motorrad_yellow));
                 }
                 break;
             case ODOMETER:
@@ -860,7 +860,7 @@ public class MotorcycleData {
                     if (voltage >= CRITICAL_BATTERY_VOLTAGE_HIGH) {
                         carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_red), MyApplication.getContext().getResources().getColor(R.color.motorrad_red));
                     } else if (voltage < CRITICAL_BATTERY_VOLTAGE_LOW) {
-                        carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.yellow), MyApplication.getContext().getResources().getColor(R.color.yellow));
+                        carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_yellow), MyApplication.getContext().getResources().getColor(R.color.motorrad_yellow));
                     }
                 }
                 break;
@@ -898,7 +898,7 @@ public class MotorcycleData {
                     if (fuelRange < RANGE_CRITICAL) {
                         carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_red), MyApplication.getContext().getResources().getColor(R.color.motorrad_red));
                     } else if (fuelRange < RANGE_LOW) {
-                        carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.yellow), MyApplication.getContext().getResources().getColor(R.color.yellow));
+                        carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_yellow), MyApplication.getContext().getResources().getColor(R.color.motorrad_yellow));
                     }
                 }
                 break;
@@ -1400,8 +1400,8 @@ public class MotorcycleData {
                         valueColor = ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red);
                     } else if (Faults.getFrontTirePressureWarningActive()){
                         icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire_alert);
-                        icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
-                        valueColor = ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow);
+                        icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_yellow), PorterDuff.Mode.SRC_ATOP);
+                        valueColor = ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_yellow);
                     } else {
                         icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire);
                     }
@@ -1428,8 +1428,8 @@ public class MotorcycleData {
                         valueColor = ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red);
                     } else if (Faults.getRearTirePressureWarningActive()){
                         icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire_alert);
-                        icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
-                        valueColor = ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow);
+                        icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_yellow), PorterDuff.Mode.SRC_ATOP);
+                        valueColor = ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_yellow);
                     } else {
                         icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire);
                     }
@@ -1475,8 +1475,8 @@ public class MotorcycleData {
                             valueColor = ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red);
                             icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
                         } else if (voltage < CRITICAL_BATTERY_VOLTAGE_LOW) {
-                            valueColor = ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow);
-                            icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
+                            valueColor = ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_yellow);
+                            icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_yellow), PorterDuff.Mode.SRC_ATOP);
                         }
                     }
                     break;
@@ -1667,8 +1667,8 @@ public class MotorcycleData {
                             valueColor = ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red);
                             icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_red), PorterDuff.Mode.SRC_ATOP);
                         } else if (fuelRange < RANGE_LOW) {
-                            valueColor = ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow);
-                            icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
+                            valueColor = ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_yellow);
+                            icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_yellow), PorterDuff.Mode.SRC_ATOP);
                         }
                         if (MemCache.distanceFormat().equals("1")) {
                             fuelRange = Utils.kmToMiles(fuelRange);
@@ -1806,7 +1806,7 @@ public class MotorcycleData {
 
                         if(current.compareTo(sunrise) > 0 && current.compareTo(sunset) < 0){
                             icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_sun);
-                            icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
+                            icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_yellow), PorterDuff.Mode.SRC_ATOP);
                         } else {
                             icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_moon);
                             icon.setColorFilter(ContextCompat.getColor(MyApplication.getContext().getApplicationContext(), R.color.motorrad_blue), PorterDuff.Mode.SRC_ATOP);
