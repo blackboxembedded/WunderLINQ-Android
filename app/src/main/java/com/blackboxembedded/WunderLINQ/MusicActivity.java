@@ -31,6 +31,7 @@ import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadata;
 import android.media.session.MediaController;
@@ -63,6 +64,7 @@ import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 
 import java.util.List;
 import java.util.Set;
@@ -223,6 +225,7 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         mAlbumText.setOnClickListener(mClickListener);
 
         showActionBar();
+        updateDisplay();
     }
 
     @Override
@@ -335,6 +338,29 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         }
     }
 
+    private void updateDisplay() {
+        // Set actionbar color based on focus
+        if (sharedPrefs.getBoolean("prefFocusIndication", false)) {
+            TypedValue typedValue = new TypedValue();
+            getTheme().resolveAttribute(R.attr.backgroundColor, typedValue, true);
+            int color = typedValue.data;
+            if (MotorcycleData.getHasFocus()) {
+                color = ContextCompat.getColor(MusicActivity.this, R.color.colorAccent);
+            }
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setBackgroundDrawable(new ColorDrawable(color));
+            }
+        }
+
+        //Check for active faults
+        if (!Faults.getAllActiveDesc().isEmpty()) {
+            faultButton.setVisibility(View.VISIBLE);
+        } else {
+            faultButton.setVisibility(View.GONE);
+        }
+    }
+
     //Go to next screen - Quick Tasks
     private void goForward(){
         SoundManager.playSound(this, R.raw.directional);
@@ -372,12 +398,8 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
     private Runnable mUpdateMetaData = new Runnable() {
         @Override
         public void run() {
-            //Check for active faults
-            if (!Faults.getAllActiveDesc().isEmpty()) {
-                faultButton.setVisibility(View.VISIBLE);
-            } else {
-                faultButton.setVisibility(View.GONE);
-            }
+            //Update display
+            updateDisplay();
             refreshMetaData();
             mHandler.postDelayed(this, 1000); //setting up update event after one second
         }
@@ -547,7 +569,9 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if (BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE.equals(action)) {
+            if (BluetoothLeService.ACTION_PERFORMANCE_DATA_AVAILABLE.equals(action)) {
+                updateDisplay();
+            } else if (BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE.equals(action)) {
                 Intent accessoryIntent = new Intent(MusicActivity.this, AccessoryActivity.class);
                 startActivity(accessoryIntent);
             }
@@ -556,6 +580,7 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
 
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothLeService.ACTION_PERFORMANCE_DATA_AVAILABLE);
         intentFilter.addAction(BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE);
         return intentFilter;
     }

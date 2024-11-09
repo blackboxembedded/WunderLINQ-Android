@@ -29,6 +29,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.drawable.ColorDrawable;
 import android.hardware.camera2.CameraCharacteristics;
 import android.location.Address;
 import android.location.Criteria;
@@ -42,6 +43,7 @@ import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -179,6 +181,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 .build());
 
         showActionBar();
+        updateDisplay();
     }
 
     @Override
@@ -327,6 +330,32 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         } else {
             faultButton.setVisibility(View.GONE);
         }
+    }
+
+    private void updateDisplay() {
+        // Set actionbar color based on focus
+        if (sharedPrefs.getBoolean("prefFocusIndication", false)) {
+            TypedValue typedValue = new TypedValue();
+            getTheme().resolveAttribute(R.attr.backgroundColor, typedValue, true);
+            int color = typedValue.data;
+            if (MotorcycleData.getHasFocus()) {
+                color = ContextCompat.getColor(TaskActivity.this, R.color.colorAccent);
+            }
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setBackgroundDrawable(new ColorDrawable(color));
+            }
+        }
+
+        //Check for active faults
+        if (!Faults.getAllActiveDesc().isEmpty()) {
+            faultButton.setVisibility(View.VISIBLE);
+        } else {
+            faultButton.setVisibility(View.GONE);
+        }
+
+        //Update Tasks
+        updateTasks();
     }
 
     private View.OnClickListener mClickListener = new View.OnClickListener() {
@@ -933,7 +962,9 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if (BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE.equals(action)) {
+            if (BluetoothLeService.ACTION_PERFORMANCE_DATA_AVAILABLE.equals(action)) {
+                updateDisplay();
+            } else if (BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE.equals(action)) {
                 Intent accessoryIntent = new Intent(TaskActivity.this, AccessoryActivity.class);
                 startActivity(accessoryIntent);
             }
@@ -942,6 +973,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
 
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothLeService.ACTION_PERFORMANCE_DATA_AVAILABLE);
         intentFilter.addAction(BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE);
         return intentFilter;
     }

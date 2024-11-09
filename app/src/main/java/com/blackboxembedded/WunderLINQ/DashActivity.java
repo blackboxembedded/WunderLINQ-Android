@@ -23,10 +23,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -47,6 +49,7 @@ import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import com.caverock.androidsvg.SVG;
 import com.caverock.androidsvg.SVGImageView;
 
@@ -131,6 +134,8 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
 
         dashboardView = findViewById(R.id.mainView);
         svgFileResolver = new SvgFileResolver();
+
+        updateDisplay();
     }
 
     @Override
@@ -138,7 +143,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
         super.onResume();
         getSupportActionBar().show();
         currentDashboard = sharedPrefs.getInt("lastDashboard",1);
-        updateDashboard();
+        updateDisplay();
         startTimer();
         ContextCompat.registerReceiver(this, mGattUpdateReceiver, makeGattUpdateIntentFilter(), ContextCompat.RECEIVER_EXPORTED);
     }
@@ -298,7 +303,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
         } else {
             currentDashboard = currentDashboard + 1;
         }
-        updateDashboard();
+        updateDisplay();
     }
 
     void prevDashboard(){
@@ -308,7 +313,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
         } else {
             currentDashboard = currentDashboard - 1;
         }
-        updateDashboard();
+        updateDisplay();
     }
 
     void nextInfoLine(){
@@ -318,7 +323,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
         } else {
             currentInfoLine = currentInfoLine + 1;
         }
-        updateDashboard();
+        updateDisplay();
     }
 
     void prevInfoLine(){
@@ -328,7 +333,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
         } else {
             currentInfoLine = currentInfoLine - 1;
         }
-        updateDashboard();
+        updateDisplay();
     }
 
     //start timer function
@@ -373,7 +378,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
             if (BluetoothLeService.ACTION_PERFORMANCE_DATA_AVAILABLE.equals(action)) {
                 if ((System.currentTimeMillis()) - lastUpdate > 500) {
                     lastUpdate = System.currentTimeMillis();
-                    updateDashboard();
+                    updateDisplay();
                 }
             } else if (BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE.equals(action)) {
                 Intent accessoryIntent = new Intent(DashActivity.this, AccessoryActivity.class);
@@ -382,7 +387,20 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
         }
     };
 
-    private void updateDashboard(){
+    private void updateDisplay(){
+        // Set actionbar color based on focus
+        if (sharedPrefs.getBoolean("prefFocusIndication", false)) {
+            TypedValue typedValue = new TypedValue();
+            getTheme().resolveAttribute(R.attr.backgroundColor, typedValue, true);
+            int color = typedValue.data;
+            if (MotorcycleData.getHasFocus()) {
+                color = ContextCompat.getColor(DashActivity.this, R.color.colorAccent);
+            }
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setBackgroundDrawable(new ColorDrawable(color));
+            }
+        }
         //Check for active faults
         if (!Faults.getAllActiveDesc().isEmpty()) {
             faultButton.setVisibility(View.VISIBLE);

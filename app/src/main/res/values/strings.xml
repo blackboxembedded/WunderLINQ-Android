@@ -906,6 +906,8 @@
     <string name="pref_autoNightModeDelay_summary">Set Auto Night Mode Delay In Seconds</string>
     <string name="pref_hide_navbar_name">Hide NavBar when not in use</string>
     <string name="pref_hide_navbar_summary">Auto hide NavBar when not in use.</string>
+    <string name="pref_focus_indication_name">Focus Indication</string>
+    <string name="pref_focus_indication_summary">Applies Highlight Color to navigation bar when the app has control focus.</string>
     <string name="experimental_title">Experimental Features</string>
     <string name="pref_pip_name">Enable Picture in Picture mode</string>
     <string name="pref_pip_summary">When leaving the app the data grid is minimized into a hovering window.  Only available in Android 8.0+</string>
