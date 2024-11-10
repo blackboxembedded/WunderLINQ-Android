@@ -931,8 +931,10 @@ public class MotorcycleData {
                     Date sunset = sunriseSunset[1].getTime();
                     if(MotorcycleData.getTime().compareTo(sunrise) > 0 && MotorcycleData.getTime().compareTo(sunset) < 0){
                         icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_sun);
+                        carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_yellow),MyApplication.getContext().getResources().getColor(R.color.motorrad_yellow));
                     } else {
                         icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_moon);
+                        carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.motorrad_blue),MyApplication.getContext().getResources().getColor(R.color.motorrad_blue));
                     }
 
                 } else {
