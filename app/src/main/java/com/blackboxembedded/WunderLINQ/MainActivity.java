@@ -37,6 +37,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,6 +48,7 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Rational;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -837,24 +839,37 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             public void run() {
                 try {
                     // code runs in a thread
-
-
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            // Set actionbar color based on focus
+                            if (sharedPrefs.getBoolean("prefFocusIndication", false)) {
+                                TypedValue typedValue = new TypedValue();
+                                getTheme().resolveAttribute(R.attr.backgroundColor, typedValue, true);
+                                int color = typedValue.data;
+                                if (MotorcycleData.getHasFocus()) {
+                                    color = ContextCompat.getColor(MainActivity.this, R.color.colorAccent);
+                                }
+                                ActionBar actionBar = getSupportActionBar();
+                                if (actionBar != null) {
+                                    actionBar.setBackgroundDrawable(new ColorDrawable(color));
+                                }
+                            }
+
+                            // Show menu items for certain HW types
                             if(MotorcycleData.wlq != null) {
-                                if(MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_N) {
+                                if(MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_N || MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_X) {
                                     mMenu.findItem(R.id.action_bike_info).setVisible(true);
                                 }
                                 mMenu.findItem(id.action_hwsettings).setVisible(true);
                             }
+
                             //Check for active faults
                             if (!Faults.getAllActiveDesc().isEmpty()) {
                                 faultButton.setVisibility(View.VISIBLE);
                             } else {
                                 faultButton.setVisibility(View.GONE);
                             }
-
 
                             //Layout visible grid
                             if (gridChange()) {

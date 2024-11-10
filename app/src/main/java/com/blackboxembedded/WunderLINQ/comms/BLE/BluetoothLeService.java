@@ -381,6 +381,7 @@ public class BluetoothLeService extends Service {
             public void run() {
                 Calendar c = Calendar.getInstance();
                 MotorcycleData.setTime(c.getTime());
+                sendDataBroadcast();
             }
         }, 1000, 1000); //Initial Delay and Period for update (in milliseconds)
     }
@@ -770,13 +771,15 @@ public class BluetoothLeService extends Service {
                 if (msgID == 0x04){
                     if (!MotorcycleData.getHasFocus()){
                         Log.d(TAG,"Focus Gained");
+                        sendDataBroadcast();
                     }
                     MotorcycleData.setHasFocus(true);
                     lastControlMessage = System.currentTimeMillis();
                 } else {
-                    if (MotorcycleData.getHasFocus() && ( System.currentTimeMillis() - lastControlMessage > 100)){
+                    if (MotorcycleData.getHasFocus() && ( System.currentTimeMillis() - lastControlMessage > 500)){
                         Log.d(TAG,"Focus Gone" );
                         MotorcycleData.setHasFocus(false);
+                        sendDataBroadcast();
                     }
                     //Check if message changed
                     if (!messages.containsKey(msgID)) {

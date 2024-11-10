@@ -367,6 +367,12 @@
             android:summary="@string/pref_hide_navbar_summary"
             android:title="@string/pref_hide_navbar_name" >
         </CheckBoxPreference>
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="prefFocusIndication"
+            android:summary="@string/pref_focus_indication_summary"
+            android:title="@string/pref_focus_indication_name" >
+        </CheckBoxPreference>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/alerting_title" >
         <CheckBoxPreference

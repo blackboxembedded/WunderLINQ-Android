@@ -277,15 +277,13 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
             prefPIPCellCount = findPreference("prefPIPCellCount");
             prefPIPCellCount.setSummary(prefPIPCellCount.getEntry());
 
-            if (Build.VERSION.SDK_INT >= 24) {
-                PreferenceScreen preferenceScreen = getPreferenceScreen();
-                Preference pipPreference = findPreference("prefPIP");
-                Preference pipOrientationPreference = findPreference("prefPIPOrientation");
-                Preference pipCellCountPreference = findPreference("prefPIPCellCount") ;
-                preferenceScreen.removePreference(pipPreference);
-                preferenceScreen.removePreference(pipOrientationPreference);
-                preferenceScreen.removePreference(pipCellCountPreference);
-            }
+            PreferenceScreen preferenceScreen = getPreferenceScreen();
+            Preference pipPreference = findPreference("prefPIP");
+            Preference pipOrientationPreference = findPreference("prefPIPOrientation");
+            Preference pipCellCountPreference = findPreference("prefPIPCellCount") ;
+            preferenceScreen.removePreference(pipPreference);
+            preferenceScreen.removePreference(pipOrientationPreference);
+            preferenceScreen.removePreference(pipCellCountPreference);
         }
 
         @Override
