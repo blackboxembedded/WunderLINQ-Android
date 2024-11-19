@@ -2413,29 +2413,35 @@ public class SVGHelper {
 
         try {
             //Compass
-            Double leanAngle = MotorcycleData.getLeanAngleBike();
+            Double leanAngle = MotorcycleData.getLeanAngleDevice();
+
             String centerRadius = ", 540, 1540)";
             String angle = "0";
-
+            String angleMaxL = "...";
+            String angleMaxR = "...";
 
             //Lean Angle
             if (MotorcycleData.getLeanAngleBike() != null) {
-                setText(doc, "angle", Utils.toZeroDecimalString(Math.abs(MotorcycleData.getLeanAngleBike())));
-                //Log.d("angle","Current Angle: " +  String.valueOf(Data.getLeanAngleBike()));
-            }
-            //Left Max Angle
-            if (MotorcycleData.getLeanAngleBikeMaxL() != null) {
-                setText(doc, "angleMaxL", (Utils.toZeroDecimalString(MotorcycleData.getLeanAngleBikeMaxL())));
-                Log.d("angleMaxL", "Max Left Angle: " + String.valueOf(MotorcycleData.getLeanAngleBikeMaxL()));
+                // Use bike value if available
+                leanAngle = MotorcycleData.getLeanAngleBike();
+                //Left Max Angle
+                if (MotorcycleData.getLeanAngleBikeMaxL() != null) {
+                    angleMaxL = Utils.toZeroDecimalString(MotorcycleData.getLeanAngleBikeMaxL());
+                }
+                //Right Max Angle
+                if (MotorcycleData.getLeanAngleBikeMaxR() != null) {
+                    angleMaxR = Utils.toZeroDecimalString(MotorcycleData.getLeanAngleBikeMaxR());
+                }
             } else {
-                setText(doc, "angleMaxL", "...");
-            }
-            //Right Max Angle
-            if (MotorcycleData.getLeanAngleBikeMaxR() != null) {
-                setText(doc, "angleMaxR", (Utils.toZeroDecimalString(MotorcycleData.getLeanAngleBikeMaxR())));
-                Log.d("angleMaxR", "Max Right Angle: " + String.valueOf(MotorcycleData.getLeanAngleBikeMaxR()));
-            } else {
-                setText(doc, "angleMaxR", "...");
+                // Fallback to device sensor reading
+                //Left Max Angle
+                if (MotorcycleData.getLeanAngleDeviceMaxL() != null) {
+                    angleMaxL = Utils.toZeroDecimalString(MotorcycleData.getLeanAngleDeviceMaxL());
+                }
+                //Right Max Angle
+                if (MotorcycleData.getLeanAngleDeviceMaxR() != null) {
+                    angleMaxR = Utils.toZeroDecimalString(MotorcycleData.getLeanAngleDeviceMaxR());
+                }
             }
 
             if (leanAngle != null) {
@@ -2451,10 +2457,11 @@ public class SVGHelper {
             if (isDevicePortrait()) {
                 centerRadius = ",540, 1540)";
             }
+            setText(doc, "angle", Utils.toZeroDecimalString(Math.abs(leanAngle)));
+            setText(doc, "angleMaxL", angleMaxL);
+            setText(doc, "angleMaxR", angleMaxR);
             doc.getElementById("needle").setAttribute("transform",
                     "rotate(" + angle + centerRadius);
-
-
 
         } catch (Exception e) {
             Log.d(TAG, "Exception Setting Up Compass: " + e.toString());
