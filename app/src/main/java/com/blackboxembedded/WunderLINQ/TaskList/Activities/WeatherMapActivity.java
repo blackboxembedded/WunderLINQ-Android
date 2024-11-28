@@ -69,6 +69,7 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
     public final static String TAG = "WeatherActivity";
     private ImageButton faultButton;
     private GoogleMap mMap;
+    private TextView tvDate;
     private Marker mMarker;
     private TileOverlay tileOverlay;
     private ValueAnimator animator;
@@ -89,6 +90,8 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         setContentView(R.layout.activity_weather);
+
+        tvDate = findViewById(R.id.tvDate);
 
         AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
 
@@ -125,6 +128,7 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 float progress = (float) valueAnimator.getAnimatedValue();
                 Date date = calculateDateForProgress(progress);
+                tvDate.setText(date.toString());
                 long l = date.getTime();
                 l -= l % (10*60*1000);
                 long unixTime = l / 1000L;
