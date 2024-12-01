@@ -17,19 +17,25 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ.Utils;
 
-
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.util.Log;
 
 import com.blackboxembedded.WunderLINQ.MemCache;
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.AltitudeData;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.Locale;
+import java.util.Queue;
 
 public class Utils {
 
@@ -91,6 +97,22 @@ public class Utils {
         long elapsedSeconds = different / secondsInMilli;
         long[] duration = new long[]{elapsedSeconds,elapsedMinutes,elapsedHours};
         return duration;
+    }
+
+    // return rate of climb
+    public static double calculateRateOfClimb(Queue<AltitudeData> altitudeWindow) {
+        if (altitudeWindow.size() < 2) return 0.0; // Not enough data to calculate
+
+        // Get the oldest and newest data points
+        AltitudeData oldestData = altitudeWindow.peek(); // Oldest data in the window
+        AltitudeData newestData = ((LinkedList<AltitudeData>) altitudeWindow).getLast(); // Most recent data
+
+        // Calculate time and altitude differences
+        double altitudeChange = newestData.altitude - oldestData.altitude;
+        double timeChangeInSeconds = (newestData.timestamp - oldestData.timestamp) / 1000.0;
+
+        // Rate of climb (m/window)
+        return altitudeChange / timeChangeInSeconds;
     }
 
     //Normalize a degree from 0 to 360 instead of -180 to 180
@@ -243,5 +265,29 @@ public class Utils {
         }
 
         return bearing;
+    }
+
+    public static Bitmap drawableToBitmap(Drawable drawable) {
+        // Determine the size of the Drawable
+        int width = drawable.getIntrinsicWidth();
+        int height = drawable.getIntrinsicHeight();
+
+        // Ensure a valid size
+        if (width <= 0) {
+            width = 1;
+        }
+        if (height <= 0) {
+            height = 1;
+        }
+
+        // Create a Bitmap to hold the drawable content
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+        // Create a Canvas and draw the Drawable onto it
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
     }
 }
