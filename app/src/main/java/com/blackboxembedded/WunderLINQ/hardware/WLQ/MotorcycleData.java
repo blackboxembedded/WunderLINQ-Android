@@ -22,7 +22,6 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;

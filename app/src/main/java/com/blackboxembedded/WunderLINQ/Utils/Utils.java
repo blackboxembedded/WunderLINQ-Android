@@ -21,7 +21,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.util.Log;
 
 import com.blackboxembedded.WunderLINQ.MemCache;
 import com.blackboxembedded.WunderLINQ.MyApplication;

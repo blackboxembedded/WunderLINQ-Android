@@ -6,8 +6,8 @@ android {
         applicationId "com.blackboxembedded.WunderLINQ"
         minSdkVersion 21
         targetSdkVersion 34
-        versionCode 193
-        versionName "2.83"
+        versionCode 194
+        versionName "2.84"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         Properties properties = new Properties()
