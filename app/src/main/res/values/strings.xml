@@ -483,6 +483,7 @@
     <string name="rearwheel_speed_header">Rear Wheel Speed</string>
     <string name="cellular_signal_header">Cell Signal</string>
     <string name="local_battery_header">Device Battery</string>
+    <string name="elevation_change_header">Elv Change</string>
     <!-- VideoRecService -->
     <string name="title_video_notification">WunderLINQ recording video</string>
     <!-- WeatherMapActivity -->
@@ -588,6 +589,7 @@
         <item name="32">@string/rearwheel_speed_header</item>
         <item name="33">@string/cellular_signal_header</item>
         <item name="34">@string/local_battery_header</item>
+        <item name="35">@string/elevation_change_header</item>
     </string-array>
     <string-array name="dataPoints_arrayValues" translatable="false">
         <item name="1">0</item>
@@ -624,6 +626,7 @@
         <item name="32">31</item>
         <item name="33">32</item>
         <item name="34">33</item>
+        <item name="35">34</item>
     </string-array>
     <string name="pref_tasks_settings_title">Quick Task Customization</string>
     <string name="pref_tasks_settings_summary">Customize which tasks to display and in which order</string>

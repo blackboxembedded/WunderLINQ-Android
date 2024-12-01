@@ -18,10 +18,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package com.blackboxembedded.WunderLINQ.AAuto;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.OptIn;
 import androidx.car.app.CarContext;
 import androidx.car.app.Screen;
-import androidx.car.app.annotations.ExperimentalCarApi;
 import androidx.car.app.model.Action;
 import androidx.car.app.model.CarColor;
 import androidx.car.app.model.CarIcon;
@@ -39,6 +37,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -47,6 +46,7 @@ import androidx.core.graphics.drawable.IconCompat;
 
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
+import com.blackboxembedded.WunderLINQ.Utils.Utils;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
@@ -184,9 +184,12 @@ public class AAutoScreen extends Screen {
         TabContents tabContents = new TabContents.Builder(contentTemplate).build();
         mTabContentsMap.put(contentId, tabContents);
 
+        IconCompat icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_cog);
+        CarIcon carIcon = new CarIcon.Builder(icon).build();
+
         Tab.Builder tabBuilder = new Tab.Builder()
                 .setTitle(MyApplication.getContext().getString(R.string.main_title))
-                .setIcon(MotorcycleData.getCarIcon(MotorcycleData.DataType.ODOMETER))
+                .setIcon(carIcon)
                 .setContentId(contentId);
         if (mActiveContentId == null) {
             mActiveContentId = contentId;
@@ -202,12 +205,12 @@ public class AAutoScreen extends Screen {
         mTabContentsMap.put(contentId, tabContents);
 
         contentId = "FAULTS";
-        IconCompat icon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_warning);
-        CarColor carColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.white),MyApplication.getContext().getResources().getColor(R.color.black));
-        CarIcon carIcon = new CarIcon.Builder(icon).setTint(carColor).build();
+        IconCompat faultIcon = IconCompat.createWithResource(MyApplication.getContext(), R.drawable.ic_warning);
+        CarColor faultIconColor = CarColor.createCustom(MyApplication.getContext().getResources().getColor(R.color.white),MyApplication.getContext().getResources().getColor(R.color.black));
+        CarIcon faultCarIcon = new CarIcon.Builder(faultIcon).setTint(faultIconColor).build();
         tabBuilder = new Tab.Builder()
                 .setTitle(MyApplication.getContext().getString(R.string.fault_title))
-                .setIcon(carIcon)
+                .setIcon(faultCarIcon)
                 .setContentId(contentId);
         if (mActiveContentId.equals(contentId)) {
             mTabTemplateBuilder.setTabContents(tabContents);
@@ -222,10 +225,18 @@ public class AAutoScreen extends Screen {
     }
 
     public GridItem getCellData(int dataPoint){
+
+        Object[] retObj =  MotorcycleData.getCombinedData(MotorcycleData.DataType.values()[dataPoint]);
+        String dataVal = (String) retObj[0];
+        String label = (String) retObj[1];
+        Drawable icon = (Drawable) retObj[2];
+        IconCompat iconCompat = IconCompat.createWithBitmap(Utils.drawableToBitmap(icon));
+        CarIcon carIcon = new CarIcon.Builder(iconCompat).build();
+
         return new GridItem.Builder()
-                .setImage(MotorcycleData.getCarIcon(dataPoint))
-                .setTitle(MotorcycleData.getLabel(dataPoint))
-                .setText((!MotorcycleData.getValue(dataPoint).isEmpty()) ? MotorcycleData.getValue(dataPoint) : MyApplication.getContext().getString(R.string.blank_field))
+                .setImage(carIcon)
+                .setTitle(label)
+                .setText(dataVal)
                 .build();
     }
 
