@@ -264,13 +264,10 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
     private Date calculateDateForProgress(float progress) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
-
-        // Calculate the timestamp for one hour ago
-        cal.add(Calendar.HOUR_OF_DAY, -2);
         Date startDate = cal.getTime();
 
         // Calculate the timestamp for the current frame
-        long timeRange = 60 * 60 * 2000; // 1 hour in milliseconds
+        long timeRange = 60 * 60 * 1000; // 1 hour in milliseconds
         long frameTime = (long) (timeRange * progress);
         Date frameDate = new Date(startDate.getTime() + frameTime);
 
