@@ -76,7 +76,7 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
     private SharedPreferences sharedPrefs;
 
     private Handler handler = new Handler();
-    private int delay = 60 * 1000;
+    private int delay = 10 * 1000;
 
     private int currentZoom = 8;
 
@@ -264,10 +264,13 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
     private Date calculateDateForProgress(float progress) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
+        // Calculate the timestamp for one hour ago
+        int hoursInPast = 2;
+        cal.add(Calendar.HOUR_OF_DAY, -hoursInPast);
         Date startDate = cal.getTime();
 
         // Calculate the timestamp for the current frame
-        long timeRange = 60 * 60 * 1000; // 1 hour in milliseconds
+        long timeRange = 60 * 60 * (1000 * hoursInPast);
         long frameTime = (long) (timeRange * progress);
         Date frameDate = new Date(startDate.getTime() + frameTime);
 
