@@ -24,7 +24,6 @@ import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -60,9 +59,6 @@ public class AlertActivity extends AppCompatActivity {
     TextView navbarTitle;
     ActionBar actionBar;
     ImageView backgroundImageView;
-
-    private Handler handler;
-    private Runnable runnable;
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -137,7 +133,7 @@ public class AlertActivity extends AppCompatActivity {
         final CountDownTimer countDownTimer = new CountDownTimer(ACTIVITY_CLOSE_TIMER, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                final String closeBtnWithCountDown = (String) btnClose.getText() + "  ( " + millisUntilFinished / 1000 + " )";
+                final String closeBtnWithCountDown = getString(R.string.alert_btn_close) + "  ( " + millisUntilFinished / 1000 + " )";
 
                 btnClose.setText(closeBtnWithCountDown);
             }
@@ -176,7 +172,6 @@ public class AlertActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        handler.removeCallbacks(runnable);
     }
 
     private View.OnClickListener mClickListener = new View.OnClickListener() {
