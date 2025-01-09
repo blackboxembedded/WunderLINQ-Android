@@ -599,7 +599,7 @@
     <string name="voltage_header">Voltaje</string>
     <string name="throttle_header">Posición Del Acelerador</string>
     <string name="rearpressure_header">Presión Rueda Trasera</string>
-    <string name="rearbrakes_header">Freno Tra.</string>
+    <string name="rearbrakes_header">Freno Trasero</string>
     <string name="shifts_header">Cambios</string>
     <string name="ambientlight_header">Luz Ambiente</string>
     <string name="speed_header">Velocidad</string>
@@ -616,8 +616,8 @@
     <string name="btconnect_alert_body">La aplicación WunderLINQ necesita poder conectarse al dispositivo WunderLINQ.</string>
     <string name="keyboard_hid_0x8D_label">Teclado Internacional7</string>
     <string name="keyboard_hid_0x99_label">Tecla Borrado alternativo</string>
-    <string name="frontbrakes_label">Freno Del.</string>
-    <string name="rearbrakes_label">Freno Tra.</string>
+    <string name="frontbrakes_label">Frenos Delanteros</string>
+    <string name="rearbrakes_label">Freno Traseros</string>
     <string name="ambientlight_label">Luz Ambiental</string>
     <string name="speed_label">Velocidad</string>
     <string name="consumer_hid_0xE8_label">MPX</string>
@@ -649,7 +649,7 @@
     <string name="alert_title_ignition">Apagado</string>
     <string name="alert_label_ignition">Apagar WunderLINQ App\?</string>git
     <string name="gpsspeed_header">Velocidad GPS</string>
-    <string name="frontbrakes_header">Freno Del.</string>
+    <string name="frontbrakes_header">Freno Delantero</string>
     <string name="rearwheel_speed_header">Velocidad De Rueda Trasera</string>
     <string name="cellular_signal_header">Señal Celular</string>
     <string name="local_battery_header">Batería Del Dispositivo</string>
@@ -853,4 +853,15 @@
     <string name="consumer_hid_0x60_label">Datos en Pantalla</string>
     <string name="consumer_hid_0x63_label">VCR/TV</string>
     <string name="consumer_hid_0x81_label">Asignar selección</string>
+    <string name="up_label">Arriba</string>
+    <string name="down_label">Abajo</string>
+    <string name="left_label">Izquierda</string>
+    <string name="right_label">Derecha</string>
+    <string name="fx1_label">F1</string>
+    <string name="fx2_label">F2</string>
+    <string name="orientation_90_label">90</string>
+    <string name="orientation_180_label">180</string>
+    <string name="orientation_270_label">270</string>
+    <string name="orientation_label">Orientación</string>
+    <string name="orientation_default_label">Por defecto</string>
 </resources>
