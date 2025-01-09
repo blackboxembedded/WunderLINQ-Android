@@ -399,4 +399,5 @@
     <string name="next_service_date_label">Fecha de la siguiente revisión</string>
     <string name="bike_info_title">Información de la moto</string>
     <string name="bike_info_label">Información de la moto</string>
+    <string name="down_label">Abajo</string>
 </resources>
