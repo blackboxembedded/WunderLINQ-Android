@@ -128,12 +128,12 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 float progress = (float) valueAnimator.getAnimatedValue();
                 Date date = calculateDateForProgress(progress);
-                tvDate.setText(date.toString());
                 long l = date.getTime();
                 l -= l % (10*60*1000);
                 long unixTime = l / 1000L;
                 if (!timestamp.equals(String.valueOf(unixTime))) {
                     Log.d(TAG,"Updating Map");
+                    tvDate.setText(date.toString());
                     timestamp = String.valueOf(unixTime);
                     if (tileOverlay != null) {
                         tileOverlay.clearTileCache();
@@ -222,7 +222,6 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
                 /* Define the URL pattern for the tile images */
                 //https://www.rainviewer.com/api.html
                 String s = String.format(Locale.US, "https://tilecache.rainviewer.com/v2/radar/%s/256/%d/%d/%d/4/1_1.png", timestamp, zoom, x, y);
-                //Log.d(TAG,s);
                 try {
                     return new URL(s);
                 } catch (MalformedURLException e) {
@@ -234,8 +233,14 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
         tileOverlay = mMap.addTileOverlay(new TileOverlayOptions()
                 .tileProvider(tileProvider));
 
+        Date date = new Date();
+        tvDate.setText(date.toString());
 
-        animator.start();
+        handler.postDelayed(new Runnable(){
+            public void run(){
+                animator.start();
+            }
+        }, 5000);
 
         handler.postDelayed(new Runnable(){
             public void run(){
