@@ -40,7 +40,7 @@ import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_BASE;
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_C;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_S;
 
 
 public class AccessoryActivity extends AppCompatActivity implements View.OnTouchListener {
@@ -200,7 +200,7 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
 
         // Read status
         if (BluetoothLeService.gattCommandCharacteristic != null) {
-            //BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, WLQ_C.GET_STATUS_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+            //BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, WLQ_S.GET_STATUS_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
         }
 
         updateDisplay();
@@ -351,9 +351,9 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
                 channelOneHeaderET.setText(sharedPrefs.getString("ACC_CHAN_1", getString(R.string.default_accessory_one_name)));
                 channelTwoHeaderTV.setText(sharedPrefs.getString("ACC_CHAN_2", getString(R.string.default_accessory_two_name)));
                 channelTwoHeaderET.setText(sharedPrefs.getString("ACC_CHAN_2", getString(R.string.default_accessory_two_name)));
-                int channelActive = (MotorcycleData.wlq.getStatus()[WLQ_C.ACTIVE_CHAN_INDEX] & 0xFF);
-                int channel1ValueRaw = (MotorcycleData.wlq.getStatus()[WLQ_C.LIN_ACC_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
-                int channel2ValueRaw = (MotorcycleData.wlq.getStatus()[WLQ_C.LIN_ACC_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
+                int channelActive = (MotorcycleData.wlq.getStatus()[WLQ_S.ACTIVE_CHAN_INDEX] & 0xFF);
+                int channel1ValueRaw = (MotorcycleData.wlq.getStatus()[WLQ_S.LIN_ACC_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
+                int channel2ValueRaw = (MotorcycleData.wlq.getStatus()[WLQ_S.LIN_ACC_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
 
                 TypedValue typedValue = new TypedValue();
                 Resources.Theme theme = this.getTheme();
@@ -386,7 +386,7 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
                 channelOneValuePB.setProgress(channel1ValueRaw);
                 channelTwoValuePB.setProgress(channel2ValueRaw);
             } else {
-                //BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, WLQ_C.GET_STATUS_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                //BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, WLQ_S.GET_STATUS_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
             }
         } else {
             // Request config

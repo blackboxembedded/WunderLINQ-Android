@@ -39,7 +39,7 @@ import android.widget.TextView;
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_C;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_S;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_U;
 import com.blackboxembedded.WunderLINQ.comms.BLE.KeyboardHID;
@@ -116,7 +116,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         actionTypeSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE || actionID == WLQ_U.KEYMODE){
+                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_S.KEYMODE || actionID == WLQ_U.KEYMODE){
                     if(MotorcycleData.wlq.getKeyMode() != pos){
                         saveBT.setVisibility(View.VISIBLE);
                     } else {
@@ -140,12 +140,6 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                     }
                 } else if (actionID == WLQ_N.fullLongPressSensitivity){
                     if ((pos) == WLQ_N.fullSensitivity){
-                        saveBT.setVisibility(View.INVISIBLE);
-                    } else {
-                        saveBT.setVisibility(View.VISIBLE);
-                    }
-                } else if (actionID == WLQ_C.longPressSensitivity){
-                    if ((pos) == WLQ_C.lpSensitivity){
                         saveBT.setVisibility(View.INVISIBLE);
                     } else {
                         saveBT.setVisibility(View.VISIBLE);
@@ -200,7 +194,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         actionKeySP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_X.KEYMODE || actionID == WLQ_C.KEYMODE || actionID == WLQ_U.KEYMODE){
+                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_X.KEYMODE || actionID == WLQ_S.KEYMODE || actionID == WLQ_U.KEYMODE){
 
                 } else if (actionID == WLQ_N.USB){
 
@@ -211,8 +205,6 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 } else if (actionID == WLQ_X.RTKDoublePressSensitivity){
 
                 } else if (actionID == WLQ_X.fullLongPressSensitivity){
-
-                } else if (actionID == WLQ_C.longPressSensitivity){
 
                 } else if (actionID == WLQ_U.ORIENTATION){
 
@@ -252,7 +244,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
                 if (actionID == WLQ_N.OldSensitivity){
 
-                } else if (actionID == WLQ_N.KEYMODE || actionID == WLQ_X.KEYMODE || actionID == WLQ_C.KEYMODE || actionID == WLQ_U.KEYMODE){
+                } else if (actionID == WLQ_N.KEYMODE || actionID == WLQ_X.KEYMODE || actionID == WLQ_S.KEYMODE || actionID == WLQ_U.KEYMODE){
 
                 } else if (actionID == WLQ_N.USB){
 
@@ -263,8 +255,6 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 } else if (actionID == WLQ_X.RTKDoublePressSensitivity){
 
                 } else if (actionID == WLQ_X.fullLongPressSensitivity){
-
-                } else if (actionID == WLQ_C.longPressSensitivity){
 
                 } else if (actionID == WLQ_U.ORIENTATION){
 
@@ -296,7 +286,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 Intent backIntent = new Intent(HWSettingsActionActivity.this, HWSettingsActivity.class);
                 startActivity(backIntent);
             } else if (v.getId() == R.id.btSave) {
-                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_X.KEYMODE || actionID == WLQ_C.KEYMODE || actionID == WLQ_U.KEYMODE){
+                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_X.KEYMODE || actionID == WLQ_S.KEYMODE || actionID == WLQ_U.KEYMODE){
                     setHWMode((byte) actionTypeSP.getSelectedItemPosition());
                     return;
                 } else if (actionID == WLQ_N.USB){
@@ -314,9 +304,6 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                     MotorcycleData.wlq.getTempConfig()[WLQ_N.RTKSensitivity_INDEX] = (byte)((actionTypeSP.getSelectedItemPosition() + 1) / 50);
                 } else if (actionID == WLQ_N.fullLongPressSensitivity){
                     MotorcycleData.wlq.getTempConfig()[WLQ_N.fullSensitivity_INDEX] = (byte)((actionTypeSP.getSelectedItemPosition() + 1) / 50);
-                } else if (actionID == WLQ_C.longPressSensitivity){
-                    // TODO
-                    //Data.wlq.getTempConfig()[WLQ_C.lpSensitivityHigh_INDEX] = (byte)(actionTypeSP.getSelectedItemPosition() + 1);
                 } else if (actionID == WLQ_U.ORIENTATION){
                     if(actionTypeSP.getSelectedItemPosition() == 0){
                         MotorcycleData.wlq.getTempConfig()[WLQ_U.orientation_INDEX] = 0x00;
@@ -377,7 +364,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
     private void updateDisplay(){
         saveBT.setVisibility(View.INVISIBLE);
         actionLabelTV.setText(MotorcycleData.wlq.getActionName(actionID));
-        if (actionID == WLQ_N.KEYMODE || actionID == WLQ_C.KEYMODE || actionID == WLQ_X.KEYMODE || actionID == WLQ_U.KEYMODE){ //Key mode
+        if (actionID == WLQ_N.KEYMODE || actionID == WLQ_S.KEYMODE || actionID == WLQ_X.KEYMODE || actionID == WLQ_U.KEYMODE){ //Key mode
             actionTypeSP.setAdapter(keyModes);
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
@@ -417,20 +404,6 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
             actionTypeSP.setSelection(WLQ_N.fullSensitivity);
-        } else if (actionID == WLQ_C.longPressSensitivity){
-            /* TODO
-            int fullSensitivityMax = 30;
-            Integer[] intArray = new Integer[fullSensitivityMax];
-            for(int i = 0; i < fullSensitivityMax; i++) {
-                intArray[i] = i + 1;
-            }
-            sensitivity = new ArrayAdapter<Integer>(this,
-                    R.layout.item_hwsettings_spinners, intArray);
-            actionTypeSP.setAdapter(sensitivity);
-            actionKeySP.setVisibility(View.INVISIBLE);
-            actionModifiersSP.setVisibility(View.INVISIBLE);
-            actionTypeSP.setSelection(WLQ_C.sensitivity - 1);
-             */
         } else if (actionID == WLQ_U.ORIENTATION){
             actionTypeSP.setAdapter(orientations);
             actionKeySP.setVisibility(View.INVISIBLE);

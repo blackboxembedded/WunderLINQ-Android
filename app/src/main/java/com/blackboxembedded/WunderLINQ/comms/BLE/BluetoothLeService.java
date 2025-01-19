@@ -80,7 +80,7 @@ import com.blackboxembedded.WunderLINQ.Utils.Utils;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_BASE;
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_C;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_S;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_N;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_U;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.WLQ_X;
@@ -870,8 +870,8 @@ public class BluetoothLeService extends Service {
             if (data != null) {
                 //Read Config
                 if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x57)) {
-                    if (connectedType == WLQ.TYPE_C) {
-                        MotorcycleData.wlq = new WLQ_C(data);
+                    if (connectedType == WLQ.TYPE_S) {
+                        MotorcycleData.wlq = new WLQ_S(data);
                         if (MotorcycleData.hardwareVersion != null) {
                             MotorcycleData.wlq.setHardwareVersion(MotorcycleData.hardwareVersion);
                         }
@@ -1321,7 +1321,7 @@ public class BluetoothLeService extends Service {
                         // Request config
                         writeCharacteristic(gattCommandCharacteristic, WLQ_BASE.GET_CONFIG_CMD, WriteType.WITH_RESPONSE);
                     } else if (UUID.fromString(GattAttributes.WUNDERLINQ_C_COMMAND_CHARACTERISTIC).equals(gattCharacteristic.getUuid())){
-                        connectedType = WLQ.TYPE_C;
+                        connectedType = WLQ.TYPE_S;
                         int charaProp = gattCharacteristic.getProperties();
                         if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
                             // If there is an active notification on a characteristic, clear

@@ -20,7 +20,7 @@ package com.blackboxembedded.WunderLINQ.hardware.WLQ;
 public interface WLQ {
     public int TYPE_N = 1;
     public int TYPE_X = 2;
-    public int TYPE_C = 3;
+    public int TYPE_S = 3;
     public int TYPE_U = 4;
 
     public byte[] GET_CONFIG_CMD();
