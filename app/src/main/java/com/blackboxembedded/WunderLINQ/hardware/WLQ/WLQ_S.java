@@ -28,95 +28,65 @@ import com.blackboxembedded.WunderLINQ.Utils.Utils;
 
 import java.util.Arrays;
 
-public class WLQ_C extends WLQ_BASE {
-    //WunderLINQ Commander
-    private final static String TAG = "WLQ_C";
+public class WLQ_S extends WLQ_BASE {
+    //WunderLINQ Switch
+    private final static String TAG = "WLQ_S";
 
-    public static String hardwareVersion1 = "2PCB7.0 11/19/21";
+    public static String hardwareVersion1 = "WLQS1.0";
 
     public static byte[] GET_STATUS_CMD = {0x57, 0x52, 0x41, 0x50};
 
-    private static int configFlashSize = 46;
-    private static int firmwareVersionMajor_INDEX = 0;
-    private static int firmwareVersionMinor_INDEX = 1;
+    private static int configFlashSize = 24;
+    private static int firmwareVersionMajor_INDEX = 3;
+    private static int firmwareVersionMinor_INDEX = 4;
 
     public static byte[] defaultConfig = {
-            0x02, 0x00,                                         // SP Sensitivity
-            0x05, 0x00,                                         // LP Sensitivity
-            0x01, 0x00, 0x52,                                   // Scroll Up
-            0x01, 0x00, 0x51,                                   // Scroll Down
-            0x01, 0x00, 0x50, 0x01, 0x00, 0x29,                 // Wheel Left
-            0x01, 0x00, 0x4F, 0x01, 0x00, 0x28,                 // Wheel Right
-            0x02, 0x00, (byte)0xE9, 0x02, 0x00, (byte)0xB8,     // Rocker1 Up
-            0x02, 0x00, (byte)0xEA, 0x02, 0x00, (byte)0xE2,     // Rocker1 Down
-            0x02, 0x00, (byte)0xB5, 0x02, 0x00, (byte)0xB0,     // Rocker2 Up
-            0x02, 0x00, (byte)0xB6, 0x02, 0x00, (byte)0xB7};    // Rocker2 Down
+            0x01, 0x00, 0x52,           // Up, BMW: Scroll Up, Triumph Joystick Up
+            0x01, 0x00, 0x51,           // Down, BMW: Scroll Down, Triumph Joystick Down
+            0x01, 0x00, 0x50,           // Left, BMW: Wheel Left, Triumph Joystick Left
+            0x01, 0x00, 0x4F,           // Right, BMW: Wheel Right, Triumph Joystick Right
+            0x01, 0x00, 0x29,           // FX2, Rocker1 Up, Triumph ?
+            0x01, 0x00, 0x28,           // FX1, Rocker1 Down, Triumph Joystick In
+            0x01, 0x00, 0x57,           // FX4, Rocker2 Up, Triumph ?
+            0x01, 0x00, 0x58};          // FX3, Rocker2 Down, Triumph ?
 
     public static final int KEYMODE = 100;
-    public static final int longPressSensitivity = 25;
     public static final int wheelScrollUp = 26;
     public static final int wheelScrollDown = 27;
     public static final int wheelToggleRight = 28;
-    public static final int wheelToggleRightLongPress = 29;
     public static final int wheelToggleLeft = 30;
-    public static final int wheelToggleLeftLongPress = 31;
     public static final int rocker1Up = 32;
-    public static final int rocker1UpLongPress = 33;
     public static final int rocker1Down = 34;
-    public static final int rocker1DownLongPress = 35;
     public static final int rocker2Up = 36;
-    public static final int rocker2UpLongPress = 37;
     public static final int rocker2Down = 38;
-    public static final int rocker2DownLongPress = 39;
 
     // Config message
     private static int keyMode_INDEX = 5;
-    public static int spSensitivityHigh_INDEX = 0;
-    public static int spSensitivityLow_INDEX = 1;
-    public static int lpSensitivityHigh_INDEX = 2;
-    public static int lpSensitivityLow_INDEX = 3;
-    private static int wheelScrollUpKeyType_INDEX = 4;
-    private static int wheelScrollUpKeyModifier_INDEX = 5;
-    private static int wheelScrollUpKey_INDEX = 6;
-    private static int wheelScrollDownKeyType_INDEX = 7;
-    private static int wheelScrollDownKeyModifier_INDEX = 8;
-    private static int wheelScrollDownKey_INDEX = 9;
-    private static int wheelLeftPressKeyType_INDEX = 10;
-    private static int wheelLeftPressKeyModifier_INDEX = 11;
-    private static int wheelLeftPressKey_INDEX = 12;
-    private static int wheelLeftLongPressKeyType_INDEX = 13;
-    private static int wheelLeftLongPressKeyModifier_INDEX = 14;
-    private static int wheelLeftLongPressKey_INDEX = 15;
-    private static int wheelRightPressKeyType_INDEX = 16;
-    private static int wheelRightPressKeyModifier_INDEX = 17;
-    private static int wheelRightPressKey_INDEX = 18;
-    private static int wheelRightLongPressKeyType_INDEX = 19;
-    private static int wheelRightLongPressKeyModifier_INDEX = 20;
-    private static int wheelRightLongPressKey_INDEX = 21;
-    private static int rocker1UpPressKeyType_INDEX = 22;
-    private static int rocker1UpPressKeyModifier_INDEX = 23;
-    private static int rocker1UpPressKey_INDEX = 24;
-    private static int rocker1UpLongPressKeyType_INDEX = 25;
-    private static int rocker1UpLongPressKeyModifier_INDEX = 26;
-    private static int rocker1UpLongPressKey_INDEX = 27;
-    private static int rocker1DownPressKeyType_INDEX = 28;
-    private static int rocker1DownPressKeyModifier_INDEX = 29;
-    private static int rocker1DownPressKey_INDEX = 30;
-    private static int rocker1DownLongPressKeyType_INDEX = 31;
-    private static int rocker1DownLongPressKeyModifier_INDEX = 32;
-    private static int rocker1DownLongPressKey_INDEX = 33;
-    private static int rocker2UpPressKeyType_INDEX = 34;
-    private static int rocker2UpPressKeyModifier_INDEX = 35;
-    private static int rocker2UpPressKey_INDEX = 36;
-    private static int rocker2UpLongPressKeyType_INDEX = 37;
-    private static int rocker2UpLongPressKeyModifier_INDEX = 38;
-    private static int rocker2UpLongPressKey_INDEX = 39;
-    private static int rocker2DownPressKeyType_INDEX = 40;
-    private static int rocker2DownPressKeyModifier_INDEX = 41;
-    private static int rocker2DownPressKey_INDEX = 42;
-    private static int rocker2DownLongPressKeyType_INDEX = 43;
-    private static int rocker2DownLongPressKeyModifier_INDEX = 44;
-    private static int rocker2DownLongPressKey_INDEX = 45;
+
+    private static int wheelScrollUpKeyType_INDEX = 0;
+    private static int wheelScrollUpKeyModifier_INDEX = 1;
+    private static int wheelScrollUpKey_INDEX = 2;
+    private static int wheelScrollDownKeyType_INDEX = 3;
+    private static int wheelScrollDownKeyModifier_INDEX = 4;
+    private static int wheelScrollDownKey_INDEX = 5;
+    private static int wheelLeftPressKeyType_INDEX = 6;
+    private static int wheelLeftPressKeyModifier_INDEX = 7;
+    private static int wheelLeftPressKey_INDEX = 8;
+    private static int wheelRightPressKeyType_INDEX = 9;
+    private static int wheelRightPressKeyModifier_INDEX = 10;
+    private static int wheelRightPressKey_INDEX = 11;
+    private static int rocker1UpPressKeyType_INDEX = 12;
+    private static int rocker1UpPressKeyModifier_INDEX = 13;
+    private static int rocker1UpPressKey_INDEX = 14;
+    private static int rocker1DownPressKeyType_INDEX = 15;
+    private static int rocker1DownPressKeyModifier_INDEX = 16;
+    private static int rocker1DownPressKey_INDEX = 17;
+    private static int rocker2UpPressKeyType_INDEX = 18;
+    private static int rocker2UpPressKeyModifier_INDEX = 19;
+    private static int rocker2UpPressKey_INDEX = 20;
+    private static int rocker2DownPressKeyType_INDEX = 21;
+    private static int rocker2DownPressKeyModifier_INDEX = 22;
+    private static int rocker2DownPressKey_INDEX = 23;
 
     // PDM Status message
     private static int statusSize = 3;
@@ -135,20 +105,12 @@ public class WLQ_C extends WLQ_BASE {
     private static String firmwareVersion;
     private static String hardwareVersion;
     private static byte keyMode;
-    private static int spSensitivity;
-    public static int lpSensitivity;
     public static byte wheelRightPressKeyType;
     public static byte wheelRightPressKeyModifier;
     public static byte wheelRightPressKey;
-    public static byte wheelRightLongPressKeyType;
-    public static byte wheelRightLongPressKeyModifier;
-    public static byte wheelRightLongPressKey;
     public static byte wheelLeftPressKeyType;
     public static byte wheelLeftPressKeyModifier;
     public static byte wheelLeftPressKey;
-    public static byte wheelLeftLongPressKeyType;
-    public static byte wheelLeftLongPressKeyModifier;
-    public static byte wheelLeftLongPressKey;
     public static byte wheelScrollUpKeyType;
     public static byte wheelScrollUpKeyModifier;
     public static byte wheelScrollUpKey;
@@ -158,29 +120,17 @@ public class WLQ_C extends WLQ_BASE {
     public static byte rocker1UpPressKeyType;
     public static byte rocker1UpPressKeyModifier;
     public static byte rocker1UpPressKey;
-    public static byte rocker1UpLongPressKeyType;
-    public static byte rocker1UpLongPressKeyModifier;
-    public static byte rocker1UpLongPressKey;
     public static byte rocker1DownPressKeyType;
     public static byte rocker1DownPressKeyModifier;
     public static byte rocker1DownPressKey;
-    public static byte rocker1DownLongPressKeyType;
-    public static byte rocker1DownLongPressKeyModifier;
-    public static byte rocker1DownLongPressKey;
     public static byte rocker2UpPressKeyType;
     public static byte rocker2UpPressKeyModifier;
     public static byte rocker2UpPressKey;
-    public static byte rocker2UpLongPressKeyType;
-    public static byte rocker2UpLongPressKeyModifier;
-    public static byte rocker2UpLongPressKey;
     public static byte rocker2DownPressKeyType;
     public static byte rocker2DownPressKeyModifier;
     public static byte rocker2DownPressKey;
-    public static byte rocker2DownLongPressKeyType;
-    public static byte rocker2DownLongPressKeyModifier;
-    public static byte rocker2DownLongPressKey;
 
-    public WLQ_C(byte[] bytes) {
+    public WLQ_S(byte[] bytes) {
         wunderLINQConfig = new byte[bytes.length];
         System.arraycopy(bytes, 0, wunderLINQConfig, 0, bytes.length);
 
@@ -207,20 +157,12 @@ public class WLQ_C extends WLQ_BASE {
             editor.apply();
 
             keyMode = bytes[keyMode_INDEX];
-            spSensitivity = ((flashConfig[spSensitivityHigh_INDEX] & 0xFF) << 8) | (flashConfig[spSensitivityLow_INDEX] & 0xFF);
-            lpSensitivity = ((flashConfig[lpSensitivityHigh_INDEX] & 0xFF) << 8) | (flashConfig[lpSensitivityLow_INDEX] & 0xFF);
             wheelRightPressKeyType = flashConfig[wheelRightPressKeyType_INDEX];
             wheelRightPressKeyModifier = flashConfig[wheelRightPressKeyModifier_INDEX];
             wheelRightPressKey = flashConfig[wheelRightPressKey_INDEX];
-            wheelRightLongPressKeyType = flashConfig[wheelRightLongPressKeyType_INDEX];
-            wheelRightLongPressKeyModifier = flashConfig[wheelRightLongPressKeyModifier_INDEX];
-            wheelRightLongPressKey = flashConfig[wheelRightLongPressKey_INDEX];
             wheelLeftPressKeyType = flashConfig[wheelLeftPressKeyType_INDEX];
             wheelLeftPressKeyModifier = flashConfig[wheelLeftPressKeyModifier_INDEX];
             wheelLeftPressKey = flashConfig[wheelLeftPressKey_INDEX];
-            wheelLeftLongPressKeyType = flashConfig[wheelLeftLongPressKeyType_INDEX];
-            wheelLeftLongPressKeyModifier = flashConfig[wheelLeftLongPressKeyModifier_INDEX];
-            wheelLeftLongPressKey = flashConfig[wheelLeftLongPressKey_INDEX];
             wheelScrollUpKeyType = flashConfig[wheelScrollUpKeyType_INDEX];
             wheelScrollUpKeyModifier = flashConfig[wheelScrollUpKeyModifier_INDEX];
             wheelScrollUpKey = flashConfig[wheelScrollUpKey_INDEX];
@@ -230,55 +172,33 @@ public class WLQ_C extends WLQ_BASE {
             rocker1UpPressKeyType = flashConfig[rocker1UpPressKeyType_INDEX];
             rocker1UpPressKeyModifier = flashConfig[rocker1UpPressKeyModifier_INDEX];
             rocker1UpPressKey = flashConfig[rocker1UpPressKey_INDEX];
-            rocker1UpLongPressKeyType = flashConfig[rocker1UpLongPressKeyType_INDEX];
-            rocker1UpLongPressKeyModifier = flashConfig[rocker1UpLongPressKeyModifier_INDEX];
-            rocker1UpLongPressKey = flashConfig[rocker1UpLongPressKey_INDEX];
             rocker1DownPressKeyType = flashConfig[rocker1DownPressKeyType_INDEX];
             rocker1DownPressKeyModifier = flashConfig[rocker1DownPressKeyModifier_INDEX];
             rocker1DownPressKey = flashConfig[rocker1DownPressKey_INDEX];
-            rocker1DownLongPressKeyType = flashConfig[rocker1DownLongPressKeyType_INDEX];
-            rocker1DownLongPressKeyModifier = flashConfig[rocker1DownLongPressKeyModifier_INDEX];
-            rocker1DownLongPressKey = flashConfig[rocker1DownLongPressKey_INDEX];
             rocker2UpPressKeyType = flashConfig[rocker2UpPressKeyType_INDEX];
             rocker2UpPressKeyModifier = flashConfig[rocker2UpPressKeyModifier_INDEX];
             rocker2UpPressKey = flashConfig[rocker2UpPressKey_INDEX];
-            rocker2UpLongPressKeyType = flashConfig[rocker2UpLongPressKeyType_INDEX];
-            rocker2UpLongPressKeyModifier = flashConfig[rocker2UpLongPressKeyModifier_INDEX];
-            rocker2UpLongPressKey = flashConfig[rocker2UpLongPressKey_INDEX];
             rocker2DownPressKeyType = flashConfig[rocker2DownPressKeyType_INDEX];
             rocker2DownPressKeyModifier = flashConfig[rocker2DownPressKeyModifier_INDEX];
             rocker2DownPressKey = flashConfig[rocker2DownPressKey_INDEX];
-            rocker2DownLongPressKeyType = flashConfig[rocker2DownLongPressKeyType_INDEX];
-            rocker2DownLongPressKeyModifier = flashConfig[rocker2DownLongPressKeyModifier_INDEX];
-            rocker2DownLongPressKey = flashConfig[rocker2DownLongPressKey_INDEX];
         }
     }
 
     @Override
     public String getActionName(int id){
         switch (id){
-            case longPressSensitivity:
-                return MyApplication.getContext().getString(R.string.full_long_press_label);
             case wheelScrollUp:
                 return MyApplication.getContext().getString(R.string.full_scroll_up_label);
             case wheelScrollDown:
                 return MyApplication.getContext().getString(R.string.full_scroll_down_label);
             case wheelToggleRight:
                 return MyApplication.getContext().getString(R.string.full_toggle_right_label);
-            case wheelToggleRightLongPress:
-                return MyApplication.getContext().getString(R.string.full_toggle_right_long_label);
             case wheelToggleLeft:
                 return MyApplication.getContext().getString(R.string.full_toggle_left_label);
-            case wheelToggleLeftLongPress:
-                return MyApplication.getContext().getString(R.string.full_toggle_left_long_label);
             case rocker1Up:
                 return MyApplication.getContext().getString(R.string.full_rocker1_up_label);
-            case rocker1UpLongPress:
-                return MyApplication.getContext().getString(R.string.full_rocker1_up_long_label);
             case rocker1Down:
                 return MyApplication.getContext().getString(R.string.full_rocker1_down_label);
-            case rocker1DownLongPress:
-                return MyApplication.getContext().getString(R.string.full_rocker1_down_long_label);
             default:
                 Log.d(TAG, "Unknown ActionID");
                 return "";
@@ -301,8 +221,6 @@ public class WLQ_C extends WLQ_BASE {
                     default:
                         return "";
                 }
-            case longPressSensitivity:
-                return String.valueOf(lpSensitivity);
             case wheelScrollUp:
                 if(wheelScrollUpKeyType == KEYBOARD_HID){
                     return(KeyboardHID.getKeyboardKeyByCode(wheelScrollUpKey));
@@ -333,32 +251,12 @@ public class WLQ_C extends WLQ_BASE {
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
-            case wheelToggleRightLongPress:
-                if(wheelRightLongPressKeyType == KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(wheelRightLongPressKey));
-                } else if(wheelRightLongPressKeyType  == CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(wheelRightLongPressKey));
-                } else if(wheelRightLongPressKeyType == UNDEFINED){
-                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
-                } else {
-                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
-                }
             case wheelToggleLeft:
                 if(wheelLeftPressKeyType == KEYBOARD_HID){
                     return(KeyboardHID.getKeyboardKeyByCode(wheelLeftPressKey));
                 } else if(wheelLeftPressKeyType == CONSUMER_HID){
                     return(KeyboardHID.getConsumerKeyByCode(wheelLeftPressKey));
                 } else if(wheelLeftPressKeyType == UNDEFINED){
-                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
-                } else {
-                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
-                }
-            case wheelToggleLeftLongPress:
-                if(wheelLeftLongPressKeyType == KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(wheelLeftLongPressKey));
-                } else if(wheelLeftLongPressKeyType  == CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(wheelLeftLongPressKey));
-                } else if(wheelLeftLongPressKeyType == UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
@@ -373,32 +271,12 @@ public class WLQ_C extends WLQ_BASE {
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
-            case rocker1UpLongPress:
-                if(rocker1UpLongPressKeyType == KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(rocker1UpLongPressKey));
-                } else if(rocker1UpLongPressKeyType == CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(rocker1UpLongPressKey));
-                } else if(rocker1UpLongPressKeyType == UNDEFINED){
-                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
-                } else {
-                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
-                }
             case rocker1Down:
                 if(rocker1DownPressKeyType == KEYBOARD_HID){
                     return(KeyboardHID.getKeyboardKeyByCode(rocker1DownPressKey));
                 } else if(rocker1DownPressKeyType == WLQ_N.CONSUMER_HID){
                     return(KeyboardHID.getConsumerKeyByCode(rocker1DownPressKey));
                 } else if(rocker1DownPressKeyType == UNDEFINED){
-                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
-                } else {
-                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
-                }
-            case rocker1DownLongPress:
-                if(rocker1DownLongPressKeyType == KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(rocker1DownLongPressKey));
-                } else if(rocker1DownLongPressKeyType == CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(rocker1DownLongPressKey));
-                } else if(rocker1DownLongPressKeyType == UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
@@ -413,32 +291,12 @@ public class WLQ_C extends WLQ_BASE {
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
-            case rocker2UpLongPress:
-                if(rocker2UpLongPressKeyType == KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(rocker2UpLongPressKey));
-                } else if(rocker2UpLongPressKeyType == CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(rocker2UpLongPressKey));
-                } else if(rocker2UpLongPressKeyType == UNDEFINED){
-                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
-                } else {
-                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
-                }
             case rocker2Down:
                 if(rocker2DownPressKeyType == KEYBOARD_HID){
                     return(KeyboardHID.getKeyboardKeyByCode(rocker2DownPressKey));
                 } else if(rocker2DownPressKeyType == WLQ_N.CONSUMER_HID){
                     return(KeyboardHID.getConsumerKeyByCode(rocker2DownPressKey));
                 } else if(rocker2DownPressKeyType == UNDEFINED){
-                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
-                } else {
-                    return(MyApplication.getContext().getString(R.string.hid_0x00_label));
-                }
-            case rocker2DownLongPress:
-                if(rocker2DownLongPressKeyType == KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(rocker2DownLongPressKey));
-                } else if(rocker2DownLongPressKeyType == CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(rocker2DownLongPressKey));
-                } else if(rocker2DownLongPressKeyType == UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
@@ -458,28 +316,16 @@ public class WLQ_C extends WLQ_BASE {
                 return wheelScrollDownKeyType;
             case wheelToggleRight:
                 return wheelRightPressKeyType;
-            case wheelToggleRightLongPress:
-                return wheelRightLongPressKeyType;
             case wheelToggleLeft:
                 return wheelLeftPressKeyType;
-            case wheelToggleLeftLongPress:
-                return wheelLeftLongPressKeyType;
             case rocker1Up:
                 return rocker1UpPressKeyType;
-            case rocker1UpLongPress:
-                return rocker1UpLongPressKeyType;
             case rocker1Down:
                 return rocker1DownPressKeyType;
-            case rocker1DownLongPress:
-                return rocker1DownLongPressKeyType;
             case rocker2Up:
                 return rocker2UpPressKeyType;
-            case rocker2UpLongPress:
-                return rocker2UpLongPressKeyType;
             case rocker2Down:
                 return rocker2DownPressKeyType;
-            case rocker2DownLongPress:
-                return rocker2DownLongPressKeyType;
             default:
                 Log.d(TAG, "Unknown ActionID");
                 return 0x00;
@@ -495,28 +341,16 @@ public class WLQ_C extends WLQ_BASE {
                 return wheelScrollDownKey;
             case wheelToggleRight:
                 return wheelRightPressKey;
-            case wheelToggleRightLongPress:
-                return wheelRightLongPressKey;
             case wheelToggleLeft:
                 return wheelLeftPressKey;
-            case wheelToggleLeftLongPress:
-                return wheelLeftLongPressKey;
             case rocker1Up:
                 return rocker1UpPressKey;
-            case rocker1UpLongPress:
-                return rocker1UpLongPressKey;
             case rocker1Down:
                 return rocker1DownPressKey;
-            case rocker1DownLongPress:
-                return rocker1DownLongPressKey;
             case rocker2Up:
                 return rocker2UpPressKey;
-            case rocker2UpLongPress:
-                return rocker2UpLongPressKey;
             case rocker2Down:
                 return rocker2DownPressKey;
-            case rocker2DownLongPress:
-                return rocker2DownLongPressKey;
             default:
                 Log.d(TAG, "Unknown ActionID");
                 return 0x00;
@@ -532,28 +366,16 @@ public class WLQ_C extends WLQ_BASE {
                 return wheelScrollDownKeyModifier;
             case wheelToggleRight:
                 return wheelRightPressKeyModifier;
-            case wheelToggleRightLongPress:
-                return wheelRightLongPressKeyModifier;
             case wheelToggleLeft:
                 return wheelLeftPressKeyModifier;
-            case wheelToggleLeftLongPress:
-                return wheelLeftLongPressKeyModifier;
             case rocker1Up:
                 return rocker1UpPressKeyModifier;
-            case rocker1UpLongPress:
-                return rocker1UpLongPressKeyModifier;
             case rocker1Down:
                 return rocker1DownPressKeyModifier;
-            case rocker1DownLongPress:
-                return rocker1DownLongPressKeyModifier;
             case rocker2Up:
                 return rocker2UpPressKeyModifier;
-            case rocker2UpLongPress:
-                return rocker2UpLongPressKeyModifier;
             case rocker2Down:
                 return rocker2DownPressKeyModifier;
-            case rocker2DownLongPress:
-                return rocker2DownLongPressKeyModifier;
             default:
                 Log.d(TAG, "Unknown ActionID");
                 return 0x00;
@@ -578,59 +400,30 @@ public class WLQ_C extends WLQ_BASE {
                 tempConfig[wheelRightPressKeyModifier_INDEX] = modifiers;
                 tempConfig[wheelRightPressKey_INDEX] = key;
                 break;
-            case wheelToggleRightLongPress:
-                tempConfig[wheelRightLongPressKeyType_INDEX] = type;
-                tempConfig[wheelRightLongPressKeyModifier_INDEX] = modifiers;
-                tempConfig[wheelRightLongPressKey_INDEX] = key;
-                break;
             case wheelToggleLeft:
                 tempConfig[wheelLeftPressKeyType_INDEX] = type;
                 tempConfig[wheelLeftPressKeyModifier_INDEX] = modifiers;
                 tempConfig[wheelLeftPressKey_INDEX] = key;
-                break;
-            case wheelToggleLeftLongPress:
-                tempConfig[wheelLeftLongPressKeyType_INDEX] = type;
-                tempConfig[wheelLeftLongPressKeyModifier_INDEX] = modifiers;
-                tempConfig[wheelLeftLongPressKey_INDEX] = key;
                 break;
             case rocker1Up:
                 tempConfig[rocker1UpPressKeyType_INDEX] = type;
                 tempConfig[rocker1UpPressKeyModifier_INDEX] = modifiers;
                 tempConfig[rocker1UpPressKey_INDEX] = key;
                 break;
-            case rocker1UpLongPress:
-                tempConfig[rocker1UpLongPressKeyType_INDEX] = type;
-                tempConfig[rocker1UpLongPressKeyModifier_INDEX] = modifiers;
-                tempConfig[rocker1UpLongPressKey_INDEX] = key;
-                break;
             case rocker1Down:
                 tempConfig[rocker1DownPressKeyType_INDEX] = type;
                 tempConfig[rocker1DownPressKeyModifier_INDEX] = modifiers;
                 tempConfig[rocker1DownPressKey_INDEX] = key;
                 break;
-            case rocker1DownLongPress:
-                tempConfig[rocker1DownLongPressKeyType_INDEX] = type;
-                tempConfig[rocker1DownLongPressKeyModifier_INDEX] = modifiers;
-                tempConfig[rocker1DownLongPressKey_INDEX] = key;
             case rocker2Up:
                 tempConfig[rocker2UpPressKeyType_INDEX] = type;
                 tempConfig[rocker2UpPressKeyModifier_INDEX] = modifiers;
                 tempConfig[rocker2UpPressKey_INDEX] = key;
                 break;
-            case rocker2UpLongPress:
-                tempConfig[rocker2UpLongPressKeyType_INDEX] = type;
-                tempConfig[rocker2UpLongPressKeyModifier_INDEX] = modifiers;
-                tempConfig[rocker2UpLongPressKey_INDEX] = key;
-                break;
             case rocker2Down:
                 tempConfig[rocker2DownPressKeyType_INDEX] = type;
                 tempConfig[rocker2DownPressKeyModifier_INDEX] = modifiers;
                 tempConfig[rocker2DownPressKey_INDEX] = key;
-                break;
-            case rocker2DownLongPress:
-                tempConfig[rocker2DownLongPressKeyType_INDEX] = type;
-                tempConfig[rocker2DownLongPressKeyModifier_INDEX] = modifiers;
-                tempConfig[rocker2DownLongPressKey_INDEX] = key;
                 break;
             default:
                 Log.d(TAG, "Unknown ActionID");
@@ -728,7 +521,7 @@ public class WLQ_C extends WLQ_BASE {
 
     @Override
     public int getHardwareType() {
-        return WLQ.TYPE_C;
+        return WLQ.TYPE_S;
     }
 
     @Override
