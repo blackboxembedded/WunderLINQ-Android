@@ -608,7 +608,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             finish();
             return;
         } else if (requestCode == SETTINGS_CHECK) {
-            gridChange(true);
             updateNightMode();
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -1233,7 +1232,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
 
             //Set dynamic tags and IDs
-            gridCell.setId (View.generateViewId());
+            gridCell.setId(View.generateViewId());
             layout.setId(View.generateViewId());
             valueTextView.setId(View.generateViewId());
             headerLabelView.setId(View.generateViewId());
@@ -1298,7 +1297,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         String retValue = "";
 
         if (gridLayout.getChildCount() > cellNumber) {
-            retValue = (String)((TextView) findViewById(valueTextViewIDs[cellNumber])).getText();
+            TextView cellView = findViewById(valueTextViewIDs[cellNumber]);
+            if (cellView != null) {
+                retValue = (String) cellView.getText();
+            }
         }
 
         return retValue;
