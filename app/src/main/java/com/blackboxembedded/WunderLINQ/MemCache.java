@@ -421,7 +421,7 @@ public class MemCache {
 
     //AMBIENT_LIGHT:
     public static String ambientLightLabel(){
-        return getString("avgSpeedLabel");
+        return getString("ambientLightLabel");
     }
 
     //TRIP_ONE
