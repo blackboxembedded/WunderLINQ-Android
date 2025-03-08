@@ -81,15 +81,20 @@ public class WLQ_U extends WLQ_BASE {
     private static int fx2PressKey_INDEX = 18;
 
     // PDM Status message
-    private static int statusSize = 3;
-    public static int ACTIVE_CHAN_INDEX = 0;
-    public static int LIN_ACC_CHANNEL1_VAL_RAW_INDEX = 1;
-    public static int LIN_ACC_CHANNEL2_VAL_RAW_INDEX = 2;
+    private static int statusSize = 6;
+    public static int NUM_CHAN_INDEX = 0;
+    public static int ACTIVE_CHAN_INDEX = 1;
+    public static int LIN_ACC_CHANNEL1_VAL_RAW_INDEX = 2;
+    public static int LIN_ACC_CHANNEL2_VAL_RAW_INDEX = 3;
+    public static int LIN_ACC_CHANNEL3_VAL_RAW_INDEX = 4;
+    public static int LIN_ACC_CHANNEL4_VAL_RAW_INDEX = 5;
 
     private static byte[] wunderLINQStatus;
     public static int activeChannel;
     public static int channe1ValueRaw;
     public static int channel2ValueRaw;
+    public static int channel3ValueRaw;
+    public static int channel4ValueRaw;
 
     private static byte[] wunderLINQConfig;
     private static byte[] flashConfig;
@@ -489,5 +494,7 @@ public class WLQ_U extends WLQ_BASE {
         activeChannel = (wunderLINQStatus[ACTIVE_CHAN_INDEX] & 0xFF);
         channe1ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
         channel2ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
+        channel3ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
+        channel4ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
     }
 }

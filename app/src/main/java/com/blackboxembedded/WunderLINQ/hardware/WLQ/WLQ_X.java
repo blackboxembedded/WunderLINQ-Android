@@ -151,6 +151,22 @@ public class WLQ_X extends WLQ_BASE {
     public static int fullSignalLongPressKeyModifier_INDEX = 60;
     public static int fullSignalLongPressKey_INDEX = 61;
 
+    // PDM Status message
+    private static int statusSize = 6;
+    public static int NUM_CHAN_INDEX = 0;
+    public static int ACTIVE_CHAN_INDEX = 1;
+    public static int LIN_ACC_CHANNEL1_VAL_RAW_INDEX = 2;
+    public static int LIN_ACC_CHANNEL2_VAL_RAW_INDEX = 3;
+    public static int LIN_ACC_CHANNEL3_VAL_RAW_INDEX = 4;
+    public static int LIN_ACC_CHANNEL4_VAL_RAW_INDEX = 5;
+
+    private static byte[] wunderLINQStatus;
+    public static int activeChannel;
+    public static int channel1ValueRaw;
+    public static int channel2ValueRaw;
+    public static int channel3ValueRaw;
+    public static int channel4ValueRaw;
+
     private static byte[] wunderLINQConfig;
     private static byte[] flashConfig;
     private static byte[] tempConfig;
@@ -941,11 +957,17 @@ public class WLQ_X extends WLQ_BASE {
 
     @Override
     public byte[] getStatus() {
-        return null;
+        return wunderLINQStatus;
     }
 
     @Override
     public void setStatus(byte[] status) {
-        Log.d(TAG, "WLQ_X_STATUS: " + Utils.ByteArrayToHex(status));
+        wunderLINQStatus = new byte[statusSize];
+        System.arraycopy(status, 4, wunderLINQStatus, 0, statusSize);
+        activeChannel = (wunderLINQStatus[ACTIVE_CHAN_INDEX] & 0xFF);
+        channel1ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
+        channel2ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
+        channel3ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
+        channel4ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
     }
 }

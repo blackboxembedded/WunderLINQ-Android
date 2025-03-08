@@ -34,21 +34,18 @@ public class WLQ_S extends WLQ_BASE {
 
     public static String hardwareVersion1 = "WLQS1.0";
 
-    public static byte[] GET_STATUS_CMD = {0x57, 0x52, 0x41, 0x50};
-
-    private static int configFlashSize = 24;
+    private static int configFlashSize = 37;
     private static int firmwareVersionMajor_INDEX = 3;
     private static int firmwareVersionMinor_INDEX = 4;
 
     public static byte[] defaultConfig = {
-            0x01, 0x00, 0x52,           // Up, BMW: Scroll Up, Triumph Joystick Up
-            0x01, 0x00, 0x51,           // Down, BMW: Scroll Down, Triumph Joystick Down
-            0x01, 0x00, 0x50,           // Left, BMW: Wheel Left, Triumph Joystick Left
-            0x01, 0x00, 0x4F,           // Right, BMW: Wheel Right, Triumph Joystick Right
-            0x01, 0x00, 0x29,           // FX2, Rocker1 Up, Triumph ?
-            0x01, 0x00, 0x28,           // FX1, Rocker1 Down, Triumph Joystick In
-            0x01, 0x00, 0x57,           // FX4, Rocker2 Up, Triumph ?
-            0x01, 0x00, 0x58};          // FX3, Rocker2 Down, Triumph ?
+            0x11,                               // Long Press Sensitivity
+            0x01, 0x00, 0x52, 0x00, 0x00, 0x00, // Scroll Up - Up Arrow
+            0x01, 0x00, 0x51, 0x00, 0x00, 0x00, // Scroll Down - Down Arrow
+            0x01, 0x00, 0x50, 0x01, 0x00, 0x29, // Wheel Left - Left Arrow
+            0x01, 0x00, 0x4F, 0x01, 0x00, 0x28, // Wheel Right - Right Arrow
+            0x01, 0x00, 0x29, 0x00, 0x00, 0x00, // FX1
+            0x01, 0x00, 0x28, 0x00, 0x00, 0x00};// FX2
 
     public static final int KEYMODE = 100;
     public static final int wheelScrollUp = 26;
@@ -89,15 +86,20 @@ public class WLQ_S extends WLQ_BASE {
     private static int rocker2DownPressKey_INDEX = 23;
 
     // PDM Status message
-    private static int statusSize = 3;
-    public static int ACTIVE_CHAN_INDEX = 0;
-    public static int LIN_ACC_CHANNEL1_VAL_RAW_INDEX = 1;
-    public static int LIN_ACC_CHANNEL2_VAL_RAW_INDEX = 2;
+    private static int statusSize = 6;
+    public static int NUM_CHAN_INDEX = 0;
+    public static int ACTIVE_CHAN_INDEX = 1;
+    public static int LIN_ACC_CHANNEL1_VAL_RAW_INDEX = 2;
+    public static int LIN_ACC_CHANNEL2_VAL_RAW_INDEX = 3;
+    public static int LIN_ACC_CHANNEL3_VAL_RAW_INDEX = 4;
+    public static int LIN_ACC_CHANNEL4_VAL_RAW_INDEX = 5;
 
     private static byte[] wunderLINQStatus;
     public static int activeChannel;
     public static int channel1ValueRaw;
     public static int channel2ValueRaw;
+    public static int channel3ValueRaw;
+    public static int channel4ValueRaw;
 
     private static byte[] wunderLINQConfig;
     private static byte[] flashConfig;
@@ -536,5 +538,7 @@ public class WLQ_S extends WLQ_BASE {
         activeChannel = (wunderLINQStatus[ACTIVE_CHAN_INDEX] & 0xFF);
         channel1ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
         channel2ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
+        channel3ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
+        channel4ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
     }
 }
