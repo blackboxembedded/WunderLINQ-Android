@@ -15,6 +15,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -339,6 +340,20 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
     }
 
     private void updateDisplay(){
+        // Set actionbar color based on focus
+        if (sharedPrefs.getBoolean("prefFocusIndication", false)) {
+            TypedValue typedValue = new TypedValue();
+            getTheme().resolveAttribute(R.attr.backgroundColor, typedValue, true);
+            int color = typedValue.data;
+            if (MotorcycleData.getHasFocus()) {
+                color = ContextCompat.getColor(AccessoryActivity.this, R.color.colorAccent);
+            }
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setBackgroundDrawable(new ColorDrawable(color));
+            }
+        }
+
         //Check for active faults
         if (!Faults.getAllActiveDesc().isEmpty()) {
             faultButton.setVisibility(View.VISIBLE);
