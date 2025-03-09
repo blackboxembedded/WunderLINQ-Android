@@ -379,13 +379,13 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
                 drawable.setStroke(20, androidx.preference.PreferenceManager.getDefaultSharedPreferences(this).getInt("prefHighlightColor", R.color.colorAccent)); // set stroke width and stroke color
                 Log.d(TAG,"ACTIVE CHANNEL: " + channelActive);
                 switch (channelActive) {
-                    case 3:
+                    case 2:
                         channelOneCL.setBackground(drawable);
                         channelTwoCL.setBackgroundResource(0);
                         channelOneValuePB.setProgressTintList(ColorStateList.valueOf(androidx.preference.PreferenceManager.getDefaultSharedPreferences(this).getInt("prefHighlightColor", R.color.colorAccent)));
                         channelTwoValuePB.setProgressTintList(ColorStateList.valueOf(foregroundColor));
                         break;
-                    case 4:
+                    case 3:
                         channelOneCL.setBackgroundResource(0);
                         channelTwoCL.setBackground(drawable);
                         channelTwoValuePB.setProgressTintList(ColorStateList.valueOf(androidx.preference.PreferenceManager.getDefaultSharedPreferences(this).getInt("prefHighlightColor", R.color.colorAccent)));
