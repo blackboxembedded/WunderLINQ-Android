@@ -1082,11 +1082,17 @@
 
     <string name="orientation_label">Orientation</string>
     <string name="up_label">Up</string>
+    <string name="up_long_label">Up Long Press</string>
     <string name="down_label">Down</string>
+    <string name="down_long_label">Down Long Press</string>
     <string name="left_label">Left</string>
+    <string name="left_long_label">Left Long Press</string>
     <string name="right_label">Right</string>
-    <string name="fx1_label">F1</string>
-    <string name="fx2_label">F2</string>
+    <string name="right_long_label">Right Long Press</string>
+    <string name="fx1_label">FX1</string>
+    <string name="fx1_long_label">FX1 Long Press</string>
+    <string name="fx2_label">FX2</string>
+    <string name="fx2_long_label">FX2 Long Press</string>
 
     <string name="orientation_default_label">Default</string>
     <string name="orientation_90_label">90</string>

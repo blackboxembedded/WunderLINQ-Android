@@ -47,15 +47,16 @@ public class WLQ_U extends WLQ_BASE {
             0x01, 0x00, 0x50, // Left - Arrow Left
             0x01, 0x00, 0x4F, // Right - Arrow Right
             0x01, 0x00, 0x29, // FX1 - Escape
-            0x01, 0x00, 0x28};// FX2 - Enter
+            0x01, 0x00, 0x28  // FX2 - Enter
+    };
 
     public static final int KEYMODE = 100;
     public static final int ORIENTATION = 101;
     public static final int up = 26;
-    public static final int down = 27;
-    public static final int right = 28;
-    public static final int left = 30;
-    public static final int fx1 = 32;
+    public static final int down = 28;
+    public static final int right = 30;
+    public static final int left = 32;
+    public static final int fx1 = 34;
     public static final int fx2 = 36;
 
     // Config message
