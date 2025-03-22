@@ -395,6 +395,7 @@
     <string name="task_title_systemvolume">Volume</string>
     <string name="task_title_gopro">GoPro Control</string>
     <string name="task_title_fuel">Fuel</string>
+    <string name="task_title_faults">Active Faults</string>
     <string name="nogpremote_alert_title">WunderLINQ GoPro Remote Not Found</string>
     <string name="nogpremote_alert_body">GoPro Control is provided by a separate free app called WunderLINQ GoPro Remote.  Click OK to install.</string>
     <string name="task_title_insta360">Insta360 Control</string>
@@ -670,7 +671,8 @@
         <item name="19">@string/task_title_systemvolume</item>
         <item name="20">@string/task_title_insta360</item>
         <item name="21">@string/task_title_fuel</item>
-        <item name="22">@string/task_title_empty</item>
+        <item name="22">@string/task_title_faults</item>
+        <item name="23">@string/task_title_empty</item>
     </string-array>
     <string-array name="tasks_arrayValues" translatable="false">
         <item name="1">0</item>
@@ -695,6 +697,7 @@
         <item name="20">18</item>
         <item name="21">20</item>
         <item name="22">21</item>
+        <item name="23">22</item>
     </string-array>
     <string name="pref_nav_app_title">Navigation App</string>
     <string name="nav_app_feature_not_supported">Feature not supported by selected Navigation App</string>
