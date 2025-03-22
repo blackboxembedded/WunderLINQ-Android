@@ -560,6 +560,8 @@ public class MotorcycleData {
         rearBrake = 0;
         leanAngleDeviceMaxL = null;
         leanAngleDeviceMaxR = null;
+        leanAngleBikeMaxL = null;
+        leanAngleBikeMaxR = null;
     }
     public static String getExtraKey(DataType dataPoint){
         String key = "";
