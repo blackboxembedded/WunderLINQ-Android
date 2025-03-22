@@ -554,6 +554,13 @@ public class MotorcycleData {
     }
 
     // Utility functions
+    public static void resetData(){
+        numberOfShifts = 0;
+        frontBrake = 0;
+        rearBrake = 0;
+        leanAngleDeviceMaxL = null;
+        leanAngleDeviceMaxR = null;
+    }
     public static String getExtraKey(DataType dataPoint){
         String key = "";
         switch (dataPoint){
@@ -1699,5 +1706,4 @@ public class MotorcycleData {
 
         return new Object[]{value, label, icon, valueColor};
     }
-
 }
