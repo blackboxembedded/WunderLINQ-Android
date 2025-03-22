@@ -633,6 +633,9 @@ public class BluetoothLeService extends Service {
                 if (sharedPrefs.getBoolean("prefAutoTripLogging", false)) {
                     LoggingService.stopLoggingService(MyApplication.getContext());
                 }
+
+                // Reset trend data
+                MotorcycleData.resetData();
             }
             // GATT Server Connecting
             if (newState == BluetoothProfile.STATE_CONNECTING) {
@@ -645,7 +648,7 @@ public class BluetoothLeService extends Service {
                         "Connection establishing";
                 Log.d(TAG,dataLog);
             }
-            // GATT Server disconnected
+            // GATT Server disconnecting
             else if (newState == BluetoothProfile.STATE_DISCONNECTING) {
                 intentAction = ACTION_GATT_DISCONNECTING;
                 synchronized (mGattCallback) {
