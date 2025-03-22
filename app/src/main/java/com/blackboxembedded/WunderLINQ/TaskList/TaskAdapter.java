@@ -19,6 +19,7 @@ package com.blackboxembedded.WunderLINQ.TaskList;
 
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,7 +100,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.RecyclerViewHo
             GradientDrawable drawable = (GradientDrawable) holder.taskContainer.getBackground();
             drawable.setColor(highlightColor);
         } else {
-            holder.taskIcon.setBackgroundResource(R.color.clear);
+            holder.taskContainer.setBackgroundResource(R.color.clear);
         }
     }
 

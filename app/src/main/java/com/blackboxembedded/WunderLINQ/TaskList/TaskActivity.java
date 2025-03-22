@@ -747,8 +747,12 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                     Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
                     if (((MyApplication) TaskActivity.this.getApplication()).getTripRecording()) {
-                        stopService(new Intent(TaskActivity.this, LoggingService.class));
-                        ((MyApplication) this.getApplication()).setTripRecording(false);
+                        if (sharedPrefs.getBoolean("prefAutoTripLogging", false)) {
+                            Toast.makeText(TaskActivity.this, R.string.toast_auto_trip_logging, Toast.LENGTH_LONG).show();
+                        } else {
+                            stopService(new Intent(TaskActivity.this, LoggingService.class));
+                            ((MyApplication) this.getApplication()).setTripRecording(false);
+                        }
                     } else {
                         startService(new Intent(TaskActivity.this, LoggingService.class));
                         ((MyApplication) this.getApplication()).setTripRecording(true);

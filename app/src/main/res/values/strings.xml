@@ -966,6 +966,9 @@
     <string name="pref_photopreview_summary">Displays the photo after capture</string>
     <string name="pref_autolaunch_name">Auto Launch App</string>
     <string name="pref_autolaunch_summary">Auto launch WunderLINQ app when WunderLINQ hardware connects</string>
+    <string name="pref_autotrip_name">Auto Trip Logging</string>
+    <string name="pref_autotrip_summary">Automatically starts trip logging when connected to the WunderLINQ hardware.</string>
+    <string name="toast_auto_trip_logging">Auto Trip Logging Enabled</string>
     <string name="pref_debuglogging_name">Enable Debug Logging</string>
     <string name="pref_debuglogging_summary">Only enable if needed by Support, may impact performance if left running.  Please disable when finished.</string>
     <string name="hw_settings_title">WunderLINQ hardware Settings</string>

@@ -73,6 +73,8 @@ import androidx.core.app.NotificationCompat;
 
 import com.blackboxembedded.WunderLINQ.AlertActivity;
 import com.blackboxembedded.WunderLINQ.FaultActivity;
+import com.blackboxembedded.WunderLINQ.LoggingService;
+import com.blackboxembedded.WunderLINQ.TaskList.TaskActivity;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
@@ -605,6 +607,12 @@ public class BluetoothLeService extends Service {
                 } else {
                     Log.d(TAG, "No BLUETOOTH_CONNECT permission granted");
                 }
+
+                // Check for auto-trip logging
+                if (sharedPrefs.getBoolean("prefAutoTripLogging", false)) {
+                    LoggingService.startLoggingService(MyApplication.getContext());
+                }
+
                 String dataLog = "GATT Connected: [" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +
                         "Connection established";
                 Log.d(TAG,dataLog);
@@ -620,6 +628,11 @@ public class BluetoothLeService extends Service {
                         "Disconnected";
                 Log.d(TAG,dataLog);
                 MotorcycleData.setHasFocus(false);
+
+                // Check for auto-trip logging
+                if (sharedPrefs.getBoolean("prefAutoTripLogging", false)) {
+                    LoggingService.stopLoggingService(MyApplication.getContext());
+                }
             }
             // GATT Server Connecting
             if (newState == BluetoothProfile.STATE_CONNECTING) {
