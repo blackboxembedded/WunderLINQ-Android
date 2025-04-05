@@ -151,6 +151,14 @@ public class NavAppHelper {
                 url = "wego://?&back_url=wunderlinq://datagrid";
                 navIntent.setData(Uri.parse(url));
                 break;
+            case "25": //Tourstart
+                navIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                url = "tourstart.org://&back_url=wunderlinq://";
+                navIntent.setData(Uri.parse(url));
+                break;
+            case "26": //DMD2
+                navIntent = activity.getPackageManager().getLaunchIntentForPackage("com.thorkracing.dmd2launcher");
+                break;
         }
         try {
             if (navIntent != null) {
@@ -273,6 +281,12 @@ public class NavAppHelper {
                 navIntent.setPackage("com.here.app.maps");
                 url = "google.navigation:q=fuel+station";
                 navIntent.setData(Uri.parse(url));
+                break;
+            case "25": //Tourstart
+                // Not Supported
+                break;
+            case "26": //DMD2
+                // Not Supported
                 break;
         }
         if (supported) {
@@ -422,8 +436,16 @@ public class NavAppHelper {
                 break;
             case "24": //HERE WeGO
                 supported = true;
-                navUrl = "wego://route?geo=" + end.getLatitude() + "," + end.getLongitude() + "&back_url=wunderlinq://datagrid";
+                navUrl = "wego://route?geo=" + end.getLatitude() + "," + end.getLongitude() + "&back_url=wunderlinq://quicktasks";
                 homeNavIntent.setData(Uri.parse(navUrl));
+                break;
+            case "25": //Tourstart
+                supported = true;
+                navUrl = "tourstart.org://route?geo=" + end.getLatitude() + "," + end.getLongitude() + "&back_url=wunderlinq://" ;
+                homeNavIntent.setData(Uri.parse(navUrl));
+                break;
+            case "26" : //DMD2
+                // Not Supported
                 break;
         }
         if (supported) {
@@ -573,6 +595,14 @@ public class NavAppHelper {
                 supported = true;
                 navUrl = "wego://view?geo=" + waypoint.getLatitude() + "," + waypoint.getLongitude() + "&back_url=wunderlinq://datagrid";
                 navIntent.setData(Uri.parse(navUrl));
+                break;
+            case "25": //Tourstart
+                supported = true;
+                navUrl = "tourstart.org://view?geo=" + waypoint.getLatitude() + "," + waypoint.getLongitude() + "&back_url=wunderlinq://" ;
+                navIntent.setData(Uri.parse(navUrl));
+                break;
+            case "26" : //DMD2
+                // Not Supported
                 break;
         }
         if (supported) {
