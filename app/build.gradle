@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdk 34
+    compileSdk 35
     defaultConfig {
         applicationId "com.blackboxembedded.WunderLINQ"
         minSdkVersion 21
@@ -71,7 +71,7 @@ dependencies {
     implementation 'stax:stax:1.2.0'
     implementation 'com.github.ticofab:android-gpx-parser:2.3.1'
     implementation 'com.caverock:androidsvg-aar:1.4'
-    implementation 'commons-io:commons-io:2.13.0'
+    implementation 'commons-io:commons-io:2.16.1'
     implementation 'com.github.yarolegovich:DiscreteScrollView:1.5.1'
     implementation 'com.google.guava:guava:31.1-android'
     implementation "androidx.car.app:app:1.4.0"
