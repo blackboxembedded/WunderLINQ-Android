@@ -367,8 +367,8 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
                 channelTwoHeaderTV.setText(sharedPrefs.getString("ACC_CHAN_2", getString(R.string.default_accessory_two_name)));
                 channelTwoHeaderET.setText(sharedPrefs.getString("ACC_CHAN_2", getString(R.string.default_accessory_two_name)));
                 int channelActive = (MotorcycleData.wlq.getStatus()[WLQ_S.ACTIVE_CHAN_INDEX] & 0xFF);
-                int channel1ValueRaw = (MotorcycleData.wlq.getStatus()[WLQ_S.LIN_ACC_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
-                int channel2ValueRaw = (MotorcycleData.wlq.getStatus()[WLQ_S.LIN_ACC_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
+                int channel1ValueRaw = (MotorcycleData.wlq.getStatus()[WLQ_S.ACC_PDM_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
+                int channel2ValueRaw = (MotorcycleData.wlq.getStatus()[WLQ_S.ACC_PDM_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
 
                 TypedValue typedValue = new TypedValue();
                 Resources.Theme theme = this.getTheme();

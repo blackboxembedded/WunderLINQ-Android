@@ -79,39 +79,39 @@ public class WLQ_S extends WLQ_BASE {
     private static int downLongKeyType_INDEX = 10;
     private static int downLongKeyModifier_INDEX = 11;
     private static int downLongKey_INDEX = 12;
-    private static int leftPressKeyType_INDEX = 13;
-    private static int leftPressKeyModifier_INDEX = 14;
-    private static int leftPressKey_INDEX = 15;
-    private static int leftLongPressKeyType_INDEX = 16;
-    private static int leftLongPressKeyModifier_INDEX = 17;
-    private static int leftLongPressKey_INDEX = 18;
-    private static int rightPressKeyType_INDEX = 19;
-    private static int rightPressKeyModifier_INDEX = 20;
-    private static int rightPressKey_INDEX = 21;
-    private static int rightLongPressKeyType_INDEX = 22;
-    private static int rightLongPressKeyModifier_INDEX = 23;
-    private static int rightLongPressKey_INDEX = 24;
-    private static int fx1PressKeyType_INDEX = 25;
-    private static int fx1PressKeyModifier_INDEX = 26;
-    private static int fx1PressKey_INDEX = 27;
-    private static int fx1LongPressKeyType_INDEX = 28;
-    private static int fx1LongPressKeyModifier_INDEX = 29;
-    private static int fx1LongPressKey_INDEX = 30;
-    private static int fx2PressKeyType_INDEX = 31;
-    private static int fx2PressKeyModifier_INDEX = 32;
-    private static int fx2PressKey_INDEX = 33;
-    private static int fx2LongPressKeyType_INDEX = 34;
-    private static int fx2LongPressKeyModifier_INDEX = 35;
-    private static int fx2LongPressKey_INDEX = 36;
+    private static int leftKeyType_INDEX = 13;
+    private static int leftKeyModifier_INDEX = 14;
+    private static int leftKey_INDEX = 15;
+    private static int leftLongKeyType_INDEX = 16;
+    private static int leftLongKeyModifier_INDEX = 17;
+    private static int leftLongKey_INDEX = 18;
+    private static int rightKeyType_INDEX = 19;
+    private static int rightKeyModifier_INDEX = 20;
+    private static int rightKey_INDEX = 21;
+    private static int rightLongKeyType_INDEX = 22;
+    private static int rightLongKeyModifier_INDEX = 23;
+    private static int rightLongKey_INDEX = 24;
+    private static int fx1KeyType_INDEX = 25;
+    private static int fx1KeyModifier_INDEX = 26;
+    private static int fx1Key_INDEX = 27;
+    private static int fx1LongKeyType_INDEX = 28;
+    private static int fx1LongKeyModifier_INDEX = 29;
+    private static int fx1LongKey_INDEX = 30;
+    private static int fx2KeyType_INDEX = 31;
+    private static int fx2KeyModifier_INDEX = 32;
+    private static int fx2Key_INDEX = 33;
+    private static int fx2LongKeyType_INDEX = 34;
+    private static int fx2LongKeyModifier_INDEX = 35;
+    private static int fx2LongKey_INDEX = 36;
 
     // PDM Status message
     private static int statusSize = 6;
     public static int NUM_CHAN_INDEX = 0;
     public static int ACTIVE_CHAN_INDEX = 1;
-    public static int LIN_ACC_CHANNEL1_VAL_RAW_INDEX = 2;
-    public static int LIN_ACC_CHANNEL2_VAL_RAW_INDEX = 3;
-    public static int LIN_ACC_CHANNEL3_VAL_RAW_INDEX = 4;
-    public static int LIN_ACC_CHANNEL4_VAL_RAW_INDEX = 5;
+    public static int ACC_PDM_CHANNEL1_VAL_RAW_INDEX = 2;
+    public static int ACC_PDM_CHANNEL2_VAL_RAW_INDEX = 3;
+    public static int ACC_PDM_CHANNEL3_VAL_RAW_INDEX = 4;
+    public static int ACC_PDM_CHANNEL4_VAL_RAW_INDEX = 5;
 
     private static byte[] wunderLINQStatus;
     public static int activeChannel;
@@ -127,18 +127,18 @@ public class WLQ_S extends WLQ_BASE {
     private static String hardwareVersion;
     private static byte keyMode;
     public static byte sensitivity;
-    public static byte rightPressKeyType;
-    public static byte rightPressKeyModifier;
-    public static byte rightPressKey;
-    public static byte rightLongPressKeyType;
-    public static byte rightLongPressKeyModifier;
-    public static byte rightLongPressKey;
-    public static byte leftPressKeyType;
-    public static byte leftPressKeyModifier;
-    public static byte leftPressKey;
-    public static byte leftLongPressKeyType;
-    public static byte leftLongPressKeyModifier;
-    public static byte leftLongPressKey;
+    public static byte rightKeyType;
+    public static byte rightKeyModifier;
+    public static byte rightKey;
+    public static byte rightLongKeyType;
+    public static byte rightLongKeyModifier;
+    public static byte rightLongKey;
+    public static byte leftKeyType;
+    public static byte leftKeyModifier;
+    public static byte leftKey;
+    public static byte leftLongKeyType;
+    public static byte leftLongKeyModifier;
+    public static byte leftLongKey;
     public static byte upKeyType;
     public static byte upKeyModifier;
     public static byte upKey;
@@ -151,18 +151,18 @@ public class WLQ_S extends WLQ_BASE {
     public static byte downLongKeyType;
     public static byte downLongKeyModifier;
     public static byte downLongKey;
-    public static byte fx1PressKeyType;
-    public static byte fx1PressKeyModifier;
-    public static byte fx1PressKey;
-    public static byte fx1LongPressKeyType;
-    public static byte fx1LongPressKeyModifier;
-    public static byte fx1LongPressKey;
-    public static byte fx2PressKeyType;
-    public static byte fx2PressKeyModifier;
-    public static byte fx2PressKey;
-    public static byte fx2LongPressKeyType;
-    public static byte fx2LongPressKeyModifier;
-    public static byte fx2LongPressKey;
+    public static byte fx1KeyType;
+    public static byte fx1KeyModifier;
+    public static byte fx1Key;
+    public static byte fx1LongKeyType;
+    public static byte fx1LongKeyModifier;
+    public static byte fx1LongKey;
+    public static byte fx2KeyType;
+    public static byte fx2KeyModifier;
+    public static byte fx2Key;
+    public static byte fx2LongKeyType;
+    public static byte fx2LongKeyModifier;
+    public static byte fx2LongKey;
 
     public WLQ_S(byte[] bytes) {
         wunderLINQConfig = new byte[bytes.length];
@@ -192,18 +192,18 @@ public class WLQ_S extends WLQ_BASE {
 
             keyMode = bytes[keyMode_INDEX];
             sensitivity = flashConfig[sensitivity_INDEX];
-            rightPressKeyType = flashConfig[rightPressKeyType_INDEX];
-            rightPressKeyModifier = flashConfig[rightPressKeyModifier_INDEX];
-            rightPressKey = flashConfig[rightPressKey_INDEX];
-            rightLongPressKeyType = flashConfig[rightLongPressKeyType_INDEX];
-            rightLongPressKeyModifier = flashConfig[rightLongPressKeyModifier_INDEX];
-            rightLongPressKey = flashConfig[rightLongPressKey_INDEX];
-            leftPressKeyType = flashConfig[leftPressKeyType_INDEX];
-            leftPressKeyModifier = flashConfig[leftPressKeyModifier_INDEX];
-            leftPressKey = flashConfig[leftPressKey_INDEX];
-            leftLongPressKeyType = flashConfig[leftLongPressKeyType_INDEX];
-            leftLongPressKeyModifier = flashConfig[leftLongPressKeyModifier_INDEX];
-            leftLongPressKey = flashConfig[leftLongPressKey_INDEX];
+            rightKeyType = flashConfig[rightKeyType_INDEX];
+            rightKeyModifier = flashConfig[rightKeyModifier_INDEX];
+            rightKey = flashConfig[rightKey_INDEX];
+            rightLongKeyType = flashConfig[rightLongKeyType_INDEX];
+            rightLongKeyModifier = flashConfig[rightLongKeyModifier_INDEX];
+            rightLongKey = flashConfig[rightLongKey_INDEX];
+            leftKeyType = flashConfig[leftKeyType_INDEX];
+            leftKeyModifier = flashConfig[leftKeyModifier_INDEX];
+            leftKey = flashConfig[leftKey_INDEX];
+            leftLongKeyType = flashConfig[leftLongKeyType_INDEX];
+            leftLongKeyModifier = flashConfig[leftLongKeyModifier_INDEX];
+            leftLongKey = flashConfig[leftLongKey_INDEX];
             upKeyType = flashConfig[upKeyType_INDEX];
             upKeyModifier = flashConfig[upKeyModifier_INDEX];
             upKey = flashConfig[upKey_INDEX];
@@ -216,18 +216,18 @@ public class WLQ_S extends WLQ_BASE {
             downLongKeyType = flashConfig[downLongKeyType_INDEX];
             downLongKeyModifier = flashConfig[downLongKeyModifier_INDEX];
             downLongKey = flashConfig[downLongKey_INDEX];
-            fx1PressKeyType = flashConfig[fx1PressKeyType_INDEX];
-            fx1PressKeyModifier = flashConfig[fx1PressKeyModifier_INDEX];
-            fx1PressKey = flashConfig[fx1PressKey_INDEX];
-            fx1LongPressKeyType = flashConfig[fx1LongPressKeyType_INDEX];
-            fx1LongPressKeyModifier = flashConfig[fx1LongPressKeyModifier_INDEX];
-            fx1LongPressKey = flashConfig[fx1LongPressKey_INDEX];
-            fx2PressKeyType = flashConfig[fx2PressKeyType_INDEX];
-            fx2PressKeyModifier = flashConfig[fx2PressKeyModifier_INDEX];
-            fx2PressKey = flashConfig[fx2PressKey_INDEX];
-            fx2LongPressKeyType = flashConfig[fx2LongPressKeyType_INDEX];
-            fx2LongPressKeyModifier = flashConfig[fx2LongPressKeyModifier_INDEX];
-            fx2LongPressKey = flashConfig[fx2LongPressKey_INDEX];
+            fx1KeyType = flashConfig[fx1KeyType_INDEX];
+            fx1KeyModifier = flashConfig[fx1KeyModifier_INDEX];
+            fx1Key = flashConfig[fx1Key_INDEX];
+            fx1LongKeyType = flashConfig[fx1LongKeyType_INDEX];
+            fx1LongKeyModifier = flashConfig[fx1LongKeyModifier_INDEX];
+            fx1LongKey = flashConfig[fx1LongKey_INDEX];
+            fx2KeyType = flashConfig[fx2KeyType_INDEX];
+            fx2KeyModifier = flashConfig[fx2KeyModifier_INDEX];
+            fx2Key = flashConfig[fx2Key_INDEX];
+            fx2LongKeyType = flashConfig[fx2LongKeyType_INDEX];
+            fx2LongKeyModifier = flashConfig[fx2LongKeyModifier_INDEX];
+            fx2LongKey = flashConfig[fx2LongKey_INDEX];
         }
     }
 
@@ -285,7 +285,7 @@ public class WLQ_S extends WLQ_BASE {
                         return "";
                 }
             case fullLongPressSensitivity:
-                return String.valueOf(sensitivity * 50) + "ms";
+                return sensitivity * 50 + "ms";
             case up:
                 if(upKeyType == KEYBOARD_HID){
                     return(KeyboardHID.getKeyboardKeyByCode(upKey));
@@ -327,81 +327,81 @@ public class WLQ_S extends WLQ_BASE {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case right:
-                if(rightPressKeyType == KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(rightPressKey));
-                } else if(rightPressKeyType == CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(rightPressKey));
-                } else if(rightPressKeyType == UNDEFINED){
+                if(rightKeyType == KEYBOARD_HID){
+                    return(KeyboardHID.getKeyboardKeyByCode(rightKey));
+                } else if(rightKeyType == CONSUMER_HID){
+                    return(KeyboardHID.getConsumerKeyByCode(rightKey));
+                } else if(rightKeyType == UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case rightLong:
-                if(rightLongPressKeyType == KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(rightLongPressKey));
-                } else if(rightLongPressKeyType == CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(rightLongPressKey));
-                } else if(rightLongPressKeyType == UNDEFINED){
+                if(rightLongKeyType == KEYBOARD_HID){
+                    return(KeyboardHID.getKeyboardKeyByCode(rightLongKey));
+                } else if(rightLongKeyType == CONSUMER_HID){
+                    return(KeyboardHID.getConsumerKeyByCode(rightLongKey));
+                } else if(rightLongKeyType == UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case left:
-                if(leftPressKeyType == KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(leftPressKey));
-                } else if(leftPressKeyType == CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(leftPressKey));
-                } else if(leftPressKeyType == UNDEFINED){
+                if(leftKeyType == KEYBOARD_HID){
+                    return(KeyboardHID.getKeyboardKeyByCode(leftKey));
+                } else if(leftKeyType == CONSUMER_HID){
+                    return(KeyboardHID.getConsumerKeyByCode(leftKey));
+                } else if(leftKeyType == UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case leftLong:
-                if(leftLongPressKeyType == KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(leftLongPressKey));
-                } else if(leftLongPressKeyType == CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(leftLongPressKey));
-                } else if(leftLongPressKeyType == UNDEFINED){
+                if(leftLongKeyType == KEYBOARD_HID){
+                    return(KeyboardHID.getKeyboardKeyByCode(leftLongKey));
+                } else if(leftLongKeyType == CONSUMER_HID){
+                    return(KeyboardHID.getConsumerKeyByCode(leftLongKey));
+                } else if(leftLongKeyType == UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case fx1:
-                if(fx1PressKeyType == KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(fx1PressKey));
-                } else if(fx1PressKeyType == CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(fx1PressKey));
-                } else if(fx1PressKeyType == UNDEFINED){
+                if(fx1KeyType == KEYBOARD_HID){
+                    return(KeyboardHID.getKeyboardKeyByCode(fx1Key));
+                } else if(fx1KeyType == CONSUMER_HID){
+                    return(KeyboardHID.getConsumerKeyByCode(fx1Key));
+                } else if(fx1KeyType == UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case fx1Long:
-                if(fx1LongPressKeyType == KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(fx1LongPressKey));
-                } else if(fx1LongPressKeyType == CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(fx1LongPressKey));
-                } else if(fx1LongPressKeyType == UNDEFINED){
+                if(fx1LongKeyType == KEYBOARD_HID){
+                    return(KeyboardHID.getKeyboardKeyByCode(fx1LongKey));
+                } else if(fx1LongKeyType == CONSUMER_HID){
+                    return(KeyboardHID.getConsumerKeyByCode(fx1LongKey));
+                } else if(fx1LongKeyType == UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case fx2:
-                if(fx2PressKeyType == KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(fx2PressKey));
-                } else if(fx2PressKeyType == CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(fx2PressKey));
-                } else if(fx2PressKeyType == UNDEFINED){
+                if(fx2KeyType == KEYBOARD_HID){
+                    return(KeyboardHID.getKeyboardKeyByCode(fx2Key));
+                } else if(fx2KeyType == CONSUMER_HID){
+                    return(KeyboardHID.getConsumerKeyByCode(fx2Key));
+                } else if(fx2KeyType == UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
             case fx2Long:
-                if(fx2LongPressKeyType == KEYBOARD_HID){
-                    return(KeyboardHID.getKeyboardKeyByCode(fx2LongPressKey));
-                } else if(fx2LongPressKeyType == CONSUMER_HID){
-                    return(KeyboardHID.getConsumerKeyByCode(fx2LongPressKey));
-                } else if(fx2LongPressKeyType == UNDEFINED){
+                if(fx2LongKeyType == KEYBOARD_HID){
+                    return(KeyboardHID.getKeyboardKeyByCode(fx2LongKey));
+                } else if(fx2LongKeyType == CONSUMER_HID){
+                    return(KeyboardHID.getConsumerKeyByCode(fx2LongKey));
+                } else if(fx2LongKeyType == UNDEFINED){
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
@@ -424,21 +424,21 @@ public class WLQ_S extends WLQ_BASE {
             case downLong:
                 return downLongKeyType;
             case right:
-                return rightPressKeyType;
+                return rightKeyType;
             case rightLong:
-                return rightLongPressKeyType;
+                return rightLongKeyType;
             case left:
-                return leftPressKeyType;
+                return leftKeyType;
             case leftLong:
-                return leftLongPressKeyType;
+                return leftLongKeyType;
             case fx1:
-                return fx1PressKeyType;
+                return fx1KeyType;
             case fx1Long:
-                return fx1LongPressKeyType;
+                return fx1LongKeyType;
             case fx2:
-                return fx2PressKeyType;
+                return fx2KeyType;
             case fx2Long:
-                return fx2LongPressKeyType;
+                return fx2LongKeyType;
             default:
                 Log.d(TAG, "Unknown ActionID");
                 return 0x00;
@@ -457,21 +457,21 @@ public class WLQ_S extends WLQ_BASE {
             case downLong:
                 return downLongKey;
             case right:
-                return rightPressKey;
+                return rightKey;
             case rightLong:
-                return rightLongPressKey;
+                return rightLongKey;
             case left:
-                return leftPressKey;
+                return leftKey;
             case leftLong:
-                return leftLongPressKey;
+                return leftLongKey;
             case fx1:
-                return fx1PressKey;
+                return fx1Key;
             case fx1Long:
-                return fx1LongPressKey;
+                return fx1LongKey;
             case fx2:
-                return fx2PressKey;
+                return fx2Key;
             case fx2Long:
-                return fx2LongPressKey;
+                return fx2LongKey;
             default:
                 Log.d(TAG, "Unknown ActionID");
                 return 0x00;
@@ -490,21 +490,21 @@ public class WLQ_S extends WLQ_BASE {
             case downLong:
                 return downLongKeyModifier;
             case right:
-                return rightPressKeyModifier;
+                return rightKeyModifier;
             case rightLong:
-                return rightLongPressKeyModifier;
+                return rightLongKeyModifier;
             case left:
-                return leftPressKeyModifier;
+                return leftKeyModifier;
             case leftLong:
-                return leftLongPressKeyModifier;
+                return leftLongKeyModifier;
             case fx1:
-                return fx1PressKeyModifier;
+                return fx1KeyModifier;
             case fx1Long:
-                return fx1LongPressKeyModifier;
+                return fx1LongKeyModifier;
             case fx2:
-                return fx2PressKeyModifier;
+                return fx2KeyModifier;
             case fx2Long:
-                return fx2LongPressKeyModifier;
+                return fx2LongKeyModifier;
             default:
                 Log.d(TAG, "Unknown ActionID");
                 return 0x00;
@@ -535,44 +535,44 @@ public class WLQ_S extends WLQ_BASE {
                 tempConfig[downLongKey_INDEX] = key;
                 break;
             case right:
-                tempConfig[rightPressKeyType_INDEX] = type;
-                tempConfig[rightPressKeyModifier_INDEX] = modifiers;
-                tempConfig[rightPressKey_INDEX] = key;
+                tempConfig[rightKeyType_INDEX] = type;
+                tempConfig[rightKeyModifier_INDEX] = modifiers;
+                tempConfig[rightKey_INDEX] = key;
                 break;
             case rightLong:
-                tempConfig[rightLongPressKeyType_INDEX] = type;
-                tempConfig[rightLongPressKeyModifier_INDEX] = modifiers;
-                tempConfig[rightLongPressKey_INDEX] = key;
+                tempConfig[rightLongKeyType_INDEX] = type;
+                tempConfig[rightLongKeyModifier_INDEX] = modifiers;
+                tempConfig[rightLongKey_INDEX] = key;
                 break;
             case left:
-                tempConfig[leftPressKeyType_INDEX] = type;
-                tempConfig[leftPressKeyModifier_INDEX] = modifiers;
-                tempConfig[leftPressKey_INDEX] = key;
+                tempConfig[leftKeyType_INDEX] = type;
+                tempConfig[leftKeyModifier_INDEX] = modifiers;
+                tempConfig[leftKey_INDEX] = key;
                 break;
             case leftLong:
-                tempConfig[leftLongPressKeyType_INDEX] = type;
-                tempConfig[leftLongPressKeyModifier_INDEX] = modifiers;
-                tempConfig[leftLongPressKey_INDEX] = key;
+                tempConfig[leftLongKeyType_INDEX] = type;
+                tempConfig[leftLongKeyModifier_INDEX] = modifiers;
+                tempConfig[leftLongKey_INDEX] = key;
                 break;
             case fx1:
-                tempConfig[fx1PressKeyType_INDEX] = type;
-                tempConfig[fx1PressKeyModifier_INDEX] = modifiers;
-                tempConfig[fx1PressKey_INDEX] = key;
+                tempConfig[fx1KeyType_INDEX] = type;
+                tempConfig[fx1KeyModifier_INDEX] = modifiers;
+                tempConfig[fx1Key_INDEX] = key;
                 break;
             case fx1Long:
-                tempConfig[fx1LongPressKeyType_INDEX] = type;
-                tempConfig[fx1LongPressKeyModifier_INDEX] = modifiers;
-                tempConfig[fx1LongPressKey_INDEX] = key;
+                tempConfig[fx1LongKeyType_INDEX] = type;
+                tempConfig[fx1LongKeyModifier_INDEX] = modifiers;
+                tempConfig[fx1LongKey_INDEX] = key;
                 break;
             case fx2:
-                tempConfig[fx2PressKeyType_INDEX] = type;
-                tempConfig[fx2PressKeyModifier_INDEX] = modifiers;
-                tempConfig[fx2PressKey_INDEX] = key;
+                tempConfig[fx2KeyType_INDEX] = type;
+                tempConfig[fx2KeyModifier_INDEX] = modifiers;
+                tempConfig[fx2Key_INDEX] = key;
                 break;
             case fx2Long:
-                tempConfig[fx2LongPressKeyType_INDEX] = type;
-                tempConfig[fx2LongPressKeyModifier_INDEX] = modifiers;
-                tempConfig[fx2LongPressKey_INDEX] = key;
+                tempConfig[fx2LongKeyType_INDEX] = type;
+                tempConfig[fx2LongKeyModifier_INDEX] = modifiers;
+                tempConfig[fx2LongKey_INDEX] = key;
                 break;
             default:
                 Log.d(TAG, "Unknown ActionID");
@@ -683,9 +683,9 @@ public class WLQ_S extends WLQ_BASE {
         wunderLINQStatus = new byte[statusSize];
         System.arraycopy(status, 4, wunderLINQStatus, 0, statusSize);
         activeChannel = (wunderLINQStatus[ACTIVE_CHAN_INDEX] & 0xFF);
-        channel1ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
-        channel2ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
-        channel3ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
-        channel4ValueRaw = (wunderLINQStatus[LIN_ACC_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
+        channel1ValueRaw = (wunderLINQStatus[ACC_PDM_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
+        channel2ValueRaw = (wunderLINQStatus[ACC_PDM_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
+        channel3ValueRaw = (wunderLINQStatus[ACC_PDM_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
+        channel4ValueRaw = (wunderLINQStatus[ACC_PDM_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
     }
 }
