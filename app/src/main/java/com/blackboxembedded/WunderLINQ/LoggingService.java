@@ -316,4 +316,16 @@ public class LoggingService extends Service {
             ((MyApplication) this.getApplication()).setTripRecording(false);
         }
     }
+
+    public static void startLoggingService(Context context) {
+        MyApplication.setTripRecording(true);
+        Intent intent = new Intent(context, LoggingService.class);
+        context.startService(intent);
+    }
+
+    public static void stopLoggingService(Context context) {
+        MyApplication.setTripRecording(false);
+        Intent intent = new Intent(context, LoggingService.class);
+        context.stopService(intent);
+    }
 }

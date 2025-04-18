@@ -46,8 +46,11 @@ public class WaypointsAdapter extends RecyclerView.Adapter<WaypointsAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         WaypointRecord record = (WaypointRecord) mData.get(position);
-        String item = record.getLabel();
-        holder.myTextView.setText(item);
+        if (!record.getLabel().isEmpty()){
+            holder.myTextView.setText(record.getLabel());
+        } else {
+            holder.myTextView.setText(record.getDate());
+        }
     }
 
     @Override

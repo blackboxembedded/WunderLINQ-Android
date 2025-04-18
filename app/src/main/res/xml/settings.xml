@@ -434,6 +434,12 @@
             android:summary="@string/pref_autolaunch_summary"
             android:title="@string/pref_autolaunch_name" >
         </CheckBoxPreference>
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="prefAutoTripLogging"
+            android:summary="@string/pref_autotrip_summary"
+            android:title="@string/pref_autotrip_name" >
+        </CheckBoxPreference>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_integrations_settings_title" >
         <PreferenceScreen

@@ -463,7 +463,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 getResources().getString(R.string.task_title_systemvolume),
                 getResources().getString(R.string.task_title_insta360),
                 videoFrontTaskText,
-                getResources().getString(R.string.task_title_fuel)
+                getResources().getString(R.string.task_title_fuel),
+                getResources().getString(R.string.task_title_faults)
 
         };
         int numTasks = taskTitles.length;
@@ -489,6 +490,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         iconId[18] = R.drawable.ic_spherical_camera;
         iconId[19] = R.drawable.ic_video_camera;
         iconId[20] = R.drawable.ic_gas_pump;
+        iconId[21] = R.drawable.ic_warning;
 
         mapping = new ArrayList<>();
         taskItems.clear();
@@ -745,8 +747,12 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                     Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
                     if (((MyApplication) TaskActivity.this.getApplication()).getTripRecording()) {
-                        stopService(new Intent(TaskActivity.this, LoggingService.class));
-                        ((MyApplication) this.getApplication()).setTripRecording(false);
+                        if (sharedPrefs.getBoolean("prefAutoTripLogging", false)) {
+                            Toast.makeText(TaskActivity.this, R.string.toast_auto_trip_logging, Toast.LENGTH_LONG).show();
+                        } else {
+                            stopService(new Intent(TaskActivity.this, LoggingService.class));
+                            ((MyApplication) this.getApplication()).setTripRecording(false);
+                        }
                     } else {
                         startService(new Intent(TaskActivity.this, LoggingService.class));
                         ((MyApplication) this.getApplication()).setTripRecording(true);
@@ -926,6 +932,11 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 if (!NavAppHelper.navigateToFuel(this, MotorcycleData.getLastLocation())) {
                     Toast.makeText(TaskActivity.this, R.string.nav_app_feature_not_supported, Toast.LENGTH_LONG).show();
                 }
+                break;
+            case 21:
+                //Faults
+                Intent faultsIntent = new Intent(TaskActivity.this, FaultActivity.class);
+                startActivity(faultsIntent);
                 break;
             default:
                 break;
