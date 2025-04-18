@@ -39,8 +39,8 @@ public class UUIDDatabase {
     public final static UUID UUID_WUNDERLINQ_X_COMMAND_CHARACTERISTIC = UUID
             .fromString(GattAttributes.WUNDERLINQ_X_COMMAND_CHARACTERISTIC);
 
-    public final static UUID UUID_WUNDERLINQ_C_COMMAND_CHARACTERISTIC = UUID
-            .fromString(GattAttributes.WUNDERLINQ_C_COMMAND_CHARACTERISTIC);
+    public final static UUID UUID_WUNDERLINQ_S_COMMAND_CHARACTERISTIC = UUID
+            .fromString(GattAttributes.WUNDERLINQ_S_COMMAND_CHARACTERISTIC);
 
     public final static UUID UUID_WUNDERLINQ_U_COMMAND_CHARACTERISTIC = UUID
             .fromString(GattAttributes.WUNDERLINQ_U_COMMAND_CHARACTERISTIC);

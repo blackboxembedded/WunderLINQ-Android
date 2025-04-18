@@ -234,6 +234,8 @@ public class WLQ_S extends WLQ_BASE {
     @Override
     public String getActionName(int id){
         switch (id){
+            case KEYMODE:
+                return MyApplication.getContext().getString(R.string.keymode_label);
             case fullLongPressSensitivity:
                 return MyApplication.getContext().getString(R.string.long_press_label);
             case up:

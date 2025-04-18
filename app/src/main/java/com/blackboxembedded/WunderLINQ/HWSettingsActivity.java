@@ -301,7 +301,8 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                 if (MotorcycleData.wlq.getFirmwareVersion() != null) {
                     fwVersionTV.setText(getString(R.string.fw_version_label) + " " + MotorcycleData.wlq.getFirmwareVersion());
                 }
-                if (MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_DEFAULT() || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_CUSTOM()) {
+                if (MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_DEFAULT() || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_CUSTOM()
+                        || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_MEDIA() || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_DMD2()) {
                     actionItems.add(new ActionItem(WLQ_S.KEYMODE, MotorcycleData.wlq.getActionName(WLQ_S.KEYMODE), MotorcycleData.wlq.getActionValue(WLQ_S.KEYMODE))); // Keymode
                     actionItems.add(new ActionItem(WLQ_S.fullLongPressSensitivity, getString(R.string.long_press_label), MotorcycleData.wlq.getActionValue(WLQ_S.fullLongPressSensitivity)));
                     actionItems.add(new ActionItem(WLQ_S.up, MotorcycleData.wlq.getActionName(WLQ_S.up), MotorcycleData.wlq.getActionValue(WLQ_S.up)));
@@ -542,9 +543,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
             if (BluetoothLeService.ACTION_CMDSTATUS_AVAILABLE.equals(action)) {
                 Bundle bd = intent.getExtras();
                 if(bd != null){
-                   // if(bd.getString(BluetoothLeService.EXTRA_BYTE_UUID_VALUE).contains(GattAttributes.WUNDERLINQ_N_COMMAND_CHARACTERISTIC)) {
-                        updateDisplay();
-                   // }
+                    updateDisplay();
                 }
             }
         }
