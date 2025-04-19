@@ -29,7 +29,7 @@ import com.blackboxembedded.WunderLINQ.Utils.Utils;
 import java.util.Arrays;
 
 public class WLQ_S extends WLQ_BASE {
-    //WunderLINQ Switch
+
     private final static String TAG = "WLQ_S";
 
     public static String hardwareVersion1 = "WLQS1.0";

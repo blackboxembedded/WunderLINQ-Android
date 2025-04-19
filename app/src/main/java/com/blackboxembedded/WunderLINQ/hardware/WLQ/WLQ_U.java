@@ -29,12 +29,10 @@ import com.blackboxembedded.WunderLINQ.comms.BLE.KeyboardHID;
 import java.util.Arrays;
 
 public class WLQ_U extends WLQ_BASE {
-    // X
+
     private final static String TAG = "WLQ_U";
 
     public static String hardwareVersion1 = "WLQU1.0";
-
-    public static byte[] GET_STATUS_CMD = {0x57, 0x52, 0x41, 0x50};
 
     private static int configFlashSize = 19;
     private static int firmwareVersionMajor_INDEX = 0;

@@ -37,10 +37,6 @@ public class WLQ_X extends WLQ_BASE {
     private static int firmwareVersionMajor_INDEX = 3;
     private static int firmwareVersionMinor_INDEX = 4;
 
-    public static byte wheelMode;
-    public static byte sensitivity;
-    public static byte tempSensitivity;
-
     public static int configFlashSize = 62;
     public static byte[] defaultConfig = {
             0x07, // RT/K Start // Sensitivity
@@ -55,9 +51,6 @@ public class WLQ_X extends WLQ_BASE {
             0x01, 0x00, 0x50, 0x01, 0x00, 0x29, // Left Toggle
             0x01, 0x00, 0x52, 0x01, 0x00, 0x51, // Scroll
             0x02, 0x00, (byte) 0xB8, 0x02, 0x00, (byte) 0xE2}; // Signal Cancel
-
-    public static byte KEYMODE_DEFAULT = 0x00;
-    public static byte KEYMODE_CUSTOM = 0x01;
 
     public static byte KEYBOARD_HID = 0x01;
     public static byte CONSUMER_HID = 0x02;

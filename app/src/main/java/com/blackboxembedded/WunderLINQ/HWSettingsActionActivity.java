@@ -244,9 +244,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         actionModifiersSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                if (actionID == WLQ_N.OldSensitivity){
-
-                } else if (actionID == WLQ_N.KEYMODE || actionID == WLQ_X.KEYMODE || actionID == WLQ_S.KEYMODE || actionID == WLQ_U.KEYMODE){
+                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_X.KEYMODE || actionID == WLQ_S.KEYMODE || actionID == WLQ_U.KEYMODE){
 
                 } else if (actionID == WLQ_N.USB){
 

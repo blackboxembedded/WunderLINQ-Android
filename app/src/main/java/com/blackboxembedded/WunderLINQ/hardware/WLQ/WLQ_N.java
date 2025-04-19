@@ -41,10 +41,6 @@ public class WLQ_N extends WLQ_BASE {
     private static int firmwareVersionMajor_INDEX = 9;
     private static int firmwareVersionMinor_INDEX = 10;
 
-    public static byte wheelMode;
-    public static byte sensitivity;
-    public static byte tempSensitivity;
-
     public static int configFlashSize = 64;
     public static byte[] defaultConfig2 = {
             0x00, 0x00, // USB Input Voltage threshold
@@ -76,14 +72,10 @@ public class WLQ_N extends WLQ_BASE {
             0x01, 0x00, 0x52, 0x01, 0x00, 0x51, // Scroll
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; // Signal Cancel
 
-    public static byte KEYMODE_DEFAULT = 0x00;
-    public static byte KEYMODE_CUSTOM = 0x01;
-
     public static byte KEYBOARD_HID = 0x01;
     public static byte CONSUMER_HID = 0x02;
     public static byte UNDEFINED = 0x00;
 
-    public static final int OldSensitivity = 0;
     public static final int KEYMODE = 100;
     public static final int USB = 1;
     public static final int RTKDoublePressSensitivity = 2;
@@ -341,8 +333,6 @@ public class WLQ_N extends WLQ_BASE {
     @Override
     public String getActionName(int id){
         switch (id){
-            case OldSensitivity:
-                return MyApplication.getContext().getString(R.string.sensitivity_label);
             case KEYMODE:
                 return MyApplication.getContext().getString(R.string.keymode_label);
             case USB:
@@ -400,8 +390,6 @@ public class WLQ_N extends WLQ_BASE {
     @Override
     public String getActionValue(int id){
         switch (id){
-            case OldSensitivity:
-                return String.valueOf(sensitivity);
             case KEYMODE:
                 switch (keyMode){
                     case 0:
