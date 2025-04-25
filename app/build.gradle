@@ -7,7 +7,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 34
         versionCode 197
-        versionName "2.87"
+        versionName "2.88"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         Properties properties = new Properties()
@@ -62,7 +62,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'com.google.android.gms:play-services-location:21.3.0'
-    implementation 'com.google.android.gms:play-services-maps:19.1.0'
+    implementation 'com.google.android.gms:play-services-maps:19.2.0'
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1'
     implementation 'com.opencsv:opencsv:4.2'
     implementation 'ca.rmen:lib-sunrise-sunset:1.1.1'
