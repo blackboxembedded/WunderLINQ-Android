@@ -784,8 +784,16 @@ public class BluetoothLeService extends Service {
                 boolean process = false;
                 int msgID = (data[0] & 0xFF);
                 if (msgID == 0x04){
+                    if(MotorcycleData.wlq != null) {
+                        if (MotorcycleData.wlq.getStatus() != null){
+                            MotorcycleData.wlq.setAccActive(1);
+                        }
+                    }
                     if (!MotorcycleData.getHasFocus()){
                         Log.d(TAG,"Focus Gained");
+                        final Intent intent = new Intent(ACTION_ACCSTATUS_AVAILABLE);
+                        MyApplication.getContext().sendBroadcast(intent);
+
                         sendDataBroadcast();
                     }
                     MotorcycleData.setHasFocus(true);
@@ -845,6 +853,7 @@ public class BluetoothLeService extends Service {
                     intent.putExtras(mBundle);
                     MyApplication.getContext().sendBroadcast(intent);
                 } else if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x41) && (data[3] == 0x50)) {
+                    MotorcycleData.setHasFocus(false);
                     if(MotorcycleData.wlq != null) {
                         MotorcycleData.wlq.setStatus(data);
                         final Intent intent = new Intent(ACTION_ACCSTATUS_AVAILABLE);
@@ -870,6 +879,7 @@ public class BluetoothLeService extends Service {
                     intent.putExtras(mBundle);
                     MyApplication.getContext().sendBroadcast(intent);
                 } else if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x41) && (data[3] == 0x50)) {
+                    MotorcycleData.setHasFocus(false);
                     if(MotorcycleData.wlq != null) {
                         MotorcycleData.wlq.setStatus(data);
                         final Intent intent = new Intent(ACTION_ACCSTATUS_AVAILABLE);
@@ -895,6 +905,7 @@ public class BluetoothLeService extends Service {
                     intent.putExtras(mBundle);
                     MyApplication.getContext().sendBroadcast(intent);
                 } else if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x41) && (data[3] == 0x50)) {
+                    MotorcycleData.setHasFocus(false);
                     if(MotorcycleData.wlq != null) {
                         MotorcycleData.wlq.setStatus(data);
                         final Intent intent = new Intent(ACTION_ACCSTATUS_AVAILABLE);

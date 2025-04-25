@@ -963,4 +963,9 @@ public class WLQ_X extends WLQ_BASE {
         channel3ValueRaw = (wunderLINQStatus[ACC_PDM_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
         channel4ValueRaw = (wunderLINQStatus[ACC_PDM_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
     }
+
+    @Override
+    public void setAccActive(int active) {
+        wunderLINQStatus[ACTIVE_CHAN_INDEX] = (byte) active;
+    }
 }

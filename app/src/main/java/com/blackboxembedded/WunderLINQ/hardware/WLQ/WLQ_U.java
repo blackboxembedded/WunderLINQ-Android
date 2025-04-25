@@ -90,7 +90,7 @@ public class WLQ_U extends WLQ_BASE {
 
     private static byte[] wunderLINQStatus;
     public static int activeChannel;
-    public static int channe1ValueRaw;
+    public static int channel1ValueRaw;
     public static int channel2ValueRaw;
     public static int channel3ValueRaw;
     public static int channel4ValueRaw;
@@ -491,9 +491,14 @@ public class WLQ_U extends WLQ_BASE {
         wunderLINQStatus = new byte[statusSize];
         System.arraycopy(status, 4, wunderLINQStatus, 0, statusSize);
         activeChannel = (wunderLINQStatus[ACTIVE_CHAN_INDEX] & 0xFF);
-        channe1ValueRaw = (wunderLINQStatus[ACC_PDM_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
+        channel1ValueRaw = (wunderLINQStatus[ACC_PDM_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
         channel2ValueRaw = (wunderLINQStatus[ACC_PDM_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
         channel3ValueRaw = (wunderLINQStatus[ACC_PDM_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
         channel4ValueRaw = (wunderLINQStatus[ACC_PDM_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
+    }
+
+    @Override
+    public void setAccActive(int active) {
+        wunderLINQStatus[ACTIVE_CHAN_INDEX] = (byte) active;
     }
 }
