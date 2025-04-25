@@ -116,7 +116,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         actionTypeSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_S.KEYMODE || actionID == WLQ_U.KEYMODE){
+                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_S.KEYMODE || actionID == WLQ_X.KEYMODE || actionID == WLQ_U.KEYMODE){
                     if(MotorcycleData.wlq.getKeyMode() != pos){
                         saveBT.setVisibility(View.VISIBLE);
                     } else {
@@ -138,7 +138,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                     } else {
                         saveBT.setVisibility(View.VISIBLE);
                     }
-                } else if (actionID == WLQ_N.fullLongPressSensitivity){
+                } else if (actionID == WLQ_N.fullLongPressSensitivity || actionID == WLQ_S.fullLongPressSensitivity){
                     if ((pos) == WLQ_N.fullSensitivity){
                         saveBT.setVisibility(View.INVISIBLE);
                     } else {
@@ -206,6 +206,8 @@ public class HWSettingsActionActivity extends AppCompatActivity {
 
                 } else if (actionID == WLQ_X.fullLongPressSensitivity){
 
+                } else if (actionID == WLQ_S.fullLongPressSensitivity){
+
                 } else if (actionID == WLQ_U.ORIENTATION){
 
                 } else {
@@ -242,9 +244,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         actionModifiersSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                if (actionID == WLQ_N.OldSensitivity){
-
-                } else if (actionID == WLQ_N.KEYMODE || actionID == WLQ_X.KEYMODE || actionID == WLQ_S.KEYMODE || actionID == WLQ_U.KEYMODE){
+                if (actionID == WLQ_N.KEYMODE || actionID == WLQ_X.KEYMODE || actionID == WLQ_S.KEYMODE || actionID == WLQ_U.KEYMODE){
 
                 } else if (actionID == WLQ_N.USB){
 
@@ -255,6 +255,8 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 } else if (actionID == WLQ_X.RTKDoublePressSensitivity){
 
                 } else if (actionID == WLQ_X.fullLongPressSensitivity){
+
+                } else if (actionID == WLQ_S.fullLongPressSensitivity){
 
                 } else if (actionID == WLQ_U.ORIENTATION){
 
@@ -304,6 +306,10 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                     MotorcycleData.wlq.getTempConfig()[WLQ_N.RTKSensitivity_INDEX] = (byte)((actionTypeSP.getSelectedItemPosition() + 1) / 50);
                 } else if (actionID == WLQ_N.fullLongPressSensitivity){
                     MotorcycleData.wlq.getTempConfig()[WLQ_N.fullSensitivity_INDEX] = (byte)((actionTypeSP.getSelectedItemPosition() + 1) / 50);
+                } else if (actionID == WLQ_X.fullLongPressSensitivity){
+                    MotorcycleData.wlq.getTempConfig()[WLQ_X.fullSensitivity_INDEX] = (byte)((actionTypeSP.getSelectedItemPosition() + 1) / 50);
+                } else if (actionID == WLQ_S.fullLongPressSensitivity){
+                    //MotorcycleData.wlq.getTempConfig()[WLQ_S.fullSensitivity_INDEX] = (byte)((actionTypeSP.getSelectedItemPosition() + 1) / 50);
                 } else if (actionID == WLQ_U.ORIENTATION){
                     if(actionTypeSP.getSelectedItemPosition() == 0){
                         MotorcycleData.wlq.getTempConfig()[WLQ_U.orientation_INDEX] = 0x00;
@@ -392,7 +398,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
             actionTypeSP.setSelection(WLQ_N.RTKSensitivity);
-        } else if (actionID == WLQ_N.fullLongPressSensitivity){  //Full Sensitivity
+        } else if (actionID == WLQ_N.fullLongPressSensitivity || actionID == WLQ_X.fullLongPressSensitivity){  //Full Sensitivity
             int fullSensitivityMax = 30;
             Integer[] intArray = new Integer[fullSensitivityMax];
             for(int i = 0; i < fullSensitivityMax; i++) {

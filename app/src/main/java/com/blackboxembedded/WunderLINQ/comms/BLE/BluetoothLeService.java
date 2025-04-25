@@ -74,7 +74,6 @@ import androidx.core.app.NotificationCompat;
 import com.blackboxembedded.WunderLINQ.AlertActivity;
 import com.blackboxembedded.WunderLINQ.FaultActivity;
 import com.blackboxembedded.WunderLINQ.LoggingService;
-import com.blackboxembedded.WunderLINQ.TaskList.TaskActivity;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
@@ -785,8 +784,16 @@ public class BluetoothLeService extends Service {
                 boolean process = false;
                 int msgID = (data[0] & 0xFF);
                 if (msgID == 0x04){
+                    if(MotorcycleData.wlq != null) {
+                        if (MotorcycleData.wlq.getStatus() != null){
+                            MotorcycleData.wlq.setAccActive(1);
+                        }
+                    }
                     if (!MotorcycleData.getHasFocus()){
                         Log.d(TAG,"Focus Gained");
+                        final Intent intent = new Intent(ACTION_ACCSTATUS_AVAILABLE);
+                        MyApplication.getContext().sendBroadcast(intent);
+
                         sendDataBroadcast();
                     }
                     MotorcycleData.setHasFocus(true);
@@ -846,6 +853,7 @@ public class BluetoothLeService extends Service {
                     intent.putExtras(mBundle);
                     MyApplication.getContext().sendBroadcast(intent);
                 } else if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x41) && (data[3] == 0x50)) {
+                    MotorcycleData.setHasFocus(false);
                     if(MotorcycleData.wlq != null) {
                         MotorcycleData.wlq.setStatus(data);
                         final Intent intent = new Intent(ACTION_ACCSTATUS_AVAILABLE);
@@ -871,6 +879,7 @@ public class BluetoothLeService extends Service {
                     intent.putExtras(mBundle);
                     MyApplication.getContext().sendBroadcast(intent);
                 } else if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x41) && (data[3] == 0x50)) {
+                    MotorcycleData.setHasFocus(false);
                     if(MotorcycleData.wlq != null) {
                         MotorcycleData.wlq.setStatus(data);
                         final Intent intent = new Intent(ACTION_ACCSTATUS_AVAILABLE);
@@ -882,7 +891,7 @@ public class BluetoothLeService extends Service {
                     }
                 }
             }
-        } else if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_C_COMMAND_CHARACTERISTIC)) {
+        } else if (characteristic.getUuid().equals(UUIDDatabase.UUID_WUNDERLINQ_S_COMMAND_CHARACTERISTIC)) {
             if (data != null) {
                 //Read Config
                 if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x57)) {
@@ -896,6 +905,7 @@ public class BluetoothLeService extends Service {
                     intent.putExtras(mBundle);
                     MyApplication.getContext().sendBroadcast(intent);
                 } else if ((data[0] == 0x57) && (data[1] == 0x52) && (data[2] == 0x41) && (data[3] == 0x50)) {
+                    MotorcycleData.setHasFocus(false);
                     if(MotorcycleData.wlq != null) {
                         MotorcycleData.wlq.setStatus(data);
                         final Intent intent = new Intent(ACTION_ACCSTATUS_AVAILABLE);
@@ -1336,7 +1346,7 @@ public class BluetoothLeService extends Service {
                         gattCommandCharacteristic = gattCharacteristic;
                         // Request config
                         writeCharacteristic(gattCommandCharacteristic, WLQ_BASE.GET_CONFIG_CMD, WriteType.WITH_RESPONSE);
-                    } else if (UUID.fromString(GattAttributes.WUNDERLINQ_C_COMMAND_CHARACTERISTIC).equals(gattCharacteristic.getUuid())){
+                    } else if (UUID.fromString(GattAttributes.WUNDERLINQ_S_COMMAND_CHARACTERISTIC).equals(gattCharacteristic.getUuid())){
                         connectedType = WLQ.TYPE_S;
                         int charaProp = gattCharacteristic.getProperties();
                         if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {

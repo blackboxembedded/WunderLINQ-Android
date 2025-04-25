@@ -271,11 +271,9 @@
     <string name="pref_actioncam_title">Cámara de Acción</string>
     <string name="rtk_display_label">Pantalla Apagada</string>
     <string name="hid_keyboard_label">Estándar</string>
-    <string name="full_rocker2_up_label">Rocker2 Arriba</string>
     <string name="keyboard_hid_0x1B_label">Tecla x</string>
     <string name="keyboard_hid_0x1C_label">Tecla y</string>
     <string name="keyboard_hid_0x25_label">Tecla 8</string>
-    <string name="full_rocker1_down_long_label">Presión Prolongada Rocker1 Abajo</string>
     <string name="keyboard_hid_0x42_label">Tecla F9</string>
     <string name="keyboard_hid_0x43_label">Tecla F10</string>
     <string name="keyboard_hid_0x6D_label">Tecla F18</string>
@@ -474,7 +472,6 @@
     <string name="dash_fueleconomytwo_label">Eco2</string>
     <string name="full_toggle_right_label">Rueda a la Derecha</string>
     <string name="full_toggle_right_long_label">Presión prolongada de la rueda al lado derecho</string>
-    <string name="full_rocker1_up_long_label">Presión Prolongada Rocker1 Arriba</string>
     <string name="keyboard_hid_modifier_0x40_label">Tecla Alt Derecha</string>
     <string name="keyboard_hid_modifier_0x80_label">Tecla Meta Derecha</string>
     <string name="keyboard_hid_0x06_label">Tecla c</string>
@@ -565,7 +562,6 @@
     <string name="consumer_hid_0x95_label">Ayuda</string>
     <string name="seventh">Séptimo</string>
     <string name="tenth">Décimo</string>
-    <string name="full_rocker1_up_label">Rocker1 Arriba</string>
     <string name="consumer_hid_0xA0_label">VCR Plus</string>
     <string name="trip_view_tv_lean">Inclinación (Max)</string>
     <string name="waypoint_view_tv_elevation_label">Elevación</string>
@@ -637,7 +633,6 @@
     <string name="dash_ambient_label">Aire</string>
     <string name="dash_rdcf_label">F</string>
     <string name="usbcontrol_engine_label">Encendido</string>
-    <string name="full_rocker2_up_long_label">Presión Prolongada Rocker2 Arriba</string>
     <string name="rtk_zoomm_label">Zoom-</string>
     <string name="rtk_speak_label">Hablar</string>
     <string name="rtk_zoomp_double_label">Doble pulsación Zoom+</string>
@@ -667,14 +662,12 @@
     <string name="pref_ignitionAlert_summary">Preguntar si se cierra la aplicación cuando se ha apagado el motor</string>
     <string name="toast_waypoint_saved">Waypoint Guardado</string>
     <string name="dash_title">Dashboard</string>
-    <string name="full_rocker2_down_label">Rocker2 Abajo</string>
     <string name="dash_trip1_label">Trip1</string>
     <string name="keyboard_hid_0x08_label">Tecla e</string>
     <string name="keyboard_hid_0x0A_label">Tecla g</string>
     <string name="keyboard_hid_0x33_label">Teclas ; y :</string>
     <string name="keyboard_hid_0x34_label">"Teclas \' y . "</string>
     <string name="keyboard_hid_0x36_label">Tecla ,</string>
-    <string name="full_rocker2_down_long_label">Presión Prolongada Rocker2 Abajo</string>
     <string name="keyboard_hid_0x38_label">Tecla /</string>
     <string name="keyboard_hid_0x39_label">Tecla Bloqueo de mayúsculas</string>
     <string name="keyboard_hid_0x3A_label">Tecla F1</string>
@@ -829,7 +822,6 @@
     <string name="keyboard_hid_0x29_label">ESCAPE</string>
     <string name="keyboard_hid_0x2A_label">Retroceso</string>
     <string name="keyboard_hid_0x30_label">Tecla ]</string>
-    <string name="full_rocker1_down_label">Rocker1 Abajo</string>
     <string name="dash_trip2_label">Trip2</string>
     <string name="dash_tripauto_label">TripA</string>
     <string name="dash_fueleconomyone_label">Eco1</string>

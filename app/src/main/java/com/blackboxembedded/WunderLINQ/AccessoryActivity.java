@@ -367,8 +367,8 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
                 channelTwoHeaderTV.setText(sharedPrefs.getString("ACC_CHAN_2", getString(R.string.default_accessory_two_name)));
                 channelTwoHeaderET.setText(sharedPrefs.getString("ACC_CHAN_2", getString(R.string.default_accessory_two_name)));
                 int channelActive = (MotorcycleData.wlq.getStatus()[WLQ_S.ACTIVE_CHAN_INDEX] & 0xFF);
-                int channel1ValueRaw = (MotorcycleData.wlq.getStatus()[WLQ_S.LIN_ACC_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
-                int channel2ValueRaw = (MotorcycleData.wlq.getStatus()[WLQ_S.LIN_ACC_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
+                int channel1ValueRaw = (MotorcycleData.wlq.getStatus()[WLQ_S.ACC_PDM_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
+                int channel2ValueRaw = (MotorcycleData.wlq.getStatus()[WLQ_S.ACC_PDM_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
 
                 TypedValue typedValue = new TypedValue();
                 Resources.Theme theme = this.getTheme();
@@ -379,13 +379,13 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
                 drawable.setStroke(20, androidx.preference.PreferenceManager.getDefaultSharedPreferences(this).getInt("prefHighlightColor", R.color.colorAccent)); // set stroke width and stroke color
                 Log.d(TAG,"ACTIVE CHANNEL: " + channelActive);
                 switch (channelActive) {
-                    case 3:
+                    case 2:
                         channelOneCL.setBackground(drawable);
                         channelTwoCL.setBackgroundResource(0);
                         channelOneValuePB.setProgressTintList(ColorStateList.valueOf(androidx.preference.PreferenceManager.getDefaultSharedPreferences(this).getInt("prefHighlightColor", R.color.colorAccent)));
                         channelTwoValuePB.setProgressTintList(ColorStateList.valueOf(foregroundColor));
                         break;
-                    case 4:
+                    case 3:
                         channelOneCL.setBackgroundResource(0);
                         channelTwoCL.setBackground(drawable);
                         channelTwoValuePB.setProgressTintList(ColorStateList.valueOf(androidx.preference.PreferenceManager.getDefaultSharedPreferences(this).getInt("prefHighlightColor", R.color.colorAccent)));

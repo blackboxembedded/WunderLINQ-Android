@@ -606,14 +606,6 @@
     <string name="keyboard_hid_0x76_label">Touche Menu</string>
     <string name="consumer_hid_0x20_label">+10</string>
     <string name="consumer_hid_0xE1_label">Balance</string>
-    <string name="full_rocker1_down_label">Bouton INFO</string>
-    <string name="full_rocker1_up_long_label">Bouton TRIP longue pression</string>
-    <string name="full_rocker1_up_label">Bouton TRIP</string>
-    <string name="full_rocker1_down_long_label">Bouton INFO longue pression</string>
-    <string name="full_rocker2_up_label">Bouton ABS</string>
-    <string name="full_rocker2_up_long_label">Bouton ABS longue pression</string>
-    <string name="full_rocker2_down_label">Bouton Amortissement</string>
-    <string name="full_rocker2_down_long_label">Bouton Amortissement longue pression</string>
     <string name="full_long_press_label">Longue pression</string>
     <string name="rtk_page_label">Page</string>
     <string name="rtk_page_double_label">Page double pression</string>

@@ -37,10 +37,6 @@ public class WLQ_X extends WLQ_BASE {
     private static int firmwareVersionMajor_INDEX = 3;
     private static int firmwareVersionMinor_INDEX = 4;
 
-    public static byte wheelMode;
-    public static byte sensitivity;
-    public static byte tempSensitivity;
-
     public static int configFlashSize = 62;
     public static byte[] defaultConfig = {
             0x07, // RT/K Start // Sensitivity
@@ -55,9 +51,6 @@ public class WLQ_X extends WLQ_BASE {
             0x01, 0x00, 0x50, 0x01, 0x00, 0x29, // Left Toggle
             0x01, 0x00, 0x52, 0x01, 0x00, 0x51, // Scroll
             0x02, 0x00, (byte) 0xB8, 0x02, 0x00, (byte) 0xE2}; // Signal Cancel
-
-    public static byte KEYMODE_DEFAULT = 0x00;
-    public static byte KEYMODE_CUSTOM = 0x01;
 
     public static byte KEYBOARD_HID = 0x01;
     public static byte CONSUMER_HID = 0x02;
@@ -150,6 +143,22 @@ public class WLQ_X extends WLQ_BASE {
     public static int fullSignalLongPressKeyType_INDEX = 59;
     public static int fullSignalLongPressKeyModifier_INDEX = 60;
     public static int fullSignalLongPressKey_INDEX = 61;
+
+    // PDM Status message
+    private static int statusSize = 6;
+    public static int NUM_CHAN_INDEX = 0;
+    public static int ACTIVE_CHAN_INDEX = 1;
+    public static int ACC_PDM_CHANNEL1_VAL_RAW_INDEX = 2;
+    public static int ACC_PDM_CHANNEL2_VAL_RAW_INDEX = 3;
+    public static int ACC_PDM_CHANNEL3_VAL_RAW_INDEX = 4;
+    public static int ACC_PDM_CHANNEL4_VAL_RAW_INDEX = 5;
+
+    private static byte[] wunderLINQStatus;
+    public static int activeChannel;
+    public static int channel1ValueRaw;
+    public static int channel2ValueRaw;
+    public static int channel3ValueRaw;
+    public static int channel4ValueRaw;
 
     private static byte[] wunderLINQConfig;
     private static byte[] flashConfig;
@@ -941,11 +950,22 @@ public class WLQ_X extends WLQ_BASE {
 
     @Override
     public byte[] getStatus() {
-        return null;
+        return wunderLINQStatus;
     }
 
     @Override
     public void setStatus(byte[] status) {
-        Log.d(TAG, "WLQ_X_STATUS: " + Utils.ByteArrayToHex(status));
+        wunderLINQStatus = new byte[statusSize];
+        System.arraycopy(status, 4, wunderLINQStatus, 0, statusSize);
+        activeChannel = (wunderLINQStatus[ACTIVE_CHAN_INDEX] & 0xFF);
+        channel1ValueRaw = (wunderLINQStatus[ACC_PDM_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
+        channel2ValueRaw = (wunderLINQStatus[ACC_PDM_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
+        channel3ValueRaw = (wunderLINQStatus[ACC_PDM_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
+        channel4ValueRaw = (wunderLINQStatus[ACC_PDM_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
+    }
+
+    @Override
+    public void setAccActive(int active) {
+        wunderLINQStatus[ACTIVE_CHAN_INDEX] = (byte) active;
     }
 }
