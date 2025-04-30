@@ -784,6 +784,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 }
             } else if (BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE.equals(action)) {
                 Intent accessoryIntent = new Intent(MainActivity.this, AccessoryActivity.class);
+                accessoryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(accessoryIntent);
             }
         }

@@ -443,6 +443,8 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
             final String action = intent.getAction();
             if (BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE.equals(action)) {
                 updateDisplay();
+            }  else if (BluetoothLeService.ACTION_FOCUS_CHANGED.equals(action)) {
+                updateDisplay();
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 goBack();
             }
@@ -452,6 +454,7 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE);
+        intentFilter.addAction(BluetoothLeService.ACTION_FOCUS_CHANGED);
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_DISCONNECTED);
         return intentFilter;
     }

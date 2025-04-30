@@ -72,7 +72,8 @@
         </service>
         <activity
             android:name=".AccessoryActivity"
-            android:exported="false">
+            android:exported="false"
+            android:launchMode="singleTask">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

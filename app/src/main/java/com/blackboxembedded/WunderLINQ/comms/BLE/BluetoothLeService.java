@@ -211,6 +211,8 @@ public class BluetoothLeService extends Service {
             "com.blackboxembedded.wunderlinq.ACTION_CMDSTATUS_AVAILABLE";
     public final static String ACTION_ACCSTATUS_AVAILABLE =
             "com.blackboxembedded.wunderlinq.ACTION_ACCSTATUS_AVAILABLE";
+    public final static String ACTION_FOCUS_CHANGED =
+            "com.blackboxembedded.wunderlinq.ACTION_FOCUS_CHANGED";
 
     public static final String EXTRA_BYTE_VALUE = "com.blackboxembedded.wunderlinq.backgroundservices." +
             "EXTRA_BYTE_VALUE";
@@ -634,7 +636,7 @@ public class BluetoothLeService extends Service {
                 }
 
                 // Reset trend data
-                MotorcycleData.resetData();
+                //MotorcycleData.resetData();
             }
             // GATT Server Connecting
             if (newState == BluetoothProfile.STATE_CONNECTING) {
@@ -791,8 +793,8 @@ public class BluetoothLeService extends Service {
                     }
                     if (!MotorcycleData.getHasFocus()){
                         Log.d(TAG,"Focus Gained");
-                        final Intent intent = new Intent(ACTION_ACCSTATUS_AVAILABLE);
-                        //MyApplication.getContext().sendBroadcast(intent);
+                        final Intent intent = new Intent(ACTION_FOCUS_CHANGED);
+                        MyApplication.getContext().sendBroadcast(intent);
 
                         sendDataBroadcast();
                     }
