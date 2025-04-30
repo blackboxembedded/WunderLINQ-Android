@@ -792,7 +792,7 @@ public class BluetoothLeService extends Service {
                     if (!MotorcycleData.getHasFocus()){
                         Log.d(TAG,"Focus Gained");
                         final Intent intent = new Intent(ACTION_ACCSTATUS_AVAILABLE);
-                        MyApplication.getContext().sendBroadcast(intent);
+                        //MyApplication.getContext().sendBroadcast(intent);
 
                         sendDataBroadcast();
                     }
