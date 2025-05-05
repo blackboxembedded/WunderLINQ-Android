@@ -19,12 +19,14 @@ package com.blackboxembedded.WunderLINQ.comms.BLE;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 
 public class BLEBus {
@@ -37,11 +39,17 @@ public class BLEBus {
             case 0x00:
                 if ((data[1] & 0xFF) != 0xFF && (data[2] & 0xFF) != 0xFF && (data[3] & 0xFF) != 0xFF && (data[4] & 0xFF) != 0xFF
                         && (data[5] & 0xFF) != 0xFF && (data[6] & 0xFF) != 0xFF && (data[7] & 0xFF) != 0xFF) {
-                    byte[] vinValue = new byte[7];
-                    for (int x = 1; x <= 7; x++) {
-                        vinValue[x - 1] = data[x];
+                    // now enforce ASCII 0x30–0x5A on each byte
+                    for (int i = 1; i <= 7; i++) {
+                        int b = data[i] & 0xFF;
+                        if (b < 0x30 || b > 0x5A) {
+                            return;  // ← this drops out of the entire method
+                        }
                     }
-                    String vin = new String(vinValue);
+
+                    // if we get here, we know data[1]…data[7] are all in 0x30–0x5A
+                    // build the ASCII string
+                    String vin = new String(data, 1, 7, StandardCharsets.US_ASCII);
                     MotorcycleData.setVin(vin);
                 }
                 break;
