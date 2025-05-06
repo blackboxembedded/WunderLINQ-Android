@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -238,7 +239,18 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
 
         handler.postDelayed(new Runnable(){
             public void run(){
-                animator.start();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    float fraction = (System.currentTimeMillis() % 30_000L) / 30_000f;
+                    animator.setCurrentFraction(fraction);
+                    animator.start();
+                } else {
+                    long nowMs      = System.currentTimeMillis();
+                    long cycleMs    = animator.getDuration();       // 30,000
+                    long offsetMs   = nowMs % cycleMs;              // [0 .. 29,999]
+
+                    animator.start();
+                    animator.setCurrentPlayTime(offsetMs);
+                }
             }
         }, 5000);
 
