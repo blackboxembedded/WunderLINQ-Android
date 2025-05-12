@@ -17,13 +17,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ.TaskList.Activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -61,7 +62,6 @@ import com.google.android.gms.maps.OnMapsSdkInitializedCallback;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -76,12 +76,16 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
     private ValueAnimator animator;
     private SharedPreferences sharedPrefs;
 
-    private Handler handler = new Handler();
-    private int delay = 10 * 1000;
+    private final Handler handler = new Handler();
+    private final int delay = 10 * 1000;
 
     private int currentZoom = 8;
 
     private String timestamp = "";
+
+    private long windowStartMs;
+    private final long windowDurationMs = 2 * 60L * 60L * 1000L;  // 2h in ms
+    private static final long TILE_INTERVAL_MS = 10 * 60L * 1000L; // 10min
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -120,26 +124,62 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        // ─── PREPARE THE ANIMATOR ────────────────────────────────────────────────
+        // animate from 0→1 (windowStart → windowEnd) over 60s:
         animator = ValueAnimator.ofFloat(0f, 1f);
-        animator.setDuration(30000); // 30 seconds
-        animator.setRepeatCount(ValueAnimator.INFINITE); // repeat forever
-        animator.setRepeatMode(ValueAnimator.RESTART); // repeat from the beginning
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                float progress = (float) valueAnimator.getAnimatedValue();
-                Date date = calculateDateForProgress(progress);
-                long l = date.getTime();
-                l -= l % (10*60*1000);
-                long unixTime = l / 1000L;
-                if (!timestamp.equals(String.valueOf(unixTime))) {
-                    Log.d(TAG,"Updating Map");
-                    tvDate.setText(date.toString());
-                    timestamp = String.valueOf(unixTime);
-                    if (tileOverlay != null) {
-                        tileOverlay.clearTileCache();
-                    }
+        animator.setDuration(60_000);               // full 2h sweep in 60s
+        animator.setRepeatCount(0);
+
+        // on each frame, map progress→timestamp:
+        animator.addUpdateListener(av -> {
+            float progress = (float) av.getAnimatedValue();
+
+            long frameMs;
+            long tileMs;
+            Date displayDate;
+            String newTs;
+
+            if (progress < 1f) {
+                // intermediate frames: evenly interpolate over [windowStart → windowEnd]
+                frameMs     = windowStartMs + (long)(windowDurationMs * progress);
+                // round to the last 10min tick
+                tileMs      = frameMs - (frameMs % TILE_INTERVAL_MS);
+                displayDate = new Date(frameMs);
+                newTs       = String.valueOf(tileMs / 1000L);
+            } else {
+                // final frame: snap to true now
+                long nowMs  = System.currentTimeMillis();
+                displayDate = new Date(nowMs);
+                newTs       = String.valueOf(nowMs / 1000L);
+            }
+
+            if (! newTs.equals(timestamp)) {
+                Log.d(TAG, "Updating Map → " + displayDate);
+                tvDate.setText(displayDate.toString());
+                timestamp = newTs;
+                if (tileOverlay != null) {
+                    tileOverlay.clearTileCache();
                 }
+            }
+        });
+
+        // on each cycle‑end, grab a fresh window ending at “now”:
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                // 1) re‑anchor your 2h window ending at Now
+                long nowMs      = System.currentTimeMillis();
+                windowStartMs   = nowMs - windowDurationMs;
+                timestamp       = "";                 // force tile & label refresh
+
+                // show “now” label immediately:
+                tvDate.setText(new Date().toString());
+                if (tileOverlay != null) {
+                    tileOverlay.clearTileCache();
+                }
+                Log.d(TAG, "Updating Map → " + "onAnimationEnd");
+                // 2) after 5s, start the next 60s sweep
+                handler.postDelayed(() -> animator.start(), 5_000);
             }
         });
     }
@@ -205,100 +245,68 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        Log.d(TAG,"onMapReady()");
-        // Move the camera
+        Log.d(TAG, "onMapReady()");
+
+        // ─── camera & marker
         if (MotorcycleData.getLastLocation() != null) {
-            LatLng location = new LatLng(MotorcycleData.getLastLocation().getLatitude(), MotorcycleData.getLastLocation().getLongitude());
-            MarkerOptions mMarkerOptions= new MarkerOptions().position(location);
-            mMarker = mMap.addMarker(mMarkerOptions);
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, currentZoom));
+            LatLng loc = new LatLng(
+                    MotorcycleData.getLastLocation().getLatitude(),
+                    MotorcycleData.getLastLocation().getLongitude()
+            );
+            mMarker = mMap.addMarker(new MarkerOptions().position(loc));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, currentZoom));
         }
-        long l = System.currentTimeMillis();
-        l -= l % (10*60*1000);
-        long unixTime = l / 1000L;
-        timestamp = String.valueOf(unixTime);
+
+        // ─── compute our fixed 2h window
+        long nowMs      = System.currentTimeMillis();
+        windowStartMs   = nowMs - windowDurationMs;
+        long rounded10m = nowMs - (nowMs % TILE_INTERVAL_MS);
+        timestamp       = String.valueOf(rounded10m / 1000L);
+
+        // ─── one‐time tileOverlay setup
         TileProvider tileProvider = new UrlTileProvider(256, 256) {
-            @Override
-            public URL getTileUrl(int x, int y, int zoom) {
-                /* Define the URL pattern for the tile images */
-                //https://www.rainviewer.com/api.html
-                String s = String.format(Locale.US, "https://tilecache.rainviewer.com/v2/radar/%s/256/%d/%d/%d/4/1_1.png", timestamp, zoom, x, y);
-                try {
-                    return new URL(s);
-                } catch (MalformedURLException e) {
-                    throw new AssertionError(e);
-                }
+            @Override public URL getTileUrl(int x, int y, int zoom) {
+                String url = String.format(Locale.US,
+                        "https://tilecache.rainviewer.com/v2/radar/%s/256/%d/%d/%d/4/1_1.png",
+                        timestamp, zoom, x, y
+                );
+                try { return new URL(url); }
+                catch (MalformedURLException e) { throw new AssertionError(e); }
             }
         };
-
         tileOverlay = mMap.addTileOverlay(new TileOverlayOptions()
                 .tileProvider(tileProvider));
 
-        Date date = new Date();
-        tvDate.setText(date.toString());
+        // ─── show the “right now” date immediately
+        tvDate.setText(new Date().toString());
+        Log.d(TAG, "Start Updating Map → " + (new Date()));
 
-        handler.postDelayed(new Runnable(){
-            public void run(){
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    float fraction = (System.currentTimeMillis() % 30_000L) / 30_000f;
-                    animator.setCurrentFraction(fraction);
-                    animator.start();
-                } else {
-                    long nowMs      = System.currentTimeMillis();
-                    long cycleMs    = animator.getDuration();       // 30,000
-                    long offsetMs   = nowMs % cycleMs;              // [0 .. 29,999]
+        // ─── kick off the animator (which will start at progress=0 → windowStart) ─
+        handler.postDelayed(animator::start, 5_000);
 
-                    animator.start();
-                    animator.setCurrentPlayTime(offsetMs);
-                }
-            }
-        }, 5000);
-
-        handler.postDelayed(new Runnable(){
-            public void run(){
-                // This portion of code runs each 10s.
-                //Check for active faults
+        // ─── (your existing) 10 s fault‐check & recenter loop
+        handler.postDelayed(new Runnable() {
+            @Override public void run() {
                 if (!Faults.getAllActiveDesc().isEmpty()) {
                     faultButton.setVisibility(View.VISIBLE);
                 } else {
                     faultButton.setVisibility(View.GONE);
                 }
-                long l = System.currentTimeMillis();
-                l -= l % (10*60*1000);
-                long unixTime = l / 1000L;
-                timestamp = String.valueOf(unixTime);
+                long lm = System.currentTimeMillis();
+                lm -= lm % (10 * 60 * 1000);
+                timestamp = String.valueOf(lm / 1000L);
                 if (MotorcycleData.getLastLocation() != null) {
-                    LatLng location = new LatLng(MotorcycleData.getLastLocation().getLatitude(), MotorcycleData.getLastLocation().getLongitude());
-                    mMarker.setPosition(location);
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+                    LatLng loc2 = new LatLng(
+                            MotorcycleData.getLastLocation().getLatitude(),
+                            MotorcycleData.getLastLocation().getLongitude()
+                    );
+                    mMarker.setPosition(loc2);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(loc2));
                     tileOverlay.clearTileCache();
                 }
                 handler.postDelayed(this, delay);
             }
         }, delay);
-    }
-
-    private Date calculateDateForProgress(float progress) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        // Calculate the timestamp for one hour ago
-        int hoursInPast = 2;
-        cal.add(Calendar.HOUR_OF_DAY, -hoursInPast);
-        Date startDate = cal.getTime();
-
-        // Calculate the timestamp for the current frame
-        long timeRange = 60 * 60 * (1000 * hoursInPast);
-        long frameTime = (long) (timeRange * progress);
-        Date frameDate = new Date(startDate.getTime() + frameTime);
-
-        // Round down to the nearest 15-minute interval
-        int minute = frameDate.getMinutes();
-        int roundedMinute = minute / 15 * 15;
-        cal.setTime(frameDate);
-        cal.set(Calendar.MINUTE, roundedMinute);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        return cal.getTime();
     }
 
     private void showActionBar(){
