@@ -38,8 +38,10 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Queue;
 
 import ca.rmen.sunrisesunset.SunriseSunset;
@@ -102,20 +104,25 @@ public class MotorcycleData {
 
         private final int value;
 
-        // Constructor is private; cannot be called from outside the enum
+        private static final Map<Integer, DataType> VALUE_MAP = new HashMap<>();
+
+        static {
+            for (DataType type : DataType.values()) {
+                VALUE_MAP.put(type.value, type);
+            }
+        }
+
         DataType(int value) {
             this.value = value;
         }
 
-        // Getter method for the value
         public int getValue() {
             return value;
         }
 
-        public String getString() {
-            return "";
+        public static DataType fromValue(int value) {
+            return VALUE_MAP.get(value); // returns null if not found
         }
-
     }
 
     // Focus
