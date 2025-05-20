@@ -1132,11 +1132,10 @@ public class MotorcycleData {
         Integer valueColor = null; //default text color is null
 
         try {
-            switch ( dataPoint){
-
+            switch (dataPoint){
                 case GEAR:
                     value = MotorcycleData.getGear();
-                    label = MemCache.gearLabel(); //MyApplication.getContext().getString(R.string.gear_label);
+                    label = MemCache.gearLabel();
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_cog);
 
                     if(!StringUtils.isEmpty(value)){
@@ -1147,7 +1146,6 @@ public class MotorcycleData {
                         }
                     }
                     break;
-
 
                 case ENGINE_TEMP:
                     Double engineTemp = MotorcycleData.getEngineTemperature();
@@ -1168,7 +1166,6 @@ public class MotorcycleData {
                         value = Utils.toZeroDecimalString(engineTemp);
                     }
                     break;
-
 
                 case AIR_TEMP:
                     Double ambientTemp = MotorcycleData.getAmbientTemperature();
@@ -1193,7 +1190,6 @@ public class MotorcycleData {
                         value = Utils.toZeroDecimalString(ambientTemp);
                     }
                     break;
-
 
                 case FRONT_RDC:
                     Double rdcFront = MotorcycleData.getFrontTirePressure();
@@ -1222,7 +1218,6 @@ public class MotorcycleData {
                     }
                     break;
 
-
                 case REAR_RDC:
                     Double rdcRear = MotorcycleData.getRearTirePressure();
                     label = MemCache.pressureUnitLabelR();
@@ -1250,7 +1245,6 @@ public class MotorcycleData {
                     }
                     break;
 
-
                 case ODOMETER:
                     Double odometer = MotorcycleData.getOdometer();
                     label = MemCache.odometerLabel();
@@ -1265,8 +1259,6 @@ public class MotorcycleData {
                         value = Utils.toZeroDecimalString(odometer,true);
                     }
                     break;
-
-
 
                 case VOLTAGE:
                     Double voltage = MotorcycleData.getVoltage();
@@ -1285,8 +1277,6 @@ public class MotorcycleData {
                     }
                     break;
 
-
-
                 case THROTTLE:
                     Double throttlePosition = MotorcycleData.getThrottlePosition();
                     label = MemCache.throttleUnitLabel();
@@ -1295,8 +1285,6 @@ public class MotorcycleData {
                         value = Utils.toZeroDecimalString(throttlePosition);
                     }
                     break;
-
-
 
                 case FRONT_BRAKE:
                     Integer frontBrakes = MotorcycleData.getFrontBrake();
@@ -1308,7 +1296,6 @@ public class MotorcycleData {
                     }
                     break;
 
-
                 case REAR_BRAKE:
                     Integer rearBrakes = MotorcycleData.getRearBrake();
                     label = MemCache.brakeLabelR();
@@ -1318,22 +1305,18 @@ public class MotorcycleData {
                     }
                     break;
 
-
-
                 case AMBIENT_LIGHT:
                     Integer ambientLight = MotorcycleData.getAmbientLight();
-                    label = MemCache.ambientLightLabel(); // MyApplication.getContext().getString(R.string.ambientlight_label);
+                    label = MemCache.ambientLightLabel();
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_lightbulb);
                     if(ambientLight != null){
                         value = String.valueOf(ambientLight);
                     }
                     break;
 
-
-
                 case TRIP_ONE:
                     Double trip1 = MotorcycleData.getTripOne();
-                    label = MemCache.trip1Label(); // MyApplication.getContext().getString(R.string.trip1_label) + " (" + distanceUnit + ")";
+                    label = MemCache.trip1Label();
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_suitcase);
                     if(trip1 != null) {
                         if (MemCache. distanceFormat().equals("1")) {
@@ -1343,11 +1326,9 @@ public class MotorcycleData {
                     }
                     break;
 
-
-
                 case TRIP_TWO:
                     Double trip2 = MotorcycleData.getTripTwo();
-                    label = MemCache.trip2Label(); // MyApplication.getContext().getString(R.string.trip2_label) + " (" + distanceUnit + ")";
+                    label = MemCache.trip2Label();
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_suitcase);
                     if(trip2 != null){
                         if (MemCache. distanceFormat().equals("1")) {
@@ -1358,11 +1339,9 @@ public class MotorcycleData {
                     }
                     break;
 
-
-
                 case TRIP_AUTO:
                     Double tripAuto = MotorcycleData.getTripAuto();
-                    label = MemCache.tripAutoLabel(); // MyApplication.getContext().getString(R.string.trip_auto_label) + " (" + distanceUnit + ")";
+                    label = MemCache.tripAutoLabel();
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_suitcase);
                     if(tripAuto != null){
                         if (MemCache.distanceFormat().equals("1")) {
@@ -1373,11 +1352,9 @@ public class MotorcycleData {
                     }
                     break;
 
-
-
                 case SPEED:
                     Double speedo = MotorcycleData.getSpeed();
-                    label = MemCache.speedLabel(); // MyApplication.getContext().getString(R.string.speed_label) + " (" + distanceTimeUnit + ")";
+                    label = MemCache.speedLabel();
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tachometer_alt);
 
                     if (speedo != null){
@@ -1388,11 +1365,9 @@ public class MotorcycleData {
                     }
                     break;
 
-
-
                 case AVG_SPEED:
                     Double avgSpeed = MotorcycleData.getAvgSpeed();
-                    label = MemCache.avgSpeedLabel(); // MyApplication.getContext().getString(R.string.avg_speed_label) + " (" + distanceTimeUnit + ")";
+                    label = MemCache.avgSpeedLabel();
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tachometer_alt);
 
                     if (avgSpeed != null) {
@@ -1403,10 +1378,9 @@ public class MotorcycleData {
                     }
                     break;
 
-
                 case CURRENT_CONSUMPTION:
                     Double currentConsumption = MotorcycleData.getCurrentConsumption();
-                    label = MemCache.consumptionLabel(); // MyApplication.getContext().getString(R.string.cConsumption_label) + " (" + consumptionUnit + ")";
+                    label = MemCache.consumptionLabel();
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_gas_pump);
 
                     if (currentConsumption != null){
@@ -1422,10 +1396,9 @@ public class MotorcycleData {
                     }
                     break;
 
-
                 case ECONOMY_ONE:
                     Double fuelEconomyOne = MotorcycleData.getFuelEconomyOne();
-                    label = MemCache.economy1Label(); // MyApplication.getContext().getString(R.string.fuel_economy_one_label) + " (" + consumptionUnit + ")";
+                    label = MemCache.economy1Label();
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_gas_pump);
 
                     if( MotorcycleData.getFuelEconomyOne() != null){
@@ -1441,10 +1414,9 @@ public class MotorcycleData {
                     }
                     break;
 
-
                 case ECONOMY_TWO:
                     Double fuelEconomyTwo = MotorcycleData.getFuelEconomyTwo();
-                    label = MemCache.economy2Label(); // MyApplication.getContext().getString(R.string.fuel_economy_two_label) + " (" + consumptionUnit + ")";
+                    label = MemCache.economy2Label();
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_gas_pump);
 
                     if(fuelEconomyTwo != null){
@@ -1460,10 +1432,9 @@ public class MotorcycleData {
                     }
                     break;
 
-
                 case RANGE:
                     Double fuelRange = MotorcycleData.getFuelRange();
-                    label = MemCache.rangeLabel(); // MyApplication.getContext().getString(R.string.fuel_range_label) + " (" + distanceUnit + ")";
+                    label = MemCache.rangeLabel();
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_gas_pump);
 
                     if(fuelRange != null){
@@ -1481,10 +1452,9 @@ public class MotorcycleData {
                     }
                     break;
 
-
                 case SHIFTS:
                     Integer shifts = MotorcycleData.getNumberOfShifts();
-                    label = MemCache.shiftsLabel(); // MyApplication.getContext().getString(R.string.shifts_header);
+                    label = MemCache.shiftsLabel();
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_arrows_alt_v);
 
                     if(shifts != null){
@@ -1492,10 +1462,9 @@ public class MotorcycleData {
                     }
                     break;
 
-
                 case LEAN_DEVICE:
                     Double leanAngle = MotorcycleData.getLeanAngleDevice();
-                    label = MemCache.leanLabelBt(); // MyApplication.getContext().getString(R.string.leanangle_header);
+                    label = MemCache.leanLabelBt();
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_angle);
 
                     if(leanAngle != null){
@@ -1503,20 +1472,18 @@ public class MotorcycleData {
                     }
                     break;
 
-
                 case GFORCE_DEVICE:
                     Double gForce = MotorcycleData.getGForce();
-                    label = MemCache.gforceLabel(); // MyApplication.getContext().getString(R.string.gforce_header);
+                    label = MemCache.gforceLabel();
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_accelerometer);
                     if(gForce != null){
                         value = Utils.toOneDecimalString(gForce);
                     }
                     break;
 
-
                 case BEARING_DEVICE:
                     Integer bearingValue = MotorcycleData.getBearing();
-                    label = MemCache.bearingLabel(); // MyApplication.getContext().getString(R.string.bearing_header);
+                    label = MemCache.bearingLabel();
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_compass);
 
                     if (bearingValue != null) {
@@ -1528,9 +1495,8 @@ public class MotorcycleData {
                     }
                     break;
 
-
                 case TIME_DEVICE:
-                    label = MemCache.timeLabel(); // MyApplication.getContext().getString(R.string.time_header);
+                    label = MemCache.timeLabel();
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_clock);
                     if ( MotorcycleData.getTime() != null) {
                         SimpleDateFormat dateFormat = Utils.getCachedLocalizedDateFormat();
@@ -1540,19 +1506,16 @@ public class MotorcycleData {
                     }
                     break;
 
-
                 case BAROMETRIC_DEVICE:
-                    label = MemCache.barometricLabel(); // MyApplication.getContext().getString(R.string.barometric_pressure_header) + "(" + barometricUnit + ")"
+                    label = MemCache.barometricLabel();
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_barometer);
                     if ( MotorcycleData.getBarometricPressure() != null) {
                         value = Utils.toZeroDecimalString( MotorcycleData.getBarometricPressure());
                     }
                     break;
 
-
-
                 case SPEED_DEVICE:
-                    label = MemCache.speedLabelG(); // MyApplication.getContext().getString(R.string.gps_speed_header) + "(" + distanceTimeUnit + ")";
+                    label = MemCache.speedLabelG();
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tachometer_alt);
                     String gpsSpeed = MyApplication.getContext().getString(R.string.gps_nofix);
 
@@ -1565,11 +1528,9 @@ public class MotorcycleData {
                     value = gpsSpeed;
                     break;
 
-
-
                 case ALTITUDE_DEVICE:
                     String altitude = MyApplication.getContext().getString(R.string.gps_nofix);
-                    label = MemCache.altitudeLabel(); // MyApplication.getContext().getString(R.string.altitude_header) + "(" + heightUnit + ")";
+                    label = MemCache.altitudeLabel();
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_mountain);
 
                     if (MotorcycleData.getLastLocation() != null){
@@ -1581,11 +1542,9 @@ public class MotorcycleData {
                     value = altitude;
                     break;
 
-
-
                 case SUN_DEVICE:
                     Location loc = MotorcycleData.getLastLocation();
-                    label = MemCache.sunLabel();//MyApplication.getContext().getString(R.string.sunrisesunset_header);
+                    label = MemCache.sunLabel();
                     value = MyApplication.getContext().getString(R.string.gps_nofix);
                     if (loc != null) {
                         Calendar[] sunriseSunset = SunriseSunset.getSunriseSunset(Calendar.getInstance(), loc.getLatitude(), loc.getLongitude());
@@ -1616,30 +1575,27 @@ public class MotorcycleData {
                     }
                     break;
 
-
                 case RPM:
                     Integer rpm = MotorcycleData.getRPM();
-                    label = MemCache.rpmLabel();//MyApplication.getContext().getString(R.string.rpm_header) + " (x1000)";
+                    label = MemCache.rpmLabel();
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tachometer_alt);
                     if ((rpm != null) && (rpm > 0)){
                         value = Utils.toOneDecimalString(rpm / 1000d);
                     }
                     break;
 
-
                 case LEAN_BIKE:
                     Double leanAngleBike = MotorcycleData.getLeanAngleBike();
-                    label = MemCache.leanLabel();//MyApplication.getContext().getString(R.string.leanangle_bike_header);
+                    label = MemCache.leanLabel();
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_angle);
                     if (leanAngleBike != null){
                         value = Utils.toZeroDecimalString(leanAngleBike);
                     }
                     break;
 
-
                 case REAR_SPEED:
                     Double rSpeed = MotorcycleData.getRearSpeed();
-                    label = MemCache.speedLabelW(); // MyApplication.getContext().getString(R.string.rear_wheel_speed_header) + "(" + distanceTimeUnit + ")";
+                    label = MemCache.speedLabelW();
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tachometer_alt);
 
                     if(rSpeed != null){
@@ -1650,10 +1606,9 @@ public class MotorcycleData {
                     }
                     break;
 
-
                 case CELL_SIGNAL:
                     Integer signal = MotorcycleData.getCellularSignal();
-                    label = MemCache.signalLabel(); // MyApplication.getContext().getString(R.string.cellular_signal_header) + "(" + signalUnit + ")";
+                    label = MemCache.signalLabel();
                     if(signal != null){
                         if (signal > -79) {
                             icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.signal_bar_4);
@@ -1670,10 +1625,9 @@ public class MotorcycleData {
                     }
                     break;
 
-
                 case BATTERY_DEVICE:
                     Double battery = MotorcycleData.getLocalBattery();
-                    label = MemCache.batteryLabel(); // MyApplication.getContext().getString(R.string.local_battery_header) + "(" + batteryUnit + ")";
+                    label = MemCache.batteryLabel();
                     if(battery != null){
                         if(battery > 95){
                             icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.battery_full);
@@ -1690,7 +1644,6 @@ public class MotorcycleData {
                         value = Utils.toZeroDecimalString(battery);
                     }
                     break;
-
 
                 case ELEVATION_CHANGE_DEVICE:
                     Double elevationChange = MotorcycleData.getElevationChange();
