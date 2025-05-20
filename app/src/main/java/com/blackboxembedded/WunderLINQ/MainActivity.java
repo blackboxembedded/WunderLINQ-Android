@@ -844,7 +844,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                                 getTheme().resolveAttribute(R.attr.backgroundColor, typedValue, true);
                                 int color = typedValue.data;
                                 if (MotorcycleData.getHasFocus()) {
-                                    color = ContextCompat.getColor(MainActivity.this, R.color.colorAccent);
+                                    color = androidx.preference.PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getInt("prefHighlightColor", R.color.colorAccent);
                                 }
                                 ActionBar actionBar = getSupportActionBar();
                                 if (actionBar != null) {
@@ -1276,7 +1276,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 valueTextView.setMaxLines(1);
             }
 
-            if (valueColor == null) valueColor = valueTextView.getTextColors().getDefaultColor();
+            if (valueColor == null) {
+                TypedValue typedValue = new TypedValue();
+                getTheme().resolveAttribute(R.attr.primaryTextColor, typedValue, true);
+                valueColor = typedValue.data;
+            }
             valueTextView.setTextColor(valueColor);
 
             if (icon != null) {

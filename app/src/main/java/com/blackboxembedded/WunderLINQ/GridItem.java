@@ -57,8 +57,6 @@ public class GridItem {
         return dataType;
     }
 
-
-
     public static GridItem getCellData( MotorcycleData.DataType dataPoint){
         Object[] retObj =  MotorcycleData.getCombinedData(dataPoint);
 
