@@ -747,16 +747,16 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             final int state = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.ERROR);
             switch (state) {
                 case BluetoothDevice.BOND_BONDING:
-                    Log.d("Bonding Status:", " Bonding...");
+                    Log.d(TAG, "Bonding Status: Bonding...");
                     break;
 
                 case BluetoothDevice.BOND_BONDED:
-                    Log.d("Bonding Status:", "Bonded!!");
+                    Log.d(TAG, "Bonding Status: Bonded!!");
                     setupBLE();
                     break;
 
                 case BluetoothDevice.BOND_NONE:
-                    Log.d("Bonding Status:", "Fail");
+                    Log.d(TAG, "Bonding Status: Fail");
                     break;
             }
         }
@@ -782,10 +782,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 if (drawingComplete) {
                     updateDisplay();
                 }
-            } else if (BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE.equals(action)) {
-                Intent accessoryIntent = new Intent(MainActivity.this, AccessoryActivity.class);
-                accessoryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(accessoryIntent);
             }
         }
     };

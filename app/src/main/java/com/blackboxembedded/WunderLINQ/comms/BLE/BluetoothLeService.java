@@ -71,9 +71,11 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
+import com.blackboxembedded.WunderLINQ.AccessoryActivity;
 import com.blackboxembedded.WunderLINQ.AlertActivity;
 import com.blackboxembedded.WunderLINQ.FaultActivity;
 import com.blackboxembedded.WunderLINQ.LoggingService;
+import com.blackboxembedded.WunderLINQ.MainActivity;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
@@ -858,6 +860,12 @@ public class BluetoothLeService extends Service {
                     MotorcycleData.setHasFocus(false);
                     if(MotorcycleData.wlq != null) {
                         MotorcycleData.wlq.setStatus(data);
+
+                        Intent accessoryIntent = new Intent(MyApplication.getContext(), AccessoryActivity.class);
+                        accessoryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        accessoryIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        MyApplication.getContext().startActivity(accessoryIntent);
+
                         final Intent intent = new Intent(ACTION_ACCSTATUS_AVAILABLE);
                         intent.putExtras(mBundle);
                         MyApplication.getContext().sendBroadcast(intent);
