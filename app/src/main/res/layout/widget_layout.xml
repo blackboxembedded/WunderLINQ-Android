@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/widget_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_weight="1"
     android:orientation="vertical"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/colorPrimary"
     android:clickable="true"
     android:focusable="true" >
-    <GridView
-        android:id="@+id/widget_grid"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:numColumns="4"
-        android:horizontalSpacing="5dp"
-        android:verticalSpacing="5dp"
-        android:padding="5dp"
-        android:background="@color/colorPrimaryDark"
-        android:focusableInTouchMode="false"
-        android:clickable="false"
-        android:focusable="false"/>
-    <Button
-        android:id="@+id/widget_button"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Open WunderLINQ" />
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        android:background="@color/colorPrimaryDark"
+        android:clickable="false"
+        android:focusable="false">
+
+        <GridView
+            android:id="@+id/widget_grid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimaryDark"
+            android:clickable="false"
+            android:focusable="false"
+            android:numColumns="3"
+            android:layout_margin="5dp"/>
+    </LinearLayout>
 </LinearLayout>
 

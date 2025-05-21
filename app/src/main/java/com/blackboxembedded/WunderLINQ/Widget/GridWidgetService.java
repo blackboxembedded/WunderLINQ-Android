@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -66,6 +67,7 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         rv.setTextViewText(R.id.grid_item_label, WidgetProvider.labels.get(position));
         rv.setTextViewText(R.id.grid_item_text, WidgetProvider.data.get(position));
         rv.setImageViewBitmap(R.id.grid_item_icon, drawableToBitmap(WidgetProvider.icons.get(position)));
+
         // Create an Intent to launch your main activity (or any other activity)
         Intent launchIntent = new Intent(context, MainActivity.class);
         // Make it possible to distinguish the individual on-click

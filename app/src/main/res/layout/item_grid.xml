@@ -49,7 +49,7 @@
         app:layout_constraintBottom_toTopOf="@+id/cell_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/label"
+        app:layout_constraintTop_toBottomOf="@+id/cell_label"
         android:singleLine="false"
         android:paddingStart = "6dp"
         android:paddingEnd ="6dp"
