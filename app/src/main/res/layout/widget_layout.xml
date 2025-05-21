@@ -24,7 +24,8 @@
             android:background="@color/colorPrimaryDark"
             android:clickable="false"
             android:focusable="false"
-            android:numColumns="3"
+            android:numColumns="4"
+            android:columnWidth="75dp"
             android:layout_margin="5dp"/>
     </LinearLayout>
 </LinearLayout>

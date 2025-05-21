@@ -28,6 +28,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -49,6 +50,7 @@ public class WidgetProvider extends AppWidgetProvider {
     public final static String TAG = "WidgetProvider";
     private static SharedPreferences sharedPrefs;
     private static BroadcastReceiver customReceiver;
+    private static Boolean hasFocus = false;
     public static List<String> labels = new ArrayList<>();
     public static List<String> data = new ArrayList<>();
     public static List<String> newData = new ArrayList<>();
@@ -69,7 +71,7 @@ public class WidgetProvider extends AppWidgetProvider {
             intentFilter.addAction(BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE);
             intentFilter.addAction(BluetoothLeService.ACTION_FOCUS_CHANGED);
             intentFilter.addAction(BluetoothLeService.ACTION_GATT_DISCONNECTED);
-            ContextCompat.registerReceiver(context.getApplicationContext(), customReceiver, intentFilter, ContextCompat.RECEIVER_NOT_EXPORTED);
+            ContextCompat.registerReceiver(context.getApplicationContext(), customReceiver, intentFilter, ContextCompat.RECEIVER_EXPORTED);
         }
     }
 
@@ -110,17 +112,30 @@ public class WidgetProvider extends AppWidgetProvider {
 
             Intent intent = new Intent(context, GridWidgetService.class);
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME))); // force unique intent
             views.setRemoteAdapter(R.id.widget_grid, intent);
 
             // Update the widget
             appWidgetManager.updateAppWidget(appWidgetId, views);
 
         }
+
+        // Register your broadcast receiver
+        if (customReceiver == null) {
+            customReceiver = new DataReceiver();
+            final IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(BluetoothLeService.ACTION_PERFORMANCE_DATA_AVAILABLE);
+            intentFilter.addAction(BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE);
+            intentFilter.addAction(BluetoothLeService.ACTION_FOCUS_CHANGED);
+            intentFilter.addAction(BluetoothLeService.ACTION_GATT_DISCONNECTED);
+            ContextCompat.registerReceiver(context.getApplicationContext(), customReceiver, intentFilter, ContextCompat.RECEIVER_EXPORTED);
+        }
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
+        Log.d(TAG, "onReceive");
     }
 
     @Override
@@ -149,7 +164,6 @@ public class WidgetProvider extends AppWidgetProvider {
     public static class DataReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(TAG,"onReceive");
             // Handle the received broadcast
             if (intent.getAction().equals(BluetoothLeService.ACTION_PERFORMANCE_DATA_AVAILABLE)) {
                 int cell1Data = Integer.parseInt(sharedPrefs.getString("prefCellOne", "14"));//Default:Speed
@@ -171,9 +185,10 @@ public class WidgetProvider extends AppWidgetProvider {
                 newData.set(6,getDataExtra(extras, MotorcycleData.getExtraKey(MotorcycleData.DataType.fromValue(cell7Data))));
                 newData.set(7,getDataExtra(extras, MotorcycleData.getExtraKey(MotorcycleData.DataType.fromValue(cell8Data))));
 
-                if (!data.equals(newData)){
+                if (!data.equals(newData) || hasFocus != MotorcycleData.getHasFocus()){
                     // Display the received data
-                    Log.d(TAG,"Update");
+                    Log.d(TAG,"DataReceiver: onReceive - New Data");
+                    hasFocus = MotorcycleData.getHasFocus();
                     data.set(0,getDataExtra(extras, MotorcycleData.getExtraKey(MotorcycleData.DataType.fromValue(cell1Data))));
                     data.set(1,getDataExtra(extras, MotorcycleData.getExtraKey(MotorcycleData.DataType.fromValue(cell2Data))));
                     data.set(2,getDataExtra(extras, MotorcycleData.getExtraKey(MotorcycleData.DataType.fromValue(cell3Data))));
@@ -183,6 +198,8 @@ public class WidgetProvider extends AppWidgetProvider {
                     data.set(6,getDataExtra(extras, MotorcycleData.getExtraKey(MotorcycleData.DataType.fromValue(cell7Data))));
                     data.set(7,getDataExtra(extras, MotorcycleData.getExtraKey(MotorcycleData.DataType.fromValue(cell8Data))));
 
+                    RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+
                     // Notify the widget's GridView that the data has changed
                     // Get the AppWidgetManager instance
                     AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
@@ -190,33 +207,53 @@ public class WidgetProvider extends AppWidgetProvider {
                     // Update the widget
                     int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, WidgetProvider.class));
                     for (int appWidgetId : appWidgetIds) {
+                        Intent svcIntent = new Intent(context, GridWidgetService.class);
+                        svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+                        svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME))); // Important
+
+                        if (sharedPrefs.getBoolean("prefFocusIndication", false)) {
+                            int color = ContextCompat.getColor(context, R.color.colorPrimary);
+                            if (MotorcycleData.getHasFocus()) {
+                                color = androidx.preference.PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext()).getInt("prefHighlightColor", R.color.colorAccent);
+                            }
+                            views.setInt(R.id.widget_layout, "setBackgroundColor", color);
+                        }
+
+                        views.setRemoteAdapter(R.id.widget_grid, svcIntent);
+                        appWidgetManager.updateAppWidget(appWidgetId, views);
                         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_grid);
                     }
                 }
 
             } else if (intent.getAction().equals(BluetoothLeService.ACTION_FOCUS_CHANGED)) {
-                // Get the layout for the app widget
-                RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-
+                Log.d(TAG,"DataReceiver: onReceive - Focus Changed");
+                hasFocus = MotorcycleData.getHasFocus();
                 if (sharedPrefs.getBoolean("prefFocusIndication", false)) {
                     int color = ContextCompat.getColor(context, R.color.colorPrimary);
                     if (MotorcycleData.getHasFocus()) {
                         color = androidx.preference.PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext()).getInt("prefHighlightColor", R.color.colorAccent);
                     }
+
+                    // Get the layout for the app widget
+                    RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
                     views.setInt(R.id.widget_layout, "setBackgroundColor", color);
+
+                    // Notify the widget's GridView that the data has changed
+                    // Get the AppWidgetManager instance
+                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+
+                    // Update the widget
+                    int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, WidgetProvider.class));
+                    for (int appWidgetId : appWidgetIds) {
+                        Intent svcIntent = new Intent(context, GridWidgetService.class);
+                        svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+                        svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME))); // Important
+
+                        views.setRemoteAdapter(R.id.widget_grid, svcIntent); // rebind adapter
+                        appWidgetManager.updateAppWidget(appWidgetId, views);
+                    }
+
                 }
-
-                // Notify the widget's GridView that the data has changed
-                // Get the AppWidgetManager instance
-                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-
-                // Update the widget
-                int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, WidgetProvider.class));
-                for (int appWidgetId : appWidgetIds) {
-                    appWidgetManager.updateAppWidget(appWidgetId, views);
-                    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_grid);
-                }
-
             }
         }
     }

@@ -17,6 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ.Widget;
 
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -37,10 +38,14 @@ public class GridWidgetService extends RemoteViewsService {
 }
 
 class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
-    private Context context;
+    private final Context context;
+    private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
 
     public GridRemoteViewsFactory(Context context, Intent intent) {
         this.context = context;
+        if (intent != null && intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
+            this.appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+        }
     }
 
     @Override
@@ -96,21 +101,37 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         return true;
     }
 
-    public Bitmap drawableToBitmap(Drawable drawable){
-        int width = drawable.getIntrinsicWidth();
-        int height = drawable.getIntrinsicHeight();
+    public Bitmap drawableToBitmap(Drawable drawable) {
+        // Set fallback size if width/height not specified
+        int targetWidth = 40;
+        int targetHeight = 40;
 
-        // Sometimes a Drawable might not have intrinsic width or height, handle that case.
-        if (width <= 0 || height <= 0) {
-            width = 1;
-            height = 1;
+        Bitmap bitmap = Bitmap.createBitmap(targetWidth, targetHeight, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+
+        int intrinsicWidth = drawable.getIntrinsicWidth();
+        int intrinsicHeight = drawable.getIntrinsicHeight();
+
+        if (intrinsicWidth <= 0 || intrinsicHeight <= 0) {
+            // Just scale to fill
+            drawable.setBounds(0, 0, targetWidth, targetHeight);
+        } else {
+            // Calculate aspect-ratio-preserving scale and offset
+            float widthRatio = (float) targetWidth / intrinsicWidth;
+            float heightRatio = (float) targetHeight / intrinsicHeight;
+            float scale = Math.min(widthRatio, heightRatio); // scale to fit
+
+            int scaledWidth = Math.round(intrinsicWidth * scale);
+            int scaledHeight = Math.round(intrinsicHeight * scale);
+
+            int dx = (targetWidth - scaledWidth) / 2;
+            int dy = (targetHeight - scaledHeight) / 2;
+
+            drawable.setBounds(dx, dy, dx + scaledWidth, dy + scaledHeight);
         }
 
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
-
         return bitmap;
     }
+
 }
