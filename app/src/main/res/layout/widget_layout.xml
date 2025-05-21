@@ -13,17 +13,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_margin="10dp"
-        android:background="@color/colorPrimaryDark"
-        android:clickable="false"
-        android:focusable="false">
+        android:background="@color/colorPrimaryDark">
 
         <GridView
             android:id="@+id/widget_grid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorPrimaryDark"
-            android:clickable="false"
-            android:focusable="false"
             android:numColumns="4"
             android:columnWidth="75dp"
             android:layout_margin="5dp"/>

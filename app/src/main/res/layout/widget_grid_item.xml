@@ -6,9 +6,7 @@
     android:layout_height="match_parent"
     android:layout_weight="1"
     android:orientation="vertical"
-    android:background="@color/colorPrimary"
-    android:clickable="false"
-    android:focusable="false">
+    android:background="@color/colorPrimary">
     <TextView
         android:id="@+id/grid_item_label"
         android:layout_width="match_parent"
@@ -23,9 +21,7 @@
         android:background="@color/colorPrimary"
         android:textColor="@color/black"
         android:textStyle="bold"
-        android:text="Label"
-        android:clickable="false"
-        android:focusable="false"/>
+        android:text="Label"/>
     <TextView
         android:id="@+id/grid_item_text"
         android:layout_width="match_parent"
@@ -39,18 +35,14 @@
         app:autoSizeTextType="uniform"
         android:background="@color/colorPrimary"
         android:textColor="@color/black"
-        android:text="@string/blank_field"
-        android:clickable="false"
-        android:focusable="false"/>
+        android:text="@string/blank_field"/>
 
     <ImageView
         android:id="@+id/grid_item_icon"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:adjustViewBounds="true"
-        android:clickable="false"
         android:cropToPadding="false"
-        android:focusable="false"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/ic_cog" />
+        app:srcCompat="@drawable/ic_cog"/>
 </LinearLayout>

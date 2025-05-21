@@ -17,6 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ.Widget;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
@@ -75,6 +76,7 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
         // Create an Intent to launch your main activity (or any other activity)
         Intent launchIntent = new Intent(context, MainActivity.class);
+        launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         // Make it possible to distinguish the individual on-click
         // action of a given item
         rv.setOnClickFillInIntent(R.id.grid_item_layout, launchIntent);

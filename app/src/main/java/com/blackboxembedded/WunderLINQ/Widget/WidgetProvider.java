@@ -95,13 +95,6 @@ public class WidgetProvider extends AppWidgetProvider {
             // Get the layout for the app widget
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
 
-            // Create an Intent to launch your main activity (or any other activity)
-            Intent launchIntent = new Intent(context, MainActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, launchIntent, PendingIntent.FLAG_IMMUTABLE);
-
-            // Attach the onClick listener to the whole widget layout (or any specific view in your widget)
-            views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
-
             if (sharedPrefs.getBoolean("prefFocusIndication", false)) {
                 int color = ContextCompat.getColor(context, R.color.colorPrimary);
                 if (MotorcycleData.getHasFocus()) {
@@ -115,9 +108,15 @@ public class WidgetProvider extends AppWidgetProvider {
             intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME))); // force unique intent
             views.setRemoteAdapter(R.id.widget_grid, intent);
 
+            // Create an Intent to launch your main activity (or any other activity)
+            Intent launchIntent = new Intent(context, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            views.setPendingIntentTemplate(R.id.widget_grid, pendingIntent);
+            // Attach the onClick listener to the whole widget layout (or any specific view in your widget)
+            views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
+
             // Update the widget
             appWidgetManager.updateAppWidget(appWidgetId, views);
-
         }
 
         // Register your broadcast receiver
@@ -219,6 +218,14 @@ public class WidgetProvider extends AppWidgetProvider {
                         }
 
                         views.setRemoteAdapter(R.id.widget_grid, svcIntent);
+
+                        // Create an Intent to launch your main activity (or any other activity)
+                        Intent launchIntent = new Intent(context, MainActivity.class);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                        views.setPendingIntentTemplate(R.id.widget_grid, pendingIntent);
+                        // Attach the onClick listener to the whole widget layout (or any specific view in your widget)
+                        views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
+
                         appWidgetManager.updateAppWidget(appWidgetId, views);
                         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_grid);
                     }
@@ -249,6 +256,14 @@ public class WidgetProvider extends AppWidgetProvider {
                         svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME))); // Important
 
                         views.setRemoteAdapter(R.id.widget_grid, svcIntent); // rebind adapter
+
+                        // Create an Intent to launch your main activity (or any other activity)
+                        Intent launchIntent = new Intent(context, MainActivity.class);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                        views.setPendingIntentTemplate(R.id.widget_grid, pendingIntent);
+                        // Attach the onClick listener to the whole widget layout (or any specific view in your widget)
+                        views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
+
                         appWidgetManager.updateAppWidget(appWidgetId, views);
                     }
 
