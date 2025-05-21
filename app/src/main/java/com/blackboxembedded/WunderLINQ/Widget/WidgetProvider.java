@@ -187,7 +187,6 @@ public class WidgetProvider extends AppWidgetProvider {
 
                 if (!data.equals(newData) || hasFocus != MotorcycleData.getHasFocus()){
                     // Display the received data
-                    Log.d(TAG,"DataReceiver: onReceive - New Data");
                     hasFocus = MotorcycleData.getHasFocus();
                     data.set(0,getDataExtra(extras, MotorcycleData.getExtraKey(MotorcycleData.DataType.fromValue(cell1Data))));
                     data.set(1,getDataExtra(extras, MotorcycleData.getExtraKey(MotorcycleData.DataType.fromValue(cell2Data))));
