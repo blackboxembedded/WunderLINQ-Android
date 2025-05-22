@@ -68,7 +68,6 @@ public class WidgetProvider extends AppWidgetProvider {
             customReceiver = new DataReceiver();
             final IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(BluetoothLeService.ACTION_PERFORMANCE_DATA_AVAILABLE);
-            intentFilter.addAction(BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE);
             intentFilter.addAction(BluetoothLeService.ACTION_FOCUS_CHANGED);
             intentFilter.addAction(BluetoothLeService.ACTION_GATT_DISCONNECTED);
             ContextCompat.registerReceiver(context.getApplicationContext(), customReceiver, intentFilter, ContextCompat.RECEIVER_EXPORTED);

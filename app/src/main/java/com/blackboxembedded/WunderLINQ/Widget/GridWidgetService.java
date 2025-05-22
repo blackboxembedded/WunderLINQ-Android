@@ -17,14 +17,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ.Widget;
 
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
+import android.util.TypedValue;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -70,8 +69,29 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public RemoteViews getViewAt(int position) {
         RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_grid_item);
-        rv.setTextViewText(R.id.grid_item_label, WidgetProvider.labels.get(position));
-        rv.setTextViewText(R.id.grid_item_text, WidgetProvider.data.get(position));
+        String label = WidgetProvider.labels.get(position);
+        if (label.length() > 20) {
+            rv.setTextViewTextSize(R.id.grid_item_label, TypedValue.COMPLEX_UNIT_SP, 8f);
+        } else if (label.length() > 12) {
+            rv.setTextViewTextSize(R.id.grid_item_label, TypedValue.COMPLEX_UNIT_SP, 10f);
+        } else {
+            rv.setTextViewTextSize(R.id.grid_item_label, TypedValue.COMPLEX_UNIT_SP, 12f);
+        }
+        rv.setTextViewText(R.id.grid_item_label, label);
+        String value = WidgetProvider.data.get(position);
+        try {
+            value = Integer.toString((int) Double.parseDouble(value));
+        } catch (NumberFormatException e) {
+            value = WidgetProvider.data.get(position);
+        }
+        if (value.length() > 6) {
+            rv.setTextViewTextSize(R.id.grid_item_text, TypedValue.COMPLEX_UNIT_SP, 30f);
+        } else if (value.length() > 4) {
+            rv.setTextViewTextSize(R.id.grid_item_text, TypedValue.COMPLEX_UNIT_SP, 30f);
+        } else {
+            rv.setTextViewTextSize(R.id.grid_item_text, TypedValue.COMPLEX_UNIT_SP, 34f);
+        }
+        rv.setTextViewText(R.id.grid_item_text, value);
         rv.setImageViewBitmap(R.id.grid_item_icon, drawableToBitmap(WidgetProvider.icons.get(position)));
 
         // Create an Intent to launch your main activity (or any other activity)

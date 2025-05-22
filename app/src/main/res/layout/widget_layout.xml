@@ -18,11 +18,14 @@
         <GridView
             android:id="@+id/widget_grid"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/colorPrimaryDark"
             android:numColumns="4"
-            android:columnWidth="75dp"
-            android:layout_margin="5dp"/>
+            android:columnWidth="0dp"
+            android:stretchMode="columnWidth"
+            android:gravity="center"
+            android:padding="4dp"
+            android:clipChildren="false"/>
     </LinearLayout>
 </LinearLayout>
 

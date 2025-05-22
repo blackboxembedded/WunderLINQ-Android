@@ -1,48 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/grid_item_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_weight="1"
-    android:orientation="vertical"
-    android:background="@color/colorPrimary">
-    <TextView
-        android:id="@+id/grid_item_label"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textSize="12sp"
-        android:maxLines="1"
-        app:autoSizeTextType="uniform"
-        app:autoSizeMinTextSize="8sp"
-        app:autoSizeMaxTextSize="50sp"
-        app:autoSizeStepGranularity="2sp"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:text="Label"/>
-    <TextView
-        android:id="@+id/grid_item_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textSize="36sp"
-        android:maxLines="1"
-        app:autoSizeMaxTextSize="100sp"
-        app:autoSizeMinTextSize="10sp"
-        app:autoSizeStepGranularity="2sp"
-        app:autoSizeTextType="uniform"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/black"
-        android:text="@string/blank_field"/>
+    android:layout_height="75dp"
+    android:background="@color/colorPrimaryDark">
 
+    <!-- Background box -->
+    <LinearLayout
+        android:id="@+id/item_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="2.5dp"
+        android:background="@color/colorPrimary"
+        android:paddingBottom="20dp">  <!-- Space so icon doesn't overlap text -->
+
+        <TextView
+            android:id="@+id/grid_item_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="12sp"
+            android:ellipsize="none"
+            android:singleLine="true"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/grid_item_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="34sp"
+            android:ellipsize="none"
+            android:singleLine="true"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/black"
+            android:text="@string/blank_field"/>
+    </LinearLayout>
+
+    <!-- Icon overlaid at bottom-end -->
     <ImageView
         android:id="@+id/grid_item_icon"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="15dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="2dp"
+        android:padding="1dp"
+        android:cropToPadding="true"
         android:adjustViewBounds="true"
-        android:cropToPadding="false"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/ic_cog"/>
-</LinearLayout>
+        app:srcCompat="@drawable/ic_cog" />
+</FrameLayout>
