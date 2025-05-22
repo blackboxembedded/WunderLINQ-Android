@@ -78,10 +78,6 @@
             <meta-data android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info" />
         </receiver>
-        <service
-            android:name=".Widget.GridWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"
-            android:exported="false"/>
         <activity
             android:name=".AccessoryActivity"
             android:exported="false"

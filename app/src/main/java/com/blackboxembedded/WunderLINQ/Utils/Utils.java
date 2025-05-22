@@ -289,4 +289,25 @@ public class Utils {
 
         return bitmap;
     }
+
+    public static Bitmap drawableToBitmap(Drawable drawable, int width, int height) {
+
+        // Ensure a valid size
+        if (width <= 0) {
+            width = 1;
+        }
+        if (height <= 0) {
+            height = 1;
+        }
+
+        // Create a Bitmap to hold the drawable content
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+        // Create a Canvas and draw the Drawable onto it
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
+    }
 }
