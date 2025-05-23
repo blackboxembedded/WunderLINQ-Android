@@ -33,45 +33,45 @@
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
                 android:orientation="vertical"
-                android:gravity="center"
-                android:background="@color/colorPrimary">
+                android:background="@color/colorPrimary"
+                >
 
+                <!-- Top label -->
                 <TextView
                     android:id="@+id/cell_0_label"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Label"
                     android:textAlignment="center"
                     android:textSize="12sp"
                     android:ellipsize="none"
                     android:singleLine="true"
-                    android:paddingStart="2dp"
-                    android:paddingEnd="2dp"
-                    android:background="@color/colorPrimary"
                     android:textColor="@color/black"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
+                <!-- Expanding middle value -->
                 <TextView
                     android:id="@+id/cell_0_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:textAlignment="center"
                     android:textSize="34sp"
                     android:ellipsize="none"
                     android:singleLine="true"
-                    android:paddingStart="2dp"
-                    android:paddingEnd="2dp"
-                    android:background="@color/colorPrimary"
                     android:textColor="@color/black"
-                    android:text="@string/blank_field"/>
+                    android:text="@string/blank_field" />
 
+                <!-- Bottom-right icon -->
                 <ImageView
                     android:id="@+id/cell_0_icon"
-                    android:layout_width="20dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="20dp"
-                    android:scaleType="fitCenter"
-                    android:layout_gravity="bottom|end"
-                    android:src="@drawable/ic_cog" />
+                    android:layout_gravity="end|bottom"
+                    android:src="@drawable/ic_cog"
+                    android:cropToPadding="true"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter" />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/cell_1"
@@ -80,45 +80,45 @@
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
                 android:orientation="vertical"
-                android:gravity="center"
-                android:background="@color/colorPrimary">
+                android:background="@color/colorPrimary"
+                >
 
+                <!-- Top label -->
                 <TextView
                     android:id="@+id/cell_1_label"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Label"
                     android:textAlignment="center"
                     android:textSize="12sp"
                     android:ellipsize="none"
                     android:singleLine="true"
-                    android:paddingStart="2dp"
-                    android:paddingEnd="2dp"
-                    android:background="@color/colorPrimary"
                     android:textColor="@color/black"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
+                <!-- Expanding middle value -->
                 <TextView
                     android:id="@+id/cell_1_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:textAlignment="center"
                     android:textSize="34sp"
                     android:ellipsize="none"
                     android:singleLine="true"
-                    android:paddingStart="2dp"
-                    android:paddingEnd="2dp"
-                    android:background="@color/colorPrimary"
                     android:textColor="@color/black"
-                    android:text="@string/blank_field"/>
+                    android:text="@string/blank_field" />
 
+                <!-- Bottom-right icon -->
                 <ImageView
                     android:id="@+id/cell_1_icon"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:scaleType="fitCenter"
-                    android:layout_gravity="bottom|end"
-                    android:src="@drawable/ic_cog" />
+                    android:layout_gravity="end|bottom"
+                    android:src="@drawable/ic_cog"
+                    android:cropToPadding="true"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter" />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/cell_2"
@@ -127,45 +127,45 @@
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
                 android:orientation="vertical"
-                android:gravity="center"
-                android:background="@color/colorPrimary">
+                android:background="@color/colorPrimary"
+                >
 
+                <!-- Top label -->
                 <TextView
                     android:id="@+id/cell_2_label"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Label"
                     android:textAlignment="center"
                     android:textSize="12sp"
                     android:ellipsize="none"
                     android:singleLine="true"
-                    android:paddingStart="2dp"
-                    android:paddingEnd="2dp"
-                    android:background="@color/colorPrimary"
                     android:textColor="@color/black"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
+                <!-- Expanding middle value -->
                 <TextView
                     android:id="@+id/cell_2_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:textAlignment="center"
                     android:textSize="34sp"
                     android:ellipsize="none"
                     android:singleLine="true"
-                    android:paddingStart="2dp"
-                    android:paddingEnd="2dp"
-                    android:background="@color/colorPrimary"
                     android:textColor="@color/black"
-                    android:text="@string/blank_field"/>
+                    android:text="@string/blank_field" />
 
+                <!-- Bottom-right icon -->
                 <ImageView
                     android:id="@+id/cell_2_icon"
-                    android:layout_width="20dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="20dp"
-                    android:scaleType="fitCenter"
-                    android:layout_gravity="bottom|end"
-                    android:src="@drawable/ic_cog" />
+                    android:layout_gravity="end|bottom"
+                    android:src="@drawable/ic_cog"
+                    android:cropToPadding="true"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter" />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/cell_3"
@@ -174,45 +174,43 @@
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
                 android:orientation="vertical"
-                android:gravity="center"
-                android:background="@color/colorPrimary">
+                android:background="@color/colorPrimary"
+                >
 
+                <!-- Top label -->
                 <TextView
                     android:id="@+id/cell_3_label"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="Label"
                     android:textAlignment="center"
                     android:textSize="12sp"
                     android:ellipsize="none"
                     android:singleLine="true"
-                    android:paddingStart="2dp"
-                    android:paddingEnd="2dp"
-                    android:background="@color/colorPrimary"
                     android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:text="Label" />
+                    android:textStyle="bold" />
 
+                <!-- Expanding middle value -->
                 <TextView
                     android:id="@+id/cell_3_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:textAlignment="center"
                     android:textSize="34sp"
                     android:ellipsize="none"
                     android:singleLine="true"
-                    android:paddingStart="2dp"
-                    android:paddingEnd="2dp"
-                    android:background="@color/colorPrimary"
                     android:textColor="@color/black"
-                    android:text="@string/blank_field"/>
+                    android:text="@string/blank_field" />
 
+                <!-- Bottom-right icon -->
                 <ImageView
                     android:id="@+id/cell_3_icon"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:scaleType="fitCenter"
-                    android:layout_gravity="bottom|end"
-                    android:src="@drawable/ic_cog" />
+                    android:layout_gravity="end|bottom"
+                    android:src="@drawable/ic_cog"
+                    android:scaleType="fitCenter" />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/cell_4"
@@ -221,45 +219,45 @@
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
                 android:orientation="vertical"
-                android:gravity="center"
-                android:background="@color/colorPrimary">
+                android:background="@color/colorPrimary"
+                >
 
+                <!-- Top label -->
                 <TextView
                     android:id="@+id/cell_4_label"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="Label"
                     android:textAlignment="center"
                     android:textSize="12sp"
                     android:ellipsize="none"
                     android:singleLine="true"
-                    android:paddingStart="2dp"
-                    android:paddingEnd="2dp"
-                    android:background="@color/colorPrimary"
                     android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:text="Label" />
+                    android:textStyle="bold" />
 
+                <!-- Expanding middle value -->
                 <TextView
                     android:id="@+id/cell_4_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:textAlignment="center"
                     android:textSize="34sp"
                     android:ellipsize="none"
                     android:singleLine="true"
-                    android:paddingStart="2dp"
-                    android:paddingEnd="2dp"
-                    android:background="@color/colorPrimary"
                     android:textColor="@color/black"
-                    android:text="@string/blank_field"/>
+                    android:text="@string/blank_field" />
 
+                <!-- Bottom-right icon -->
                 <ImageView
                     android:id="@+id/cell_4_icon"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:scaleType="fitCenter"
-                    android:layout_gravity="bottom|end"
-                    android:src="@drawable/ic_cog" />
+                    android:layout_gravity="end|bottom"
+                    android:src="@drawable/ic_cog"
+                    android:cropToPadding="true"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter" />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/cell_5"
@@ -268,45 +266,45 @@
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
                 android:orientation="vertical"
-                android:gravity="center"
-                android:background="@color/colorPrimary">
+                android:background="@color/colorPrimary"
+                >
 
+                <!-- Top label -->
                 <TextView
                     android:id="@+id/cell_5_label"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="Label"
                     android:textAlignment="center"
                     android:textSize="12sp"
                     android:ellipsize="none"
                     android:singleLine="true"
-                    android:paddingStart="2dp"
-                    android:paddingEnd="2dp"
-                    android:background="@color/colorPrimary"
                     android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:text="Label" />
+                    android:textStyle="bold" />
 
+                <!-- Expanding middle value -->
                 <TextView
                     android:id="@+id/cell_5_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:textAlignment="center"
                     android:textSize="34sp"
                     android:ellipsize="none"
                     android:singleLine="true"
-                    android:paddingStart="2dp"
-                    android:paddingEnd="2dp"
-                    android:background="@color/colorPrimary"
                     android:textColor="@color/black"
-                    android:text="@string/blank_field"/>
+                    android:text="@string/blank_field" />
 
+                <!-- Bottom-right icon -->
                 <ImageView
                     android:id="@+id/cell_5_icon"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:scaleType="fitCenter"
-                    android:layout_gravity="bottom|end"
-                    android:src="@drawable/ic_cog" />
+                    android:layout_gravity="end|bottom"
+                    android:src="@drawable/ic_cog"
+                    android:cropToPadding="true"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter" />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/cell_6"
@@ -315,45 +313,45 @@
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
                 android:orientation="vertical"
-                android:gravity="center"
-                android:background="@color/colorPrimary">
+                android:background="@color/colorPrimary"
+                >
 
+                <!-- Top label -->
                 <TextView
                     android:id="@+id/cell_6_label"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="Label"
                     android:textAlignment="center"
                     android:textSize="12sp"
                     android:ellipsize="none"
                     android:singleLine="true"
-                    android:paddingStart="2dp"
-                    android:paddingEnd="2dp"
-                    android:background="@color/colorPrimary"
                     android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:text="Label" />
+                    android:textStyle="bold" />
 
+                <!-- Expanding middle value -->
                 <TextView
                     android:id="@+id/cell_6_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:textAlignment="center"
                     android:textSize="34sp"
                     android:ellipsize="none"
                     android:singleLine="true"
-                    android:paddingStart="2dp"
-                    android:paddingEnd="2dp"
-                    android:background="@color/colorPrimary"
                     android:textColor="@color/black"
-                    android:text="@string/blank_field"/>
+                    android:text="@string/blank_field" />
 
+                <!-- Bottom-right icon -->
                 <ImageView
                     android:id="@+id/cell_6_icon"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:scaleType="fitCenter"
-                    android:layout_gravity="bottom|end"
-                    android:src="@drawable/ic_cog" />
+                    android:layout_gravity="end|bottom"
+                    android:src="@drawable/ic_cog"
+                    android:cropToPadding="true"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter" />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/cell_7"
@@ -362,45 +360,45 @@
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
                 android:orientation="vertical"
-                android:gravity="center"
-                android:background="@color/colorPrimary">
+                android:background="@color/colorPrimary"
+                >
 
+                <!-- Top label -->
                 <TextView
                     android:id="@+id/cell_7_label"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="Label"
                     android:textAlignment="center"
                     android:textSize="12sp"
                     android:ellipsize="none"
                     android:singleLine="true"
-                    android:paddingStart="2dp"
-                    android:paddingEnd="2dp"
-                    android:background="@color/colorPrimary"
                     android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:text="Label" />
+                    android:textStyle="bold" />
 
+                <!-- Expanding middle value -->
                 <TextView
                     android:id="@+id/cell_7_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:textAlignment="center"
                     android:textSize="34sp"
                     android:ellipsize="none"
                     android:singleLine="true"
-                    android:paddingStart="2dp"
-                    android:paddingEnd="2dp"
-                    android:background="@color/colorPrimary"
                     android:textColor="@color/black"
-                    android:text="@string/blank_field"/>
+                    android:text="@string/blank_field" />
 
+                <!-- Bottom-right icon -->
                 <ImageView
                     android:id="@+id/cell_7_icon"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:scaleType="fitCenter"
-                    android:layout_gravity="bottom|end"
-                    android:src="@drawable/ic_cog" />
+                    android:layout_gravity="end|bottom"
+                    android:src="@drawable/ic_cog"
+                    android:cropToPadding="true"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter" />
             </LinearLayout>
         </GridLayout>
     </LinearLayout>

@@ -47,8 +47,8 @@ import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WidgetProvider extends AppWidgetProvider {
-    public final static String TAG = "WidgetProvider";
+public class DataGridWidget extends AppWidgetProvider {
+    public final static String TAG = "DataGridWidget";
     private static SharedPreferences sharedPrefs;
     private static BroadcastReceiver customReceiver;
     public static List<String> labels = new ArrayList<>(8);
@@ -142,7 +142,7 @@ public class WidgetProvider extends AppWidgetProvider {
                         views.setTextViewTextSize(valueId, TypedValue.COMPLEX_UNIT_SP, 20f);
                     }
                 }
-                views.setImageViewBitmap(iconId, Utils.drawableToBitmap(icons.get(i), 20, 20));
+                views.setImageViewBitmap(iconId, Utils.drawableToBitmap(icons.get(i), 100));
             }
 
             Intent launchIntent = new Intent(context, MainActivity.class);
@@ -205,7 +205,7 @@ public class WidgetProvider extends AppWidgetProvider {
                 // Get the AppWidgetManager instance
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
                 // Update the widget
-                int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, WidgetProvider.class));
+                int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, DataGridWidget.class));
                 for (int appWidgetId : appWidgetIds) {
                     RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
 
@@ -259,7 +259,7 @@ public class WidgetProvider extends AppWidgetProvider {
                                 views.setTextViewTextSize(valueId, TypedValue.COMPLEX_UNIT_SP, 20f);
                             }
                         }
-                        views.setImageViewBitmap(iconId, Utils.drawableToBitmap(icons.get(i), 20, 20));
+                        views.setImageViewBitmap(iconId, Utils.drawableToBitmap(icons.get(i), 100));
                     }
 
                     Intent launchIntent = new Intent(context, MainActivity.class);
@@ -285,7 +285,7 @@ public class WidgetProvider extends AppWidgetProvider {
                     // Get the AppWidgetManager instance
                     AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
                     // Update the widget
-                    int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, WidgetProvider.class));
+                    int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, DataGridWidget.class));
                     for (int appWidgetId : appWidgetIds) {
                         appWidgetManager.updateAppWidget(appWidgetId, views);
                     }
