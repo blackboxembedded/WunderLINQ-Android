@@ -34,44 +34,33 @@
                 android:layout_rowWeight="1"
                 android:orientation="vertical"
                 android:background="@color/colorPrimary"
-                >
+                android:padding="2dp">
 
-                <!-- Top label -->
+                <!-- Top-aligned label -->
                 <TextView
                     android:id="@+id/cell_0_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Label"
-                    android:textAlignment="center"
-                    android:textSize="12sp"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+                    android:text=""
+                    style="@style/WidgetDGLabelText"/>
 
-                <!-- Expanding middle value -->
-                <TextView
-                    android:id="@+id/cell_0_value"
+                <!-- Centered value text (inside container with weight) -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textAlignment="center"
-                    android:textSize="34sp"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:text="@string/blank_field" />
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                <!-- Bottom-right icon -->
+                    <TextView
+                        android:id="@+id/cell_0_value"
+                        android:text="@string/blank_field"
+                        style="@style/WidgetDGValueText" />
+                </LinearLayout>
+
+                <!-- Bottom-aligned icon -->
                 <ImageView
                     android:id="@+id/cell_0_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_gravity="end|bottom"
                     android:src="@drawable/ic_cog"
-                    android:cropToPadding="true"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter" />
+                    style="@style/WidgetDGIcon"/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/cell_1"
@@ -81,44 +70,33 @@
                 android:layout_rowWeight="1"
                 android:orientation="vertical"
                 android:background="@color/colorPrimary"
-                >
+                android:padding="2dp">
 
-                <!-- Top label -->
+                <!-- Top-aligned label -->
                 <TextView
                     android:id="@+id/cell_1_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Label"
-                    android:textAlignment="center"
-                    android:textSize="12sp"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+                    android:text=""
+                    style="@style/WidgetDGLabelText"/>
 
-                <!-- Expanding middle value -->
-                <TextView
-                    android:id="@+id/cell_1_value"
+                <!-- Centered value text (inside container with weight) -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textAlignment="center"
-                    android:textSize="34sp"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:text="@string/blank_field" />
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                <!-- Bottom-right icon -->
+                    <TextView
+                        android:id="@+id/cell_1_value"
+                        android:text="@string/blank_field"
+                        style="@style/WidgetDGValueText" />
+                </LinearLayout>
+
+                <!-- Bottom-aligned icon -->
                 <ImageView
                     android:id="@+id/cell_1_icon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="end|bottom"
                     android:src="@drawable/ic_cog"
-                    android:cropToPadding="true"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter" />
+                    style="@style/WidgetDGIcon"/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/cell_2"
@@ -128,44 +106,33 @@
                 android:layout_rowWeight="1"
                 android:orientation="vertical"
                 android:background="@color/colorPrimary"
-                >
+                android:padding="2dp">
 
-                <!-- Top label -->
+                <!-- Top-aligned label -->
                 <TextView
                     android:id="@+id/cell_2_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Label"
-                    android:textAlignment="center"
-                    android:textSize="12sp"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+                    android:text=""
+                    style="@style/WidgetDGLabelText"/>
 
-                <!-- Expanding middle value -->
-                <TextView
-                    android:id="@+id/cell_2_value"
+                <!-- Centered value text (inside container with weight) -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textAlignment="center"
-                    android:textSize="34sp"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:text="@string/blank_field" />
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                <!-- Bottom-right icon -->
+                    <TextView
+                        android:id="@+id/cell_2_value"
+                        android:text="@string/blank_field"
+                        style="@style/WidgetDGValueText" />
+                </LinearLayout>
+
+                <!-- Bottom-aligned icon -->
                 <ImageView
                     android:id="@+id/cell_2_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_gravity="end|bottom"
                     android:src="@drawable/ic_cog"
-                    android:cropToPadding="true"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter" />
+                    style="@style/WidgetDGIcon"/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/cell_3"
@@ -175,42 +142,33 @@
                 android:layout_rowWeight="1"
                 android:orientation="vertical"
                 android:background="@color/colorPrimary"
-                >
+                android:padding="2dp">
 
-                <!-- Top label -->
+                <!-- Top-aligned label -->
                 <TextView
                     android:id="@+id/cell_3_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Label"
-                    android:textAlignment="center"
-                    android:textSize="12sp"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+                    android:text=""
+                    style="@style/WidgetDGLabelText"/>
 
-                <!-- Expanding middle value -->
-                <TextView
-                    android:id="@+id/cell_3_value"
+                <!-- Centered value text (inside container with weight) -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textAlignment="center"
-                    android:textSize="34sp"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:text="@string/blank_field" />
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                <!-- Bottom-right icon -->
+                    <TextView
+                        android:id="@+id/cell_3_value"
+                        android:text="@string/blank_field"
+                        style="@style/WidgetDGValueText" />
+                </LinearLayout>
+
+                <!-- Bottom-aligned icon -->
                 <ImageView
                     android:id="@+id/cell_3_icon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="end|bottom"
                     android:src="@drawable/ic_cog"
-                    android:scaleType="fitCenter" />
+                    style="@style/WidgetDGIcon"/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/cell_4"
@@ -220,44 +178,33 @@
                 android:layout_rowWeight="1"
                 android:orientation="vertical"
                 android:background="@color/colorPrimary"
-                >
+                android:padding="2dp">
 
-                <!-- Top label -->
+                <!-- Top-aligned label -->
                 <TextView
                     android:id="@+id/cell_4_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Label"
-                    android:textAlignment="center"
-                    android:textSize="12sp"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+                    android:text=""
+                    style="@style/WidgetDGLabelText"/>
 
-                <!-- Expanding middle value -->
-                <TextView
-                    android:id="@+id/cell_4_value"
+                <!-- Centered value text (inside container with weight) -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textAlignment="center"
-                    android:textSize="34sp"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:text="@string/blank_field" />
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                <!-- Bottom-right icon -->
+                    <TextView
+                        android:id="@+id/cell_4_value"
+                        android:text="@string/blank_field"
+                        style="@style/WidgetDGValueText" />
+                </LinearLayout>
+
+                <!-- Bottom-aligned icon -->
                 <ImageView
                     android:id="@+id/cell_4_icon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="end|bottom"
                     android:src="@drawable/ic_cog"
-                    android:cropToPadding="true"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter" />
+                    style="@style/WidgetDGIcon"/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/cell_5"
@@ -267,44 +214,33 @@
                 android:layout_rowWeight="1"
                 android:orientation="vertical"
                 android:background="@color/colorPrimary"
-                >
+                android:padding="2dp">
 
-                <!-- Top label -->
+                <!-- Top-aligned label -->
                 <TextView
                     android:id="@+id/cell_5_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Label"
-                    android:textAlignment="center"
-                    android:textSize="12sp"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+                    android:text=""
+                    style="@style/WidgetDGLabelText"/>
 
-                <!-- Expanding middle value -->
-                <TextView
-                    android:id="@+id/cell_5_value"
+                <!-- Centered value text (inside container with weight) -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textAlignment="center"
-                    android:textSize="34sp"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:text="@string/blank_field" />
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                <!-- Bottom-right icon -->
+                    <TextView
+                        android:id="@+id/cell_5_value"
+                        android:text="@string/blank_field"
+                        style="@style/WidgetDGValueText" />
+                </LinearLayout>
+
+                <!-- Bottom-aligned icon -->
                 <ImageView
                     android:id="@+id/cell_5_icon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="end|bottom"
                     android:src="@drawable/ic_cog"
-                    android:cropToPadding="true"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter" />
+                    style="@style/WidgetDGIcon"/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/cell_6"
@@ -314,44 +250,33 @@
                 android:layout_rowWeight="1"
                 android:orientation="vertical"
                 android:background="@color/colorPrimary"
-                >
+                android:padding="2dp">
 
-                <!-- Top label -->
+                <!-- Top-aligned label -->
                 <TextView
                     android:id="@+id/cell_6_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Label"
-                    android:textAlignment="center"
-                    android:textSize="12sp"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+                    android:text=""
+                    style="@style/WidgetDGLabelText"/>
 
-                <!-- Expanding middle value -->
-                <TextView
-                    android:id="@+id/cell_6_value"
+                <!-- Centered value text (inside container with weight) -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textAlignment="center"
-                    android:textSize="34sp"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:text="@string/blank_field" />
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                <!-- Bottom-right icon -->
+                    <TextView
+                        android:id="@+id/cell_6_value"
+                        android:text="@string/blank_field"
+                        style="@style/WidgetDGValueText" />
+                </LinearLayout>
+
+                <!-- Bottom-aligned icon -->
                 <ImageView
                     android:id="@+id/cell_6_icon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="end|bottom"
                     android:src="@drawable/ic_cog"
-                    android:cropToPadding="true"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter" />
+                    style="@style/WidgetDGIcon"/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/cell_7"
@@ -361,46 +286,34 @@
                 android:layout_rowWeight="1"
                 android:orientation="vertical"
                 android:background="@color/colorPrimary"
-                >
+                android:padding="2dp">
 
-                <!-- Top label -->
+                <!-- Top-aligned label -->
                 <TextView
                     android:id="@+id/cell_7_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Label"
-                    android:textAlignment="center"
-                    android:textSize="12sp"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+                    android:text=""
+                    style="@style/WidgetDGLabelText"/>
 
-                <!-- Expanding middle value -->
-                <TextView
-                    android:id="@+id/cell_7_value"
+                <!-- Centered value text (inside container with weight) -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textAlignment="center"
-                    android:textSize="34sp"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:text="@string/blank_field" />
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                <!-- Bottom-right icon -->
+                    <TextView
+                        android:id="@+id/cell_7_value"
+                        android:text="@string/blank_field"
+                        style="@style/WidgetDGValueText" />
+                </LinearLayout>
+
+                <!-- Bottom-aligned icon -->
                 <ImageView
                     android:id="@+id/cell_7_icon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="end|bottom"
                     android:src="@drawable/ic_cog"
-                    android:cropToPadding="true"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter" />
+                    style="@style/WidgetDGIcon"/>
             </LinearLayout>
         </GridLayout>
     </LinearLayout>
 </LinearLayout>
-

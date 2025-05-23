@@ -1,22 +1,4 @@
 <resources>
-    <style name="WLQTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="WLQTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
-    </style>
-
-    <style name="WLQTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
-    </style>
-
-    <style name="CarAppTheme">
-        <item name="carColorPrimary">@color/white</item>
-        <item name="carColorPrimaryDark">@color/black</item>
-        <item name="carColorSecondary">@color/motorrad_blue</item>
-        <item name="carColorSecondaryDark">@color/motorrad_red</item>
-    </style>
-
     <style name="WidgetDGLabelText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -24,7 +6,7 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:ellipsize">none</item>
         <item name="android:singleLine">true</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">11sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
@@ -35,12 +17,12 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:ellipsize">none</item>
         <item name="android:singleLine">true</item>
-        <item name="android:textSize">34sp</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
     <style name="WidgetDGIcon">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">20dp</item>
+        <item name="android:layout_height">15dp</item>
         <item name="android:layout_gravity">end|bottom</item>
         <item name="android:scaleType">fitCenter</item>
         <item name="android:cropToPadding">true</item>

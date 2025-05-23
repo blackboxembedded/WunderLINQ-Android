@@ -29,6 +29,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -225,38 +226,39 @@ public class DataGridWidget extends AppWidgetProvider {
                         int valueId = context.getResources().getIdentifier(valueIdName, "id", context.getPackageName());
                         int iconId = context.getResources().getIdentifier(iconIdName, "id", context.getPackageName());
 
-                        boolean isPortrait = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                            boolean isPortrait = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+                            if (isPortrait) {
+                                if (labels.get(i).length() > 20) {
+                                    views.setTextViewTextSize(labelId, TypedValue.COMPLEX_UNIT_SP, 8f);
+                                } else if (labels.get(i).length() > 12) {
+                                    views.setTextViewTextSize(labelId, TypedValue.COMPLEX_UNIT_SP, 10f);
+                                } else {
+                                    views.setTextViewTextSize(labelId, TypedValue.COMPLEX_UNIT_SP, 12f);
+                                }
+                            } else {
+                                views.setTextViewTextSize(labelId, TypedValue.COMPLEX_UNIT_SP, 11f);
+                            }
+                            if (isPortrait) {
+                                if (data.get(i).length() > 6) {
+                                    views.setTextViewTextSize(valueId, TypedValue.COMPLEX_UNIT_SP, 30f);
+                                } else if (data.get(i).length() > 4) {
+                                    views.setTextViewTextSize(valueId, TypedValue.COMPLEX_UNIT_SP, 30f);
+                                } else {
+                                    views.setTextViewTextSize(valueId, TypedValue.COMPLEX_UNIT_SP, 34f);
+                                }
+                            } else {
+                                if (data.get(i).length() > 6) {
+                                    views.setTextViewTextSize(valueId, TypedValue.COMPLEX_UNIT_SP, 16f);
+                                } else if (data.get(i).length() > 4) {
+                                    views.setTextViewTextSize(valueId, TypedValue.COMPLEX_UNIT_SP, 18f);
+                                } else {
+                                    views.setTextViewTextSize(valueId, TypedValue.COMPLEX_UNIT_SP, 20f);
+                                }
+                            }
+                        }
                         views.setTextViewText(labelId, labels.get(i));
-                        if (isPortrait) {
-                            if (labels.get(i).length() > 20) {
-                                views.setTextViewTextSize(labelId, TypedValue.COMPLEX_UNIT_SP, 8f);
-                            } else if (labels.get(i).length() > 12) {
-                                views.setTextViewTextSize(labelId, TypedValue.COMPLEX_UNIT_SP, 10f);
-                            } else {
-                                views.setTextViewTextSize(labelId, TypedValue.COMPLEX_UNIT_SP, 12f);
-                            }
-                        } else {
-                            views.setTextViewTextSize(labelId, TypedValue.COMPLEX_UNIT_SP, 11f);
-                        }
-
                         views.setTextViewText(valueId, data.get(i));
-                        if (isPortrait) {
-                            if (data.get(i).length() > 6) {
-                                views.setTextViewTextSize(valueId, TypedValue.COMPLEX_UNIT_SP, 30f);
-                            } else if (data.get(i).length() > 4) {
-                                views.setTextViewTextSize(valueId, TypedValue.COMPLEX_UNIT_SP, 30f);
-                            } else {
-                                views.setTextViewTextSize(valueId, TypedValue.COMPLEX_UNIT_SP, 34f);
-                            }
-                        } else {
-                            if (data.get(i).length() > 6) {
-                                views.setTextViewTextSize(valueId, TypedValue.COMPLEX_UNIT_SP, 16f);
-                            } else if (data.get(i).length() > 4) {
-                                views.setTextViewTextSize(valueId, TypedValue.COMPLEX_UNIT_SP, 18f);
-                            } else {
-                                views.setTextViewTextSize(valueId, TypedValue.COMPLEX_UNIT_SP, 20f);
-                            }
-                        }
                         views.setImageViewBitmap(iconId, Utils.drawableToBitmap(icons.get(i), 100));
                     }
 
