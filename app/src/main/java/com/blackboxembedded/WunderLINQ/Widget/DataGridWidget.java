@@ -110,7 +110,6 @@ public class DataGridWidget extends AppWidgetProvider {
                 int iconId = context.getResources().getIdentifier(iconIdName, "id", context.getPackageName());
 
                 boolean isPortrait = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-                Log.d(TAG, "Is Portrait: " + isPortrait);
                 views.setTextViewText(labelId, labels.get(i));
                 if (isPortrait) {
                     if (labels.get(i).length() > 20) {
@@ -227,7 +226,6 @@ public class DataGridWidget extends AppWidgetProvider {
                         int iconId = context.getResources().getIdentifier(iconIdName, "id", context.getPackageName());
 
                         boolean isPortrait = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-                        Log.d(TAG, "Is Portrait: " + isPortrait);
                         views.setTextViewText(labelId, labels.get(i));
                         if (isPortrait) {
                             if (labels.get(i).length() > 20) {
@@ -270,7 +268,6 @@ public class DataGridWidget extends AppWidgetProvider {
                 }
 
             } else if (intent.getAction().equals(BluetoothLeService.ACTION_FOCUS_CHANGED)) {
-                Log.d(TAG,"DataReceiver: onReceive - Focus Changed");
                 if (sharedPrefs.getBoolean("prefFocusIndication", false)) {
                     int color = ContextCompat.getColor(context, R.color.colorPrimary);
                     if (MotorcycleData.getHasFocus()) {
@@ -297,8 +294,11 @@ public class DataGridWidget extends AppWidgetProvider {
 
     private static void updateCellData(){
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
+        icons.clear();
+        labels.clear();
+        data.clear();
         for (int i = 0; i < 8; i++) {
-            int cellDataIndex = Integer.parseInt(sharedPrefs.getString("prefCell" + (i + 1), String.valueOf(i)));
+            int cellDataIndex = Integer.parseInt(sharedPrefs.getString("prefCell" + (i + 1), String.valueOf(MotorcycleData.defaultCellData[i])));
             Object[] cellObj = MotorcycleData.getCombinedData(MotorcycleData.DataType.values()[cellDataIndex]);
             String dataVal = (String) cellObj[0];
             String label = (String) cellObj[1];
@@ -307,14 +307,6 @@ public class DataGridWidget extends AppWidgetProvider {
             labels.add(label);
             data.add(dataVal);
         }
-    }
-
-    public static String getDataExtra(Bundle extras, String key){
-        Object objValue = extras.get(key);
-        if (objValue != null) {
-            return objValue.toString();
-        }
-        return "";
     }
 }
 

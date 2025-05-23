@@ -61,6 +61,12 @@ public class MotorcycleData {
     private final static double RANGE_LOW = 50.0;
     private final static int timeWindowInSeconds = 120; // Altitude observation time window in seconds
 
+    public final static int[] defaultCellData = {
+            14, 29, 3, 0, 1,
+            2, 20, 8, 9, 7,
+            24, 28, 27, 23, 22
+    };
+
     // WunderLINQ HW
     public static WLQ wlq;
     public static String hardwareVersion;
