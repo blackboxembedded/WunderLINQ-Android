@@ -90,7 +90,7 @@ public class DataGridWidget extends AppWidgetProvider {
         updateCellData();
 
         for (int appWidgetId : appWidgetIds) {
-            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_datagrid);
 
             if (sharedPrefs.getBoolean("prefFocusIndication", false)) {
                 int color = ContextCompat.getColor(context, R.color.colorPrimary);
@@ -187,7 +187,7 @@ public class DataGridWidget extends AppWidgetProvider {
         // You might decide to modify the number of items in your adapter, the size of text, etc.
 
         // Then update the widget
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_datagrid);
         // Configure your RemoteViews (for example, set up the GridView with your adapter)
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -206,7 +206,7 @@ public class DataGridWidget extends AppWidgetProvider {
                 // Update the widget
                 int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, DataGridWidget.class));
                 for (int appWidgetId : appWidgetIds) {
-                    RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+                    RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_datagrid);
 
                     if (sharedPrefs.getBoolean("prefFocusIndication", false)) {
                         int color = ContextCompat.getColor(context, R.color.colorPrimary);
@@ -275,7 +275,7 @@ public class DataGridWidget extends AppWidgetProvider {
                     }
 
                     // Get the layout for the app widget
-                    RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+                    RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_datagrid);
                     views.setInt(R.id.widget_layout, "setBackgroundColor", color);
 
                     // Notify the widget's GridView that the data has changed

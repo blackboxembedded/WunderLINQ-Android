@@ -77,7 +77,7 @@
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data android:name="android.appwidget.provider"
-                android:resource="@xml/widget_info" />
+                android:resource="@xml/widget_datagrid_info" />
         </receiver>
         <activity
             android:name=".AccessoryActivity"
