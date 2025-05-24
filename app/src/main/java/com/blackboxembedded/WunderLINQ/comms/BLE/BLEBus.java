@@ -59,8 +59,10 @@ public class BLEBus {
                 switch (ignitionValue){
                     case 0x0: case 0x1: case 0x2: case 0x3:
                         //Ignition Off
-                        if (MotorcycleData.getIgnitionStatus()){
-                            BluetoothLeService.ignitionAlert();
+                        if (MotorcycleData.getIgnitionStatus() != null) {
+                            if (MotorcycleData.getIgnitionStatus()) {
+                                BluetoothLeService.ignitionAlert();
+                            }
                         }
                         MotorcycleData.setIgnitionStatus(false);
                         break;

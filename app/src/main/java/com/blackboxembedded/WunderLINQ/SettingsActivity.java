@@ -39,6 +39,8 @@ import androidx.preference.PreferenceScreen;
 import androidx.preference.EditTextPreference;
 import androidx.preference.PreferenceManager;
 
+import com.blackboxembedded.WunderLINQ.TaskList.TaskActivity;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import com.rarepebble.colorpicker.ColorPreference;
 
 public class SettingsActivity extends AppCompatActivity implements PreferenceFragmentCompat.OnPreferenceStartScreenCallback {
@@ -122,24 +124,24 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
         ListPreference prefCell13;
         ListPreference prefCell14;
         ListPreference prefCell15;
-        ListPreference prefQuickTaskOne;
-        ListPreference prefQuickTaskTwo;
-        ListPreference prefQuickTaskThree;
-        ListPreference prefQuickTaskFour;
-        ListPreference prefQuickTaskFive;
-        ListPreference prefQuickTaskSix;
-        ListPreference prefQuickTaskSeven;
-        ListPreference prefQuickTaskEight;
-        ListPreference prefQuickTaskNine;
-        ListPreference prefQuickTaskTen;
-        ListPreference prefQuickTaskEleven;
-        ListPreference prefQuickTaskTwelve;
-        ListPreference prefQuickTaskThirteen;
-        ListPreference prefQuickTaskFourteen;
-        ListPreference prefQuickTaskFifteen;
-        ListPreference prefQuickTaskSixteen;
-        ListPreference prefQuickTaskSeventeen;
-        ListPreference prefQuickTaskEighteen;
+        ListPreference prefQuickTask1;
+        ListPreference prefQuickTask2;
+        ListPreference prefQuickTask3;
+        ListPreference prefQuickTask4;
+        ListPreference prefQuickTask5;
+        ListPreference prefQuickTask6;
+        ListPreference prefQuickTask7;
+        ListPreference prefQuickTask8;
+        ListPreference prefQuickTask9;
+        ListPreference prefQuickTask10;
+        ListPreference prefQuickTask11;
+        ListPreference prefQuickTask12;
+        ListPreference prefQuickTask13;
+        ListPreference prefQuickTask14;
+        ListPreference prefQuickTask15;
+        ListPreference prefQuickTask16;
+        ListPreference prefQuickTask17;
+        ListPreference prefQuickTask18;
         ListPreference prefRPMMax;
         ListPreference prefContactsFilter;
         ListPreference prefPressureF;
@@ -182,70 +184,103 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
             favNumberPref.setSummary(sharedPreferences.getString("prefHomePhone",getString(R.string.pref_homePhone_summary)));
             prefCell1 = findPreference("prefCell1");
             prefCell1.setSummary(prefCell1.getEntry());
+            prefCell1.setDefaultValue(MotorcycleData.defaultCellData[0]);
             prefCell2 = findPreference("prefCell2");
             prefCell2.setSummary(prefCell2.getEntry());
+            prefCell2.setDefaultValue(MotorcycleData.defaultCellData[1]);
             prefCell3 = findPreference("prefCell3");
             prefCell3.setSummary(prefCell3.getEntry());
+            prefCell3.setDefaultValue(MotorcycleData.defaultCellData[2]);
             prefCell4 = findPreference("prefCell4");
             prefCell4.setSummary(prefCell4.getEntry());
+            prefCell4.setDefaultValue(MotorcycleData.defaultCellData[3]);
             prefCell5 = findPreference("prefCell5");
             prefCell5.setSummary(prefCell5.getEntry());
+            prefCell5.setDefaultValue(MotorcycleData.defaultCellData[4]);
             prefCell6 = findPreference("prefCell6");
             prefCell6.setSummary(prefCell6.getEntry());
+            prefCell6.setDefaultValue(MotorcycleData.defaultCellData[5]);
             prefCell7 = findPreference("prefCell7");
             prefCell7.setSummary(prefCell7.getEntry());
+            prefCell7.setDefaultValue(MotorcycleData.defaultCellData[6]);
             prefCell8 = findPreference("prefCell8");
             prefCell8.setSummary(prefCell8.getEntry());
+            prefCell8.setDefaultValue(MotorcycleData.defaultCellData[7]);
             prefCell9 = findPreference("prefCell9");
             prefCell9.setSummary(prefCell9.getEntry());
+            prefCell9.setDefaultValue(MotorcycleData.defaultCellData[8]);
             prefCell10 = findPreference("prefCell10");
             prefCell10.setSummary(prefCell10.getEntry());
+            prefCell10.setDefaultValue(MotorcycleData.defaultCellData[9]);
             prefCell11 = findPreference("prefCell11");
             prefCell11.setSummary(prefCell11.getEntry());
+            prefCell11.setDefaultValue(MotorcycleData.defaultCellData[10]);
             prefCell12 = findPreference("prefCell12");
             prefCell12.setSummary(prefCell12.getEntry());
+            prefCell12.setDefaultValue(MotorcycleData.defaultCellData[11]);
             prefCell13 = findPreference("prefCell13");
             prefCell13.setSummary(prefCell13.getEntry());
+            prefCell13.setDefaultValue(MotorcycleData.defaultCellData[12]);
             prefCell14 = findPreference("prefCell14");
             prefCell14.setSummary(prefCell14.getEntry());
+            prefCell14.setDefaultValue(MotorcycleData.defaultCellData[13]);
             prefCell15 = findPreference("prefCell15");
             prefCell15.setSummary(prefCell15.getEntry());
-            prefQuickTaskOne = findPreference("prefQuickTaskOne");
-            prefQuickTaskOne.setSummary(prefQuickTaskOne.getEntry());
-            prefQuickTaskTwo = findPreference("prefQuickTaskTwo");
-            prefQuickTaskTwo.setSummary(prefQuickTaskTwo.getEntry());
-            prefQuickTaskThree = findPreference("prefQuickTaskThree");
-            prefQuickTaskThree.setSummary(prefQuickTaskThree.getEntry());
-            prefQuickTaskFour = findPreference("prefQuickTaskFour");
-            prefQuickTaskFour.setSummary(prefQuickTaskFour.getEntry());
-            prefQuickTaskFive = findPreference("prefQuickTaskFive");
-            prefQuickTaskFive.setSummary(prefQuickTaskFive.getEntry());
-            prefQuickTaskSix = findPreference("prefQuickTaskSix");
-            prefQuickTaskSix.setSummary(prefQuickTaskSix.getEntry());
-            prefQuickTaskSeven = findPreference("prefQuickTaskSeven");
-            prefQuickTaskSeven.setSummary(prefQuickTaskSeven.getEntry());
-            prefQuickTaskEight = findPreference("prefQuickTaskEight");
-            prefQuickTaskEight.setSummary(prefQuickTaskEight.getEntry());
-            prefQuickTaskNine = findPreference("prefQuickTaskNine");
-            prefQuickTaskNine.setSummary(prefQuickTaskNine.getEntry());
-            prefQuickTaskTen = findPreference("prefQuickTaskTen");
-            prefQuickTaskTen.setSummary(prefQuickTaskTen.getEntry());
-            prefQuickTaskEleven = findPreference("prefQuickTaskEleven");
-            prefQuickTaskEleven.setSummary(prefQuickTaskEleven.getEntry());
-            prefQuickTaskTwelve = findPreference("prefQuickTaskTwelve");
-            prefQuickTaskTwelve.setSummary(prefQuickTaskTwelve.getEntry());
-            prefQuickTaskThirteen = findPreference("prefQuickTaskThirteen");
-            prefQuickTaskThirteen.setSummary(prefQuickTaskThirteen.getEntry());
-            prefQuickTaskFourteen = findPreference("prefQuickTaskFourteen");
-            prefQuickTaskFourteen.setSummary(prefQuickTaskFourteen.getEntry());
-            prefQuickTaskFifteen = findPreference("prefQuickTaskFifteen");
-            prefQuickTaskFifteen.setSummary(prefQuickTaskFifteen.getEntry());
-            prefQuickTaskSixteen = findPreference("prefQuickTaskSixteen");
-            prefQuickTaskSixteen.setSummary(prefQuickTaskSixteen.getEntry());
-            prefQuickTaskSeventeen = findPreference("prefQuickTaskSeventeen");
-            prefQuickTaskSeventeen.setSummary(prefQuickTaskSeventeen.getEntry());
-            prefQuickTaskEighteen = findPreference("prefQuickTaskEighteen");
-            prefQuickTaskEighteen.setSummary(prefQuickTaskEighteen.getEntry());
+            prefCell15.setDefaultValue(MotorcycleData.defaultCellData[14]);
+            prefQuickTask1 = findPreference("prefQuickTask1");
+            prefQuickTask1.setSummary(prefQuickTask1.getEntry());
+            prefQuickTask1.setDefaultValue(TaskActivity.defaultTaskData[0]);
+            prefQuickTask2 = findPreference("prefQuickTask2");
+            prefQuickTask2.setSummary(prefQuickTask2.getEntry());
+            prefQuickTask2.setDefaultValue(TaskActivity.defaultTaskData[1]);
+            prefQuickTask3 = findPreference("prefQuickTask3");
+            prefQuickTask3.setSummary(prefQuickTask3.getEntry());
+            prefQuickTask3.setDefaultValue(TaskActivity.defaultTaskData[2]);
+            prefQuickTask4 = findPreference("prefQuickTask4");
+            prefQuickTask4.setSummary(prefQuickTask4.getEntry());
+            prefQuickTask4.setDefaultValue(TaskActivity.defaultTaskData[3]);
+            prefQuickTask5 = findPreference("prefQuickTask5");
+            prefQuickTask5.setSummary(prefQuickTask5.getEntry());
+            prefQuickTask5.setDefaultValue(TaskActivity.defaultTaskData[4]);
+            prefQuickTask6 = findPreference("prefQuickTask6");
+            prefQuickTask6.setSummary(prefQuickTask6.getEntry());
+            prefQuickTask6.setDefaultValue(TaskActivity.defaultTaskData[5]);
+            prefQuickTask7 = findPreference("prefQuickTask7");
+            prefQuickTask7.setSummary(prefQuickTask7.getEntry());
+            prefQuickTask7.setDefaultValue(TaskActivity.defaultTaskData[6]);
+            prefQuickTask8 = findPreference("prefQuickTask8");
+            prefQuickTask8.setSummary(prefQuickTask8.getEntry());
+            prefQuickTask8.setDefaultValue(TaskActivity.defaultTaskData[7]);
+            prefQuickTask9 = findPreference("prefQuickTask9");
+            prefQuickTask9.setSummary(prefQuickTask9.getEntry());
+            prefQuickTask9.setDefaultValue(TaskActivity.defaultTaskData[8]);
+            prefQuickTask10 = findPreference("prefQuickTask10");
+            prefQuickTask10.setSummary(prefQuickTask10.getEntry());
+            prefQuickTask10.setDefaultValue(TaskActivity.defaultTaskData[9]);
+            prefQuickTask11 = findPreference("prefQuickTask11");
+            prefQuickTask11.setSummary(prefQuickTask11.getEntry());
+            prefQuickTask11.setDefaultValue(TaskActivity.defaultTaskData[10]);
+            prefQuickTask12 = findPreference("prefQuickTask12");
+            prefQuickTask12.setSummary(prefQuickTask12.getEntry());
+            prefQuickTask12.setDefaultValue(TaskActivity.defaultTaskData[11]);
+            prefQuickTask13 = findPreference("prefQuickTask13");
+            prefQuickTask13.setSummary(prefQuickTask13.getEntry());
+            prefQuickTask13.setDefaultValue(TaskActivity.defaultTaskData[12]);
+            prefQuickTask14 = findPreference("prefQuickTask14");
+            prefQuickTask14.setSummary(prefQuickTask14.getEntry());
+            prefQuickTask14.setDefaultValue(TaskActivity.defaultTaskData[13]);
+            prefQuickTask15 = findPreference("prefQuickTask15");
+            prefQuickTask15.setSummary(prefQuickTask15.getEntry());
+            prefQuickTask15.setDefaultValue(TaskActivity.defaultTaskData[14]);
+            prefQuickTask16 = findPreference("prefQuickTask16");
+            prefQuickTask16.setSummary(prefQuickTask16.getEntry());
+            prefQuickTask16.setDefaultValue(TaskActivity.defaultTaskData[15]);
+            prefQuickTask17 = findPreference("prefQuickTask17");
+            prefQuickTask17.setSummary(prefQuickTask17.getEntry());
+            prefQuickTask17.setDefaultValue(TaskActivity.defaultTaskData[16]);
+            prefQuickTask18 = findPreference("prefQuickTask18");
+            prefQuickTask18.setSummary(prefQuickTask18.getEntry());
+            prefQuickTask18.setDefaultValue(TaskActivity.defaultTaskData[17]);
             prefRPMMax = findPreference("prefRPMMax");
             prefRPMMax.setSummary(prefRPMMax.getEntry());
             prefContactsFilter = findPreference("prefContactsFilter");
@@ -354,41 +389,59 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
             if (key.equals("prefCell15")){
                 prefCell15.setSummary(prefCell15.getEntry());
             }
-            if (key.equals("prefQuickTaskOne")){
-                prefQuickTaskOne.setSummary(prefQuickTaskOne.getEntry());
+            if (key.equals("prefQuickTask1")){
+                prefQuickTask1.setSummary(prefQuickTask1.getEntry());
             }
-            if (key.equals("prefQuickTaskTwo")){
-                prefQuickTaskTwo.setSummary(prefQuickTaskTwo.getEntry());
+            if (key.equals("prefQuickTask2")){
+                prefQuickTask2.setSummary(prefQuickTask2.getEntry());
             }
-            if (key.equals("prefQuickTaskThree")){
-                prefQuickTaskThree.setSummary(prefQuickTaskThree.getEntry());
+            if (key.equals("prefQuickTask3")){
+                prefQuickTask3.setSummary(prefQuickTask3.getEntry());
             }
-            if (key.equals("prefQuickTaskFour")){
-                prefQuickTaskFour.setSummary(prefQuickTaskFour.getEntry());
+            if (key.equals("prefQuickTask4")){
+                prefQuickTask4.setSummary(prefQuickTask4.getEntry());
             }
-            if (key.equals("prefQuickTaskFive")){
-                prefQuickTaskFive.setSummary(prefQuickTaskFive.getEntry());
+            if (key.equals("prefQuickTask5")){
+                prefQuickTask5.setSummary(prefQuickTask5.getEntry());
             }
-            if (key.equals("prefQuickTaskSix")){
-                prefQuickTaskSix.setSummary(prefQuickTaskSix.getEntry());
+            if (key.equals("prefQuickTask6")){
+                prefQuickTask6.setSummary(prefQuickTask6.getEntry());
             }
-            if (key.equals("prefQuickTaskSeven")){
-                prefQuickTaskSeven.setSummary(prefQuickTaskSeven.getEntry());
+            if (key.equals("prefQuickTask7")){
+                prefQuickTask7.setSummary(prefQuickTask7.getEntry());
             }
-            if (key.equals("prefQuickTaskEight")){
-                prefQuickTaskEight.setSummary(prefQuickTaskEight.getEntry());
+            if (key.equals("prefQuickTask8")){
+                prefQuickTask8.setSummary(prefQuickTask8.getEntry());
             }
-            if (key.equals("prefQuickTaskNine")){
-                prefQuickTaskNine.setSummary(prefQuickTaskNine.getEntry());
+            if (key.equals("prefQuickTask9")){
+                prefQuickTask9.setSummary(prefQuickTask9.getEntry());
             }
-            if (key.equals("prefQuickTaskTen")){
-                prefQuickTaskTen.setSummary(prefQuickTaskTen.getEntry());
+            if (key.equals("prefQuickTask10")){
+                prefQuickTask10.setSummary(prefQuickTask10.getEntry());
             }
-            if (key.equals("prefQuickTaskEleven")){
-                prefQuickTaskEleven.setSummary(prefQuickTaskEleven.getEntry());
+            if (key.equals("prefQuickTask11")){
+                prefQuickTask11.setSummary(prefQuickTask11.getEntry());
             }
-            if (key.equals("prefQuickTaskTwelve")){
-                prefQuickTaskTwelve.setSummary(prefQuickTaskTwelve.getEntry());
+            if (key.equals("prefQuickTask12")){
+                prefQuickTask12.setSummary(prefQuickTask12.getEntry());
+            }
+            if (key.equals("prefQuickTask13")){
+                prefQuickTask13.setSummary(prefQuickTask13.getEntry());
+            }
+            if (key.equals("prefQuickTask14")){
+                prefQuickTask14.setSummary(prefQuickTask14.getEntry());
+            }
+            if (key.equals("prefQuickTask15")){
+                prefQuickTask15.setSummary(prefQuickTask15.getEntry());
+            }
+            if (key.equals("prefQuickTask16")){
+                prefQuickTask16.setSummary(prefQuickTask16.getEntry());
+            }
+            if (key.equals("prefQuickTask17")){
+                prefQuickTask17.setSummary(prefQuickTask17.getEntry());
+            }
+            if (key.equals("prefQuickTask18")){
+                prefQuickTask18.setSummary(prefQuickTask18.getEntry());
             }
             if (key.equals("prefRPMMax")){
                 prefRPMMax.setSummary(prefRPMMax.getEntry());
