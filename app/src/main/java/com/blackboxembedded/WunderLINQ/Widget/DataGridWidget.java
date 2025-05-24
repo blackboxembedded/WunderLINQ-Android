@@ -29,7 +29,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -123,9 +122,9 @@ public class DataGridWidget extends AppWidgetProvider {
                     views.setTextViewTextSize(labelId, TypedValue.COMPLEX_UNIT_SP, 11f);
                 }
                 if (isPortrait) {
-                    if (data.get(i).length() > 6) {
-                        views.setTextViewTextSize(valueId, TypedValue.COMPLEX_UNIT_SP, 30f);
-                    } else if (data.get(i).length() > 4) {
+                    if (data.get(i).length() > 4) {
+                        views.setTextViewTextSize(valueId, TypedValue.COMPLEX_UNIT_SP, 28f);
+                    } else if (data.get(i).length() > 2) {
                         views.setTextViewTextSize(valueId, TypedValue.COMPLEX_UNIT_SP, 30f);
                     } else {
                         views.setTextViewTextSize(valueId, TypedValue.COMPLEX_UNIT_SP, 34f);
@@ -199,6 +198,7 @@ public class DataGridWidget extends AppWidgetProvider {
         public void onReceive(Context context, Intent intent) {
             // Handle the received broadcast
             if (intent.getAction().equals(BluetoothLeService.ACTION_PERFORMANCE_DATA_AVAILABLE)) {
+
                 updateCellData();
 
                 // Notify the widget's GridView that the data has changed
@@ -239,9 +239,9 @@ public class DataGridWidget extends AppWidgetProvider {
                             views.setTextViewTextSize(labelId, TypedValue.COMPLEX_UNIT_SP, 11f);
                         }
                         if (isPortrait) {
-                            if (data.get(i).length() > 6) {
-                                views.setTextViewTextSize(valueId, TypedValue.COMPLEX_UNIT_SP, 30f);
-                            } else if (data.get(i).length() > 4) {
+                            if (data.get(i).length() > 4) {
+                                views.setTextViewTextSize(valueId, TypedValue.COMPLEX_UNIT_SP, 28f);
+                            } else if (data.get(i).length() > 2) {
                                 views.setTextViewTextSize(valueId, TypedValue.COMPLEX_UNIT_SP, 30f);
                             } else {
                                 views.setTextViewTextSize(valueId, TypedValue.COMPLEX_UNIT_SP, 34f);
@@ -266,7 +266,6 @@ public class DataGridWidget extends AppWidgetProvider {
 
                     appWidgetManager.updateAppWidget(appWidgetId, views);
                 }
-
             } else if (intent.getAction().equals(BluetoothLeService.ACTION_FOCUS_CHANGED)) {
                 if (sharedPrefs.getBoolean("prefFocusIndication", false)) {
                     int color = ContextCompat.getColor(context, R.color.colorPrimary);
@@ -286,7 +285,6 @@ public class DataGridWidget extends AppWidgetProvider {
                     for (int appWidgetId : appWidgetIds) {
                         appWidgetManager.updateAppWidget(appWidgetId, views);
                     }
-
                 }
             }
         }
@@ -305,7 +303,7 @@ public class DataGridWidget extends AppWidgetProvider {
             Drawable icon = (Drawable) cellObj[2];
             icons.add(icon);
             labels.add(label);
-            data.add(dataVal);
+            data.add(dataVal.replaceAll("[\\r\\n]+", ""));
         }
     }
 }
