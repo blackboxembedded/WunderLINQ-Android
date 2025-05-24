@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="@color/colorPrimary"
     android:clickable="true"
-    android:focusable="true" >
+    android:focusable="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,7 +53,7 @@
                     <TextView
                         android:id="@+id/cell_0_value"
                         android:text="@string/blank_field"
-                        style="@style/WidgetDGValueText" />
+                        style="@style/WidgetDGValueText"/>
                 </LinearLayout>
 
                 <!-- Bottom-aligned icon -->
@@ -89,7 +89,7 @@
                     <TextView
                         android:id="@+id/cell_1_value"
                         android:text="@string/blank_field"
-                        style="@style/WidgetDGValueText" />
+                        style="@style/WidgetDGValueText"/>
                 </LinearLayout>
 
                 <!-- Bottom-aligned icon -->
@@ -125,7 +125,7 @@
                     <TextView
                         android:id="@+id/cell_2_value"
                         android:text="@string/blank_field"
-                        style="@style/WidgetDGValueText" />
+                        style="@style/WidgetDGValueText"/>
                 </LinearLayout>
 
                 <!-- Bottom-aligned icon -->
@@ -161,7 +161,7 @@
                     <TextView
                         android:id="@+id/cell_3_value"
                         android:text="@string/blank_field"
-                        style="@style/WidgetDGValueText" />
+                        style="@style/WidgetDGValueText"/>
                 </LinearLayout>
 
                 <!-- Bottom-aligned icon -->
@@ -197,7 +197,7 @@
                     <TextView
                         android:id="@+id/cell_4_value"
                         android:text="@string/blank_field"
-                        style="@style/WidgetDGValueText" />
+                        style="@style/WidgetDGValueText"/>
                 </LinearLayout>
 
                 <!-- Bottom-aligned icon -->
@@ -233,7 +233,7 @@
                     <TextView
                         android:id="@+id/cell_5_value"
                         android:text="@string/blank_field"
-                        style="@style/WidgetDGValueText" />
+                        style="@style/WidgetDGValueText"/>
                 </LinearLayout>
 
                 <!-- Bottom-aligned icon -->
@@ -269,7 +269,7 @@
                     <TextView
                         android:id="@+id/cell_6_value"
                         android:text="@string/blank_field"
-                        style="@style/WidgetDGValueText" />
+                        style="@style/WidgetDGValueText"/>
                 </LinearLayout>
 
                 <!-- Bottom-aligned icon -->
@@ -305,7 +305,7 @@
                     <TextView
                         android:id="@+id/cell_7_value"
                         android:text="@string/blank_field"
-                        style="@style/WidgetDGValueText" />
+                        style="@style/WidgetDGValueText"/>
                 </LinearLayout>
 
                 <!-- Bottom-aligned icon -->
