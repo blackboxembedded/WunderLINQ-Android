@@ -289,4 +289,30 @@ public class Utils {
 
         return bitmap;
     }
+
+    public static Bitmap drawableToBitmap(Drawable drawable, int height) {
+        if (drawable == null) {
+            return null;
+        }
+
+        // Ensure a valid height
+        if (height <= 0) {
+            height = 1;
+        }
+
+        int intrinsicWidth = drawable.getIntrinsicWidth();
+        int intrinsicHeight = drawable.getIntrinsicHeight();
+
+        // Default width if no intrinsic size
+        int width = (intrinsicWidth > 0 && intrinsicHeight > 0)
+                ? (int) ((float) height * intrinsicWidth / intrinsicHeight)
+                : height; // fallback to square
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
+    }
 }

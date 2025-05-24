@@ -315,51 +315,40 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     private void showCellSelector(int cell) {
-        String[] prefStringKeys = {
-                "prefCellOne", "prefCellTwo", "prefCellThree", "prefCellFour",
-                "prefCellFive", "prefCellSix", "prefCellSeven", "prefCellEight",
-                "prefCellNine", "prefCellTen", "prefCellEleven", "prefCellTwelve",
-                "prefCellThirteen", "prefCellFourteen", "prefCellFifteen"
-        };
-        String prefStringKey = "";
-        if (cell < prefStringKeys.length) {
-            prefStringKey = prefStringKeys[cell ];
-        } else {
-            Log.d(TAG, "Invalid cell in showCellSelector");
-        }
+
+        String prefStringKey = "prefCell" + (cell + 1);
 
         final String selectedPrefStringKey = prefStringKey;
-        if (!prefStringKey.isEmpty()) {
-            final ArrayAdapter<String> adp = new ArrayAdapter<String>(MainActivity.this, R.layout.item_gridspinner,
-                    R.id.textview, getResources().getStringArray(R.array.dataPoints_array));
+        final ArrayAdapter<String> adp = new ArrayAdapter<String>(MainActivity.this, R.layout.item_gridspinner,
+                R.id.textview, getResources().getStringArray(R.array.dataPoints_array));
 
-            final Spinner sp1 = new Spinner(MainActivity.this);
-            sp1.setLayoutParams(new LinearLayout.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT));
-            sp1.setAdapter(adp);
-            sp1.setSelection(Integer.parseInt(sharedPrefs.getString(prefStringKey, String.valueOf(cell))));
-            sp1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent,
-                                           View view, int pos, long id) {
-                    SharedPreferences.Editor editor = sharedPrefs.edit();
-                    editor.putString(selectedPrefStringKey, String.valueOf(pos));
-                    editor.apply();
-                    gridChange(true);
-                    updateDisplay();
-                }
+        final Spinner sp1 = new Spinner(MainActivity.this);
+        sp1.setLayoutParams(new LinearLayout.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT));
+        sp1.setAdapter(adp);
+        sp1.setSelection(Integer.parseInt(sharedPrefs.getString(prefStringKey, String.valueOf(cell))));
+        sp1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent,
+                                       View view, int pos, long id) {
+                SharedPreferences.Editor editor = sharedPrefs.edit();
+                editor.putString(selectedPrefStringKey, String.valueOf(pos));
+                editor.apply();
+                gridChange(true);
+                updateDisplay();
+            }
 
-                @Override
-                public void onNothingSelected(AdapterView parent) {
-                    // Do nothing.
-                }
+            @Override
+            public void onNothingSelected(AdapterView parent) {
+                // Do nothing.
+            }
 
-            });
+        });
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            builder.setView(sp1);
-            builder.create().show();
-        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setView(sp1);
+        builder.create().show();
     }
+
     private void showActionBar() {
         View v = layoutInflater.inflate(R.layout.actionbar_nav_main, null);
         ActionBar actionBar = getSupportActionBar();
@@ -1120,19 +1109,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         final int templateTextViewLabelID = id.cell_label;
         final int templateImageViewID = id.cell_icon;
 
-
-        int[] defaultCellData = {
-                14, 29, 3, 0, 1,
-                2, 20, 8, 9, 7,
-                24, 28, 27, 23, 22
-        };
-        String[] numberWords = {
-                "One", "Two", "Three", "Four", "Five",
-                "Six", "Seven", "Eight", "Nine", "Ten",
-                "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen"
-        };
-
-
         final int numCellsPIP = 4;
 
         int visibleCells;
@@ -1207,14 +1183,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 break;
         }
 
-
-
-
         for (int cellNumber = 0; cellNumber < maxNumCells; cellNumber++) {
-            String prefKey = "prefCell" + numberWords[cellNumber];
-            cellDataPref[cellNumber] = MotorcycleData.DataType.values()[ Integer.parseInt(sharedPrefs.getString(prefKey, String.valueOf(defaultCellData[cellNumber]))) ];
+            String prefKey = "prefCell" + (cellNumber + 1);
+            cellDataPref[cellNumber] = MotorcycleData.DataType.values()[ Integer.parseInt(sharedPrefs.getString(prefKey, String.valueOf(MotorcycleData.defaultCellData[cellNumber]))) ];
         }
-
 
         for (int cellNumber= 0; cellNumber < visibleCells; cellNumber++) {
             //Create new cell from template

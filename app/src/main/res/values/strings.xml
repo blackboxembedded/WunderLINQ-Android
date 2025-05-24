@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name" translatable="false">WunderLINQ</string>
     <string name="automotive_app_desc" translatable="false">WunderLINQ</string>
+    <string name="widget_datagrid_name" translatable="false">WunderLINQ Data Grid</string>
     <string name="product" translatable="false">WunderLINQ</string>
     <string name="company_name" translatable="false">Black Box Embedded, LLC</string>
     <!-- <string name="device_name" translatable="false">WunderLINQ</string> -->

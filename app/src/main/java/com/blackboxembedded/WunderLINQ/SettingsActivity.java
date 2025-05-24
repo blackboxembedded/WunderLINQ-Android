@@ -107,21 +107,21 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
     {
         EditTextPreference addressPref;
         EditTextPreference favNumberPref;
-        ListPreference prefCellOne;
-        ListPreference prefCellTwo;
-        ListPreference prefCellThree;
-        ListPreference prefCellFour;
-        ListPreference prefCellFive;
-        ListPreference prefCellSix;
-        ListPreference prefCellSeven;
-        ListPreference prefCellEight;
-        ListPreference prefCellNine;
-        ListPreference prefCellTen;
-        ListPreference prefCellEleven;
-        ListPreference prefCellTwelve;
-        ListPreference prefCellThirteen;
-        ListPreference prefCellFourteen;
-        ListPreference prefCellFifteen;
+        ListPreference prefCell1;
+        ListPreference prefCell2;
+        ListPreference prefCell3;
+        ListPreference prefCell4;
+        ListPreference prefCell5;
+        ListPreference prefCell6;
+        ListPreference prefCell7;
+        ListPreference prefCell8;
+        ListPreference prefCell9;
+        ListPreference prefCell10;
+        ListPreference prefCell11;
+        ListPreference prefCell12;
+        ListPreference prefCell13;
+        ListPreference prefCell14;
+        ListPreference prefCell15;
         ListPreference prefQuickTaskOne;
         ListPreference prefQuickTaskTwo;
         ListPreference prefQuickTaskThree;
@@ -180,36 +180,36 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
             addressPref.setSummary(sharedPreferences.getString("prefHomeAddress",getString(R.string.pref_homeAddress_summary)));
             favNumberPref = findPreference("prefHomePhone");
             favNumberPref.setSummary(sharedPreferences.getString("prefHomePhone",getString(R.string.pref_homePhone_summary)));
-            prefCellOne = findPreference("prefCellOne");
-            prefCellOne.setSummary(prefCellOne.getEntry());
-            prefCellTwo = findPreference("prefCellTwo");
-            prefCellTwo.setSummary(prefCellTwo.getEntry());
-            prefCellThree = findPreference("prefCellThree");
-            prefCellThree.setSummary(prefCellThree.getEntry());
-            prefCellFour = findPreference("prefCellFour");
-            prefCellFour.setSummary(prefCellFour.getEntry());
-            prefCellFive = findPreference("prefCellFive");
-            prefCellFive.setSummary(prefCellFive.getEntry());
-            prefCellSix = findPreference("prefCellSix");
-            prefCellSix.setSummary(prefCellSix.getEntry());
-            prefCellSeven = findPreference("prefCellSeven");
-            prefCellSeven.setSummary(prefCellSeven.getEntry());
-            prefCellEight = findPreference("prefCellEight");
-            prefCellEight.setSummary(prefCellEight.getEntry());
-            prefCellNine = findPreference("prefCellNine");
-            prefCellNine.setSummary(prefCellNine.getEntry());
-            prefCellTen = findPreference("prefCellTen");
-            prefCellTen.setSummary(prefCellTen.getEntry());
-            prefCellEleven = findPreference("prefCellEleven");
-            prefCellEleven.setSummary(prefCellEleven.getEntry());
-            prefCellTwelve = findPreference("prefCellTwelve");
-            prefCellTwelve.setSummary(prefCellTwelve.getEntry());
-            prefCellThirteen = findPreference("prefCellThirteen");
-            prefCellThirteen.setSummary(prefCellThirteen.getEntry());
-            prefCellFourteen = findPreference("prefCellFourteen");
-            prefCellFourteen.setSummary(prefCellFourteen.getEntry());
-            prefCellFifteen = findPreference("prefCellFifteen");
-            prefCellFifteen.setSummary(prefCellFifteen.getEntry());
+            prefCell1 = findPreference("prefCell1");
+            prefCell1.setSummary(prefCell1.getEntry());
+            prefCell2 = findPreference("prefCell2");
+            prefCell2.setSummary(prefCell2.getEntry());
+            prefCell3 = findPreference("prefCell3");
+            prefCell3.setSummary(prefCell3.getEntry());
+            prefCell4 = findPreference("prefCell4");
+            prefCell4.setSummary(prefCell4.getEntry());
+            prefCell5 = findPreference("prefCell5");
+            prefCell5.setSummary(prefCell5.getEntry());
+            prefCell6 = findPreference("prefCell6");
+            prefCell6.setSummary(prefCell6.getEntry());
+            prefCell7 = findPreference("prefCell7");
+            prefCell7.setSummary(prefCell7.getEntry());
+            prefCell8 = findPreference("prefCell8");
+            prefCell8.setSummary(prefCell8.getEntry());
+            prefCell9 = findPreference("prefCell9");
+            prefCell9.setSummary(prefCell9.getEntry());
+            prefCell10 = findPreference("prefCell10");
+            prefCell10.setSummary(prefCell10.getEntry());
+            prefCell11 = findPreference("prefCell11");
+            prefCell11.setSummary(prefCell11.getEntry());
+            prefCell12 = findPreference("prefCell12");
+            prefCell12.setSummary(prefCell12.getEntry());
+            prefCell13 = findPreference("prefCell13");
+            prefCell13.setSummary(prefCell13.getEntry());
+            prefCell14 = findPreference("prefCell14");
+            prefCell14.setSummary(prefCell14.getEntry());
+            prefCell15 = findPreference("prefCell15");
+            prefCell15.setSummary(prefCell15.getEntry());
             prefQuickTaskOne = findPreference("prefQuickTaskOne");
             prefQuickTaskOne.setSummary(prefQuickTaskOne.getEntry());
             prefQuickTaskTwo = findPreference("prefQuickTaskTwo");
@@ -309,50 +309,50 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
             if(key.equals("prefHomePhone")) {
                 favNumberPref.setSummary(sharedPreferences.getString(key, getString(R.string.pref_homePhone_summary)));
             }
-            if (key.equals("prefCellOne")){
-                prefCellOne.setSummary(prefCellOne.getEntry());
+            if (key.equals("prefCell1")){
+                prefCell1.setSummary(prefCell1.getEntry());
             }
-            if (key.equals("prefCellTwo")){
-                prefCellTwo.setSummary(prefCellTwo.getEntry());
+            if (key.equals("prefCell2")){
+                prefCell2.setSummary(prefCell2.getEntry());
             }
-            if (key.equals("prefCellThree")){
-                prefCellThree.setSummary(prefCellThree.getEntry());
+            if (key.equals("prefCell3")){
+                prefCell3.setSummary(prefCell3.getEntry());
             }
-            if (key.equals("prefCellFour")){
-                prefCellFour.setSummary(prefCellFour.getEntry());
+            if (key.equals("prefCell4")){
+                prefCell4.setSummary(prefCell4.getEntry());
             }
-            if (key.equals("prefCellFive")){
-                prefCellFive.setSummary(prefCellFive.getEntry());
+            if (key.equals("prefCell5")){
+                prefCell5.setSummary(prefCell5.getEntry());
             }
-            if (key.equals("prefCellSix")){
-                prefCellSix.setSummary(prefCellSix.getEntry());
+            if (key.equals("prefCell6")){
+                prefCell6.setSummary(prefCell6.getEntry());
             }
-            if (key.equals("prefCellSeven")){
-                prefCellSeven.setSummary(prefCellSeven.getEntry());
+            if (key.equals("prefCell7")){
+                prefCell7.setSummary(prefCell7.getEntry());
             }
-            if (key.equals("prefCellEight")){
-                prefCellEight.setSummary(prefCellEight.getEntry());
+            if (key.equals("prefCell8")){
+                prefCell8.setSummary(prefCell8.getEntry());
             }
-            if (key.equals("prefCellNine")){
-                prefCellNine.setSummary(prefCellNine.getEntry());
+            if (key.equals("prefCell9")){
+                prefCell9.setSummary(prefCell9.getEntry());
             }
-            if (key.equals("prefCellTen")){
-                prefCellTen.setSummary(prefCellTen.getEntry());
+            if (key.equals("prefCell10")){
+                prefCell10.setSummary(prefCell10.getEntry());
             }
-            if (key.equals("prefCellEleven")){
-                prefCellEleven.setSummary(prefCellEleven.getEntry());
+            if (key.equals("prefCell11")){
+                prefCell11.setSummary(prefCell11.getEntry());
             }
-            if (key.equals("prefCellTwelve")){
-                prefCellTwelve.setSummary(prefCellTwelve.getEntry());
+            if (key.equals("prefCell12")){
+                prefCell12.setSummary(prefCell12.getEntry());
             }
-            if (key.equals("prefCellThirteen")){
-                prefCellThirteen.setSummary(prefCellThirteen.getEntry());
+            if (key.equals("prefCell13")){
+                prefCell13.setSummary(prefCell13.getEntry());
             }
-            if (key.equals("prefCellFourteen")){
-                prefCellFourteen.setSummary(prefCellFourteen.getEntry());
+            if (key.equals("prefCell14")){
+                prefCell14.setSummary(prefCell14.getEntry());
             }
-            if (key.equals("prefCellFifteen")){
-                prefCellFifteen.setSummary(prefCellFifteen.getEntry());
+            if (key.equals("prefCell15")){
+                prefCell15.setSummary(prefCell15.getEntry());
             }
             if (key.equals("prefQuickTaskOne")){
                 prefQuickTaskOne.setSummary(prefQuickTaskOne.getEntry());

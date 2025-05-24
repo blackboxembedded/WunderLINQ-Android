@@ -38,8 +38,10 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Queue;
 
 import ca.rmen.sunrisesunset.SunriseSunset;
@@ -58,6 +60,12 @@ public class MotorcycleData {
     private final static double RANGE_CRITICAL = 5.0;
     private final static double RANGE_LOW = 50.0;
     private final static int timeWindowInSeconds = 120; // Altitude observation time window in seconds
+
+    public final static int[] defaultCellData = {
+            14, 29, 3, 0, 1,
+            2, 20, 8, 9, 7,
+            24, 28, 27, 23, 22
+    };
 
     // WunderLINQ HW
     public static WLQ wlq;
@@ -102,20 +110,25 @@ public class MotorcycleData {
 
         private final int value;
 
-        // Constructor is private; cannot be called from outside the enum
+        private static final Map<Integer, DataType> VALUE_MAP = new HashMap<>();
+
+        static {
+            for (DataType type : DataType.values()) {
+                VALUE_MAP.put(type.value, type);
+            }
+        }
+
         DataType(int value) {
             this.value = value;
         }
 
-        // Getter method for the value
         public int getValue() {
             return value;
         }
 
-        public String getString() {
-            return "";
+        public static DataType fromValue(int value) {
+            return VALUE_MAP.get(value); // returns null if not found
         }
-
     }
 
     // Focus

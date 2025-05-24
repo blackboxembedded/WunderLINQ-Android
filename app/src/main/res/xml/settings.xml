@@ -43,105 +43,105 @@
             android:title="@string/pref_grid_settings_title"
             android:summary="@string/pref_grid_settings_summary">
             <ListPreference
-                android:key="prefCellOne"
+                android:key="prefCell1"
                 android:title="@string/pref_grid_one"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
                 android:defaultValue="1"
                 />
             <ListPreference
-                android:key="prefCellTwo"
+                android:key="prefCell2"
                 android:title="@string/pref_grid_two"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
                 android:defaultValue="2"
                 />
             <ListPreference
-                android:key="prefCellThree"
+                android:key="prefCell3"
                 android:title="@string/pref_grid_three"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
                 android:defaultValue="3"
                 />
             <ListPreference
-                android:key="prefCellFour"
+                android:key="prefCell4"
                 android:title="@string/pref_grid_four"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
                 android:defaultValue="4"
                 />
             <ListPreference
-                android:key="prefCellFive"
+                android:key="prefCell5"
                 android:title="@string/pref_grid_five"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
                 android:defaultValue="5"
                 />
             <ListPreference
-                android:key="prefCellSix"
+                android:key="prefCell6"
                 android:title="@string/pref_grid_six"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
                 android:defaultValue="6"
                 />
             <ListPreference
-                android:key="prefCellSeven"
+                android:key="prefCell7"
                 android:title="@string/pref_grid_seven"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
                 android:defaultValue="7"
                 />
             <ListPreference
-                android:key="prefCellEight"
+                android:key="prefCell8"
                 android:title="@string/pref_grid_eight"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
                 android:defaultValue="8"
                 />
             <ListPreference
-                android:key="prefCellNine"
+                android:key="prefCell9"
                 android:title="@string/pref_grid_nine"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
                 android:defaultValue="9"
                 />
             <ListPreference
-                android:key="prefCellTen"
+                android:key="prefCell10"
                 android:title="@string/pref_grid_ten"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
                 android:defaultValue="10"
                 />
             <ListPreference
-                android:key="prefCellEleven"
+                android:key="prefCell11"
                 android:title="@string/pref_grid_eleven"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
                 android:defaultValue="11"
                 />
             <ListPreference
-                android:key="prefCellTwelve"
+                android:key="prefCell12"
                 android:title="@string/pref_grid_twelve"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
                 android:defaultValue="12"
                 />
             <ListPreference
-                android:key="prefCellThirteen"
+                android:key="prefCell13"
                 android:title="@string/pref_grid_thirteen"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
                 android:defaultValue="13"
                 />
             <ListPreference
-                android:key="prefCellFourteen"
+                android:key="prefCell14"
                 android:title="@string/pref_grid_fourteen"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
                 android:defaultValue="14"
                 />
             <ListPreference
-                android:key="prefCellFifteen"
+                android:key="prefCell15"
                 android:title="@string/pref_grid_fifteen"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"

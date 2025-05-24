@@ -70,6 +70,15 @@
                 <category android:name="androidx.car.app.category.IOT"/>
             </intent-filter>
         </service>
+        <receiver android:name=".Widget.DataGridWidget"
+            android:exported="true"
+            android:label="@string/widget_datagrid_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/widget_datagrid_info" />
+        </receiver>
         <activity
             android:name=".AccessoryActivity"
             android:exported="false"
