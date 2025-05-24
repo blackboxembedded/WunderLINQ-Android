@@ -153,126 +153,126 @@
             android:title="@string/pref_tasks_settings_title"
             android:summary="@string/pref_tasks_settings_summary">
             <ListPreference
-                android:key="prefQuickTaskOne"
+                android:key="prefQuickTask1"
                 android:title="@string/pref_task_one"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
                 android:defaultValue="1"
                 />
             <ListPreference
-                android:key="prefQuickTaskTwo"
+                android:key="prefQuickTask2"
                 android:title="@string/pref_task_two"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
                 android:defaultValue="2"
                 />
             <ListPreference
-                android:key="prefQuickTaskThree"
+                android:key="prefQuickTask3"
                 android:title="@string/pref_task_three"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
                 android:defaultValue="3"
                 />
             <ListPreference
-                android:key="prefQuickTaskFour"
+                android:key="prefQuickTask4"
                 android:title="@string/pref_task_four"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
                 android:defaultValue="4"
                 />
             <ListPreference
-                android:key="prefQuickTaskFive"
+                android:key="prefQuickTask5"
                 android:title="@string/pref_task_five"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
                 android:defaultValue="5"
                 />
             <ListPreference
-                android:key="prefQuickTaskSix"
+                android:key="prefQuickTask6"
                 android:title="@string/pref_task_six"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
                 android:defaultValue="6"
                 />
             <ListPreference
-                android:key="prefQuickTaskSeven"
+                android:key="prefQuickTask7"
                 android:title="@string/pref_task_seven"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
                 android:defaultValue="7"
                 />
             <ListPreference
-                android:key="prefQuickTaskEight"
+                android:key="prefQuickTask8"
                 android:title="@string/pref_task_eight"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
                 android:defaultValue="8"
                 />
             <ListPreference
-                android:key="prefQuickTaskNine"
+                android:key="prefQuickTask9"
                 android:title="@string/pref_task_nine"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
                 android:defaultValue="9"
                 />
             <ListPreference
-                android:key="prefQuickTaskTen"
+                android:key="prefQuickTask10"
                 android:title="@string/pref_task_ten"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
                 android:defaultValue="10"
                 />
             <ListPreference
-                android:key="prefQuickTaskEleven"
+                android:key="prefQuickTask11"
                 android:title="@string/pref_task_eleven"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
                 android:defaultValue="11"
                 />
             <ListPreference
-                android:key="prefQuickTaskTwelve"
+                android:key="prefQuickTask12"
                 android:title="@string/pref_task_twelve"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
                 android:defaultValue="12"
                 />
             <ListPreference
-                android:key="prefQuickTaskThirteen"
+                android:key="prefQuickTask13"
                 android:title="@string/pref_task_thirteen"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
                 android:defaultValue="13"
                 />
             <ListPreference
-                android:key="prefQuickTaskFourteen"
+                android:key="prefQuickTask14"
                 android:title="@string/pref_task_fourteen"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
                 android:defaultValue="14"
                 />
             <ListPreference
-                android:key="prefQuickTaskFifteen"
+                android:key="prefQuickTask15"
                 android:title="@string/pref_task_fifteen"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
                 android:defaultValue="15"
                 />
             <ListPreference
-                android:key="prefQuickTaskSixteen"
+                android:key="prefQuickTask16"
                 android:title="@string/pref_task_sixteen"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
                 android:defaultValue="16"
                 />
             <ListPreference
-                android:key="prefQuickTaskSeventeen"
+                android:key="prefQuickTask17"
                 android:title="@string/pref_task_seventeen"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
                 android:defaultValue="17"
                 />
             <ListPreference
-                android:key="prefQuickTaskEighteen"
+                android:key="prefQuickTask18"
                 android:title="@string/pref_task_eighteen"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"

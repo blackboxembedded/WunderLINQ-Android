@@ -112,6 +112,13 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
 
     private List<Integer> mapping;
 
+    public final static int[] defaultTaskData = {
+            0, 1, 2, 3, 4,
+            5, 6, 7, 8, 9,
+            10, 11, 12, 13, 14,
+            15, 16, 17, 18
+    };
+
     private int selected = 0;
 
     private final DiscreteScrollView.ScrollStateChangeListener scrollListener = new DiscreteScrollView.ScrollStateChangeListener() {
@@ -494,132 +501,13 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
 
         mapping = new ArrayList<>();
         taskItems.clear();
-        int x = 0;
-        while (x < numTasks){
-            switch (x){
-                case 0:
-                    int selectionOne = Integer.parseInt(sharedPrefs.getString("prefQuickTaskOne", "1"));
-                    if (!(selectionOne >= numTasks)){
-                        mapping.add(selectionOne);
-                        taskItems.add(new TaskItem(iconId[selectionOne], taskTitles[selectionOne]));
-                    }
-                    break;
-                case 1:
-                    int selectionTwo = Integer.parseInt(sharedPrefs.getString("prefQuickTaskTwo", "2"));
-                    if (!(selectionTwo >= numTasks)){
-                        mapping.add(selectionTwo);
-                        taskItems.add(new TaskItem(iconId[selectionTwo], taskTitles[selectionTwo]));
-                    }
-                    break;
-                case 2:
-                    int selectionThree = Integer.parseInt(sharedPrefs.getString("prefQuickTaskThree", "3"));
-                    if (!(selectionThree >= numTasks)){
-                        mapping.add(selectionThree);
-                        taskItems.add(new TaskItem(iconId[selectionThree], taskTitles[selectionThree]));
-                    }
-                    break;
-                case 3:
-                    int selectionFour = Integer.parseInt(sharedPrefs.getString("prefQuickTaskFour", "4"));
-                    if (!(selectionFour >= numTasks)){
-                        mapping.add(selectionFour);
-                        taskItems.add(new TaskItem(iconId[selectionFour], taskTitles[selectionFour]));
-                    }
-                    break;
-                case 4:
-                    int selectionFive = Integer.parseInt(sharedPrefs.getString("prefQuickTaskFive", "5"));
-                    if (!(selectionFive >= numTasks)){
-                        mapping.add(selectionFive);
-                        taskItems.add(new TaskItem(iconId[selectionFive], taskTitles[selectionFive]));
-                    }
-                    break;
-                case 5:
-                    int selectionSix = Integer.parseInt(sharedPrefs.getString("prefQuickTaskSix", "6"));
-                    if (!(selectionSix >= numTasks)){
-                        mapping.add(selectionSix);
-                        taskItems.add(new TaskItem(iconId[selectionSix], taskTitles[selectionSix]));
-                    }
-                    break;
-                case 6:
-                    int selectionSeven = Integer.parseInt(sharedPrefs.getString("prefQuickTaskSeven", "7"));
-                    if (!(selectionSeven >= numTasks)){
-                        mapping.add(selectionSeven);
-                        taskItems.add(new TaskItem(iconId[selectionSeven], taskTitles[selectionSeven]));
-                    }
-                    break;
-                case 7:
-                    int selectionEight = Integer.parseInt(sharedPrefs.getString("prefQuickTaskEight", "8"));
-                    if (!(selectionEight >= numTasks)){
-                        mapping.add(selectionEight);
-                        taskItems.add(new TaskItem(iconId[selectionEight], taskTitles[selectionEight]));
-                    }
-                    break;
-                case 8:
-                    int selectionNine = Integer.parseInt(sharedPrefs.getString("prefQuickTaskNine", "9"));
-                    if (!(selectionNine >= numTasks)){
-                        mapping.add(selectionNine);
-                        taskItems.add(new TaskItem(iconId[selectionNine], taskTitles[selectionNine]));
-                    }
-                    break;
-                case 9:
-                    int selectionTen = Integer.parseInt(sharedPrefs.getString("prefQuickTaskTen", "10"));
-                    if (!(selectionTen >= numTasks)){
-                        mapping.add(selectionTen);
-                        taskItems.add(new TaskItem(iconId[selectionTen], taskTitles[selectionTen]));
-                    }
-                    break;
-                case 10:
-                    int selectionEleven = Integer.parseInt(sharedPrefs.getString("prefQuickTaskEleven", "11"));
-                    if (!(selectionEleven >= numTasks)){
-                        mapping.add(selectionEleven);
-                        taskItems.add(new TaskItem(iconId[selectionEleven], taskTitles[selectionEleven]));
-                    }
-                    break;
-                case 11:
-                    int selectionTwelve = Integer.parseInt(sharedPrefs.getString("prefQuickTaskTwelve", "12"));
-                    if (!(selectionTwelve >= numTasks)){
-                        mapping.add(selectionTwelve);
-                        taskItems.add(new TaskItem(iconId[selectionTwelve], taskTitles[selectionTwelve]));
-                    }
-                    break;
-                case 12:
-                    int selectionThirteen = Integer.parseInt(sharedPrefs.getString("prefQuickTaskThirteen", "13"));
-                    if (!(selectionThirteen >= numTasks)){
-                        mapping.add(selectionThirteen);
-                        taskItems.add(new TaskItem(iconId[selectionThirteen], taskTitles[selectionThirteen]));
-                    }
-                    break;
-                case 13:
-                    int selectionFourteen = Integer.parseInt(sharedPrefs.getString("prefQuickTaskFourteen", "14"));
-                    if (!(selectionFourteen >= numTasks)){
-                        mapping.add(selectionFourteen);
-                        taskItems.add(new TaskItem(iconId[selectionFourteen], taskTitles[selectionFourteen]));
-                    }
-                    break;
-                case 14:
-                    int selectionFifteen = Integer.parseInt(sharedPrefs.getString("prefQuickTaskFifteen", "15"));
-                    if (!(selectionFifteen >= numTasks)){
-                        mapping.add(selectionFifteen);
-                        taskItems.add(new TaskItem(iconId[selectionFifteen], taskTitles[selectionFifteen]));
-                    }
-                    break;
-                case 15:
-                    int selectionSixteen = Integer.parseInt(sharedPrefs.getString("prefQuickTaskSixteen", "16"));
-                    if (!(selectionSixteen >= numTasks)){
-                        mapping.add(selectionSixteen);
-                        taskItems.add(new TaskItem(iconId[selectionSixteen], taskTitles[selectionSixteen]));
-                    }
-                    break;
-                case 16:
-                    int selectionSeventeen = Integer.parseInt(sharedPrefs.getString("prefQuickTaskSeventeen", "17"));
-                    if (!(selectionSeventeen >= numTasks)){
-                        mapping.add(selectionSeventeen);
-                        taskItems.add(new TaskItem(iconId[selectionSeventeen], taskTitles[selectionSeventeen]));
-                    }
-                    break;
-                default:
-                    break;
+
+        for (int i = 0; i < 18; i++) {
+            int selection = Integer.parseInt(sharedPrefs.getString("prefQuickTask" + (i + 1), String.valueOf(defaultTaskData[i])));
+            if (!(selection >= numTasks)){
+                mapping.add(selection);
+                taskItems.add(new TaskItem(iconId[selection], taskTitles[selection]));
             }
-            x = x + 1;
         }
         adapter.notifyDataSetChanged();
     }
