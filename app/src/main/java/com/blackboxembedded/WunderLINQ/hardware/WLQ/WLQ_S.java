@@ -34,7 +34,7 @@ public class WLQ_S extends WLQ_BASE {
 
     public static String hardwareVersion1 = "WLQS1.0";
 
-    private static int configFlashSize = 37;
+    private static int configFlashSize = 41;
     private static int firmwareVersionMajor_INDEX = 3;
     private static int firmwareVersionMinor_INDEX = 4;
 
@@ -46,6 +46,10 @@ public class WLQ_S extends WLQ_BASE {
             0x01, 0x00, 0x4F, 0x01, 0x00, 0x28, // Wheel Right - Right Arrow
             0x01, 0x00, 0x29, 0x00, 0x00, 0x00, // Rocker2 Up - FX1
             0x01, 0x00, 0x28, 0x00, 0x00, 0x00, // Rocker2 Down - FX2
+            0x00,                               // PDM Channel 1 Mode
+            0x00,                               // PDM Channel 2 Mode
+            0x00,                               // PDM Channel 3 Mode
+            0x00                                // PDM Channel 4 Mode
     };
 
     public static final int KEYMODE = 100;
@@ -62,10 +66,13 @@ public class WLQ_S extends WLQ_BASE {
     public static final int fx1Long = 35;
     public static final int fx2 = 36;
     public static final int fx2Long = 37;
+    public static final int pdmChannel1 = 50;
+    public static final int pdmChannel2 = 51;
+    public static final int pdmChannel3 = 52;
+    public static final int pdmChannel4 = 53;
 
     // Config message
     private static int keyMode_INDEX = 5;
-
     private static int sensitivity_INDEX = 0;
     private static int upKeyType_INDEX = 1;
     private static int upKeyModifier_INDEX = 2;
@@ -103,6 +110,11 @@ public class WLQ_S extends WLQ_BASE {
     private static int fx2LongKeyType_INDEX = 34;
     private static int fx2LongKeyModifier_INDEX = 35;
     private static int fx2LongKey_INDEX = 36;
+    public static int pdmChannel1_INDEX = 37;
+    public static int pdmChannel2_INDEX = 38;
+    public static int pdmChannel3_INDEX = 39;
+    public static int pdmChannel4_INDEX = 40;
+    private static int accessories_INDEX = 44;
 
     // PDM Status message
     private static int statusSize = 6;
@@ -163,6 +175,12 @@ public class WLQ_S extends WLQ_BASE {
     public static byte fx2LongKeyType;
     public static byte fx2LongKeyModifier;
     public static byte fx2LongKey;
+
+    public static byte pdmChannel1Setting;
+    public static byte pdmChannel2Setting;
+    public static byte pdmChannel3Setting;
+    public static byte pdmChannel4Setting;
+    public static byte accessories;
 
     public WLQ_S(byte[] bytes) {
         wunderLINQConfig = new byte[bytes.length];
@@ -228,6 +246,11 @@ public class WLQ_S extends WLQ_BASE {
             fx2LongKeyType = flashConfig[fx2LongKeyType_INDEX];
             fx2LongKeyModifier = flashConfig[fx2LongKeyModifier_INDEX];
             fx2LongKey = flashConfig[fx2LongKey_INDEX];
+            pdmChannel1Setting = flashConfig[pdmChannel1_INDEX];
+            pdmChannel2Setting = flashConfig[pdmChannel2_INDEX];
+            pdmChannel3Setting = flashConfig[pdmChannel3_INDEX];
+            pdmChannel4Setting = flashConfig[pdmChannel4_INDEX];
+            accessories = bytes[accessories_INDEX];
         }
     }
 
@@ -262,6 +285,14 @@ public class WLQ_S extends WLQ_BASE {
                 return MyApplication.getContext().getString(R.string.fx2_label);
             case fx2Long:
                 return MyApplication.getContext().getString(R.string.fx2_long_label);
+            case pdmChannel1:
+                return MyApplication.getContext().getString(R.string.pdm_channel1_label);
+            case pdmChannel2:
+                return MyApplication.getContext().getString(R.string.pdm_channel2_label);
+            case pdmChannel3:
+                return MyApplication.getContext().getString(R.string.pdm_channel3_label);
+            case pdmChannel4:
+                return MyApplication.getContext().getString(R.string.pdm_channel4_label);
             default:
                 Log.d(TAG, "Unknown ActionID");
                 return "";
@@ -405,6 +436,46 @@ public class WLQ_S extends WLQ_BASE {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
+                }
+            case pdmChannel1:
+                int index1 = java.util.Arrays.asList(
+                        MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_value_array)
+                ).indexOf(String.format("0x%02X", pdmChannel1Setting));
+                if (index1 != -1) {
+                    return MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_array)[index1];
+                } else {
+                    Log.d(TAG, "Unknown pdmChannel1Setting Value: " + String.format("0x%02X", pdmChannel1Setting));
+                    return "";
+                }
+            case pdmChannel2:
+                int index2 = java.util.Arrays.asList(
+                        MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_value_array)
+                ).indexOf(String.format("0x%02X", pdmChannel2Setting));
+                if (index2 != -1) {
+                    return MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_array)[index2];
+                } else {
+                    Log.d(TAG, "Unknown pdmChannel2Setting Value: " + String.format("0x%02X", pdmChannel2Setting));
+                    return "";
+                }
+            case pdmChannel3:
+                int index3 = java.util.Arrays.asList(
+                        MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_value_array)
+                ).indexOf(String.format("0x%02X", pdmChannel3Setting));
+                if (index3 != -1) {
+                    return MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_array)[index3];
+                } else {
+                    Log.d(TAG, "Unknown pdmChannel3Setting Value: " + String.format("0x%02X", pdmChannel3Setting));
+                    return "";
+                }
+            case pdmChannel4:
+                int index4 = java.util.Arrays.asList(
+                        MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_value_array)
+                ).indexOf(String.format("0x%02X", pdmChannel4Setting));
+                if (index4 != -1) {
+                    return MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_array)[index4];
+                } else {
+                    Log.d(TAG, "Unknown pdmChannel4Setting Value: " + String.format("0x%02X", pdmChannel4Setting));
+                    return "";
                 }
             default:
                 Log.d(TAG, "Unknown ActionID");
@@ -671,6 +742,11 @@ public class WLQ_S extends WLQ_BASE {
     @Override
     public int getHardwareType() {
         return WLQ.TYPE_S;
+    }
+
+    @Override
+    public byte getAccessories() {
+        return accessories;
     }
 
     @Override

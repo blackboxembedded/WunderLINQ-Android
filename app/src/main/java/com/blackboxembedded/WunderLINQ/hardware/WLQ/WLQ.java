@@ -47,6 +47,7 @@ public interface WLQ {
     public byte[] getConfig();
     public byte[] getTempConfig();
 
+    public byte getAccessories();
     public void setAccActive(int active);
     public byte[] getStatus();
     public void setStatus(byte[] status);

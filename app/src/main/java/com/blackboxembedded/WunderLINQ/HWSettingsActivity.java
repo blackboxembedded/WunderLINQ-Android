@@ -136,7 +136,10 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                 startActivity(intent);
             }
         } else {
-            if (actionID == WLQ_N.KEYMODE || actionID == WLQ_X.KEYMODE || actionID == WLQ_S.KEYMODE || actionID == WLQ_U.KEYMODE) {
+            if (actionID == WLQ_N.KEYMODE || actionID == WLQ_X.KEYMODE || actionID == WLQ_S.KEYMODE || actionID == WLQ_U.KEYMODE
+                    || actionID == WLQ_S.pdmChannel1 || actionID == WLQ_S.pdmChannel2 || actionID == WLQ_S.pdmChannel3 || actionID == WLQ_S.pdmChannel4
+                    || actionID == WLQ_U.pdmChannel1 || actionID == WLQ_U.pdmChannel2 || actionID == WLQ_U.pdmChannel3 || actionID == WLQ_U.pdmChannel4
+                    || actionID == WLQ_X.pdmChannel1 || actionID == WLQ_X.pdmChannel2 || actionID == WLQ_X.pdmChannel3 || actionID == WLQ_X.pdmChannel4) {
                 Intent intent = new Intent(HWSettingsActivity.this, HWSettingsActionActivity.class);
                 intent.putExtra("ACTIONID", actionID);
                 startActivity(intent);
@@ -249,6 +252,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                     }
                 }
             } else if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_X) {
+                byte accessories = 0x00;
                 if (MotorcycleData.wlq.getFirmwareVersion() != null) {
                     fwVersionTV.setText(getString(R.string.fw_version_label) + " " + MotorcycleData.wlq.getFirmwareVersion());
                 }
@@ -279,7 +283,11 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                     actionItems.add(new ActionItem(WLQ_X.RTKMuteDoublePress, MotorcycleData.wlq.getActionName(WLQ_X.RTKMuteDoublePress), MotorcycleData.wlq.getActionValue(WLQ_X.RTKMuteDoublePress)));
                     actionItems.add(new ActionItem(WLQ_X.RTKDisplayOff, MotorcycleData.wlq.getActionName(WLQ_X.RTKDisplayOff), MotorcycleData.wlq.getActionValue(WLQ_X.RTKDisplayOff)));
                     actionItems.add(new ActionItem(WLQ_X.RTKDisplayOffDoublePress, MotorcycleData.wlq.getActionName(WLQ_X.RTKDisplayOffDoublePress), MotorcycleData.wlq.getActionValue(WLQ_X.RTKDisplayOffDoublePress)));
-
+                    if (MotorcycleData.wlq.getAccessories() > 0){
+                        actionItems.add(new ActionItem(-1, getString(R.string.pdm_label), ""));  //Power Controller
+                        actionItems.add(new ActionItem(WLQ_X.pdmChannel1, MotorcycleData.wlq.getActionName(WLQ_X.pdmChannel1), MotorcycleData.wlq.getActionValue(WLQ_X.pdmChannel1)));
+                        actionItems.add(new ActionItem(WLQ_X.pdmChannel2, MotorcycleData.wlq.getActionName(WLQ_X.pdmChannel2), MotorcycleData.wlq.getActionValue(WLQ_X.pdmChannel2)));
+                    }
                     resetButton.setVisibility(View.INVISIBLE);
                     hwConfigBtn.setVisibility(View.INVISIBLE);
                     if (MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_CUSTOM()) {
@@ -317,6 +325,11 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                     actionItems.add(new ActionItem(WLQ_S.fx1Long, MotorcycleData.wlq.getActionName(WLQ_S.fx1Long), MotorcycleData.wlq.getActionValue(WLQ_S.fx1Long)));
                     actionItems.add(new ActionItem(WLQ_S.fx2, MotorcycleData.wlq.getActionName(WLQ_S.fx2), MotorcycleData.wlq.getActionValue(WLQ_S.fx2)));
                     actionItems.add(new ActionItem(WLQ_S.fx2Long, MotorcycleData.wlq.getActionName(WLQ_S.fx2Long), MotorcycleData.wlq.getActionValue(WLQ_S.fx2Long)));
+                    if (MotorcycleData.wlq.getAccessories() > 0){
+                        actionItems.add(new ActionItem(-1, getString(R.string.pdm_label), ""));  //Power Controller
+                        actionItems.add(new ActionItem(WLQ_S.pdmChannel1, MotorcycleData.wlq.getActionName(WLQ_S.pdmChannel1), MotorcycleData.wlq.getActionValue(WLQ_S.pdmChannel1)));
+                        actionItems.add(new ActionItem(WLQ_S.pdmChannel2, MotorcycleData.wlq.getActionName(WLQ_S.pdmChannel2), MotorcycleData.wlq.getActionValue(WLQ_S.pdmChannel2)));
+                    }
 
                     resetButton.setVisibility(View.INVISIBLE);
                     hwConfigBtn.setVisibility(View.INVISIBLE);
@@ -348,7 +361,11 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                     actionItems.add(new ActionItem(WLQ_U.left, MotorcycleData.wlq.getActionName(WLQ_U.left), MotorcycleData.wlq.getActionValue(WLQ_U.left)));
                     actionItems.add(new ActionItem(WLQ_U.fx1, MotorcycleData.wlq.getActionName(WLQ_U.fx1), MotorcycleData.wlq.getActionValue(WLQ_U.fx1)));
                     actionItems.add(new ActionItem(WLQ_U.fx2, MotorcycleData.wlq.getActionName(WLQ_U.fx2), MotorcycleData.wlq.getActionValue(WLQ_U.fx2)));
-
+                    if (MotorcycleData.wlq.getAccessories() > 0){
+                        actionItems.add(new ActionItem(-1, getString(R.string.pdm_label), ""));  //Power Controller
+                        actionItems.add(new ActionItem(WLQ_U.pdmChannel1, MotorcycleData.wlq.getActionName(WLQ_U.pdmChannel1), MotorcycleData.wlq.getActionValue(WLQ_U.pdmChannel1)));
+                        actionItems.add(new ActionItem(WLQ_U.pdmChannel2, MotorcycleData.wlq.getActionName(WLQ_U.pdmChannel2), MotorcycleData.wlq.getActionValue(WLQ_U.pdmChannel2)));
+                    }
                     resetButton.setVisibility(View.INVISIBLE);
                     hwConfigBtn.setVisibility(View.INVISIBLE);
                     if (MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_CUSTOM()) {

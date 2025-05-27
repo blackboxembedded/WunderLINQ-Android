@@ -52,6 +52,7 @@ public class HWSettingsRecyclerViewAdapter extends RecyclerView.Adapter<HWSettin
         holder.actionKeyTV.setText(key);
         if(key.equals("")){
             holder.actionLabelTV.setTextSize(32);
+            holder.actionKeyTV.setVisibility(View.GONE);
         } else {
             holder.actionLabelTV.setTextSize(21);
         }

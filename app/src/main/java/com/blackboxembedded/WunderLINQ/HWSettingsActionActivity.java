@@ -410,19 +410,31 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
             actionTypeSP.setSelection(WLQ_N.fullSensitivity);
-        } else if (actionID == WLQ_U.ORIENTATION){
+        } else if (actionID == WLQ_U.ORIENTATION) {
             actionTypeSP.setAdapter(orientations);
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
-            if(WLQ_U.orientation == 0x00){
+            if (WLQ_U.orientation == 0x00) {
                 actionTypeSP.setSelection(0);
-            } else if(WLQ_U.orientation == 0x01){
+            } else if (WLQ_U.orientation == 0x01) {
                 actionTypeSP.setSelection(1);
-            } else if(WLQ_U.orientation == 0x02){
+            } else if (WLQ_U.orientation == 0x02) {
                 actionTypeSP.setSelection(2);
-            } else if(WLQ_U.orientation == 0x04){
+            } else if (WLQ_U.orientation == 0x04) {
                 actionTypeSP.setSelection(3);
             }
+        } else if (actionID == WLQ_S.pdmChannel1 || actionID == WLQ_U.pdmChannel1 || actionID == WLQ_X.pdmChannel1
+        || actionID == WLQ_S.pdmChannel2 || actionID == WLQ_U.pdmChannel2 || actionID == WLQ_X.pdmChannel2
+        || actionID == WLQ_S.pdmChannel3 || actionID == WLQ_U.pdmChannel3 || actionID == WLQ_X.pdmChannel3
+        || actionID == WLQ_S.pdmChannel4 || actionID == WLQ_U.pdmChannel4 || actionID == WLQ_X.pdmChannel4) {
+            actionTypeSP.setAdapter(new ArrayAdapter<String>(this,
+                    R.layout.item_hwsettings_spinners, getResources().getStringArray(R.array.pdm_mode_array)));
+            actionKeySP.setVisibility(View.INVISIBLE);
+            actionModifiersSP.setVisibility(View.INVISIBLE);
+            int index = java.util.Arrays.asList(
+                    MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_array)
+            ).indexOf(MotorcycleData.wlq.getActionValue(actionID));
+            actionTypeSP.setSelection(index);
         } else {    // Keys
             if (MotorcycleData.wlq.getHardwareVersion() != null) {
                 if (MotorcycleData.wlq.getHardwareVersion().equals(WLQ_N.hardwareVersion1)){
