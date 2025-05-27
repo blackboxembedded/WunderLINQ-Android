@@ -73,7 +73,7 @@ public class WLQ_S extends WLQ_BASE {
 
     // Config message
     private static int keyMode_INDEX = 5;
-    private static int sensitivity_INDEX = 0;
+    public static int sensitivity_INDEX = 0;
     private static int upKeyType_INDEX = 1;
     private static int upKeyModifier_INDEX = 2;
     private static int upKey_INDEX = 3;
@@ -294,7 +294,7 @@ public class WLQ_S extends WLQ_BASE {
             case pdmChannel4:
                 return MyApplication.getContext().getString(R.string.pdm_channel4_label);
             default:
-                Log.d(TAG, "Unknown ActionID");
+                Log.d(TAG, "getActionName: Unknown ActionID " + id);
                 return "";
         }
     }
@@ -478,7 +478,7 @@ public class WLQ_S extends WLQ_BASE {
                     return "";
                 }
             default:
-                Log.d(TAG, "Unknown ActionID");
+                Log.d(TAG, "getActionValue: Unknown ActionID " + id);
                 return "";
         }
     }
@@ -511,7 +511,7 @@ public class WLQ_S extends WLQ_BASE {
             case fx2Long:
                 return fx2LongKeyType;
             default:
-                Log.d(TAG, "Unknown ActionID");
+                Log.d(TAG, "getActionKeyType: Unknown ActionID " + id);
                 return 0x00;
         }
     }
@@ -544,7 +544,7 @@ public class WLQ_S extends WLQ_BASE {
             case fx2Long:
                 return fx2LongKey;
             default:
-                Log.d(TAG, "Unknown ActionID");
+                Log.d(TAG, "getActionKey: Unknown ActionID " + id);
                 return 0x00;
         }
     }
@@ -578,6 +578,7 @@ public class WLQ_S extends WLQ_BASE {
                 return fx2LongKeyModifier;
             default:
                 Log.d(TAG, "Unknown ActionID");
+                Log.d(TAG, "getActionKeyModifiers: Unknown ActionID " + id);
                 return 0x00;
         }
     }
@@ -646,7 +647,7 @@ public class WLQ_S extends WLQ_BASE {
                 tempConfig[fx2LongKey_INDEX] = key;
                 break;
             default:
-                Log.d(TAG, "Unknown ActionID");
+                Log.d(TAG, "setActionKey: Unknown ActionID " + id);
                 break;
         }
     }

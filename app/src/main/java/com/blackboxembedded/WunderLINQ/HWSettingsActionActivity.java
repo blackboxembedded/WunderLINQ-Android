@@ -150,6 +150,11 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                     } else {
                         saveBT.setVisibility(View.VISIBLE);
                     }
+                } else if (actionID == WLQ_S.pdmChannel1 || actionID == WLQ_U.pdmChannel1 || actionID == WLQ_X.pdmChannel1
+                        || actionID == WLQ_S.pdmChannel2 || actionID == WLQ_U.pdmChannel2 || actionID == WLQ_X.pdmChannel2
+                        || actionID == WLQ_S.pdmChannel3 || actionID == WLQ_U.pdmChannel3 || actionID == WLQ_X.pdmChannel3
+                        || actionID == WLQ_S.pdmChannel4 || actionID == WLQ_U.pdmChannel4 || actionID == WLQ_X.pdmChannel4){
+                    //TODO
                 } else {
                     if (pos == MotorcycleData.wlq.UNDEFINED()){
                         actionKeySP.setVisibility(View.INVISIBLE);
@@ -210,6 +215,11 @@ public class HWSettingsActionActivity extends AppCompatActivity {
 
                 } else if (actionID == WLQ_U.ORIENTATION){
 
+                } else if (actionID == WLQ_S.pdmChannel1 || actionID == WLQ_U.pdmChannel1 || actionID == WLQ_X.pdmChannel1
+                        || actionID == WLQ_S.pdmChannel2 || actionID == WLQ_U.pdmChannel2 || actionID == WLQ_X.pdmChannel2
+                        || actionID == WLQ_S.pdmChannel3 || actionID == WLQ_U.pdmChannel3 || actionID == WLQ_X.pdmChannel3
+                        || actionID == WLQ_S.pdmChannel4 || actionID == WLQ_U.pdmChannel4 || actionID == WLQ_X.pdmChannel4){
+
                 } else {
                     if (actionTypeSP.getSelectedItemPosition() == MotorcycleData.wlq.KEYBOARD_HID()) {
                         if (MotorcycleData.wlq.getActionKeyType(actionID) == MotorcycleData.wlq.KEYBOARD_HID()) {
@@ -260,6 +270,11 @@ public class HWSettingsActionActivity extends AppCompatActivity {
 
                 } else if (actionID == WLQ_U.ORIENTATION){
 
+                } else if (actionID == WLQ_S.pdmChannel1 || actionID == WLQ_U.pdmChannel1 || actionID == WLQ_X.pdmChannel1
+                        || actionID == WLQ_S.pdmChannel2 || actionID == WLQ_U.pdmChannel2 || actionID == WLQ_X.pdmChannel2
+                        || actionID == WLQ_S.pdmChannel3 || actionID == WLQ_U.pdmChannel3 || actionID == WLQ_X.pdmChannel3
+                        || actionID == WLQ_S.pdmChannel4 || actionID == WLQ_U.pdmChannel4 || actionID == WLQ_X.pdmChannel4){
+
                 } else {
                     saveBT.setVisibility(View.VISIBLE);
                 }
@@ -309,7 +324,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 } else if (actionID == WLQ_X.fullLongPressSensitivity){
                     MotorcycleData.wlq.getTempConfig()[WLQ_X.fullSensitivity_INDEX] = (byte)((actionTypeSP.getSelectedItemPosition() + 1) / 50);
                 } else if (actionID == WLQ_S.fullLongPressSensitivity){
-                    //MotorcycleData.wlq.getTempConfig()[WLQ_S.fullSensitivity_INDEX] = (byte)((actionTypeSP.getSelectedItemPosition() + 1) / 50);
+                    MotorcycleData.wlq.getTempConfig()[WLQ_S.sensitivity_INDEX] = (byte)((actionTypeSP.getSelectedItemPosition() + 1) / 50);
                 } else if (actionID == WLQ_U.ORIENTATION){
                     if(actionTypeSP.getSelectedItemPosition() == 0){
                         MotorcycleData.wlq.getTempConfig()[WLQ_U.orientation_INDEX] = 0x00;
@@ -427,6 +442,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         || actionID == WLQ_S.pdmChannel2 || actionID == WLQ_U.pdmChannel2 || actionID == WLQ_X.pdmChannel2
         || actionID == WLQ_S.pdmChannel3 || actionID == WLQ_U.pdmChannel3 || actionID == WLQ_X.pdmChannel3
         || actionID == WLQ_S.pdmChannel4 || actionID == WLQ_U.pdmChannel4 || actionID == WLQ_X.pdmChannel4) {
+            Log.d(TAG, "pdmChannelactionID: " + actionID);
             actionTypeSP.setAdapter(new ArrayAdapter<String>(this,
                     R.layout.item_hwsettings_spinners, getResources().getStringArray(R.array.pdm_mode_array)));
             actionKeySP.setVisibility(View.INVISIBLE);
