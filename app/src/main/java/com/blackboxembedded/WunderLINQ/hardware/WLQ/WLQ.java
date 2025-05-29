@@ -18,46 +18,94 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package com.blackboxembedded.WunderLINQ.hardware.WLQ;
 
 public interface WLQ {
-    public int TYPE_N = 1;
-    public int TYPE_X = 2;
-    public int TYPE_S = 3;
-    public int TYPE_U = 4;
+    int TYPE_N = 1;
+    int TYPE_X = 2;
+    int TYPE_S = 3;
+    int TYPE_U = 4;
 
-    public byte[] GET_CONFIG_CMD();
+    byte KEYBOARD_HID = 0x01;
+    byte CONSUMER_HID = 0x02;
+    byte UNDEFINED = 0x00;
 
-    public byte[] WRITE_CONFIG_CMD();
-    public byte[] WRITE_MODE_CMD();
-    public byte[] CMD_EOM();
+    int USB = 1;
+    int doublePressSensitivity = 2;
+    int longPressSensitivity = 3;
+    int RTKPage = 4;
+    int RTKPageDoublePress = 5;
+    int RTKZoomPlus = 6;
+    int RTKZoomPlusDoublePress = 7;
+    int RTKZoomMinus = 8;
+    int RTKZoomMinusDoublePress = 9;
+    int RTKSpeak = 10;
+    int RTKSpeakDoublePress = 11;
+    int RTKMute = 12;
+    int RTKMuteDoublePress = 13;
+    int RTKDisplayOff = 14;
+    int RTKDisplayOffDoublePress = 15;
+    int fullScrollUp = 16;
+    int fullScrollDown = 17;
+    int fullToggleRight = 18;
+    int fullToggleRightLongPress = 19;
+    int fullToggleLeft = 20;
+    int fullToggleLeftLongPress = 21;
+    int fullSignalCancel = 22;
+    int fullSignalCancelLongPress = 23;
+    int up = 26;
+    int upLong = 27;
+    int down = 28;
+    int downLong = 29;
+    int right = 30;
+    int rightLong = 31;
+    int left = 32;
+    int leftLong = 33;
+    int fx1 = 34;
+    int fx1Long = 35;
+    int fx2 = 36;
+    int fx2Long = 37;
+    int pdmChannel1 = 50;
+    int pdmChannel2 = 51;
+    int pdmChannel3 = 52;
+    int pdmChannel4 = 53;
+    int KEYMODE = 100;
+    int ORIENTATION = 101;
 
-    public byte KEYMODE_DEFAULT();
-    public byte KEYMODE_CUSTOM();
-    public byte KEYMODE_MEDIA();
-    public byte KEYMODE_DMD2();
+    byte[] GET_CONFIG_CMD();
 
-    public byte KEYBOARD_HID();
-    public byte CONSUMER_HID();
-    public byte UNDEFINED();
+    byte[] WRITE_CONFIG_CMD();
+    byte[] WRITE_MODE_CMD();
+    byte[] CMD_EOM();
 
-    public int getHardwareType();
-    public void setHardwareVersion(String version);
-    public String getHardwareVersion();
-    public String getFirmwareVersion();
+    byte KEYMODE_DEFAULT();
+    byte KEYMODE_CUSTOM();
+    byte KEYMODE_MEDIA();
+    byte KEYMODE_DMD2();
 
-    public byte[] getFlash();
-    public byte[] getConfig();
-    public byte[] getTempConfig();
+    byte KEYBOARD_HID();
+    byte CONSUMER_HID();
+    byte UNDEFINED();
 
-    public byte getAccessories();
-    public void setAccActive(int active);
-    public byte[] getStatus();
-    public void setStatus(byte[] status);
+    int getHardwareType();
+    void setHardwareVersion(String version);
+    String getHardwareVersion();
+    String getFirmwareVersion();
 
-    public byte getKeyMode();
+    byte[] getFlash();
+    byte[] getDefaultConfig();
+    byte[] getConfig();
+    byte[] getTempConfig();
 
-    public String getActionName(int id);
-    public String getActionValue(int id);
-    public byte getActionKeyType(int id);
-    public byte getActionKey(int id);
-    public byte getActionKeyModifiers(int id);
-    public void setActionKey(int id, byte type, byte modifiers, byte key);
+    byte getAccessories();
+    void setAccActive(int active);
+    byte[] getStatus();
+    void setStatus(byte[] status);
+
+    byte getKeyMode();
+
+    String getActionName(int id);
+    String getActionValue(int id);
+    void setActionValue(int id, byte value);
+    byte getActionKeyType(int id);
+    byte getActionKey(int id);
+    byte getActionKeyModifiers(int id);
+    void setActionKey(int id, byte type, byte modifiers, byte key);
 }

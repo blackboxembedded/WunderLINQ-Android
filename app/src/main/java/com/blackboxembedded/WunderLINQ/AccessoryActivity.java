@@ -362,6 +362,7 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
         }
         if (MotorcycleData.wlq != null){
             if (MotorcycleData.wlq.getStatus() != null) {
+                //TODO: Replace device specific code
                 channelOneHeaderTV.setText(sharedPrefs.getString("ACC_CHAN_1", getString(R.string.default_accessory_one_name)));
                 channelOneHeaderET.setText(sharedPrefs.getString("ACC_CHAN_1", getString(R.string.default_accessory_one_name)));
                 channelTwoHeaderTV.setText(sharedPrefs.getString("ACC_CHAN_2", getString(R.string.default_accessory_two_name)));
