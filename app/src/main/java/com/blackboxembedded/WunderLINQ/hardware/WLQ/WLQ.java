@@ -27,6 +27,10 @@ public interface WLQ {
     byte CONSUMER_HID = 0x02;
     byte UNDEFINED = 0x00;
 
+    int ACTIVE_CHAN_INDEX = 1;
+    int ACC_PDM_CHANNEL1_VAL_RAW_INDEX = 2;
+    int ACC_PDM_CHANNEL2_VAL_RAW_INDEX = 3;
+
     int USB = 1;
     int doublePressSensitivity = 2;
     int longPressSensitivity = 3;

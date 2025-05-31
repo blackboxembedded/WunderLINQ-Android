@@ -100,9 +100,9 @@ public class WLQ_S extends WLQ_BASE {
     // PDM Status message
     private static int statusSize = 6;
     private static int NUM_CHAN_INDEX = 0;
-    public static int ACTIVE_CHAN_INDEX = 1;
-    public static int ACC_PDM_CHANNEL1_VAL_RAW_INDEX = 2;
-    public static int ACC_PDM_CHANNEL2_VAL_RAW_INDEX = 3;
+    private static int ACTIVE_CHAN_INDEX = 1;
+    private static int ACC_PDM_CHANNEL1_VAL_RAW_INDEX = 2;
+    private static int ACC_PDM_CHANNEL2_VAL_RAW_INDEX = 3;
     private static int ACC_PDM_CHANNEL3_VAL_RAW_INDEX = 4;
     private static int ACC_PDM_CHANNEL4_VAL_RAW_INDEX = 5;
 
