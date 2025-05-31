@@ -414,7 +414,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         SoundManager.playSound(this, R.raw.directional);
         Intent forwardIntent = new Intent(this, MainActivity.class);
         if (MotorcycleData.wlq != null) {
-            if (MotorcycleData.wlq.getStatus() != null) {
+            if (MotorcycleData.wlq.getAccStatus() != null) {
                 forwardIntent = new Intent(this, AccessoryActivity.class);
             }
         }

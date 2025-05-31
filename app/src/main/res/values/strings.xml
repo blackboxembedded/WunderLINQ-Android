@@ -1046,6 +1046,18 @@
     <string name="keymode_custom_label">Custom</string>
     <string name="keymode_media_label">Media</string>
     <string name="keymode_dmd2_label">DMD2</string>
+    <string-array name="keymode_names_array" translatable="false">
+        <item>@string/keymode_default_label</item>
+        <item>@string/keymode_custom_label</item>
+        <item>@string/keymode_media_label</item>
+        <item>@string/keymode_dmd2_label</item>
+    </string-array>
+    <string-array name="keymode_value_array" translatable="false">
+        <item>0x00</item>
+        <item>0x01</item>
+        <item>0x02</item>
+        <item>0x03</item>
+    </string-array>
     <string name="usb_threshold_label">USB Port Control</string>
     <string name="usbcontrol_on_label">Always On</string>
     <string name="usbcontrol_engine_label">On Engine</string>
@@ -1103,6 +1115,58 @@
     <string name="orientation_90_label">90</string>
     <string name="orientation_180_label">180</string>
     <string name="orientation_270_label">270</string>
+    <string-array name="orientation_names_array" translatable="false">
+        <item>@string/orientation_default_label</item>
+        <item>@string/orientation_90_label</item>
+        <item>@string/orientation_180_label</item>
+        <item>@string/orientation_270_label</item>
+    </string-array>
+    <string-array name="orientation_value_array" translatable="false">
+        <item>0x00</item>
+        <item>0x01</item>
+        <item>0x02</item>
+        <item>0x03</item>
+    </string-array>
+
+    <string name="pdm_label">Power Controller</string>
+    <string name="pdm_channel1_label">PDM Channel 1</string>
+    <string name="pdm_channel2_label">PDM Channel 2</string>
+    <string name="pdm_channel3_label">PDM Channel 3</string>
+    <string name="pdm_channel4_label">PDM Channel 4</string>
+
+    <string name="pdm_channel_mode_toggle">Toggle</string>
+    <string name="pdm_channel_mode_momentary">Momentary</string>
+    <string name="pdm_channel_mode_ignition">Ignition</string>
+    <string name="pdm_channel_mode_highbeam">High Beam</string>
+    <string name="pdm_channel_mode_brakes">Brakes</string>
+    <string name="pdm_channel_mode_ambient_light">Ambient Light</string>">
+    <string name="pdm_channel_mode_ambient_temp">Ambient Temperature</string>">
+    <string name="pdm_channel_mode_heated_grips">Heated Grip Level</string>">
+    <string name="pdm_channel_mode_disabled">Disabled</string>
+
+    <string-array name="pdm_mode_array" translatable="false">
+        <item>@string/pdm_channel_mode_toggle</item>
+        <item>@string/pdm_channel_mode_momentary</item>
+        <item>@string/pdm_channel_mode_ignition</item>
+        <item>@string/pdm_channel_mode_highbeam</item>
+        <item>@string/pdm_channel_mode_brakes</item>
+        <item>@string/pdm_channel_mode_ambient_light</item>
+        <item>@string/pdm_channel_mode_ambient_temp</item>
+        <item>@string/pdm_channel_mode_heated_grips</item>
+        <item>@string/pdm_channel_mode_disabled</item>
+    </string-array>
+
+    <string-array name="pdm_mode_value_array" translatable="false">
+        <item>0x00</item>
+        <item>0x01</item>
+        <item>0x02</item>
+        <item>0x0A</item>
+        <item>0x0B</item>
+        <item>0x1C</item>
+        <item>0x1D</item>
+        <item>0x1E</item>
+        <item>0xFF</item>
+    </string-array>
 
     <string name="hid_0x00_label">Not Set</string>
     <string name="hid_keyboard_label">Standard</string>

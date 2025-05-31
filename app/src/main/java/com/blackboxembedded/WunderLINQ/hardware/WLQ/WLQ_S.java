@@ -32,13 +32,13 @@ public class WLQ_S extends WLQ_BASE {
 
     private final static String TAG = "WLQ_S";
 
-    public static String hardwareVersion1 = "WLQS1.0";
+    private static String hardwareVersion1 = "WLQS1.0";
 
-    private static int configFlashSize = 37;
+    private static int configFlashSize = 41;
     private static int firmwareVersionMajor_INDEX = 3;
     private static int firmwareVersionMinor_INDEX = 4;
 
-    public static byte[] defaultConfig = {
+    private static byte[] defaultConfig = {
             0x11,                               // Long Press Sensitivity
             0x01, 0x00, 0x52, 0x00, 0x00, 0x00, // Scroll Up - Up Arrow
             0x01, 0x00, 0x51, 0x00, 0x00, 0x00, // Scroll Down - Down Arrow
@@ -46,26 +46,14 @@ public class WLQ_S extends WLQ_BASE {
             0x01, 0x00, 0x4F, 0x01, 0x00, 0x28, // Wheel Right - Right Arrow
             0x01, 0x00, 0x29, 0x00, 0x00, 0x00, // Rocker2 Up - FX1
             0x01, 0x00, 0x28, 0x00, 0x00, 0x00, // Rocker2 Down - FX2
+            0x00,                               // PDM Channel 1 Mode
+            0x00,                               // PDM Channel 2 Mode
+            0x00,                               // PDM Channel 3 Mode
+            0x00                                // PDM Channel 4 Mode
     };
-
-    public static final int KEYMODE = 100;
-    public static final int fullLongPressSensitivity = 3;
-    public static final int up = 26;
-    public static final int upLong = 27;
-    public static final int down = 28;
-    public static final int downLong = 29;
-    public static final int right = 30;
-    public static final int rightLong = 31;
-    public static final int left = 32;
-    public static final int leftLong = 33;
-    public static final int fx1 = 34;
-    public static final int fx1Long = 35;
-    public static final int fx2 = 36;
-    public static final int fx2Long = 37;
 
     // Config message
     private static int keyMode_INDEX = 5;
-
     private static int sensitivity_INDEX = 0;
     private static int upKeyType_INDEX = 1;
     private static int upKeyModifier_INDEX = 2;
@@ -103,22 +91,27 @@ public class WLQ_S extends WLQ_BASE {
     private static int fx2LongKeyType_INDEX = 34;
     private static int fx2LongKeyModifier_INDEX = 35;
     private static int fx2LongKey_INDEX = 36;
+    private static int pdmChannel1_INDEX = 37;
+    private static int pdmChannel2_INDEX = 38;
+    private static int pdmChannel3_INDEX = 39;
+    private static int pdmChannel4_INDEX = 40;
+    private static int accessories_INDEX = 44;
 
     // PDM Status message
     private static int statusSize = 6;
-    public static int NUM_CHAN_INDEX = 0;
-    public static int ACTIVE_CHAN_INDEX = 1;
-    public static int ACC_PDM_CHANNEL1_VAL_RAW_INDEX = 2;
-    public static int ACC_PDM_CHANNEL2_VAL_RAW_INDEX = 3;
-    public static int ACC_PDM_CHANNEL3_VAL_RAW_INDEX = 4;
-    public static int ACC_PDM_CHANNEL4_VAL_RAW_INDEX = 5;
+    private static int NUM_CHAN_INDEX = 0;
+    private static int ACTIVE_CHAN_INDEX = 1;
+    private static int ACC_PDM_CHANNEL1_VAL_RAW_INDEX = 2;
+    private static int ACC_PDM_CHANNEL2_VAL_RAW_INDEX = 3;
+    private static int ACC_PDM_CHANNEL3_VAL_RAW_INDEX = 4;
+    private static int ACC_PDM_CHANNEL4_VAL_RAW_INDEX = 5;
 
     private static byte[] wunderLINQStatus;
-    public static int activeChannel;
-    public static int channel1ValueRaw;
-    public static int channel2ValueRaw;
-    public static int channel3ValueRaw;
-    public static int channel4ValueRaw;
+    private static int activeChannel;
+    private static int channel1ValueRaw;
+    private static int channel2ValueRaw;
+    private static int channel3ValueRaw;
+    private static int channel4ValueRaw;
 
     private static byte[] wunderLINQConfig;
     private static byte[] flashConfig;
@@ -126,43 +119,49 @@ public class WLQ_S extends WLQ_BASE {
     private static String firmwareVersion;
     private static String hardwareVersion;
     private static byte keyMode;
-    public static byte sensitivity;
-    public static byte rightKeyType;
-    public static byte rightKeyModifier;
-    public static byte rightKey;
-    public static byte rightLongKeyType;
-    public static byte rightLongKeyModifier;
-    public static byte rightLongKey;
-    public static byte leftKeyType;
-    public static byte leftKeyModifier;
-    public static byte leftKey;
-    public static byte leftLongKeyType;
-    public static byte leftLongKeyModifier;
-    public static byte leftLongKey;
-    public static byte upKeyType;
-    public static byte upKeyModifier;
-    public static byte upKey;
-    public static byte upLongKeyType;
-    public static byte upLongKeyModifier;
-    public static byte upLongKey;
-    public static byte downKeyType;
-    public static byte downKeyModifier;
-    public static byte downKey;
-    public static byte downLongKeyType;
-    public static byte downLongKeyModifier;
-    public static byte downLongKey;
-    public static byte fx1KeyType;
-    public static byte fx1KeyModifier;
-    public static byte fx1Key;
-    public static byte fx1LongKeyType;
-    public static byte fx1LongKeyModifier;
-    public static byte fx1LongKey;
-    public static byte fx2KeyType;
-    public static byte fx2KeyModifier;
-    public static byte fx2Key;
-    public static byte fx2LongKeyType;
-    public static byte fx2LongKeyModifier;
-    public static byte fx2LongKey;
+    private static byte sensitivity;
+    private static byte rightKeyType;
+    private static byte rightKeyModifier;
+    private static byte rightKey;
+    private static byte rightLongKeyType;
+    private static byte rightLongKeyModifier;
+    private static byte rightLongKey;
+    private static byte leftKeyType;
+    private static byte leftKeyModifier;
+    private static byte leftKey;
+    private static byte leftLongKeyType;
+    private static byte leftLongKeyModifier;
+    private static byte leftLongKey;
+    private static byte upKeyType;
+    private static byte upKeyModifier;
+    private static byte upKey;
+    private static byte upLongKeyType;
+    private static byte upLongKeyModifier;
+    private static byte upLongKey;
+    private static byte downKeyType;
+    private static byte downKeyModifier;
+    private static byte downKey;
+    private static byte downLongKeyType;
+    private static byte downLongKeyModifier;
+    private static byte downLongKey;
+    private static byte fx1KeyType;
+    private static byte fx1KeyModifier;
+    private static byte fx1Key;
+    private static byte fx1LongKeyType;
+    private static byte fx1LongKeyModifier;
+    private static byte fx1LongKey;
+    private static byte fx2KeyType;
+    private static byte fx2KeyModifier;
+    private static byte fx2Key;
+    private static byte fx2LongKeyType;
+    private static byte fx2LongKeyModifier;
+    private static byte fx2LongKey;
+
+    private static byte pdmChannel1Setting;
+    private static byte pdmChannel2Setting;
+    private static byte pdmChannel3Setting;
+    private static byte pdmChannel4Setting;
+    private static byte accessories;
 
     public WLQ_S(byte[] bytes) {
         wunderLINQConfig = new byte[bytes.length];
@@ -228,6 +227,11 @@ public class WLQ_S extends WLQ_BASE {
             fx2LongKeyType = flashConfig[fx2LongKeyType_INDEX];
             fx2LongKeyModifier = flashConfig[fx2LongKeyModifier_INDEX];
             fx2LongKey = flashConfig[fx2LongKey_INDEX];
+            pdmChannel1Setting = flashConfig[pdmChannel1_INDEX];
+            pdmChannel2Setting = flashConfig[pdmChannel2_INDEX];
+            pdmChannel3Setting = flashConfig[pdmChannel3_INDEX];
+            pdmChannel4Setting = flashConfig[pdmChannel4_INDEX];
+            accessories = bytes[accessories_INDEX];
         }
     }
 
@@ -236,7 +240,7 @@ public class WLQ_S extends WLQ_BASE {
         switch (id){
             case KEYMODE:
                 return MyApplication.getContext().getString(R.string.keymode_label);
-            case fullLongPressSensitivity:
+            case longPressSensitivity:
                 return MyApplication.getContext().getString(R.string.long_press_label);
             case up:
                 return MyApplication.getContext().getString(R.string.up_label);
@@ -262,8 +266,16 @@ public class WLQ_S extends WLQ_BASE {
                 return MyApplication.getContext().getString(R.string.fx2_label);
             case fx2Long:
                 return MyApplication.getContext().getString(R.string.fx2_long_label);
+            case pdmChannel1:
+                return MyApplication.getContext().getString(R.string.pdm_channel1_label);
+            case pdmChannel2:
+                return MyApplication.getContext().getString(R.string.pdm_channel2_label);
+            case pdmChannel3:
+                return MyApplication.getContext().getString(R.string.pdm_channel3_label);
+            case pdmChannel4:
+                return MyApplication.getContext().getString(R.string.pdm_channel4_label);
             default:
-                Log.d(TAG, "Unknown ActionID");
+                Log.d(TAG, "getActionName: Unknown ActionID " + id);
                 return "";
         }
     }
@@ -284,8 +296,8 @@ public class WLQ_S extends WLQ_BASE {
                     default:
                         return "";
                 }
-            case fullLongPressSensitivity:
-                return sensitivity * 50 + "ms";
+            case longPressSensitivity:
+                return String.valueOf(sensitivity * 50);
             case up:
                 if(upKeyType == KEYBOARD_HID){
                     return(KeyboardHID.getKeyboardKeyByCode(upKey));
@@ -406,9 +418,67 @@ public class WLQ_S extends WLQ_BASE {
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
+            case pdmChannel1:
+                int index1 = java.util.Arrays.asList(
+                        MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_value_array)
+                ).indexOf(String.format("0x%02X", pdmChannel1Setting));
+                if (index1 != -1) {
+                    return MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_array)[index1];
+                } else {
+                    Log.d(TAG, "Unknown pdmChannel1Setting Value: " + String.format("0x%02X", pdmChannel1Setting));
+                    return "";
+                }
+            case pdmChannel2:
+                int index2 = java.util.Arrays.asList(
+                        MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_value_array)
+                ).indexOf(String.format("0x%02X", pdmChannel2Setting));
+                if (index2 != -1) {
+                    return MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_array)[index2];
+                } else {
+                    Log.d(TAG, "Unknown pdmChannel2Setting Value: " + String.format("0x%02X", pdmChannel2Setting));
+                    return "";
+                }
+            case pdmChannel3:
+                int index3 = java.util.Arrays.asList(
+                        MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_value_array)
+                ).indexOf(String.format("0x%02X", pdmChannel3Setting));
+                if (index3 != -1) {
+                    return MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_array)[index3];
+                } else {
+                    Log.d(TAG, "Unknown pdmChannel3Setting Value: " + String.format("0x%02X", pdmChannel3Setting));
+                    return "";
+                }
+            case pdmChannel4:
+                int index4 = java.util.Arrays.asList(
+                        MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_value_array)
+                ).indexOf(String.format("0x%02X", pdmChannel4Setting));
+                if (index4 != -1) {
+                    return MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_array)[index4];
+                } else {
+                    Log.d(TAG, "Unknown pdmChannel4Setting Value: " + String.format("0x%02X", pdmChannel4Setting));
+                    return "";
+                }
+            default:
+                Log.d(TAG, "getActionValue: Unknown ActionID " + id);
+                return "";
+        }
+    }
+
+    @Override
+    public void setActionValue(int id, byte value) {
+        switch (id) {
+            case longPressSensitivity:
+                tempConfig[sensitivity_INDEX] = value;
+            case pdmChannel1:
+                tempConfig[pdmChannel1_INDEX] = value;
+            case pdmChannel2:
+                tempConfig[pdmChannel2_INDEX] = value;
+            case pdmChannel3:
+                tempConfig[pdmChannel3_INDEX] = value;
+            case pdmChannel4:
+                tempConfig[pdmChannel2_INDEX] = value;
             default:
                 Log.d(TAG, "Unknown ActionID");
-                return "";
         }
     }
 
@@ -440,7 +510,7 @@ public class WLQ_S extends WLQ_BASE {
             case fx2Long:
                 return fx2LongKeyType;
             default:
-                Log.d(TAG, "Unknown ActionID");
+                Log.d(TAG, "getActionKeyType: Unknown ActionID " + id);
                 return 0x00;
         }
     }
@@ -473,7 +543,7 @@ public class WLQ_S extends WLQ_BASE {
             case fx2Long:
                 return fx2LongKey;
             default:
-                Log.d(TAG, "Unknown ActionID");
+                Log.d(TAG, "getActionKey: Unknown ActionID " + id);
                 return 0x00;
         }
     }
@@ -507,6 +577,7 @@ public class WLQ_S extends WLQ_BASE {
                 return fx2LongKeyModifier;
             default:
                 Log.d(TAG, "Unknown ActionID");
+                Log.d(TAG, "getActionKeyModifiers: Unknown ActionID " + id);
                 return 0x00;
         }
     }
@@ -575,7 +646,7 @@ public class WLQ_S extends WLQ_BASE {
                 tempConfig[fx2LongKey_INDEX] = key;
                 break;
             default:
-                Log.d(TAG, "Unknown ActionID");
+                Log.d(TAG, "setActionKey: Unknown ActionID " + id);
                 break;
         }
     }
@@ -598,6 +669,11 @@ public class WLQ_S extends WLQ_BASE {
     @Override
     public byte[] getFlash() {
         return wunderLINQConfig;
+    }
+
+    @Override
+    public byte[] getDefaultConfig() {
+        return defaultConfig;
     }
 
     @Override
@@ -674,12 +750,17 @@ public class WLQ_S extends WLQ_BASE {
     }
 
     @Override
-    public byte[] getStatus() {
+    public byte getAccessories() {
+        return accessories;
+    }
+
+    @Override
+    public byte[] getAccStatus() {
         return wunderLINQStatus;
     }
 
     @Override
-    public void setStatus(byte[] status) {
+    public void setAccStatus(byte[] status) {
         wunderLINQStatus = new byte[statusSize];
         System.arraycopy(status, 4, wunderLINQStatus, 0, statusSize);
         activeChannel = (wunderLINQStatus[ACTIVE_CHAN_INDEX] & 0xFF);

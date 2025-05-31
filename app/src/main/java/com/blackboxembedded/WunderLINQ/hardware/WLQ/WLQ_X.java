@@ -30,204 +30,192 @@ import java.util.Arrays;
 
 public class WLQ_X extends WLQ_BASE {
 
-    public final static String TAG = "WLQ_X";
+    private final static String TAG = "WLQ_X";
 
-    public static String hardwareVersion1 = "WLQX1.0";
+    private static String hardwareVersion1 = "WLQX1.0";
 
     private static int firmwareVersionMajor_INDEX = 3;
     private static int firmwareVersionMinor_INDEX = 4;
 
-    public static int configFlashSize = 62;
-    public static byte[] defaultConfig = {
-            0x07, // RT/K Start // Sensitivity
-            0x01, 0x00, 0x4F, 0x01, 0x00, 0x28, // Menu
-            0x01, 0x00, 0x52, 0x00, 0x00, 0x00, // Zoom+
-            0x01, 0x00, 0x51, 0x00, 0x00, 0x00, // Zoom-
-            0x01, 0x00, 0x50, 0x01, 0x00, 0x29, // Speak
-            0x02, 0x00, (byte) 0xE2, 0x00, 0x00, 0x00, // Mute
-            0x02, 0x00, (byte) 0xB8, 0x00, 0x00, 0x00, // Display
-            0x11, // Full Start // Sensitivity
-            0x01, 0x00, 0x4F, 0x01, 0x00, 0x28, // Right Toggle
-            0x01, 0x00, 0x50, 0x01, 0x00, 0x29, // Left Toggle
-            0x01, 0x00, 0x52, 0x01, 0x00, 0x51, // Scroll
-            0x02, 0x00, (byte) 0xB8, 0x02, 0x00, (byte) 0xE2}; // Signal Cancel
+    private static int configFlashSize = 66;
+    private static byte[] defaultConfig = {
+            0x07,                                               // RT/K Sensitivity
+            0x01, 0x00, 0x4F, 0x01, 0x00, 0x28,                 // Menu
+            0x01, 0x00, 0x52, 0x00, 0x00, 0x00,                 // Zoom+
+            0x01, 0x00, 0x51, 0x00, 0x00, 0x00,                 // Zoom-
+            0x01, 0x00, 0x50, 0x01, 0x00, 0x29,                 // Speak
+            0x02, 0x00, (byte) 0xE2, 0x00, 0x00, 0x00,          // Mute
+            0x02, 0x00, (byte) 0xB8, 0x00, 0x00, 0x00,          // Display
+            0x11,                                               // Full Sensitivity
+            0x01, 0x00, 0x4F, 0x01, 0x00, 0x28,                 // Right Toggle
+            0x01, 0x00, 0x50, 0x01, 0x00, 0x29,                 // Left Toggle
+            0x01, 0x00, 0x52, 0x01, 0x00, 0x51,                 // Scroll
+            0x02, 0x00, (byte) 0xB8, 0x02, 0x00, (byte) 0xE2,   // Signal Cancel
+            0x00,                                               // PDM Channel 1 Mode
+            0x00,                                               // PDM Channel 2 Mode
+            0x00,                                               // PDM Channel 3 Mode
+            0x00                                                // PDM Channel 4 Mode
+    };
 
-    public static byte KEYBOARD_HID = 0x01;
-    public static byte CONSUMER_HID = 0x02;
-    public static byte UNDEFINED = 0x00;
-
-    public static final int KEYMODE = 100;
-    public static final int RTKDoublePressSensitivity = 2;
-    public static final int fullLongPressSensitivity = 3;
-    public static final int RTKPage = 4;
-    public static final int RTKPageDoublePress = 5;
-    public static final int RTKZoomPlus = 6;
-    public static final int RTKZoomPlusDoublePress = 7;
-    public static final int RTKZoomMinus = 8;
-    public static final int RTKZoomMinusDoublePress = 9;
-    public static final int RTKSpeak = 10;
-    public static final int RTKSpeakDoublePress = 11;
-    public static final int RTKMute = 12;
-    public static final int RTKMuteDoublePress = 13;
-    public static final int RTKDisplayOff = 14;
-    public static final int RTKDisplayOffDoublePress = 15;
-    public static final int fullScrollUp = 16;
-    public static final int fullScrollDown = 17;
-    public static final int fullToggleRight = 18;
-    public static final int fullToggleRightLongPress = 19;
-    public static final int fullToggleLeft = 20;
-    public static final int fullToggleLeftLongPress = 21;
-    public static final int fullSignalCancel = 22;
-    public static final int fullSignalCancelLongPress = 23;
-
-    public static int keyMode_INDEX = 5;
-    public static int RTKSensitivity_INDEX = 0;
-    public static int RTKPagePressKeyType_INDEX = 1;
-    public static int RTKPagePressKeyModifier_INDEX = 2;
-    public static int RTKPagePressKey_INDEX = 3;
-    public static int RTKPageDoublePressKeyType_INDEX = 4;
-    public static int RTKPageDoublePressKeyModifier_INDEX = 5;
-    public static int RTKPageDoublePressKey_INDEX = 6;
-    public static int RTKZoomPPressKeyType_INDEX = 7;
-    public static int RTKZoomPPressKeyModifier_INDEX = 8;
-    public static int RTKZoomPPressKey_INDEX = 9;
-    public static int RTKZoomPDoublePressKeyType_INDEX = 10;
-    public static int RTKZoomPDoublePressKeyModifier_INDEX = 11;
-    public static int RTKZoomPDoublePressKey_INDEX = 12;
-    public static int RTKZoomMPressKeyType_INDEX = 13;
-    public static int RTKZoomMPressKeyModifier_INDEX = 14;
-    public static int RTKZoomMPressKey_INDEX = 15;
-    public static int RTKZoomMDoublePressKeyType_INDEX = 16;
-    public static int RTKZoomMDoublePressKeyModifier_INDEX = 17;
-    public static int RTKZoomMDoublePressKey_INDEX = 18;
-    public static int RTKSpeakPressKeyType_INDEX = 19;
-    public static int RTKSpeakPressKeyModifier_INDEX = 20;
-    public static int RTKSpeakPressKey_INDEX = 21;
-    public static int RTKSpeakDoublePressKeyType_INDEX = 22;
-    public static int RTKSpeakDoublePressKeyModifier_INDEX = 23;
-    public static int RTKSpeakDoublePressKey_INDEX = 24;
-    public static int RTKMutePressKeyType_INDEX = 25;
-    public static int RTKMutePressKeyModifier_INDEX = 26;
-    public static int RTKMutePressKey_INDEX = 27;
-    public static int RTKMuteDoublePressKeyType_INDEX = 28;
-    public static int RTKMuteDoublePressKeyModifier_INDEX = 29;
-    public static int RTKMuteDoublePressKey_INDEX = 30;
-    public static int RTKDisplayPressKeyType_INDEX = 31;
-    public static int RTKDisplayPressKeyModifier_INDEX = 32;
-    public static int RTKDisplayPressKey_INDEX = 33;
-    public static int RTKDisplayDoublePressKeyType_INDEX = 34;
-    public static int RTKDisplayDoublePressKeyModifier_INDEX = 35;
-    public static int RTKDisplayDoublePressKey_INDEX = 36;
-    public static int fullSensitivity_INDEX = 37;
-    public static int fullRightPressKeyType_INDEX = 38;
-    public static int fullRightPressKeyModifier_INDEX = 39;
-    public static int fullRightPressKey_INDEX = 40;
-    public static int fullRightLongPressKeyType_INDEX = 41;
-    public static int fullRightLongPressKeyModifier_INDEX = 42;
-    public static int fullRightLongPressKey_INDEX = 43;
-    public static int fullLeftPressKeyType_INDEX = 44;
-    public static int fullLeftPressKeyModifier_INDEX = 45;
-    public static int fullLeftPressKey_INDEX = 46;
-    public static int fullLeftLongPressKeyType_INDEX = 47;
-    public static int fullLeftLongPressKeyModifier_INDEX = 48;
-    public static int fullLeftLongPressKey_INDEX = 49;
-    public static int fullScrollUpKeyType_INDEX = 50;
-    public static int fullScrollUpKeyModifier_INDEX = 51;
-    public static int fullScrollUpKey_INDEX = 52;
-    public static int fullScrollDownKeyType_INDEX = 53;
-    public static int fullScrollDownKeyModifier_INDEX = 54;
-    public static int fullScrollDownKey_INDEX = 55;
-    public static int fullSignalPressKeyType_INDEX = 56;
-    public static int fullSignalPressKeyModifier_INDEX = 57;
-    public static int fullSignalPressKey_INDEX = 58;
-    public static int fullSignalLongPressKeyType_INDEX = 59;
-    public static int fullSignalLongPressKeyModifier_INDEX = 60;
-    public static int fullSignalLongPressKey_INDEX = 61;
+    private static int keyMode_INDEX = 5;
+    private static int RTKSensitivity_INDEX = 0;
+    private static int RTKPagePressKeyType_INDEX = 1;
+    private static int RTKPagePressKeyModifier_INDEX = 2;
+    private static int RTKPagePressKey_INDEX = 3;
+    private static int RTKPageDoublePressKeyType_INDEX = 4;
+    private static int RTKPageDoublePressKeyModifier_INDEX = 5;
+    private static int RTKPageDoublePressKey_INDEX = 6;
+    private static int RTKZoomPPressKeyType_INDEX = 7;
+    private static int RTKZoomPPressKeyModifier_INDEX = 8;
+    private static int RTKZoomPPressKey_INDEX = 9;
+    private static int RTKZoomPDoublePressKeyType_INDEX = 10;
+    private static int RTKZoomPDoublePressKeyModifier_INDEX = 11;
+    private static int RTKZoomPDoublePressKey_INDEX = 12;
+    private static int RTKZoomMPressKeyType_INDEX = 13;
+    private static int RTKZoomMPressKeyModifier_INDEX = 14;
+    private static int RTKZoomMPressKey_INDEX = 15;
+    private static int RTKZoomMDoublePressKeyType_INDEX = 16;
+    private static int RTKZoomMDoublePressKeyModifier_INDEX = 17;
+    private static int RTKZoomMDoublePressKey_INDEX = 18;
+    private static int RTKSpeakPressKeyType_INDEX = 19;
+    private static int RTKSpeakPressKeyModifier_INDEX = 20;
+    private static int RTKSpeakPressKey_INDEX = 21;
+    private static int RTKSpeakDoublePressKeyType_INDEX = 22;
+    private static int RTKSpeakDoublePressKeyModifier_INDEX = 23;
+    private static int RTKSpeakDoublePressKey_INDEX = 24;
+    private static int RTKMutePressKeyType_INDEX = 25;
+    private static int RTKMutePressKeyModifier_INDEX = 26;
+    private static int RTKMutePressKey_INDEX = 27;
+    private static int RTKMuteDoublePressKeyType_INDEX = 28;
+    private static int RTKMuteDoublePressKeyModifier_INDEX = 29;
+    private static int RTKMuteDoublePressKey_INDEX = 30;
+    private static int RTKDisplayPressKeyType_INDEX = 31;
+    private static int RTKDisplayPressKeyModifier_INDEX = 32;
+    private static int RTKDisplayPressKey_INDEX = 33;
+    private static int RTKDisplayDoublePressKeyType_INDEX = 34;
+    private static int RTKDisplayDoublePressKeyModifier_INDEX = 35;
+    private static int RTKDisplayDoublePressKey_INDEX = 36;
+    private static int fullSensitivity_INDEX = 37;
+    private static int fullRightPressKeyType_INDEX = 38;
+    private static int fullRightPressKeyModifier_INDEX = 39;
+    private static int fullRightPressKey_INDEX = 40;
+    private static int fullRightLongPressKeyType_INDEX = 41;
+    private static int fullRightLongPressKeyModifier_INDEX = 42;
+    private static int fullRightLongPressKey_INDEX = 43;
+    private static int fullLeftPressKeyType_INDEX = 44;
+    private static int fullLeftPressKeyModifier_INDEX = 45;
+    private static int fullLeftPressKey_INDEX = 46;
+    private static int fullLeftLongPressKeyType_INDEX = 47;
+    private static int fullLeftLongPressKeyModifier_INDEX = 48;
+    private static int fullLeftLongPressKey_INDEX = 49;
+    private static int fullScrollUpKeyType_INDEX = 50;
+    private static int fullScrollUpKeyModifier_INDEX = 51;
+    private static int fullScrollUpKey_INDEX = 52;
+    private static int fullScrollDownKeyType_INDEX = 53;
+    private static int fullScrollDownKeyModifier_INDEX = 54;
+    private static int fullScrollDownKey_INDEX = 55;
+    private static int fullSignalPressKeyType_INDEX = 56;
+    private static int fullSignalPressKeyModifier_INDEX = 57;
+    private static int fullSignalPressKey_INDEX = 58;
+    private static int fullSignalLongPressKeyType_INDEX = 59;
+    private static int fullSignalLongPressKeyModifier_INDEX = 60;
+    private static int fullSignalLongPressKey_INDEX = 61;
+    private static int pdmChannel1_INDEX = 62;
+    private static int pdmChannel2_INDEX = 63;
+    private static int pdmChannel3_INDEX = 64;
+    private static int pdmChannel4_INDEX = 65;
+    private static int accessories_INDEX = 72;
 
     // PDM Status message
     private static int statusSize = 6;
-    public static int NUM_CHAN_INDEX = 0;
-    public static int ACTIVE_CHAN_INDEX = 1;
-    public static int ACC_PDM_CHANNEL1_VAL_RAW_INDEX = 2;
-    public static int ACC_PDM_CHANNEL2_VAL_RAW_INDEX = 3;
-    public static int ACC_PDM_CHANNEL3_VAL_RAW_INDEX = 4;
-    public static int ACC_PDM_CHANNEL4_VAL_RAW_INDEX = 5;
+    private static int NUM_CHAN_INDEX = 0;
+    private static int ACTIVE_CHAN_INDEX = 1;
+    private static int ACC_PDM_CHANNEL1_VAL_RAW_INDEX = 2;
+    private static int ACC_PDM_CHANNEL2_VAL_RAW_INDEX = 3;
+    private static int ACC_PDM_CHANNEL3_VAL_RAW_INDEX = 4;
+    private static int ACC_PDM_CHANNEL4_VAL_RAW_INDEX = 5;
 
     private static byte[] wunderLINQStatus;
-    public static int activeChannel;
-    public static int channel1ValueRaw;
-    public static int channel2ValueRaw;
-    public static int channel3ValueRaw;
-    public static int channel4ValueRaw;
+    private static int activeChannel;
+    private static int channel1ValueRaw;
+    private static int channel2ValueRaw;
+    private static int channel3ValueRaw;
+    private static int channel4ValueRaw;
 
     private static byte[] wunderLINQConfig;
     private static byte[] flashConfig;
     private static byte[] tempConfig;
     private static String firmwareVersion;
     private static String hardwareVersion;
-    public static byte keyMode;
-    public static byte RTKSensitivity;
-    public static byte RTKPagePressKeyType;
-    public static byte RTKPagePressKeyModifier;
-    public static byte RTKPagePressKey;
-    public static byte RTKPageDoublePressKeyType;
-    public static byte RTKPageDoublePressKeyModifier;
-    public static byte RTKPageDoublePressKey;
-    public static byte RTKZoomPPressKeyType;
-    public static byte RTKZoomPPressKeyModifier;
-    public static byte RTKZoomPPressKey;
-    public static byte RTKZoomPDoublePressKeyType;
-    public static byte RTKZoomPDoublePressKeyModifier;
-    public static byte RTKZoomPDoublePressKey;
-    public static byte RTKZoomMPressKeyType;
-    public static byte RTKZoomMPressKeyModifier;
-    public static byte RTKZoomMPressKey;
-    public static byte RTKZoomMDoublePressKeyType;
-    public static byte RTKZoomMDoublePressKeyModifier;
-    public static byte RTKZoomMDoublePressKey;
-    public static byte RTKSpeakPressKeyType;
-    public static byte RTKSpeakPressKeyModifier;
-    public static byte RTKSpeakPressKey;
-    public static byte RTKSpeakDoublePressKeyType;
-    public static byte RTKSpeakDoublePressKeyModifier;
-    public static byte RTKSpeakDoublePressKey;
-    public static byte RTKMutePressKeyType;
-    public static byte RTKMutePressKeyModifier;
-    public static byte RTKMutePressKey;
-    public static byte RTKMuteDoublePressKeyType;
-    public static byte RTKMuteDoublePressKeyModifier;
-    public static byte RTKMuteDoublePressKey;
-    public static byte RTKDisplayPressKeyType;
-    public static byte RTKDisplayPressKeyModifier;
-    public static byte RTKDisplayPressKey;
-    public static byte RTKDisplayDoublePressKeyType;
-    public static byte RTKDisplayDoublePressKeyModifier;
-    public static byte RTKDisplayDoublePressKey;
-    public static byte fullSensitivity;
-    public static byte fullRightPressKeyType;
-    public static byte fullRightPressKeyModifier;
-    public static byte fullRightPressKey;
-    public static byte fullRightLongPressKeyType;
-    public static byte fullRightLongPressKeyModifier;
-    public static byte fullRightLongPressKey;
-    public static byte fullLeftPressKeyType;
-    public static byte fullLeftPressKeyModifier;
-    public static byte fullLeftPressKey;
-    public static byte fullLeftLongPressKeyType;
-    public static byte fullLeftLongPressKeyModifier;
-    public static byte fullLeftLongPressKey;
-    public static byte fullScrollUpKeyType;
-    public static byte fullScrollUpKeyModifier;
-    public static byte fullScrollUpKey;
-    public static byte fullScrollDownKeyType;
-    public static byte fullScrollDownKeyModifier;
-    public static byte fullScrollDownKey;
-    public static byte fullSignalPressKeyType;
-    public static byte fullSignalPressKeyModifier;
-    public static byte fullSignalPressKey;
-    public static byte fullSignalLongPressKeyType;
-    public static byte fullSignalLongPressKeyModifier;
-    public static byte fullSignalLongPressKey;
+    private static byte keyMode;
+    private static byte RTKSensitivity;
+    private static byte RTKPagePressKeyType;
+    private static byte RTKPagePressKeyModifier;
+    private static byte RTKPagePressKey;
+    private static byte RTKPageDoublePressKeyType;
+    private static byte RTKPageDoublePressKeyModifier;
+    private static byte RTKPageDoublePressKey;
+    private static byte RTKZoomPPressKeyType;
+    private static byte RTKZoomPPressKeyModifier;
+    private static byte RTKZoomPPressKey;
+    private static byte RTKZoomPDoublePressKeyType;
+    private static byte RTKZoomPDoublePressKeyModifier;
+    private static byte RTKZoomPDoublePressKey;
+    private static byte RTKZoomMPressKeyType;
+    private static byte RTKZoomMPressKeyModifier;
+    private static byte RTKZoomMPressKey;
+    private static byte RTKZoomMDoublePressKeyType;
+    private static byte RTKZoomMDoublePressKeyModifier;
+    private static byte RTKZoomMDoublePressKey;
+    private static byte RTKSpeakPressKeyType;
+    private static byte RTKSpeakPressKeyModifier;
+    private static byte RTKSpeakPressKey;
+    private static byte RTKSpeakDoublePressKeyType;
+    private static byte RTKSpeakDoublePressKeyModifier;
+    private static byte RTKSpeakDoublePressKey;
+    private static byte RTKMutePressKeyType;
+    private static byte RTKMutePressKeyModifier;
+    private static byte RTKMutePressKey;
+    private static byte RTKMuteDoublePressKeyType;
+    private static byte RTKMuteDoublePressKeyModifier;
+    private static byte RTKMuteDoublePressKey;
+    private static byte RTKDisplayPressKeyType;
+    private static byte RTKDisplayPressKeyModifier;
+    private static byte RTKDisplayPressKey;
+    private static byte RTKDisplayDoublePressKeyType;
+    private static byte RTKDisplayDoublePressKeyModifier;
+    private static byte RTKDisplayDoublePressKey;
+    private static byte fullSensitivity;
+    private static byte fullRightPressKeyType;
+    private static byte fullRightPressKeyModifier;
+    private static byte fullRightPressKey;
+    private static byte fullRightLongPressKeyType;
+    private static byte fullRightLongPressKeyModifier;
+    private static byte fullRightLongPressKey;
+    private static byte fullLeftPressKeyType;
+    private static byte fullLeftPressKeyModifier;
+    private static byte fullLeftPressKey;
+    private static byte fullLeftLongPressKeyType;
+    private static byte fullLeftLongPressKeyModifier;
+    private static byte fullLeftLongPressKey;
+    private static byte fullScrollUpKeyType;
+    private static byte fullScrollUpKeyModifier;
+    private static byte fullScrollUpKey;
+    private static byte fullScrollDownKeyType;
+    private static byte fullScrollDownKeyModifier;
+    private static byte fullScrollDownKey;
+    private static byte fullSignalPressKeyType;
+    private static byte fullSignalPressKeyModifier;
+    private static byte fullSignalPressKey;
+    private static byte fullSignalLongPressKeyType;
+    private static byte fullSignalLongPressKeyModifier;
+    private static byte fullSignalLongPressKey;
+
+    private static byte pdmChannel1Setting;
+    private static byte pdmChannel2Setting;
+    private static byte pdmChannel3Setting;
+    private static byte pdmChannel4Setting;
+    private static byte accessories;
 
     public WLQ_X(byte[] bytes) {
 
@@ -319,6 +307,13 @@ public class WLQ_X extends WLQ_BASE {
             fullSignalLongPressKeyType = flashConfig[fullSignalLongPressKeyType_INDEX];
             fullSignalLongPressKeyModifier = flashConfig[fullSignalLongPressKeyModifier_INDEX];
             fullSignalLongPressKey = flashConfig[fullSignalLongPressKey_INDEX];
+
+            pdmChannel1Setting = flashConfig[pdmChannel1_INDEX];
+            pdmChannel2Setting = flashConfig[pdmChannel2_INDEX];
+            pdmChannel3Setting = flashConfig[pdmChannel3_INDEX];
+            pdmChannel4Setting = flashConfig[pdmChannel4_INDEX];
+
+            accessories = bytes[accessories_INDEX];
         }
     }
 
@@ -327,9 +322,9 @@ public class WLQ_X extends WLQ_BASE {
         switch (id){
             case KEYMODE:
                 return MyApplication.getContext().getString(R.string.keymode_label);
-            case RTKDoublePressSensitivity:
+            case doublePressSensitivity:
                 return MyApplication.getContext().getString(R.string.double_press_label);
-            case fullLongPressSensitivity:
+            case longPressSensitivity:
                 return MyApplication.getContext().getString(R.string.long_press_label);
             case RTKPage:
                 return MyApplication.getContext().getString(R.string.rtk_page_label);
@@ -371,6 +366,14 @@ public class WLQ_X extends WLQ_BASE {
                 return MyApplication.getContext().getString(R.string.full_signal_cancel_label);
             case fullSignalCancelLongPress:
                 return MyApplication.getContext().getString(R.string.full_signal_cancel_long_label);
+            case pdmChannel1:
+                return MyApplication.getContext().getString(R.string.pdm_channel1_label);
+            case pdmChannel2:
+                return MyApplication.getContext().getString(R.string.pdm_channel2_label);
+            case pdmChannel3:
+                return MyApplication.getContext().getString(R.string.pdm_channel3_label);
+            case pdmChannel4:
+                return MyApplication.getContext().getString(R.string.pdm_channel4_label);
             default:
                 Log.d(TAG, "Unknown ActionID");
                 return "";
@@ -393,10 +396,10 @@ public class WLQ_X extends WLQ_BASE {
                     default:
                         return "";
                 }
-            case RTKDoublePressSensitivity:
-                return String.valueOf(RTKSensitivity * 50) + "ms";
-            case fullLongPressSensitivity:
-                return String.valueOf(fullSensitivity * 50) + "ms";
+            case doublePressSensitivity:
+                return String.valueOf(RTKSensitivity * 50);
+            case longPressSensitivity:
+                return String.valueOf(fullSensitivity * 50);
             case RTKPage:
                 if (WLQ_X.RTKPagePressKeyType == WLQ_X.KEYBOARD_HID) {
                     return(KeyboardHID.getKeyboardKeyByCode(WLQ_X.RTKPagePressKey));
@@ -597,9 +600,69 @@ public class WLQ_X extends WLQ_BASE {
                 } else {
                     return(MyApplication.getContext().getString(R.string.hid_0x00_label));
                 }
+            case pdmChannel1:
+                int index1 = java.util.Arrays.asList(
+                        MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_value_array)
+                ).indexOf(String.format("0x%02X", pdmChannel1Setting));
+                if (index1 != -1) {
+                    return MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_array)[index1];
+                } else {
+                    Log.d(TAG, "Unknown pdmChannel1Setting Value: " + String.format("0x%02X", pdmChannel1Setting));
+                    return "";
+                }
+            case pdmChannel2:
+                int index2 = java.util.Arrays.asList(
+                        MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_value_array)
+                ).indexOf(String.format("0x%02X", pdmChannel2Setting));
+                if (index2 != -1) {
+                    return MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_array)[index2];
+                } else {
+                    Log.d(TAG, "Unknown pdmChannel2Setting Value: " + String.format("0x%02X", pdmChannel2Setting));
+                    return "";
+                }
+            case pdmChannel3:
+                int index3 = java.util.Arrays.asList(
+                        MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_value_array)
+                ).indexOf(String.format("0x%02X", pdmChannel3Setting));
+                if (index3 != -1) {
+                    return MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_array)[index3];
+                } else {
+                    Log.d(TAG, "Unknown pdmChannel3Setting Value: " + String.format("0x%02X", pdmChannel3Setting));
+                    return "";
+                }
+            case pdmChannel4:
+                int index4 = java.util.Arrays.asList(
+                        MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_value_array)
+                ).indexOf(String.format("0x%02X", pdmChannel4Setting));
+                if (index4 != -1) {
+                    return MyApplication.getContext().getResources().getStringArray(R.array.pdm_mode_array)[index4];
+                } else {
+                    Log.d(TAG, "Unknown pdmChannel4Setting Value: " + String.format("0x%02X", pdmChannel4Setting));
+                    return "";
+                }
             default:
                 Log.d(TAG, "Unknown ActionID");
                 return "";
+        }
+    }
+
+    @Override
+    public void setActionValue(int id, byte value) {
+        switch (id) {
+            case doublePressSensitivity:
+                tempConfig[RTKSensitivity_INDEX] = value;
+            case longPressSensitivity:
+                tempConfig[fullSensitivity_INDEX] = value;
+            case pdmChannel1:
+                tempConfig[pdmChannel1_INDEX] = value;
+            case pdmChannel2:
+                tempConfig[pdmChannel2_INDEX] = value;
+            case pdmChannel3:
+                tempConfig[pdmChannel3_INDEX] = value;
+            case pdmChannel4:
+                tempConfig[pdmChannel2_INDEX] = value;
+            default:
+                Log.d(TAG, "Unknown ActionID: " + id);
         }
     }
 
@@ -880,6 +943,11 @@ public class WLQ_X extends WLQ_BASE {
     }
 
     @Override
+    public byte[] getDefaultConfig() {
+        return defaultConfig;
+    }
+
+    @Override
     public byte[] getConfig() {
         return flashConfig;
     }
@@ -949,12 +1017,17 @@ public class WLQ_X extends WLQ_BASE {
     }
 
     @Override
-    public byte[] getStatus() {
+    public byte getAccessories() {
+        return accessories;
+    }
+
+    @Override
+    public byte[] getAccStatus() {
         return wunderLINQStatus;
     }
 
     @Override
-    public void setStatus(byte[] status) {
+    public void setAccStatus(byte[] status) {
         wunderLINQStatus = new byte[statusSize];
         System.arraycopy(status, 4, wunderLINQStatus, 0, statusSize);
         activeChannel = (wunderLINQStatus[ACTIVE_CHAN_INDEX] & 0xFF);

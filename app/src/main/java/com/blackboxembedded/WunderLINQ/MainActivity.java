@@ -970,7 +970,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         SoundManager.playSound(this, R.raw.directional);
         Intent backIntent = new Intent(this, com.blackboxembedded.WunderLINQ.TaskList.TaskActivity.class);
         if (MotorcycleData.wlq != null) {
-            if (MotorcycleData.wlq.getStatus() != null) {
+            if (MotorcycleData.wlq.getAccStatus() != null) {
                 backIntent = new Intent(this, AccessoryActivity.class);
             }
         }
