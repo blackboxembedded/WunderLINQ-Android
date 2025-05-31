@@ -286,13 +286,13 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                     hwConfigBtn.setVisibility(View.INVISIBLE);
                     if (MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_CUSTOM()) {
                         resetButton.setVisibility(View.VISIBLE);
-                        if (!Arrays.equals(MotorcycleData.wlq.getConfig(), MotorcycleData.wlq.getTempConfig())) {
-                            Log.d(TAG, "New Config found");
-                            Log.d(TAG, "Config: " + Utils.ByteArrayToHex(MotorcycleData.wlq.getConfig()));
-                            Log.d(TAG, "tempConfig: " + Utils.ByteArrayToHex(MotorcycleData.wlq.getTempConfig()));
-                            hwConfigBtn.setText(getString(R.string.config_write_label));
-                            hwConfigBtn.setVisibility(View.VISIBLE);
-                        }
+                    }
+                    if (!Arrays.equals(MotorcycleData.wlq.getConfig(), MotorcycleData.wlq.getTempConfig())) {
+                        Log.d(TAG, "New Config found");
+                        Log.d(TAG, "Config: " + Utils.ByteArrayToHex(MotorcycleData.wlq.getConfig()));
+                        Log.d(TAG, "tempConfig: " + Utils.ByteArrayToHex(MotorcycleData.wlq.getTempConfig()));
+                        hwConfigBtn.setText(getString(R.string.config_write_label));
+                        hwConfigBtn.setVisibility(View.VISIBLE);
                     }
                 } else {
                     // Corrupt Config
@@ -329,13 +329,13 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                     hwConfigBtn.setVisibility(View.INVISIBLE);
                     if (MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_CUSTOM()) {
                         resetButton.setVisibility(View.VISIBLE);
-                        if (!Arrays.equals(MotorcycleData.wlq.getConfig(), MotorcycleData.wlq.getTempConfig())) {
-                            Log.d(TAG, "New Config found");
-                            Log.d(TAG, "Config: " + Utils.ByteArrayToHex(MotorcycleData.wlq.getConfig()));
-                            Log.d(TAG, "tempConfig: " + Utils.ByteArrayToHex(MotorcycleData.wlq.getTempConfig()));
-                            hwConfigBtn.setText(getString(R.string.config_write_label));
-                            hwConfigBtn.setVisibility(View.VISIBLE);
-                        }
+                    }
+                    if (!Arrays.equals(MotorcycleData.wlq.getConfig(), MotorcycleData.wlq.getTempConfig())) {
+                        Log.d(TAG, "New Config found");
+                        Log.d(TAG, "Config: " + Utils.ByteArrayToHex(MotorcycleData.wlq.getConfig()));
+                        Log.d(TAG, "tempConfig: " + Utils.ByteArrayToHex(MotorcycleData.wlq.getTempConfig()));
+                        hwConfigBtn.setText(getString(R.string.config_write_label));
+                        hwConfigBtn.setVisibility(View.VISIBLE);
                     }
                 } else {
                     // Corrupt Config
@@ -371,13 +371,13 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                     hwConfigBtn.setVisibility(View.INVISIBLE);
                     if (MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_CUSTOM()) {
                         resetButton.setVisibility(View.VISIBLE);
-                        if (!Arrays.equals(MotorcycleData.wlq.getConfig(), MotorcycleData.wlq.getTempConfig())) {
-                            Log.d(TAG, "New Config found");
-                            Log.d(TAG, "Config: " + Utils.ByteArrayToHex(MotorcycleData.wlq.getConfig()));
-                            Log.d(TAG, "tempConfig: " + Utils.ByteArrayToHex(MotorcycleData.wlq.getTempConfig()));
-                            hwConfigBtn.setText(getString(R.string.config_write_label));
-                            hwConfigBtn.setVisibility(View.VISIBLE);
-                        }
+                    }
+                    if (!Arrays.equals(MotorcycleData.wlq.getConfig(), MotorcycleData.wlq.getTempConfig())) {
+                        Log.d(TAG, "New Config found");
+                        Log.d(TAG, "Config: " + Utils.ByteArrayToHex(MotorcycleData.wlq.getConfig()));
+                        Log.d(TAG, "tempConfig: " + Utils.ByteArrayToHex(MotorcycleData.wlq.getTempConfig()));
+                        hwConfigBtn.setText(getString(R.string.config_write_label));
+                        hwConfigBtn.setVisibility(View.VISIBLE);
                     }
                 } else {
                     // Corrupt Config

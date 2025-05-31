@@ -37,7 +37,7 @@ public class WLQ_X extends WLQ_BASE {
     private static int firmwareVersionMajor_INDEX = 3;
     private static int firmwareVersionMinor_INDEX = 4;
 
-    private static int configFlashSize = 62;
+    private static int configFlashSize = 66;
     private static byte[] defaultConfig = {
             0x07,                                               // RT/K Sensitivity
             0x01, 0x00, 0x4F, 0x01, 0x00, 0x28,                 // Menu
@@ -50,7 +50,11 @@ public class WLQ_X extends WLQ_BASE {
             0x01, 0x00, 0x4F, 0x01, 0x00, 0x28,                 // Right Toggle
             0x01, 0x00, 0x50, 0x01, 0x00, 0x29,                 // Left Toggle
             0x01, 0x00, 0x52, 0x01, 0x00, 0x51,                 // Scroll
-            0x02, 0x00, (byte) 0xB8, 0x02, 0x00, (byte) 0xE2    // Signal Cancel
+            0x02, 0x00, (byte) 0xB8, 0x02, 0x00, (byte) 0xE2,   // Signal Cancel
+            0x00,                                               // PDM Channel 1 Mode
+            0x00,                                               // PDM Channel 2 Mode
+            0x00,                                               // PDM Channel 3 Mode
+            0x00                                                // PDM Channel 4 Mode
     };
 
     private static int keyMode_INDEX = 5;
@@ -120,7 +124,7 @@ public class WLQ_X extends WLQ_BASE {
     private static int pdmChannel2_INDEX = 63;
     private static int pdmChannel3_INDEX = 64;
     private static int pdmChannel4_INDEX = 65;
-    private static int accessories_INDEX = 69;
+    private static int accessories_INDEX = 72;
 
     // PDM Status message
     private static int statusSize = 6;
@@ -658,7 +662,7 @@ public class WLQ_X extends WLQ_BASE {
             case pdmChannel4:
                 tempConfig[pdmChannel2_INDEX] = value;
             default:
-                Log.d(TAG, "Unknown ActionID");
+                Log.d(TAG, "Unknown ActionID: " + id);
         }
     }
 

@@ -263,6 +263,8 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                     MotorcycleData.wlq.setActionValue(actionID, value);
                 } else if (actionID == WLQ.ORIENTATION){
                     MotorcycleData.wlq.setActionValue(actionID, (byte)actionTypeSP.getSelectedItemPosition());
+                } else if (actionID == WLQ.pdmChannel1 || actionID == WLQ.pdmChannel2 || actionID == WLQ.pdmChannel3 || actionID == WLQ.pdmChannel4){
+                    MotorcycleData.wlq.setActionValue(actionID, (byte)actionTypeSP.getSelectedItemPosition());
                 } else {
                     byte type = (byte)actionTypeSP.getSelectedItemPosition();
                     byte key = 0x00;
