@@ -256,9 +256,11 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                 } else if (actionID == WLQ.USB){
                     MotorcycleData.wlq.setActionValue(actionID, (byte)actionTypeSP.getSelectedItemPosition());
                 } else if (actionID == WLQ.doublePressSensitivity){
-                    MotorcycleData.wlq.setActionValue(actionID, (byte)((actionTypeSP.getSelectedItemPosition() + 1) / 50));
+                    byte value = (byte) (Integer.decode(actionTypeSP.getSelectedItem().toString()) / 50);
+                    MotorcycleData.wlq.setActionValue(actionID, value);
                 } else if (actionID == WLQ.longPressSensitivity){
-                    MotorcycleData.wlq.setActionValue(actionID, (byte)((actionTypeSP.getSelectedItemPosition() + 1) / 50));
+                    byte value = (byte) (Integer.decode(actionTypeSP.getSelectedItem().toString()) / 50);
+                    MotorcycleData.wlq.setActionValue(actionID, value);
                 } else if (actionID == WLQ.ORIENTATION){
                     MotorcycleData.wlq.setActionValue(actionID, (byte)actionTypeSP.getSelectedItemPosition());
                 } else {

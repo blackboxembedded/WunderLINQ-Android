@@ -981,12 +981,12 @@ public class WLQ_N extends WLQ_BASE {
     }
 
     @Override
-    public byte[] getStatus() {
+    public byte[] getAccStatus() {
         return null;
     }
 
     @Override
-    public void setStatus(byte[] status) {
+    public void setAccStatus(byte[] status) {
         Log.d(TAG, "WLQ_N_STATUS: " + Utils.ByteArrayToHex(status));
     }
     @Override

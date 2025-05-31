@@ -771,12 +771,12 @@ public class WLQ_U extends WLQ_BASE {
     }
 
     @Override
-    public byte[] getStatus() {
+    public byte[] getAccStatus() {
         return wunderLINQStatus;
     }
 
     @Override
-    public void setStatus(byte[] status) {
+    public void setAccStatus(byte[] status) {
         wunderLINQStatus = new byte[statusSize];
         System.arraycopy(status, 4, wunderLINQStatus, 0, statusSize);
         activeChannel = (wunderLINQStatus[ACTIVE_CHAN_INDEX] & 0xFF);

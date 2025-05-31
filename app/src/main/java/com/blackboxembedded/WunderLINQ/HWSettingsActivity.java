@@ -480,10 +480,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             if (BluetoothLeService.ACTION_CMDSTATUS_AVAILABLE.equals(action)) {
-                Bundle bd = intent.getExtras();
-                if(bd != null){
-                    updateDisplay();
-                }
+                updateDisplay();
             }
         }
     };

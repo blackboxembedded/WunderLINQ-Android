@@ -361,15 +361,15 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
             faultButton.setVisibility(View.GONE);
         }
         if (MotorcycleData.wlq != null){
-            if (MotorcycleData.wlq.getStatus() != null) {
+            if (MotorcycleData.wlq.getAccStatus() != null) {
                 //TODO: Replace device specific code
                 channelOneHeaderTV.setText(sharedPrefs.getString("ACC_CHAN_1", getString(R.string.default_accessory_one_name)));
                 channelOneHeaderET.setText(sharedPrefs.getString("ACC_CHAN_1", getString(R.string.default_accessory_one_name)));
                 channelTwoHeaderTV.setText(sharedPrefs.getString("ACC_CHAN_2", getString(R.string.default_accessory_two_name)));
                 channelTwoHeaderET.setText(sharedPrefs.getString("ACC_CHAN_2", getString(R.string.default_accessory_two_name)));
-                int channelActive = (MotorcycleData.wlq.getStatus()[WLQ_S.ACTIVE_CHAN_INDEX] & 0xFF);
-                int channel1ValueRaw = (MotorcycleData.wlq.getStatus()[WLQ_S.ACC_PDM_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
-                int channel2ValueRaw = (MotorcycleData.wlq.getStatus()[WLQ_S.ACC_PDM_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
+                int channelActive = (MotorcycleData.wlq.getAccStatus()[WLQ_S.ACTIVE_CHAN_INDEX] & 0xFF);
+                int channel1ValueRaw = (MotorcycleData.wlq.getAccStatus()[WLQ_S.ACC_PDM_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
+                int channel2ValueRaw = (MotorcycleData.wlq.getAccStatus()[WLQ_S.ACC_PDM_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
 
                 TypedValue typedValue = new TypedValue();
                 Resources.Theme theme = this.getTheme();
@@ -429,15 +429,12 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
         }
     }
 
-    //cancel timer
+    //Cancel timer
     void cancelTimer() {
         if(cTimer!=null)
             cTimer.cancel();
     }
 
-    // Handles various events fired by the Service.
-    // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read
-    //                        or notification operations.
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {

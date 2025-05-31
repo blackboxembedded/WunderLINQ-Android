@@ -96,8 +96,8 @@ public interface WLQ {
 
     byte getAccessories();
     void setAccActive(int active);
-    byte[] getStatus();
-    void setStatus(byte[] status);
+    byte[] getAccStatus();
+    void setAccStatus(byte[] status);
 
     byte getKeyMode();
 
