@@ -95,7 +95,7 @@ public class WLQ_S extends WLQ_BASE {
     private static int pdmChannel2_INDEX = 38;
     private static int pdmChannel3_INDEX = 39;
     private static int pdmChannel4_INDEX = 40;
-    private static int accessories_INDEX = 44;
+    private static int accessories_INDEX = 47;
 
     // PDM Status message
     private static int statusSize = 6;
