@@ -2410,9 +2410,8 @@ public class SVGHelper {
     }
 
     public void setupInclinometer(Document doc) {
-
+        //Inclinometer
         try {
-            //Compass
             Double leanAngle = MotorcycleData.getLeanAngleDevice();
 
             String centerRadius = ", 540, 1540)";
@@ -2464,15 +2463,13 @@ public class SVGHelper {
                     "rotate(" + angle + centerRadius);
 
         } catch (Exception e) {
-            Log.d(TAG, "Exception Setting Up Compass: " + e.toString());
+            Log.d(TAG, "Exception Setting Up Inclinometer: " + e.toString());
         }
     }
 
 
     public void setupCompass(Document doc) {
         try {
-            setText(doc, "txtCardinalLeft", "W");
-            setText(doc, "txtCardinalRight", "E");
             //Compass
             String centerRadius = ",960,1080)";
             String bearing = "0";
