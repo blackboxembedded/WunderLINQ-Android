@@ -690,11 +690,13 @@ public class BLEBus {
             case 0x08:
                 if ((data[1] & 0xFF) != 0xFF) {
                     double ambientTemp = ((data[1] & 0xFF) * 0.50) - 40;
-                    MotorcycleData.setAmbientTemperature(ambientTemp);
-                    if(ambientTemp <= 0.0){
-                        Faults.setIceWarnActive(true);
-                    } else {
-                        Faults.setIceWarnActive(false);
+                    if (ambientTemp >= -20.0 && ambientTemp <= 45.0) { // Filter out improbable values
+                        MotorcycleData.setAmbientTemperature(ambientTemp);
+                        if (ambientTemp <= 0.0) {
+                            Faults.setIceWarnActive(true);
+                        } else {
+                            Faults.setIceWarnActive(false);
+                        }
                     }
                 }
 
