@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdk 35
+    compileSdk 36
     defaultConfig {
         applicationId "com.blackboxembedded.WunderLINQ"
         minSdkVersion 21
-        targetSdkVersion 34
+        targetSdkVersion 35
         versionCode 205
         versionName "2.95"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -64,16 +64,16 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:21.3.0'
     implementation 'com.google.android.gms:play-services-maps:19.2.0'
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1'
-    implementation 'com.opencsv:opencsv:4.2'
+    implementation 'com.opencsv:opencsv:5.11.2'
     implementation 'ca.rmen:lib-sunrise-sunset:1.1.1'
     implementation 'com.github.martin-stone:hsv-alpha-color-picker-android:3.1.0'
     implementation 'io.jenetics:jpx:2.3.0'
     implementation 'stax:stax:1.2.0'
     implementation 'com.github.ticofab:android-gpx-parser:2.3.1'
     implementation 'com.caverock:androidsvg-aar:1.4'
-    implementation 'commons-io:commons-io:2.16.1'
+    implementation 'commons-io:commons-io:2.19.0'
     implementation 'com.github.yarolegovich:DiscreteScrollView:1.5.1'
-    implementation 'com.google.guava:guava:31.1-android'
+    implementation 'com.google.guava:guava:33.4.8-android'
     implementation "androidx.car.app:app:1.4.0"
 
     testImplementation 'junit:junit:4.13.2'

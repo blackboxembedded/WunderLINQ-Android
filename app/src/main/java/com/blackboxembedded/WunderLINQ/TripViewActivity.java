@@ -24,7 +24,6 @@ import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -61,6 +60,7 @@ import com.google.android.gms.maps.MapsInitializer.Renderer;
 import com.google.android.gms.maps.OnMapsSdkInitializedCallback;
 
 import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvException;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -186,7 +186,14 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
 
             try {
                 CSVReader reader = new CSVReader(new FileReader(file));
-                List<String[]> myEntries = reader.readAll();
+                List<String[]> myEntries = new ArrayList<>();
+                try {
+                    myEntries = reader.readAll();
+                } catch (CsvException e) {
+                    // Handle the CsvException here
+                    Log.e(TAG, "Error reading CSV file: " + e.getMessage());
+                    e.printStackTrace();
+                }
                 int lineNumber = 0;
                 for(String[] nextLine : myEntries) {
                     if (lineNumber == 0){
@@ -518,7 +525,14 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 CSVReader reader = new CSVReader(new FileReader(file));
                 TrackSegment.Builder segment = TrackSegment.builder();
 
-                List<String[]> myEntries = reader.readAll();
+                List<String[]> myEntries = new ArrayList<>();
+                try {
+                    myEntries = reader.readAll();
+                } catch (CsvException e) {
+                    // Handle the CsvException here
+                    Log.e(TAG, "Error reading CSV file: " + e.getMessage());
+                    e.printStackTrace();
+                }
                 int lineNumber = 0;
                 for (String[] nextLine : myEntries) {
                     if ((lineNumber > 1) && (!nextLine[1].equals("No Fix") && (!nextLine[2].equals("No Fix")))) {

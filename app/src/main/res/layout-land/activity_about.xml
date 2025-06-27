@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".AboutActivity"
     android:id="@+id/clAbout"
+    android:fitsSystemWindows="true"
     android:background="?attr/backgroundColor">
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
