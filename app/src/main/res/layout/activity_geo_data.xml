@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".GeoDataActivity"
     android:id="@+id/clGeoData"
+    android:fitsSystemWindows="true"
     android:background="?attr/backgroundColor">
 
     <androidx.constraintlayout.widget.Guideline

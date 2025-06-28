@@ -26,11 +26,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
@@ -55,9 +57,19 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(android.R.id.content, new UserSettingActivityFragment()).commit();
+
+        setContentView(R.layout.activity_settings); // Use your new layout
+
+        // Explicitly tell the system to avoid edge-to-edge
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
+
+        if (savedInstanceState == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.settings_fragment_container, new UserSettingActivityFragment())
+                    .commit();
         }
+
         showActionBar();
     }
 
@@ -98,7 +110,9 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
                     Intent backIntent = new Intent(SettingsActivity.this, MainActivity.class);
                     startActivity(backIntent);
                 } else {
-                    getSupportFragmentManager().beginTransaction().replace(android.R.id.content, new UserSettingActivityFragment()).commit();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.settings_fragment_container, new UserSettingActivityFragment())
+                            .commit();
                     last = root;
                 }
             }

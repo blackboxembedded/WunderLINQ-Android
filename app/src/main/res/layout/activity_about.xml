@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".AboutActivity"
     android:id="@+id/clAbout"
+    android:fitsSystemWindows="true"
     android:background="?attr/backgroundColor">
-
     <ImageView
         android:id="@+id/ivLogo"
         android:layout_width="match_parent"

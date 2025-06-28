@@ -3,8 +3,8 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/layout_waypoint_nav"
+    android:fitsSystemWindows="true"
     android:background="?attr/backgroundColor">
-
     <ListView
         android:id="@+id/lv_waypoints"
         android:layout_width="match_parent"
