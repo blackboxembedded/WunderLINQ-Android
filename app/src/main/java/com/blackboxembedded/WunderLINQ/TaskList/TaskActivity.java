@@ -37,7 +37,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
@@ -878,14 +877,6 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
     }
 
     private boolean canDrawOverlays(){
-        boolean canDrawOverlays = false;
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(Settings.canDrawOverlays(TaskActivity.this)){
-                canDrawOverlays = true;
-            }
-        } else {
-            canDrawOverlays = true;
-        }
-        return canDrawOverlays;
+        return Settings.canDrawOverlays(this);
     }
 }

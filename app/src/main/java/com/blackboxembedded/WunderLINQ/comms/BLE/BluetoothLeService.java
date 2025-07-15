@@ -1439,16 +1439,14 @@ public class BluetoothLeService extends Service {
         String channelId = "critical";
         String channelName = MyApplication.getContext().getString(R.string.notification_channel);
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel mChannel = new NotificationChannel(
-                    channelId, channelName, importance);
-            mChannel.shouldShowLights();
-            try {
-                notificationManager.createNotificationChannel(mChannel);
-            } catch (NullPointerException e){
-                Log.d(TAG, "Error creating notification channel: " + e.toString());
-            }
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+        NotificationChannel mChannel = new NotificationChannel(
+                channelId, channelName, importance);
+        mChannel.shouldShowLights();
+        try {
+            notificationManager.createNotificationChannel(mChannel);
+        } catch (NullPointerException e){
+            Log.d(TAG, "Error creating notification channel: " + e.toString());
         }
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, channelId)

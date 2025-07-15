@@ -536,31 +536,29 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
         layoutParams.screenBrightness = -1;
         getWindow().setAttributes(layoutParams);
-        if (Build.VERSION.SDK_INT >= 26) {
-            if (sharedPrefs.getBoolean("prefPIP", false) && (!isInMultiWindowMode())) {
-                int width = getWindow().getDecorView().getWidth();
-                int height = getWindow().getDecorView().getHeight();
-                int pipWidth = width;
-                int pipHeight = height;
+        if (sharedPrefs.getBoolean("prefPIP", false) && (!isInMultiWindowMode())) {
+            int width = getWindow().getDecorView().getWidth();
+            int height = getWindow().getDecorView().getHeight();
+            int pipWidth = width;
+            int pipHeight = height;
 
-                if (sharedPrefs.getString("prefPIPOrientation", "0").equals("0")) {
-                    if (height > width) {
-                        pipWidth = height;
-                        pipHeight = width;
-                    }
-                } else {
-                    if (height < width) {
-                        pipWidth = height;
-                        pipHeight = width;
-                    }
+            if (sharedPrefs.getString("prefPIPOrientation", "0").equals("0")) {
+                if (height > width) {
+                    pipWidth = height;
+                    pipHeight = width;
                 }
-                try {
-                    PictureInPictureParams params = new PictureInPictureParams.Builder()
-                            .setAspectRatio(new Rational(pipWidth, pipHeight)).build();
-                    enterPictureInPictureMode(params);
-                } catch (IllegalStateException e){
-                    Log.d(TAG,"PiP Not Supported at this time: " + e);
+            } else {
+                if (height < width) {
+                    pipWidth = height;
+                    pipHeight = width;
                 }
+            }
+            try {
+                PictureInPictureParams params = new PictureInPictureParams.Builder()
+                        .setAspectRatio(new Rational(pipWidth, pipHeight)).build();
+                enterPictureInPictureMode(params);
+            } catch (IllegalStateException e) {
+                Log.d(TAG, "PiP Not Supported at this time: " + e);
             }
         }
     }
@@ -1102,6 +1100,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
 
     private void reloadGridLayout() {
+
+        if (isFinishing() || isDestroyed()) {
+            return;
+        }
+
         //Use layout grid item1 as template and copy as needed
         final int templateLayoutResource = R.layout.item_grid;
         final int templateLayoutID = id.cell_layout;
@@ -1192,6 +1195,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             //Create new cell from template
             View gridCell = layoutInflater.inflate(templateLayoutResource, gridLayout, false);
             gridLayout.addView(gridCell);
+
+            if (gridLayout == null) {
+                // The GridLayout instance is null, potentially due to incorrect initialization
+                return;
+            }
 
             //Get contents of cell using template IDs
             ConstraintLayout layout = findViewById(templateLayoutID);

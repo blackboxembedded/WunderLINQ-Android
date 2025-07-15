@@ -63,9 +63,9 @@ import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -249,11 +249,11 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                                 }
                             }
                             if (!nextLine[10].equals("null") && !nextLine[10].equals("")){
-                                if (endOdometer == null || endOdometer < Double.parseDouble(nextLine[10])){
-                                    endOdometer = Double.parseDouble(nextLine[10]);
+                                if (endOdometer == null || endOdometer < Double.parseDouble(nextLine[10].replace(",", ""))){
+                                    endOdometer = Double.parseDouble(nextLine[10].replace(",", ""));
                                 }
-                                if (startOdometer == null || startOdometer > Double.parseDouble(nextLine[10])){
-                                    startOdometer = Double.parseDouble(nextLine[10]);
+                                if (startOdometer == null || startOdometer > Double.parseDouble(nextLine[10].replace(",", ""))){
+                                    startOdometer = Double.parseDouble(nextLine[10].replace(",", ""));
                                 }
                             }
                             if (!nextLine[13].equals("null") && !nextLine[13].equals("")){
@@ -520,7 +520,6 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                     gpxFile.delete();
                 while(!gpxFile.exists())
                     gpxFile.createNewFile();
-                FileOutputStream gpxOutStream = new FileOutputStream(gpxFile);
 
                 CSVReader reader = new CSVReader(new FileReader(file));
                 TrackSegment.Builder segment = TrackSegment.builder();
@@ -539,7 +538,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                         Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").parse(nextLine[0]);
                         double lat = Double.parseDouble(nextLine[1]);
                         double lon = Double.parseDouble(nextLine[1]);
-                        double elevation = Double.parseDouble(nextLine[3]);
+                        double elevation = Double.parseDouble(nextLine[3].replace(",", ""));
                         double speed = Double.parseDouble(nextLine[4]);
                         final WayPoint point = WayPoint.builder()
                                 .lat(lat).lon(lon).time(date.getTime()).ele(elevation).speed(speed)
@@ -549,7 +548,8 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                     lineNumber = lineNumber +1;
                 }
                 final GPX gpx = GPX.builder().creator(getString(R.string.app_name)).addTrack(track -> track.addSegment(segment.build())).build();
-                GPX.write(gpx, gpxOutStream);
+                Path gpxPath = gpxFile.toPath();
+                GPX.write(gpx, gpxPath);  // Path-based write, API 26+
                 Uri uri = FileProvider.getUriForFile(this, "com.blackboxembedded.wunderlinq.fileprovider", gpxFile);
 
                 share("application/gpx+xml", uri);

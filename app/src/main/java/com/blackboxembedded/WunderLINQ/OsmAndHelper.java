@@ -10,6 +10,7 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
@@ -520,8 +521,8 @@ public class OsmAndHelper {
      */
     private void sendRequest(OsmAndIntentBuilder intentBuilder) {
         try {
-            if (android.os.Build.VERSION.SDK_INT >= 24) {
-                if (mActivity.isInMultiWindowMode()) {
+            if (mActivity.isInMultiWindowMode()) {
+                if(PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext()).getString("prefAppLaunchOptions", "1").equals("0")){
                     intentBuilder.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
                 }
             }

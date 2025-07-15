@@ -236,14 +236,10 @@ public class FirstRunActivity extends AppCompatActivity {
                     tvMessage.setText(getString(R.string.notification_alert_body));
                     step = step + 1;
                     if (v.getId() == R.id.buttonOK) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            if (!Settings.canDrawOverlays(getApplication())) {
-                                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                        Uri.parse("package:" + getPackageName()));
-                                startActivity(intent);
-                            }
-                        } else {
-                            buttonOk.performClick();
+                        if (!Settings.canDrawOverlays(getApplication())) {
+                            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                    Uri.parse("package:" + getPackageName()));
+                            startActivity(intent);
                         }
                     }
                     break;

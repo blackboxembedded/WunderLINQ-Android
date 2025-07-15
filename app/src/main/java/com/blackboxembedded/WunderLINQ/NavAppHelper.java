@@ -162,8 +162,8 @@ public class NavAppHelper {
         }
         try {
             if (navIntent != null) {
-                if (android.os.Build.VERSION.SDK_INT >= 24) {
-                    if (activity.isInMultiWindowMode()) {
+                if (activity.isInMultiWindowMode()) {
+                    if(sharedPrefs.getString("prefAppLaunchOptions", "1").equals("0")){
                         navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
                     }
                 }
@@ -293,8 +293,8 @@ public class NavAppHelper {
             if (!navApp.equals("6")) { // If NOT OsmAnd
                 try {
                     if (navIntent != null) {
-                        if (android.os.Build.VERSION.SDK_INT >= 24) {
-                            if (activity.isInMultiWindowMode()) {
+                        if (activity.isInMultiWindowMode()) {
+                            if(sharedPrefs.getString("prefAppLaunchOptions", "1").equals("0")){
                                 navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
                             }
                         }
@@ -451,8 +451,8 @@ public class NavAppHelper {
         if (supported) {
             if (!navApp.equals("6")) { // If NOT OsmAnd
                 try {
-                    if (android.os.Build.VERSION.SDK_INT >= 24) {
-                        if (activity.isInMultiWindowMode()) {
+                    if (activity.isInMultiWindowMode()) {
+                        if(sharedPrefs.getString("prefAppLaunchOptions", "1").equals("0")){
                             homeNavIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
                         }
                     }
@@ -608,8 +608,8 @@ public class NavAppHelper {
         if (supported) {
             if (!navApp.equals("6")) { // If NOT OsmAnd
                 try {
-                    if (android.os.Build.VERSION.SDK_INT >= 24) {
-                        if (activity.isInMultiWindowMode()) {
+                    if (activity.isInMultiWindowMode()) {
+                        if(sharedPrefs.getString("prefAppLaunchOptions", "1").equals("0")){
                             navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
                         }
                     }
@@ -634,8 +634,8 @@ public class NavAppHelper {
         }
         try {
             roadbookIntent.setData(Uri.parse(url));
-            if (android.os.Build.VERSION.SDK_INT >= 24) {
-                if (activity.isInMultiWindowMode()) {
+            if (activity.isInMultiWindowMode()) {
+                if(sharedPrefs.getString("prefAppLaunchOptions", "1").equals("0")){
                     roadbookIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
                 }
             }

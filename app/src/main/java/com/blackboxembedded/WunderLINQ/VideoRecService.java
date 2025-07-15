@@ -127,15 +127,8 @@ public class VideoRecService extends Service implements LifecycleOwner {
             }
         }
 
-        boolean locationWPPerms = false;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            // Check Location permissions
-            if (getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                locationWPPerms = true;
-            }
-        } else {
-            locationWPPerms = true;
-        }
+        boolean locationWPPerms = getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        // Check Location permissions
         if (locationWPPerms) {
             LocationManager locationManager = (LocationManager)
                     this.getSystemService(LOCATION_SERVICE);
@@ -312,14 +305,12 @@ public class VideoRecService extends Service implements LifecycleOwner {
     private void createNotification() {
         // Start foreground service to avoid unexpected kill
         String CHANNEL_ID = "WunderLINQ";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, this.getString(R.string.title_video_notification),
-                    NotificationManager.IMPORTANCE_DEFAULT);
-            channel.setShowBadge(false);
-            channel.setSound(null, null);
-            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            manager.createNotificationChannel(channel);
-        }
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, this.getString(R.string.title_video_notification),
+                NotificationManager.IMPORTANCE_DEFAULT);
+        channel.setShowBadge(false);
+        channel.setSound(null, null);
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        manager.createNotificationChannel(channel);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setChannelId(CHANNEL_ID)

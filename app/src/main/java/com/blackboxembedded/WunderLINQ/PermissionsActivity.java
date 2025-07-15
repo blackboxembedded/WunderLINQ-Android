@@ -122,12 +122,10 @@ public class PermissionsActivity extends AppCompatActivity {
                         }
                         break;
                     case PERMISSION_OVERLAY:
-                        if(Build.VERSION.SDK_INT >= 23) {
-                            if (!Settings.canDrawOverlays(getApplication())) {
-                                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                        Uri.parse("package:" + getPackageName()));
-                                startActivity(intent);
-                            }
+                        if (!Settings.canDrawOverlays(getApplication())) {
+                            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                    Uri.parse("package:" + getPackageName()));
+                            startActivity(intent);
                         }
                         break;
                     case PERMISSION_USAGE_STATS:
@@ -251,14 +249,7 @@ public class PermissionsActivity extends AppCompatActivity {
         listValues.add(new PermissionRecord(PERMISSION_NOTIFICATION, getString(R.string.permission_notification_label), notificationPermission));
 
         //Overlay
-        boolean overlayPermission = false;
-        if(Build.VERSION.SDK_INT >= 23) {
-            if (Settings.canDrawOverlays(getApplication())) {
-                overlayPermission = true;
-            }
-        } else {
-            overlayPermission = true;
-        }
+        boolean overlayPermission = Settings.canDrawOverlays(getApplication());
         listValues.add(new PermissionRecord(PERMISSION_OVERLAY, getString(R.string.permission_overlays_label), overlayPermission));
 
         //Usage Stats

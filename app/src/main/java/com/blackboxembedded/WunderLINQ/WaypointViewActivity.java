@@ -62,8 +62,8 @@ import com.google.android.gms.maps.MapsInitializer.Renderer;
 import com.google.android.gms.maps.OnMapsSdkInitializedCallback;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -369,7 +369,7 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
                     gpxFile.delete();
                 while(!gpxFile.exists())
                     gpxFile.createNewFile();
-                FileOutputStream gpxOutStream = new FileOutputStream(gpxFile);
+
                 Calendar cal = Calendar.getInstance();
                 Date date = cal.getTime();
                 try {
@@ -386,7 +386,10 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
                             .creator(getString(R.string.app_name)).addWayPoint(WayPoint.builder().lat(lat).lon(lon).ele(elev).time(date.getTime()).cmt(label).build())
                             .build();
                 }
-                GPX.write(gpx, gpxOutStream);
+
+                Path gpxPath = gpxFile.toPath();
+                GPX.write(gpx, gpxPath);  // Path-based write, API 26+
+
                 Uri uri = FileProvider.getUriForFile(this, "com.blackboxembedded.wunderlinq.fileprovider", gpxFile);
                 share("application/gpx+xml", uri, true);
             }

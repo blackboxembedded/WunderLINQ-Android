@@ -976,6 +976,17 @@
     <string name="pref_autotrip_name">Auto Trip Logging</string>
     <string name="pref_autotrip_summary">Automatically starts trip logging when connected to the WunderLINQ hardware.</string>
     <string name="toast_auto_trip_logging">Auto Trip Logging Enabled</string>
+    <string name="pref_app_launch_options_name">Split Screen App Launch</string>
+    <string name="pref_app_launch_adjacent">Launch Adjacent</string>
+    <string name="pref_app_launch_over">Launch Overtop</string>
+    <string-array name="appLaunchOptions_array" translatable="false">
+        <item name="1">@string/pref_app_launch_adjacent</item>
+        <item name="2">@string/pref_app_launch_over</item>
+    </string-array>
+    <string-array name="appLaunchOptions_arrayValues" translatable="false">
+        <item name="1">0</item>
+        <item name="2">1</item>
+    </string-array>
     <string name="pref_debuglogging_name">Enable Debug Logging</string>
     <string name="pref_debuglogging_summary">Only enable if needed by Support, may impact performance if left running.  Please disable when finished.</string>
     <string name="hw_settings_title">WunderLINQ hardware Settings</string>

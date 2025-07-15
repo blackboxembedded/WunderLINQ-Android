@@ -172,11 +172,7 @@ public class Utils {
 
     //Get Devices current Locale
     public static Locale getCurrentLocale() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return MyApplication.getContext().getResources().getConfiguration().getLocales().get(0);
-        } else {
-            return MyApplication.getContext().getResources().getConfiguration().locale;
-        }
+        return MyApplication.getContext().getResources().getConfiguration().getLocales().get(0);
     }
 
 

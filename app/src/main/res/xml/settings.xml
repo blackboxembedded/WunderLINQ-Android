@@ -353,7 +353,7 @@
             android:title="@string/pref_nightMode_name"
             android:entries="@array/night_mode_array"
             android:entryValues="@array/night_mode_arrayValues"
-            android:defaultValue="0"
+            android:defaultValue="3"
             />
         <EditTextPreference
             android:title="@string/pref_autoNightModeDelay_name"
@@ -414,7 +414,7 @@
             android:title="@string/pref_dashboard_speedsource_name"
             android:entries="@array/dashSpeedSources_array"
             android:entryValues="@array/dashSpeedSources_arrayValues"
-            android:defaultValue="1">
+            android:defaultValue="0">
         </ListPreference>
         <CheckBoxPreference
             android:defaultValue="false"
@@ -440,6 +440,13 @@
             android:summary="@string/pref_autotrip_summary"
             android:title="@string/pref_autotrip_name" >
         </CheckBoxPreference>
+        <ListPreference
+            android:key="prefAppLaunchOptions"
+            android:title="@string/pref_app_launch_options_name"
+            android:entries="@array/appLaunchOptions_array"
+            android:entryValues="@array/appLaunchOptions_arrayValues"
+            android:defaultValue="0">
+        </ListPreference>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_integrations_settings_title" >
         <PreferenceScreen

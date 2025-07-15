@@ -21,12 +21,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -167,6 +165,7 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
         ListPreference prefOrientation;
         ListPreference prefNightModeCombo;
         ListPreference prefDashSpeedSource;
+        ListPreference prefAppLaunchOptions;
         ListPreference prefNavApp;
         ListPreference prefRoadBookApp;
         ListPreference prefPIPOrientation;
@@ -317,6 +316,8 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
             prefNightModeCombo.setSummary(prefNightModeCombo.getEntry());
             prefDashSpeedSource = findPreference("prefDashSpeedSource");
             prefDashSpeedSource.setSummary(prefDashSpeedSource.getEntry());
+            prefAppLaunchOptions = findPreference("prefAppLaunchOptions");
+            prefAppLaunchOptions.setSummary(prefAppLaunchOptions.getEntry());
             prefNavApp = findPreference("prefNavApp");
             prefNavApp.setSummary(prefNavApp.getEntry());
             prefRoadBookApp = findPreference("prefRoadBookApp");
@@ -489,6 +490,9 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
             }
             if (key.equals("prefDashSpeedSource")){
                 prefDashSpeedSource.setSummary(prefDashSpeedSource.getEntry());
+            }
+            if (key.equals("prefAppLaunchOptions")){
+                prefAppLaunchOptions.setSummary(prefAppLaunchOptions.getEntry());
             }
             if (key.equals("prefNavApp")){
                 prefNavApp.setSummary(prefNavApp.getEntry());

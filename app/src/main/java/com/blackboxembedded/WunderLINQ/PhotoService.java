@@ -32,9 +32,8 @@ import android.graphics.Matrix;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.media.ExifInterface;
+import androidx.exifinterface.media.ExifInterface;
 import android.media.MediaScannerConnection;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
@@ -140,15 +139,8 @@ public class PhotoService extends Service implements LifecycleOwner {
             }
         }, ContextCompat.getMainExecutor(this));
 
-        boolean locationWPPerms = false;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            // Check Location permissions
-            if (getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                locationWPPerms = true;
-            }
-        } else {
-            locationWPPerms = true;
-        }
+        boolean locationWPPerms = getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        // Check Location permissions
         if (locationWPPerms) {
             LocationManager locationManager = (LocationManager)
                     this.getSystemService(LOCATION_SERVICE);
