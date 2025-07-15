@@ -786,44 +786,47 @@ public class BluetoothLeService extends Service {
             if (data != null) {
                 boolean process = false;
                 int msgID = (data[0] & 0xFF);
-                if (msgID == 0x04){
-                    if(MotorcycleData.wlq != null) {
-                        if (MotorcycleData.wlq.getAccStatus() != null){
-                            MotorcycleData.wlq.setAccActive(1);
+                if (msgID <= 0x0C) {
+                    if (msgID == 0x04) {
+                        if (MotorcycleData.wlq != null) {
+                            if (MotorcycleData.wlq.getAccStatus() != null) {
+                                MotorcycleData.wlq.setAccActive(1);
+                            }
                         }
-                    }
-                    if (!MotorcycleData.getHasFocus()){
-                        Log.d(TAG,"Focus Gained");
-                        final Intent intent = new Intent(ACTION_FOCUS_CHANGED);
-                        MyApplication.getContext().sendBroadcast(intent);
+                        if (!MotorcycleData.getHasFocus()) {
+                            Log.d(TAG, "Focus Gained");
+                            final Intent intent = new Intent(ACTION_FOCUS_CHANGED);
+                            MyApplication.getContext().sendBroadcast(intent);
 
-                        sendDataBroadcast();
-                    }
-                    MotorcycleData.setHasFocus(true);
-                    lastControlMessage = System.currentTimeMillis();
-                } else {
-                    if (MotorcycleData.getHasFocus() && ( System.currentTimeMillis() - lastControlMessage > 500)){
-                        Log.d(TAG,"Focus Gone" );
-                        MotorcycleData.setHasFocus(false);
-                        sendDataBroadcast();
-                    }
-                    //Check if message changed
-                    if (!messages.containsKey(msgID)) {
-                        messages.put(msgID, data);
-                        process = true;
-                    } else {
-                        if (!Arrays.equals(messages.get(msgID), data)) {
-                            process = true;
+                            sendDataBroadcast();
                         }
-                    }
-                    //Process message
-                    if (process) {
-                        BLEBus.parseBLEMessage(data);
-                        /*
-                         * Sending the broad cast so that it can be received on registered
-                         * receivers
-                         */
-                        sendDataBroadcast();
+                        MotorcycleData.setHasFocus(true);
+                        lastControlMessage = System.currentTimeMillis();
+                    } else {
+                        if (MotorcycleData.getHasFocus() && (System.currentTimeMillis() - lastControlMessage > 500)) {
+                            Log.d(TAG, "Focus Gone");
+                            MotorcycleData.setHasFocus(false);
+                            sendDataBroadcast();
+                        }
+                        //Check if message changed
+                        if (!messages.containsKey(msgID)) {
+                            messages.put(msgID, data);
+                            process = true;
+                        } else {
+                            if (!Arrays.equals(messages.get(msgID), data)) {
+                                messages.put(msgID, data);
+                                process = true;
+                            }
+                        }
+                        //Process message
+                        if (process) {
+                            BLEBus.parseBLEMessage(data);
+                            /*
+                             * Sending the broad cast so that it can be received on registered
+                             * receivers
+                             */
+                            sendDataBroadcast();
+                        }
                     }
                 }
             }
