@@ -19,7 +19,6 @@ package com.blackboxembedded.WunderLINQ.comms.BLE;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
@@ -430,6 +429,11 @@ public class BLEBus {
                     int minPosition = 36;
                     int maxPosition = 236;
                     double throttlePosition = (((data[3] & 0xFF) - minPosition) * 100.0) / (maxPosition - minPosition);
+                    if (throttlePosition < 0) {
+                        throttlePosition = 0;
+                    } else if (throttlePosition > 100) {
+                        throttlePosition = 100;
+                    }
                     MotorcycleData.setThrottlePosition(throttlePosition);
                 }
 
