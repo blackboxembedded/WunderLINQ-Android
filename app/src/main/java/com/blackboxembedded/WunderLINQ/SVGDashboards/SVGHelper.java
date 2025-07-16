@@ -13,7 +13,6 @@ import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import com.blackboxembedded.WunderLINQ.MyApplication;
 import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
-//import com.caverock.androidsvg.SVG;
 
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 

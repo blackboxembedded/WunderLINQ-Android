@@ -15,17 +15,19 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-package com.blackboxembedded.WunderLINQ;
+package com.blackboxembedded.WunderLINQ.SVGDashboards;
 
 import android.graphics.Typeface;
 
 import androidx.core.content.res.ResourcesCompat;
 
+import com.blackboxembedded.WunderLINQ.MyApplication;
+import com.blackboxembedded.WunderLINQ.R;
 import com.caverock.androidsvg.SVGExternalFileResolver;
 
 
 public class SvgFileResolver extends SVGExternalFileResolver {
     @Override public Typeface resolveFont(String fontFamily, int fontWeight, String fontStyle) {
-        return ResourcesCompat.getFont(MyApplication.getContext(),R.font.agencyfb);
+        return ResourcesCompat.getFont(MyApplication.getContext(), R.font.agencyfb);
     }
 }

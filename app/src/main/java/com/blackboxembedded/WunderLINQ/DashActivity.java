@@ -44,6 +44,7 @@ import androidx.core.content.ContextCompat;
 import com.blackboxembedded.WunderLINQ.SVGDashboards.ADVDashboard;
 import com.blackboxembedded.WunderLINQ.SVGDashboards.SportDashboard;
 import com.blackboxembedded.WunderLINQ.SVGDashboards.StandardDashboard;
+import com.blackboxembedded.WunderLINQ.SVGDashboards.SvgFileResolver;
 import com.blackboxembedded.WunderLINQ.TaskList.TaskActivity;
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
@@ -80,6 +81,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
         setContentView(R.layout.activity_dash);
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        currentDashboard = sharedPrefs.getInt("lastDashboard",1);
 
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
