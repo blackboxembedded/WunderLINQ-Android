@@ -1202,18 +1202,35 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             }
 
             //Get contents of cell using template IDs
+            /*
             ConstraintLayout layout = findViewById(templateLayoutID);
             TextView valueTextView = findViewById(templateTextViewID);
             TextView headerLabelView = findViewById(templateTextViewLabelID);
             ImageView iconImageView = findViewById(templateImageViewID);
 
+             */
+            ConstraintLayout layout = gridCell.findViewById(templateLayoutID);
+            TextView valueTextView = gridCell.findViewById(templateTextViewID);
+            TextView headerLabelView = gridCell.findViewById(templateTextViewLabelID);
+            ImageView iconImageView = gridCell.findViewById(templateImageViewID);
+
+            if (layout == null || valueTextView == null || headerLabelView == null || iconImageView == null) {
+                Log.e(TAG, "Template IDs wrong or not present in R.layout.item_grid!");
+                return;
+            }
 
             //Set dynamic tags and IDs
-            gridCell.setId(View.generateViewId());
-            layout.setId(View.generateViewId());
-            valueTextView.setId(View.generateViewId());
-            headerLabelView.setId(View.generateViewId());
-            iconImageView.setId(View.generateViewId());
+            int cellId       = View.generateViewId();
+            int layoutId     = View.generateViewId();
+            int valueViewId  = View.generateViewId();
+            int labelViewId  = View.generateViewId();
+            int iconViewId   = View.generateViewId();
+
+            gridCell.setId(cellId);
+            layout.setId(layoutId);
+            valueTextView.setId(valueViewId);
+            headerLabelView.setId(labelViewId);
+            iconImageView.setId(iconViewId);
 
             gridCell.setTag(cellNumber);
             layout.setTag(cellNumber);
@@ -1222,10 +1239,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             iconImageView.setTag(cellNumber);
 
             //cache generated IDs in an array for later use
-            layoutIDs[cellNumber] = layout.getId();
-            valueTextViewIDs[cellNumber] = valueTextView.getId();
-            headerLabelViewIDs[cellNumber] = headerLabelView.getId();
-            iconImageViewIDs[cellNumber] = iconImageView.getId();
+            layoutIDs[cellNumber]         = layoutId;
+            valueTextViewIDs[cellNumber]  = valueViewId;
+            headerLabelViewIDs[cellNumber]= labelViewId;
+            iconImageViewIDs[cellNumber]  = iconViewId;
         }
 
         gridChange( false);

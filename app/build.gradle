@@ -6,8 +6,8 @@ android {
         applicationId "com.blackboxembedded.WunderLINQ"
         minSdkVersion 26
         targetSdkVersion 35
-        versionCode 207
-        versionName "2.97"
+        versionCode 208
+        versionName "2.98"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         Properties properties = new Properties()
@@ -58,8 +58,8 @@ dependencies {
     implementation 'androidx.preference:preference:1.2.1'
     implementation 'androidx.gridlayout:gridlayout:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
-    implementation "androidx.lifecycle:lifecycle-viewmodel:2.9.1"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:2.9.2"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.2"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'com.google.android.gms:play-services-location:21.3.0'
@@ -73,10 +73,10 @@ dependencies {
     implementation 'stax:stax:1.2.0'
     implementation 'com.github.ticofab:android-gpx-parser:2.3.1'
     implementation 'com.caverock:androidsvg-aar:1.4'
-    implementation 'commons-io:commons-io:2.19.0'
+    implementation 'commons-io:commons-io:2.20.0'
     implementation 'com.github.yarolegovich:DiscreteScrollView:1.5.1'
     implementation 'com.google.guava:guava:33.4.8-android'
-    implementation "androidx.car.app:app:1.4.0"
+    implementation "androidx.car.app:app:1.7.0"
 
     testImplementation 'junit:junit:4.13.2'
 }
