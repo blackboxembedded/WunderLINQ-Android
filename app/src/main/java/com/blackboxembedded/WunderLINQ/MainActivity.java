@@ -532,36 +532,43 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     public void onUserLeaveHint() {
-        //Set Brightness to defaults
-        WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
-        layoutParams.screenBrightness = -1;
-        getWindow().setAttributes(layoutParams);
-        if (sharedPrefs.getBoolean("prefPIP", false) && (!isInMultiWindowMode())) {
-            int width = getWindow().getDecorView().getWidth();
-            int height = getWindow().getDecorView().getHeight();
-            int pipWidth = width;
-            int pipHeight = height;
+        // Restore brightness
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.screenBrightness = -1;
+        getWindow().setAttributes(lp);
 
-            if (sharedPrefs.getString("prefPIPOrientation", "0").equals("0")) {
-                if (height > width) {
-                    pipWidth = height;
-                    pipHeight = width;
-                }
+        if (sharedPrefs.getBoolean("prefPIP", false) && !isInMultiWindowMode()) {
+            int contentWidth  = getWindow().getDecorView().getWidth();
+            int contentHeight = getWindow().getDecorView().getHeight();
+
+            if (contentWidth > 0 && contentHeight > 0) {
+                // Compute raw aspect ratio
+                float rawRatio = (float) contentWidth / contentHeight;
+
+                // PiP bounds: [1/2.39, 2.39]
+                final float MIN_ASPECT = 1f / 2.39f;
+                final float MAX_ASPECT = 2.39f;
+
+                // Clamp
+                float clampedRatio = Math.max(MIN_ASPECT, Math.min(rawRatio, MAX_ASPECT));
+
+                // Recompute a Rational with the clamped width
+                int clampedWidth = Math.round(clampedRatio * contentHeight);
+                Rational pipAspectRatio = new Rational(clampedWidth, contentHeight);
+
+                PictureInPictureParams pipParams =
+                        new PictureInPictureParams.Builder()
+                                .setAspectRatio(pipAspectRatio)
+                                .build();
+                enterPictureInPictureMode(pipParams);
             } else {
-                if (height < width) {
-                    pipWidth = height;
-                    pipHeight = width;
-                }
-            }
-            try {
-                PictureInPictureParams params = new PictureInPictureParams.Builder()
-                        .setAspectRatio(new Rational(pipWidth, pipHeight)).build();
-                enterPictureInPictureMode(params);
-            } catch (IllegalStateException e) {
-                Log.d(TAG, "PiP Not Supported at this time: " + e);
+                Log.w("PiP", "Cannot enter PiP: invalid content dimensions.");
             }
         }
+
+        super.onUserLeaveHint();
     }
+
 
     @Override
     public void onPictureInPictureModeChanged(boolean isInPIPMode) {
