@@ -159,6 +159,11 @@ public class NavAppHelper {
             case "26": //DMD2
                 navIntent = activity.getPackageManager().getLaunchIntentForPackage("com.thorkracing.dmd2launcher");
                 break;
+            case "27": //Bmaps
+                navIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                url = "bmaps://";
+                navIntent.setData(Uri.parse(url));
+                break;
         }
         try {
             if (navIntent != null) {
@@ -287,6 +292,11 @@ public class NavAppHelper {
                 break;
             case "26": //DMD2
                 // Not Supported
+                break;
+            case "27": //Bmaps
+                supported = true;
+                url = "bmaps://search?fuel";
+                navIntent.setData(Uri.parse(url));
                 break;
         }
         if (supported) {
@@ -447,6 +457,11 @@ public class NavAppHelper {
             case "26" : //DMD2
                 // Not Supported
                 break;
+            case "27": //Bmaps
+                supported = true;
+                navUrl = "bmaps://route?geo=" + end.getLatitude() + "," + end.getLongitude();
+                homeNavIntent.setData(Uri.parse(navUrl));
+                break;
         }
         if (supported) {
             if (!navApp.equals("6")) { // If NOT OsmAnd
@@ -604,6 +619,11 @@ public class NavAppHelper {
             case "26" : //DMD2
                 // Not Supported
                 break;
+            case "27": //Bmaps
+                supported = true;
+                navUrl = "bmaps://view?geo=" + waypoint.getLatitude() + "," + waypoint.getLongitude() ;
+                navIntent.setData(Uri.parse(navUrl));
+                break;
         }
         if (supported) {
             if (!navApp.equals("6")) { // If NOT OsmAnd
@@ -649,7 +669,7 @@ public class NavAppHelper {
         
         List<ResolveInfo> list = activity.getPackageManager().queryIntentActivities(intent,
                 PackageManager.MATCH_DEFAULT_ONLY);
-        return list.size() > 0;
+        return !list.isEmpty();
     }
 
     //Looks for a partial string and returns the first package name that matches
