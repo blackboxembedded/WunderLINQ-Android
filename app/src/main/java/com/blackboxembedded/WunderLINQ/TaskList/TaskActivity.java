@@ -592,7 +592,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                     Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
                     Intent photoIntent = new Intent(TaskActivity.this, PhotoService.class);
-                    photoIntent.putExtra("camera", CameraCharacteristics.LENS_FACING_BACK);
+                    photoIntent.putExtra("CAMERA", CameraCharacteristics.LENS_FACING_BACK);
                     startService(photoIntent);
                 }
                 break;
@@ -603,7 +603,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                     Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
                     Intent photoIntent = new Intent(TaskActivity.this, PhotoService.class);
-                    photoIntent.putExtra("camera", CameraCharacteristics.LENS_FACING_FRONT);
+                    photoIntent.putExtra("CAMERA", CameraCharacteristics.LENS_FACING_FRONT);
                     startService(photoIntent);
                 }
                 break;
