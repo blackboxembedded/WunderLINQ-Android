@@ -134,15 +134,20 @@
             android:launchMode="singleTask"
             android:resizeableActivity="true"
             android:supportsPictureInPicture="true">
+            <!-- Bare scheme: wunderlinq:// -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="wunderlinq" />
+            </intent-filter>
 
-                <data
-                    android:host="datagrid"
-                    android:scheme="wunderlinq" />
+            <!-- Specific host: wunderlinq://datagrid -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="wunderlinq" android:host="datagrid" />
             </intent-filter>
         </activity>
         <activity
