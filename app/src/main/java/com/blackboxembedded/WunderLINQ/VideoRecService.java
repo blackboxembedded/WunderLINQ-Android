@@ -24,33 +24,35 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraCharacteristics;
-import android.hardware.camera2.CameraManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.provider.MediaStore;
 import android.text.format.DateFormat;
 import android.util.Log;
-import android.util.Size;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.camera.core.AspectRatio;
 import androidx.camera.core.CameraSelector;
-import androidx.camera.core.VideoCapture;
 import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.camera.video.FallbackStrategy;
+import androidx.camera.video.FileOutputOptions;
+import androidx.camera.video.MediaStoreOutputOptions;
+import androidx.camera.video.PendingRecording;
+import androidx.camera.video.Quality;
+import androidx.camera.video.QualitySelector;
+import androidx.camera.video.Recorder;
+import androidx.camera.video.Recording;
+import androidx.camera.video.VideoCapture;
+import androidx.camera.video.VideoRecordEvent;
+import androidx.camera.video.QualitySelector;
+import androidx.camera.video.Quality;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Lifecycle;
@@ -60,264 +62,261 @@ import androidx.lifecycle.LifecycleRegistry;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;
-import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
 
 public class VideoRecService extends Service implements LifecycleOwner {
-
     private static final String TAG = "VideoRecService";
-    private LifecycleRegistry mLifecycleRegistry;
 
-    private int cameraArg = 0;
-    private CameraManager cameraManager;
-    private MediaRecorder mediaRecorder;
-    private String cameraId;
-    private Size videoSize;
+    // Foreground notification
+    private static final String CHANNEL_ID = "wlq-video";
+    private static final int NOTIF_ID = 1234;
+
+    // Intent extras (match your existing usage)
+    // CAMERA: 0=front, 1=back (default back)
+    private int cameraArg = CameraSelector.LENS_FACING_BACK;
+
+    private LifecycleRegistry lifecycleRegistry;
     private ProcessCameraProvider cameraProvider;
-    private File outputFile;
-    private Location location;
-    private boolean isRecording = false;
+
+    // CameraX 1.4.0 video API
+    private Recorder recorder;
+    private VideoCapture<Recorder> videoCapture;
+    private Recording activeRecording;
+
+    // Optional: last known location (for MediaStore LAT/LON columns)
+    @Nullable private Location location;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mLifecycleRegistry = new LifecycleRegistry(this);
-        mLifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
-
+        lifecycleRegistry = new LifecycleRegistry(this);
+        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
         createNotification();
-
-        cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-        try {
-            for (String id : cameraManager.getCameraIdList()) {
-                CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(id);
-                if (characteristics.get(CameraCharacteristics.LENS_FACING) == cameraArg) {
-                    cameraId = id;
-                    break;
-                }
-            }
-        } catch (CameraAccessException e) {
-            Log.e(TAG, "Failed to get camera ID", e);
-            stopSelf();
-        }
-
-        if (cameraId == null) {
-            Log.e(TAG, "No camera found");
-            stopSelf();
-        }
-
-        mediaRecorder = new MediaRecorder();
     }
 
-    @SuppressLint("RestrictedApi")
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "onStartCommand");
-        mLifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_START);
+    public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
+        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_START);
 
         if (intent != null) {
-            // Retrieve the Intent that started the Service
-            Bundle extras = intent.getExtras();
-            if (extras != null) {
-                cameraArg = extras.getInt("camera");
-                Log.d(TAG, "Camera Choice: " + cameraArg);
-            } else {
-                stopSelf();
-            }
+            cameraArg = intent.getIntExtra("CAMERA", CameraSelector.LENS_FACING_BACK);
         }
 
-        boolean locationWPPerms = getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-        // Check Location permissions
-        if (locationWPPerms) {
-            LocationManager locationManager = (LocationManager)
-                    this.getSystemService(LOCATION_SERVICE);
-            Criteria criteria = new Criteria();
-            String bestProvider = locationManager.getBestProvider(criteria, false);
-            location = locationManager.getLastKnownLocation(bestProvider);
-        }
+        // Try to fetch a last-known location if we have permission.
+        fetchLastKnownLocation();
 
-        cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-
-        // Get the camera instance
-        ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(this);
-        cameraProviderFuture.addListener(() -> {
+        // Spin up CameraX and start recording
+        ListenableFuture<ProcessCameraProvider> providerFuture = ProcessCameraProvider.getInstance(this);
+        providerFuture.addListener(() -> {
             try {
-                // Set up the video output file
-                outputFile = createVideoFile();
-
-                // Set up the MediaRecorder
-                Size[] sizes = cameraManager.getCameraCharacteristics(cameraId)
-                        .get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
-                        .getOutputSizes(MediaRecorder.class);
-
-                videoSize = sizes[0];
-                for (Size size : sizes) {
-                    if (size.getWidth() * size.getHeight() > videoSize.getWidth() * videoSize.getHeight()) {
-                        videoSize = size;
-                    }
-                }
-                mediaRecorder = new MediaRecorder();
-                mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
-                mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-                mediaRecorder.setOutputFile(outputFile.getAbsolutePath());
-                mediaRecorder.setVideoEncodingBitRate(10000000);
-                mediaRecorder.setAudioSamplingRate(16000);
-                mediaRecorder.setVideoFrameRate(30);
-                mediaRecorder.setVideoSize(videoSize.getWidth(), videoSize.getHeight());
-                mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
-                mediaRecorder.prepare();
-
-                // Get the camera provider instance
-                cameraProvider = cameraProviderFuture.get();
-
-                cameraProvider.unbindAll();
-
-                CameraSelector cameraSelector = new CameraSelector.Builder()
-                        .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                        .build();
-                if (cameraArg == 0 ){
-                    cameraSelector = new CameraSelector.Builder()
-                            .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
-                            .build();
-                }
-
-                // Set up the video capture use case
-                VideoCapture.Builder videoCaptureConfigBuilder = new VideoCapture.Builder();
-                videoCaptureConfigBuilder.setTargetAspectRatio(AspectRatio.RATIO_16_9);
-                VideoCapture videoCapture = videoCaptureConfigBuilder.build();
-
-                // Bind the lifecycle of the camera to the lifecycle of the service
-                cameraProvider.bindToLifecycle(this, cameraSelector, videoCapture);
-
-                ContentValues contentValues = new ContentValues();
-                contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "WunderLINQ-" + DateFormat.format("yyyyMMdd_kkmmss", new Date().getTime()).toString());
-                contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4");
-                contentValues.put(MediaStore.Video.Media.TITLE, "WunderLINQ Video");
-                if (location != null) {
-                    contentValues.put(MediaStore.Video.Media.LATITUDE, String.valueOf(location.getLatitude()));
-                    contentValues.put(MediaStore.Video.Media.LONGITUDE, String.valueOf(location.getLongitude()));
-                }
-
-                VideoCapture.OutputFileOptions outputFileOptions = new VideoCapture.OutputFileOptions.Builder(
-                        this.getContentResolver(),
-                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI, //Use this to save in normal Gallery
-                        contentValues
-                ).build();
-
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    videoCapture.startRecording(outputFileOptions, getMainExecutor(), new VideoCapture.OnVideoSavedCallback() {
-                        @Override
-                        public void onVideoSaved(@NonNull VideoCapture.OutputFileResults outputFileResults) {
-                            Log.i(TAG,"Recording ended");
-                        }
-
-                        @Override
-                        public void onError(int videoCaptureError, String message, Throwable cause) {
-                            // Error occurred while saving the video
-                        }
-                    });
-                } else {
-                    Handler mainHandler = new Handler(Looper.getMainLooper());
-                    Executor mainExecutor = new Executor() {
-                        @Override
-                        public void execute(Runnable command) {
-                            mainHandler.post(command);
-                        }
-                    };
-
-                    videoCapture.startRecording(outputFileOptions, mainExecutor, new VideoCapture.OnVideoSavedCallback() {
-                        @Override
-                        public void onVideoSaved(@NonNull VideoCapture.OutputFileResults outputFileResults) {
-                            Log.i(TAG,"Recording ended");
-                        }
-
-                        @Override
-                        public void onError(int videoCaptureError, String message, Throwable cause) {
-                            // Error occurred while saving the video
-                        }
-                    });
-                }
-
-                // Start recording
-                mediaRecorder.start();
-                isRecording = true;
-                Log.d(TAG, "Recording started");
-                ((MyApplication) this.getApplication()).setVideoRecording(true);
-
-            } catch (ExecutionException | InterruptedException | IOException | CameraAccessException e) {
-                Log.e(TAG, "Error setting up camera and media recorder", e);
+                cameraProvider = providerFuture.get();
+                startCameraAndRecord();
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "CameraProvider error", e);
                 stopSelf();
             }
         }, ContextCompat.getMainExecutor(this));
 
-        // Return START_STICKY to indicate that this service should be restarted if it's killed
         return START_STICKY;
+    }
+
+    private void startCameraAndRecord() {
+        if (cameraProvider == null) {
+            Log.e(TAG, "cameraProvider null");
+            stopSelf();
+            return;
+        }
+
+        cameraProvider.unbindAll();
+
+        CameraSelector selector = new CameraSelector.Builder()
+                .requireLensFacing(cameraArg == 0
+                        ? CameraSelector.LENS_FACING_FRONT
+                        : CameraSelector.LENS_FACING_BACK)
+                .build();
+
+        // Prefer FHD, then HD, then SD (fallbacks are important across devices)
+        QualitySelector qualitySelector = QualitySelector.fromOrderedList(
+                java.util.Arrays.asList(Quality.FHD, Quality.HD, Quality.SD),
+                FallbackStrategy.lowerQualityOrHigherThan(Quality.FHD));
+
+        recorder = new Recorder.Builder()
+                .setQualitySelector(qualitySelector)
+                .build();
+
+        videoCapture = VideoCapture.withOutput(recorder);
+
+        // Bind to this Service's lifecycle
+        cameraProvider.bindToLifecycle(this, selector, videoCapture);
+
+        // Choose output: MediaStore (scoped storage) for API 29+; else a file in Movies/WunderLINQ
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startRecordingToMediaStore();
+        } else {
+            startRecordingToFile();
+        }
+    }
+
+    private void startRecordingToMediaStore() {
+        String displayName = "WLQ_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.MediaColumns.DISPLAY_NAME, displayName);
+        values.put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4");
+        values.put(MediaStore.Video.Media.TITLE, "WunderLINQ Video");
+        if (location != null) {
+            // These columns are respected by some OEM galleries and Google Photos for videos.
+            values.put(MediaStore.Video.Media.LATITUDE, location.getLatitude());
+            values.put(MediaStore.Video.Media.LONGITUDE, location.getLongitude());
+        }
+
+        MediaStoreOutputOptions outputOptions =
+                new MediaStoreOutputOptions.Builder(getContentResolver(),
+                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
+                        .setContentValues(values)
+                        .build();
+
+        beginRecording(outputOptions);
+    }
+
+    private void startRecordingToFile() {
+        File movies = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
+        File appDir = new File(movies, "WunderLINQ");
+        if (!appDir.exists() && !appDir.mkdirs()) {
+            Log.e(TAG, "Failed to create dir: " + appDir);
+            stopSelf();
+            return;
+        }
+        String ts = DateFormat.format("yyyyMMdd_HHmmss", System.currentTimeMillis()).toString();
+        File out = new File(appDir, "WLQ_" + ts + ".mp4");
+
+        FileOutputOptions outputOptions =
+                new FileOutputOptions.Builder(out).build();
+
+        beginRecording(outputOptions);
+    }
+
+    @SuppressLint("MissingPermission")
+    private void beginRecording(@NonNull Object outputOptions) {
+        if (videoCapture == null || recorder == null) {
+            Log.e(TAG, "Video components not ready");
+            stopSelf();
+            return;
+        }
+
+        PendingRecording pending;
+        if (outputOptions instanceof MediaStoreOutputOptions) {
+            pending = recorder.prepareRecording(this, (MediaStoreOutputOptions) outputOptions);
+        } else if (outputOptions instanceof FileOutputOptions) {
+            pending = recorder.prepareRecording(this, (FileOutputOptions) outputOptions);
+        } else {
+            Log.e(TAG, "Unsupported output options");
+            stopSelf();
+            return;
+        }
+
+        // Enable audio if we have permission
+        boolean hasAudio = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                == PackageManager.PERMISSION_GRANTED;
+        if (hasAudio) pending = pending.withAudioEnabled();
+
+        activeRecording = pending.start(ContextCompat.getMainExecutor(this), event -> {
+            if (event instanceof VideoRecordEvent.Start) {
+                Log.d(TAG, "Recording started");
+                ((MyApplication) getApplication()).setVideoRecording(true);
+            } else if (event instanceof VideoRecordEvent.Finalize finalizeEvent) {
+                Uri uri = finalizeEvent.getOutputResults().getOutputUri();
+                Log.d(TAG, "Recording finalized: " + uri + " error=" + finalizeEvent.getError());
+                ((MyApplication) getApplication()).setVideoRecording(false);
+                // Stop the service once finalized (adjust if you want continuous)
+                stopSelf();
+            } else if (event instanceof VideoRecordEvent.Status status) {
+                // Optional: bitrate, duration, etc.
+                // Log.v(TAG, "Status: " + status.getRecordedDurationNanos());
+            } else if (event instanceof VideoRecordEvent.Pause) {
+                Log.d(TAG, "Recording paused");
+            } else if (event instanceof VideoRecordEvent.Resume) {
+                Log.d(TAG, "Recording resumed");
+            }
+        });
+    }
+
+    private void fetchLastKnownLocation() {
+        boolean fine = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
+        boolean coarse = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
+        if (!fine && !coarse) return;
+
+        try {
+            LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+            if (lm != null) {
+                Criteria c = new Criteria();
+                String provider = lm.getBestProvider(c, false);
+                if (provider != null) location = lm.getLastKnownLocation(provider);
+            }
+        } catch (Throwable t) {
+            Log.w(TAG, "Location fetch failed", t);
+        }
     }
 
     @Override
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
-        mLifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
 
-        if (isRecording) {
-            // Stop recording
+        // Stop recording if active
+        if (activeRecording != null) {
             try {
-                mediaRecorder.stop();
-            } catch(RuntimeException stopException) {
-                // handle cleanup here
+                activeRecording.stop();
+            } catch (Throwable t) {
+                Log.w(TAG, "Error stopping recording", t);
             }
-            mediaRecorder.reset();
-            mediaRecorder.release();
-            Log.d(TAG, "Recording stopped");
+            try {
+                activeRecording.close();
+            } catch (Throwable ignored) {}
+            activeRecording = null;
         }
 
         // Unbind and release the camera
         if (cameraProvider != null) {
             cameraProvider.unbindAll();
+            cameraProvider = null;
         }
 
-        ((MyApplication) this.getApplication()).setVideoRecording(false);
+        ((MyApplication) getApplication()).setVideoRecording(false);
 
+        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
         super.onDestroy();
     }
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @NonNull
-    @Override
-    public Lifecycle getLifecycle() {
-        return mLifecycleRegistry;
-    }
-
-    private File createVideoFile() throws IOException {
-        return new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DCIM)+"/WunderLINQ/VID_"+
-                DateFormat.format("yyyyMMdd_kkmmss", new Date().getTime())+
-                ".mp4");
-    }
-
+    // --- Foreground notification (unchanged style) ---
     private void createNotification() {
-        // Start foreground service to avoid unexpected kill
-        String CHANNEL_ID = "WunderLINQ";
-        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, this.getString(R.string.title_video_notification),
-                NotificationManager.IMPORTANCE_DEFAULT);
-        channel.setShowBadge(false);
-        channel.setSound(null, null);
-        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        manager.createNotificationChannel(channel);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setChannelId(CHANNEL_ID)
-                .setContentTitle(getResources().getString(R.string.title_video_notification))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel ch = new NotificationChannel(
+                    CHANNEL_ID,
+                    getString(R.string.title_video_notification),
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            ch.setShowBadge(false);
+            ch.setSound(null, null);
+            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).createNotificationChannel(ch);
+        }
+        Notification notif = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle(getString(R.string.title_video_notification))
                 .setContentText("")
-                .setSmallIcon(R.drawable.ic_video_camera);
-        Notification notification = builder.build();
-        startForeground(1234, notification);
+                .setSmallIcon(R.drawable.ic_video_camera)
+                .build();
+        startForeground(NOTIF_ID, notif);
     }
+
+    // --- LifecycleOwner for binding ---
+    @NonNull @Override
+    public Lifecycle getLifecycle() {
+        return lifecycleRegistry;
+    }
+
+    @Nullable @Override
+    public IBinder onBind(Intent intent) { return null; }
 }

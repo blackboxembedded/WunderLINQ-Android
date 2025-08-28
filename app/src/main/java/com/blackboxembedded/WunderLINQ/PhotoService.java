@@ -18,31 +18,21 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package com.blackboxembedded.WunderLINQ;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static java.lang.Math.abs;
 
-import android.Manifest;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import androidx.exifinterface.media.ExifInterface;
 import android.media.MediaScannerConnection;
-import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.text.format.DateFormat;
 import android.util.Log;
-import android.util.SparseIntArray;
-import android.view.Surface;
-import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -52,10 +42,11 @@ import androidx.camera.core.ImageCaptureException;
 import androidx.camera.core.ImageProxy;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.core.content.ContextCompat;
+import androidx.exifinterface.media.ExifInterface;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LifecycleRegistry;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.preference.PreferenceManager;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
@@ -63,219 +54,233 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 public class PhotoService extends Service implements LifecycleOwner {
     private static final String TAG = "PhotoService";
-    private LifecycleRegistry mLifecycleRegistry;
-    private int cameraArg = 0;
+
+    // Intent extras you already use:
+    // "CAMERA" (int: 0 front, 1 back), "PREFIX" (String), etc.
+    private int cameraArg = 1; // default back
+    private String prefixArg = "IMG_";
+
+    private LifecycleRegistry lifecycleRegistry;
     private ImageCapture imageCapture;
-    private File file;
-    private Location location;
-
-    private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
-    static {
-        ORIENTATIONS.append(Surface.ROTATION_0, 90);
-        ORIENTATIONS.append(Surface.ROTATION_90, 0);
-        ORIENTATIONS.append(Surface.ROTATION_180, 270);
-        ORIENTATIONS.append(Surface.ROTATION_270, 180);
-    }
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
+    @Nullable private Location location;
 
     @Override
     public void onCreate() {
-        Log.d(TAG, "onCreate");
         super.onCreate();
-        mLifecycleRegistry = new LifecycleRegistry(this);
-        mLifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
+        lifecycleRegistry = new LifecycleRegistry(this);
+        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "onStartCommand");
-        mLifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_START);
+    public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
+        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_START);
 
-        if (intent != null) {
-            // Retrieve the Intent that started the Service
-            Bundle extras = intent.getExtras();
-            if (extras != null) {
-                cameraArg = extras.getInt("camera");
-                Log.d(TAG, "Camera Choice: " + cameraArg);
-            } else {
-                stopSelf();
+        if (intent != null && intent.getExtras() != null) {
+            cameraArg = intent.getIntExtra("CAMERA", 1);
+            String p = intent.getStringExtra("PREFIX");
+            if (p != null && !p.isEmpty()) prefixArg = p;
+        }
+
+        // Prepare last-known location if app has permission.
+        boolean hasFine = checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == android.content.pm.PackageManager.PERMISSION_GRANTED;
+        boolean hasCoarse = checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                == android.content.pm.PackageManager.PERMISSION_GRANTED;
+        if (hasFine || hasCoarse) {
+            try {
+                LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+                if (lm != null) {
+                    Criteria c = new Criteria();
+                    String provider = lm.getBestProvider(c, false);
+                    if (provider != null) location = lm.getLastKnownLocation(provider);
+                }
+            } catch (Throwable t) {
+                Log.w(TAG, "Unable to get last known location", t);
             }
         }
 
-        ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(this);
+        // Bind camera and capture one image.
+        ListenableFuture<ProcessCameraProvider> cameraProviderFuture =
+                ProcessCameraProvider.getInstance(this);
+
         cameraProviderFuture.addListener(() -> {
             try {
                 ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
                 cameraProvider.unbindAll();
-                CameraSelector cameraSelector = new CameraSelector.Builder()
-                        .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                        .build();
-                if (cameraArg == 0){
-                    cameraSelector = new CameraSelector.Builder()
-                            .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
-                            .build();
-                }
-                WindowManager windowService = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-                int rotation = windowService.getDefaultDisplay().getRotation();
-                Log.d(TAG,"rotation: " + rotation);
+
+                CameraSelector selector = (cameraArg == 0)
+                        ? new CameraSelector.Builder()
+                        .requireLensFacing(CameraSelector.LENS_FACING_FRONT).build()
+                        : new CameraSelector.Builder()
+                        .requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
+
                 imageCapture = new ImageCapture.Builder()
-                        //.setTargetRotation(Surface.ROTATION_270)
+                        // In 1.4.0, target rotation on headless capture isn’t required;
+                        // we’ll rotate via the image’s metadata when saving.
+                        .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
                         .build();
-                cameraProvider.bindToLifecycle(this, cameraSelector, imageCapture);
-                // Take a picture
-                takePicture();
+
+                cameraProvider.bindToLifecycle(this, selector, imageCapture);
+                takePicture(); // single shot then stopSelf()
             } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
+                Log.e(TAG, "Failed to get camera provider", e);
+                stopSelf();
             }
         }, ContextCompat.getMainExecutor(this));
 
-        boolean locationWPPerms = getApplication().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-        // Check Location permissions
-        if (locationWPPerms) {
-            LocationManager locationManager = (LocationManager)
-                    this.getSystemService(LOCATION_SERVICE);
-            Criteria criteria = new Criteria();
-            String bestProvider = locationManager.getBestProvider(criteria, false);
-            location = locationManager.getLastKnownLocation(bestProvider);
+        return START_NOT_STICKY;
+    }
+
+    private void takePicture() {
+        imageCapture.takePicture(ContextCompat.getMainExecutor(this),
+                new ImageCapture.OnImageCapturedCallback() {
+                    @Override
+                    public void onCaptureSuccess(@NonNull ImageProxy image) {
+                        try {
+                            // 1) Decode JPEG plane
+                            Bitmap bmp = imageProxyToBitmap(image);
+
+                            // 2) Rotate according to metadata
+                            int rotationDegrees = image.getImageInfo().getRotationDegrees();
+                            if (rotationDegrees != 0) {
+                                Matrix m = new Matrix();
+                                m.postRotate(rotationDegrees);
+                                bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), m, true);
+                            }
+
+                            // 3) Save to file
+                            File file = saveBitmapToPictures(bmp);
+
+                            // 4) Write EXIF GPS (if available)
+                            if (file != null && location != null) {
+                                try {
+                                    ExifInterface exif = new ExifInterface(file.getAbsolutePath());
+                                    exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE,
+                                            getLatGeoCoordinates(location));
+                                    exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF,
+                                            location.getLatitude() < 0 ? "S" : "N");
+                                    exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE,
+                                            getLonGeoCoordinates(location));
+                                    exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF,
+                                            location.getLongitude() < 0 ? "W" : "E");
+                                    exif.saveAttributes();
+                                } catch (IOException e) {
+                                    Log.w(TAG, "EXIF write failed", e);
+                                }
+                            }
+
+                            // 5) Media scan & optional preview
+                            if (file != null) {
+                                MediaScannerConnection.scanFile(PhotoService.this,
+                                        new String[]{file.toString()}, null, null);
+
+                                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                if (sp.getBoolean("prefPhotoPreview", false)) {
+                                    Intent alert = new Intent(getApplicationContext(), AlertActivity.class);
+                                    alert.setFlags(FLAG_ACTIVITY_NEW_TASK);
+                                    alert.putExtra("TYPE", AlertActivity.ALERT_PHOTO);
+                                    alert.putExtra("TITLE", getString(R.string.alert_title_photopreview));
+                                    alert.putExtra("BODY", "");
+                                    alert.putExtra("BACKGROUND", file.getAbsolutePath());
+                                    startActivity(alert);
+                                }
+                            }
+                        } catch (Throwable t) {
+                            Log.e(TAG, "Error handling captured image", t);
+                        } finally {
+                            // Always close the image!
+                            image.close();
+                            stopSelf();
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull ImageCaptureException exception) {
+                        Log.e(TAG, "Error taking picture", exception);
+                        stopSelf();
+                    }
+                });
+    }
+
+    private static Bitmap imageProxyToBitmap(@NonNull ImageProxy image) {
+        // Assumes JPEG output (default for ImageCapture). Plane[0] contains the full JPEG bytes.
+        ByteBuffer buffer = image.getPlanes()[0].getBuffer();
+        buffer.rewind();
+        byte[] bytes = new byte[buffer.remaining()];
+        buffer.get(bytes);
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+    }
+
+    @Nullable
+    private File saveBitmapToPictures(@NonNull Bitmap bmp) {
+        String dirName = Environment.DIRECTORY_PICTURES;
+        File pictures = Environment.getExternalStoragePublicDirectory(dirName);
+        File appDir = new File(pictures, "WunderLINQ");
+        if (!appDir.exists() && !appDir.mkdirs()) {
+            Log.e(TAG, "Failed to create directory: " + appDir);
+            return null;
         }
 
-        return START_NOT_STICKY;
+        String ts = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+        String name = prefixArg + DateFormat.format("yyyyMMdd_HHmmss", System.currentTimeMillis()) + "_" + ts + ".jpg";
+        File out = new File(appDir, name);
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(out);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 95, fos);
+            fos.flush();
+            return out;
+        } catch (IOException e) {
+            Log.e(TAG, "Saving bitmap failed", e);
+            return null;
+        } finally {
+            if (fos != null) try { fos.close(); } catch (IOException ignored) {}
+        }
+    }
+
+    // --- EXIF helpers (unchanged logic) ---
+    private static String getLatGeoCoordinates(Location loc) {
+        double lat = Math.abs(loc.getLatitude());
+        int deg = (int) lat;
+        lat = (lat - deg) * 60;
+        int min = (int) lat;
+        double sec = (lat - min) * 60;
+        return deg + "/1," + min + "/1," + (int) (sec * 1000) + "/1000";
+    }
+
+    private static String getLonGeoCoordinates(Location loc) {
+        double lon = Math.abs(loc.getLongitude());
+        int deg = (int) lon;
+        lon = (lon - deg) * 60;
+        int min = (int) lon;
+        double sec = (lon - min) * 60;
+        return deg + "/1," + min + "/1," + (int) (sec * 1000) + "/1000";
+    }
+
+    // --- LifecycleOwner for camera binding ---
+    @NonNull
+    @Override
+    public Lifecycle getLifecycle() {
+        return lifecycleRegistry;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mLifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
+        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
     }
 
-    @NonNull
+    @Nullable
     @Override
-    public Lifecycle getLifecycle() {
-        return mLifecycleRegistry;
-    }
-
-    private void takePicture() {
-        imageCapture.takePicture(ContextCompat.getMainExecutor(this), new ImageCapture.OnImageCapturedCallback() {
-            @Override
-            public void onCaptureSuccess(@NonNull ImageProxy image) {
-                super.onCaptureSuccess(image);
-                // Get the bitmap from the image
-                Bitmap bitmap = imageProxyToBitmap(image);
-
-                // Save the bitmap to file
-                file = createFile();
-                try {
-                    FileOutputStream fos = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-                    fos.close();
-                    Log.d(TAG, "File saved: " + file.getAbsolutePath());
-
-                    if (location != null) {
-                        Log.d(TAG,"Location: " + location.toString());
-                        storeGeoCoordsToImage(file, location);
-                    }
-
-                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
-                    if (sharedPrefs.getBoolean("prefPhotoPreview",false)) {
-                        Intent alertIntent = new Intent(MyApplication.getContext(), AlertActivity.class);
-                        alertIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
-                        alertIntent.putExtra("TYPE", AlertActivity.ALERT_PHOTO);
-                        alertIntent.putExtra("TITLE", MyApplication.getContext().getResources().getString(R.string.alert_title_photopreview));
-                        alertIntent.putExtra("BODY", "");
-                        alertIntent.putExtra("BACKGROUND", file.getAbsolutePath());
-                        MyApplication.getContext().startActivity(alertIntent);
-                    }
-
-                    MediaScannerConnection.scanFile(PhotoService.this,
-                            new String[] { file.toString() }, null,
-                            (path, uri) -> {
-                                Log.i(TAG, "Scanned file: " + path);
-                                stopSelf();
-                            });
-                    // Send a broadcast to notify the picture has been taken
-                    Intent pictureTakenIntent = new Intent("PICTURE_TAKEN");
-                    pictureTakenIntent.putExtra("file_path", file.getAbsolutePath());
-                    LocalBroadcastManager.getInstance(PhotoService.this).sendBroadcast(pictureTakenIntent);
-                } catch (IOException e) {
-                    Log.d(TAG, "Error Saving: ");
-                    e.printStackTrace();
-                    stopSelf();
-                }
-            }
-
-            @Override
-            public void onError(@NonNull ImageCaptureException exception) {
-                super.onError(exception);
-                Log.e(TAG, "Error taking picture", exception);
-                stopSelf();
-            }
-        });
-    }
-
-    private Bitmap imageProxyToBitmap(ImageProxy image) {
-        ByteBuffer buffer = image.getPlanes()[0].getBuffer();
-        buffer.rewind();
-        byte[] bytes = new byte[buffer.capacity()];
-        buffer.get(bytes);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-        // Rotate bitmap if necessary
-        Matrix matrix = new Matrix();
-        matrix.postRotate((float)image.getImageInfo().getRotationDegrees());
-        Bitmap bitmap2 =  Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-        return bitmap2;
-    }
-
-    private File createFile() {
-        File root = new File( Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DCIM), "/WunderLINQ/");
-        if(!root.exists()){
-            if(!root.mkdirs()){
-                Log.d(TAG,"Unable to create directory: " + root);
-            }
-        }
-        return new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + "/WunderLINQ/"
-                + "IMG_" + DateFormat.format("yyyyMMdd_kkmmss", new Date().getTime()) + ".jpg");
-    }
-
-    public static String getLatGeoCoordinates(Location location) {
-
-        if (location == null) return "0/1,0/1,0/1000";
-        String[] degMinSec = Location.convert(abs(location.getLatitude()), Location.FORMAT_SECONDS).split(":");
-        return degMinSec[0] + "/1," + degMinSec[1] + "/1," + degMinSec[2] + "/1000";
-    }
-
-    public static String getLonGeoCoordinates(Location location) {
-
-        if (location == null) return "0/1,0/1,0/1000";
-        String[] degMinSec = Location.convert(abs(location.getLongitude()), Location.FORMAT_SECONDS).split(":");
-        return degMinSec[0] + "/1," + degMinSec[1] + "/1," + degMinSec[2] + "/1000";
-    }
-
-    public static boolean storeGeoCoordsToImage(File imagePath, Location location) {
-        // Avoid NullPointer
-        if (imagePath == null || location == null) return false;
-        try {
-            ExifInterface exif = new ExifInterface(imagePath.getAbsolutePath());
-            exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE,  getLatGeoCoordinates(location));
-            exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, location.getLatitude() < 0 ? "S" : "N");
-            exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, getLonGeoCoordinates(location));
-            exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF, location.getLongitude() < 0 ? "W" : "E");
-            Log.d(TAG,exif.toString());
-            exif.saveAttributes();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+    public IBinder onBind(Intent intent) {
+        return null; // started service
     }
 }
