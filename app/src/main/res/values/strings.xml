@@ -727,6 +727,7 @@
     <string name="nav_app_here">HERE WeGo</string>
     <string name="nav_app_tourstart">Tourstart</string>
     <string name="nav_app_dmd2">DMD2</string>
+    <string name="nav_app_bmaps">Bmaps</string>
     <string-array name="nav_apps_array" translatable="false">
         <item name="1">@string/nav_app_default</item>
         <item name="2">@string/nav_app_google</item>
@@ -753,6 +754,7 @@
         <item name="24">@string/nav_app_here</item>
         <item name="25">@string/nav_app_tourstart</item>
         <item name="26">@string/nav_app_dmd2</item>
+        <item name="27">@string/nav_app_bmaps</item>
     </string-array>
     <string-array name="nav_apps_arrayValues" translatable="false">
         <item name="1">1</item>
@@ -780,6 +782,7 @@
         <item name="24">24</item>
         <item name="25">25</item>
         <item name="26">26</item>
+        <item name="27">27</item>
     </string-array>
     <string name="pref_roadbook_app_title">Roadbook App</string>
     <string name="roadbook_app_rabbitrally">Rabbit Rally</string>
