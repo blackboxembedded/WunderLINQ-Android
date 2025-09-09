@@ -39,13 +39,13 @@ public class WLQ_S extends WLQ_BASE {
     private static int firmwareVersionMinor_INDEX = 4;
 
     private static byte[] defaultConfig = {
-            0x11,                               // Long Press Sensitivity
+            0x44,                               // Long Press Sensitivity
             0x01, 0x00, 0x52, 0x00, 0x00, 0x00, // Scroll Up - Up Arrow
             0x01, 0x00, 0x51, 0x00, 0x00, 0x00, // Scroll Down - Down Arrow
             0x01, 0x00, 0x50, 0x01, 0x00, 0x29, // Wheel Left - Left Arrow
             0x01, 0x00, 0x4F, 0x01, 0x00, 0x28, // Wheel Right - Right Arrow
-            0x01, 0x00, 0x29, 0x00, 0x00, 0x00, // Rocker2 Up - FX1
-            0x01, 0x00, 0x28, 0x00, 0x00, 0x00, // Rocker2 Down - FX2
+            0x01, 0x00, 0x28, 0x00, 0x00, 0x00, // Rocker2 Up - FX1
+            0x01, 0x00, 0x29, 0x00, 0x00, 0x00, // Rocker2 Down - FX2
             0x00,                               // PDM Channel 1 Mode
             0x00,                               // PDM Channel 2 Mode
             0x00,                               // PDM Channel 3 Mode
