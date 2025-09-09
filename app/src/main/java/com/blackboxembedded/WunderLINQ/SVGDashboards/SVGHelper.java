@@ -2,10 +2,16 @@ package com.blackboxembedded.WunderLINQ.SVGDashboards;
 
 import static android.content.Context.WINDOW_SERVICE;
 
+import android.content.Context;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Display;
 import android.view.Surface;
 import android.view.WindowManager;
+import android.view.WindowMetrics;
 
 
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
@@ -96,24 +102,30 @@ public class SVGHelper {
     }
 
     public static boolean isDevicePortrait() {
-        boolean portrait = false;
-
         try {
-            WindowManager wm = (WindowManager) MyApplication.getContext().getSystemService(WINDOW_SERVICE);
+            Context context = MyApplication.getContext();
 
+            WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
             if (wm != null) {
-                int rotation = wm.getDefaultDisplay().getRotation();
-
-                // Determine the screen orientation based on the rotation value
-                if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
-                    portrait = true;
+                // Get current window metrics (API 30+)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    WindowMetrics metrics = wm.getCurrentWindowMetrics();
+                    Rect bounds = metrics.getBounds();
+                    return bounds.height() >= bounds.width();
+                } else {
+                    // Fallback for older APIs
+                    Display display = wm.getDefaultDisplay();
+                    Point size = new Point();
+                    display.getSize(size);
+                    return size.y >= size.x;
                 }
             }
         } catch (Exception e) {
             Log.e("IsPortrait Error", e.toString());
         }
 
-        return portrait;
+        // Default: assume landscape if something goes wrong
+        return false;
     }
 
     public String getDataLabel(int infoLine) {
