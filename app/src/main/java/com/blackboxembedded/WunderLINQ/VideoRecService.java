@@ -86,6 +86,8 @@ public class VideoRecService extends Service implements LifecycleOwner {
     private VideoCapture<Recorder> videoCapture;
     private Recording activeRecording;
 
+    private BluetoothMicRouter btRouter;
+
     // Optional: last known location (for MediaStore LAT/LON columns)
     @Nullable private Location location;
 
@@ -95,6 +97,8 @@ public class VideoRecService extends Service implements LifecycleOwner {
         lifecycleRegistry = new LifecycleRegistry(this);
         lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
         createNotification();
+
+        btRouter = new BluetoothMicRouter(this);
     }
 
     @Override
@@ -178,7 +182,7 @@ public class VideoRecService extends Service implements LifecycleOwner {
                         .setContentValues(values)
                         .build();
 
-        beginRecording(outputOptions);
+        btRouter.routeToBluetoothIfPresentThen(() -> beginRecording(outputOptions));
     }
 
     private void startRecordingToFile() {
@@ -195,7 +199,7 @@ public class VideoRecService extends Service implements LifecycleOwner {
         FileOutputOptions outputOptions =
                 new FileOutputOptions.Builder(out).build();
 
-        beginRecording(outputOptions);
+        btRouter.routeToBluetoothIfPresentThen(() -> beginRecording(outputOptions));
     }
 
     @SuppressLint("MissingPermission")
@@ -288,21 +292,20 @@ public class VideoRecService extends Service implements LifecycleOwner {
         ((MyApplication) getApplication()).setVideoRecording(false);
 
         lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
+        if (btRouter != null) btRouter.clearRouting();
         super.onDestroy();
     }
 
     // --- Foreground notification (unchanged style) ---
     private void createNotification() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel ch = new NotificationChannel(
-                    CHANNEL_ID,
-                    getString(R.string.title_video_notification),
-                    NotificationManager.IMPORTANCE_DEFAULT
-            );
-            ch.setShowBadge(false);
-            ch.setSound(null, null);
-            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).createNotificationChannel(ch);
-        }
+        NotificationChannel ch = new NotificationChannel(
+                CHANNEL_ID,
+                getString(R.string.title_video_notification),
+                NotificationManager.IMPORTANCE_DEFAULT
+        );
+        ch.setShowBadge(false);
+        ch.setSound(null, null);
+        ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).createNotificationChannel(ch);
         Notification notif = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle(getString(R.string.title_video_notification))
                 .setContentText("")
