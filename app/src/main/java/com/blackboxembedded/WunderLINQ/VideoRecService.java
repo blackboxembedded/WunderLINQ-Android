@@ -23,225 +23,426 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
+import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCaptureSession;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraDevice;
+import android.hardware.camera2.CameraManager;
+import android.hardware.camera2.CaptureRequest;
+import android.hardware.camera2.params.StreamConfigurationMap;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.CamcorderProfile;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.IBinder;
 import android.provider.MediaStore;
-import android.text.format.DateFormat;
 import android.util.Log;
+import android.util.Size;
+import android.util.SparseIntArray;
+import android.view.Surface;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.camera.core.CameraSelector;
-import androidx.camera.lifecycle.ProcessCameraProvider;
-import androidx.camera.video.FallbackStrategy;
-import androidx.camera.video.FileOutputOptions;
-import androidx.camera.video.MediaStoreOutputOptions;
-import androidx.camera.video.PendingRecording;
-import androidx.camera.video.Quality;
-import androidx.camera.video.QualitySelector;
-import androidx.camera.video.Recorder;
-import androidx.camera.video.Recording;
-import androidx.camera.video.VideoCapture;
-import androidx.camera.video.VideoRecordEvent;
-import androidx.camera.video.QualitySelector;
-import androidx.camera.video.Quality;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LifecycleRegistry;
-
-import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
-public class VideoRecService extends Service implements LifecycleOwner {
+public class VideoRecService extends Service {
     private static final String TAG = "VideoRecService";
 
     // Foreground notification
     private static final String CHANNEL_ID = "wlq-video";
     private static final int NOTIF_ID = 1234;
 
-    // Intent extras (match your existing usage)
-    // CAMERA: 0=front, 1=back (default back)
-    private int cameraArg = CameraSelector.LENS_FACING_BACK;
+    // Intent extra: CAMERA 0=front, 1=back (default back)
+    private int cameraArg = CameraCharacteristics.LENS_FACING_BACK;
 
-    private LifecycleRegistry lifecycleRegistry;
-    private ProcessCameraProvider cameraProvider;
+    // Camera2 plumbing
+    private HandlerThread        cameraThread;
+    private Handler              cameraHandler;
+    private CameraDevice         cameraDevice;
+    private CameraCaptureSession captureSession;
+    private CaptureRequest.Builder recordRequestBuilder;
 
-    // CameraX 1.4.0 video API
-    private Recorder recorder;
-    private VideoCapture<Recorder> videoCapture;
-    private Recording activeRecording;
+    // MediaRecorder + outputs
+    private MediaRecorder mediaRecorder;
+    private Uri           outputUri;            // API 29+
+    private android.os.ParcelFileDescriptor pfd;// API 29+
+    private File          outputFile;           // <29
 
-    // Optional: last known location (for MediaStore LAT/LON columns)
+    // Chosen camera info
+    private String cameraId;
+    private int lensFacing = CameraCharacteristics.LENS_FACING_BACK;
+    private int sensorOrientation = 0;
+    private Size videoSize;
+
+    // Optional: last known location (for MediaStore LAT/LON)
     @Nullable private Location location;
 
-    @Override
-    public void onCreate() {
+    // Bluetooth mic router
+    private BluetoothMicRouter btRouter;
+
+    // Display rotation → degrees for MediaRecorder orientation hint
+    private static final SparseIntArray DEFAULT_ORIENTATIONS = new SparseIntArray();
+    private static final SparseIntArray INVERSE_ORIENTATIONS = new SparseIntArray();
+    static {
+        // For sensors with orientation = 90
+        DEFAULT_ORIENTATIONS.append(Surface.ROTATION_0,   90);
+        DEFAULT_ORIENTATIONS.append(Surface.ROTATION_90,  0);
+        DEFAULT_ORIENTATIONS.append(Surface.ROTATION_180, 270);
+        DEFAULT_ORIENTATIONS.append(Surface.ROTATION_270, 180);
+
+        // For sensors with orientation = 270
+        INVERSE_ORIENTATIONS.append(Surface.ROTATION_0,   270);
+        INVERSE_ORIENTATIONS.append(Surface.ROTATION_90,  180);
+        INVERSE_ORIENTATIONS.append(Surface.ROTATION_180, 90);
+        INVERSE_ORIENTATIONS.append(Surface.ROTATION_270, 0);
+    }
+    @Override public void onCreate() {
         super.onCreate();
-        lifecycleRegistry = new LifecycleRegistry(this);
-        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
         createNotification();
+        btRouter = new BluetoothMicRouter(this);
+        fetchLastKnownLocation();
+        startCameraThread();
     }
 
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
-        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_START);
-
         if (intent != null) {
-            cameraArg = intent.getIntExtra("CAMERA", CameraSelector.LENS_FACING_BACK);
+            cameraArg = intent.getIntExtra("CAMERA", CameraCharacteristics.LENS_FACING_BACK);
         }
-
-        // Try to fetch a last-known location if we have permission.
-        fetchLastKnownLocation();
-
-        // Spin up CameraX and start recording
-        ListenableFuture<ProcessCameraProvider> providerFuture = ProcessCameraProvider.getInstance(this);
-        providerFuture.addListener(() -> {
-            try {
-                cameraProvider = providerFuture.get();
-                startCameraAndRecord();
-            } catch (ExecutionException | InterruptedException e) {
-                Log.e(TAG, "CameraProvider error", e);
-                stopSelf();
-            }
-        }, ContextCompat.getMainExecutor(this));
-
+        // Route BT mic (if present) first, then start camera+recording
+        btRouter.routeToBluetoothIfPresentThen(this::startFlow);
         return START_STICKY;
     }
 
-    private void startCameraAndRecord() {
-        if (cameraProvider == null) {
-            Log.e(TAG, "cameraProvider null");
+    private void startFlow() {
+        try {
+            if (!pickCamera()) {
+                Log.e(TAG, "No matching camera found");
+                stopSelf();
+                return;
+            }
+            if (!prepareMediaRecorder()) {
+                Log.e(TAG, "MediaRecorder prepare failed");
+                stopSelf();
+                return;
+            }
+            openCameraThenRecord();
+        } catch (Throwable t) {
+            Log.e(TAG, "startFlow error", t);
             stopSelf();
-            return;
+        }
+    }
+
+    // ---------------- Camera thread ----------------
+
+    private void startCameraThread() {
+        cameraThread = new HandlerThread("WLQ-Cam2");
+        cameraThread.start();
+        cameraHandler = new Handler(cameraThread.getLooper());
+    }
+
+    private void stopCameraThread() {
+        if (cameraThread != null) {
+            cameraThread.quitSafely();
+            try { cameraThread.join(); } catch (InterruptedException ignored) {}
+            cameraThread = null;
+            cameraHandler = null;
+        }
+    }
+
+    // ---------------- Camera selection ----------------
+
+    private boolean pickCamera() throws CameraAccessException {
+        CameraManager cm = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+        if (cm == null) return false;
+
+        int desired = (cameraArg == 0)
+                ? CameraCharacteristics.LENS_FACING_FRONT
+                : CameraCharacteristics.LENS_FACING_BACK;
+
+        // First pass: try desired lens
+        for (String id : cm.getCameraIdList()) {
+            CameraCharacteristics cc = cm.getCameraCharacteristics(id);
+            Integer facing = cc.get(CameraCharacteristics.LENS_FACING);
+            if (facing == null || facing != desired) continue;
+
+            StreamConfigurationMap map = cc.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+            if (map == null) continue;
+
+            Size[] recorderSizes = map.getOutputSizes(MediaRecorder.class);
+            if (recorderSizes == null || recorderSizes.length == 0) continue;
+
+            Size best = chooseVideoSize(recorderSizes);
+            if (best == null) continue;
+
+            cameraId = id;
+            lensFacing = facing;
+            Integer so = cc.get(CameraCharacteristics.SENSOR_ORIENTATION);
+            sensorOrientation = (so != null) ? so : 0;
+            videoSize = best;
+            return true;
         }
 
-        cameraProvider.unbindAll();
+        // Fallback: pick any with MediaRecorder output
+        for (String id : cm.getCameraIdList()) {
+            CameraCharacteristics cc = cm.getCameraCharacteristics(id);
+            StreamConfigurationMap map = cc.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+            if (map == null) continue;
+            Size[] recorderSizes = map.getOutputSizes(MediaRecorder.class);
+            if (recorderSizes == null || recorderSizes.length == 0) continue;
 
-        CameraSelector selector = new CameraSelector.Builder()
-                .requireLensFacing(cameraArg == 0
-                        ? CameraSelector.LENS_FACING_FRONT
-                        : CameraSelector.LENS_FACING_BACK)
-                .build();
+            cameraId = id;
+            Integer facing = cc.get(CameraCharacteristics.LENS_FACING);
+            lensFacing = (facing != null) ? facing : CameraCharacteristics.LENS_FACING_BACK;
+            Integer so = cc.get(CameraCharacteristics.SENSOR_ORIENTATION);
+            sensorOrientation = (so != null) ? so : 0;
+            videoSize = chooseVideoSize(recorderSizes);
+            return (videoSize != null);
+        }
 
-        // Prefer FHD, then HD, then SD (fallbacks are important across devices)
-        QualitySelector qualitySelector = QualitySelector.fromOrderedList(
-                java.util.Arrays.asList(Quality.FHD, Quality.HD, Quality.SD),
-                FallbackStrategy.lowerQualityOrHigherThan(Quality.FHD));
+        return false;
+    }
 
-        recorder = new Recorder.Builder()
-                .setQualitySelector(qualitySelector)
-                .build();
+    private static Size chooseVideoSize(Size[] choices) {
+        // Prefer 1080p, else 720p, else largest ~16:9, else largest overall
+        Size pick1080 = null, pick720 = null, best169 = null;
+        for (Size s : choices) {
+            if (s.getWidth() == 1920 && s.getHeight() == 1080) pick1080 = s;
+            if (s.getWidth() == 1280 && s.getHeight() == 720)  pick720  = s;
+            float r = (float) s.getWidth() / s.getHeight();
+            if (Math.abs(r - 16f/9f) < 0.05f) {
+                if (best169 == null ||
+                        (s.getWidth()*s.getHeight() > best169.getWidth()*best169.getHeight())) {
+                    best169 = s;
+                }
+            }
+        }
+        if (pick1080 != null) return pick1080;
+        if (pick720  != null) return pick720;
+        if (best169  != null) return best169;
+        return Collections.max(Arrays.asList(choices),
+                Comparator.comparingInt(a -> a.getWidth() * a.getHeight()));
+    }
 
-        videoCapture = VideoCapture.withOutput(recorder);
+    // ---------------- MediaRecorder ----------------
 
-        // Bind to this Service's lifecycle
-        cameraProvider.bindToLifecycle(this, selector, videoCapture);
+    private int computeOrientationHint() {
+        int rotation = Surface.ROTATION_0;
+        try {
+            WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+            if (wm != null && wm.getDefaultDisplay() != null) {
+                rotation = wm.getDefaultDisplay().getRotation();
+            }
+        } catch (Throwable ignored) {}
 
-        // Choose output: MediaStore (scoped storage) for API 29+; else a file in Movies/WunderLINQ
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            startRecordingToMediaStore();
+        // Use the table based on the camera sensor's mounting
+        if (sensorOrientation == 90) {
+            return DEFAULT_ORIENTATIONS.get(rotation);
+        } else if (sensorOrientation == 270) {
+            return INVERSE_ORIENTATIONS.get(rotation);
         } else {
-            startRecordingToFile();
+            // Rare sensors; fall back to a simple sum
+            // (kept for completeness; most phones are 90 or 270)
+            int base = DEFAULT_ORIENTATIONS.get(rotation, 0);
+            return (base + sensorOrientation - 90 + 360) % 360;
         }
-    }
-
-    private void startRecordingToMediaStore() {
-        String displayName = "WLQ_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
-        ContentValues values = new ContentValues();
-        values.put(MediaStore.MediaColumns.DISPLAY_NAME, displayName);
-        values.put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4");
-        values.put(MediaStore.Video.Media.TITLE, "WunderLINQ Video");
-        if (location != null) {
-            // These columns are respected by some OEM galleries and Google Photos for videos.
-            values.put(MediaStore.Video.Media.LATITUDE, location.getLatitude());
-            values.put(MediaStore.Video.Media.LONGITUDE, location.getLongitude());
-        }
-
-        MediaStoreOutputOptions outputOptions =
-                new MediaStoreOutputOptions.Builder(getContentResolver(),
-                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
-                        .setContentValues(values)
-                        .build();
-
-        beginRecording(outputOptions);
-    }
-
-    private void startRecordingToFile() {
-        File movies = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
-        File appDir = new File(movies, "WunderLINQ");
-        if (!appDir.exists() && !appDir.mkdirs()) {
-            Log.e(TAG, "Failed to create dir: " + appDir);
-            stopSelf();
-            return;
-        }
-        String ts = DateFormat.format("yyyyMMdd_HHmmss", System.currentTimeMillis()).toString();
-        File out = new File(appDir, "WLQ_" + ts + ".mp4");
-
-        FileOutputOptions outputOptions =
-                new FileOutputOptions.Builder(out).build();
-
-        beginRecording(outputOptions);
     }
 
     @SuppressLint("MissingPermission")
-    private void beginRecording(@NonNull Object outputOptions) {
-        if (videoCapture == null || recorder == null) {
-            Log.e(TAG, "Video components not ready");
-            stopSelf();
-            return;
-        }
+    private boolean prepareMediaRecorder() {
+        releaseMediaRecorder();
 
-        PendingRecording pending;
-        if (outputOptions instanceof MediaStoreOutputOptions) {
-            pending = recorder.prepareRecording(this, (MediaStoreOutputOptions) outputOptions);
-        } else if (outputOptions instanceof FileOutputOptions) {
-            pending = recorder.prepareRecording(this, (FileOutputOptions) outputOptions);
+        mediaRecorder = new MediaRecorder();
+
+        // Audio source that respects BT SCO routing; change to MIC if you prefer less processing.
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.VOICE_COMMUNICATION);
+        mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
+
+        CamcorderProfile prof = bestProfileForCamera(cameraId);
+        if (prof != null) {
+            mediaRecorder.setOutputFormat(prof.fileFormat);
+            mediaRecorder.setVideoEncoder(prof.videoCodec);
+            mediaRecorder.setAudioEncoder(prof.audioCodec);
+            mediaRecorder.setVideoEncodingBitRate(prof.videoBitRate);
+            mediaRecorder.setVideoFrameRate(prof.videoFrameRate);
+            mediaRecorder.setVideoSize(videoSize.getWidth(), videoSize.getHeight());
+            mediaRecorder.setAudioEncodingBitRate(prof.audioBitRate);
+            mediaRecorder.setAudioSamplingRate(prof.audioSampleRate);
+            // Channels from profile are fine; SCO is typically mono and will be upmixed as needed.
         } else {
-            Log.e(TAG, "Unsupported output options");
+            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+            mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
+            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+            mediaRecorder.setVideoEncodingBitRate(10_000_000);
+            mediaRecorder.setVideoFrameRate(30);
+            mediaRecorder.setVideoSize(videoSize.getWidth(), videoSize.getHeight());
+            mediaRecorder.setAudioEncodingBitRate(128_000);
+            mediaRecorder.setAudioSamplingRate(48_000);
+            mediaRecorder.setAudioChannels(1);
+        }
+
+        // Output target
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                String name = "WLQ_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.MediaColumns.DISPLAY_NAME, name);
+                values.put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4");
+                values.put(MediaStore.Video.Media.TITLE, "WunderLINQ Video");
+                if (location != null) {
+                    values.put(MediaStore.Video.Media.LATITUDE,  location.getLatitude());
+                    values.put(MediaStore.Video.Media.LONGITUDE, location.getLongitude());
+                }
+
+                ContentResolver cr = getContentResolver();
+                outputUri = cr.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
+                if (outputUri == null) throw new IOException("MediaStore insert failed");
+                pfd = cr.openFileDescriptor(outputUri, "rw");
+                if (pfd == null) throw new IOException("openFileDescriptor null");
+                mediaRecorder.setOutputFile(pfd.getFileDescriptor());
+            } else {
+                File movies = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
+                File appDir = new File(movies, "WunderLINQ");
+                if (!appDir.exists() && !appDir.mkdirs()) throw new IOException("mkdirs failed: " + appDir);
+                String ts = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+                outputFile = new File(appDir, "WLQ_" + ts + ".mp4");
+                mediaRecorder.setOutputFile(outputFile.getAbsolutePath());
+            }
+        } catch (IOException ioe) {
+            Log.e(TAG, "Output setup failed", ioe);
+            return false;
+        }
+
+        mediaRecorder.setOrientationHint(computeOrientationHint());
+
+        try {
+            mediaRecorder.prepare();
+            return true;
+        } catch (Exception e) {
+            Log.e(TAG, "MediaRecorder.prepare failed", e);
+            return false;
+        }
+    }
+
+    private @Nullable CamcorderProfile bestProfileForCamera(@Nullable String id) {
+        int cid = -1;
+        if (id != null) {
+            try { cid = Integer.parseInt(id); } catch (Exception ignored) {}
+        }
+        int[] quals = new int[] {
+                CamcorderProfile.QUALITY_1080P,
+                CamcorderProfile.QUALITY_720P,
+                CamcorderProfile.QUALITY_480P,
+                CamcorderProfile.QUALITY_HIGH
+        };
+        for (int q : quals) {
+            try {
+                if (cid >= 0 && CamcorderProfile.hasProfile(cid, q)) return CamcorderProfile.get(cid, q);
+                if (cid < 0 && CamcorderProfile.hasProfile(q))        return CamcorderProfile.get(q);
+            } catch (Throwable ignored) {}
+        }
+        return null;
+    }
+
+    // ---------------- Open camera & start recording ----------------
+
+    @SuppressLint("MissingPermission")
+    private void openCameraThenRecord() throws CameraAccessException {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            Log.e(TAG, "CAMERA permission not granted");
             stopSelf();
             return;
         }
+        CameraManager cm = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+        if (cm == null) { stopSelf(); return; }
 
-        // Enable audio if we have permission
-        boolean hasAudio = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
-                == PackageManager.PERMISSION_GRANTED;
-        if (hasAudio) pending = pending.withAudioEnabled();
-
-        activeRecording = pending.start(ContextCompat.getMainExecutor(this), event -> {
-            if (event instanceof VideoRecordEvent.Start) {
-                Log.d(TAG, "Recording started");
-                ((MyApplication) getApplication()).setVideoRecording(true);
-            } else if (event instanceof VideoRecordEvent.Finalize finalizeEvent) {
-                Uri uri = finalizeEvent.getOutputResults().getOutputUri();
-                Log.d(TAG, "Recording finalized: " + uri + " error=" + finalizeEvent.getError());
-                ((MyApplication) getApplication()).setVideoRecording(false);
-                // Stop the service once finalized (adjust if you want continuous)
-                stopSelf();
-            } else if (event instanceof VideoRecordEvent.Status status) {
-                // Optional: bitrate, duration, etc.
-                // Log.v(TAG, "Status: " + status.getRecordedDurationNanos());
-            } else if (event instanceof VideoRecordEvent.Pause) {
-                Log.d(TAG, "Recording paused");
-            } else if (event instanceof VideoRecordEvent.Resume) {
-                Log.d(TAG, "Recording resumed");
+        cm.openCamera(cameraId, new CameraDevice.StateCallback() {
+            @Override public void onOpened(@NonNull CameraDevice camera) {
+                cameraDevice = camera;
+                try {
+                    createRecordSessionAndStart();
+                } catch (Exception e) {
+                    Log.e(TAG, "createRecordSession failed", e);
+                    stopSelf();
+                }
             }
-        });
+            @Override public void onDisconnected(@NonNull CameraDevice camera) {
+                Log.w(TAG, "Camera disconnected");
+                camera.close();
+                cameraDevice = null;
+                stopSelf();
+            }
+            @Override public void onError(@NonNull CameraDevice camera, int error) {
+                Log.e(TAG, "Camera error: " + error);
+                camera.close();
+                cameraDevice = null;
+                stopSelf();
+            }
+        }, cameraHandler);
     }
+
+    private void createRecordSessionAndStart() throws CameraAccessException {
+        if (cameraDevice == null || mediaRecorder == null) throw new IllegalStateException("Not ready");
+
+        final Surface recorderSurface = mediaRecorder.getSurface();
+
+        recordRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_RECORD);
+        recordRequestBuilder.addTarget(recorderSurface);
+        recordRequestBuilder.set(CaptureRequest.CONTROL_MODE, CaptureRequest.CONTROL_MODE_AUTO);
+        recordRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_VIDEO);
+        recordRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON);
+
+        cameraDevice.createCaptureSession(
+                Collections.singletonList(recorderSurface),
+                new CameraCaptureSession.StateCallback() {
+                    @Override public void onConfigured(@NonNull CameraCaptureSession session) {
+                        captureSession = session;
+                        try {
+                            session.setRepeatingRequest(recordRequestBuilder.build(), null, cameraHandler);
+                            mediaRecorder.start();
+                            Log.d(TAG, "Recording started: " + (outputUri != null ? outputUri :
+                                    (outputFile != null ? outputFile.getAbsolutePath() : "unknown")));
+                            if (getApplication() instanceof MyApplication) {
+                                ((MyApplication) getApplication()).setVideoRecording(true);
+                            }
+                        } catch (Exception e) {
+                            Log.e(TAG, "Recorder start failed", e);
+                            stopSelf();
+                        }
+                    }
+                    @Override public void onConfigureFailed(@NonNull CameraCaptureSession session) {
+                        Log.e(TAG, "CaptureSession configure failed");
+                        stopSelf();
+                    }
+                },
+                cameraHandler
+        );
+    }
+
+    // ---------------- Location helper ----------------
 
     private void fetchLastKnownLocation() {
         boolean fine = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -262,36 +463,8 @@ public class VideoRecService extends Service implements LifecycleOwner {
         }
     }
 
-    @Override
-    public void onDestroy() {
-        Log.d(TAG, "onDestroy");
+    // ---------------- Foreground notification ----------------
 
-        // Stop recording if active
-        if (activeRecording != null) {
-            try {
-                activeRecording.stop();
-            } catch (Throwable t) {
-                Log.w(TAG, "Error stopping recording", t);
-            }
-            try {
-                activeRecording.close();
-            } catch (Throwable ignored) {}
-            activeRecording = null;
-        }
-
-        // Unbind and release the camera
-        if (cameraProvider != null) {
-            cameraProvider.unbindAll();
-            cameraProvider = null;
-        }
-
-        ((MyApplication) getApplication()).setVideoRecording(false);
-
-        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
-        super.onDestroy();
-    }
-
-    // --- Foreground notification (unchanged style) ---
     private void createNotification() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel ch = new NotificationChannel(
@@ -311,12 +484,59 @@ public class VideoRecService extends Service implements LifecycleOwner {
         startForeground(NOTIF_ID, notif);
     }
 
-    // --- LifecycleOwner for binding ---
-    @NonNull @Override
-    public Lifecycle getLifecycle() {
-        return lifecycleRegistry;
+    // ---------------- Teardown ----------------
+
+    @Override public void onDestroy() {
+        Log.d(TAG, "onDestroy");
+
+        // Stop camera repeating and recording first (order matters on some OEMs)
+        try {
+            if (captureSession != null) {
+                try { captureSession.stopRepeating(); } catch (Throwable ignored) {}
+                try { captureSession.abortCaptures(); } catch (Throwable ignored) {}
+            }
+        } catch (Throwable ignored) {}
+
+        try {
+            if (mediaRecorder != null) {
+                try { mediaRecorder.stop(); } catch (Throwable t) { Log.w(TAG, "Recorder stop", t); }
+            }
+        } catch (Throwable ignored) {}
+
+        releaseMediaRecorder();
+
+        if (captureSession != null) {
+            try { captureSession.close(); } catch (Throwable ignored) {}
+            captureSession = null;
+        }
+        if (cameraDevice != null) {
+            try { cameraDevice.close(); } catch (Throwable ignored) {}
+            cameraDevice = null;
+        }
+        if (pfd != null) {
+            try { pfd.close(); } catch (Throwable ignored) {}
+            pfd = null;
+        }
+
+        // Clear BT routing
+        if (btRouter != null) btRouter.clearRouting();
+
+        stopCameraThread();
+
+        if (getApplication() instanceof MyApplication) {
+            ((MyApplication) getApplication()).setVideoRecording(false);
+        }
+        super.onDestroy();
     }
 
-    @Nullable @Override
-    public IBinder onBind(Intent intent) { return null; }
+    private void releaseMediaRecorder() {
+        if (mediaRecorder != null) {
+            try { mediaRecorder.reset(); } catch (Throwable ignored) {}
+            try { mediaRecorder.release(); } catch (Throwable ignored) {}
+            mediaRecorder = null;
+        }
+    }
+
+    // --- Service binding ---
+    @Nullable @Override public IBinder onBind(Intent intent) { return null; }
 }
