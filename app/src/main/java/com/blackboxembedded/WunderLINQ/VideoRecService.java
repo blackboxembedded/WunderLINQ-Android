@@ -103,14 +103,21 @@ public class VideoRecService extends Service {
     private BluetoothMicRouter btRouter;
 
     // Display rotation → degrees for MediaRecorder orientation hint
-    private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
+    private static final SparseIntArray DEFAULT_ORIENTATIONS = new SparseIntArray();
+    private static final SparseIntArray INVERSE_ORIENTATIONS = new SparseIntArray();
     static {
-        ORIENTATIONS.append(Surface.ROTATION_0,   90);
-        ORIENTATIONS.append(Surface.ROTATION_90,  0);
-        ORIENTATIONS.append(Surface.ROTATION_180, 270);
-        ORIENTATIONS.append(Surface.ROTATION_270, 180);
-    }
+        // For sensors with orientation = 90
+        DEFAULT_ORIENTATIONS.append(Surface.ROTATION_0,   90);
+        DEFAULT_ORIENTATIONS.append(Surface.ROTATION_90,  0);
+        DEFAULT_ORIENTATIONS.append(Surface.ROTATION_180, 270);
+        DEFAULT_ORIENTATIONS.append(Surface.ROTATION_270, 180);
 
+        // For sensors with orientation = 270
+        INVERSE_ORIENTATIONS.append(Surface.ROTATION_0,   270);
+        INVERSE_ORIENTATIONS.append(Surface.ROTATION_90,  180);
+        INVERSE_ORIENTATIONS.append(Surface.ROTATION_180, 90);
+        INVERSE_ORIENTATIONS.append(Surface.ROTATION_270, 0);
+    }
     @Override public void onCreate() {
         super.onCreate();
         createNotification();
@@ -250,12 +257,16 @@ public class VideoRecService extends Service {
             }
         } catch (Throwable ignored) {}
 
-        int deviceDeg = ORIENTATIONS.get(rotation, 0);
-        // Typical recorder mapping (front gets the +180 mirror compensation)
-        if (lensFacing == CameraCharacteristics.LENS_FACING_FRONT) {
-            return (sensorOrientation + deviceDeg + 180) % 360;
+        // Use the table based on the camera sensor's mounting
+        if (sensorOrientation == 90) {
+            return DEFAULT_ORIENTATIONS.get(rotation);
+        } else if (sensorOrientation == 270) {
+            return INVERSE_ORIENTATIONS.get(rotation);
         } else {
-            return (sensorOrientation + deviceDeg) % 360;
+            // Rare sensors; fall back to a simple sum
+            // (kept for completeness; most phones are 90 or 270)
+            int base = DEFAULT_ORIENTATIONS.get(rotation, 0);
+            return (base + sensorOrientation - 90 + 360) % 360;
         }
     }
 
