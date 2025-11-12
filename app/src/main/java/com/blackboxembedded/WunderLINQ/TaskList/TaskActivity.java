@@ -631,6 +631,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                 // Trip Log
                 // Check Write permissions
                 if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    Log.e(TAG, "Location permission not granted; cannot start foreground location service.");
                     Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
                     if (((MyApplication) TaskActivity.this.getApplication()).getTripRecording()) {

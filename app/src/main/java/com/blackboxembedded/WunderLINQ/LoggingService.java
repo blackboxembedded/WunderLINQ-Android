@@ -20,6 +20,7 @@ package com.blackboxembedded.WunderLINQ;
 import static android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION;
 import static androidx.core.app.NotificationCompat.PRIORITY_MIN;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -27,6 +28,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Handler;
@@ -34,6 +36,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
 import com.blackboxembedded.WunderLINQ.TaskList.TaskActivity;
@@ -108,6 +111,13 @@ public class LoggingService extends Service {
     public void onCreate() {
         Log.d(TAG, "In onCreate");
         super.onCreate();
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            Log.e(TAG, "Location permission not granted; cannot start foreground location service.");
+            stopSelf();
+            return;
+        }
 
         Intent showTaskIntent = new Intent(getApplicationContext(), TaskActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(
