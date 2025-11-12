@@ -21,6 +21,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.util.Log;
 
 import com.blackboxembedded.WunderLINQ.MemCache;
 import com.blackboxembedded.WunderLINQ.MyApplication;
@@ -37,6 +38,8 @@ import java.util.Locale;
 import java.util.Queue;
 
 public class Utils {
+
+    private static final String TAG = "Utils";
 
     public static final String LATITUDE_PATTERN="^(\\+|-)?(?:90(?:(?:\\.0{1,8})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,8})?))$";
     public static final String LONGITUDE_PATTERN="^(\\+|-)?(?:180(?:(?:\\.0{1,8})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,8})?))$";
@@ -263,6 +266,12 @@ public class Utils {
     }
 
     public static Bitmap drawableToBitmap(Drawable drawable) {
+
+        if (drawable == null) {
+            Log.e(TAG, "drawableToBitmap: drawable is null!");
+            return null;
+        }
+
         // Determine the size of the Drawable
         int width = drawable.getIntrinsicWidth();
         int height = drawable.getIntrinsicHeight();

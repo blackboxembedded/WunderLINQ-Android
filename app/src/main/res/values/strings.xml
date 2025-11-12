@@ -494,6 +494,9 @@
     <string name="systemvolume_title">System Volume</string>
     <!-- SettingsActivity -->
     <string name="title_activity_settings">Settings</string>
+    <!-- AAutoScreen -->
+    <string name="permission_required">Permissions Required</string>
+    <string name="permission_required_message">Please ensure all permissions are granted to the mobile device.</string>
     <!-- Preference strings -->
     <string name="info_title">Personal Information</string>
     <string name="pref_homeAddress_name">Home Address</string>

@@ -37,6 +37,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -85,6 +86,34 @@ public class AAutoScreen extends Screen {
     @NonNull
     @Override
     public Template onGetTemplate() {
+        Context context = getCarContext();
+
+        // Check for critical permissions used by this screen
+        boolean hasLocation = ContextCompat.checkSelfPermission(
+                context, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
+
+        boolean hasBluetooth = ContextCompat.checkSelfPermission(
+                context, android.Manifest.permission.BLUETOOTH_CONNECT)
+                == PackageManager.PERMISSION_GRANTED;
+
+        // If either permission missing, show a friendly placeholder template
+        if (!hasLocation || !hasBluetooth) {
+            StringBuilder message = new StringBuilder(MyApplication.getContext().getString(R.string.permission_required_message));
+
+            return new androidx.car.app.model.MessageTemplate.Builder(message.toString())
+                    .setTitle(MyApplication.getContext().getString(R.string.permission_required))
+                    .setHeaderAction(Action.APP_ICON)
+                    .addAction(
+                            new Action.Builder()
+                                    .setTitle("Retry")
+                                    .setOnClickListener(this::invalidate)
+                                    .build()
+                    )
+                    .build();
+        }
+
+        // Safe to show real UI now
         return tabTemplate;
     }
 
