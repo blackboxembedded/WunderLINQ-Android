@@ -297,6 +297,7 @@ public class Utils {
 
     public static Bitmap drawableToBitmap(Drawable drawable, int height) {
         if (drawable == null) {
+            Log.e(TAG, "drawableToBitmap: drawable is null!");
             return null;
         }
 
