@@ -361,7 +361,7 @@
     <string name="west">W</string>
     <string name="east">E</string>
     <!-- AccessoryActivity -->
-    <string name="accessory_title">Accessory Status</string>
+    <string name="accessory_title">PowerLINQ Status</string>
     <string name="default_accessory_one_name">Channel One</string>
     <string name="default_accessory_two_name">Channel Two</string>
     <!-- MusicActivity -->
@@ -1145,11 +1145,11 @@
         <item>0x03</item>
     </string-array>
 
-    <string name="pdm_label">Power Controller</string>
-    <string name="pdm_channel1_label">PDM Channel 1</string>
-    <string name="pdm_channel2_label">PDM Channel 2</string>
-    <string name="pdm_channel3_label">PDM Channel 3</string>
-    <string name="pdm_channel4_label">PDM Channel 4</string>
+    <string name="pdm_label">PowerLINQ</string>
+    <string name="pdm_channel1_label">Channel 1</string>
+    <string name="pdm_channel2_label">Channel 2</string>
+    <string name="pdm_channel3_label">Channel 3</string>
+    <string name="pdm_channel4_label">Channel 4</string>
 
     <string name="pdm_channel_mode_toggle">Toggle</string>
     <string name="pdm_channel_mode_momentary">Momentary</string>
