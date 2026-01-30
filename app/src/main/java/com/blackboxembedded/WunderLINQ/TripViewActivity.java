@@ -86,7 +86,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
     private PopupMenu mPopupMenu;
     private EditText etLabel;
     private List<LatLng> routePoints;
-    private ArrayList tripFileList = new ArrayList<String>();
+    private final ArrayList<String> tripFileList = new ArrayList<String>();
     private String fileName;
     private File file;
     private int index;
@@ -211,77 +211,126 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                             e.printStackTrace();
                         }
                         if((lineNumber > 1) && (!nextLine[1].equals("No Fix") && (!nextLine[2].equals("No Fix")))) {
-                            LatLng location = new LatLng(Double.parseDouble(nextLine[1]), Double.parseDouble(nextLine[2]));
-                            if(lastLocation == null){
-                                lastLocation = new LatLng(Double.parseDouble(nextLine[1]), Double.parseDouble(nextLine[2]));
-                            } else {
-                                float[] results = new float[1];
-                                Location.distanceBetween(lastLocation.latitude, lastLocation.longitude,
-                                        location.latitude, location.longitude, results);
+                            try {
+                                LatLng location = new LatLng(Double.parseDouble(nextLine[1]), Double.parseDouble(nextLine[2]));
+                                if(lastLocation == null){
+                                    lastLocation = new LatLng(Double.parseDouble(nextLine[1]), Double.parseDouble(nextLine[2]));
+                                } else {
+                                    float[] results = new float[1];
+                                    Location.distanceBetween(lastLocation.latitude, lastLocation.longitude,
+                                            location.latitude, location.longitude, results);
 
-                                // Update total distance
-                                totalDistance += results[0];
+                                    // Update total distance
+                                    totalDistance += results[0];
+                                }
+
+                                routePoints.add(location);
+                                speeds.add(Double.parseDouble(nextLine[4]));
+                                if (maxSpeed == null || maxSpeed < Double.parseDouble(nextLine[4])){
+                                    maxSpeed = Double.parseDouble(nextLine[4]);
+                                }
+                            } catch (NumberFormatException e) {
+                                // Handle the invalid input, e.g., log the error and use a sensible default.
+                                Log.e(TAG, "Invalid numeric string encountered: ", e);
                             }
 
-                            routePoints.add(location);
-                            speeds.add(Double.parseDouble(nextLine[4]));
-                            if (maxSpeed == null || maxSpeed < Double.parseDouble(nextLine[4])){
-                                maxSpeed = Double.parseDouble(nextLine[4]);
-                            }
                         }
                         if (lineNumber > 1) {
-                            if (!nextLine[6].equals("null") && !nextLine[6].equals("")){
-                                engineTemps.add(Double.parseDouble(nextLine[6]));
-                                if (maxEngineTemp == null || maxEngineTemp < Double.parseDouble(nextLine[6])){
-                                    maxEngineTemp = Double.parseDouble(nextLine[6]);
-                                }
-                                if (minEngineTemp == null || minEngineTemp > Double.parseDouble(nextLine[6])){
-                                    minEngineTemp = Double.parseDouble(nextLine[6]);
-                                }
-                            }
-                            if (!nextLine[7].equals("null") && !nextLine[7].equals("")){
-                                ambientTemps.add(Double.parseDouble(nextLine[7]));
-                                if (maxAmbientTemp == null || maxAmbientTemp < Double.parseDouble(nextLine[7])){
-                                    maxAmbientTemp = Double.parseDouble(nextLine[7]);
-                                }
-                                if (minAmbientTemp == null || minAmbientTemp > Double.parseDouble(nextLine[7])){
-                                    minAmbientTemp = Double.parseDouble(nextLine[7]);
+                            if (!nextLine[6].equals("null") && !nextLine[6].isEmpty()){
+                                try {
+                                    engineTemps.add(Double.parseDouble(nextLine[6]));
+                                    if (maxEngineTemp == null || maxEngineTemp < Double.parseDouble(nextLine[6])){
+                                        maxEngineTemp = Double.parseDouble(nextLine[6]);
+                                    }
+                                    if (minEngineTemp == null || minEngineTemp > Double.parseDouble(nextLine[6])){
+                                        minEngineTemp = Double.parseDouble(nextLine[6]);
+                                    }
+                                } catch (NumberFormatException e) {
+                                    // Handle the invalid input, e.g., log the error and use a sensible default.
+                                    Log.e(TAG, "Invalid numeric string encountered: ", e);
                                 }
                             }
-                            if (!nextLine[10].equals("null") && !nextLine[10].equals("")){
-                                if (endOdometer == null || endOdometer < Double.parseDouble(nextLine[10].replace(",", ""))){
-                                    endOdometer = Double.parseDouble(nextLine[10].replace(",", ""));
-                                }
-                                if (startOdometer == null || startOdometer > Double.parseDouble(nextLine[10].replace(",", ""))){
-                                    startOdometer = Double.parseDouble(nextLine[10].replace(",", ""));
-                                }
-                            }
-                            if (!nextLine[13].equals("null") && !nextLine[13].equals("")){
-                                if (endFrontBrakeCnt == null || endFrontBrakeCnt < Double.parseDouble(nextLine[13])){
-                                    endFrontBrakeCnt = Integer.parseInt(nextLine[13]);
-                                }
-                            }
-                            if (!nextLine[14].equals("null") && !nextLine[14].equals("")){
-                                if (endRearBrakeCnt == null || endRearBrakeCnt < Double.parseDouble(nextLine[14])){
-                                    endRearBrakeCnt = Integer.parseInt(nextLine[14]);
+                            if (!nextLine[7].equals("null") && !nextLine[7].isEmpty()){
+                                try {
+                                    ambientTemps.add(Double.parseDouble(nextLine[7]));
+                                    if (maxAmbientTemp == null || maxAmbientTemp < Double.parseDouble(nextLine[7])){
+                                        maxAmbientTemp = Double.parseDouble(nextLine[7]);
+                                    }
+                                    if (minAmbientTemp == null || minAmbientTemp > Double.parseDouble(nextLine[7])){
+                                        minAmbientTemp = Double.parseDouble(nextLine[7]);
+                                    }
+                                } catch (NumberFormatException e) {
+                                    // Handle the invalid input, e.g., log the error and use a sensible default.
+                                    Log.e(TAG, "Invalid numeric string encountered: ", e);
                                 }
                             }
-                            if (!nextLine[15].equals("null") && !nextLine[15].equals("")){
-                                if (endShiftCnt == null || endShiftCnt < Double.parseDouble(nextLine[15])){
-                                    endShiftCnt = Integer.parseInt(nextLine[15]);
+                            if (!nextLine[10].equals("null") && !nextLine[10].isEmpty()){
+                                try {
+                                    if (endOdometer == null || endOdometer < Double.parseDouble(nextLine[10].replace(",", ""))){
+                                        endOdometer = Double.parseDouble(nextLine[10].replace(",", ""));
+                                    }
+                                    if (startOdometer == null || startOdometer > Double.parseDouble(nextLine[10].replace(",", ""))){
+                                        startOdometer = Double.parseDouble(nextLine[10].replace(",", ""));
+                                    }
+                                } catch (NumberFormatException e) {
+                                    // Handle the invalid input, e.g., log the error and use a sensible default.
+                                    Log.e(TAG, "Invalid numeric string encountered: ", e);
                                 }
                             }
-                            if (!nextLine[32].equals("null") && !nextLine[32].equals("")){
-                                if (maxLean == null) {
-                                    maxLean = Math.abs(Double.parseDouble(nextLine[32]));
-                                } else if (maxLean < Math.abs(Double.parseDouble(nextLine[32]))){
-                                    maxLean = Math.abs(Double.parseDouble(nextLine[32]));
+                            if (!nextLine[13].equals("null") && !nextLine[13].isEmpty()){
+                                try {
+                                    if (endFrontBrakeCnt == null || endFrontBrakeCnt < Double.parseDouble(nextLine[13])){
+                                        endFrontBrakeCnt = Integer.parseInt(nextLine[13]);
+                                    }
+                                } catch (NumberFormatException e) {
+                                    // Handle the invalid input, e.g., log the error and use a sensible default.
+                                    Log.e(TAG, "Invalid numeric string encountered: ", e);
                                 }
-                            } else if (!nextLine[27].equals("null") && !nextLine[27].equals("")){
-                                if (maxLean == null) {
-                                    maxLean = Math.abs(Double.parseDouble(nextLine[27]));
-                                } else if (maxLean < Math.abs(Double.parseDouble(nextLine[27]))){
-                                    maxLean = Math.abs(Double.parseDouble(nextLine[27]));
+
+                            }
+                            if (!nextLine[14].equals("null") && !nextLine[14].isEmpty()){
+                                try {
+                                    if (endRearBrakeCnt == null || endRearBrakeCnt < Double.parseDouble(nextLine[14])){
+                                        endRearBrakeCnt = Integer.parseInt(nextLine[14]);
+                                    }
+                                } catch (NumberFormatException e) {
+                                    // Handle the invalid input, e.g., log the error and use a sensible default.
+                                    Log.e(TAG, "Invalid numeric string encountered: ", e);
+                                }
+                            }
+                            if (!nextLine[15].equals("null") && !nextLine[15].isEmpty()){
+                                try {
+                                    if (endShiftCnt == null || endShiftCnt < Double.parseDouble(nextLine[15])){
+                                        endShiftCnt = Integer.parseInt(nextLine[15]);
+                                    }
+                                } catch (NumberFormatException e) {
+                                    // Handle the invalid input, e.g., log the error and use a sensible default.
+                                    Log.e(TAG, "Invalid numeric string encountered: ", e);
+                                }
+                            }
+                            if (!nextLine[32].equals("null") && !nextLine[32].isEmpty()){
+                                try {
+                                    if (maxLean == null) {
+                                        maxLean = Math.abs(Double.parseDouble(nextLine[32]));
+                                    } else if (maxLean < Math.abs(Double.parseDouble(nextLine[32]))){
+                                        maxLean = Math.abs(Double.parseDouble(nextLine[32]));
+                                    }
+                                } catch (NumberFormatException e) {
+                                    // Handle the invalid input, e.g., log the error and use a sensible default.
+                                    Log.e(TAG, "Invalid numeric string encountered: ", e);
+                                }
+                            } else if (!nextLine[27].equals("null") && !nextLine[27].isEmpty()){
+                                if (!nextLine[15].equals("null") && !nextLine[15].isEmpty()){
+                                    try {
+                                        if (maxLean == null) {
+                                            maxLean = Math.abs(Double.parseDouble(nextLine[27]));
+                                        } else if (maxLean < Math.abs(Double.parseDouble(nextLine[27]))){
+                                            maxLean = Math.abs(Double.parseDouble(nextLine[27]));
+                                        }
+                                    } catch (NumberFormatException e) {
+                                        // Handle the invalid input, e.g., log the error and use a sensible default.
+                                        Log.e(TAG, "Invalid numeric string encountered: ", e);
+                                    }
                                 }
                             }
                         }
@@ -290,7 +339,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                     lineNumber = lineNumber + 1;
                 }
 
-                if (speeds.size() > 0){
+                if (!speeds.isEmpty()){
                     double avgSpeed = 0.0;
                     for (double speed : speeds) {
                         avgSpeed = avgSpeed + speed;
@@ -318,7 +367,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 tvBrakes.setText(frontBrakeText + "/" + rearBrakeText);
 
                 double avgEngineTemp = 0.0;
-                if (engineTemps.size() > 0) {
+                if (!engineTemps.isEmpty()) {
                     for (double engineTemp : engineTemps) {
                         avgEngineTemp = avgEngineTemp + engineTemp;
                     }
@@ -331,7 +380,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 tvEngine.setText(Utils.toOneDecimalString(minEngineTemp) + "/" + Utils.toOneDecimalString(avgEngineTemp) + "/" + Utils.toOneDecimalString(maxEngineTemp) + " (" + temperatureUnit + ")");
 
                 double avgAmbientTemp = 0.0;
-                if (ambientTemps.size() > 0) {
+                if (!ambientTemps.isEmpty()) {
                     for (double ambientTemp : ambientTemps) {
                         avgAmbientTemp = avgAmbientTemp + ambientTemp;
                     }
@@ -363,7 +412,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 Log.d(TAG,"Exception reading CSV: " + e.toString());
             }
 
-            if (routePoints.size() > 0) {
+            if (!routePoints.isEmpty()) {
                 MapsInitializer.initialize(getApplicationContext(), Renderer.LATEST, this);
                 FragmentManager myFragmentManager = getSupportFragmentManager();
                 SupportMapFragment mapFragment = (SupportMapFragment) myFragmentManager.findFragmentById(R.id.map);

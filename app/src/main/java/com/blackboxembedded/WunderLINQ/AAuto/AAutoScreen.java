@@ -55,6 +55,7 @@ import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class AAutoScreen extends Screen {
 
@@ -218,7 +219,7 @@ public class AAutoScreen extends Screen {
         String dataVal = (String) retObj[0];
         String label = (String) retObj[1];
         Drawable icon = (Drawable) retObj[2];
-        IconCompat iconCompat = IconCompat.createWithBitmap(Utils.drawableToBitmap(icon));
+        IconCompat iconCompat = IconCompat.createWithBitmap(Objects.requireNonNull(Utils.drawableToBitmap(icon)));
         CarIcon carIcon = new CarIcon.Builder(iconCompat).build();
 
         return new GridItem.Builder()
