@@ -127,7 +127,12 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
                     if (controller != null) {
                         PackageManager packageManager = getPackageManager();
                         Intent intent = packageManager.getLaunchIntentForPackage(controller.getPackageName());
-                        startActivity(intent);
+                        if (intent != null) {
+                            startActivity(intent);
+                        } else {
+                            // Log a warning and inform the user
+                            Log.e(TAG, "Intent for music player was null, cannot start activity.");
+                        }
                     }
                     break;
                 case R.id.album_text:
