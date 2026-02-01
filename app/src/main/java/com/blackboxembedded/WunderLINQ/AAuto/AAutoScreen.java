@@ -38,6 +38,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -219,7 +220,12 @@ public class AAutoScreen extends Screen {
         String dataVal = (String) retObj[0];
         String label = (String) retObj[1];
         Drawable icon = (Drawable) retObj[2];
-        IconCompat iconCompat = IconCompat.createWithBitmap(Objects.requireNonNull(Utils.drawableToBitmap(icon)));
+
+        IconCompat iconCompat = IconCompat.createWithResource(getCarContext(), R.drawable.ic_cog); // Default Icon
+        Bitmap itemBitmap = Utils.drawableToBitmap(icon);
+        if (itemBitmap != null) {
+            iconCompat = IconCompat.createWithBitmap(itemBitmap);
+        }
         CarIcon carIcon = new CarIcon.Builder(iconCompat).build();
 
         return new GridItem.Builder()
