@@ -103,10 +103,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private final static int maxNumCells = 15;
 
-    private int[] layoutIDs = new int[maxNumCells];
-    private int[] valueTextViewIDs = new int[maxNumCells];
-    private int[] headerLabelViewIDs = new int[maxNumCells];
-    private int[] iconImageViewIDs = new int[maxNumCells];
+    private ConstraintLayout[] layoutViews = new ConstraintLayout[maxNumCells];
+    private TextView[] valueTextViews = new TextView[maxNumCells];
+    private TextView[] headerLabelViews = new TextView[maxNumCells];
+    private ImageView[] iconImageViews = new ImageView[maxNumCells];
+
     private MotorcycleData.DataType[] cellDataPref = new MotorcycleData.DataType[maxNumCells];
     GridItem[] cellsData = new GridItem[maxNumCells];
 
@@ -130,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private boolean inPIP = false;
 
-    private boolean drawingComplete = true;
+    private volatile boolean drawingComplete = true;
 
     private boolean timerRunning = false;
 
@@ -823,67 +824,58 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     // Update Display
     private void updateDisplay() {
+        if (!drawingComplete) return;
         drawingComplete = false;
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    // code runs in a thread
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // Set actionbar color based on focus
-                            if (sharedPrefs.getBoolean("prefFocusIndication", false)) {
-                                TypedValue typedValue = new TypedValue();
-                                getTheme().resolveAttribute(R.attr.backgroundColor, typedValue, true);
-                                int color = typedValue.data;
-                                if (MotorcycleData.getHasFocus()) {
-                                    color = androidx.preference.PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getInt("prefHighlightColor", R.color.colorAccent);
-                                }
-                                ActionBar actionBar = getSupportActionBar();
-                                if (actionBar != null) {
-                                    actionBar.setBackgroundDrawable(new ColorDrawable(color));
-                                }
-                            }
 
-                            // Show menu items for certain HW types
-                            if(MotorcycleData.wlq != null) {
-                                if(MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_N || MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_X) {
-                                    mMenu.findItem(R.id.action_bike_info).setVisible(true);
-                                }
-                                mMenu.findItem(id.action_hwsettings).setVisible(true);
-                            }
-
-                            //Check for active faults
-                            if (!Faults.getAllActiveDesc().isEmpty()) {
-                                faultButton.setVisibility(View.VISIBLE);
-                            } else {
-                                faultButton.setVisibility(View.GONE);
-                            }
-
-                            //Layout visible grid
-                            if (gridChange()) {
-                                reloadGridLayout();
-                            }
-
-                            // Update grid for visible cellsData
-                            for (int cellNumber = 0; cellNumber < gridLayout.getChildCount(); cellNumber++) {
-                                String cellValue = getCellContents(cellNumber);
-                                cellsData[cellNumber] = GridItem.getCellData(cellDataPref[cellNumber]);
-
-                                //Only draw contents to screen when changes occur to underlying data
-                                if (cellValue.isBlank() || !cellsData[cellNumber].getValue().equals(cellValue)) {
-                                    setCellContents(cellNumber);
-                                }
-                            }
-                        }
-                    });
-                } catch (final Exception ex) {
-                    Log.i(TAG, "Exception in thread");
-                }
-                drawingComplete = true;
+        // Set actionbar color based on focus
+        if (sharedPrefs.getBoolean("prefFocusIndication", false)) {
+            TypedValue typedValue = new TypedValue();
+            getTheme().resolveAttribute(R.attr.backgroundColor, typedValue, true);
+            int color = typedValue.data;
+            if (MotorcycleData.getHasFocus()) {
+                color = androidx.preference.PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getInt("prefHighlightColor", R.color.colorAccent);
             }
-        }.start();
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setBackgroundDrawable(new ColorDrawable(color));
+            }
+        }
+
+        // Show menu items for certain HW types
+        if (MotorcycleData.wlq != null) {
+            if (MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_N || MotorcycleData.wlq.getHardwareType() == WLQ.TYPE_X) {
+                mMenu.findItem(R.id.action_bike_info).setVisible(true);
+            }
+            mMenu.findItem(id.action_hwsettings).setVisible(true);
+        }
+
+        //Check for active faults
+        if (!Faults.getAllActiveDesc().isEmpty()) {
+            faultButton.setVisibility(View.VISIBLE);
+        } else {
+            faultButton.setVisibility(View.GONE);
+        }
+
+        //Layout visible grid
+        if (gridChange()) {
+            reloadGridLayout();
+        }
+
+        // Update grid for visible cellsData
+        for (int cellNumber = 0; cellNumber < gridLayout.getChildCount(); cellNumber++) {
+            cellsData[cellNumber] = GridItem.getCellData(cellDataPref[cellNumber]);
+            String newValue = cellsData[cellNumber].getValue();
+
+            TextView valueView = valueTextViews[cellNumber];
+            if (valueView != null) {
+                String currentValue = valueView.getText().toString();
+                //Only draw contents to screen when changes occur to underlying data
+                if (currentValue.isEmpty() || !newValue.equals(currentValue)) {
+                    setCellContents(cellNumber);
+                }
+            }
+        }
+        drawingComplete = true;
     }
 
     @Override
@@ -1088,11 +1080,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         if (gridHasBeenChanged){
             gridLayout.removeAllViews();
 
-            int[] layoutIDs = new int[maxNumCells];
-            int[] valueTextViewIDs = new int[maxNumCells];
-            int[] headerLabelViewIDs = new int[maxNumCells];
-            int[] iconImageViewIDs = new int[maxNumCells];
-            MotorcycleData.DataType[] cellDataPref = new MotorcycleData.DataType[maxNumCells];
+            layoutViews = new ConstraintLayout[maxNumCells];
+            valueTextViews = new TextView[maxNumCells];
+            headerLabelViews = new TextView[maxNumCells];
+            iconImageViews = new ImageView[maxNumCells];
+            cellDataPref = new MotorcycleData.DataType[maxNumCells];
 
             //Probably unnecessary but why not
             MemCache.invalidate();
@@ -1245,11 +1237,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             headerLabelView.setTag(cellNumber);
             iconImageView.setTag(cellNumber);
 
-            //cache generated IDs in an array for later use
-            layoutIDs[cellNumber]         = layoutId;
-            valueTextViewIDs[cellNumber]  = valueViewId;
-            headerLabelViewIDs[cellNumber]= labelViewId;
-            iconImageViewIDs[cellNumber]  = iconViewId;
+            //cache generated views in an array for later use
+            layoutViews[cellNumber]         = layout;
+            valueTextViews[cellNumber]      = valueTextView;
+            headerLabelViews[cellNumber]    = headerLabelView;
+            iconImageViews[cellNumber]      = iconImageView;
         }
 
         gridChange( false);
@@ -1258,11 +1250,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
 
     private void setCellContents(Integer cellNumber) {
-        ConstraintLayout layout = findViewById(layoutIDs[cellNumber]);
+        ConstraintLayout layout = layoutViews[cellNumber];
         if (layout != null) {
-            TextView valueTextView = findViewById(valueTextViewIDs[cellNumber]);
-            TextView headerLabelView = findViewById(headerLabelViewIDs[cellNumber]);
-            ImageView iconImageView = findViewById(iconImageViewIDs[cellNumber]);
+            TextView valueTextView = valueTextViews[cellNumber];
+            TextView headerLabelView = headerLabelViews[cellNumber];
+            ImageView iconImageView = iconImageViews[cellNumber];
 
             String label = cellsData[cellNumber].getLabel();
             String value = cellsData[cellNumber].getValue();
@@ -1299,15 +1291,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     private String getCellContents(int cellNumber) {
-        String retValue = "";
-
-        if (gridLayout.getChildCount() > cellNumber) {
-            TextView cellView = findViewById(valueTextViewIDs[cellNumber]);
-            if (cellView != null) {
-                retValue = (String) cellView.getText();
-            }
+        if (cellNumber < valueTextViews.length && valueTextViews[cellNumber] != null) {
+            return valueTextViews[cellNumber].getText().toString();
         }
-
-        return retValue;
+        return "";
     }
 }
