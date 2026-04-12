@@ -51,6 +51,7 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.preference.PreferenceManager;
@@ -123,12 +124,26 @@ public class BluetoothLeService extends Service {
     boolean mAllowRebind; // indicates whether onRebind should be used
 
     private static final Queue<Runnable> commandQueue = new ConcurrentLinkedQueue<>();
-    private static Handler bleHandler = new Handler();
+    private static final HandlerThread bleHandlerThread = new HandlerThread("BleHandlerThread");
+    static {
+        bleHandlerThread.start();
+    }
+    private static final Handler bleHandler = new Handler(bleHandlerThread.getLooper());
+    private static final Handler mainHandler = new Handler(Looper.getMainLooper());
     private static volatile boolean commandQueueBusy = false;
     private static boolean isRetrying;
     private static int nrTries;
     // Maximum number of retries of commands
     private static final int MAX_TRIES = 2;
+
+    private static final long BROADCAST_THROTTLE_MS = 100;
+    private static long lastBroadcastTime = 0;
+    private static final Runnable broadcastRunnable = new Runnable() {
+        @Override
+        public void run() {
+            sendDataBroadcastInternal();
+        }
+    };
 
     public enum WriteType {
         WITH_RESPONSE,
@@ -688,15 +703,18 @@ public class BluetoothLeService extends Service {
                 if (mDisableNotificationFlag) {
                     disableAllEnabledCharacteristics();
                 }
+                completedCommand();
             } else if (status == BluetoothGatt.GATT_INSUFFICIENT_AUTHENTICATION
                     || status == BluetoothGatt.GATT_INSUFFICIENT_ENCRYPTION) {
                 bondDevice();
                 Intent intent = new Intent(ACTION_WRITE_FAILED);
                 MyApplication.getContext().sendBroadcast(intent);
+                completedCommand();
             } else {
                 mDisableNotificationFlag = false;
                 Intent intent = new Intent(ACTION_WRITE_FAILED);
                 MyApplication.getContext().sendBroadcast(intent);
+                retryCommand();
             }
         }
 
@@ -725,6 +743,9 @@ public class BluetoothLeService extends Service {
 
                 MyApplication.getContext().sendBroadcast(intent);
                 completedCommand();
+            } else {
+                Log.e(TAG, "Characteristic write failed: " + status);
+                retryCommand();
             }
         }
 
@@ -734,7 +755,7 @@ public class BluetoothLeService extends Service {
             // Perform some checks on the status field
             if (status != BluetoothGatt.GATT_SUCCESS) {
                 Log.d(TAG, String.format(Locale.ENGLISH,"ERROR: Read failed for characteristic: %s, status %d", characteristic.getUuid(), status));
-                completedCommand();
+                retryCommand();
                 return;
             }
 
@@ -1169,35 +1190,50 @@ public class BluetoothLeService extends Service {
      * @param enabled        If true, enable notification. False otherwise.
      */
     public static void setCharacteristicNotification(
-            BluetoothGattCharacteristic characteristic, boolean enabled) {
-        if ((ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED)
-                || (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)) {
-            if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-                return;
-            }
-            if (characteristic.getDescriptor(UUID
-                    .fromString(GattAttributes.CLIENT_CHARACTERISTIC_CONFIG)) != null) {
-                BluetoothGattDescriptor descriptor = characteristic
-                        .getDescriptor(UUID
-                                .fromString(GattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
-                if (enabled) {
-                    descriptor
-                            .setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+            final BluetoothGattCharacteristic characteristic, final boolean enabled) {
+        if (mBluetoothGatt == null) return;
 
+        boolean result = commandQueue.add(new Runnable() {
+            @Override
+            public void run() {
+                if ((ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED)
+                        || (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)) {
+                    if (mBluetoothGatt == null) {
+                        completedCommand();
+                        return;
+                    }
+
+                    boolean hasDescriptor = false;
+                    BluetoothGattDescriptor descriptor = characteristic.getDescriptor(UUID.fromString(GattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
+                    if (descriptor != null) {
+                        if (enabled) {
+                            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+                        } else {
+                            descriptor.setValue(BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
+                        }
+                        if (mBluetoothGatt.writeDescriptor(descriptor)) {
+                            hasDescriptor = true;
+                            nrTries++;
+                            Log.d(TAG, (enabled ? "Start" : "Stop") + " notification request sent");
+                        }
+                    }
+
+                    if (!mBluetoothGatt.setCharacteristicNotification(characteristic, enabled)) {
+                        Log.e(TAG, "setCharacteristicNotification failed for characteristic: " + characteristic.getUuid());
+                    }
+
+                    if (!hasDescriptor) {
+                        completedCommand();
+                    }
                 } else {
-                    descriptor
-                            .setValue(BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
+                    Log.d(TAG, "No BLUETOOTH_CONNECT permission granted");
+                    completedCommand();
                 }
-                mBluetoothGatt.writeDescriptor(descriptor);
             }
-            mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
-            if (enabled) {
-                String dataLog = "Start notification request sent";
-                Log.d(TAG, dataLog);
-            } else {
-                String dataLog = "Stop notification request sent";
-                Log.d(TAG, dataLog);
-            }
+        });
+
+        if (result) {
+            nextCommand();
         }
     }
 
@@ -1591,7 +1627,9 @@ public class BluetoothLeService extends Service {
         if (commandQueue.size() > 0) {
             final Runnable bluetoothCommand = commandQueue.peek();
             commandQueueBusy = true;
-            nrTries = 0;
+            if (!isRetrying) {
+                nrTries = 0;
+            }
 
             bleHandler.post(new Runnable() {
                 @Override
@@ -1629,6 +1667,18 @@ public class BluetoothLeService extends Service {
     }
 
     private static void sendDataBroadcast() {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastBroadcastTime >= BROADCAST_THROTTLE_MS) {
+            mainHandler.removeCallbacks(broadcastRunnable);
+            sendDataBroadcastInternal();
+            lastBroadcastTime = currentTime;
+        } else {
+            mainHandler.removeCallbacks(broadcastRunnable);
+            mainHandler.postDelayed(broadcastRunnable, BROADCAST_THROTTLE_MS - (currentTime - lastBroadcastTime));
+        }
+    }
+
+    private static void sendDataBroadcastInternal() {
         final Intent intent = new Intent(ACTION_PERFORMANCE_DATA_AVAILABLE);
         intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.GEAR), MotorcycleData.getGear());
         intent.putExtra(MotorcycleData.getExtraKey(MotorcycleData.DataType.ENGINE_TEMP), MotorcycleData.getEngineTemperature());
