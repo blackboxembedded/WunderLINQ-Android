@@ -392,7 +392,7 @@ public class WLQ_X extends WLQ_BASE {
                     case 2:
                         return MyApplication.getContext().getString(R.string.keymode_media_label);
                     case 3:
-                        return MyApplication.getContext().getString(R.string.keymode_dmd2_label);
+                        return MyApplication.getContext().getString(R.string.KEYMODE_DIRECT_label);
                     default:
                         return "";
                 }
@@ -996,7 +996,7 @@ public class WLQ_X extends WLQ_BASE {
     }
 
     @Override
-    public byte KEYMODE_DMD2() { return WLQ_BASE.KEYMODE_DMD2; }
+    public byte KEYMODE_DIRECT() { return WLQ_BASE.KEYMODE_DIRECT; }
 
     @Override
     public byte KEYBOARD_HID() {

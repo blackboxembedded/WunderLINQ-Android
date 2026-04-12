@@ -194,7 +194,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                     fwVersionTV.setText(getString(R.string.fw_version_label) + " " + MotorcycleData.wlq.getFirmwareVersion());
                     if (Double.parseDouble(MotorcycleData.wlq.getFirmwareVersion()) >= 2.0) {
                         if (MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_DEFAULT() || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_CUSTOM()
-                                || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_MEDIA() || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_DMD2()) {
+                                || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_MEDIA() || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_DIRECT()) {
                             actionItems.add(new ActionItem(WLQ.KEYMODE, MotorcycleData.wlq.getActionName(WLQ.KEYMODE), MotorcycleData.wlq.getActionValue(WLQ.KEYMODE))); // Key mode
                             actionItems.add(new ActionItem(WLQ.USB, getString(R.string.usb_threshold_label), MotorcycleData.wlq.getActionValue(WLQ.USB))); // USB
                             actionItems.add(new ActionItem(-1, getString(R.string.wwMode1), "")); //Full
@@ -251,7 +251,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                     fwVersionTV.setText(getString(R.string.fw_version_label) + " " + MotorcycleData.wlq.getFirmwareVersion());
                 }
                 if (MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_DEFAULT() || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_CUSTOM()
-                        || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_MEDIA() || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_DMD2()) {
+                        || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_MEDIA() || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_DIRECT()) {
                     actionItems.add(new ActionItem(WLQ.KEYMODE, MotorcycleData.wlq.getActionName(WLQ.KEYMODE), MotorcycleData.wlq.getActionValue(WLQ.KEYMODE))); // Key mode
                     actionItems.add(new ActionItem(-1, getString(R.string.wwMode1), "")); //Full
                     actionItems.add(new ActionItem(WLQ.longPressSensitivity, MotorcycleData.wlq.getActionName(WLQ.longPressSensitivity), MotorcycleData.wlq.getActionValue(WLQ.longPressSensitivity)));
@@ -304,7 +304,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                     fwVersionTV.setText(getString(R.string.fw_version_label) + " " + MotorcycleData.wlq.getFirmwareVersion());
                 }
                 if (MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_DEFAULT() || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_CUSTOM()
-                        || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_MEDIA() || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_DMD2()) {
+                        || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_MEDIA() || MotorcycleData.wlq.getKeyMode() == MotorcycleData.wlq.KEYMODE_DIRECT()) {
                     actionItems.add(new ActionItem(WLQ.KEYMODE, MotorcycleData.wlq.getActionName(WLQ.KEYMODE), MotorcycleData.wlq.getActionValue(WLQ.KEYMODE))); // Keymode
                     actionItems.add(new ActionItem(WLQ.longPressSensitivity, getString(R.string.long_press_label), MotorcycleData.wlq.getActionValue(WLQ.longPressSensitivity)));
                     actionItems.add(new ActionItem(WLQ.up, MotorcycleData.wlq.getActionName(WLQ.up), MotorcycleData.wlq.getActionValue(WLQ.up)));

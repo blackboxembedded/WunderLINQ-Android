@@ -728,7 +728,7 @@
     <string name="consumer_hid_0xE2_label">Silenciar</string>
     <string name="consumer_hid_0xE3_label">Bajo</string>
     <string name="keymode_media_label">Media</string>
-    <string name="keymode_dmd2_label">DMD2</string>
+    <string name="KEYMODE_DIRECT_label">Direct</string>
     <string name="sensitivity_label">Sensibilidad</string>
     <string name="long_press_label">Sensibilidad Presión Prolongada</string>
     <string name="full_scroll_up_label">Desplazar Hacia Arriba</string>

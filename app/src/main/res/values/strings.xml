@@ -1062,12 +1062,12 @@
     <string name="keymode_default_label">Default</string>
     <string name="keymode_custom_label">Custom</string>
     <string name="keymode_media_label">Media</string>
-    <string name="keymode_dmd2_label">DMD2</string>
+    <string name="KEYMODE_DIRECT_label">Direct</string>
     <string-array name="keymode_names_array" translatable="false">
         <item>@string/keymode_default_label</item>
         <item>@string/keymode_custom_label</item>
         <item>@string/keymode_media_label</item>
-        <item>@string/keymode_dmd2_label</item>
+        <item>@string/KEYMODE_DIRECT_label</item>
     </string-array>
     <string-array name="keymode_value_array" translatable="false">
         <item>0x00</item>

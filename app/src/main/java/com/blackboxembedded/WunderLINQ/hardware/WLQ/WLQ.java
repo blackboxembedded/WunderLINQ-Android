@@ -82,7 +82,7 @@ public interface WLQ {
     byte KEYMODE_DEFAULT();
     byte KEYMODE_CUSTOM();
     byte KEYMODE_MEDIA();
-    byte KEYMODE_DMD2();
+    byte KEYMODE_DIRECT();
 
     byte KEYBOARD_HID();
     byte CONSUMER_HID();
