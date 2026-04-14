@@ -28,7 +28,7 @@
             android:title="@string/pref_main_settings_title"
             android:summary="@string/pref_main_settings_summary">
             <CheckBoxPreference
-                android:defaultValue="false"
+                android:defaultValue="true"
                 android:key="prefDisplayDash"
                 android:title="@string/pref_display_dashboard_name" >
             </CheckBoxPreference>
@@ -47,105 +47,105 @@
                 android:title="@string/pref_grid_one"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
-                android:defaultValue="1"
+                android:defaultValue="26"
                 />
             <ListPreference
                 android:key="prefCell2"
                 android:title="@string/pref_grid_two"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
-                android:defaultValue="2"
+                android:defaultValue="27"
                 />
             <ListPreference
                 android:key="prefCell3"
                 android:title="@string/pref_grid_three"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
-                android:defaultValue="3"
+                android:defaultValue="34"
                 />
             <ListPreference
                 android:key="prefCell4"
                 android:title="@string/pref_grid_four"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
-                android:defaultValue="4"
+                android:defaultValue="21"
                 />
             <ListPreference
                 android:key="prefCell5"
                 android:title="@string/pref_grid_five"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
-                android:defaultValue="5"
+                android:defaultValue="22"
                 />
             <ListPreference
                 android:key="prefCell6"
                 android:title="@string/pref_grid_six"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
-                android:defaultValue="6"
+                android:defaultValue="23"
                 />
             <ListPreference
                 android:key="prefCell7"
                 android:title="@string/pref_grid_seven"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
-                android:defaultValue="7"
+                android:defaultValue="24"
                 />
             <ListPreference
                 android:key="prefCell8"
                 android:title="@string/pref_grid_eight"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
-                android:defaultValue="8"
+                android:defaultValue="28"
                 />
             <ListPreference
                 android:key="prefCell9"
                 android:title="@string/pref_grid_nine"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
-                android:defaultValue="9"
+                android:defaultValue="25"
                 />
             <ListPreference
                 android:key="prefCell10"
                 android:title="@string/pref_grid_ten"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
-                android:defaultValue="10"
+                android:defaultValue="32"
                 />
             <ListPreference
                 android:key="prefCell11"
                 android:title="@string/pref_grid_eleven"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
-                android:defaultValue="11"
+                android:defaultValue="33"
                 />
             <ListPreference
                 android:key="prefCell12"
                 android:title="@string/pref_grid_twelve"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
-                android:defaultValue="12"
+                android:defaultValue="6"
                 />
             <ListPreference
                 android:key="prefCell13"
                 android:title="@string/pref_grid_thirteen"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
-                android:defaultValue="13"
+                android:defaultValue="10"
                 />
             <ListPreference
                 android:key="prefCell14"
                 android:title="@string/pref_grid_fourteen"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
-                android:defaultValue="14"
+                android:defaultValue="0"
                 />
             <ListPreference
                 android:key="prefCell15"
                 android:title="@string/pref_grid_fifteen"
                 android:entries="@array/dataPoints_array"
                 android:entryValues="@array/dataPoints_arrayValues"
-                android:defaultValue="15"
+                android:defaultValue="1"
                 />
         </PreferenceScreen>
         <PreferenceScreen
@@ -157,126 +157,126 @@
                 android:title="@string/pref_task_one"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
-                android:defaultValue="1"
+                android:defaultValue="0"
                 />
             <ListPreference
                 android:key="prefQuickTask2"
                 android:title="@string/pref_task_two"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
-                android:defaultValue="2"
+                android:defaultValue="9"
                 />
             <ListPreference
                 android:key="prefQuickTask3"
                 android:title="@string/pref_task_three"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
-                android:defaultValue="3"
+                android:defaultValue="10"
                 />
             <ListPreference
                 android:key="prefQuickTask4"
                 android:title="@string/pref_task_four"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
-                android:defaultValue="4"
+                android:defaultValue="20"
                 />
             <ListPreference
                 android:key="prefQuickTask5"
                 android:title="@string/pref_task_five"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
-                android:defaultValue="5"
+                android:defaultValue="1"
                 />
             <ListPreference
                 android:key="prefQuickTask6"
                 android:title="@string/pref_task_six"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
-                android:defaultValue="6"
+                android:defaultValue="8"
                 />
             <ListPreference
                 android:key="prefQuickTask7"
                 android:title="@string/pref_task_seven"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
-                android:defaultValue="7"
+                android:defaultValue="15"
                 />
             <ListPreference
                 android:key="prefQuickTask8"
                 android:title="@string/pref_task_eight"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
-                android:defaultValue="8"
+                android:defaultValue="11"
                 />
             <ListPreference
                 android:key="prefQuickTask9"
                 android:title="@string/pref_task_nine"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
-                android:defaultValue="9"
+                android:defaultValue="2"
                 />
             <ListPreference
                 android:key="prefQuickTask10"
                 android:title="@string/pref_task_ten"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
-                android:defaultValue="10"
+                android:defaultValue="3"
                 />
             <ListPreference
                 android:key="prefQuickTask11"
                 android:title="@string/pref_task_eleven"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
-                android:defaultValue="11"
+                android:defaultValue="4"
                 />
             <ListPreference
                 android:key="prefQuickTask12"
                 android:title="@string/pref_task_twelve"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
-                android:defaultValue="12"
+                android:defaultValue="5"
                 />
             <ListPreference
                 android:key="prefQuickTask13"
                 android:title="@string/pref_task_thirteen"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
-                android:defaultValue="13"
+                android:defaultValue="6"
                 />
             <ListPreference
                 android:key="prefQuickTask14"
                 android:title="@string/pref_task_fourteen"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
-                android:defaultValue="14"
+                android:defaultValue="7"
                 />
             <ListPreference
                 android:key="prefQuickTask15"
                 android:title="@string/pref_task_fifteen"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
-                android:defaultValue="15"
+                android:defaultValue="18"
                 />
             <ListPreference
                 android:key="prefQuickTask16"
                 android:title="@string/pref_task_sixteen"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
-                android:defaultValue="16"
+                android:defaultValue="14"
                 />
             <ListPreference
                 android:key="prefQuickTask17"
                 android:title="@string/pref_task_seventeen"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
-                android:defaultValue="17"
+                android:defaultValue="19"
                 />
             <ListPreference
                 android:key="prefQuickTask18"
                 android:title="@string/pref_task_eighteen"
                 android:entries="@array/tasks_array"
                 android:entryValues="@array/tasks_arrayValues"
-                android:defaultValue="18"
+                android:defaultValue="17"
                 />
         </PreferenceScreen>
         <ListPreference
