@@ -18,6 +18,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package com.blackboxembedded.WunderLINQ.AAuto;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.DefaultLifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.car.app.CarContext;
 import androidx.car.app.Screen;
 import androidx.car.app.model.Action;
@@ -70,6 +72,8 @@ public class AAutoScreen extends Screen {
     private TabTemplate.Builder mTabTemplateBuilder;
     private String mActiveContentId;
 
+    private boolean isReceiverRegistered = false;
+
     public AAutoScreen(CarContext carContext) {
         super(carContext);
         Log.d(TAG,"AAutoScreen Create");
@@ -78,9 +82,29 @@ public class AAutoScreen extends Screen {
         mActiveContentId = null;
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
-        // Initialize your BroadcastReceiver
-        IntentFilter filter = new IntentFilter(BluetoothLeService.ACTION_PERFORMANCE_DATA_AVAILABLE);
-        ContextCompat.registerReceiver(getCarContext(), dataReceiver, filter, ContextCompat.RECEIVER_EXPORTED);
+
+        getLifecycle().addObserver(new DefaultLifecycleObserver() {
+            @Override
+            public void onStart(@NonNull LifecycleOwner owner) {
+                if (!isReceiverRegistered) {
+                    IntentFilter filter = new IntentFilter(BluetoothLeService.ACTION_PERFORMANCE_DATA_AVAILABLE);
+                    ContextCompat.registerReceiver(getCarContext(), dataReceiver, filter, ContextCompat.RECEIVER_EXPORTED);
+                    isReceiverRegistered = true;
+                }
+            }
+
+            @Override
+            public void onStop(@NonNull LifecycleOwner owner) {
+                if (isReceiverRegistered) {
+                    try {
+                        getCarContext().unregisterReceiver(dataReceiver);
+                    } catch (IllegalArgumentException e) {
+                        Log.e(TAG, "Receiver not registered", e);
+                    }
+                    isReceiverRegistered = false;
+                }
+            }
+        });
 
         updateUI();
     }

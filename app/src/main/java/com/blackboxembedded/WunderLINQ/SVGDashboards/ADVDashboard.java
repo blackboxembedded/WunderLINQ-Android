@@ -24,18 +24,37 @@ import javax.xml.transform.stream.StreamResult;
 
 public class ADVDashboard {
     private final static String TAG = "adv-dashboard";
+    private static Document templateDoc = null;
+    private static String lastFilename = "";
 
 
-    public static SVG updateDashboard(int infoLine){
+    public static synchronized SVG updateDashboard(int infoLine){
+        InputStream xml = null;
+        ByteArrayOutputStream outputStream = null;
+
         try {
             // Setup Help class to layout document
             SVGHelper h = new SVGHelper();
+            String filename = SVGHelper.svgFilename(TAG);
 
-            // Read SVG File
+            // Read/Cache SVG File template
+            if (templateDoc == null || !filename.equals(lastFilename)) {
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                factory.setNamespaceAware(true);
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                templateDoc = builder.parse(MyApplication.getContext().getAssets().open(filename));
+                lastFilename = filename;
+            }
+
+            // Create a new document and import the template's root element
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setNamespaceAware(true);
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(MyApplication.getContext().getAssets().open(SVGHelper.svgFilename(TAG)));
+            Document doc = builder.newDocument();
+            doc.appendChild(doc.importNode(templateDoc.getDocumentElement(), true));
 
+            // Pre-cache elements for faster lookup
+            h.preCacheElements(doc);
 
             //layout document using helper
             h.setupCustomData(doc, infoLine);
@@ -52,14 +71,22 @@ public class ADVDashboard {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource dSource = new DOMSource(doc);
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            outputStream = new ByteArrayOutputStream();
             StreamResult result = new StreamResult(outputStream);
             transformer.transform(dSource, result);
-            InputStream xml = new ByteArrayInputStream(outputStream.toByteArray());
+            xml = new ByteArrayInputStream(outputStream.toByteArray());
 
             return SVG.getFromInputStream(xml);
         } catch (IOException | ParserConfigurationException | SAXException | TransformerException | NullPointerException e) {
             Log.d(TAG, "Exception updating dashboard: " + e.toString());
+        } finally {
+            // Close resources
+            try {
+                if (xml != null) xml.close();
+                if (outputStream != null) outputStream.close();
+            } catch (IOException e) {
+                Log.d(TAG, "Exception updating dashboard: " + e.toString());
+            }
         }
         return null;
     }

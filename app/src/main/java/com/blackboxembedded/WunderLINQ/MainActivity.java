@@ -462,6 +462,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         super.recreate();
     }
 
+    private boolean isGattReceiverRegistered = false;
+    private boolean isBondingReceiverRegistered = false;
+    private boolean isServiceBound = false;
+
     @Override
     protected void onResume() {
         Log.d(TAG, "In onResume");
@@ -469,8 +473,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         //Only use BLE if on a real device
         if (!(Build.BRAND.startsWith("google") && Build.DEVICE.startsWith("generic"))) {
             startService(bluetoothLeService);
-            registerReceiver(mBondingBroadcast, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
-            ContextCompat.registerReceiver(this, mGattUpdateReceiver, makeGattUpdateIntentFilter(), ContextCompat.RECEIVER_EXPORTED);
+            if (!isBondingReceiverRegistered) {
+                registerReceiver(mBondingBroadcast, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
+                isBondingReceiverRegistered = true;
+            }
+            if (!isGattReceiverRegistered) {
+                ContextCompat.registerReceiver(this, mGattUpdateReceiver, makeGattUpdateIntentFilter(), ContextCompat.RECEIVER_EXPORTED);
+                isGattReceiverRegistered = true;
+            }
             if (mBluetoothLeService == null) {
                 Log.d(TAG, "mBluetoothLeService is null");
                 setupBLE();
@@ -487,47 +497,55 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     @Override
-    protected void onDestroy() {
-        Log.d(TAG, "In onDestroy");
-        super.onDestroy();
+    protected void onPause() {
+        Log.d(TAG, "In onPause");
+        super.onPause();
         cancelTimer();
-        try {
-            unregisterReceiver(mGattUpdateReceiver);
-            unregisterReceiver(mBondingBroadcast);
-            unbindService(mServiceConnection);
-        } catch (IllegalArgumentException e) {
-            Log.d(TAG, e.toString());
+        
+        if (!sharedPrefs.getBoolean("prefPIP", false)) {
+            cleanupReceiversAndService();
         }
-        mBluetoothLeService = null;
     }
 
     @Override
     public void onStop() {
         Log.d(TAG, "In onStop");
         super.onStop();
-        cancelTimer();
-        try {
-            unregisterReceiver(mGattUpdateReceiver);
-            unregisterReceiver(mBondingBroadcast);
-            unbindService(mServiceConnection);
-        } catch (IllegalArgumentException e) {
-            Log.d(TAG, e.toString());
-        }
+        cleanupReceiversAndService();
     }
 
     @Override
-    protected void onPause() {
-        Log.d(TAG, "In onPause");
-        super.onPause();
-        cancelTimer();
-        try {
-            if (!sharedPrefs.getBoolean("prefPIP", false)) {
+    protected void onDestroy() {
+        Log.d(TAG, "In onDestroy");
+        super.onDestroy();
+        cleanupReceiversAndService();
+        mBluetoothLeService = null;
+    }
+
+    private void cleanupReceiversAndService() {
+        if (isGattReceiverRegistered) {
+            try {
                 unregisterReceiver(mGattUpdateReceiver);
+            } catch (IllegalArgumentException e) {
+                Log.e(TAG, "Gatt Receiver not registered", e);
             }
-            unregisterReceiver(mBondingBroadcast);
-            unbindService(mServiceConnection);
-        } catch (IllegalArgumentException e) {
-            Log.d(TAG, e.toString());
+            isGattReceiverRegistered = false;
+        }
+        if (isBondingReceiverRegistered) {
+            try {
+                unregisterReceiver(mBondingBroadcast);
+            } catch (IllegalArgumentException e) {
+                Log.e(TAG, "Bonding Receiver not registered", e);
+            }
+            isBondingReceiverRegistered = false;
+        }
+        if (isServiceBound) {
+            try {
+                unbindService(mServiceConnection);
+            } catch (IllegalArgumentException e) {
+                Log.e(TAG, "Service not bound", e);
+            }
+            isServiceBound = false;
         }
     }
 
@@ -679,7 +697,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 builder.show();
             } else if (wlqCnt == 1) {
                 Log.d(TAG, "Connecting to Address: " + mDeviceAddress);
-                bindService(bluetoothLeService, mServiceConnection, BIND_AUTO_CREATE);
+                if (!isServiceBound) {
+                    bindService(bluetoothLeService, mServiceConnection, BIND_AUTO_CREATE);
+                    isServiceBound = true;
+                }
             } else if (wlqCnt > 1) {
                 Log.d(TAG, "Too many WunderLINQ pairings: " + wlqCnt);
                 // Display dialog text here......

@@ -103,11 +103,16 @@ public class BikeInfoActivity extends AppCompatActivity {
         updateDisplay();
     }
 
+    private boolean isReceiverRegistered = false;
+
     @Override
     protected void onResume() {
         super.onResume();
 
-        ContextCompat.registerReceiver(this, mGattUpdateReceiver, makeGattUpdateIntentFilter(), ContextCompat.RECEIVER_EXPORTED);
+        if (!isReceiverRegistered) {
+            ContextCompat.registerReceiver(this, mGattUpdateReceiver, makeGattUpdateIntentFilter(), ContextCompat.RECEIVER_EXPORTED);
+            isReceiverRegistered = true;
+        }
 
         if (MotorcycleData.wlq != null) {
             if (MotorcycleData.wlq.getFirmwareVersion() == null) {
@@ -121,13 +126,26 @@ public class BikeInfoActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        cleanup();
+    }
+
+    @Override
     protected void onDestroy() {
-        Log.d(TAG,"In onDestroy");
+        Log.d(TAG, "In onDestroy");
         super.onDestroy();
-        try {
-            unregisterReceiver(mGattUpdateReceiver);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+        cleanup();
+    }
+
+    private void cleanup() {
+        if (isReceiverRegistered) {
+            try {
+                unregisterReceiver(mGattUpdateReceiver);
+            } catch (IllegalArgumentException e) {
+                Log.e(TAG, "Receiver not registered", e);
+            }
+            isReceiverRegistered = false;
         }
     }
 

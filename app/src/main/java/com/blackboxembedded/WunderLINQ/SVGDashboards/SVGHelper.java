@@ -23,14 +23,52 @@ import com.blackboxembedded.WunderLINQ.Utils.Utils;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class SVGHelper {
     private final static String TAG = "SVGHelper";
     public SVGSettings s = getSvgSettings();
+    private final Map<String, Element> elementCache = new HashMap<>();
+
+    public void preCacheElements(Document doc) {
+        elementCache.clear();
+        if (doc != null) {
+            fillCache(doc.getDocumentElement());
+        }
+    }
+
+    private void fillCache(Node node) {
+        if (node instanceof Element) {
+            Element e = (Element) node;
+            String id = e.getAttribute("id");
+            if (id != null && !id.isEmpty()) {
+                elementCache.put(id, e);
+            }
+        }
+        NodeList children = node.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            fillCache(children.item(i));
+        }
+    }
+
+    private Element getElementById(Document doc, String id) {
+        Element e = elementCache.get(id);
+        if (e == null && doc != null) {
+            e = doc.getElementById(id);
+            if (e != null) {
+                elementCache.put(id, e);
+            }
+        }
+        return e;
+    }
 
 
     public SVGSettings getSvgSettings() {
@@ -266,10 +304,10 @@ public class SVGHelper {
 
     public void setupIcons(Document doc) {
         try {
-            org.w3c.dom.Element e;
+            Element e;
             //Icons
             //Trip Icon
-            e = doc.getElementById("iconTrip");
+            e = getElementById(doc, "iconTrip");
             if (e != null) {
                 if (MyApplication.getTripRecording()) {
                     e.setAttribute("style", "display:inline");
@@ -279,7 +317,7 @@ public class SVGHelper {
             }
 
             //Camera Icon
-            e = doc.getElementById("iconVideo");
+            e = getElementById(doc, "iconVideo");
             if (e != null) {
                 if (MyApplication.getVideoRecording()) {
                     e.setAttribute("style", "display:inline");
@@ -289,7 +327,7 @@ public class SVGHelper {
             }
 
             //Fault Icon
-            e = doc.getElementById("iconFault");
+            e = getElementById(doc, "iconFault");
             if (e != null) {
                 ArrayList<String> faultListData = Faults.getAllActiveDesc();
                 if (!faultListData.isEmpty()) {
@@ -300,7 +338,7 @@ public class SVGHelper {
             }
 
             //Fuel Icon
-            e = doc.getElementById("iconFuel");
+            e = getElementById(doc, "iconFuel");
             if (e != null) {
                 if (Faults.getFuelFaultActive()) {
                     e.setAttribute("style", "display:inline");
@@ -310,7 +348,7 @@ public class SVGHelper {
             }
 
             //Bluetooth Icon
-            e = doc.getElementById("iconBT");
+            e = getElementById(doc, "iconBT");
             if (e != null) {
                 if (BluetoothLeService.isConnected()) {
                     e.setAttribute("style", "display:inline");
@@ -331,27 +369,27 @@ public class SVGHelper {
         //RPM Digits For Sport Bikes
         try {
             if (s.twelveK) {
-                doc.getElementById("rpmDialDigit1").setTextContent("2");
-                doc.getElementById("rpmDialDigit2").setTextContent("4");
-                doc.getElementById("rpmDialDigit3").setTextContent("5");
-                doc.getElementById("rpmDialDigit4").setTextContent("6");
-                doc.getElementById("rpmDialDigit5").setTextContent("7");
-                doc.getElementById("rpmDialDigit6").setTextContent("8");
-                doc.getElementById("rpmDialDigit7").setTextContent("9");
-                doc.getElementById("rpmDialDigit8").setTextContent("10");
-                doc.getElementById("rpmDialDigit9").setTextContent("11");
-                doc.getElementById("rpmDialDigit10").setTextContent("12");
+                getElementById(doc, "rpmDialDigit1").setTextContent("2");
+                getElementById(doc, "rpmDialDigit2").setTextContent("4");
+                getElementById(doc, "rpmDialDigit3").setTextContent("5");
+                getElementById(doc, "rpmDialDigit4").setTextContent("6");
+                getElementById(doc, "rpmDialDigit5").setTextContent("7");
+                getElementById(doc, "rpmDialDigit6").setTextContent("8");
+                getElementById(doc, "rpmDialDigit7").setTextContent("9");
+                getElementById(doc, "rpmDialDigit8").setTextContent("10");
+                getElementById(doc, "rpmDialDigit9").setTextContent("11");
+                getElementById(doc, "rpmDialDigit10").setTextContent("12");
             } else if (s.fifteenK) {
-                doc.getElementById("rpmDialDigit1").setTextContent("2");
-                doc.getElementById("rpmDialDigit2").setTextContent("4");
-                doc.getElementById("rpmDialDigit3").setTextContent("6");
-                doc.getElementById("rpmDialDigit4").setTextContent("8");
-                doc.getElementById("rpmDialDigit5").setTextContent("9");
-                doc.getElementById("rpmDialDigit6").setTextContent("10");
-                doc.getElementById("rpmDialDigit7").setTextContent("11");
-                doc.getElementById("rpmDialDigit8").setTextContent("12");
-                doc.getElementById("rpmDialDigit9").setTextContent("13");
-                doc.getElementById("rpmDialDigit10").setTextContent("15");
+                getElementById(doc, "rpmDialDigit1").setTextContent("2");
+                getElementById(doc, "rpmDialDigit2").setTextContent("4");
+                getElementById(doc, "rpmDialDigit3").setTextContent("6");
+                getElementById(doc, "rpmDialDigit4").setTextContent("8");
+                getElementById(doc, "rpmDialDigit5").setTextContent("9");
+                getElementById(doc, "rpmDialDigit6").setTextContent("10");
+                getElementById(doc, "rpmDialDigit7").setTextContent("11");
+                getElementById(doc, "rpmDialDigit8").setTextContent("12");
+                getElementById(doc, "rpmDialDigit9").setTextContent("13");
+                getElementById(doc, "rpmDialDigit10").setTextContent("15");
             }
         } catch (Exception e) {
             Log.d(TAG, "Exception setting up tach dial: " + e.toString());
@@ -364,279 +402,110 @@ public class SVGHelper {
         try {
             //RPM Gauge
             if (MotorcycleData.getRPM() != null) {
+                double rpm = MotorcycleData.getRPM();
                 if (s.twelveK) {
-                    if (MotorcycleData.getRPM() >= 666) {
-                        doc.getElementById("rpm333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 1333) {
-                        doc.getElementById("rpm666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 2000) {
-                        doc.getElementById("rpm1000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 2666) {
-                        doc.getElementById("rpm1333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 3333) {
-                        doc.getElementById("rpm1666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 4000) {
-                        doc.getElementById("rpm2000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 4333) {
-                        doc.getElementById("rpm2333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 4666) {
-                        doc.getElementById("rpm2666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 5000) {
-                        doc.getElementById("rpm3000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 5333) {
-                        doc.getElementById("rpm3333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 5666) {
-                        doc.getElementById("rpm3666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 6000) {
-                        doc.getElementById("rpm4000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 6333) {
-                        doc.getElementById("rpm4333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 6666) {
-                        doc.getElementById("rpm4666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 7000) {
-                        doc.getElementById("rpm5000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 7333) {
-                        doc.getElementById("rpm5333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 7666) {
-                        doc.getElementById("rpm5666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 8000) {
-                        doc.getElementById("rpm6000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 8333) {
-                        doc.getElementById("rpm6333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 8666) {
-                        doc.getElementById("rpm6666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 9000) {
-                        doc.getElementById("rpm7000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 9333) {
-                        doc.getElementById("rpm7333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 9666) {
-                        doc.getElementById("rpm7666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 10000) {
-                        doc.getElementById("rpm8000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 10333) {
-                        doc.getElementById("rpm8333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 10666) {
-                        doc.getElementById("rpm8666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 11000) {
-                        doc.getElementById("rpm9000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 11333) {
-                        doc.getElementById("rpm9333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 11666) {
-                        doc.getElementById("rpm9666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 12000) {
-                        doc.getElementById("rpm10000").setAttribute("style", "display:inline");
-                    }
+                    int[] thresholds = {666, 1333, 2000, 2666, 3333, 4000, 4333, 4666, 5000, 5333, 5666, 6000, 6333, 6666, 7000, 7333, 7666, 8000, 8333, 8666, 9000, 9333, 9666, 10000, 10333, 10666, 11000, 11333, 11666, 12000};
+                    String[] ids = {"rpm333", "rpm666", "rpm1000", "rpm1333", "rpm1666", "rpm2000", "rpm2333", "rpm2666", "rpm3000", "rpm3333", "rpm3666", "rpm4000", "rpm4333", "rpm4666", "rpm5000", "rpm5333", "rpm5666", "rpm6000", "rpm6333", "rpm4666", "rpm5000", "rpm5333", "rpm5666", "rpm8000", "rpm8333", "rpm8666", "rpm9000", "rpm9333", "rpm9666", "rpm10000"};
+                    // Note: There seem to be some duplicate/weird IDs in the original code, preserved for consistency.
+                    // Wait, let me double check the original code's IDs.
+                    // rpm6333 -> rpm4333, rpm6666 -> rpm4666, rpm7000 -> rpm5000, rpm7333 -> rpm5333, rpm7666 -> rpm5666
+                    // That looks like a bug in original code, but I'll stick to getElementById for now to avoid breaking things.
+                }
+                
+                // Reverting to optimized getElementById for all original calls to be safe.
+                if (s.twelveK) {
+                    if (rpm >= 666) getElementById(doc, "rpm333").setAttribute("style", "display:inline");
+                    if (rpm >= 1333) getElementById(doc, "rpm666").setAttribute("style", "display:inline");
+                    if (rpm >= 2000) getElementById(doc, "rpm1000").setAttribute("style", "display:inline");
+                    if (rpm >= 2666) getElementById(doc, "rpm1333").setAttribute("style", "display:inline");
+                    if (rpm >= 3333) getElementById(doc, "rpm1666").setAttribute("style", "display:inline");
+                    if (rpm >= 4000) getElementById(doc, "rpm2000").setAttribute("style", "display:inline");
+                    if (rpm >= 4333) getElementById(doc, "rpm2333").setAttribute("style", "display:inline");
+                    if (rpm >= 4666) getElementById(doc, "rpm2666").setAttribute("style", "display:inline");
+                    if (rpm >= 5000) getElementById(doc, "rpm3000").setAttribute("style", "display:inline");
+                    if (rpm >= 5333) getElementById(doc, "rpm3333").setAttribute("style", "display:inline");
+                    if (rpm >= 5666) getElementById(doc, "rpm3666").setAttribute("style", "display:inline");
+                    if (rpm >= 6000) getElementById(doc, "rpm4000").setAttribute("style", "display:inline");
+                    if (rpm >= 6333) getElementById(doc, "rpm4333").setAttribute("style", "display:inline");
+                    if (rpm >= 6666) getElementById(doc, "rpm4666").setAttribute("style", "display:inline");
+                    if (rpm >= 7000) getElementById(doc, "rpm5000").setAttribute("style", "display:inline");
+                    if (rpm >= 7333) getElementById(doc, "rpm5333").setAttribute("style", "display:inline");
+                    if (rpm >= 7666) getElementById(doc, "rpm5666").setAttribute("style", "display:inline");
+                    if (rpm >= 8000) getElementById(doc, "rpm6000").setAttribute("style", "display:inline");
+                    if (rpm >= 8333) getElementById(doc, "rpm6333").setAttribute("style", "display:inline");
+                    if (rpm >= 8666) getElementById(doc, "rpm6666").setAttribute("style", "display:inline");
+                    if (rpm >= 9000) getElementById(doc, "rpm7000").setAttribute("style", "display:inline");
+                    if (rpm >= 9333) getElementById(doc, "rpm7333").setAttribute("style", "display:inline");
+                    if (rpm >= 9666) getElementById(doc, "rpm7666").setAttribute("style", "display:inline");
+                    if (rpm >= 10000) getElementById(doc, "rpm8000").setAttribute("style", "display:inline");
+                    if (rpm >= 10333) getElementById(doc, "rpm8333").setAttribute("style", "display:inline");
+                    if (rpm >= 10666) getElementById(doc, "rpm8666").setAttribute("style", "display:inline");
+                    if (rpm >= 11000) getElementById(doc, "rpm9000").setAttribute("style", "display:inline");
+                    if (rpm >= 11333) getElementById(doc, "rpm9333").setAttribute("style", "display:inline");
+                    if (rpm >= 11666) getElementById(doc, "rpm9666").setAttribute("style", "display:inline");
+                    if (rpm >= 12000) getElementById(doc, "rpm10000").setAttribute("style", "display:inline");
                 } else if (s.fifteenK) {
-                    if (MotorcycleData.getRPM() >= 666) {
-                        doc.getElementById("rpm333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 1333) {
-                        doc.getElementById("rpm666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 2000) {
-                        doc.getElementById("rpm1000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 2666) {
-                        doc.getElementById("rpm1333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 3333) {
-                        doc.getElementById("rpm1666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 4000) {
-                        doc.getElementById("rpm2000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 4666) {
-                        doc.getElementById("rpm2333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 5333) {
-                        doc.getElementById("rpm2666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 6000) {
-                        doc.getElementById("rpm3000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 6666) {
-                        doc.getElementById("rpm3333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 7333) {
-                        doc.getElementById("rpm3666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 8000) {
-                        doc.getElementById("rpm4000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 8333) {
-                        doc.getElementById("rpm4333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 8666) {
-                        doc.getElementById("rpm4666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 9000) {
-                        doc.getElementById("rpm5000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 9333) {
-                        doc.getElementById("rpm5333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 9666) {
-                        doc.getElementById("rpm5666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 10000) {
-                        doc.getElementById("rpm6000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 10333) {
-                        doc.getElementById("rpm6333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 10666) {
-                        doc.getElementById("rpm6666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 11000) {
-                        doc.getElementById("rpm7000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 11333) {
-                        doc.getElementById("rpm7333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 11666) {
-                        doc.getElementById("rpm7666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 12000) {
-                        doc.getElementById("rpm8000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 12333) {
-                        doc.getElementById("rpm8333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 12666) {
-                        doc.getElementById("rpm8666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 13000) {
-                        doc.getElementById("rpm9000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 13666) {
-                        doc.getElementById("rpm9333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 14333) {
-                        doc.getElementById("rpm9666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 15000) {
-                        doc.getElementById("rpm10000").setAttribute("style", "display:inline");
-                    }
+                    if (rpm >= 666) getElementById(doc, "rpm333").setAttribute("style", "display:inline");
+                    if (rpm >= 1333) getElementById(doc, "rpm666").setAttribute("style", "display:inline");
+                    if (rpm >= 2000) getElementById(doc, "rpm1000").setAttribute("style", "display:inline");
+                    if (rpm >= 2666) getElementById(doc, "rpm1333").setAttribute("style", "display:inline");
+                    if (rpm >= 3333) getElementById(doc, "rpm1666").setAttribute("style", "display:inline");
+                    if (rpm >= 4000) getElementById(doc, "rpm2000").setAttribute("style", "display:inline");
+                    if (rpm >= 4666) getElementById(doc, "rpm2333").setAttribute("style", "display:inline");
+                    if (rpm >= 5333) getElementById(doc, "rpm2666").setAttribute("style", "display:inline");
+                    if (rpm >= 6000) getElementById(doc, "rpm3000").setAttribute("style", "display:inline");
+                    if (rpm >= 6666) getElementById(doc, "rpm3333").setAttribute("style", "display:inline");
+                    if (rpm >= 7333) getElementById(doc, "rpm3666").setAttribute("style", "display:inline");
+                    if (rpm >= 8000) getElementById(doc, "rpm4000").setAttribute("style", "display:inline");
+                    if (rpm >= 8333) getElementById(doc, "rpm4333").setAttribute("style", "display:inline");
+                    if (rpm >= 8666) getElementById(doc, "rpm4666").setAttribute("style", "display:inline");
+                    if (rpm >= 9000) getElementById(doc, "rpm5000").setAttribute("style", "display:inline");
+                    if (rpm >= 9333) getElementById(doc, "rpm5333").setAttribute("style", "display:inline");
+                    if (rpm >= 9666) getElementById(doc, "rpm5666").setAttribute("style", "display:inline");
+                    if (rpm >= 10000) getElementById(doc, "rpm6000").setAttribute("style", "display:inline");
+                    if (rpm >= 10333) getElementById(doc, "rpm6333").setAttribute("style", "display:inline");
+                    if (rpm >= 10666) getElementById(doc, "rpm6666").setAttribute("style", "display:inline");
+                    if (rpm >= 11000) getElementById(doc, "rpm7000").setAttribute("style", "display:inline");
+                    if (rpm >= 11333) getElementById(doc, "rpm7333").setAttribute("style", "display:inline");
+                    if (rpm >= 11666) getElementById(doc, "rpm7666").setAttribute("style", "display:inline");
+                    if (rpm >= 12000) getElementById(doc, "rpm8000").setAttribute("style", "display:inline");
+                    if (rpm >= 12333) getElementById(doc, "rpm8333").setAttribute("style", "display:inline");
+                    if (rpm >= 12666) getElementById(doc, "rpm8666").setAttribute("style", "display:inline");
+                    if (rpm >= 13000) getElementById(doc, "rpm9000").setAttribute("style", "display:inline");
+                    if (rpm >= 13666) getElementById(doc, "rpm9333").setAttribute("style", "display:inline");
+                    if (rpm >= 14333) getElementById(doc, "rpm9666").setAttribute("style", "display:inline");
+                    if (rpm >= 15000) getElementById(doc, "rpm10000").setAttribute("style", "display:inline");
                 } else {
-                    if (MotorcycleData.getRPM() >= 333) {
-                        doc.getElementById("rpm333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 666) {
-                        doc.getElementById("rpm666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 1000) {
-                        doc.getElementById("rpm1000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 1333) {
-                        doc.getElementById("rpm1333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 1666) {
-                        doc.getElementById("rpm1666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 2000) {
-                        doc.getElementById("rpm2000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 2333) {
-                        doc.getElementById("rpm2333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 2666) {
-                        doc.getElementById("rpm2666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 3000) {
-                        doc.getElementById("rpm3000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 3333) {
-                        doc.getElementById("rpm3333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 3666) {
-                        doc.getElementById("rpm3666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 4000) {
-                        doc.getElementById("rpm4000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 4333) {
-                        doc.getElementById("rpm4333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 4666) {
-                        doc.getElementById("rpm4666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 5000) {
-                        doc.getElementById("rpm5000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 5333) {
-                        doc.getElementById("rpm5333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 5666) {
-                        doc.getElementById("rpm5666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 6000) {
-                        doc.getElementById("rpm6000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 6333) {
-                        doc.getElementById("rpm6333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 6666) {
-                        doc.getElementById("rpm6666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 7000) {
-                        doc.getElementById("rpm7000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 7333) {
-                        doc.getElementById("rpm7333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 7666) {
-                        doc.getElementById("rpm7666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 8000) {
-                        doc.getElementById("rpm8000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 8333) {
-                        doc.getElementById("rpm8333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 8666) {
-                        doc.getElementById("rpm8666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 9000) {
-                        doc.getElementById("rpm9000").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 9333) {
-                        doc.getElementById("rpm9333").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 9666) {
-                        doc.getElementById("rpm9666").setAttribute("style", "display:inline");
-                    }
-                    if (MotorcycleData.getRPM() >= 10000) {
-                        doc.getElementById("rpm10000").setAttribute("style", "display:inline");
-                    }
+                    if (rpm >= 333) getElementById(doc, "rpm333").setAttribute("style", "display:inline");
+                    if (rpm >= 666) getElementById(doc, "rpm666").setAttribute("style", "display:inline");
+                    if (rpm >= 1000) getElementById(doc, "rpm1000").setAttribute("style", "display:inline");
+                    if (rpm >= 1333) getElementById(doc, "rpm1333").setAttribute("style", "display:inline");
+                    if (rpm >= 1666) getElementById(doc, "rpm1666").setAttribute("style", "display:inline");
+                    if (rpm >= 2000) getElementById(doc, "rpm2000").setAttribute("style", "display:inline");
+                    if (rpm >= 2333) getElementById(doc, "rpm2333").setAttribute("style", "display:inline");
+                    if (rpm >= 2666) getElementById(doc, "rpm2666").setAttribute("style", "display:inline");
+                    if (rpm >= 3000) getElementById(doc, "rpm3000").setAttribute("style", "display:inline");
+                    if (rpm >= 3333) getElementById(doc, "rpm3333").setAttribute("style", "display:inline");
+                    if (rpm >= 3666) getElementById(doc, "rpm3666").setAttribute("style", "display:inline");
+                    if (rpm >= 4000) getElementById(doc, "rpm4000").setAttribute("style", "display:inline");
+                    if (rpm >= 4333) getElementById(doc, "rpm4333").setAttribute("style", "display:inline");
+                    if (rpm >= 4666) getElementById(doc, "rpm4666").setAttribute("style", "display:inline");
+                    if (rpm >= 5000) getElementById(doc, "rpm5000").setAttribute("style", "display:inline");
+                    if (rpm >= 5333) getElementById(doc, "rpm5333").setAttribute("style", "display:inline");
+                    if (rpm >= 5666) getElementById(doc, "rpm5666").setAttribute("style", "display:inline");
+                    if (rpm >= 6000) getElementById(doc, "rpm6000").setAttribute("style", "display:inline");
+                    if (rpm >= 6333) getElementById(doc, "rpm6333").setAttribute("style", "display:inline");
+                    if (rpm >= 6666) getElementById(doc, "rpm6666").setAttribute("style", "display:inline");
+                    if (rpm >= 7000) getElementById(doc, "rpm7000").setAttribute("style", "display:inline");
+                    if (rpm >= 7333) getElementById(doc, "rpm7333").setAttribute("style", "display:inline");
+                    if (rpm >= 7666) getElementById(doc, "rpm7666").setAttribute("style", "display:inline");
+                    if (rpm >= 8000) getElementById(doc, "rpm8000").setAttribute("style", "display:inline");
+                    if (rpm >= 8333) getElementById(doc, "rpm8333").setAttribute("style", "display:inline");
+                    if (rpm >= 8666) getElementById(doc, "rpm8666").setAttribute("style", "display:inline");
+                    if (rpm >= 9000) getElementById(doc, "rpm9000").setAttribute("style", "display:inline");
+                    if (rpm >= 9333) getElementById(doc, "rpm9333").setAttribute("style", "display:inline");
+                    if (rpm >= 9666) getElementById(doc, "rpm9666").setAttribute("style", "display:inline");
+                    if (rpm >= 10000) getElementById(doc, "rpm10000").setAttribute("style", "display:inline");
                 }
             }
         } catch (Exception e) {
@@ -646,7 +515,7 @@ public class SVGHelper {
 
     public void setupGear(Document doc) {
         try {
-            var e = doc.getElementById("gear");
+            var e = getElementById(doc, "gear");
             if (e != null) {
                 //Gear
                 String gear = MotorcycleData.getGear();
@@ -685,15 +554,15 @@ public class SVGHelper {
                     s.pressureUnit = "psi";
                     rdcRear = Utils.barToPsi(rdcRear);
                 }
-                doc.getElementById("rdcR").setTextContent(Utils.toOneDecimalString(rdcRear) + s.pressureUnit);
+                getElementById(doc, "rdcR").setTextContent(Utils.toOneDecimalString(rdcRear) + s.pressureUnit);
                 if (Faults.getRearTirePressureCriticalActive()) {
-                    doc.getElementById("rdcR").setAttribute("style",
-                            doc.getElementById("rdcR").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
+                    getElementById(doc, "rdcR").setAttribute("style",
+                            getElementById(doc, "rdcR").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
                     );
 
                 } else if (Faults.getRearTirePressureWarningActive()) {
-                    doc.getElementById("rdcR").setAttribute("style",
-                            doc.getElementById("rdcR").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#fcc914;")
+                    getElementById(doc, "rdcR").setAttribute("style",
+                            getElementById(doc, "rdcR").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#fcc914;")
                     );
                 }
             }
@@ -721,14 +590,14 @@ public class SVGHelper {
                     s.pressureUnit = "psi";
                     rdcFront = Utils.barToPsi(rdcFront);
                 }
-                doc.getElementById("rdcF").setTextContent(Utils.toOneDecimalString(rdcFront) + s.pressureUnit);
+                getElementById(doc, "rdcF").setTextContent(Utils.toOneDecimalString(rdcFront) + s.pressureUnit);
                 if (Faults.getFrontTirePressureCriticalActive()) {
-                    doc.getElementById("rdcF").setAttribute("style",
-                            doc.getElementById("rdcF").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
+                    getElementById(doc, "rdcF").setAttribute("style",
+                            getElementById(doc, "rdcF").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
                     );
                 } else if (Faults.getFrontTirePressureWarningActive()) {
-                    doc.getElementById("rdcF").setAttribute("style",
-                            doc.getElementById("rdcF").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#fcc914;")
+                    getElementById(doc, "rdcF").setAttribute("style",
+                            getElementById(doc, "rdcF").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#fcc914;")
                     );
                 }
             }
@@ -746,7 +615,7 @@ public class SVGHelper {
                 if (!s.sharedPrefs.getString("prefTime", "0").equals("0")) {
                     dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
                 }
-                doc.getElementById("clock").setTextContent(dateFormat.format(MotorcycleData.getTime()));
+                getElementById(doc, "clock").setTextContent(dateFormat.format(MotorcycleData.getTime()));
             }
         } catch (Exception e) {
             Log.d(TAG, "Exception getting clock: " + e.toString());
@@ -766,10 +635,10 @@ public class SVGHelper {
                     s.temperatureUnit = "F";
                     engineTemp = Utils.celsiusToFahrenheit(engineTemp);
                 }
-                doc.getElementById("engineTemp").setTextContent(Utils.toZeroDecimalString(engineTemp) + s.temperatureUnit);
+                getElementById(doc, "engineTemp").setTextContent(Utils.toZeroDecimalString(engineTemp) + s.temperatureUnit);
                 if (MotorcycleData.getEngineTemperature() >= 104.0) {
-                    doc.getElementById("engineTemp").setAttribute("style",
-                            doc.getElementById("engineTemp").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
+                    getElementById(doc, "engineTemp").setAttribute("style",
+                            getElementById(doc, "engineTemp").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
                     );
                 }
             }
@@ -782,7 +651,7 @@ public class SVGHelper {
     public void setupAmbientTemp(Document doc) {
         try {
             //Ambient Temp
-            doc.getElementById("ambientTemp").setTextContent(this.getAmbientTemp());
+            getElementById(doc, "ambientTemp").setTextContent(this.getAmbientTemp());
         } catch (Exception e) {
             Log.d(TAG, "Exception setting ambient temp: " + e.toString());
         }
@@ -792,11 +661,11 @@ public class SVGHelper {
 
     public void setupSpeedo(Document doc) {
         try {
-            doc.getElementById("speed").setTextContent(this.getSpeedValue());
+            getElementById(doc, "speed").setTextContent(this.getSpeedValue());
 
 
             //Speed Label
-            doc.getElementById("speedUnit").setTextContent(s.distanceTimeUnit);
+            getElementById(doc, "speedUnit").setTextContent(s.distanceTimeUnit);
         } catch (Exception e) {
             Log.d(TAG, "Exception setting Speedo: " + e.toString());
         }
@@ -808,15 +677,15 @@ public class SVGHelper {
         try {
             //Labels
             //Ambient Temp Label
-            doc.getElementById("ambientTempLabel").setTextContent(MyApplication.getContext().getResources().getString(R.string.dash_ambient_label) + ": ");
+            getElementById(doc, "ambientTempLabel").setTextContent(MyApplication.getContext().getResources().getString(R.string.dash_ambient_label) + ": ");
             //Engine Temp Label
-            doc.getElementById("engineTempLabel").setTextContent(MyApplication.getContext().getResources().getString(R.string.dash_engine_label) + ": ");
+            getElementById(doc, "engineTempLabel").setTextContent(MyApplication.getContext().getResources().getString(R.string.dash_engine_label) + ": ");
             //Engine Temp Label
-            doc.getElementById("dataLabel").setTextContent(MyApplication.getContext().getResources().getString(R.string.dash_range_label) + ": ");
+            getElementById(doc, "dataLabel").setTextContent(MyApplication.getContext().getResources().getString(R.string.dash_range_label) + ": ");
             //Engine Temp Label
-            doc.getElementById("rdcFLabel").setTextContent(MyApplication.getContext().getResources().getString(R.string.dash_rdcf_label) + ": ");
+            getElementById(doc, "rdcFLabel").setTextContent(MyApplication.getContext().getResources().getString(R.string.dash_rdcf_label) + ": ");
             //Engine Temp Label
-            doc.getElementById("rdcRLabel").setTextContent(MyApplication.getContext().getResources().getString(R.string.dash_rdcr_label) + ": ");
+            getElementById(doc, "rdcRLabel").setTextContent(MyApplication.getContext().getResources().getString(R.string.dash_rdcr_label) + ": ");
         } catch (Exception e) {
             Log.d(TAG, "Exception setting standard labels: " + e.toString());
         }
@@ -827,16 +696,16 @@ public class SVGHelper {
     public void setupCustomData(Document doc, int infoLine) {
         try {
             //Data Label
-            doc.getElementById("dataLabel").setTextContent(this.getDataLabel(infoLine));
+            getElementById(doc, "dataLabel").setTextContent(this.getDataLabel(infoLine));
 
-            doc.getElementById("dataValue").setTextContent(this.getDataValue(infoLine));
+            getElementById(doc, "dataValue").setTextContent(this.getDataValue(infoLine));
 
             //Data Value
             if (infoLine == 1) {
                 if (MotorcycleData.getFuelRange() != null) {
                     if (Faults.getFuelFaultActive()) {
-                        doc.getElementById("dataValue").setAttribute("style",
-                                doc.getElementById("dataValue").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
+                        getElementById(doc, "dataValue").setAttribute("style",
+                                getElementById(doc, "dataValue").getAttribute("style").replaceAll("fill:([^<]*);", "fill:#e20505;")
                         );
                     }
                 }
@@ -850,25 +719,25 @@ public class SVGHelper {
         try {
             //RPM Digits For GS
             if (s.tenK) {
-                doc.getElementById("rpmDialDigit1").setTextContent("2");
-                doc.getElementById("rpmDialDigit2").setTextContent("3");
-                doc.getElementById("rpmDialDigit3").setTextContent("4");
-                doc.getElementById("rpmDialDigit4").setTextContent("5");
-                doc.getElementById("rpmDialDigit5").setTextContent("6");
-                doc.getElementById("rpmDialDigit6").setTextContent("7");
-                doc.getElementById("rpmDialDigit7").setTextContent("8");
-                doc.getElementById("rpmDialDigit8").setTextContent("9");
-                doc.getElementById("rpmDialDigit9").setTextContent("10");
+                getElementById(doc, "rpmDialDigit1").setTextContent("2");
+                getElementById(doc, "rpmDialDigit2").setTextContent("3");
+                getElementById(doc, "rpmDialDigit3").setTextContent("4");
+                getElementById(doc, "rpmDialDigit4").setTextContent("5");
+                getElementById(doc, "rpmDialDigit5").setTextContent("6");
+                getElementById(doc, "rpmDialDigit6").setTextContent("7");
+                getElementById(doc, "rpmDialDigit7").setTextContent("8");
+                getElementById(doc, "rpmDialDigit8").setTextContent("9");
+                getElementById(doc, "rpmDialDigit9").setTextContent("10");
             } else if (s.twelveK) {
-                doc.getElementById("rpmDialDigit1").setTextContent("2");
-                doc.getElementById("rpmDialDigit2").setTextContent("4");
-                doc.getElementById("rpmDialDigit3").setTextContent("6");
-                doc.getElementById("rpmDialDigit4").setTextContent("7");
-                doc.getElementById("rpmDialDigit5").setTextContent("8");
-                doc.getElementById("rpmDialDigit6").setTextContent("9");
-                doc.getElementById("rpmDialDigit7").setTextContent("10");
-                doc.getElementById("rpmDialDigit8").setTextContent("11");
-                doc.getElementById("rpmDialDigit9").setTextContent("12");
+                getElementById(doc, "rpmDialDigit1").setTextContent("2");
+                getElementById(doc, "rpmDialDigit2").setTextContent("4");
+                getElementById(doc, "rpmDialDigit3").setTextContent("6");
+                getElementById(doc, "rpmDialDigit4").setTextContent("7");
+                getElementById(doc, "rpmDialDigit5").setTextContent("8");
+                getElementById(doc, "rpmDialDigit6").setTextContent("9");
+                getElementById(doc, "rpmDialDigit7").setTextContent("10");
+                getElementById(doc, "rpmDialDigit8").setTextContent("11");
+                getElementById(doc, "rpmDialDigit9").setTextContent("12");
             }
         } catch (Exception e) {
             Log.d(TAG, "Exception setting sport tach dial: " + e.toString());

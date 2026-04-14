@@ -193,52 +193,51 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
         showActionBar();
     }
 
+    private boolean isReceiverRegistered = false;
+
     @Override
     protected void onResume() {
         super.onResume();
 
-        ContextCompat.registerReceiver(this, mGattUpdateReceiver, makeGattUpdateIntentFilter(), ContextCompat.RECEIVER_EXPORTED);
-
-        // Read status
-        if (BluetoothLeService.gattCommandCharacteristic != null) {
-            //BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, WLQ_S.GET_STATUS_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+        if (!isReceiverRegistered) {
+            ContextCompat.registerReceiver(this, mGattUpdateReceiver, makeGattUpdateIntentFilter(), ContextCompat.RECEIVER_EXPORTED);
+            isReceiverRegistered = true;
         }
 
         updateDisplay();
-
+        // Force refresh focus and accent color on resume
+        if (sharedPrefs.getBoolean("prefFocusIndication", false)) {
+            Log.d(TAG, "onResume: Forcing focus update, focus=" + MotorcycleData.getHasFocus());
+        }
         startTimer();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        cancelTimer();
-        try {
-            unregisterReceiver(mGattUpdateReceiver);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
+        cleanup();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        cancelTimer();
-        try {
-            unregisterReceiver(mGattUpdateReceiver);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        cleanup();
+    }
+
+    private void cleanup() {
         cancelTimer();
-        try {
-            unregisterReceiver(mGattUpdateReceiver);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+        if (isReceiverRegistered) {
+            try {
+                unregisterReceiver(mGattUpdateReceiver);
+            } catch (IllegalArgumentException e) {
+                Log.e(TAG, "Receiver not registered", e);
+            }
+            isReceiverRegistered = false;
         }
     }
 
@@ -346,26 +345,37 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
             getTheme().resolveAttribute(R.attr.backgroundColor, typedValue, true);
             int color = typedValue.data;
             if (MotorcycleData.getHasFocus()) {
-                color = ContextCompat.getColor(AccessoryActivity.this, R.color.colorAccent);
+                color = androidx.preference.PreferenceManager.getDefaultSharedPreferences(this).getInt("prefHighlightColor", ContextCompat.getColor(this, R.color.colorAccent));
             }
-            ActionBar actionBar = getSupportActionBar();
+            final ActionBar actionBar = getSupportActionBar();
             if (actionBar != null) {
-                actionBar.setBackgroundDrawable(new ColorDrawable(color));
+                final int finalColor = color;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "updateDisplay: Setting NavBar color to " + String.format("#%06X", (0xFFFFFF & finalColor)) + " (hasFocus=" + MotorcycleData.getHasFocus() + ")");
+                        actionBar.setBackgroundDrawable(new ColorDrawable(finalColor));
+                    }
+                });
             }
         }
 
         //Check for active faults
-        if (!Faults.getAllActiveDesc().isEmpty()) {
-            faultButton.setVisibility(View.VISIBLE);
-        } else {
-            faultButton.setVisibility(View.GONE);
+        if (faultButton != null) {
+            if (!Faults.getAllActiveDesc().isEmpty()) {
+                faultButton.setVisibility(View.VISIBLE);
+            } else {
+                faultButton.setVisibility(View.GONE);
+            }
         }
         if (MotorcycleData.wlq != null){
             if (MotorcycleData.wlq.getAccStatus() != null) {
-                channelOneHeaderTV.setText(sharedPrefs.getString("ACC_CHAN_1", getString(R.string.default_accessory_one_name)));
-                channelOneHeaderET.setText(sharedPrefs.getString("ACC_CHAN_1", getString(R.string.default_accessory_one_name)));
-                channelTwoHeaderTV.setText(sharedPrefs.getString("ACC_CHAN_2", getString(R.string.default_accessory_two_name)));
-                channelTwoHeaderET.setText(sharedPrefs.getString("ACC_CHAN_2", getString(R.string.default_accessory_two_name)));
+                String chan1Name = sharedPrefs.getString("ACC_CHAN_1", getString(R.string.default_accessory_one_name));
+                String chan2Name = sharedPrefs.getString("ACC_CHAN_2", getString(R.string.default_accessory_two_name));
+                channelOneHeaderTV.setText(chan1Name);
+                channelOneHeaderET.setText(chan1Name);
+                channelTwoHeaderTV.setText(chan2Name);
+                channelTwoHeaderET.setText(chan2Name);
                 int channelActive = (MotorcycleData.wlq.getAccStatus()[WLQ.ACTIVE_CHAN_INDEX] & 0xFF);
                 int channel1ValueRaw = (MotorcycleData.wlq.getAccStatus()[WLQ.ACC_PDM_CHANNEL1_VAL_RAW_INDEX] & 0xFF);
                 int channel2ValueRaw = (MotorcycleData.wlq.getAccStatus()[WLQ.ACC_PDM_CHANNEL2_VAL_RAW_INDEX] & 0xFF);
@@ -374,21 +384,26 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
                 Resources.Theme theme = this.getTheme();
                 theme.resolveAttribute(R.attr.primaryTextColor, typedValue, true);
                 @ColorInt int foregroundColor = typedValue.data;
-                GradientDrawable drawable = (GradientDrawable) getDrawable(R.drawable.border_highlight);
-                drawable.mutate(); // only change this instance of the xml, not all components using this xml
-                drawable.setStroke(20, androidx.preference.PreferenceManager.getDefaultSharedPreferences(this).getInt("prefHighlightColor", R.color.colorAccent)); // set stroke width and stroke color
+                int highlightColor = androidx.preference.PreferenceManager.getDefaultSharedPreferences(this).getInt("prefHighlightColor", ContextCompat.getColor(this, R.color.colorAccent));
+
+                GradientDrawable drawable = (GradientDrawable) ContextCompat.getDrawable(this, R.drawable.border_highlight);
+                if (drawable != null) {
+                    drawable = (GradientDrawable) drawable.mutate();
+                    drawable.setStroke(20, highlightColor);
+                }
+
                 Log.d(TAG,"ACTIVE CHANNEL: " + channelActive);
                 switch (channelActive) {
                     case 2:
                         channelOneCL.setBackground(drawable);
                         channelTwoCL.setBackgroundResource(0);
-                        channelOneValuePB.setProgressTintList(ColorStateList.valueOf(androidx.preference.PreferenceManager.getDefaultSharedPreferences(this).getInt("prefHighlightColor", R.color.colorAccent)));
+                        channelOneValuePB.setProgressTintList(ColorStateList.valueOf(highlightColor));
                         channelTwoValuePB.setProgressTintList(ColorStateList.valueOf(foregroundColor));
                         break;
                     case 3:
                         channelOneCL.setBackgroundResource(0);
                         channelTwoCL.setBackground(drawable);
-                        channelTwoValuePB.setProgressTintList(ColorStateList.valueOf(androidx.preference.PreferenceManager.getDefaultSharedPreferences(this).getInt("prefHighlightColor", R.color.colorAccent)));
+                        channelTwoValuePB.setProgressTintList(ColorStateList.valueOf(highlightColor));
                         channelOneValuePB.setProgressTintList(ColorStateList.valueOf(foregroundColor));
                         break;
                     default:
@@ -400,8 +415,6 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
                 }
                 channelOneValuePB.setProgress(channel1ValueRaw);
                 channelTwoValuePB.setProgress(channel2ValueRaw);
-            } else {
-                //BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, WLQ_S.GET_STATUS_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
             }
         } else {
             // Request config
@@ -442,6 +455,8 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
                 updateDisplay();
             }  else if (BluetoothLeService.ACTION_FOCUS_CHANGED.equals(action)) {
                 updateDisplay();
+            } else if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
+                updateDisplay();
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 goBack();
             }
@@ -452,6 +467,7 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE);
         intentFilter.addAction(BluetoothLeService.ACTION_FOCUS_CHANGED);
+        intentFilter.addAction(BluetoothLeService.ACTION_GATT_CONNECTED);
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_DISCONNECTED);
         return intentFilter;
     }

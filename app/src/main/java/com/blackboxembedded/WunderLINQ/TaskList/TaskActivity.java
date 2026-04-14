@@ -190,6 +190,8 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         updateDisplay();
     }
 
+    private boolean isReceiverRegistered = false;
+
     @Override
     public void onResume() {
         Log.d(TAG,"onResume");
@@ -198,19 +200,17 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         getSupportActionBar().show();
         taskListView.addScrollStateChangeListener(scrollListener);
         startTimer();
-        ContextCompat.registerReceiver(this, mGattUpdateReceiver, makeGattUpdateIntentFilter(), ContextCompat.RECEIVER_EXPORTED);
+        if (!isReceiverRegistered) {
+            ContextCompat.registerReceiver(this, mGattUpdateReceiver, makeGattUpdateIntentFilter(), ContextCompat.RECEIVER_EXPORTED);
+            isReceiverRegistered = true;
+        }
     }
 
     @Override
     public void onPause() {
         Log.d(TAG,"onPause");
         super.onPause();
-        cancelTimer();
-        try {
-            unregisterReceiver(mGattUpdateReceiver);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
+        cleanup();
     }
 
     @Override
@@ -218,12 +218,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         Log.d(TAG,"onStop");
         super.onStop();
         taskListView.removeScrollStateChangeListener(scrollListener);
-        cancelTimer();
-        try {
-            unregisterReceiver(mGattUpdateReceiver);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
+        cleanup();
     }
 
     @Override
@@ -231,11 +226,18 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         Log.d(TAG,"onDestroy");
         super.onDestroy();
         taskListView.removeScrollStateChangeListener(scrollListener);
+        cleanup();
+    }
+
+    private void cleanup() {
         cancelTimer();
-        try {
-            unregisterReceiver(mGattUpdateReceiver);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+        if (isReceiverRegistered) {
+            try {
+                unregisterReceiver(mGattUpdateReceiver);
+            } catch (IllegalArgumentException e) {
+                Log.e(TAG, "Receiver not registered", e);
+            }
+            isReceiverRegistered = false;
         }
     }
 

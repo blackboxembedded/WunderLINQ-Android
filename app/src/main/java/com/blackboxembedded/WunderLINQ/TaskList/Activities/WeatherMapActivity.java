@@ -147,10 +147,11 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
                 displayDate = new Date(frameMs);
                 newTs       = String.valueOf(tileMs / 1000L);
             } else {
-                // final frame: snap to true now
+                // final frame: snap to one interval ago to ensure availability
                 long nowMs  = System.currentTimeMillis();
+                long rounded10m = nowMs - (nowMs % TILE_INTERVAL_MS) - TILE_INTERVAL_MS;
                 displayDate = new Date(nowMs);
-                newTs       = String.valueOf(nowMs / 1000L);
+                newTs       = String.valueOf(rounded10m / 1000L);
             }
 
             if (! newTs.equals(timestamp)) {
@@ -260,15 +261,19 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
         // ─── compute our fixed 2h window
         long nowMs      = System.currentTimeMillis();
         windowStartMs   = nowMs - windowDurationMs;
-        long rounded10m = nowMs - (nowMs % TILE_INTERVAL_MS);
+        // Use the interval BEFORE the current one to ensure tiles are ready
+        long rounded10m = nowMs - (nowMs % TILE_INTERVAL_MS) - TILE_INTERVAL_MS;
         timestamp       = String.valueOf(rounded10m / 1000L);
 
         // ─── one‐time tileOverlay setup
         TileProvider tileProvider = new UrlTileProvider(256, 256) {
             @Override public URL getTileUrl(int x, int y, int zoom) {
+                // RainViewer typically supports up to zoom 7 for radar.
+                // Requesting higher levels often results in "Zoom Level Not Supported".
+                int radarZoom = Math.min(zoom, 7);
                 String url = String.format(Locale.US,
                         "https://tilecache.rainviewer.com/v2/radar/%s/256/%d/%d/%d/4/1_1.png",
-                        timestamp, zoom, x, y
+                        timestamp, radarZoom, x, y
                 );
                 try { return new URL(url); }
                 catch (MalformedURLException e) { throw new AssertionError(e); }
@@ -293,7 +298,7 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
                     faultButton.setVisibility(View.GONE);
                 }
                 long lm = System.currentTimeMillis();
-                lm -= lm % (10 * 60 * 1000);
+                lm -= (lm % TILE_INTERVAL_MS) + TILE_INTERVAL_MS;
                 timestamp = String.valueOf(lm / 1000L);
                 if (MotorcycleData.getLastLocation() != null) {
                     LatLng loc2 = new LatLng(

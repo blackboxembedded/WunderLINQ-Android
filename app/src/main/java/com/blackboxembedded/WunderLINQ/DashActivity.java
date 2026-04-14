@@ -26,6 +26,9 @@ import android.content.pm.ActivityInfo;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.TypedValue;
@@ -74,6 +77,9 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
     private int numInfoLine = 4;
     private int currentDashboard = 1;
     private int currentInfoLine = 1;
+
+    private HandlerThread dashUpdateThread;
+    private Handler dashUpdateHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,17 +143,27 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
         dashboardView = findViewById(R.id.mainView);
         svgFileResolver = new SvgFileResolver();
 
+        dashUpdateThread = new HandlerThread("DashUpdateThread");
+        dashUpdateThread.start();
+        dashUpdateHandler = new Handler(dashUpdateThread.getLooper());
+
         updateDisplay();
     }
+
+    private boolean isReceiverRegistered = false;
 
     @Override
     public void onResume() {
         super.onResume();
         getSupportActionBar().show();
-        currentDashboard = sharedPrefs.getInt("lastDashboard",1);
+        currentDashboard = sharedPrefs.getInt("lastDashboard", 1);
         updateDisplay();
         startTimer();
-        ContextCompat.registerReceiver(this, mGattUpdateReceiver, makeGattUpdateIntentFilter(), ContextCompat.RECEIVER_EXPORTED);
+
+        if (!isReceiverRegistered) {
+            ContextCompat.registerReceiver(this, mGattUpdateReceiver, makeGattUpdateIntentFilter(), ContextCompat.RECEIVER_EXPORTED);
+            isReceiverRegistered = true;
+        }
     }
 
     @Override
@@ -156,33 +172,32 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
         SharedPreferences.Editor editor = sharedPrefs.edit();
         editor.putInt("lastDashboard", currentDashboard);
         editor.apply();
-        cancelTimer();
-        try {
-            unregisterReceiver(mGattUpdateReceiver);
-        } catch (IllegalArgumentException e){
-            Log.d(TAG,e.toString());
-        }
+        cleanup();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        cancelTimer();
-        try {
-            unregisterReceiver(mGattUpdateReceiver);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        cleanup();
+        if (dashUpdateThread != null) {
+            dashUpdateThread.quitSafely();
+        }
+    }
+
+    private void cleanup() {
         cancelTimer();
-        try {
-            unregisterReceiver(mGattUpdateReceiver);
-        } catch (IllegalArgumentException e){
-            Log.d(TAG,e.toString());
+        if (isReceiverRegistered) {
+            try {
+                unregisterReceiver(mGattUpdateReceiver);
+            } catch (IllegalArgumentException e) {
+                Log.e(TAG, "Receiver not registered", e);
+            }
+            isReceiverRegistered = false;
         }
     }
 
@@ -409,33 +424,35 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
         } else {
             faultButton.setVisibility(View.GONE);
         }
-        if (!dashUpdateRunning) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    dashUpdateRunning = true;
 
-                    if (currentDashboard == 1){
-                        svg = StandardDashboard.updateDashboard(currentInfoLine);
-                    } else if (currentDashboard == 2){
-                        svg = SportDashboard.updateDashboard(currentInfoLine);
-                    } else if (currentDashboard == 3){
-                        svg = ADVDashboard.updateDashboard(currentInfoLine);
+        if (dashUpdateHandler != null && !dashUpdateRunning) {
+            dashUpdateHandler.post(() -> {
+                dashUpdateRunning = true;
+                try {
+                    SVG newSvg = null;
+                    if (currentDashboard == 1) {
+                        newSvg = StandardDashboard.updateDashboard(currentInfoLine);
+                    } else if (currentDashboard == 2) {
+                        newSvg = SportDashboard.updateDashboard(currentInfoLine);
+                    } else if (currentDashboard == 3) {
+                        newSvg = ADVDashboard.updateDashboard(currentInfoLine);
                     }
-                    svg.registerExternalFileResolver(svgFileResolver);
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            //your code or your request that you want to run on uiThread
-                            if(svg != null) {
-                                dashboardView.setSVG(svg);
+                    if (newSvg != null) {
+                        newSvg.registerExternalFileResolver(svgFileResolver);
+                        final SVG finalSvg = newSvg;
+                        runOnUiThread(() -> {
+                            if (!isFinishing() && !isDestroyed()) {
+                                dashboardView.setSVG(finalSvg);
                             }
-                        }
-                    });
+                        });
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "Error updating dashboard", e);
+                } finally {
                     dashUpdateRunning = false;
                 }
-            }).start();
+            });
         }
     }
 }

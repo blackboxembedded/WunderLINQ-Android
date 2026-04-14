@@ -17,8 +17,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -39,6 +41,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
+import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 
 import java.util.ArrayList;
@@ -87,15 +90,60 @@ public class FaultActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void recreate() {
-        super.recreate();
-    }
+    private boolean isReceiverRegistered = false;
 
     @Override
     public void onResume() {
         super.onResume();
+        if (!isReceiverRegistered) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(BluetoothLeService.ACTION_CMDSTATUS_AVAILABLE);
+            androidx.core.content.ContextCompat.registerReceiver(this, mGattUpdateReceiver, filter, androidx.core.content.ContextCompat.RECEIVER_EXPORTED);
+            isReceiverRegistered = true;
+        }
+        updateFaultList();
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        cleanup();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        cleanup();
+    }
+
+    private void cleanup() {
+        if (isReceiverRegistered) {
+            try {
+                unregisterReceiver(mGattUpdateReceiver);
+            } catch (IllegalArgumentException e) {
+                Log.e("FaultActivity", "Receiver not registered", e);
+            }
+            isReceiverRegistered = false;
+        }
+    }
+
+    private void updateFaultList() {
+        Faults faults = new Faults(this);
+        faultListData = faults.getAllActiveDesc();
+        ListView faultList = findViewById(R.id.lv_faults);
+        if (faultList != null) {
+            faultList.setAdapter(new ArrayAdapter<String>(this, R.layout.item_fault, faultListData));
+        }
+    }
+
+    private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (BluetoothLeService.ACTION_CMDSTATUS_AVAILABLE.equals(intent.getAction())) {
+                updateFaultList();
+            }
+        }
+    };
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {

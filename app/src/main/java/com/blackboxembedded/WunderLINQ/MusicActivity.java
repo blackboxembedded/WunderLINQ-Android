@@ -92,6 +92,33 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
     private CountDownTimer cTimer = null;
 
     private boolean timerRunning = false;
+    private boolean isReceiverRegistered = false;
+
+    private final MediaSessionManager.OnActiveSessionsChangedListener mSessionsListener =
+            controllers -> updateActiveController();
+
+    private void updateActiveController() {
+        MediaSessionManager mm = (MediaSessionManager) this.getSystemService(
+                Context.MEDIA_SESSION_SERVICE);
+        List<MediaController> controllers = mm.getActiveSessions(
+                new ComponentName(this, NotificationListener.class));
+
+        MediaController newController = controllers.size() > 0 ? controllers.get(0) : null;
+
+        if (controller != newController) {
+            if (controller != null) {
+                controller.unregisterCallback(mMediaCallback);
+            }
+            controller = newController;
+            if (controller != null) {
+                controls = controller.getTransportControls();
+                controller.registerCallback(mMediaCallback);
+            } else {
+                controls = null;
+            }
+        }
+        refreshMetaData();
+    }
 
     private OnClickListener mClickListener = new OnClickListener() {
 
@@ -238,6 +265,26 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         super.recreate();
     }
 
+    private final MediaController.Callback mMediaCallback = new MediaController.Callback() {
+        @Override
+        public void onPlaybackStateChanged(PlaybackState state) {
+            super.onPlaybackStateChanged(state);
+            refreshMetaData();
+        }
+
+        @Override
+        public void onMetadataChanged(MediaMetadata metadata) {
+            super.onMetadataChanged(metadata);
+            refreshMetaData(metadata);
+        }
+
+        @Override
+        public void onSessionDestroyed() {
+            super.onSessionDestroyed();
+            updateActiveController();
+        }
+    };
+
     @Override
     public void onResume() {
         super.onResume();
@@ -246,19 +293,12 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         mPlayPauseButton.requestFocus();
 
         // Check if we have permissions to read notifications
-        Set<String> packageNames = NotificationManagerCompat.getEnabledListenerPackages (this);
+        Set<String> packageNames = NotificationManagerCompat.getEnabledListenerPackages(this);
         if (packageNames.contains(getApplicationContext().getPackageName())) {
             MediaSessionManager mm = (MediaSessionManager) this.getSystemService(
                     Context.MEDIA_SESSION_SERVICE);
-            List<MediaController> controllers = mm.getActiveSessions(
-                    new ComponentName(this, NotificationListener.class));
-            if (controllers.size() != 0 ) {
-                mHandler.post(mUpdateMetaData);
-            } else {
-                mTitleText.setText(R.string.not_found_media_player);
-                mAlbumText.setText(R.string.start_media_player);
-                mArtistText.setText("");
-            }
+            mm.addOnActiveSessionsChangedListener(mSessionsListener, new ComponentName(this, NotificationListener.class));
+            updateActiveController();
         } else {
             mArtistText.setText(R.string.toast_permission_denied);
             mTitleText.setText("");
@@ -268,42 +308,50 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         getSupportActionBar().show();
         startTimer();
 
-        ContextCompat.registerReceiver(this, mGattUpdateReceiver, makeGattUpdateIntentFilter(), ContextCompat.RECEIVER_EXPORTED);
+        // Register broadcast receiver for GATT updates
+        if (!isReceiverRegistered) {
+            ContextCompat.registerReceiver(this, mGattUpdateReceiver, makeGattUpdateIntentFilter(), ContextCompat.RECEIVER_EXPORTED);
+            isReceiverRegistered = true;
+        }
+
+        // Periodically update focus/fault UI (not metadata)
+        mHandler.post(mUpdateUI);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        cancelTimer();
-        mHandler.removeCallbacks(mUpdateMetaData);
-        try {
-            unregisterReceiver(mGattUpdateReceiver);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
+        cleanup();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        cancelTimer();
-        mHandler.removeCallbacks(mUpdateMetaData);
-        try {
-            unregisterReceiver(mGattUpdateReceiver);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    private void cleanup() {
         cancelTimer();
-        mHandler.removeCallbacks(mUpdateMetaData);
-        try {
-            unregisterReceiver(mGattUpdateReceiver);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+        mHandler.removeCallbacks(mUpdateUI);
+
+        MediaSessionManager mm = (MediaSessionManager) this.getSystemService(Context.MEDIA_SESSION_SERVICE);
+        mm.removeOnActiveSessionsChangedListener(mSessionsListener);
+
+        if (controller != null) {
+            controller.unregisterCallback(mMediaCallback);
+            controller = null;
+        }
+        if (isReceiverRegistered) {
+            try {
+                unregisterReceiver(mGattUpdateReceiver);
+            } catch (IllegalArgumentException e) {
+                Log.e(TAG, "Receiver not registered", e);
+            }
+            isReceiverRegistered = false;
         }
     }
 
@@ -400,25 +448,22 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         }
     }
 
-    private Runnable mUpdateMetaData = new Runnable() {
+    private Runnable mUpdateUI = new Runnable() {
         @Override
         public void run() {
-            //Update display
+            //Update display - focus and faults
             updateDisplay();
-            refreshMetaData();
-            mHandler.postDelayed(this, 1000); //setting up update event after one second
+            mHandler.postDelayed(this, 1000); // UI updates every second
         }
     };
 
     //Refresh media metadata on screen and update button status
-    protected void refreshMetaData(){
-        MediaSessionManager mm = (MediaSessionManager) this.getSystemService(
-                Context.MEDIA_SESSION_SERVICE);
-        List<MediaController> controllers = mm.getActiveSessions(
-                new ComponentName(this, NotificationListener.class));
-        if (controllers.size() != 0 ) {
-            controller = controllers.get(0);
-            controls = controller.getTransportControls();
+    protected void refreshMetaData() {
+        refreshMetaData(controller != null ? controller.getMetadata() : null);
+    }
+
+    protected void refreshMetaData(MediaMetadata metaData) {
+        if (controller != null) {
             PlaybackState playbackState = controller.getPlaybackState();
             if (playbackState != null) {
                 if (playbackState.getState() != PlaybackState.STATE_PLAYING) {
@@ -429,63 +474,61 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
             }
 
             try {
-                MediaMetadata metaData = controller.getMetadata();
-                String metadataArtist = getString(R.string.unknown);
-                if (metaData.getString(MediaMetadata.METADATA_KEY_ARTIST) != null) {
-                    metadataArtist = metaData.getString(MediaMetadata.METADATA_KEY_ARTIST);
-                }
-                mArtistText.setText(metadataArtist);
+                if (metaData != null) {
+                    String metadataArtist = metaData.getString(MediaMetadata.METADATA_KEY_ARTIST);
+                    mArtistText.setText(metadataArtist != null ? metadataArtist : getString(R.string.unknown));
 
-                String metadataAlbum = getString(R.string.unknown);
-                if (metaData.getString(MediaMetadata.METADATA_KEY_ALBUM) != null) {
-                    metadataAlbum = metaData.getString(MediaMetadata.METADATA_KEY_ALBUM);
-                }
-                mAlbumText.setText(metadataAlbum);
+                    String metadataAlbum = metaData.getString(MediaMetadata.METADATA_KEY_ALBUM);
+                    mAlbumText.setText(metadataAlbum != null ? metadataAlbum : getString(R.string.unknown));
 
-                String metadataTitle = getString(R.string.unknown);
-                if (metaData.getString(MediaMetadata.METADATA_KEY_TITLE) != null) {
-                    metadataTitle = metaData.getString(MediaMetadata.METADATA_KEY_TITLE);
-                }
-                mTitleText.setText(metadataTitle);
+                    String metadataTitle = metaData.getString(MediaMetadata.METADATA_KEY_TITLE);
+                    mTitleText.setText(metadataTitle != null ? metadataTitle : getString(R.string.unknown));
 
-                if (metaData.getBitmap(MediaMetadata.METADATA_KEY_ART) != null) {
-                    mArtwork.setImageBitmap(scaleBitmap(metaData.getBitmap(MediaMetadata.METADATA_KEY_ART), 800, 800));
-                    mArtwork.clearColorFilter();
-                    mArtwork.setImageTintMode(null);
-                } else if (metaData.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART) != null) {
-                    mArtwork.setImageBitmap(scaleBitmap(metaData.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART), 800, 800));
-                    mArtwork.clearColorFilter();
-                    mArtwork.setImageTintMode(null);
-                } else {
-                    Log.d(TAG,"No art");
-                    Drawable drawable = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_music_note);
-                    try {
-                        Bitmap bitmap;
-
-                        bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.RGB_565);
-
-                        Canvas canvas = new Canvas(bitmap);
-                        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-                        drawable.draw(canvas);
-
-                        mArtwork.setImageBitmap(scaleBitmap(bitmap, 800, 800));
-
-                        TypedValue typedValue = new TypedValue();
-                        getTheme().resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true);
-                        mArtwork.setColorFilter(typedValue.data);
-
-                    } catch (OutOfMemoryError e) {
-                        // Handle the error
-                        Log.d(TAG,"Error converting drawable to bitmap");
+                    Bitmap art = metaData.getBitmap(MediaMetadata.METADATA_KEY_ART);
+                    if (art == null) {
+                        art = metaData.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART);
                     }
+
+                    if (art != null) {
+                        mArtwork.setImageBitmap(scaleBitmap(art, 800, 800));
+                        mArtwork.clearColorFilter();
+                        mArtwork.setImageTintMode(null);
+                    } else {
+                        setDefaultArtwork();
+                    }
+                } else {
+                    mArtistText.setText(R.string.unknown);
+                    mAlbumText.setText(R.string.unknown);
+                    mTitleText.setText(R.string.unknown);
+                    setDefaultArtwork();
                 }
-            } catch (NullPointerException e){
-                Log.d(TAG,"Error: " + e.toString());
+            } catch (Exception e) {
+                Log.e(TAG, "Error refreshing metadata", e);
             }
         } else {
             mArtistText.setText(R.string.not_found_media_player);
             mTitleText.setText(R.string.start_media_player);
             mAlbumText.setText("");
+            setDefaultArtwork();
+        }
+    }
+
+    private void setDefaultArtwork() {
+        Log.d(TAG, "No art");
+        Drawable drawable = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_music_note);
+        if (drawable != null) {
+            try {
+                Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.RGB_565);
+                Canvas canvas = new Canvas(bitmap);
+                drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+                drawable.draw(canvas);
+                mArtwork.setImageBitmap(scaleBitmap(bitmap, 800, 800));
+                TypedValue typedValue = new TypedValue();
+                getTheme().resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true);
+                mArtwork.setColorFilter(typedValue.data);
+            } catch (OutOfMemoryError e) {
+                Log.d(TAG, "Error converting drawable to bitmap");
+            }
         }
     }
 

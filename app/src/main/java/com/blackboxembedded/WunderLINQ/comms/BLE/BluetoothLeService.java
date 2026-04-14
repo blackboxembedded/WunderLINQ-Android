@@ -651,6 +651,12 @@ public class BluetoothLeService extends Service {
                     LoggingService.stopLoggingService(MyApplication.getContext());
                 }
 
+                // Attempt to reconnect if this was an unexpected disconnection
+                if (mBluetoothDeviceAddress != null) {
+                    Log.d(TAG, "Attempting to reconnect to: " + mBluetoothDeviceAddress);
+                    connect(mBluetoothDeviceAddress, mBluetoothDeviceName);
+                }
+
                 // Reset trend data
                 //MotorcycleData.resetData();
             }
@@ -816,17 +822,19 @@ public class BluetoothLeService extends Service {
                         }
                         if (!MotorcycleData.getHasFocus()) {
                             Log.d(TAG, "Focus Gained");
+                            MotorcycleData.setHasFocus(true);
                             final Intent intent = new Intent(ACTION_FOCUS_CHANGED);
                             MyApplication.getContext().sendBroadcast(intent);
 
                             sendDataBroadcast();
                         }
-                        MotorcycleData.setHasFocus(true);
                         lastControlMessage = System.currentTimeMillis();
                     } else {
-                        if (MotorcycleData.getHasFocus() && (System.currentTimeMillis() - lastControlMessage > 500)) {
+                        if (MotorcycleData.getHasFocus() && (System.currentTimeMillis() - lastControlMessage > 1000)) {
                             Log.d(TAG, "Focus Gone");
                             MotorcycleData.setHasFocus(false);
+                            final Intent intent = new Intent(ACTION_FOCUS_CHANGED);
+                            MyApplication.getContext().sendBroadcast(intent);
                             sendDataBroadcast();
                         }
                         //Check if message changed
@@ -884,10 +892,12 @@ public class BluetoothLeService extends Service {
                     if(MotorcycleData.wlq != null) {
                         MotorcycleData.wlq.setAccStatus(data);
 
-                        Intent accessoryIntent = new Intent(MyApplication.getContext(), AccessoryActivity.class);
-                        accessoryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        accessoryIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        MyApplication.getContext().startActivity(accessoryIntent);
+                        if (!MyApplication.isActivityVisible(AccessoryActivity.class)) {
+                            Intent accessoryIntent = new Intent(MyApplication.getContext(), AccessoryActivity.class);
+                            accessoryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            accessoryIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            MyApplication.getContext().startActivity(accessoryIntent);
+                        }
 
                         final Intent intent = new Intent(ACTION_ACCSTATUS_AVAILABLE);
                         intent.putExtras(mBundle);
@@ -987,15 +997,15 @@ public class BluetoothLeService extends Service {
 
         // We want to directly connect to the device, so we are setting the
         // autoConnect
-        // parameter to false.
+        // parameter to true to allow for reconnection when the device is back in range.
         if ((ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED)
         || (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)) {
-            mBluetoothGatt = device.connectGatt(MyApplication.getContext(), false, mGattCallback);
+            mBluetoothGatt = device.connectGatt(MyApplication.getContext(), true, mGattCallback);
             mBluetoothDeviceAddress = address;
             mBluetoothDeviceName = deviceName;
 
             String dataLog = "[" + deviceName + "|" + address + "] " +
-                    "Connection request sent";
+                    "Connection request sent (autoConnect=true)";
             Log.d(TAG, dataLog);
         } else {
             Log.d(TAG, "No BLUETOOTH_CONNECT permission granted");

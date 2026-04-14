@@ -17,12 +17,21 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.os.Bundle;
 
-public class MyApplication extends Application {
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class MyApplication extends Application implements Application.ActivityLifecycleCallbacks {
 
     private static Context mContext;
+    private static final Set<String> visibleActivities = new HashSet<>();
 
     private static boolean videoRecording;
     private static boolean tripRecording;
@@ -31,11 +40,41 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mContext = this;
+        registerActivityLifecycleCallbacks(this);
     }
 
     public static Context getContext(){
         return mContext;
     }
+
+    public static boolean isActivityVisible(Class<?> activityClass) {
+        return visibleActivities.contains(activityClass.getName());
+    }
+
+    @Override
+    public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {}
+
+    @Override
+    public void onActivityStarted(@NonNull Activity activity) {}
+
+    @Override
+    public void onActivityResumed(@NonNull Activity activity) {
+        visibleActivities.add(activity.getClass().getName());
+    }
+
+    @Override
+    public void onActivityPaused(@NonNull Activity activity) {
+        visibleActivities.remove(activity.getClass().getName());
+    }
+
+    @Override
+    public void onActivityStopped(@NonNull Activity activity) {}
+
+    @Override
+    public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {}
+
+    @Override
+    public void onActivityDestroyed(@NonNull Activity activity) {}
 
     public static boolean getVideoRecording() {
         return videoRecording;
