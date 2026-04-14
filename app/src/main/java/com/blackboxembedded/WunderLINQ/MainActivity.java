@@ -236,11 +236,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             return;
         }
 
-        dailyDisclaimerWarning();
-
         ContextCompat.registerReceiver(this, mGattUpdateReceiver, makeGattUpdateIntentFilter(), ContextCompat.RECEIVER_EXPORTED);
 
         bluetoothLeService = new Intent(MainActivity.this, BluetoothLeService.class);
+
+        dailyDisclaimerWarning();
     }
 
 
