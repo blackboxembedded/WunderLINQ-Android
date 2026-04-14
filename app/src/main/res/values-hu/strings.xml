@@ -347,7 +347,7 @@
     <string name="pref_homePhone_summary">Formátum: 11234567890</string>
     <string name="pref_grid_settings_summary">Egyéni beállítás: mely adatpontok kerülnek kijelzésre és mely cellában</string>
     <string name="thirteenth">Tizenharmadik</string>
-    <string name="fiftheenth">Tizenötödik</string>
+    <string name="fifteenth">Tizenötödik</string>
     <string name="pref_tasks_settings_summary">Egyéni beállítás: mely feladat kerül kijelzésre, és milyen sorrendben</string>
     <string name="nav_app_default">Android alapértelmezett</string>
     <string name="pref_contacts_filter_title">Kapcsolatok kijelzése</string>

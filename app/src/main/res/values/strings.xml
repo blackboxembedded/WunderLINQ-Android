@@ -540,7 +540,7 @@
     <string name="twelfth">Twelfth</string>
     <string name="thirteenth">Thirteenth</string>
     <string name="fourteenth">Fourteenth</string>
-    <string name="fiftheenth">Fifteenth</string>
+    <string name="fifteenth">Fifteenth</string>
     <string name="sixteenth">Sixteenth</string>
     <string name="seventeenth">Seventeenth</string>
     <string name="eighteenth">Eighteenth</string>
@@ -558,7 +558,7 @@
     <string name="pref_grid_twelve" translatable="false">@string/twelfth</string>
     <string name="pref_grid_thirteen" translatable="false">@string/thirteenth</string>
     <string name="pref_grid_fourteen" translatable="false">@string/fourteenth</string>
-    <string name="pref_grid_fifteen" translatable="false">@string/fiftheenth</string>
+    <string name="pref_grid_fifteen" translatable="false">@string/fifteenth</string>
     <string-array name="dataPoints_array" translatable="false">
         <item name="1">@string/gear_header</item>
         <item name="2">@string/enginetemp_header</item>
@@ -649,7 +649,7 @@
     <string name="pref_task_twelve" translatable="false">@string/twelfth</string>
     <string name="pref_task_thirteen" translatable="false">@string/thirteenth</string>
     <string name="pref_task_fourteen" translatable="false">@string/fourteenth</string>
-    <string name="pref_task_fifteen" translatable="false">@string/fiftheenth</string>
+    <string name="pref_task_fifteen" translatable="false">@string/fifteenth</string>
     <string name="pref_task_sixteen" translatable="false">@string/sixteenth</string>
     <string name="pref_task_seventeen" translatable="false">@string/seventeenth</string>
     <string name="pref_task_eighteen" translatable="false">@string/eighteenth</string>

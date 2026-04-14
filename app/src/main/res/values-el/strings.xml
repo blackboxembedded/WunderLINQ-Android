@@ -302,7 +302,7 @@
     <string name="pref_grid_settings_summary">Επιλέξτε ποια δεδομένα εμφανίζονται στα αντίστοιχα κελιά</string>
     <string name="thirteenth">Δέκατη-τρίτη</string>
     <string name="fourteenth">΄Δεκατή-τέταρτη</string>
-    <string name="fiftheenth">Δέκατη-πέμπτη</string>
+    <string name="fifteenth">Δέκατη-πέμπτη</string>
     <string name="tripauto_label">Διαδρομή (αυτόματη)</string>
     <string name="voltage_label">Τάση</string>
     <string name="throttle_label">Άνοιγμα πεταλούδας</string>
