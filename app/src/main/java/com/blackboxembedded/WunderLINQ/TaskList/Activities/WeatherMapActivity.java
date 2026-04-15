@@ -1,20 +1,3 @@
-/*
-WunderLINQ Client Application
-Copyright (C) 2020  Keith Conger, Black Box Embedded, LLC
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
 package com.blackboxembedded.WunderLINQ.TaskList.Activities;
 
 import android.animation.Animator;
@@ -27,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -40,15 +24,16 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.blackboxembedded.WunderLINQ.FaultActivity;
+import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
 import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
-import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
-import com.blackboxembedded.WunderLINQ.R;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
+import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.OnMapsSdkInitializedCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -57,17 +42,38 @@ import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
 import com.google.android.gms.maps.model.UrlTileProvider;
-import com.google.android.gms.maps.MapsInitializer.Renderer;
-import com.google.android.gms.maps.OnMapsSdkInitializedCallback;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyCallback, OnMapsSdkInitializedCallback {
 
-    public final static String TAG = "WeatherActivity";
+    public static final String TAG = "WeatherActivity";
+
+    private static final String RAINVIEWER_API_URL = "https://api.rainviewer.com/public/weather-maps.json";
+    private static final String DEFAULT_RAIN_HOST = "https://tilecache.rainviewer.com";
+
+    private static final int RADAR_TILE_SIZE = 256;
+    private static final int RADAR_COLOR_SCHEME = 2;   // Universal Blue
+    private static final String RADAR_OPTIONS = "1_1"; // smooth + snow
+    private static final int RADAR_MAX_ZOOM = 7;
+
+    private static final long UI_UPDATE_DELAY_MS = 10_000L;
+    private static final long FRAME_REFRESH_INTERVAL_MS = 5 * 60_000L;
+    private static final long ANIMATION_DURATION_MS = 60_000L;
+    private static final long ANIMATION_RESTART_DELAY_MS = 5_000L;
+
     private ImageButton faultButton;
     private GoogleMap mMap;
     private TextView tvDate;
@@ -76,16 +82,55 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
     private ValueAnimator animator;
     private SharedPreferences sharedPrefs;
 
-    private final Handler handler = new Handler();
-    private final int delay = 10 * 1000;
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
-    private int currentZoom = 8;
+    private int currentZoom = RADAR_MAX_ZOOM;
 
-    private String timestamp = "";
+    private String rainHost = DEFAULT_RAIN_HOST;
+    private final List<RadarFrame> radarFrames = new ArrayList<>();
+    private int currentFrameIndex = -1;
 
-    private long windowStartMs;
-    private final long windowDurationMs = 2 * 60L * 60L * 1000L;  // 2h in ms
-    private static final long TILE_INTERVAL_MS = 10 * 60L * 1000L; // 10min
+    private boolean allowAnimationRestart = true;
+
+    private final Runnable faultAndLocationRunnable = new Runnable() {
+        @Override
+        public void run() {
+            updateFaultButton();
+            updateMarkerAndCamera(false);
+            handler.postDelayed(this, UI_UPDATE_DELAY_MS);
+        }
+    };
+
+    private final Runnable frameRefreshRunnable = new Runnable() {
+        @Override
+        public void run() {
+            loadRainViewerFrames();
+            handler.postDelayed(this, FRAME_REFRESH_INTERVAL_MS);
+        }
+    };
+
+    private final Runnable animationRestartRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (!allowAnimationRestart) {
+                return;
+            }
+
+            if (radarFrames.size() > 1 && animator != null && !animator.isRunning()) {
+                animator.start();
+            }
+        }
+    };
+
+    private static class RadarFrame {
+        final long time;
+        final String path;
+
+        RadarFrame(long time, String path) {
+            this.time = time;
+            this.path = path;
+        }
+    }
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -100,14 +145,13 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
 
         AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
 
-        // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         String orientation = sharedPrefs.getString("prefOrientation", "0");
-        if (!orientation.equals("0")){
-            if(orientation.equals("1")){
+        if (!orientation.equals("0")) {
+            if (orientation.equals("1")) {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            } else if (orientation.equals("2")){
+            } else if (orientation.equals("2")) {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
             } else {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -117,70 +161,46 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
         }
 
         showActionBar();
+        setupAnimator();
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        MapsInitializer.initialize(getApplicationContext(), Renderer.LATEST, this);
+        MapsInitializer.initialize(getApplicationContext(), MapsInitializer.Renderer.LATEST, this);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
 
-        // ─── PREPARE THE ANIMATOR ────────────────────────────────────────────────
-        // animate from 0→1 (windowStart → windowEnd) over 60s:
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        } else {
+            Log.e(TAG, "Map fragment not found.");
+        }
+    }
+
+    private void setupAnimator() {
         animator = ValueAnimator.ofFloat(0f, 1f);
-        animator.setDuration(60_000);               // full 2h sweep in 60s
+        animator.setDuration(ANIMATION_DURATION_MS);
         animator.setRepeatCount(0);
 
-        // on each frame, map progress→timestamp:
-        animator.addUpdateListener(av -> {
-            float progress = (float) av.getAnimatedValue();
-
-            long frameMs;
-            long tileMs;
-            Date displayDate;
-            String newTs;
-
-            if (progress < 1f) {
-                // intermediate frames: evenly interpolate over [windowStart → windowEnd]
-                frameMs     = windowStartMs + (long)(windowDurationMs * progress);
-                // round to the last 10min tick
-                tileMs      = frameMs - (frameMs % TILE_INTERVAL_MS);
-                displayDate = new Date(frameMs);
-                newTs       = String.valueOf(tileMs / 1000L);
-            } else {
-                // final frame: snap to one interval ago to ensure availability
-                long nowMs  = System.currentTimeMillis();
-                long rounded10m = nowMs - (nowMs % TILE_INTERVAL_MS) - TILE_INTERVAL_MS;
-                displayDate = new Date(nowMs);
-                newTs       = String.valueOf(rounded10m / 1000L);
+        animator.addUpdateListener(animation -> {
+            if (radarFrames.isEmpty()) {
+                return;
             }
 
-            if (! newTs.equals(timestamp)) {
-                Log.d(TAG, "Updating Map → " + displayDate);
-                tvDate.setText(displayDate.toString());
-                timestamp = newTs;
-                if (tileOverlay != null) {
-                    tileOverlay.clearTileCache();
-                }
+            float progress = (float) animation.getAnimatedValue();
+            int lastIndex = radarFrames.size() - 1;
+            int newIndex = Math.min(lastIndex, Math.max(0, Math.round(progress * lastIndex)));
+
+            if (newIndex != currentFrameIndex) {
+                applyFrameIndex(newIndex, true);
             }
         });
 
-        // on each cycle‑end, grab a fresh window ending at “now”:
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                // 1) re‑anchor your 2h window ending at Now
-                long nowMs      = System.currentTimeMillis();
-                windowStartMs   = nowMs - windowDurationMs;
-                timestamp       = "";                 // force tile & label refresh
-
-                // show “now” label immediately:
-                tvDate.setText(new Date().toString());
-                if (tileOverlay != null) {
-                    tileOverlay.clearTileCache();
+                if (!allowAnimationRestart) {
+                    return;
                 }
-                Log.d(TAG, "Updating Map → " + "onAnimationEnd");
-                // 2) after 5s, start the next 60s sweep
-                handler.postDelayed(() -> animator.start(), 5_000);
+
+                scheduleAnimationRestart(ANIMATION_RESTART_DELAY_MS);
             }
         });
     }
@@ -193,13 +213,23 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
     @Override
     public void onResume() {
         super.onResume();
+        allowAnimationRestart = true;
+
+        if (mMap != null) {
+            startRuntimeTasks();
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        animator.end();
+        allowAnimationRestart = false;
+
         handler.removeCallbacksAndMessages(null);
+
+        if (animator != null) {
+            animator.cancel();
+        }
     }
 
     @Override
@@ -210,6 +240,11 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
     @Override
     public void onDestroy() {
         super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
+
+        if (animator != null) {
+            animator.cancel();
+        }
     }
 
     @Override
@@ -218,7 +253,8 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
         if (hasFocus) {
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+            );
         }
     }
 
@@ -234,107 +270,199 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
         }
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         Log.d(TAG, "onMapReady()");
 
-        // ─── camera & marker
-        if (MotorcycleData.getLastLocation() != null) {
-            LatLng loc = new LatLng(
-                    MotorcycleData.getLastLocation().getLatitude(),
-                    MotorcycleData.getLastLocation().getLongitude()
-            );
-            mMarker = mMap.addMarker(new MarkerOptions().position(loc));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, currentZoom));
-        }
+        updateMarkerAndCamera(true);
+        setupRadarOverlay();
 
-        // ─── compute our fixed 2h window
-        long nowMs      = System.currentTimeMillis();
-        windowStartMs   = nowMs - windowDurationMs;
-        // Use the interval BEFORE the current one to ensure tiles are ready
-        long rounded10m = nowMs - (nowMs % TILE_INTERVAL_MS) - TILE_INTERVAL_MS;
-        timestamp       = String.valueOf(rounded10m / 1000L);
-
-        // ─── one‐time tileOverlay setup
-        TileProvider tileProvider = new UrlTileProvider(256, 256) {
-            @Override public URL getTileUrl(int x, int y, int zoom) {
-                // RainViewer typically supports up to zoom 7 for radar.
-                // Requesting higher levels often results in "Zoom Level Not Supported".
-                int radarZoom = Math.min(zoom, 7);
-                String url = String.format(Locale.US,
-                        "https://tilecache.rainviewer.com/v2/radar/%s/256/%d/%d/%d/4/1_1.png",
-                        timestamp, radarZoom, x, y
-                );
-                try { return new URL(url); }
-                catch (MalformedURLException e) { throw new AssertionError(e); }
-            }
-        };
-        tileOverlay = mMap.addTileOverlay(new TileOverlayOptions()
-                .tileProvider(tileProvider));
-
-        // ─── show the “right now” date immediately
-        tvDate.setText(new Date().toString());
-        Log.d(TAG, "Start Updating Map → " + (new Date()));
-
-        // ─── kick off the animator (which will start at progress=0 → windowStart) ─
-        handler.postDelayed(animator::start, 5_000);
-
-        // ─── (your existing) 10 s fault‐check & recenter loop
-        handler.postDelayed(new Runnable() {
-            @Override public void run() {
-                if (!Faults.getAllActiveDesc().isEmpty()) {
-                    faultButton.setVisibility(View.VISIBLE);
-                } else {
-                    faultButton.setVisibility(View.GONE);
-                }
-                long lm = System.currentTimeMillis();
-                lm -= (lm % TILE_INTERVAL_MS) + TILE_INTERVAL_MS;
-                timestamp = String.valueOf(lm / 1000L);
-                if (MotorcycleData.getLastLocation() != null) {
-                    LatLng loc2 = new LatLng(
-                            MotorcycleData.getLastLocation().getLatitude(),
-                            MotorcycleData.getLastLocation().getLongitude()
-                    );
-                    mMarker.setPosition(loc2);
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(loc2));
-                    tileOverlay.clearTileCache();
-                }
-                handler.postDelayed(this, delay);
-            }
-        }, delay);
+        tvDate.setText("Loading radar...");
+        startRuntimeTasks();
     }
 
-    private void showActionBar(){
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflater.inflate(R.layout.actionbar_nav, null);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setDisplayShowHomeEnabled (false);
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setCustomView(v);
+    private void startRuntimeTasks() {
+        handler.removeCallbacksAndMessages(null);
 
-        TextView navbarTitle = findViewById(R.id.action_title);
-        navbarTitle.setText(R.string.weathermap_title);
+        updateFaultButton();
+        updateMarkerAndCamera(false);
 
-        ImageButton backButton = findViewById(R.id.action_back);
-        ImageButton forwardButton = findViewById(R.id.action_forward);
-        backButton.setOnClickListener(mClickListener);
-        forwardButton.setVisibility(View.INVISIBLE);
-        faultButton = findViewById(R.id.action_faults);
-        faultButton.setOnClickListener(mClickListener);
+        handler.post(faultAndLocationRunnable);
+        handler.post(frameRefreshRunnable);
+    }
 
-        //Check for active faults
+    private void setupRadarOverlay() {
+        TileProvider tileProvider = new UrlTileProvider(RADAR_TILE_SIZE, RADAR_TILE_SIZE) {
+            @Override
+            public URL getTileUrl(int x, int y, int zoom) {
+                if (currentFrameIndex < 0 || currentFrameIndex >= radarFrames.size()) {
+                    return null;
+                }
+
+                int radarZoom = Math.min(zoom, RADAR_MAX_ZOOM);
+                RadarFrame frame = radarFrames.get(currentFrameIndex);
+
+                String url = String.format(
+                        Locale.US,
+                        "%s%s/%d/%d/%d/%d/%d/%s.png",
+                        rainHost,
+                        frame.path,
+                        RADAR_TILE_SIZE,
+                        radarZoom,
+                        x,
+                        y,
+                        RADAR_COLOR_SCHEME,
+                        RADAR_OPTIONS
+                );
+
+                try {
+                    return new URL(url);
+                } catch (MalformedURLException e) {
+                    Log.e(TAG, "Invalid radar tile URL: " + url, e);
+                    return null;
+                }
+            }
+        };
+
+        tileOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(tileProvider));
+    }
+
+    private void loadRainViewerFrames() {
+        new Thread(() -> {
+            HttpURLConnection connection = null;
+            try {
+                URL url = new URL(RAINVIEWER_API_URL);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setConnectTimeout(10_000);
+                connection.setReadTimeout(10_000);
+                connection.setUseCaches(false);
+                connection.setRequestProperty("Accept", "application/json");
+
+                int responseCode = connection.getResponseCode();
+                if (responseCode != HttpURLConnection.HTTP_OK) {
+                    Log.e(TAG, "RainViewer API HTTP error: " + responseCode);
+                    return;
+                }
+
+                String json = readStream(connection.getInputStream());
+                JSONObject root = new JSONObject(json);
+
+                String newHost = root.optString("host", DEFAULT_RAIN_HOST);
+                JSONObject radar = root.optJSONObject("radar");
+                JSONArray past = radar != null ? radar.optJSONArray("past") : null;
+
+                if (past == null || past.length() == 0) {
+                    Log.w(TAG, "RainViewer returned no past radar frames.");
+                    return;
+                }
+
+                ArrayList<RadarFrame> newFrames = new ArrayList<>();
+                for (int i = 0; i < past.length(); i++) {
+                    JSONObject frame = past.getJSONObject(i);
+                    long time = frame.getLong("time");
+                    String path = frame.getString("path");
+                    newFrames.add(new RadarFrame(time, path));
+                }
+
+                runOnUiThread(() -> {
+                    boolean changed = framesChanged(newHost, newFrames);
+
+                    rainHost = newHost;
+                    radarFrames.clear();
+                    radarFrames.addAll(newFrames);
+
+                    if (currentFrameIndex < 0 || currentFrameIndex >= radarFrames.size() || changed) {
+                        applyFrameIndex(radarFrames.size() - 1, true);
+                    } else {
+                        updateDisplayedFrameTime();
+                    }
+
+                    if (tileOverlay != null && changed) {
+                        tileOverlay.clearTileCache();
+                    }
+
+                    if (allowAnimationRestart && radarFrames.size() > 1 && (animator == null || !animator.isRunning())) {
+                        scheduleAnimationRestart(ANIMATION_RESTART_DELAY_MS);
+                    }
+                });
+
+            } catch (Exception e) {
+                Log.e(TAG, "Failed to load RainViewer frames", e);
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+            }
+        }).start();
+    }
+
+    private boolean framesChanged(String newHost, List<RadarFrame> newFrames) {
+        if (!rainHost.equals(newHost)) {
+            return true;
+        }
+
+        if (radarFrames.size() != newFrames.size()) {
+            return true;
+        }
+
+        for (int i = 0; i < radarFrames.size(); i++) {
+            RadarFrame oldFrame = radarFrames.get(i);
+            RadarFrame newFrame = newFrames.get(i);
+
+            if (oldFrame.time != newFrame.time || !oldFrame.path.equals(newFrame.path)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private String readStream(InputStream inputStream) throws Exception {
+        StringBuilder builder = new StringBuilder();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+            builder.append(line);
+        }
+
+        reader.close();
+        return builder.toString();
+    }
+
+    private void applyFrameIndex(int frameIndex, boolean clearCache) {
+        if (frameIndex < 0 || frameIndex >= radarFrames.size()) {
+            return;
+        }
+
+        currentFrameIndex = frameIndex;
+        updateDisplayedFrameTime();
+
+        if (clearCache && tileOverlay != null) {
+            tileOverlay.clearTileCache();
+        }
+    }
+
+    private void updateDisplayedFrameTime() {
+        if (currentFrameIndex >= 0 && currentFrameIndex < radarFrames.size()) {
+            long timeMs = radarFrames.get(currentFrameIndex).time * 1000L;
+            tvDate.setText(new Date(timeMs).toString());
+            Log.d(TAG, "Displaying radar frame: " + new Date(timeMs));
+        }
+    }
+
+    private void scheduleAnimationRestart(long delayMs) {
+        handler.removeCallbacks(animationRestartRunnable);
+        handler.postDelayed(animationRestartRunnable, delayMs);
+    }
+
+    private void updateFaultButton() {
+        if (faultButton == null) {
+            return;
+        }
+
         if (!Faults.getAllActiveDesc().isEmpty()) {
             faultButton.setVisibility(View.VISIBLE);
         } else {
@@ -342,15 +470,69 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
         }
     }
 
-    private void goBack(){
-        Intent backIntent = new Intent(WeatherMapActivity.this, com.blackboxembedded.WunderLINQ.TaskList.TaskActivity.class);
+    private void updateMarkerAndCamera(boolean centerWithZoom) {
+        if (mMap == null || MotorcycleData.getLastLocation() == null) {
+            return;
+        }
+
+        LatLng loc = new LatLng(
+                MotorcycleData.getLastLocation().getLatitude(),
+                MotorcycleData.getLastLocation().getLongitude()
+        );
+
+        if (mMarker == null) {
+            mMarker = mMap.addMarker(new MarkerOptions().position(loc));
+        } else {
+            mMarker.setPosition(loc);
+        }
+
+        if (centerWithZoom) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, currentZoom));
+        } else {
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
+        }
+    }
+
+    private void showActionBar() {
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.actionbar_nav, null);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayShowHomeEnabled(false);
+            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setCustomView(v);
+        }
+
+        TextView navbarTitle = findViewById(R.id.action_title);
+        navbarTitle.setText(R.string.weathermap_title);
+
+        ImageButton backButton = findViewById(R.id.action_back);
+        ImageButton forwardButton = findViewById(R.id.action_forward);
+
+        backButton.setOnClickListener(mClickListener);
+        forwardButton.setVisibility(View.INVISIBLE);
+
+        faultButton = findViewById(R.id.action_faults);
+        faultButton.setOnClickListener(mClickListener);
+
+        updateFaultButton();
+    }
+
+    private void goBack() {
+        Intent backIntent = new Intent(
+                WeatherMapActivity.this,
+                com.blackboxembedded.WunderLINQ.TaskList.TaskActivity.class
+        );
         startActivity(backIntent);
     }
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
 
+    private final View.OnClickListener mClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch(v.getId()) {
+            switch (v.getId()) {
                 case R.id.action_back:
                     goBack();
                     break;
@@ -368,40 +550,38 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 goBack();
                 return true;
+
             case KeyEvent.KEYCODE_DPAD_DOWN:
             case KeyEvent.KEYCODE_MINUS:
             case KeyEvent.KEYCODE_NUMPAD_SUBTRACT:
                 SoundManager.playSound(this, R.raw.directional);
-                //Zoom Out
-                if (currentZoom > 3){
-                    if (MotorcycleData.getLastLocation() != null) {
-                        currentZoom = currentZoom - 1;
-                        LatLng location = new LatLng(MotorcycleData.getLastLocation().getLatitude(), MotorcycleData.getLastLocation().getLongitude());
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, currentZoom));
-                    }
+                if (currentZoom > 3) {
+                    currentZoom = currentZoom - 1;
+                    updateMarkerAndCamera(true);
                 }
                 return true;
+
             case KeyEvent.KEYCODE_DPAD_UP:
             case KeyEvent.KEYCODE_PLUS:
             case KeyEvent.KEYCODE_NUMPAD_ADD:
                 SoundManager.playSound(this, R.raw.directional);
-                //Zoom In
-                if (currentZoom < 16){
-                    if (MotorcycleData.getLastLocation() != null) {
-                        currentZoom = currentZoom + 1;
-                        LatLng location = new LatLng(MotorcycleData.getLastLocation().getLatitude(), MotorcycleData.getLastLocation().getLongitude());
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, currentZoom));
-                    }
+                if (currentZoom < RADAR_MAX_ZOOM) {
+                    currentZoom = currentZoom + 1;
+                    updateMarkerAndCamera(true);
                 }
                 return true;
+
             case KeyEvent.KEYCODE_ENTER:
-                //Center
                 SoundManager.playSound(this, R.raw.enter);
                 if (MotorcycleData.getLastLocation() != null) {
-                    LatLng location = new LatLng(MotorcycleData.getLastLocation().getLatitude(), MotorcycleData.getLastLocation().getLongitude());
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 10));
+                    LatLng location = new LatLng(
+                            MotorcycleData.getLastLocation().getLatitude(),
+                            MotorcycleData.getLastLocation().getLongitude()
+                    );
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, currentZoom));
                 }
                 return true;
+
             default:
                 return super.onKeyUp(keyCode, event);
         }
