@@ -450,6 +450,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                             outputStream.write(MotorcycleData.wlq.getTempConfig());
                             outputStream.write(MotorcycleData.wlq.CMD_EOM());
                             byte[] writeConfigCmd = outputStream.toByteArray();
+                            Log.d(TAG, "Set HWConfig Command Sent: " + Utils.ByteArrayToHex(writeConfigCmd));
                             BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                         } catch (IOException e) {
                             Log.d(TAG, e.toString());
