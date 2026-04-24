@@ -124,50 +124,42 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
 
         @Override
         public void onClick(View v) {
-            switch(v.getId()) {
-                case R.id.prev_button:
-                    if (controller != null) {
-                        controls.skipToPrevious();
-                        refreshMetaData();
+            int id = v.getId();
+            if (id == R.id.prev_button) {
+                if (controller != null) {
+                    controls.skipToPrevious();
+                    refreshMetaData();
+                }
+            } else if (id == R.id.next_button) {
+                if (controller != null) {
+                    controls.skipToNext();
+                    refreshMetaData();
+                }
+            } else if (id == R.id.play_pause_button) {
+                playBack();
+            } else if (id == R.id.action_back) {
+                goBack();
+            } else if (id == R.id.action_forward) {
+                goForward();
+            } else if (id == R.id.action_faults) {
+                Intent faultIntent = new Intent(MusicActivity.this, FaultActivity.class);
+                startActivity(faultIntent);
+            } else if (id == R.id.album_art) {
+                if (controller != null) {
+                    PackageManager packageManager = getPackageManager();
+                    Intent intent = packageManager.getLaunchIntentForPackage(controller.getPackageName());
+                    if (intent != null) {
+                        startActivity(intent);
+                    } else {
+                        // Log a warning and inform the user
+                        Log.e(TAG, "Intent for music player was null, cannot start activity.");
                     }
-                    break;
-                case R.id.next_button:
-                    if (controller != null) {
-                        controls.skipToNext();
-                        refreshMetaData();
-                    }
-                    break;
-                case R.id.play_pause_button:
-                    playBack();
-                    break;
-                case R.id.action_back:
-                    goBack();
-                    break;
-                case R.id.action_forward:
-                    goForward();
-                    break;
-                case R.id.action_faults:
-                    Intent faultIntent = new Intent(MusicActivity.this, FaultActivity.class);
-                    startActivity(faultIntent);
-                    break;
-                case R.id.album_art:
-                    if (controller != null) {
-                        PackageManager packageManager = getPackageManager();
-                        Intent intent = packageManager.getLaunchIntentForPackage(controller.getPackageName());
-                        if (intent != null) {
-                            startActivity(intent);
-                        } else {
-                            // Log a warning and inform the user
-                            Log.e(TAG, "Intent for music player was null, cannot start activity.");
-                        }
-                    }
-                    break;
-                case R.id.album_text:
-                    if (Settings.Secure.getString(getApplication().getContentResolver(),"enabled_notification_listeners") == null
-                        || !Settings.Secure.getString(getApplication().getContentResolver(),"enabled_notification_listeners").contains(getApplicationContext().getPackageName())) {
-                        startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
-                    }
-                    break;
+                }
+            } else if (id == R.id.album_text) {
+                if (Settings.Secure.getString(getApplication().getContentResolver(),"enabled_notification_listeners") == null
+                    || !Settings.Secure.getString(getApplication().getContentResolver(),"enabled_notification_listeners").contains(getApplicationContext().getPackageName())) {
+                    startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+                }
             }
         }
     };

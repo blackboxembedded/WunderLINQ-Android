@@ -172,32 +172,30 @@ public class BikeInfoActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            switch(v.getId()) {
-                case R.id.action_back:
-                    Intent backIntent = new Intent(BikeInfoActivity.this, MainActivity.class);
-                    startActivity(backIntent);
-                    break;
-                case R.id.btReset:
-                    switch(spReset.getSelectedItemPosition()){
-                        case 0: // Reset Cluster Average Speed
-                            BluetoothLeService.writeCharacteristic(characteristic, WLQ_BASE.RESET_CLUSTER_SPEED_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
-                            break;
-                        case 1: // Reset Cluster Economy 1
-                            BluetoothLeService.writeCharacteristic(characteristic, WLQ_BASE.RESET_CLUSTER_ECONO1_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
-                            break;
-                        case 2: // Reset Cluster Economy 2
-                            BluetoothLeService.writeCharacteristic(characteristic, WLQ_BASE.RESET_CLUSTER_ECONO2_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
-                            break;
-                        case 3: // Reset Cluster Trip 1
-                            BluetoothLeService.writeCharacteristic(characteristic, WLQ_BASE.RESET_CLUSTER_TRIP1_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
-                            break;
-                        case 4: // Reset Cluster Trip 2
-                            BluetoothLeService.writeCharacteristic(characteristic, WLQ_BASE.RESET_CLUSTER_TRIP2_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
+            int id = v.getId();
+            if (id == R.id.action_back) {
+                Intent backIntent = new Intent(BikeInfoActivity.this, MainActivity.class);
+                startActivity(backIntent);
+            } else if (id == R.id.btReset) {
+                switch(spReset.getSelectedItemPosition()){
+                    case 0: // Reset Cluster Average Speed
+                        BluetoothLeService.writeCharacteristic(characteristic, WLQ_BASE.RESET_CLUSTER_SPEED_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                        break;
+                    case 1: // Reset Cluster Economy 1
+                        BluetoothLeService.writeCharacteristic(characteristic, WLQ_BASE.RESET_CLUSTER_ECONO1_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                        break;
+                    case 2: // Reset Cluster Economy 2
+                        BluetoothLeService.writeCharacteristic(characteristic, WLQ_BASE.RESET_CLUSTER_ECONO2_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                        break;
+                    case 3: // Reset Cluster Trip 1
+                        BluetoothLeService.writeCharacteristic(characteristic, WLQ_BASE.RESET_CLUSTER_TRIP1_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                        break;
+                    case 4: // Reset Cluster Trip 2
+                        BluetoothLeService.writeCharacteristic(characteristic, WLQ_BASE.RESET_CLUSTER_TRIP2_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     };

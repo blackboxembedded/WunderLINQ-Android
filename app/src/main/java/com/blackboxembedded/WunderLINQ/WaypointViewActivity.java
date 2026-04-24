@@ -247,22 +247,17 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
         mPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                switch(item.getItemId()) {
-                    case R.id.action_open:
-                        open();
-                        break;
-                    case R.id.action_navigate:
-                        navigate();
-                        break;
-                    case R.id.action_share_original:
-                        share("\"text/plain\"", Uri.parse("http://maps.google.com/maps?saddr=" + lat + "," + lon), false);
-                        break;
-                    case R.id.action_share_gpx:
-                        exportGPX();
-                        break;
-                    case R.id.action_delete:
-                        delete();
-                        break;
+                int itemId = item.getItemId();
+                if (itemId == R.id.action_open) {
+                    open();
+                } else if (itemId == R.id.action_navigate) {
+                    navigate();
+                } else if (itemId == R.id.action_share_original) {
+                    share("\"text/plain\"", Uri.parse("http://maps.google.com/maps?saddr=" + lat + "," + lon), false);
+                } else if (itemId == R.id.action_share_gpx) {
+                    exportGPX();
+                } else if (itemId == R.id.action_delete) {
+                    delete();
                 }
                 return true;
             }
@@ -403,14 +398,12 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
 
         @Override
         public void onClick(View v) {
-            switch(v.getId()) {
-                case R.id.action_back:
-                    Intent backIntent = new Intent(WaypointViewActivity.this, WaypointActivity.class);
-                    startActivity(backIntent);
-                    break;
-                case R.id.action_menu:
-                    mPopupMenu.show();
-                    break;
+            int id = v.getId();
+            if (id == R.id.action_back) {
+                Intent backIntent = new Intent(WaypointViewActivity.this, WaypointActivity.class);
+                startActivity(backIntent);
+            } else if (id == R.id.action_menu) {
+                mPopupMenu.show();
             }
         }
     };

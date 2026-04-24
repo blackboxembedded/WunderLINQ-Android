@@ -194,11 +194,10 @@ public class PermissionsActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            switch(v.getId()) {
-                case R.id.action_back:
-                    Intent backIntent = new Intent(PermissionsActivity.this, SettingsActivity.class);
-                    startActivity(backIntent);
-                    break;
+            int id = v.getId();
+            if (id == R.id.action_back) {
+                Intent backIntent = new Intent(PermissionsActivity.this, SettingsActivity.class);
+                startActivity(backIntent);
             }
         }
     };

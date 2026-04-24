@@ -507,17 +507,14 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
         mPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                switch(item.getItemId()) {
-                    case R.id.action_share_original:
-                        Uri uri = FileProvider.getUriForFile(TripViewActivity.this, "com.blackboxembedded.wunderlinq.fileprovider", file);
-                        share("text/csv", uri);
-                        break;
-                    case R.id.action_share_gpx:
-                        exportGPX();
-                        break;
-                    case R.id.action_delete:
-                        delete();
-                        break;
+                int itemId = item.getItemId();
+                if (itemId == R.id.action_share_original) {
+                    Uri uri = FileProvider.getUriForFile(TripViewActivity.this, "com.blackboxembedded.wunderlinq.fileprovider", file);
+                    share("text/csv", uri);
+                } else if (itemId == R.id.action_share_gpx) {
+                    exportGPX();
+                } else if (itemId == R.id.action_delete) {
+                    delete();
                 }
                 return true;
             }
@@ -613,14 +610,12 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
 
         @Override
         public void onClick(View v) {
-            switch(v.getId()) {
-                case R.id.action_back:
-                    Intent backIntent = new Intent(TripViewActivity.this, TripsActivity.class);
-                    startActivity(backIntent);
-                    break;
-                case R.id.action_menu:
-                    mPopupMenu.show();
-                    break;
+            int id = v.getId();
+            if (id == R.id.action_back) {
+                Intent backIntent = new Intent(TripViewActivity.this, TripsActivity.class);
+                startActivity(backIntent);
+            } else if (id == R.id.action_menu) {
+                mPopupMenu.show();
             }
         }
     };

@@ -147,11 +147,10 @@ public class TripsActivity extends AppCompatActivity {
     private View.OnClickListener mClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch(v.getId()) {
-                case R.id.action_back:
-                    Intent backIntent = new Intent(TripsActivity.this, GeoDataActivity.class);
-                    startActivity(backIntent);
-                    break;
+            int id = v.getId();
+            if (id == R.id.action_back) {
+                Intent backIntent = new Intent(TripsActivity.this, GeoDataActivity.class);
+                startActivity(backIntent);
             }
         }
     };

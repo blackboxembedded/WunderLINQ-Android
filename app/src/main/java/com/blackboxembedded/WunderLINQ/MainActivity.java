@@ -387,32 +387,26 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_bike_info:
-                        Intent bikeInfoIntent = new Intent(MainActivity.this, BikeInfoActivity.class);
-                        startActivity(bikeInfoIntent);
-                        break;
-                    case R.id.action_data:
-                        Intent geoDataIntent = new Intent(MainActivity.this, GeoDataActivity.class);
-                        startActivity(geoDataIntent);
-                        break;
-                    case R.id.action_settings:
-                        Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
-                        startActivityForResult(settingsIntent, SETTINGS_CHECK);
-                        break;
-                    case R.id.action_hwsettings:
-                        Intent hwSettingsIntent = new Intent(MainActivity.this, HWSettingsActivity.class);
-                        startActivity(hwSettingsIntent);
-                        break;
-                    case R.id.action_about:
-                        Intent aboutIntent = new Intent(MainActivity.this, AboutActivity.class);
-                        startActivity(aboutIntent);
-                        break;
-                    case R.id.action_exit:
-                        BluetoothLeService.clearNotifications();
-                        stopService(bluetoothLeService);
-                        finishAffinity();
-                        break;
+                int itemId = item.getItemId();
+                if (itemId == R.id.action_bike_info) {
+                    Intent bikeInfoIntent = new Intent(MainActivity.this, BikeInfoActivity.class);
+                    startActivity(bikeInfoIntent);
+                } else if (itemId == R.id.action_data) {
+                    Intent geoDataIntent = new Intent(MainActivity.this, GeoDataActivity.class);
+                    startActivity(geoDataIntent);
+                } else if (itemId == R.id.action_settings) {
+                    Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                    startActivityForResult(settingsIntent, SETTINGS_CHECK);
+                } else if (itemId == R.id.action_hwsettings) {
+                    Intent hwSettingsIntent = new Intent(MainActivity.this, HWSettingsActivity.class);
+                    startActivity(hwSettingsIntent);
+                } else if (itemId == R.id.action_about) {
+                    Intent aboutIntent = new Intent(MainActivity.this, AboutActivity.class);
+                    startActivity(aboutIntent);
+                } else if (itemId == R.id.action_exit) {
+                    BluetoothLeService.clearNotifications();
+                    stopService(bluetoothLeService);
+                    finishAffinity();
                 }
                 return true;
             }
@@ -431,28 +425,23 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         @Override
         public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.action_connect:
-                    Log.d(TAG, "Connect");
-                    if (!(Build.BRAND.startsWith("google") && Build.DEVICE.startsWith("generic"))) {
-                        setupBLE();
-                    } else {
-                        Log.d(TAG, "Running in the emulator");
-                    }
-                    break;
-                case R.id.action_back:
-                    goBack();
-                    break;
-                case R.id.action_forward:
-                    goForward();
-                    break;
-                case R.id.action_faults:
-                    Intent faultIntent = new Intent(MainActivity.this, FaultActivity.class);
-                    startActivity(faultIntent);
-                    break;
-                case R.id.action_menu:
-                    mPopupMenu.show();
-                    break;
+            int id = v.getId();
+            if (id == R.id.action_connect) {
+                Log.d(TAG, "Connect");
+                if (!(Build.BRAND.startsWith("google") && Build.DEVICE.startsWith("generic"))) {
+                    setupBLE();
+                } else {
+                    Log.d(TAG, "Running in the emulator");
+                }
+            } else if (id == R.id.action_back) {
+                goBack();
+            } else if (id == R.id.action_forward) {
+                goForward();
+            } else if (id == R.id.action_faults) {
+                Intent faultIntent = new Intent(MainActivity.this, FaultActivity.class);
+                startActivity(faultIntent);
+            } else if (id == R.id.action_menu) {
+                mPopupMenu.show();
             }
         }
     };

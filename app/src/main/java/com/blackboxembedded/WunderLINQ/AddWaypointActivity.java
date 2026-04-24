@@ -301,17 +301,14 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
 
         @Override
         public void onClick(View v) {
-            switch(v.getId()) {
-                case R.id.action_back:
-                    Intent backIntent = new Intent(AddWaypointActivity.this, WaypointActivity.class);
-                    startActivity(backIntent);
-                    break;
-                case R.id.btSearch:
-                    lookupGeoCode();
-                    break;
-                case R.id.btSave:
-                    saveWaypoint();
-                    break;
+            int id = v.getId();
+            if (id == R.id.action_back) {
+                Intent backIntent = new Intent(AddWaypointActivity.this, WaypointActivity.class);
+                startActivity(backIntent);
+            } else if (id == R.id.btSearch) {
+                lookupGeoCode();
+            } else if (id == R.id.btSave) {
+                saveWaypoint();
             }
         }
     };

@@ -178,22 +178,20 @@ public class AlertActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            switch(v.getId()) {
-                case R.id.btnClose:
-                    finish();
-                    break;
-                case R.id.btnOK:
-                    if (type == ALERT_FUEL) {
-                        if (!NavAppHelper.navigateToFuel(AlertActivity.this, MotorcycleData.getLastLocation())) {
-                            tvAlertBody.setText(getString(R.string.nav_app_feature_not_supported));
-                        }
-                    } else if (type == ALERT_IGNITION) {
-                        //Stop Service
-                        BluetoothLeService.close();
-                        // End App
-                        finishAffinity();
+            int id = v.getId();
+            if (id == R.id.btnClose) {
+                finish();
+            } else if (id == R.id.btnOK) {
+                if (type == ALERT_FUEL) {
+                    if (!NavAppHelper.navigateToFuel(AlertActivity.this, MotorcycleData.getLastLocation())) {
+                        tvAlertBody.setText(getString(R.string.nav_app_feature_not_supported));
                     }
-                    break;
+                } else if (type == ALERT_IGNITION) {
+                    //Stop Service
+                    BluetoothLeService.close();
+                    // End App
+                    finishAffinity();
+                }
             }
         }
     };

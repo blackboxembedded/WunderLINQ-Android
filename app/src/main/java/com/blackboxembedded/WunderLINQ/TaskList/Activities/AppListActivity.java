@@ -158,15 +158,13 @@ public class AppListActivity extends AppCompatActivity {
     private View.OnClickListener mClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch(v.getId()) {
-                case R.id.action_back:
-                    // Go back
-                    goBack();
-                    break;
-                case R.id.action_faults:
-                    Intent faultIntent = new Intent(AppListActivity.this, FaultActivity.class);
-                    startActivity(faultIntent);
-                    break;
+            int id = v.getId();
+            if (id == R.id.action_back) {
+                // Go back
+                goBack();
+            } else if (id == R.id.action_faults) {
+                Intent faultIntent = new Intent(AppListActivity.this, FaultActivity.class);
+                startActivity(faultIntent);
             }
         }
     };

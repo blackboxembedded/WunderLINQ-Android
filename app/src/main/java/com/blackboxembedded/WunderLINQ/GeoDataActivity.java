@@ -85,19 +85,16 @@ public class GeoDataActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            switch(v.getId()) {
-                case R.id.action_back:
-                    Intent backIntent = new Intent(GeoDataActivity.this, MainActivity.class);
-                    startActivity(backIntent);
-                    break;
-                case R.id.llTrips:
-                    Intent tripsIntent = new Intent(GeoDataActivity.this, TripsActivity.class);
-                    startActivity(tripsIntent);
-                    break;
-                case R.id.llWaypoints:
-                    Intent waypointsIntent = new Intent(GeoDataActivity.this, WaypointActivity.class);
-                    startActivity(waypointsIntent);
-                    break;
+            int id = v.getId();
+            if (id == R.id.action_back) {
+                Intent backIntent = new Intent(GeoDataActivity.this, MainActivity.class);
+                startActivity(backIntent);
+            } else if (id == R.id.llTrips) {
+                Intent tripsIntent = new Intent(GeoDataActivity.this, TripsActivity.class);
+                startActivity(tripsIntent);
+            } else if (id == R.id.llWaypoints) {
+                Intent waypointsIntent = new Intent(GeoDataActivity.this, WaypointActivity.class);
+                startActivity(waypointsIntent);
             }
         }
     };

@@ -241,17 +241,14 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
 
         @Override
         public void onClick(View v) {
-            switch(v.getId()) {
-                case R.id.action_back:
-                    goBack();
-                    break;
-                case R.id.action_forward:
-                    goForward();
-                    break;
-                case R.id.action_faults:
-                    Intent faultIntent = new Intent(DashActivity.this, FaultActivity.class);
-                    startActivity(faultIntent);
-                    break;
+            int id = v.getId();
+            if (id == R.id.action_back) {
+                goBack();
+            } else if (id == R.id.action_forward) {
+                goForward();
+            } else if (id == R.id.action_faults) {
+                Intent faultIntent = new Intent(DashActivity.this, FaultActivity.class);
+                startActivity(faultIntent);
             }
         }
     };

@@ -131,15 +131,13 @@ public class WaypointActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            switch(v.getId()) {
-                case R.id.action_back:
-                    Intent backIntent = new Intent(WaypointActivity.this, GeoDataActivity.class);
-                    startActivity(backIntent);
-                    break;
-                case R.id.action_forward:
-                    Intent addIntent = new Intent(WaypointActivity.this, AddWaypointActivity.class);
-                    startActivity(addIntent);
-                    break;
+            int id = v.getId();
+            if (id == R.id.action_back) {
+                Intent backIntent = new Intent(WaypointActivity.this, GeoDataActivity.class);
+                startActivity(backIntent);
+            } else if (id == R.id.action_forward) {
+                Intent addIntent = new Intent(WaypointActivity.this, AddWaypointActivity.class);
+                startActivity(addIntent);
             }
         }
     };

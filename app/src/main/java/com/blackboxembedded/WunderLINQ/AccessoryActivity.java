@@ -295,17 +295,14 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
     private View.OnClickListener mClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch(v.getId()) {
-                case R.id.action_back:
-                    goBack();
-                    break;
-                case R.id.action_forward:
-                    goForward();
-                    break;
-                case R.id.action_faults:
-                    Intent faultIntent = new Intent(AccessoryActivity.this, FaultActivity.class);
-                    startActivity(faultIntent);
-                    break;
+            int id = v.getId();
+            if (id == R.id.action_back) {
+                goBack();
+            } else if (id == R.id.action_forward) {
+                goForward();
+            } else if (id == R.id.action_faults) {
+                Intent faultIntent = new Intent(AccessoryActivity.this, FaultActivity.class);
+                startActivity(faultIntent);
             }
         }
     };

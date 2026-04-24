@@ -179,10 +179,9 @@ public class FaultActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            switch(v.getId()) {
-                case R.id.action_back:
-                    finish();
-                    break;
+            int id = v.getId();
+            if (id == R.id.action_back) {
+                finish();
             }
         }
     };
