@@ -3,31 +3,21 @@
     <!-- MainActivity -->
     <string name="main_title">Motorfiets</string>
     <!-- Permission Requests -->
-    <string name="camera_alert_title">WunderLINQ heeft toestemming nodig om de camera te gebruiken</string>
     <string name="camera_alert_body">De WunderLINQ app heeft toegang nodig tot je camera om foto\'s en video\'s te kunnen maken.</string>
     <string name="contacts_alert_title">WunderLINQ heeft toestemming nodig om de contacten te gebruiken</string>
     <string name="contacts_alert_body">De WunderLINQ app heeft toegang nodig tot je contacten om deze te kunnen bellen.</string>
-    <string name="record_audio_alert_title">WunderLINQ heeft toestemming nodig om audio op te nemen</string>
     <string name="record_audio_alert_body">De WunderLINQ app heeft toegang nodig tot je microfoon om het geluid van je video\'s op te nemen.</string>
-    <string name="location_alert_title">WunderLINQ heeft locatie toestemming nodig</string>
     <string name="location_alert_body">Geef toestemming voor locatie gebruik</string>
-    <string name="write_alert_title">WunderLINQ heeft toestemming nodig voor wijzigingen toe te passen</string>
-    <string name="write_alert_body">Geef toestemming om wijzigingen toe te passen</string>
-    <string name="overlay_alert_title">WunderLINQ heeft video toestemming nodig</string>
     <string name="overlay_alert_body">Geef toestemming zodat de app video kan opnemen </string>
     <string name="negative_alert_title">Functionaliteit beperkt</string>
     <string name="negative_location_alert_body">Door geen locatie toestemming, kan deze app je WunderLINQ niet zien op de achtergrond.</string>
-    <string name="negative_write_alert_body">Door geen wijziging toestemming, kan deze app geen bestanden opslaan.</string>
     <string name="negative_camera_alert_body">Door geen camera toestemming, kan deze app geen foto of video’s maken.</string>
-    <string name="negative_microphone_alert_body">Door geen microfoon toestemming, kan deze app geen video’s opnemen.</string>
     <string name="disclaimer_alert_title">WAARSCHUWING!</string>
     <string name="disclaimer_alert_body">.  Probeer geen route-informatie in te voeren of pas de WunderLINQ tijdens het rijden aan. Het niet volledig opletten van de werking van uw voertuig kan de dood, ernstig letsel of schade aan eigendommen tot gevolg hebben. U neemt de volledige verantwoordelijkheid en het risico op zich voor het gebruik van dit apparaat.</string>
     <string name="disclaimer_ok">Akkoord</string>
     <string name="disclaimer_quit">Stop</string>
     <!-- BLE Stuff Below -->
     <string name="bt_not_supported">BLE wordt niet ondersteund</string>
-    <string name="rdc_front_label">Voorwiel</string>
-    <string name="rdc_rear_label">Achterwiel</string>
     <string name="engine_temp_label">Motortemperatuur</string>
     <string name="ambient_temp_label">Buitentemperatuur</string>
     <string name="odometer_label">Kilometerteller</string>
@@ -41,7 +31,6 @@
     <!-- AboutActivity -->
     <string name="about_title">Over</string>
     <!-- FaultActivity -->
-    <string name="title_activity_fault">Fout Melding</string>
     <string name="fault_title">Actieve foutmeldingen</string>
     <string name="notification_channel">Actieve fout meldingen</string>
     <!-- Fault strings -->
@@ -91,8 +80,6 @@
     <string name="waypoint_view_tv_label_label">Naam</string>
     <string name="waypoint_view_label_hint">Routepunt Label</string>
     <string name="waypoint_view_bt_open">Open in kaart App</string>
-    <string name="waypoint_view_bt_share">Delen</string>
-    <string name="waypoint_view_bt_delete">Verwijderen</string>
     <string name="waypoint_view_waypoint_label">Route punt</string>
     <string name="waypoint_view_share_label">Delen met</string>
     <!-- TripsActivity -->
@@ -111,14 +98,11 @@
     <string name="trip_view_tv_ambient">Omgevingstemperatuur (Min/Gem/Max)</string>
     <string name="trip_view_tv_engine">Motortemperatuur (Min/Gem/Max)</string>
     <!-- CompassActivity -->
-    <string name="compass_title">Kompas</string>
     <!-- MusicActivity -->
     <string name="music_title">Muziek</string>
-    <string name="title_activity_music">Huidig muziek nummer</string>
     <string name="not_found_media_player">Geen passende muziek speller gevonden</string>
     <string name="start_media_player">Start je favoriete media speler om te bedienen</string>
     <string name="unknown">Onbekend</string>
-    <string name="notification_alert_title">WunderLINQ vraagt toestemming voor de media speler</string>
     <string name="notification_alert_body">geef toestemming zodat deze app je media speller kan gebruiken</string>
     <!-- TaskActivity -->
     <string name="quicktask_title">Stop Taak</string>
@@ -138,7 +122,6 @@
     <string name="task_title_voicecontrol">Voice Assistant</string>
     <string name="toast_address_not_set">Geen Huisadres in de instellingen gevonden</string>
     <string name="toast_phone_not_set">Geen Favoriet Nummer in instellingen gevonden</string>
-    <string name="toast_photo_taken">Foto Gemaakt!</string>
     <!-- ContactListActivity -->
     <string name="contactlist_title">Contacten</string>
     <string name="contact_type_0">Algemeen</string>
@@ -198,7 +181,6 @@
     <!-- VideoRecService -->
     <string name="title_video_notification">WunderLINQ opnemen video</string>
     <!-- SettingsActivity -->
-    <string name="title_activity_settings">Instellingen</string>
     <!-- Preference strings -->
     <string name="info_title">Persoonlijke Informatie</string>
     <string name="pref_homeAddress_name">Thuis Adres</string>
@@ -227,7 +209,6 @@
     <string name="orientation_rl">Omgekeerde  Landscape</string>
     <string name="pref_brightness_summary">Toestel brightness maximaal.</string>
     <string name="pref_nightMode_name">Nacht Modus</string>
-    <string name="pref_nightMode_summary">Gebruikers Interface kleuren schema</string>
     <string name="off">Uit</string>
     <string name="on">Aan</string>
     <string name="auto">Auto</string>
@@ -284,8 +265,6 @@
     <string name="delete_bt">Verwijderen</string>
     <string name="weathermap_title">Weerkaart</string>
     <string name="roadbook_app_rabbitrally">Rabbit Rally</string>
-    <string name="task_title_actioncam_start_video">Start ActionCam Opname</string>
-    <string name="task_title_actioncam_stop_video">Stop ActionCam Opname</string>
     <string name="task_title_weathermap">Weerkaart</string>
     <string name="task_title_empty">Leeg</string>
     <string name="delete_waypoint_alert_title">Waarschuwing!</string>
@@ -294,11 +273,9 @@
     <string name="delete_waypoint_alert_body">Verwijder Routepunt\?</string>
     <string name="task_title_roadbook">Wegenkaart</string>
     <string name="task_title_systemvolume">Volume</string>
-    <string name="toast_actioncam_notconnected">ActionCam niet verbonden</string>
     <string name="alert_title_photopreview">Foto Voorbeeld</string>
     <string name="dash_title">Dashboard</string>
     <string name="cancel">Annuleren</string>
-    <string name="pref_actioncam_title">Action Camera</string>
     <string name="share_gpx">Deel GPX</string>
     <string name="fw_version_label">Firmware Versie</string>
     <string name="pref_dashboard_speedsource_name">Dashboard Bron Snelheidsmeter</string>
@@ -306,10 +283,7 @@
     <string name="bike_info_label">Voertuiginformatie</string>
     <string name="appsettings_label">App Instellingen</string>
     <string name="hwsettings_label">HW Instellingen</string>
-    <string name="wwtype_label">Wiel Type</string>
     <string name="config_reset_label">Herstel Instellingen</string>
-    <string name="default_btn_label">Standaard Modus</string>
-    <string name="corrupt_config_label">Configuratie is beschadigd! Reset is nodig</string>
     <string name="usb_threshold_label">USB Poort Controle</string>
     <string name="usbcontrol_off_label">Altijd Uit</string>
     <string name="usbcontrol_on_label">Altijd Aan</string>
@@ -347,9 +321,7 @@
     <string name="pref_display_dashboard_name">Dashboardscherm inschakelen</string>
     <string name="consumption_km">km/L</string>
     <string name="pref_notification_name">Foutmeldingen inschakelen</string>
-    <string name="customize_btn_label">Aanpassen</string>
     <string name="keymode_label">Sleutel Modus</string>
-    <string name="sensitivity_label">Gevoeligheid</string>
     <string name="pref_integrations_settings_title">Integraties</string>
     <string name="call_alert_body">De WunderLINQ app heeft toegang nodig tot bellen om telefoongesprekken mogelijk te maken.</string>
     <string name="geocode_error">Probleem met het opvragen van de geocode</string>
@@ -360,7 +332,6 @@
     <string name="dash_engine_label">Motor</string>
     <string name="dash_range_label">Actieradius</string>
     <string name="dash_rdcf_label">V</string>
-    <string name="dash_cconsumption_label">Verbruik</string>
     <string name="pref_integrations_settings_summary">Zet de integratie van andere applicaties en hardware aan.</string>
     <string name="gpx_import_alert_body">Gebruik viapunten uit GPX bestand\?</string>
     <string name="toast_waypoint_saved">Routepunt opgeslagen</string>
@@ -368,8 +339,6 @@
     <string name="pref_bearing_override_name">GPS richting</string>
     <string name="pref_bearing_override_summary">Gebruik GPS richting in plaats van magnetisch kompas.</string>
     <string name="keymode_default_label">Standaard</string>
-    <string name="dash_odometer_label">Kilometerteller</string>
-    <string name="dash_avgspeed_label">Gem.</string>
     <string name="gpx_import_alert_title">GPX importeren</string>
     <string name="system_default">Standaard systeeminstelling</string>
     <string name="geodata_label">Reizen &amp; Viapunten</string>

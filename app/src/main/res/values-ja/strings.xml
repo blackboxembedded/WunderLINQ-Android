@@ -63,7 +63,6 @@
     <string name="alert_title_fuel">燃料残量低下</string>
     <string name="alert_btn_close">閉じる</string>
     <string name="alert_btn_ok">OK</string>
-    <string name="toast_photo_taken">撮影完了</string>
     <string name="toast_address_not_set">自宅住所が設定されていません</string>
     <string name="task_title_settings">設定</string>
     <string name="task_title_waypoint_nav">地点登録地へのナビゲーション</string>
@@ -86,7 +85,6 @@
     <string name="north_east">北東</string>
     <string name="north_west">北西</string>
     <string name="north">北</string>
-    <string name="compass_title">コンパス</string>
     <string name="cancel_bt">キャンセル</string>
     <string name="delete_bt">消去</string>
     <string name="delete_trip_alert_body">トリップログを消去しますか？</string>
@@ -104,8 +102,6 @@
     <string name="trips_title">記録したトリップログ</string>
     <string name="delete_waypoint_alert_body">ウェイポイントを消去しますか？</string>
     <string name="delete_waypoint_alert_title">警告！</string>
-    <string name="waypoint_view_bt_delete">消去する</string>
-    <string name="waypoint_view_bt_share">共有する</string>
     <string name="waypoint_view_bt_open">地図アプリで開く</string>
     <string name="waypoint_view_tv_label_label">ラベル</string>
     <string name="waypoint_view_tv_lon_label">経度</string>
@@ -164,7 +160,6 @@
     <string name="altitude_header">標高</string>
     <string name="longitude_header">経度</string>
     <string name="latitude_header">緯度</string>
-    <string name="wwtype_label">マルチコントローラータイプ</string>
     <string name="fw_config_title">ワンダーリンク設定</string>
     <string name="close_label">閉じる</string>
     <string name="hwsettings_label">ハードウェア設定</string>
@@ -175,12 +170,9 @@
     <string name="odometer_label">オドメーター</string>
     <string name="ambient_temp_label">外気温</string>
     <string name="engine_temp_label">エンジン温度</string>
-    <string name="rdc_rear_label">後輪</string>
-    <string name="rdc_front_label">前輪</string>
     <string name="disclaimer_quit">やめる</string>
     <string name="disclaimer_ok">同意する</string>
     <string name="disclaimer_alert_title">警告！</string>
-    <string name="negative_microphone_alert_body">マイクへのアクセスが許可されていないためビデオ撮影が出来ません.</string>
     <string name="negative_camera_alert_body">カメラへのアクセスが許可されていないため写真やビデオが撮影出来ません.</string>
     <string name="negative_location_alert_body">位置情報へのアクセスが許可されていないためウェイポイントやロケーションログは使えません.</string>
     <string name="negative_alert_title">機能的制限</string>
@@ -188,7 +180,6 @@
     <string name="toast_waypoint_saved">地点登録の完了（ウェイポイント）</string>
     <string name="geodata_label">トリップログとウェイポイント</string>
     <string name="negative_contacts_alert_body">連絡先へのアクセスが許可されていないため連絡先を表示出来ません.</string>
-    <string name="negative_write_alert_body">写真へのアクセスが許可されていないため写真を保存出来ません.</string>
     <string name="main_title">モーターサイクル</string>
     <string name="ambientlight_label">周囲の明るさ</string>
     <string name="rearbrakes_label">リヤブレーキ</string>
@@ -200,11 +191,8 @@
 \n運転に集中しないと死亡など重大な事故の原因になります.
 \n本APPおよびWUNDERLINQを使う全責任は使用者にあります.</string>
     <string name="tripauto_label">オートトリップ</string>
-    <string name="title_activity_fault">FaultActivity</string>
     <string name="hours">時間</string>
-    <string name="title_activity_music">MusicActivity</string>
     <string name="contactlist_title">連絡先</string>
-    <string name="title_activity_settings">設定</string>
     <string name="pref_nav_app_title">ナビApp選択</string>
     <string name="pref_fuelAlert_summary">燃料低下時に近くのガソリンスタンドへナビゲート</string>
     <string name="info_label">アバウト</string>
@@ -252,7 +240,6 @@
     <string name="pref_orientation_name">画面の横向き／縦向きのロック</string>
     <string name="off">オフ</string>
     <string name="pref_debuglogging_summary">"サポートで必要な場合のみ有効にする, 放置するとパフォーマンスに影響が出ます.  終了後は停止して下さい."</string>
-    <string name="pref_actioncam_title">アクションカメラ</string>
     <string name="pref_integrations_settings_summary">外部アプリおよびハードウェアとの連携を有効にします。</string>
     <string name="pref_integrations_settings_title">連携APP選択（音楽・地図など）</string>
     <string name="timef_24h">24時間表示</string>
@@ -260,18 +247,12 @@
     <string name="pref_time_name">時間のフォーマット</string>
     <string name="weathermap_title">お天気マップ</string>
     <string name="sunrisesunset_header">日の出/日没</string>
-    <string name="toast_actioncam_notset">アクションカメラをアプリセッティングで設定してください</string>
-    <string name="toast_actioncam_notconnected">アクションカメラが接続されていません</string>
     <string name="task_title_weathermap">お天気マップ</string>
-    <string name="task_title_actioncam_stop_video">アクションカメラ録画の停止</string>
-    <string name="task_title_actioncam_start_video">アクションカメラ録画の開始</string>
     <string name="next_service_label">次の整備</string>
     <string name="next_service_date_label">次の整備日</string>
     <string name="bike_info_title">バイク情報</string>
     <string name="bike_info_label">バイク情報</string>
     <string name="notification_alert_body">お知らせへのアクセスを許可してください。　ワンダーリンクがミュージックプレーヤーをコントロールできます</string>
-    <string name="hw_settings_title">ワンダーリンクハードウェアセッティング</string>
-    <string name="accessibilityservice_alert_title">ワンダーリンクはアクセシビリティーサービスの実行が必要です</string>
     <string name="waypoint_view_label_hint">ウェイポイントラベル</string>
     <string name="waypoint_view_waypoint_label">ウェイポイント</string>
     <string name="pref_homeAddress_summary">フォーマット：番地、市町村、都道府県、郵便番号</string>
@@ -280,24 +261,16 @@
     <string name="pref_piporientation_name">PiPオリエンテーション</string>
     <string name="pref_pipgrid_name">PiPセルカウント</string>
     <string name="pref_tpmsAlert_summary">カスタム警告設定圧を使用する</string>
-    <string name="record_audio_alert_title">ワンダーリンクは音声録音の許可が必要です</string>
-    <string name="accessibilityservice_alert_body">アクセシビリティーサービスを有効にしてください。</string>
-    <string name="camera_alert_title">ワンダーリンクはカメラ使用の許可が必要です</string>
     <string name="camera_alert_body">ワンダーリンクアプリは写真や動画撮影のために、カメラにアクセスする必要があります。</string>
     <string name="call_alert_title">ワンダーリンクは電話へのアクセス許可が必要です。ワンダーリンクを操作して電話をかけるためです</string>
     <string name="call_alert_body">ワンダーリンクアプリは電話発信をするために電話へのアクセスをする必要があります。</string>
     <string name="contacts_alert_title">ワンダーリンクは連絡先へのアクセス許可が必要です</string>
     <string name="contacts_alert_body">ワンダーリンクアプリは電話を掛けるために、あなたの連絡先リストにアクセスする必要があります。</string>
     <string name="record_audio_alert_body">ワンダーリンクアプリは動画撮影の音声を取り込むためにマイクへアクセスする必要があります。</string>
-    <string name="location_alert_title">ワンダーリンクはロケーションの許可が必要です</string>
     <string name="location_alert_body">ロケーションへのアクセス許可をしてください</string>
-    <string name="write_alert_title">ワンダーリンクは書き込みの許可が必要です</string>
-    <string name="write_alert_body">書き込みの許可をしてください</string>
-    <string name="overlay_alert_title">ワンダーリンクはオーバーレイの許可が必要です</string>
     <string name="overlay_alert_body">オーバーレイの許可をしてください</string>
     <string name="negative_call_alert_body">電話へのアクセスが許可されていないので電話をかけることができません。</string>
     <string name="negative_record_audio_alert_body">音声録音の許可がされていないので、ビデオを録画できません。</string>
-    <string name="usagestats_alert_title">ワンダーリンクは稼働統計の許可が必要です</string>
     <string name="usagestats_alert_body">稼働統計へのアクセスを許可してください。これにより、ワンダーリンクデバイスが接続されたときに自動的にAPPを起動できます。</string>
     <string name="throttle_label">スロットル</string>
     <string name="avgspeed_label">平均速度</string>
@@ -308,7 +281,6 @@
     <string name="not_found_media_player">起動中のメディアプレーヤーが見つかりません</string>
     <string name="start_media_player">使用可能なメディアプレーヤーを起動する</string>
     <string name="unknown">不明</string>
-    <string name="notification_alert_title">ワンダーリンクはお知らせへのアクセスが必要です</string>
     <string name="task_title_voicecontrol">ボイスアシスタント</string>
     <string name="task_title_homescreen">ホームスクリーン</string>
     <string name="contact_type_2">携帯電話</string>
@@ -342,7 +314,6 @@
     <string name="orientation_rl">ランドスケープ反転</string>
     <string name="pref_brightness_name">ディスプレー明度</string>
     <string name="pref_brightness_summary">ディスプレー明度を最大にする。</string>
-    <string name="pref_nightMode_summary">ユーザーインターフェイス色</string>
     <string name="on">オン</string>
     <string name="auto">オート</string>
     <string name="pref_autoNightModeDelay_name">オートナイトモードディレイ</string>
@@ -375,7 +346,6 @@
     <string name="consumption_gallon_imperial">mpg (標準)</string>
     <string name="consumption_km">Km/L</string>
     <string name="roadbook_app_rabbitrally">Rabbit Rally</string>
-    <string name="sensitivity_label">感度</string>
     <string name="full_scroll_down_label">スクロールダウン</string>
     <string name="full_toggle_right_label">ジョグダイヤルの右押し</string>
     <string name="rtk_display_label">ディスプレイ・オフ</string>
@@ -407,8 +377,6 @@
     <string name="consumer_hid_0x9D_label">チャンネル減分</string>
     <string name="consumer_hid_0xE8_label">MPX</string>
     <string name="consumer_hid_0xE9_label">音量を上げる</string>
-    <string name="dash_fueleconomyone_label">エコノミー１</string>
-    <string name="dash_fueleconomytwo_label">エコノミー２</string>
     <string name="consumer_hid_0xB9_label">ランダムプレイ</string>
     <string name="consumer_hid_0xBC_label">繰り返す</string>
     <string name="consumer_hid_0xC1_label">フレーム戻し</string>
@@ -419,13 +387,8 @@
     <string name="cancel">キャンセル</string>
     <string name="gpx_import_alert_title">GPXの取込み</string>
     <string name="dash_title">ダッシュボード</string>
-    <string name="dash_odometer_label">オドメーター</string>
     <string name="dash_trip1_label">トリップ１</string>
     <string name="dash_trip2_label">トリップ２</string>
-    <string name="dash_tripauto_label">トリップA</string>
-    <string name="customize_btn_label">カスタマイズ</string>
-    <string name="default_btn_label">デフォルトモード</string>
-    <string name="corrupt_config_label">コンフィグレーションの破損！ リセットをしてください。</string>
     <string name="keymode_default_label">デフォルト</string>
     <string name="usb_threshold_label">USBポート操作</string>
     <string name="usbcontrol_engine_label">エンジン上</string>
@@ -435,10 +398,7 @@
     <string name="dash_range_label">幅</string>
     <string name="dash_rdcf_label">F</string>
     <string name="dash_rdcr_label">R</string>
-    <string name="dash_avgspeed_label">AVG</string>
-    <string name="dash_cconsumption_label">CONS</string>
     <string name="dash_altitude_label">ALT</string>
-    <string name="keymode_custom_title">重要なカスタマイズ</string>
     <string name="long_press_label">長押し感度</string>
     <string name="double_press_label">２度押し感度</string>
     <string name="full_scroll_up_label">スクロールアップ</string>
@@ -447,17 +407,14 @@
     <string name="full_toggle_left_long_label">ジョグダイヤル、左長押し</string>
     <string name="full_signal_cancel_label">シグナル・キャンセル</string>
     <string name="full_signal_cancel_long_label">シグナル・キャンセル、長押し</string>
-    <string name="full_long_press_label">長押し</string>
     <string name="rtk_page_label">ページ</string>
     <string name="rtk_page_double_label">ページ、2度押し</string>
     <string name="rtk_zoomp_label">ズームイン</string>
-    <string name="rtk_zoomp_double_label">ズームイン：2度押し</string>
     <string name="rtk_zoomm_label">ズームアウト</string>
     <string name="rtk_zoomm_double_label">ズームアウト：2度押し</string>
     <string name="rtk_speak_label">話す</string>
     <string name="rtk_speak_double_label">話す：2度押し</string>
     <string name="rtk_mute_double_label">消音：2度押し</string>
-    <string name="rtk_double_press_label">2度押し</string>
     <string name="hid_0x00_label">設定なし</string>
     <string name="hid_keyboard_label">通常</string>
     <string name="hid_consumer_label">メディア</string>

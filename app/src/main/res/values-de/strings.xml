@@ -3,23 +3,15 @@
     <!-- MainActivity -->
     <string name="main_title">Motorrad</string>
     <!-- Permission Requests -->
-    <string name="camera_alert_title">WunderLINQ benötigt Zugriff auf Ihre Kamera</string>
     <string name="camera_alert_body">WunderLINQ benötigt Zugriff auf die Kamera, um Fotos und Videos aufzunehmen.</string>
     <string name="contacts_alert_title">WunderLINQ benötigt Zugriff auf Ihre Kontakte</string>
     <string name="contacts_alert_body">WunderLINQ benötigt Zugriff auf Deine Kontakte, um sie anzurufen.</string>
-    <string name="record_audio_alert_title">WunderLINQ benötigt Zugriff auf Ihr Mikrofon</string>
     <string name="record_audio_alert_body">WunderLINQ benötigt Zugriff auf das Mikrofon für den Ton bei Videoaufnahmen.</string>
-    <string name="location_alert_title">WunderLINQ benötigt Zugriff auf Ihren Standort</string>
     <string name="location_alert_body">WunderLINQ benutzt Standortdaten für die Aufzeichnung von Spuren (Tracks) und Daten wie Höhe, GPS-Geschwindigkeit und Richtung.</string>
-    <string name="write_alert_title">WunderLINQ benötigt Schreibzugriff</string>
-    <string name="write_alert_body">WunderLINQ benötigt Schreibzugriff um Reiseaufzeichnungen und Fotos zu speichern.</string>
-    <string name="overlay_alert_title">WunderLINQ benötigt Überlagerungsrecht</string>
     <string name="overlay_alert_body">WunderLINQ benötigt eine Überlagerungserlaubnis, um Videos im Hintergrund aufzunehmen.</string>
     <string name="negative_alert_title">Funktionalität eingeschränkt</string>
     <string name="negative_location_alert_body">Weil der Zugriff zu den Standortdaten nicht gewährt wurde, kann diese App keine Wegpunkte oder Ihren Standort mitschreiben.</string>
-    <string name="negative_write_alert_body">Weil Schreibzugriff nicht gewährt wurde, kann diese App keine Dateien abspeichern.</string>
     <string name="negative_camera_alert_body">Weil Kamerazugriff nicht gewährt wurde, kann diese App keine Fotos oder Videos aufnehmen.</string>
-    <string name="negative_microphone_alert_body">Weil Mikrofonzugriff nicht gewährt wurde, kann diese App keine Videos aufnehmen.</string>
     <string name="disclaimer_alert_title">WARNUNG!</string>
     <string name="disclaimer_alert_body">
         Bitte bedienen Sie das WunderLINQ Gerät nicht während der Fahrt.
@@ -29,15 +21,12 @@
     <string name="disclaimer_ok">Ich stimme zu</string>
     <string name="disclaimer_quit">Beenden</string>
     <string name="bt_not_supported">BLE wird nicht unterstützt</string>
-    <string name="rdc_front_label">Vorderreifen</string>
-    <string name="rdc_rear_label">Hinterreifen</string>
     <string name="engine_temp_label">Motortemperatur</string>
     <string name="ambient_temp_label">Aussentemperatur</string>
     <string name="odometer_label">Kilometerzähler</string>
     <string name="trip1_label">KM-Zähler 1</string>
     <string name="trip2_label">KM-Zähler 2</string>
     <string name="gear_label">Gang</string>
-    <string name="title_activity_fault">Fehleraufzeichnungen</string>
     <string name="fault_title">Aktive Fehler</string>
     <string name="notification_channel">Aktive Fehler</string>
     <string name="fault_ABSSLF">ABS Eigendiagnose nicht beendet</string>
@@ -83,8 +72,6 @@
     <string name="waypoint_view_tv_lat_label">Breitengrad</string>
     <string name="waypoint_view_tv_lon_label">Längengrad</string>
     <string name="waypoint_view_bt_open">In Karten-App öffnen</string>
-    <string name="waypoint_view_bt_share">Teilen</string>
-    <string name="waypoint_view_bt_delete">Löschen</string>
     <string name="waypoint_view_waypoint_label">Wegpunkt</string>
     <string name="waypoint_view_share_label">Teilen via</string>
     <string name="trips_title">Gespeicherte Fahrten</string>
@@ -100,12 +87,9 @@
     <string name="trip_view_tv_brakes">Bremsen (Vorne/Hinten)</string>
     <string name="trip_view_tv_ambient">Aussentemp. (Min/Ø/Max)</string>
     <string name="trip_view_tv_engine">Motortemp. (Min/Ø/Max)</string>
-    <string name="compass_title">Kompass</string>
     <string name="music_title">Musik</string>
-    <string name="title_activity_music">Media-Player</string>
     <string name="start_media_player">Starten Sie Ihren bevorzugten Media-Player für Steuerung</string>
     <string name="unknown">Unbekannt</string>
-    <string name="notification_alert_title">WunderLINQ benötigt Zugriff auf Benachrichtigungen</string>
     <string name="notification_alert_body">WunderLINQ benötigt Zugriff auf Benachrichtigungen um Deinen Media-Player zu steuern.</string>
     <string name="quicktask_title">Schnellzugriff</string>
     <string name="task_title_navigation">Navigation</string>
@@ -122,7 +106,6 @@
     <string name="task_title_voicecontrol">Sprachassistent</string>
     <string name="toast_address_not_set">Keine Nach Hause Adresse gesetzt in den Einstellungen</string>
     <string name="toast_phone_not_set">Keine Bevorzugte Nummer gesetzt in den Einstellungen</string>
-    <string name="toast_photo_taken">Foto aufgenommen!</string>
     <string name="contactlist_title">Kontakte</string>
     <string name="contact_type_0">Spezial</string>
     <string name="contact_type_1">Zuhause</string>
@@ -146,7 +129,6 @@
     <string name="contact_type_19">Assistent</string>
     <string name="contact_type_20">MMS</string>
     <string name="title_video_notification">WunderLINQ Videoaufnahme</string>
-    <string name="title_activity_settings">Einstellungen</string>
     <string name="info_title">Persönliche Angaben</string>
     <string name="pref_homeAddress_name">Adresse (Nach Hause)</string>
     <string name="pref_homeAddress_summary">Format: Strasse 123, 12345 Ort, Staat</string>
@@ -171,7 +153,6 @@
     <string name="sendlogs_body">Bitte beschreiben Sie Ihr Problem:
 \n</string>
     <string name="sendlogs_intent_title">Logdaten senden…</string>
-    <string name="hw_settings_title">WunderLINQ Hardware Einstellungen</string>
     <string name="info_label">Über</string>
     <string name="close_label">Schliessen</string>
     <string name="about_title">Über</string>
@@ -215,7 +196,6 @@
     <string name="pref_orientation_name">Ausrichtungs-Sperre</string>
     <string name="pref_brightness_name">Anzeigehelligkeit</string>
     <string name="pref_brightness_summary">Anzeigehelligkeit auf Maximum setzen.</string>
-    <string name="pref_nightMode_summary">Farbschema der Bedienoberfläche</string>
     <string name="alerting_title">Warnungseinstellungen</string>
     <string name="pref_tpmsAlert_name">Eigener Reifendruck-Schwellwert</string>
     <string name="pref_tpmsAlert_summary">Einen eigenen Schwellwert benutzen für Reifendruck-Alarmierung</string>
@@ -234,7 +214,6 @@
     <string name="south_east">SO</string>
     <string name="west">W</string>
     <string name="east">O</string>
-    <string name="usagestats_alert_title">WunderLINQ benötigt Zugriff auf Benutzungsstatistik</string>
     <string name="usagestats_alert_body">WunderLINQ benötigt Zugriff auf die Benutzungsstatistik, um den Autostart der App zu ermöglichen, wenn die WunderLINQ-Hardware verbunden wird.</string>
     <string name="task_title_empty">Leer</string>
     <string name="pref_tasks_settings_title">Einstellungen Schnellzugriff</string>
@@ -259,7 +238,6 @@
     <string name="appsettings_label">App-Einstellungen</string>
     <string name="hwsettings_label">Geräte-Einstellungen</string>
     <string name="fw_config_title">WunderLINQ Einstellungen</string>
-    <string name="wwtype_label">Scrollrad Typ</string>
     <string name="config_write_label">Einstellungen speichern</string>
     <string name="hwsave_alert_title">Warnung!</string>
     <string name="hwsave_alert_body">Nach dem Speichern von Einstellungen kann das WunderLINQ Gerät u.U. unstabil laufen, bitte entfernen Sie es aus der Halterung und setzen Sie es neu ein.
@@ -302,8 +280,6 @@
     <string name="delete_bt">Löschen</string>
     <string name="cancel_bt">Abbrechen</string>
     <string name="experimental_title">Experimentelle Funktionen</string>
-    <string name="accessibilityservice_alert_title">WunderLINQ benötigt den Zugriffs-Hilfsservice</string>
-    <string name="accessibilityservice_alert_body">WunderLINQ verwendet den Zugriffs-Hilfsservice, um Bild-in-Bild zu ermöglichen.</string>
     <string name="leanangle_header">Neigungswinkel</string>
     <string name="gforce_header">Beschleunigungskraft</string>
     <string name="geodata_label">Aufzeichnungen &amp; Wegpunkte</string>
@@ -339,26 +315,21 @@
     <string name="timef_12h">12 Std</string>
     <string name="timef_24h">24 Std</string>
     <string name="credits_label">Danksagung</string>
-    <string name="toast_actioncam_notset">Bitte ActionCam in den App-Einstellungen auswählen</string>
     <string name="next_service_label">Nächste Wartung</string>
     <string name="pref_contacts_filter_title">Kontakte anzeigen</string>
     <string name="bike_info_title">Motorrad-Information</string>
-    <string name="task_title_actioncam_stop_video">ActionCam Aufnahmestop</string>
     <string name="alert_title_photopreview">Foto-Vorschau</string>
     <string name="barometricpressure_header">Barometrischer Druck</string>
     <string name="sunrisesunset_header">Sonnenaufgang/Untergang</string>
     <string name="bike_info_label">Motorrad-Information</string>
     <string name="next_service_date_label">Nächste fällige Wartung</string>
-    <string name="task_title_actioncam_start_video">ActionCam Aufnahmestart</string>
     <string name="contacts_filter_all">Alle</string>
-    <string name="toast_actioncam_notconnected">ActionCam nicht verbunden</string>
     <string name="weathermap_title">Wetterkarte</string>
     <string name="pref_photopreview_name">Foto-Vorschau</string>
     <string name="task_title_weathermap">Wetterkarte</string>
     <string name="contacts_filter_favorites">Favoriten</string>
     <string name="pref_photopreview_summary">Zeigt das Foto nach Aufnahme an</string>
     <string name="btn_logging_notification_stop">Aufnahme-Stop</string>
-    <string name="pref_actioncam_title">Action-Kamera</string>
     <string name="pref_notification_name">Fehlermeldungen aktivieren</string>
     <string name="consumption_km">km/L</string>
     <string name="consumption_gallon_imperial">mpg(Imperial)</string>
@@ -374,7 +345,6 @@
     <string name="nav_app_calimoto">Calimoto</string>
     <string name="nav_app_bmwconnectedride">BMW Motorrad Connected</string>
     <string name="nav_app_tomtomgo">TomTom GO</string>
-    <string name="nav_app_kurviger">Kurviger</string>
     <string name="nav_app_sygic">Sygic</string>
     <string name="nav_app_mapfactor">Mapfactor Navigator</string>
     <string name="toast_permission_denied">Erforderliche Erlaubnis nicht erteilt.</string>

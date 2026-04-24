@@ -24,23 +24,15 @@
     <!-- MainActivity -->
     <string name="main_title">Moto</string>
     <!-- Permission Requests -->
-    <string name="camera_alert_title">WunderLINQ necesita permiso para usar su cámara</string>
     <string name="camera_alert_body">Por favor, permita el uso de su cámara</string>
     <string name="contacts_alert_title">WunderLINQ necesita permiso para acceder a sus contactos</string>
     <string name="contacts_alert_body">Por favor, permita el acceso a sus contactos</string>
-    <string name="record_audio_alert_title">WunderLINQ necesita permiso para la grabación de audio</string>
     <string name="record_audio_alert_body">Por favor, permita la grabación de audio</string>
-    <string name="location_alert_title">WunderLINQ necesita permiso para el acceso a su localización</string>
     <string name="location_alert_body">Por favor, permita el acceso a su localización</string>
-    <string name="write_alert_title">WunderLINQ necesita permiso para el acceso en escritura</string>
-    <string name="write_alert_body">Por favor, permita el acceso en escritura</string>
-    <string name="overlay_alert_title">WunderLINQ necesita permiso de superposición de aplicaciones</string>
     <string name="overlay_alert_body">Por favor, permita la superposición para que esta aplicación pueda grabar video</string>
     <string name="negative_alert_title">Funcionalidad limitada</string>
     <string name="negative_location_alert_body">Como el acceso a la localización no ha sido permitido, esta aplicación no podrá almacenar waypoints ni registrar (log) su localización.</string>
-    <string name="negative_write_alert_body">Como el acceso en escritura no ha sido permitido, esta aplicación no podrá guardar ficheros.</string>
     <string name="negative_camera_alert_body">Como no se ha permitido el acceso a la cámara, esta aplicación no podrá sacar fotos ni videos.</string>
-    <string name="negative_microphone_alert_body">Como el acceso al micrófono no ha sido permitido, esta aplicación no podrá guardar audios.</string>
     <string name="disclaimer_alert_title">¡AVISO!</string>
     <string name="disclaimer_alert_body">
         No intente introducir información de rutas ni ajuste el WunderLINQ mientras conduce.
@@ -51,8 +43,6 @@
     <string name="disclaimer_quit">Salir</string>
     <!-- BLE Stuff Below -->
     <string name="bt_not_supported">Bluetooth Low Energy (BLE) no está soportado</string>
-    <string name="rdc_front_label">Neumático Delantero</string>
-    <string name="rdc_rear_label">Neumático Trasero</string>
     <string name="engine_temp_label">Temp. Motor</string>
     <string name="ambient_temp_label">Temp. Ambiente</string>
     <string name="odometer_label">Odómetro</string>
@@ -66,7 +56,6 @@
     <!-- AboutActivity -->
     <string name="about_title">Acerca de</string>
     <!-- FaultActivity -->
-    <string name="title_activity_fault">Actividad de Fallos</string>
     <string name="fault_title">Fallos Activos</string>
     <string name="notification_channel">Fallos Activos</string>
     <!-- Fault strings -->
@@ -117,8 +106,6 @@
     <string name="waypoint_view_tv_label_label">Etiqueta</string>
     <string name="waypoint_view_label_hint">Etiqueta del Waypoint</string>
     <string name="waypoint_view_bt_open">Abrir en App de Mapas</string>
-    <string name="waypoint_view_bt_share">Compartir</string>
-    <string name="waypoint_view_bt_delete">Borrar</string>
     <string name="waypoint_view_waypoint_label">Waypoint</string>
     <string name="waypoint_view_share_label">Compartir con</string>
     <!-- TripsActivity -->
@@ -137,14 +124,11 @@
     <string name="trip_view_tv_ambient">Temp. Ambiente (Mín/Med/Máx)</string>
     <string name="trip_view_tv_engine">Temp. Motor (Mín/Med/Máx)</string>
     <!-- CompassActivity -->
-    <string name="compass_title">Brújula</string>
     <!-- MusicActivity -->
     <string name="music_title">Música</string>
-    <string name="title_activity_music">Actividad de música</string>
     <string name="not_found_media_player">No encontrada app reproductor de música compatible</string>
     <string name="start_media_player">Inicie su app reproductor de música favorita para su control</string>
     <string name="unknown">Desconocido</string>
-    <string name="notification_alert_title">WunderLINQ requiere acceso a las notificaciones</string>
     <string name="notification_alert_body">Por favor, permita el acceso a las notificaciones para que esta app pueda controlar su reproductor de música</string>
     <!-- TaskActivity -->
     <string name="quicktask_title">Tareas frecuentes</string>
@@ -164,7 +148,6 @@
     <string name="task_title_voicecontrol">Asistente de voz</string>
     <string name="toast_address_not_set">No está disponible la dirección \"Casa\" en los Ajustes</string>
     <string name="toast_phone_not_set">No está disponible el número favorito en los Ajustes</string>
-    <string name="toast_photo_taken">¡Foto guardada!</string>
     <!-- ContactListActivity -->
     <string name="contactlist_title">Contactos</string>
     <string name="contact_type_0">Personalizados</string>
@@ -224,7 +207,6 @@
     <!-- VideoRecService -->
     <string name="title_video_notification">WunderLINQ grabando video</string>
     <!-- SettingsActivity -->
-    <string name="title_activity_settings">Ajustes</string>
     <!-- Preference strings -->
     <string name="info_title">Información personal</string>
     <string name="pref_homeAddress_name">Dirección Casa</string>
@@ -255,7 +237,6 @@
     <string name="pref_brightness_name">Brillo de la Pantalla</string>
     <string name="pref_brightness_summary">Ajusta el brillo del dispositivo al máximo</string>
     <string name="pref_nightMode_name">Modo noche</string>
-    <string name="pref_nightMode_summary">Esquema de colores del Interfaz de Usuario</string>
     <string name="off">Off</string>
     <string name="on">On</string>
     <string name="auto">Auto</string>
@@ -273,7 +254,6 @@
     <string name="sendlogs_body">Por favor, describa su problema a continuación:
 \n</string>
     <string name="sendlogs_intent_title">Enviar Logs…</string>
-    <string name="hw_settings_title">Ajustes de hardware WunderLINQ</string>
     <string name="hours">h</string>
     <string name="minutes">m</string>
     <string name="seconds">s</string>
@@ -285,7 +265,6 @@
     <string name="south_east">SE</string>
     <string name="west">O</string>
     <string name="east">E</string>
-    <string name="usagestats_alert_title">WunderLINQ requiere el uso del acceso a estadísticas</string>
     <string name="usagestats_alert_body">Por favor, permita el uso de acceso a estadísticas, esto permitirá la ejecución automática de la App cuando el dispositivo WunderLINQ esté conectado.</string>
     <string name="task_title_empty">Vacía</string>
     <string name="pref_tasks_settings_title">Configuración rápida de tareas</string>
@@ -307,7 +286,6 @@
     <string name="appsettings_label">Ajustes de la aplicación</string>
     <string name="hwsettings_label">Ajustes del dispositivo (hardware)</string>
     <string name="fw_config_title">Ajustes de WunderLINQ</string>
-    <string name="wwtype_label">Tipo de rueda</string>
     <string name="config_write_label">Ajustes de Guardar (Save)</string>
     <string name="hwsave_alert_title">¡Aviso!</string>
     <string name="hwsave_alert_body">Después de almacenar nuevos ajustes del hardware, el hardware WunderLINQ será inestable y necesitará ser extraído y, a continuación, repuesto de nuevo en su ubicación (cuna predisposición del GPS).</string>
@@ -354,8 +332,6 @@
     <string name="delete_bt">Borrar</string>
     <string name="cancel_bt">Cancelar</string>
     <string name="experimental_title">Características experimentales</string>
-    <string name="accessibilityservice_alert_title">WunderLINQ necesita ejecutar un servicio de accesibilidad</string>
-    <string name="accessibilityservice_alert_body">Por favor, habilite el servicio de accesibilidad de WunderLINQ.</string>
     <string name="leanangle_header">Ángulo de inclinación</string>
     <string name="gforce_header">Fuerza-G</string>
     <string name="geodata_label">Viajes (trips) &amp; Puntos de paso (Waypoints)</string>
@@ -373,7 +349,6 @@
     <string name="nav_app_mapsme">Maps.me</string>
     <string name="nav_app_osmand">OsmAnd</string>
     <string name="vin_label">VIN</string>
-    <string name="pref_actioncam_title">Cámara de acción</string>
     <string name="pref_integrations_settings_summary">Habilitar la integración con otras apps y otro hardware</string>
     <string name="pref_integrations_settings_title">Integraciones</string>
     <string name="pref_photopreview_summary">Visualiza la foto después de tomarla</string>
@@ -389,11 +364,7 @@
     <string name="barometricpressure_header">Presión barométrica</string>
     <string name="btn_logging_notification_stop">Finalizar grabación</string>
     <string name="alert_title_photopreview">Vista previa de la foto</string>
-    <string name="toast_actioncam_notset">Inicializar el tipo de cámara de acción en los ajustes de la app</string>
-    <string name="toast_actioncam_notconnected">Cámara de acción no conectada</string>
     <string name="task_title_weathermap">Mapa del tiempo</string>
-    <string name="task_title_actioncam_stop_video">Terminar grabación de la cámara de acción</string>
-    <string name="task_title_actioncam_start_video">Iniciar grabación de la cámara de acción</string>
     <string name="task_title_homescreen">Pantalla inicial</string>
     <string name="next_service_label">Siguiente revisión</string>
     <string name="next_service_date_label">Fecha de la siguiente revisión</string>

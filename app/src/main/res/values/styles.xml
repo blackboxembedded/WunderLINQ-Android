@@ -4,12 +4,6 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="WLQTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
-    </style>
-
-    <style name="WLQTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
-    </style>
-
     <style name="CarAppTheme">
         <item name="carColorPrimary">@color/white</item>
         <item name="carColorPrimaryDark">@color/black</item>

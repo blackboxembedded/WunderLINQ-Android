@@ -3,24 +3,15 @@
     <!-- MainActivity -->
     <string name="main_title">Motor</string>
     <!-- Permission Requests -->
-    <string name="camera_alert_title">WunderLINQ potrebuje dovoljenje za uporabo kamere</string>
     <string name="camera_alert_body">Prosim dovolite dostop do kamere</string>
     <string name="contacts_alert_title">WunderLINQ potrebuje dovoljenje za dostop do stikov</string>
     <string name="contacts_alert_body">Prosim dovolite dostop do stikov</string>
-    <string name="record_audio_alert_title">WunderLINQ potrebuje dovoljenje za snemanje zvoka</string>
     <string name="record_audio_alert_body">Prosim dovolite dostop do snemanja zvoka</string>
-    <string name="location_alert_title">WunderLINQ potrebuje dovoljenje za dostop do lokacije</string>
     <string name="location_alert_body">Prosim dovolite dostop do lokacije</string>
-    <string name="write_alert_title">WunderLINQ potrebuje dovoljenje za pisanje</string>
-    <string name="write_alert_body">Prosim dovolite pisanje</string>
-    <string name="overlay_alert_title">WunderLINQ potrebuje dovoljenje za prekrivanje</string>
     <string name="overlay_alert_body">Prosim dovolite prekrivanje, da lahko aplikacija snema video</string>
     <string name="negative_alert_title">Omejena zmogljivost</string>
     <string name="negative_location_alert_body">Ker dostop do lokacije ni dovoljen, aplikacija ne bo shranjevala kažipotov in vaših lokacij.</string>
-    <string name="negative_write_alert_body">Ker zapisovanje ni dovoljeno, aplikacija ne bo shranjevala datotek.</string>
     <string name="negative_camera_alert_body">Ker dostop do kamere ni dovoljen, aplikacija ne bo zajemala slik ali videoposnetkov.</string>
-    <string name="negative_microphone_alert_body">Ker dostop do mikrofona ni dovoljen, aplikacija ne bo zajemala videoposnetkov.</string>
-    <string name="usagestats_alert_title">WunderLINQ potrebuje dostop do stanja porabe podatkov</string>
     <string name="usagestats_alert_body">Prosim dovolite dostop do stanja porabe podatkov, to bo aplikaciji omogočilo samodejni zagon, ko se naprava WunderLINQ poveže.</string>
     <string name="disclaimer_alert_title">POZOR!</string>
     <string name="disclaimer_alert_body">
@@ -32,8 +23,6 @@
     <string name="disclaimer_quit">Izhod</string>
     <!-- BLE Stuff Below -->
     <string name="bt_not_supported">Bluetooth z nizko porabo energije - BLE ni podprt</string>
-    <string name="rdc_front_label">Prednja pnevmatika</string>
-    <string name="rdc_rear_label">Zadnja pnevmatika</string>
     <string name="engine_temp_label">Temperatura motorja</string>
     <string name="ambient_temp_label">Temperatura okolice</string>
     <string name="odometer_label">Merilec razdalje</string>
@@ -47,7 +36,6 @@
     <!-- AboutActivity -->
     <string name="about_title">O aplikaciji</string>
     <!-- FaultActivity -->
-    <string name="title_activity_fault">Dejavnost napake</string>
     <string name="fault_title">Aktivne napake</string>
     <string name="notification_channel">Aktivne napake</string>
     <!-- Fault strings -->
@@ -98,8 +86,6 @@
     <string name="waypoint_view_tv_label_label">Oznaka</string>
     <string name="waypoint_view_label_hint">Oznaka kažipota</string>
     <string name="waypoint_view_bt_open">Odpri v Zemljevidih</string>
-    <string name="waypoint_view_bt_share">Deli</string>
-    <string name="waypoint_view_bt_delete">Izbriši</string>
     <string name="waypoint_view_waypoint_label">Kažipot</string>
     <string name="waypoint_view_share_label">Deli z</string>
     <!-- TripsActivity -->
@@ -121,7 +107,6 @@
     <string name="minutes">m</string>
     <string name="seconds">s</string>
     <!-- CompassActivity -->
-    <string name="compass_title">Kompas</string>
     <string name="north">S</string>
     <string name="north_west">SZ</string>
     <string name="north_east">SV</string>
@@ -132,11 +117,9 @@
     <string name="east">V</string>
     <!-- MusicActivity -->
     <string name="music_title">Glasba</string>
-    <string name="title_activity_music">Glasbena dejavnost</string>
     <string name="not_found_media_player">Ni delujočega predvajalnika glasbe</string>
     <string name="start_media_player">Zaženi ustrezen predvajalnik glasbe</string>
     <string name="unknown">Neznano</string>
-    <string name="notification_alert_title">WunderLINQ potrebuje dovoljenje za obvestila</string>
     <string name="notification_alert_body">Prosim dovolite dostop do obvestil, da lahko aplikacija upravlja vaš predvajalnik glasbe</string>
     <!-- TaskActivity -->
     <string name="quicktask_title">Hitra opravila</string>
@@ -158,7 +141,6 @@
     <string name="task_title_empty">Prazno</string>
     <string name="toast_address_not_set">Ni domačega naslova v nastavitvah</string>
     <string name="toast_phone_not_set">Ni nastavljene številke za hitri klic</string>
-    <string name="toast_photo_taken">Posnetek zajet!</string>
     <!-- ContactListActivity -->
     <string name="contactlist_title">Stiki</string>
     <string name="contact_type_0">Po meri</string>
@@ -218,7 +200,6 @@
     <!-- VideoRecService -->
     <string name="title_video_notification">WunderLINQ snemanje videoposnetkov</string>
     <!-- SettingsActivity -->
-    <string name="title_activity_settings">Nastavitve</string>
     <!-- Preference strings -->
     <string name="info_title">Osebne informacije</string>
     <string name="pref_homeAddress_name">Domači naslov</string>
@@ -255,7 +236,6 @@
     <string name="pref_brightness_name">Svetlost zaslona</string>
     <string name="pref_brightness_summary">Nastavi svetlost na max.</string>
     <string name="pref_nightMode_name">Nočni način</string>
-    <string name="pref_nightMode_summary">Uporabnikova barvna tema</string>
     <string name="off">Izklop</string>
     <string name="on">Vklop</string>
     <string name="auto">Samodejno</string>
@@ -273,12 +253,10 @@
     <string name="sendlogs_body">Prosimo spodaj opišite vaše težave:
 \n</string>
     <string name="sendlogs_intent_title">Pošlji dnevnike…</string>
-    <string name="hw_settings_title">WunderLINQ nastavitve naprave</string>
     <string name="waypoint_view_bt_navigate">Navigacija</string>
     <string name="appsettings_label">Nastavitve aplikacije</string>
     <string name="hwsettings_label">Nastavitve naprave</string>
     <string name="fw_config_title">WunderLINQ nastavitve</string>
-    <string name="wwtype_label">Vrsta kolesa</string>
     <string name="config_write_label">Shrani nastavitve</string>
     <string name="hwsave_alert_title">Pozor!</string>
     <string name="hwsave_alert_body">Po novih nastavitvah postane naprava WunderLINQ nestabilna. Napravo je potrebno odstraniti z nosilca in jo ponovno namestiti. Spremembe nastavitev pritiskov (tipk) lahko vplivajo na upravljanje s koleščkom.</string>
@@ -336,8 +314,6 @@
     <string name="delete_bt">Izbriši</string>
     <string name="cancel_bt">Prekliči</string>
     <string name="experimental_title">Poskusne funkcije</string>
-    <string name="accessibilityservice_alert_title">WunderLINQ mora zagnati pripomoček za osebe s posebnimi potrebami</string>
-    <string name="accessibilityservice_alert_body">Omogočite WunderLINQ pripomoček za osebe s posebnimi potrebami.</string>
     <string name="leanangle_header">Kot nagiba</string>
     <string name="gforce_header">g sila</string>
     <string name="geodata_label">Potovanja in kažipoti</string>
@@ -354,21 +330,16 @@
     <string name="vin_label">Številka šasije</string>
     <string name="pref_integrations_settings_summary">Omogoči integracijo zunanjih aplikacij in naprav.</string>
     <string name="task_title_weathermap">Vremenska slika</string>
-    <string name="task_title_actioncam_stop_video">Ustavi snemanje s kamero</string>
-    <string name="task_title_actioncam_start_video">Začni snemanje s kamero</string>
     <string name="pref_integrations_settings_title">Integracija</string>
     <string name="pref_photopreview_name">Predogled slike</string>
     <string name="timef_24h">24 ur</string>
     <string name="timef_12h">12 ur</string>
     <string name="pref_time_name">Časovni format</string>
-    <string name="pref_actioncam_title">Zunanja kamera</string>
     <string name="sunrisesunset_header">Sončni vzhod/zahod</string>
     <string name="weathermap_title">Vremenska slika</string>
     <string name="next_service_label">Naslednji servis</string>
     <string name="next_service_date_label">Datum naslednjega servisa</string>
     <string name="bike_info_title">Podatki o motorju</string>
-    <string name="toast_actioncam_notset">Nastavite tip kamere v nastavitvah aplikacije</string>
-    <string name="toast_actioncam_notconnected">Kamera ni povezana</string>
     <string name="alert_title_photopreview">Predogled slike</string>
     <string name="bike_info_label">Podatki o motorju</string>
     <string name="pref_photopreview_summary">Prikaže sliko po zajetju</string>
@@ -403,14 +374,11 @@
     <string name="consumption_km">km/L</string>
     <string name="pref_notification_name">Omogočite opozorila napak</string>
     <string name="firstrun_start">WunderLINQ potrebuje mnogo dovoljenj za dostop do vseh funkcij ki jih aplikacija ponuja. Na naslednjih zaslonih bomo pojasnili zakaj potrebujemo posamezno dovoljenje, to vam bomo predstavili le tokrat. Če boste po tem želeli omogočiti posamezna dovoljenja, boste to morali storiti v nastavitvah sistema Android.</string>
-    <string name="corrupt_config_label">Poškodovan Config! Potreben ponovni zagon</string>
     <string name="keymode_default_label">Privzeto</string>
     <string name="usb_threshold_label">Nadzor USB vtičnice</string>
     <string name="usbcontrol_on_label">Vedno vklopljeno</string>
     <string name="usbcontrol_engine_label">Vklopljen motor</string>
     <string name="usbcontrol_off_label">Vedno izklopljeno</string>
-    <string name="keymode_custom_title">Prilagoditev tipk</string>
-    <string name="sensitivity_label">Občutljivost</string>
     <string name="long_press_label">Občutljivost dolgega pritiska</string>
     <string name="double_press_label">Občutljivost dvojnega pritiska</string>
     <string name="full_scroll_up_label">Zavrti gor</string>
@@ -424,8 +392,6 @@
     <string name="pref_notification_summary">O(ne)mogoči vsa opozorila</string>
     <string name="dash_range_label">Domet</string>
     <string name="dash_rdcf_label">F</string>
-    <string name="customize_btn_label">Prilagodi</string>
-    <string name="default_btn_label">Privzeti način</string>
     <string name="dash_ambient_label">Zrak</string>
     <string name="hwreset_alert_body">Trenutne WunderLINQ nastavitve po meri bodo povrnjene na tovarniške.</string>
     <string name="full_toggle_right_long_label">Dolg pritisk koleščka v desno</string>
@@ -438,7 +404,6 @@
     <string name="rtk_mute_label">Utišaj</string>
     <string name="dash_rdcr_label">R</string>
     <string name="leanangle_bike_header">Kot nagiba</string>
-    <string name="nav_app_kurviger">Kurviger 2</string>
     <string name="nav_app_tomtomgo">TomTom GO</string>
     <string name="nav_app_calimoto">Calimoto</string>
     <string name="share">Deli</string>
@@ -451,17 +416,14 @@
     <string name="dash_engine_label">Eng</string>
     <string name="full_signal_cancel_label">Prekliči signal</string>
     <string name="full_signal_cancel_long_label">Prekliči signal dolgega pritiska</string>
-    <string name="full_long_press_label">Dolg pritisk</string>
     <string name="rtk_page_label">Izzovi</string>
     <string name="rtk_zoomm_label">Oddalji</string>
     <string name="rtk_zoomp_label">Približaj</string>
-    <string name="rtk_zoomp_double_label">Približaj, dvojni pritisk</string>
     <string name="rtk_zoomm_double_label">Oddalji, dvojni pritisk</string>
     <string name="rtk_speak_label">Govori</string>
     <string name="rtk_speak_double_label">Govori, dvojni pritisk</string>
     <string name="rtk_display_label">Izklopi prikaz</string>
     <string name="rtk_display_double_label">Prikaz, dvojni pritisk</string>
-    <string name="rtk_double_press_label">Dvojni pritisk</string>
     <string name="hid_0x00_label">Ni nastavljeno</string>
     <string name="pref_dashboard_speedsource_name">Hitrost z armature</string>
     <string name="permissions_title">Dovoljenja</string>
@@ -469,18 +431,12 @@
     <string name="permission_contacts_label">Stiki</string>
     <string name="permission_microphone_label">Mikrofon</string>
     <string name="permission_camera_label">Kamera</string>
-    <string name="permission_storagewrite_label">Zapiši v pomnilnik</string>
     <string name="permission_phone_label">Telefon</string>
     <string name="permission_notification_label">Dostop do obvestil</string>
     <string name="permission_overlays_label">Riši prekrivanja</string>
     <string name="permission_usagestats_label">Statistika porabe</string>
-    <string name="permission_accessbility_label">Dostopnost</string>
     <string name="dash_trip1_label">Trip1</string>
     <string name="dash_trip2_label">Trip2</string>
-    <string name="dash_tripauto_label">TripA</string>
-    <string name="dash_avgspeed_label">Povp.</string>
-    <string name="dash_fueleconomyone_label">Econo1</string>
-    <string name="dash_fueleconomytwo_label">Econo2</string>
     <string name="dash_altitude_label">Višina</string>
     <string name="keyboard_hid_0x2A_label">Backspace</string>
     <string name="hid_keyboard_label">Navadno</string>

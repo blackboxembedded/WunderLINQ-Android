@@ -3,23 +3,15 @@
     <!-- MainActivity -->
     <string name="main_title">Motocykl</string>
     <!-- Permission Requests -->
-    <string name="camera_alert_title">WunderLINQ vyžaduje oprávnění k pořizování fotografií a nahrávání videa</string>
     <string name="camera_alert_body">Udělte prosím oprávnění k pořizování fotografií a nahrávání videa</string>
     <string name="contacts_alert_title">WunderLINQ vyžaduje oprávnění pro přístup ke kontaktům</string>
     <string name="contacts_alert_body">Udělte prosím oprávnění pro přístup ke kontaktům</string>
-    <string name="record_audio_alert_title">WunderLINQ vyžaduje oprávnění pro nahrávání zvuku</string>
     <string name="record_audio_alert_body">Udělte prosím oprávnění pro nahrávání zvuku</string>
-    <string name="location_alert_title">WunderLINQ vyžaduje oprávnění pro přístup k poloze tohoto zařízení</string>
     <string name="location_alert_body">Udělte prosím oprávnění pro přístup k poloze tohoto zařízení</string>
-    <string name="write_alert_title">WunderLINQ vyžaduje oprávnění k zápisu dat</string>
-    <string name="write_alert_body">Udělte prosím oprávnění k zápisu dat</string>
-    <string name="overlay_alert_title">WunderLINQ vyžaduje oprávnění pro zobrazení přes jiné aplikace</string>
     <string name="overlay_alert_body">Udělte prosím oprávnění pro zobrazení přes jiné aplikace</string>
     <string name="negative_alert_title">Funkcionalita omezena</string>
     <string name="negative_location_alert_body">Chybí oprávnění pro přístup k vaší poloze, nebude možné použít nekteré funkce.</string>
-    <string name="negative_write_alert_body">Chybí oprávnění k zápisu dat, nebude možné ukládat soubory.</string>
     <string name="negative_camera_alert_body">Chybí oprávnění k použití kamery, nebude možné pořizovat fotky nebo nahrávat video.</string>
-    <string name="negative_microphone_alert_body">Chybí oprávnění k použití mikrofonu, nebude možné nahrávat video.</string>
     <string name="disclaimer_alert_title">VAROVÁNÍ!</string>
     <string name="disclaimer_alert_body">
         Nepokoušejte se zadat cílové misto nebo měnit nastavení aplikace za jízdy.
@@ -30,8 +22,6 @@
     <string name="disclaimer_quit">Ukončit</string>
     <!-- BLE Stuff Below -->
     <string name="bt_not_supported">BLE není podporováno</string>
-    <string name="rdc_front_label">Přední pneu</string>
-    <string name="rdc_rear_label">Zadní pneu</string>
     <string name="engine_temp_label">Teplota motoru</string>
     <string name="ambient_temp_label">Okolní teplota</string>
     <string name="odometer_label">Ujetá vzdálenost</string>
@@ -45,7 +35,6 @@
     <!-- AboutActivity -->
     <string name="about_title">O aplikaci</string>
     <!-- FaultActivity -->
-    <string name="title_activity_fault">Chybové kódy</string>
     <string name="fault_title">Aktivní chyby</string>
     <string name="notification_channel">Aktivní chyby</string>
     <!-- Fault strings -->
@@ -96,8 +85,6 @@
     <string name="waypoint_view_tv_label_label">Popis</string>
     <string name="waypoint_view_label_hint">Popis uloženého místa</string>
     <string name="waypoint_view_bt_open">Otevřít na mapě</string>
-    <string name="waypoint_view_bt_share">Sdílet</string>
-    <string name="waypoint_view_bt_delete">Smazat</string>
     <string name="waypoint_view_waypoint_label">Uložené místo</string>
     <string name="waypoint_view_share_label">Sdílet s..</string>
     <!-- TripsActivity -->
@@ -119,7 +106,6 @@
     <string name="minutes">min</string>
     <string name="seconds">sek</string>
     <!-- CompassActivity -->
-    <string name="compass_title">Kompas</string>
     <string name="north">S</string>
     <string name="north_west">SZ</string>
     <string name="north_east">SV</string>
@@ -130,11 +116,9 @@
     <string name="east">V</string>
     <!-- MusicActivity -->
     <string name="music_title">Hudba</string>
-    <string name="title_activity_music">Hudba</string>
     <string name="not_found_media_player">Nebyl nalezen kompatibilní přehrávač hudby</string>
     <string name="start_media_player">Otevřete svůj oblíbený přehrávač hudby</string>
     <string name="unknown">Neznámé</string>
-    <string name="notification_alert_title">WunderLINQ potřebuje přístup k upozorněním</string>
     <string name="notification_alert_body">Udělte prosím oprávnění pro přístup k upozorněním pro ovládání hudby</string>
     <!-- TaskActivity -->
     <string name="quicktask_title">Rychlé Akce</string>
@@ -154,7 +138,6 @@
     <string name="task_title_voicecontrol">Hlasový asistent</string>
     <string name="toast_address_not_set">V nastavení chybí adresa domů</string>
     <string name="toast_phone_not_set">V nastavení chybí oblíbené číslo</string>
-    <string name="toast_photo_taken">Fotka pořízena!</string>
     <!-- ContactListActivity -->
     <string name="contactlist_title">Kontakty</string>
     <string name="contact_type_0">Vlastní</string>
@@ -214,7 +197,6 @@
     <!-- VideoRecService -->
     <string name="title_video_notification">WunderLINQ nahrává video</string>
     <!-- SettingsActivity -->
-    <string name="title_activity_settings">Nastavení</string>
     <!-- Preference strings -->
     <string name="info_title">Osobní údaje</string>
     <string name="pref_homeAddress_name">Adresa domů</string>
@@ -245,7 +227,6 @@
     <string name="pref_brightness_name">Jas obrazovky</string>
     <string name="pref_brightness_summary">Nastaví jas obrazovky na maximum.</string>
     <string name="pref_nightMode_name">Noční režim</string>
-    <string name="pref_nightMode_summary">Tmavé barevné schéma</string>
     <string name="off">Vypnuto</string>
     <string name="on">Zapnuto</string>
     <string name="auto">Automaticky</string>
@@ -263,8 +244,6 @@
     <string name="sendlogs_body">Prosím popište problém (anglicky):
 \n</string>
     <string name="sendlogs_intent_title">Odeslat logy…</string>
-    <string name="hw_settings_title">Nastavení WunderLINQ hardware</string>
-    <string name="usagestats_alert_title">WunderLINQ vyžaduje oprávnění pro přístup k údajům o využití</string>
     <string name="usagestats_alert_body">Udělte prosím oprávnění pro přístup k údajům o využití tak, aby bylo možné automaticky spustit aplikaci po připojení k zařízení WunderLINQ.</string>
     <!-- New -->
     <string name="task_title_empty">Prázdná</string>
@@ -290,7 +269,6 @@
     <string name="appsettings_label">Nastavení aplikace</string>
     <string name="hwsettings_label">Nastaveni zařízení</string>
     <string name="fw_config_title">Nastavení WunderLINQ</string>
-    <string name="wwtype_label">Typ otočného ovladače</string>
     <string name="wwMode1">Standardní (GS)</string>
     <string name="wwMode2">RT/K1600</string>
     <string name="keymode_custom_label">Vlastní</string>
@@ -336,8 +314,6 @@
     <string name="delete_bt">Smazat</string>
     <string name="cancel_bt">Zrušít</string>
     <string name="experimental_title">Experimentální funkce</string>
-    <string name="accessibilityservice_alert_title">WunderLINQ vyžaduje přístup k Accessibility Service</string>
-    <string name="accessibilityservice_alert_body">"Udělte prosím oprávnění pro přístup k Accessibilty Service."</string>
     <string name="leanangle_header">Úhel náklonu</string>
     <string name="gforce_header">G</string>
     <string name="geodata_label">Jízdy &amp; Místa</string>
@@ -355,16 +331,12 @@
     <string name="pref_integrations_settings_summary">Povolit integraci s aplikacemi a zařízením třetích stran.</string>
     <string name="vin_label">VIN</string>
     <string name="pref_photopreview_name">Náhled foto</string>
-    <string name="task_title_actioncam_stop_video">Ukončit nahrávání ext. kamerou</string>
-    <string name="toast_actioncam_notset">Nastavte typ externí kamery</string>
     <string name="task_title_weathermap">Povětrnostní mapa</string>
     <string name="bike_info_title">Info o motocyklu</string>
     <string name="bike_info_label">Info o motocyklu</string>
     <string name="pref_contacts_filter_title">Zobrazení kontaktů</string>
-    <string name="toast_actioncam_notconnected">Ext. kamera není připojena</string>
     <string name="next_service_date_label">Datum příštího servisu</string>
     <string name="weathermap_title">Povětrnostní mapa</string>
-    <string name="task_title_actioncam_start_video">Nahrávat video ext. kamerou</string>
     <string name="alert_title_photopreview">Náhled foto</string>
     <string name="btn_logging_notification_stop">Zastavit nahrávání</string>
     <string name="sunrisesunset_header">Východ/Západ Slunce</string>
@@ -372,7 +344,6 @@
     <string name="contacts_filter_all">Vše</string>
     <string name="next_service_label">Datum příštího servisu</string>
     <string name="task_title_homescreen">Domů</string>
-    <string name="pref_actioncam_title">Externí kamera</string>
     <string name="contacts_filter_favorites">Oblíbené</string>
     <string name="pref_photopreview_summary">Zobrazí pořízené foto</string>
 </resources>

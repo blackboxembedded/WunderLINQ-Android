@@ -3,23 +3,15 @@
     <!-- MainActivity -->
     <string name="main_title">Μοτοσυκλέτα</string>
     <!-- Permission Requests -->
-    <string name="camera_alert_title">Το WunderLINQ χρειάζεται την άδειά σας για χρήση της κάμερας σας</string>
     <string name="camera_alert_body">Η εφαρμογή WunderLINQ χρειάζεται πρόσβαση στην κάμερα για λήψη φωτογραφιών και εγγραφή βίντεο.</string>
     <string name="contacts_alert_title">Το WunderLINQ χρειάζεται την άδειά σας για πρόσβαση στις επαφές σας</string>
     <string name="contacts_alert_body">Η εφαρμογή WunderLINQ χρειάζεται πρόσβαση στις επαφές σου, για να τις παραθέτει για κλήση.</string>
-    <string name="record_audio_alert_title">Το WunderLINQ χρειάζεται την άδειά σας για να κάνει καταγραφή ηχητικού αποσπάσματος</string>
     <string name="record_audio_alert_body">Η εφαρμογή WunderLINQ χρειάζεται πρόσβαση στο μικρόφωνο για εγγραφή ήχου στα βίντεο.</string>
-    <string name="location_alert_title">Το WunderLINQ χρειάζεται την άδειά σας για το προσδιορισμό της τοποθεσίας</string>
     <string name="location_alert_body">Η εφαρμογή WunderLINQ χρειάζεται πρόσβαση στη τοποθεσία για να επιτρέπει στην εγγραφή διαδρομής στο παρασκήνιο και καταγραφή δεδομένων. Η πρόσβαση στη τοποθεσία, χρησιμοποιείται επίσης για προσδιορισμό του υψόμετρου, την ταχύτητα μέσω GPS και την κατεύθυνση.</string>
-    <string name="write_alert_title">Το WunderLINQ χρειάζεται την άδειά σας για να κάνει εγγραφή</string>
-    <string name="write_alert_body">Η εφαρμογή WunderLINQ χρειάζεται πρόσβαση στο σύστημα αρχείων για να διατηρεί αρχεία καταγραφών και να κάνει λήψη φωτογραφιών.</string>
-    <string name="overlay_alert_title">Το WunderLINQ χρειάζεται την άδειά σας για εμφάνιση σε πρώτο πλάνο</string>
     <string name="overlay_alert_body">Η εφαρμογή WunderLINQ χρειάζεται πρόσβαση παράθεσης σε πρώτο πλάνο για εγγραφή βίντεο στο παρασκήνιο.</string>
     <string name="negative_alert_title">Περιορισμένη λειτουργικότητα</string>
     <string name="negative_location_alert_body">Εφόσον δεν έχει εκχωρηθεί δικαίωμα πρόσβασης στη τοποθεσία, η εφαρμογή δεν θα μπορεί να αποθηκεύσει προορισμούς ή να καταγράψει την τοποθεσία σας.</string>
-    <string name="negative_write_alert_body">Η εφαρμογή δεν θα μπορεί να αποθηκεύσει αρχεία, όσο δεν έχει εκχωρηθεί πρόσβαση εγγραφής.</string>
     <string name="negative_camera_alert_body">Εφόσον δεν έχει εκχωρηθεί δικαίωμα πρόσβασης στην κάμερα, η εφαρμογή δεν θα μπορεί να κάνει λήψη φωτογραφιών ή εγγραφή βίντεο.</string>
-    <string name="negative_microphone_alert_body">Εφόσον δεν έχει εκχωρηθεί δικαίωμα πρόσβασης στο μικρόφωνο, η εφαρμογή δεν θα μπορεί να κάνει εγγραφή βίντεο.</string>
     <string name="disclaimer_alert_title">ΠΡΟΕΙΔΟΠΟΙΗΣΗ!</string>
     <string name="disclaimer_alert_body">
 		Μην επιχειρήτε να εισάγετε πληροφορίες διαδρομής ή να ρυθμίσετε το WunderLINQ ενώ οδειγείτε.
@@ -30,8 +22,6 @@
     <string name="disclaimer_quit">Κλείσιμο</string>
     <!-- BLE Stuff Below -->
     <string name="bt_not_supported">Το Bluetooth χαμηλής κατανάλωσης δεν υποστηρίζεται</string>
-    <string name="rdc_front_label">Εμπρός ελαστικό</string>
-    <string name="rdc_rear_label">Πίσω ελαστικό</string>
     <string name="engine_temp_label">Θερμ. κινητήρα</string>
     <string name="ambient_temp_label">Θερμ. περιβάλλοντος</string>
     <string name="odometer_label">Χιλιομετρητής</string>
@@ -40,7 +30,6 @@
     <string name="gear_label">Ταχύτητα</string>
     <!-- Data Menu -->
     <!-- FaultActivity -->
-    <string name="title_activity_fault">Δραστιριότητα σφαλμάτων</string>
     <string name="fault_title">Τρέχοντα σφάλματα</string>
     <string name="notification_channel">Τρέχοντα σφάλματα</string>
     <!-- Fault strings -->
@@ -91,8 +80,6 @@
     <string name="waypoint_view_tv_label_label">Τίτλος</string>
     <string name="waypoint_view_label_hint">Τίτλος προορισμού</string>
     <string name="waypoint_view_bt_open">Άνοιγμα στην εφαρμογή χάρτη</string>
-    <string name="waypoint_view_bt_share">Κοινή χρήση</string>
-    <string name="waypoint_view_bt_delete">Διαγραφή</string>
     <string name="waypoint_view_waypoint_label">Προορισμός</string>
     <string name="waypoint_view_share_label">Κοινή χρήση μέσω</string>
     <!-- TripsActivity -->
@@ -111,14 +98,11 @@
     <string name="trip_view_tv_ambient">Θερμοκρασία περιβάλλοντος (Ελάχ/Μέση/Μέγ)</string>
     <string name="trip_view_tv_engine">Θερμοκρασία κινητήρα (Ελάχ/Μέση/Μέγ)</string>
     <!-- CompassActivity -->
-    <string name="compass_title">Πυξίδα</string>
     <!-- MusicActivity -->
     <string name="music_title">Μουσική</string>
-    <string name="title_activity_music">Δραστηριότητα μουσικής</string>
     <string name="not_found_media_player">Δεν βρέθηκε συμβατή ενεργή εφαρμογή αναπαραγωγής μέσων</string>
     <string name="start_media_player">Εκκινήστε την προτιμώμενη εφαρμογή αναπαραγωγής μέσων για έλεγχο</string>
     <string name="unknown">Άγνωστο</string>
-    <string name="notification_alert_title">Το WunderLINQ χρειάζεται πρόσβαση στις ειδοποιήσεις</string>
     <string name="notification_alert_body">Η εφαρμογή WunderLINQ χρειάζεται πρόσβαση στις ειδοποιήσεις ώστε να ελέγχει το πρόγραμμα αναπαραγωγής μουσικής.</string>
     <!-- TaskActivity -->
     <string name="quicktask_title">Γρήγορα εργαλεία</string>
@@ -138,7 +122,6 @@
     <string name="task_title_voicecontrol">Φωνητικές οδηγίες</string>
     <string name="toast_address_not_set">Δεν βρέθηκε αποθηκευμένη προτιμώμενη διεύθυνση στις ρυθμίσεις</string>
     <string name="toast_phone_not_set">Δεν βρέθηκε αποθηκευμένος προτιμώμενος αριθμός στις ρυθμίσεις</string>
-    <string name="toast_photo_taken">Επιτυχής λήψη φωτογραφίας!</string>
     <!-- ContactListActivity -->
     <string name="contactlist_title">Επαφές</string>
     <string name="contact_type_0">Προσαρμοσμένη</string>
@@ -170,7 +153,6 @@
     <!-- VideoRecService -->
     <string name="title_video_notification">WunderLINQ εγγραφή βίντεο</string>
     <!-- SettingsActivity -->
-    <string name="title_activity_settings">Ρυθμίσεις</string>
     <!-- Preference strings -->
     <string name="info_title">Προσωπικές πληροφορίες</string>
     <string name="pref_homeAddress_name">Προτιμώμενη διεύθυνση</string>
@@ -201,7 +183,6 @@
     <string name="pref_brightness_name">Φωτεινότητα οθόνης</string>
     <string name="pref_brightness_summary">Ρυθμίσει την φωτεινότητα της συσκευής στο μέγιστο.</string>
     <string name="pref_nightMode_name">Νυχτερινή λειτουργία</string>
-    <string name="pref_nightMode_summary">Ενεργοποίηση νυχτερινής λειτουργίας, απενεργοποιηεί την αυτόματη εναλλαγή νυχτερινής λειτουργίας</string>
     <string name="pref_autoNightModeDelay_name">Καθυστέρηση αυτόματης εναλλαγής νυχτερινής λειτουργίας σε δευτερόλεπτα</string>
     <string name="pref_autoNightModeDelay_summary">Ρύθμιση αυτόματης εναλλαγής νυχτερινής λειτουργίας σε δευτερόλεπτα</string>
     <string name="alerting_title">Ρυθμίσεις ειδοποιήσεων</string>
@@ -216,7 +197,6 @@
     <string name="sendlogs_body">Παρακαλώ περιγράψτε το πρόβλημα στο πεδίο:
 \n</string>
     <string name="sendlogs_intent_title">Αποστολή αρχείων καταγραφής…</string>
-    <string name="hw_settings_title">Ρυθμίσεις συσκευής WunderLINQ</string>
     <string name="info_label">Περί</string>
     <string name="close_label">Κλείσιμο</string>
     <string name="about_title">Περί</string>
@@ -257,7 +237,6 @@
     <string name="south_east">ΝΑ</string>
     <string name="west">Δ</string>
     <string name="east">Α</string>
-    <string name="usagestats_alert_title">Το WunderLINQ χρειάζεται την άδειά σας για πρόσβαση στα δεδομένα χρήσης</string>
     <string name="usagestats_alert_body">Η εφαρμογή WunderLINQ χρειάζεται πρόσβαση στα δεδομένα χρήσης για αυτόματη εκκίνηση της εφαρμογής όταν συνδέεται η συσκευή WunderLINQ.</string>
     <string name="task_title_empty">Άδεια</string>
     <string name="pref_tasks_settings_title">Παραμετροποίηση δυνατοτήτων</string>
@@ -279,7 +258,6 @@
     <string name="appsettings_label">Ρυθμίσεις εφαρμογής</string>
     <string name="hwsettings_label">Ρυθμίσεις συσκευής</string>
     <string name="fw_config_title">Ρυθμίσεις συσκευής WunderLINQ</string>
-    <string name="wwtype_label">Τύπος περιστροφ. δαχτυλίου</string>
     <string name="config_write_label">Αποθήκευση ρυθμίσεων</string>
     <string name="hwsave_alert_title">Προειδοποίηση!</string>
     <string name="hwsave_alert_body">Μετά την αποθήκευση των νέων ρυθμίσεων συσκευής, η συσκευή WunderLINQ θα είναι ασταθής και θα πρέπει να αφαιρεθεί και να εγκατασταθεί ξανά στη βάση.
@@ -325,8 +303,6 @@
     <string name="delete_bt">Διαγραφή</string>
     <string name="cancel_bt">Ακύρωση</string>
     <string name="experimental_title">Πειραματικά χαρακτηριστικά</string>
-    <string name="accessibilityservice_alert_title">Το WunderLINQ χρειάζεται να εκτελέση την υπηρεσία προσβασιμότητας</string>
-    <string name="accessibilityservice_alert_body">Η εφαρμογή WunderLINQ χρησιμοποιεί την υπηρεσία προσβασιμότητας για να ενεργοποιήσει την παράθεση εφαρμογών μέσω της ίδιας της εφαρμογής.</string>
     <string name="leanangle_header">Γωνία κλίσης κινητού</string>
     <string name="gforce_header">Επιτάχυνση G</string>
     <string name="geodata_label">Διαδρομές &amp; Προορισμοί</string>
@@ -351,21 +327,16 @@
     <string name="vin_label">Αριθμός πλαισίου</string>
     <string name="contacts_filter_favorites">Προτιμώμενες επαφές</string>
     <string name="ambientlight_header">Φωτισμός περιβάλλοντος</string>
-    <string name="toast_actioncam_notset">Ορίστε τύπο action camera στις ρυθμίσεις της εφαρμογής</string>
     <string name="btn_logging_notification_stop">Παύση εγγραφής</string>
     <string name="bike_info_title">Πληροφορίες μοτοσυκλέτας</string>
     <string name="weathermap_title">Χάρτης καιρού</string>
-    <string name="pref_actioncam_title">Action Camera</string>
     <string name="next_service_label">Επόμενη προγραμματισμένη συντήρηση</string>
     <string name="pref_photopreview_name">Προεπισκόπηση φωτογραφίας</string>
     <string name="bike_info_label">Πληροφορίες μοτοσυκλέτας</string>
     <string name="contacts_filter_all">Όλες οι επαφές</string>
-    <string name="toast_actioncam_notconnected">Μη συνδεδεμένη action camera</string>
     <string name="pref_photopreview_summary">Εμφάνιση φωτογραφίας μετά τη λήψη</string>
     <string name="next_service_date_label">Ημερομηνία επόμενης προγραμματισμένης συντήρησης</string>
     <string name="task_title_homescreen">Αρχική οθόνη</string>
-    <string name="task_title_actioncam_start_video">Έναρξη καταγραφής μεσω action camera</string>
-    <string name="task_title_actioncam_stop_video">Παύση καταγραφής μέσω  action camera</string>
     <string name="task_title_weathermap">Χάρτης καιρού</string>
     <string name="alert_title_photopreview">Προεπισκόπηση φωτογραφίας</string>
     <string name="sunrisesunset_header">Ανατολή/Δύση Ηλίου</string>
@@ -381,7 +352,6 @@
     <string name="nav_app_calimoto">Calimoto</string>
     <string name="nav_app_bmwconnectedride">BMW Motorrad Connected</string>
     <string name="nav_app_tomtomgo">TomTom GO</string>
-    <string name="nav_app_kurviger">Kurviger 2</string>
     <string name="nav_app_sygic">Sygic</string>
     <string name="toast_permission_denied">Οι άδειες που απαιτούνται για αυτή την ενέργεια, δεν έχουν δωθεί.</string>
     <string name="toast_waypoint_error">Απαιτείται το γεωμετρικό πλάτος και μήκος</string>
@@ -445,17 +415,13 @@
     <string name="keyboard_hid_0x62_label">Keypad 0 and Insert</string>
     <string name="keyboard_hid_0x65_label">Πληκτρολόγιο Application</string>
     <string name="dash_altitude_label">Υψόμ</string>
-    <string name="default_btn_label">Προεπιλεγμένη λειτουργία</string>
     <string name="keymode_label">Λειτουργία κλειδιού</string>
     <string name="hwreset_alert_body">Οι τρέχουσες προσαρμοσμένες ρυθμίσεις του WunderLINQ  θα επανέλθουν στις εργοστασιακές.</string>
-    <string name="corrupt_config_label">Κατεστραμμένα παραμετροποίηση! Ανάγκη για επαναφορά</string>
     <string name="keymode_default_label">Προεπιλογή</string>
     <string name="usb_threshold_label">Θύρα ελέγχου USB</string>
     <string name="usbcontrol_on_label">Μόνιμα ενεργοποιημένη</string>
     <string name="usbcontrol_engine_label">Σε λειτουργία της μηχανής</string>
     <string name="usbcontrol_off_label">Πάντα απενεργοποιημένη</string>
-    <string name="keymode_custom_title">Παραμετροποίηση κουμπιών</string>
-    <string name="sensitivity_label">Ευαισθησία</string>
     <string name="double_press_label">Ευαισθησία διπλής επιλογής</string>
     <string name="long_press_label">Ευαισθησία παρατεταμένης επιλογής</string>
     <string name="full_scroll_up_label">Κύλιση επάνω</string>
@@ -516,35 +482,25 @@
     <string name="cancel">Ακύρωση</string>
     <string name="gpx_import_alert_title">Εισαγωγή GPX</string>
     <string name="gpx_import_alert_body">Εισαγωγή προορισμών από το GPX</string>
-    <string name="dash_odometer_label">Χιλιομετρητής</string>
     <string name="dash_trip1_label">Διαδρομή1</string>
     <string name="dash_trip2_label">Διαδρομή2</string>
-    <string name="dash_tripauto_label">ΔιαδρομήA</string>
-    <string name="dash_avgspeed_label">Μέση</string>
-    <string name="dash_cconsumption_label">Κατανάλωση</string>
-    <string name="dash_fueleconomyone_label">Οικον1</string>
-    <string name="dash_fueleconomytwo_label">Οικον2</string>
     <string name="dash_engine_label">Κινητ</string>
     <string name="dash_range_label">Εύρος</string>
     <string name="dash_rdcf_label">Ε</string>
     <string name="dash_rdcr_label">Π</string>
-    <string name="customize_btn_label">Παραμετροποίηση</string>
     <string name="full_scroll_down_label">Κύλιση κάτω</string>
     <string name="full_toggle_right_long_label">Παρατεταμένη δεξιά επιλογή WonderWheel</string>
     <string name="full_toggle_left_label">Αριστερή επιλογή  WonderWheel</string>
     <string name="full_signal_cancel_label">Ακύρωση Signal</string>
     <string name="full_signal_cancel_long_label">Ακύρωση Signal παρατεταμένη επιλογή</string>
-    <string name="full_long_press_label">Παρατεταμένη επιλογή</string>
     <string name="rtk_page_label">Σελίδα</string>
     <string name="rtk_zoomp_label">Μεγέθυνση</string>
-    <string name="rtk_zoomp_double_label">Μεγέθυνση διπλή επιλογή</string>
     <string name="rtk_zoomm_label">Σμίκρυνση</string>
     <string name="rtk_zoomm_double_label">Σμίκρυνση διπλή επιλογή</string>
     <string name="rtk_speak_label">Ομιλία</string>
     <string name="rtk_mute_label">Σίγαση</string>
     <string name="rtk_mute_double_label">Σίγαση διπλή επιλογή</string>
     <string name="rtk_display_label">Απενεργοποίηση οθόνης</string>
-    <string name="rtk_double_press_label">Διπλή επιλογή</string>
     <string name="hid_0x00_label">Μη ορισμένο</string>
     <string name="hid_keyboard_label">Στάνταρ</string>
     <string name="hid_consumer_label">Πολυμέσα</string>
@@ -720,8 +676,6 @@
     <string name="consumer_hid_0xF1_label">Ταχύτητα αναπαραγωγής</string>
     <string name="rpmmax_10k">10000</string>
     <string name="permissions_title">Δικαιώματα</string>
-    <string name="permission_storagewrite_label">Εγγραφή στο χώρο αποθήκευσης</string>
-    <string name="permission_accessbility_label">Διευκόλυνση πρόσβασης</string>
     <string name="consumer_hid_0x61_label">Closed Caption</string>
     <string name="consumer_hid_0x62_label">Closed Caption Select</string>
     <string name="consumer_hid_0xA0_label">VCR Plus</string>

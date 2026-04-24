@@ -3,23 +3,15 @@
     <!-- MainActivity -->
     <string name="main_title">Motocicleta</string>
     <!-- Permission Requests -->
-    <string name="camera_alert_title">WunderLINQ necesita permisos para usar tu cámara</string>
     <string name="camera_alert_body">La app WunderLINQ necesita acceso a su cámara para tomar fotos y grabar vídeo.</string>
     <string name="contacts_alert_title">WunderLINQ necesita permisos para leer tus contactos</string>
     <string name="contacts_alert_body">La app WunderLINQ necesita acceder a sus contactos para incluirlos en la lista de marcación.</string>
-    <string name="record_audio_alert_title">WunderLINQ necesita permisos para grabar audio</string>
     <string name="record_audio_alert_body">La app WunderLINQ necesita acceso a su micrófono para grabar audio de vídeo.</string>
-    <string name="location_alert_title">WunderLINQ necesita permiso de ubicación</string>
     <string name="location_alert_body">La app WunderLINQ necesita acceder a su ubicación para permitir la grabación de la ruta en segundo plano y el registro de datos. El permiso de ubicación también se utiliza para registrar datos como la elevación, la velocidad mediante GPS y el rumbo.</string>
-    <string name="write_alert_title">WunderLINQ necesita permiso de escritura</string>
-    <string name="write_alert_body">La aplicación WunderLINQ necesita acceso para escribir archivos para el registro de pistas y fotos.</string>
-    <string name="overlay_alert_title">WunderLINQ necesita permiso para superposición</string>
     <string name="overlay_alert_body">La aplicación WunderLINQ necesita permisos de superposición para la grabación de vídeo en segundo plano.</string>
     <string name="negative_alert_title">Funcionalidad limitada</string>
     <string name="negative_location_alert_body">Dado que no se ha concedido acceso a la ubicación, esta app no podrá guardar waypoints ni registrar tu ubicación.</string>
-    <string name="negative_write_alert_body">Dado que no se ha otorgado acceso de escritura, esta aplicación no podrá guardar archivos.</string>
     <string name="negative_camera_alert_body">Dado que no se ha otorgado acceso a la cámara, esta aplicación no podrá tomar fotos ni videos.</string>
-    <string name="negative_microphone_alert_body">Como no se ha concedido acceso al micrófono, esta aplicación no podrá grabar vídeos.</string>
     <string name="disclaimer_alert_title">¡ADVERTENCIA!</string>
     <string name="disclaimer_alert_body">
         No intente ingresar información de ruta ni ajustar el WunderLINQ mientras conduce.
@@ -30,8 +22,6 @@
     <string name="disclaimer_quit">Salir</string>
     <!-- BLE Stuff Below -->
     <string name="bt_not_supported">No es compatible con BLE</string>
-    <string name="rdc_front_label">Rueda Del</string>
-    <string name="rdc_rear_label">Rueda Tra</string>
     <string name="engine_temp_label">Temp. Motor</string>
     <string name="ambient_temp_label">Temp. Ambiente</string>
     <string name="odometer_label">Odómetro</string>
@@ -40,7 +30,6 @@
     <string name="gear_label">Marcha</string>
     <!-- Data Menu -->
     <!-- FaultActivity -->
-    <string name="title_activity_fault">Actividad de fallas</string>
     <string name="fault_title">Fallas Activas</string>
     <string name="notification_channel">Fallas Activas</string>
     <!-- Fault strings -->
@@ -91,8 +80,6 @@
     <string name="waypoint_view_tv_label_label">Etiqueta</string>
     <string name="waypoint_view_label_hint">Etiqueta de Waypoint</string>
     <string name="waypoint_view_bt_open">Abrir en App de Mapas</string>
-    <string name="waypoint_view_bt_share">Compartir</string>
-    <string name="waypoint_view_bt_delete">Eliminar</string>
     <string name="waypoint_view_share_label">Compartir vía</string>
     <!-- TripsActivity -->
     <!-- TripViewActivity -->
@@ -109,14 +96,11 @@
     <string name="trip_view_tv_ambient">Temp. Ambiente (Min/Prom/Máx)</string>
     <string name="trip_view_tv_engine">Temp. Motor (Min/Prom/Máx)</string>
     <!-- CompassActivity -->
-    <string name="compass_title">Compás</string>
     <!-- MusicActivity -->
     <string name="music_title">Música</string>
-    <string name="title_activity_music">Actividad Musical</string>
     <string name="not_found_media_player">No se encontró ningún reproductor multimedia en ejecución</string>
     <string name="start_media_player">Inicie un reproductor multimedia compatible</string>
     <string name="unknown">Desconocido</string>
-    <string name="notification_alert_title">WunderLINQ necesita acceso a las notificaciones</string>
     <string name="notification_alert_body">La aplicación WunderLINQ necesita acceso a las notificaciones para poder controlar su reproductor de música.</string>
     <!-- TaskActivity -->
     <string name="quicktask_title">Tareas Rápidas</string>
@@ -132,7 +116,6 @@
     <string name="task_title_stop_trip">Detener Bitácora de Trip</string>
     <string name="toast_address_not_set">No Se Ha Configurado La Dirección Ir a Casa en Ajustes</string>
     <string name="toast_phone_not_set">No Se ha Configurado un Número Favorito en Ajustes</string>
-    <string name="toast_photo_taken">Fotografía Tomada!</string>
     <!-- ContactListActivity -->
     <string name="contactlist_title">Contactos</string>
     <string name="contact_type_0">Personalizado</string>
@@ -164,7 +147,6 @@
     <!-- VideoRecService -->
     <string name="title_video_notification">WunderLINQ Grabando Video</string>
     <!-- SettingsActivity -->
-    <string name="title_activity_settings">Configuraciones</string>
     <!-- Preference strings -->
     <string name="info_title">Información Personal</string>
     <string name="pref_homeAddress_name">Dirección De Domicilio</string>
@@ -207,7 +189,6 @@
     <string name="sendlogs_body">Por favor, describa su problema a continuación:
 \n</string>
     <string name="sendlogs_intent_title">Enviar registros…</string>
-    <string name="hw_settings_title">Configuración del dispositivo WunderLINQ</string>
     <string name="north">N</string>
     <string name="north_west">NW</string>
     <string name="north_east">NE</string>
@@ -222,7 +203,6 @@
     <string name="tripone_header">Trip 1</string>
     <string name="triptwo_header">Trip 2</string>
     <string name="tripauto_header">Auto Trip</string>
-    <string name="pref_nightMode_summary">Esquema de color de la interfaz de usuario</string>
     <string name="eighth">Octavo</string>
     <string name="eleventh">Décimo Primero</string>
     <string name="tripauto_label">Auto Trip</string>
@@ -246,7 +226,6 @@
     <string name="toast_gpx_saved">GPX Importado</string>
     <string name="permission_location_label">Ubicación</string>
     <string name="permissions_title">Permisos</string>
-    <string name="accessibilityservice_alert_title">WunderLINQ necesita ejecutar el Servicio de Accesibilidad</string>
     <string name="throttle_label">Aceleración</string>
     <string name="credits_label">Créditos</string>
     <string name="task_title_gopro">Control GoPro</string>
@@ -268,7 +247,6 @@
     <string name="timef_24h">24h</string>
     <string name="pref_pip_name">Activar el Modo Imagen en Imagen</string>
     <string name="pref_integrations_settings_summary">Habilitar la integración con apps y dispositivos de terceros.</string>
-    <string name="pref_actioncam_title">Cámara de Acción</string>
     <string name="rtk_display_label">Pantalla Apagada</string>
     <string name="hid_keyboard_label">Estándar</string>
     <string name="keyboard_hid_0x1B_label">Tecla x</string>
@@ -303,7 +281,6 @@
     <string name="time_header">Hora</string>
     <string name="version_label">Versión:</string>
     <string name="rtk_page_label">Página</string>
-    <string name="full_long_press_label">Presión Prolongada</string>
     <string name="btn_documentation_title">Documentación</string>
     <string name="keyboard_hid_modifier_0x08_label">Tecla Meta Izquierda</string>
     <string name="keyboard_hid_modifier_0x04_label">Tecla Alt Izquierda</string>
@@ -313,7 +290,6 @@
     <string name="consumer_hid_0x99_label">Selección de medios desde Seguridad</string>
     <string name="consumer_hid_0xE6_label">Modo Surround</string>
     <string name="consumer_hid_0xE7_label">Intensidad</string>
-    <string name="phone_state_alert_title">WunderLINQ necesita permiso del estado del teléfono</string>
     <string name="phone_state_alert_body">La app WunderLINQ necesita permisos de estado del teléfono para el indicador de intensidad de la señal celular.</string>
     <string name="leanangle_header">Ángulo De Inclinación Móvil</string>
     <string name="consumer_hid_0xF3_label">Reproducción Prolongada</string>
@@ -325,7 +301,6 @@
     <string name="reset_header">Restablecimiento de los datos del cluster</string>
     <string name="reset_btn_label">Reiniciar</string>
     <string name="fw_version_label">Versión del Firmware</string>
-    <string name="wwtype_label">Tipo de Rueda</string>
     <string name="wwMode1">Full</string>
     <string name="fw_config_title">Configuración de WunderLINQ</string>
     <string name="next_service_date_label">Fecha del Próximo Servicio</string>
@@ -348,7 +323,6 @@
     <string name="sixteenth">Decimo Sexto</string>
     <string name="eighteenth">Decimo Octavo</string>
     <string name="keyboard_hid_0x26_label">Tecla 9</string>
-    <string name="toast_actioncam_notset">Configure El Tipo De Cámara De acción en los ajustes de la aplicación</string>
     <string name="task_title_empty">Vacío</string>
     <string name="keyboard_hid_0x35_label">Tecla acento grave y tilde</string>
     <string name="nav_app_cruiser">Cruiser</string>
@@ -367,14 +341,10 @@
     <string name="keyboard_hid_0x9C_label">Tecla Limpiar</string>
     <string name="dash_rdcr_label">R</string>
     <string name="dash_altitude_label">ELEV</string>
-    <string name="customize_btn_label">Personalizar</string>
-    <string name="default_btn_label">Modo Predeterminado</string>
-    <string name="corrupt_config_label">Configuración Corrupta! Es Necesario Reiniciar</string>
     <string name="hwreset_alert_body">La configuración personalizada actual de WunderLINQ se restablecerá a los valores predeterminados de fábrica.</string>
     <string name="usb_threshold_label">Puerto de control USB</string>
     <string name="usbcontrol_on_label">Siempre Encendido</string>
     <string name="usbcontrol_off_label">Siempre Apagado</string>
-    <string name="keymode_custom_title">Personalización de Llaves</string>
     <string name="rtk_zoomp_label">Zoom+</string>
     <string name="rtk_speak_double_label">Doble pulsación para hablar</string>
     <string name="rtk_page_double_label">Doble pulsación Página</string>
@@ -466,10 +436,8 @@
     <string name="share">Compartir</string>
     <string name="permission_overlays_label">Dibujar Superposiciones</string>
     <string name="permission_usagestats_label">Estadísticas de Uso</string>
-    <string name="permission_accessbility_label">Servicio de Accesibilidad</string>
     <string name="delete">Borrar</string>
     <string name="cancel">Cancelar</string>
-    <string name="dash_fueleconomytwo_label">Eco2</string>
     <string name="full_toggle_right_label">Rueda a la Derecha</string>
     <string name="full_toggle_right_long_label">Presión prolongada de la rueda al lado derecho</string>
     <string name="keyboard_hid_modifier_0x40_label">Tecla Alt Derecha</string>
@@ -497,13 +465,11 @@
     <string name="rtk_display_double_label">Doble Pulsación Pantalla</string>
     <string name="keyboard_hid_0x87_label">Teclado Internacional1</string>
     <string name="firstrun_button_ok">De acuerdo</string>
-    <string name="accessibilityservice_alert_body">La app WunderLINQ utiliza el servicio de accesibilidad para permitir el inicio Picture-in-Picture.</string>
     <string name="call_alert_body">La app WunderLINQ necesita acceso al teléfono para iniciar llamadas.</string>
     <string name="firstrun_button_skip">En desacuerdo</string>
     <string name="call_alert_title">WunderLINQ necesita permisos para utilizar su teléfono para realizar llamadas telefónicas</string>
     <string name="negative_call_alert_body">Dado que no se ha concedido acceso al teléfono, esta aplicación no podrá realizar llamadas telefónicas.</string>
     <string name="negative_record_audio_alert_body">Dado que no se ha concedido acceso a la grabación de audio, esta aplicación no podrá grabar vídeos.</string>
-    <string name="usagestats_alert_title">WunderLINQ necesita acceso a las estadísticas de uso</string>
     <string name="no_pairing_alert_title">WunderLINQ no emparejado</string>
     <string name="no_pairing_alert_body">No hay un WunderLINQ emparejado. Por favor, empareje su WunderLINQ en los Ajustes Bluetooth.</string>
     <string name="too_many_pairings_alert_title">Más de un WunderLINQ emparejado</string>
@@ -528,8 +494,6 @@
     <string name="system_default">Predeterminado del Sistema</string>
     <string name="waypoints_nav_title">Waypoints</string>
     <string name="full_scroll_down_label">Desplazar Hacia Abajo</string>
-    <string name="task_title_actioncam_stop_video">Detener Grabación Cámara de Acción</string>
-    <string name="task_title_actioncam_start_video">Iniciar Grabación Cámara de Acción</string>
     <string name="keyboard_hid_0x0B_label">Tecla h</string>
     <string name="keyboard_hid_0x16_label">Tecla s</string>
     <string name="keyboard_hid_0x2E_label">Tecla =</string>
@@ -567,7 +531,6 @@
     <string name="waypoint_view_tv_elevation_label">Elevación</string>
     <string name="trip_view_label_hint">Etiqueta de Trip</string>
     <string name="nogpremote_alert_body">El control de GoPro lo proporciona una aplicación gratuita independiente llamada WunderLINQ GoPro Remote. Haz clic en ACEPTAR para instalarla.</string>
-    <string name="toast_actioncam_notconnected">Cámara De Acción No Conectada</string>
     <string name="weathermap_title">Mapa Meteorológico</string>
     <string name="rpmmax_10k">10000</string>
     <string name="rpmmax_12k">12000</string>
@@ -579,7 +542,6 @@
     <string name="third">Tercero</string>
     <string name="pref_piporientation_name">Orientación PiP</string>
     <string name="gpx_import_alert_title">Importar GPX</string>
-    <string name="dash_odometer_label">Odo</string>
     <string name="keyboard_hid_0x31_label">Tecla \\</string>
     <string name="keyboard_hid_0x32_label">Tecla No-US # y ~</string>
     <string name="keyboard_hid_0x9D_label">Tecla Anterior</string>
@@ -589,7 +551,6 @@
     <string name="share_gpx">Compartir GPX</string>
     <string name="consumer_hid_0xB3_label">Avance rápido</string>
     <string name="task_title_front_start_record">Iniciar Grabación Selfie</string>
-    <string name="task_title_rear_stop_record">Detener Grabación Selfie</string>
     <string name="applist_title">Apps</string>
     <string name="alert_title_photopreview">Vista Previa Foto</string>
     <string name="voltage_header">Voltaje</string>
@@ -608,7 +569,6 @@
     <string name="keyboard_hid_0x19_label">Tecla v</string>
     <string name="keyboard_hid_0x27_label">Tecla 0</string>
     <string name="keyboard_hid_0x37_label">Tecla .</string>
-    <string name="btconnect_alert_title">WunderLINQ necesita permiso de acceso a Bluetooth</string>
     <string name="btconnect_alert_body">La aplicación WunderLINQ necesita poder conectarse al dispositivo WunderLINQ.</string>
     <string name="keyboard_hid_0x8D_label">Teclado Internacional7</string>
     <string name="keyboard_hid_0x99_label">Tecla Borrado alternativo</string>
@@ -635,7 +595,6 @@
     <string name="usbcontrol_engine_label">Encendido</string>
     <string name="rtk_zoomm_label">Zoom-</string>
     <string name="rtk_speak_label">Hablar</string>
-    <string name="rtk_zoomp_double_label">Doble pulsación Zoom+</string>
     <string name="rtk_zoomm_double_label">Doble pulsación Zoom-</string>
     <string name="hid_0x00_label">No Configurado</string>
     <string name="keyboard_hid_0x15_label">Tecla r</string>
@@ -729,7 +688,6 @@
     <string name="consumer_hid_0xE3_label">Bajo</string>
     <string name="keymode_media_label">Media</string>
     <string name="KEYMODE_DIRECT_label">Direct</string>
-    <string name="sensitivity_label">Sensibilidad</string>
     <string name="long_press_label">Sensibilidad Presión Prolongada</string>
     <string name="full_scroll_up_label">Desplazar Hacia Arriba</string>
     <string name="double_press_label">Sensibilidad Doble Presión</string>
@@ -759,7 +717,6 @@
     <string name="consumer_hid_0xE0_label">Volumen</string>
     <string name="fw_ver_label">Firmware:</string>
     <string name="app_ver_label">App:</string>
-    <string name="rtk_double_press_label">Doble Pulsación</string>
     <string name="consumer_hid_0x21_label">+100</string>
     <string name="consumer_hid_0x33_label">suspender después</string>
     <string name="consumer_hid_0x22_label">AM/PM</string>
@@ -803,10 +760,7 @@
     <string name="contacts_filter_favorites">Favoritos</string>
     <string name="contacts_filter_all">Todo</string>
     <string name="permission_contacts_label">Contactos</string>
-    <string name="permission_storagewrite_label">Escribir en el Almacenamiento</string>
     <string name="permission_phonestate_label">Leer el estado del teléfono</string>
-    <string name="dash_avgspeed_label">PROMEDIO</string>
-    <string name="dash_cconsumption_label">CONS</string>
     <string name="dash_engine_label">Mot</string>
     <string name="keymode_default_label">Predeterminado</string>
     <string name="keymode_custom_label">Personalizado</string>
@@ -823,8 +777,6 @@
     <string name="keyboard_hid_0x2A_label">Retroceso</string>
     <string name="keyboard_hid_0x30_label">Tecla ]</string>
     <string name="dash_trip2_label">Trip2</string>
-    <string name="dash_tripauto_label">TripA</string>
-    <string name="dash_fueleconomyone_label">Eco1</string>
     <string name="keyboard_hid_0x50_label">Flecha Izquierda</string>
     <string name="keyboard_hid_0x4F_label">Flecha Derecha</string>
     <string name="keyboard_hid_0x59_label">Teclado numérico 1 y Fin</string>
