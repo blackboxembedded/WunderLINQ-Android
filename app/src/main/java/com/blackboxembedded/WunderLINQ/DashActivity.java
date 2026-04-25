@@ -28,8 +28,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Looper;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -65,7 +64,6 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
     private ImageButton faultButton;
 
     private SVGImageView dashboardView;
-    private SVG svg;
     private SvgFileResolver svgFileResolver;
     private GestureDetectorListener gestureDetector;
     private CountDownTimer cTimer = null;
@@ -73,8 +71,8 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
     private boolean dashUpdateRunning = false;
     private long lastUpdate = 0;
 
-    private int numDashboard = 3;
-    private int numInfoLine = 4;
+    private final int numDashboard = 3;
+    private final int numInfoLine = 4;
     private int currentDashboard = 1;
     private int currentInfoLine = 1;
 
@@ -237,19 +235,15 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
         }
     }
 
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            int id = v.getId();
-            if (id == R.id.action_back) {
-                goBack();
-            } else if (id == R.id.action_forward) {
-                goForward();
-            } else if (id == R.id.action_faults) {
-                Intent faultIntent = new Intent(DashActivity.this, FaultActivity.class);
-                startActivity(faultIntent);
-            }
+    private final View.OnClickListener mClickListener = v -> {
+        int id = v.getId();
+        if (id == R.id.action_back) {
+            goBack();
+        } else if (id == R.id.action_forward) {
+            goForward();
+        } else if (id == R.id.action_faults) {
+            Intent faultIntent = new Intent(DashActivity.this, FaultActivity.class);
+            startActivity(faultIntent);
         }
     };
 
@@ -282,32 +276,34 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_ENTER:
+        return switch (keyCode) {
+            case KeyEvent.KEYCODE_ENTER -> {
                 nextDashboard();
-                return true;
-            case KeyEvent.KEYCODE_ESCAPE:
+                yield true;
+            }
+            case KeyEvent.KEYCODE_ESCAPE -> {
                 prevDashboard();
-                return true;
-            case KeyEvent.KEYCODE_DPAD_UP:
-            case KeyEvent.KEYCODE_PLUS:
-            case KeyEvent.KEYCODE_NUMPAD_ADD:
+                yield true;
+            }
+            case KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_PLUS, KeyEvent.KEYCODE_NUMPAD_ADD -> {
                 nextInfoLine();
-                return true;
-            case KeyEvent.KEYCODE_DPAD_DOWN:
-            case KeyEvent.KEYCODE_MINUS:
-            case KeyEvent.KEYCODE_NUMPAD_SUBTRACT:
+                yield true;
+            }
+            case KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_MINUS,
+                 KeyEvent.KEYCODE_NUMPAD_SUBTRACT -> {
                 prevInfoLine();
-                return true;
-            case KeyEvent.KEYCODE_DPAD_LEFT:
+                yield true;
+            }
+            case KeyEvent.KEYCODE_DPAD_LEFT -> {
                 goBack();
-                return true;
-            case KeyEvent.KEYCODE_DPAD_RIGHT:
+                yield true;
+            }
+            case KeyEvent.KEYCODE_DPAD_RIGHT -> {
                 goForward();
-                return true;
-            default:
-                return super.onKeyUp(keyCode, event);
-        }
+                yield true;
+            }
+            default -> super.onKeyUp(keyCode, event);
+        };
     }
 
     void nextDashboard(){
@@ -436,7 +432,7 @@ public class DashActivity extends AppCompatActivity implements View.OnTouchListe
                     }
 
                     if (newSvg != null) {
-                        newSvg.registerExternalFileResolver(svgFileResolver);
+                        SVG.registerExternalFileResolver(svgFileResolver);
                         final SVG finalSvg = newSvg;
                         runOnUiThread(() -> {
                             if (!isFinishing() && !isDestroyed()) {

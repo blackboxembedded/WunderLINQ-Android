@@ -25,6 +25,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.blackboxembedded.WunderLINQ.AppInfo;
 import com.blackboxembedded.WunderLINQ.R;
 
@@ -42,19 +44,36 @@ public class AppListView extends ArrayAdapter<AppInfo> {
         this.apps = apps;
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
-        LayoutInflater inflater = context.getLayoutInflater();
-        View rowView= inflater.inflate(R.layout.item_contact, null, true);
-        TextView txtTitle = rowView.findViewById(R.id.tv_label);
-        ImageView imageView = rowView.findViewById(R.id.iv_icon);
+    public View getView(int position, View view, @NonNull ViewGroup parent) {
+        View rowView = view;
+        ViewHolder holder;
+        if (rowView == null) {
+            LayoutInflater inflater = context.getLayoutInflater();
+            rowView = inflater.inflate(R.layout.item_contact, parent, false);
+            holder = new ViewHolder();
+            holder.txtTitle = rowView.findViewById(R.id.tv_label);
+            holder.imageView = rowView.findViewById(R.id.iv_icon);
+            rowView.setTag(holder);
+        } else {
+            holder = (ViewHolder) rowView.getTag();
+        }
 
-        txtTitle.setText(apps.get(position).label);
-        if (apps.get(position).icon != null) {
-            imageView.setImageDrawable(apps.get(position).icon);
-            imageView.setImageTintMode(null);
+        AppInfo app = apps.get(position);
+        holder.txtTitle.setText(app.label);
+        if (app.icon != null) {
+            holder.imageView.setImageDrawable(app.icon);
+            holder.imageView.setImageTintMode(null);
+        } else {
+            holder.imageView.setImageDrawable(null);
         }
 
         return rowView;
+    }
+
+    static class ViewHolder {
+        TextView txtTitle;
+        ImageView imageView;
     }
 }

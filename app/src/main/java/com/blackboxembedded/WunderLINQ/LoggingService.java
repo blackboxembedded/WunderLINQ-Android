@@ -61,8 +61,8 @@ public class LoggingService extends Service {
     private PrintWriter outFile = null;
     private Date logStartDate;
 
-    private int loggingInterval = 250;
-    private String CHANNEL_ID = "WunderLINQ";
+    private final int loggingInterval = 250;
+    private final String CHANNEL_ID = "WunderLINQ";
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -247,7 +247,6 @@ public class LoggingService extends Service {
         ((MyApplication) this.getApplication()).setTripRecording(false);
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private String createNotificationChannel(NotificationManager notificationManager){
         String channelId = CHANNEL_ID;
         String channelName = this.getString(R.string.title_logging_notification);
@@ -282,46 +281,42 @@ public class LoggingService extends Service {
                 String curDateTime = formatter.format(logStartDate);
                 String filename = "WunderLINQ-TripLog-";
 
-                StringBuilder headerBuilder = new StringBuilder();
-
-                headerBuilder.append(quote(MyApplication.getContext().getResources().getString(R.string.time_header))).append(",");
-                headerBuilder.append(quote(MyApplication.getContext().getResources().getString(R.string.latitude_header))).append(",");
-                headerBuilder.append(quote(MyApplication.getContext().getResources().getString(R.string.longitude_header))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.ALTITUDE_DEVICE))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.SPEED_DEVICE))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.GEAR))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.ENGINE_TEMP))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.AIR_TEMP))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.FRONT_RDC))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.REAR_RDC))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.ODOMETER))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.VOLTAGE))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.THROTTLE))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.FRONT_BRAKE))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.REAR_BRAKE))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.SHIFTS))).append(",");
-                headerBuilder.append(quote(MyApplication.getContext().getResources().getString(R.string.vin_header))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.AMBIENT_LIGHT))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.TRIP_ONE))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.TRIP_TWO))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.TRIP_AUTO))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.SPEED))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.AVG_SPEED))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.CURRENT_CONSUMPTION))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.ECONOMY_ONE))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.ECONOMY_TWO))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.RANGE))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.LEAN_DEVICE))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.GFORCE_DEVICE))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.BEARING_DEVICE))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.BAROMETRIC_DEVICE))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.RPM))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.LEAN_BIKE))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.REAR_SPEED))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.CELL_SIGNAL))).append(",");
-                headerBuilder.append(quote(MotorcycleData.getLabel(MotorcycleData.DataType.BATTERY_DEVICE))).append("\n");
-
-                String header = headerBuilder.toString();
+                String header = quote(MyApplication.getContext().getResources().getString(R.string.time_header)) + "," +
+                        quote(MyApplication.getContext().getResources().getString(R.string.latitude_header)) + "," +
+                        quote(MyApplication.getContext().getResources().getString(R.string.longitude_header)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.ALTITUDE_DEVICE)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.SPEED_DEVICE)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.GEAR)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.ENGINE_TEMP)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.AIR_TEMP)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.FRONT_RDC)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.REAR_RDC)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.ODOMETER)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.VOLTAGE)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.THROTTLE)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.FRONT_BRAKE)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.REAR_BRAKE)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.SHIFTS)) + "," +
+                        quote(MyApplication.getContext().getResources().getString(R.string.vin_header)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.AMBIENT_LIGHT)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.TRIP_ONE)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.TRIP_TWO)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.TRIP_AUTO)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.SPEED)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.AVG_SPEED)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.CURRENT_CONSUMPTION)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.ECONOMY_ONE)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.ECONOMY_TWO)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.RANGE)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.LEAN_DEVICE)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.GFORCE_DEVICE)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.BEARING_DEVICE)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.BAROMETRIC_DEVICE)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.RPM)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.LEAN_BIKE)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.REAR_SPEED)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.CELL_SIGNAL)) + "," +
+                        quote(MotorcycleData.getLabel(MotorcycleData.DataType.BATTERY_DEVICE)) + "\n";
 
                 File logFile = new File( root, filename + curDateTime + ".csv" );
                 FileWriter logWriter = new FileWriter( logFile );

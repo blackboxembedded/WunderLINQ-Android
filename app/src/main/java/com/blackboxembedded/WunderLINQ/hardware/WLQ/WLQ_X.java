@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package com.blackboxembedded.WunderLINQ.hardware.WLQ;
 
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.util.Log;
 
 import com.blackboxembedded.WunderLINQ.comms.BLE.KeyboardHID;
@@ -32,13 +32,13 @@ public class WLQ_X extends WLQ_BASE {
 
     private final static String TAG = "WLQ_X";
 
-    private static String hardwareVersion1 = "WLQX1.0";
+    public static String hardwareVersion1 = "WLQX1.0";
 
-    private static int firmwareVersionMajor_INDEX = 3;
-    private static int firmwareVersionMinor_INDEX = 4;
+    private static final int firmwareVersionMajor_INDEX = 3;
+    private static final int firmwareVersionMinor_INDEX = 4;
 
-    private static int configFlashSize = 66;
-    private static byte[] defaultConfig = {
+    private static final int configFlashSize = 66;
+    private static final byte[] defaultConfig = {
             0x07,                                               // RT/K Sensitivity
             0x01, 0x00, 0x4F, 0x01, 0x00, 0x28,                 // Menu
             0x01, 0x00, 0x52, 0x00, 0x00, 0x00,                 // Zoom+
@@ -57,83 +57,83 @@ public class WLQ_X extends WLQ_BASE {
             0x00                                                // PDM Channel 4 Mode
     };
 
-    private static int keyMode_INDEX = 5;
-    private static int RTKSensitivity_INDEX = 0;
-    private static int RTKPagePressKeyType_INDEX = 1;
-    private static int RTKPagePressKeyModifier_INDEX = 2;
-    private static int RTKPagePressKey_INDEX = 3;
-    private static int RTKPageDoublePressKeyType_INDEX = 4;
-    private static int RTKPageDoublePressKeyModifier_INDEX = 5;
-    private static int RTKPageDoublePressKey_INDEX = 6;
-    private static int RTKZoomPPressKeyType_INDEX = 7;
-    private static int RTKZoomPPressKeyModifier_INDEX = 8;
-    private static int RTKZoomPPressKey_INDEX = 9;
-    private static int RTKZoomPDoublePressKeyType_INDEX = 10;
-    private static int RTKZoomPDoublePressKeyModifier_INDEX = 11;
-    private static int RTKZoomPDoublePressKey_INDEX = 12;
-    private static int RTKZoomMPressKeyType_INDEX = 13;
-    private static int RTKZoomMPressKeyModifier_INDEX = 14;
-    private static int RTKZoomMPressKey_INDEX = 15;
-    private static int RTKZoomMDoublePressKeyType_INDEX = 16;
-    private static int RTKZoomMDoublePressKeyModifier_INDEX = 17;
-    private static int RTKZoomMDoublePressKey_INDEX = 18;
-    private static int RTKSpeakPressKeyType_INDEX = 19;
-    private static int RTKSpeakPressKeyModifier_INDEX = 20;
-    private static int RTKSpeakPressKey_INDEX = 21;
-    private static int RTKSpeakDoublePressKeyType_INDEX = 22;
-    private static int RTKSpeakDoublePressKeyModifier_INDEX = 23;
-    private static int RTKSpeakDoublePressKey_INDEX = 24;
-    private static int RTKMutePressKeyType_INDEX = 25;
-    private static int RTKMutePressKeyModifier_INDEX = 26;
-    private static int RTKMutePressKey_INDEX = 27;
-    private static int RTKMuteDoublePressKeyType_INDEX = 28;
-    private static int RTKMuteDoublePressKeyModifier_INDEX = 29;
-    private static int RTKMuteDoublePressKey_INDEX = 30;
-    private static int RTKDisplayPressKeyType_INDEX = 31;
-    private static int RTKDisplayPressKeyModifier_INDEX = 32;
-    private static int RTKDisplayPressKey_INDEX = 33;
-    private static int RTKDisplayDoublePressKeyType_INDEX = 34;
-    private static int RTKDisplayDoublePressKeyModifier_INDEX = 35;
-    private static int RTKDisplayDoublePressKey_INDEX = 36;
-    private static int fullSensitivity_INDEX = 37;
-    private static int fullRightPressKeyType_INDEX = 38;
-    private static int fullRightPressKeyModifier_INDEX = 39;
-    private static int fullRightPressKey_INDEX = 40;
-    private static int fullRightLongPressKeyType_INDEX = 41;
-    private static int fullRightLongPressKeyModifier_INDEX = 42;
-    private static int fullRightLongPressKey_INDEX = 43;
-    private static int fullLeftPressKeyType_INDEX = 44;
-    private static int fullLeftPressKeyModifier_INDEX = 45;
-    private static int fullLeftPressKey_INDEX = 46;
-    private static int fullLeftLongPressKeyType_INDEX = 47;
-    private static int fullLeftLongPressKeyModifier_INDEX = 48;
-    private static int fullLeftLongPressKey_INDEX = 49;
-    private static int fullScrollUpKeyType_INDEX = 50;
-    private static int fullScrollUpKeyModifier_INDEX = 51;
-    private static int fullScrollUpKey_INDEX = 52;
-    private static int fullScrollDownKeyType_INDEX = 53;
-    private static int fullScrollDownKeyModifier_INDEX = 54;
-    private static int fullScrollDownKey_INDEX = 55;
-    private static int fullSignalPressKeyType_INDEX = 56;
-    private static int fullSignalPressKeyModifier_INDEX = 57;
-    private static int fullSignalPressKey_INDEX = 58;
-    private static int fullSignalLongPressKeyType_INDEX = 59;
-    private static int fullSignalLongPressKeyModifier_INDEX = 60;
-    private static int fullSignalLongPressKey_INDEX = 61;
-    private static int pdmChannel1_INDEX = 62;
-    private static int pdmChannel2_INDEX = 63;
-    private static int pdmChannel3_INDEX = 64;
-    private static int pdmChannel4_INDEX = 65;
-    private static int accessories_INDEX = 72;
+    private static final int keyMode_INDEX = 5;
+    private static final int RTKSensitivity_INDEX = 0;
+    private static final int RTKPagePressKeyType_INDEX = 1;
+    private static final int RTKPagePressKeyModifier_INDEX = 2;
+    private static final int RTKPagePressKey_INDEX = 3;
+    private static final int RTKPageDoublePressKeyType_INDEX = 4;
+    private static final int RTKPageDoublePressKeyModifier_INDEX = 5;
+    private static final int RTKPageDoublePressKey_INDEX = 6;
+    private static final int RTKZoomPPressKeyType_INDEX = 7;
+    private static final int RTKZoomPPressKeyModifier_INDEX = 8;
+    private static final int RTKZoomPPressKey_INDEX = 9;
+    private static final int RTKZoomPDoublePressKeyType_INDEX = 10;
+    private static final int RTKZoomPDoublePressKeyModifier_INDEX = 11;
+    private static final int RTKZoomPDoublePressKey_INDEX = 12;
+    private static final int RTKZoomMPressKeyType_INDEX = 13;
+    private static final int RTKZoomMPressKeyModifier_INDEX = 14;
+    private static final int RTKZoomMPressKey_INDEX = 15;
+    private static final int RTKZoomMDoublePressKeyType_INDEX = 16;
+    private static final int RTKZoomMDoublePressKeyModifier_INDEX = 17;
+    private static final int RTKZoomMDoublePressKey_INDEX = 18;
+    private static final int RTKSpeakPressKeyType_INDEX = 19;
+    private static final int RTKSpeakPressKeyModifier_INDEX = 20;
+    private static final int RTKSpeakPressKey_INDEX = 21;
+    private static final int RTKSpeakDoublePressKeyType_INDEX = 22;
+    private static final int RTKSpeakDoublePressKeyModifier_INDEX = 23;
+    private static final int RTKSpeakDoublePressKey_INDEX = 24;
+    private static final int RTKMutePressKeyType_INDEX = 25;
+    private static final int RTKMutePressKeyModifier_INDEX = 26;
+    private static final int RTKMutePressKey_INDEX = 27;
+    private static final int RTKMuteDoublePressKeyType_INDEX = 28;
+    private static final int RTKMuteDoublePressKeyModifier_INDEX = 29;
+    private static final int RTKMuteDoublePressKey_INDEX = 30;
+    private static final int RTKDisplayPressKeyType_INDEX = 31;
+    private static final int RTKDisplayPressKeyModifier_INDEX = 32;
+    private static final int RTKDisplayPressKey_INDEX = 33;
+    private static final int RTKDisplayDoublePressKeyType_INDEX = 34;
+    private static final int RTKDisplayDoublePressKeyModifier_INDEX = 35;
+    private static final int RTKDisplayDoublePressKey_INDEX = 36;
+    private static final int fullSensitivity_INDEX = 37;
+    private static final int fullRightPressKeyType_INDEX = 38;
+    private static final int fullRightPressKeyModifier_INDEX = 39;
+    private static final int fullRightPressKey_INDEX = 40;
+    private static final int fullRightLongPressKeyType_INDEX = 41;
+    private static final int fullRightLongPressKeyModifier_INDEX = 42;
+    private static final int fullRightLongPressKey_INDEX = 43;
+    private static final int fullLeftPressKeyType_INDEX = 44;
+    private static final int fullLeftPressKeyModifier_INDEX = 45;
+    private static final int fullLeftPressKey_INDEX = 46;
+    private static final int fullLeftLongPressKeyType_INDEX = 47;
+    private static final int fullLeftLongPressKeyModifier_INDEX = 48;
+    private static final int fullLeftLongPressKey_INDEX = 49;
+    private static final int fullScrollUpKeyType_INDEX = 50;
+    private static final int fullScrollUpKeyModifier_INDEX = 51;
+    private static final int fullScrollUpKey_INDEX = 52;
+    private static final int fullScrollDownKeyType_INDEX = 53;
+    private static final int fullScrollDownKeyModifier_INDEX = 54;
+    private static final int fullScrollDownKey_INDEX = 55;
+    private static final int fullSignalPressKeyType_INDEX = 56;
+    private static final int fullSignalPressKeyModifier_INDEX = 57;
+    private static final int fullSignalPressKey_INDEX = 58;
+    private static final int fullSignalLongPressKeyType_INDEX = 59;
+    private static final int fullSignalLongPressKeyModifier_INDEX = 60;
+    private static final int fullSignalLongPressKey_INDEX = 61;
+    private static final int pdmChannel1_INDEX = 62;
+    private static final int pdmChannel2_INDEX = 63;
+    private static final int pdmChannel3_INDEX = 64;
+    private static final int pdmChannel4_INDEX = 65;
+    private static final int accessories_INDEX = 72;
 
     // PDM Status message
-    private static int statusSize = 6;
-    private static int NUM_CHAN_INDEX = 0;
-    private static int ACTIVE_CHAN_INDEX = 1;
-    private static int ACC_PDM_CHANNEL1_VAL_RAW_INDEX = 2;
-    private static int ACC_PDM_CHANNEL2_VAL_RAW_INDEX = 3;
-    private static int ACC_PDM_CHANNEL3_VAL_RAW_INDEX = 4;
-    private static int ACC_PDM_CHANNEL4_VAL_RAW_INDEX = 5;
+    private static final int statusSize = 6;
+    private static final int NUM_CHAN_INDEX = 0;
+    private static final int ACTIVE_CHAN_INDEX = 1;
+    private static final int ACC_PDM_CHANNEL1_VAL_RAW_INDEX = 2;
+    private static final int ACC_PDM_CHANNEL2_VAL_RAW_INDEX = 3;
+    private static final int ACC_PDM_CHANNEL3_VAL_RAW_INDEX = 4;
+    private static final int ACC_PDM_CHANNEL4_VAL_RAW_INDEX = 5;
 
     private static byte[] wunderLINQStatus;
     private static int activeChannel;
@@ -319,83 +319,68 @@ public class WLQ_X extends WLQ_BASE {
 
     @Override
     public String getActionName(int id){
-        switch (id){
-            case KEYMODE:
-                return MyApplication.getContext().getString(R.string.keymode_label);
-            case doublePressSensitivity:
-                return MyApplication.getContext().getString(R.string.double_press_label);
-            case longPressSensitivity:
-                return MyApplication.getContext().getString(R.string.long_press_label);
-            case RTKPage:
-                return MyApplication.getContext().getString(R.string.rtk_page_label);
-            case RTKPageDoublePress:
-                return MyApplication.getContext().getString(R.string.rtk_page_double_label);
-            case RTKZoomPlus:
-                return MyApplication.getContext().getString(R.string.rtk_zoomp_label);
-            case RTKZoomPlusDoublePress:
-                return MyApplication.getContext().getString(R.string.rtk_zoomm_double_label);
-            case RTKZoomMinus:
-                return MyApplication.getContext().getString(R.string.rtk_zoomm_label);
-            case RTKZoomMinusDoublePress:
-                return MyApplication.getContext().getString(R.string.rtk_zoomm_double_label);
-            case RTKSpeak:
-                return MyApplication.getContext().getString(R.string.rtk_speak_label);
-            case RTKSpeakDoublePress:
-                return MyApplication.getContext().getString(R.string.rtk_speak_double_label);
-            case RTKMute:
-                return MyApplication.getContext().getString(R.string.rtk_mute_label);
-            case RTKMuteDoublePress:
-                return MyApplication.getContext().getString(R.string.rtk_mute_double_label);
-            case RTKDisplayOff:
-                return MyApplication.getContext().getString(R.string.rtk_display_label);
-            case RTKDisplayOffDoublePress:
-                return MyApplication.getContext().getString(R.string.rtk_display_double_label);
-            case fullScrollUp:
-                return MyApplication.getContext().getString(R.string.full_scroll_up_label);
-            case fullScrollDown:
-                return MyApplication.getContext().getString(R.string.full_scroll_down_label);
-            case fullToggleRight:
-                return MyApplication.getContext().getString(R.string.full_toggle_right_label);
-            case fullToggleRightLongPress:
-                return MyApplication.getContext().getString(R.string.full_toggle_right_long_label);
-            case fullToggleLeft:
-                return MyApplication.getContext().getString(R.string.full_toggle_left_label);
-            case fullToggleLeftLongPress:
-                return MyApplication.getContext().getString(R.string.full_toggle_left_long_label);
-            case fullSignalCancel:
-                return MyApplication.getContext().getString(R.string.full_signal_cancel_label);
-            case fullSignalCancelLongPress:
-                return MyApplication.getContext().getString(R.string.full_signal_cancel_long_label);
-            case pdmChannel1:
-                return MyApplication.getContext().getString(R.string.pdm_channel1_label);
-            case pdmChannel2:
-                return MyApplication.getContext().getString(R.string.pdm_channel2_label);
-            case pdmChannel3:
-                return MyApplication.getContext().getString(R.string.pdm_channel3_label);
-            case pdmChannel4:
-                return MyApplication.getContext().getString(R.string.pdm_channel4_label);
-            default:
+        return switch (id) {
+            case KEYMODE -> MyApplication.getContext().getString(R.string.keymode_label);
+            case doublePressSensitivity ->
+                    MyApplication.getContext().getString(R.string.double_press_label);
+            case longPressSensitivity ->
+                    MyApplication.getContext().getString(R.string.long_press_label);
+            case RTKPage -> MyApplication.getContext().getString(R.string.rtk_page_label);
+            case RTKPageDoublePress ->
+                    MyApplication.getContext().getString(R.string.rtk_page_double_label);
+            case RTKZoomPlus -> MyApplication.getContext().getString(R.string.rtk_zoomp_label);
+            case RTKZoomPlusDoublePress ->
+                    MyApplication.getContext().getString(R.string.rtk_zoomm_double_label);
+            case RTKZoomMinus -> MyApplication.getContext().getString(R.string.rtk_zoomm_label);
+            case RTKZoomMinusDoublePress ->
+                    MyApplication.getContext().getString(R.string.rtk_zoomm_double_label);
+            case RTKSpeak -> MyApplication.getContext().getString(R.string.rtk_speak_label);
+            case RTKSpeakDoublePress ->
+                    MyApplication.getContext().getString(R.string.rtk_speak_double_label);
+            case RTKMute -> MyApplication.getContext().getString(R.string.rtk_mute_label);
+            case RTKMuteDoublePress ->
+                    MyApplication.getContext().getString(R.string.rtk_mute_double_label);
+            case RTKDisplayOff -> MyApplication.getContext().getString(R.string.rtk_display_label);
+            case RTKDisplayOffDoublePress ->
+                    MyApplication.getContext().getString(R.string.rtk_display_double_label);
+            case fullScrollUp ->
+                    MyApplication.getContext().getString(R.string.full_scroll_up_label);
+            case fullScrollDown ->
+                    MyApplication.getContext().getString(R.string.full_scroll_down_label);
+            case fullToggleRight ->
+                    MyApplication.getContext().getString(R.string.full_toggle_right_label);
+            case fullToggleRightLongPress ->
+                    MyApplication.getContext().getString(R.string.full_toggle_right_long_label);
+            case fullToggleLeft ->
+                    MyApplication.getContext().getString(R.string.full_toggle_left_label);
+            case fullToggleLeftLongPress ->
+                    MyApplication.getContext().getString(R.string.full_toggle_left_long_label);
+            case fullSignalCancel ->
+                    MyApplication.getContext().getString(R.string.full_signal_cancel_label);
+            case fullSignalCancelLongPress ->
+                    MyApplication.getContext().getString(R.string.full_signal_cancel_long_label);
+            case pdmChannel1 -> MyApplication.getContext().getString(R.string.pdm_channel1_label);
+            case pdmChannel2 -> MyApplication.getContext().getString(R.string.pdm_channel2_label);
+            case pdmChannel3 -> MyApplication.getContext().getString(R.string.pdm_channel3_label);
+            case pdmChannel4 -> MyApplication.getContext().getString(R.string.pdm_channel4_label);
+            default -> {
                 Log.d(TAG, "Unknown ActionID");
-                return "";
-        }
+                yield "";
+            }
+        };
     }
 
     @Override
     public String getActionValue(int id){
         switch (id){
             case KEYMODE:
-                switch (keyMode){
-                    case 0:
-                        return MyApplication.getContext().getString(R.string.keymode_default_label);
-                    case 1:
-                        return MyApplication.getContext().getString(R.string.keymode_custom_label);
-                    case 2:
-                        return MyApplication.getContext().getString(R.string.keymode_media_label);
-                    case 3:
-                        return MyApplication.getContext().getString(R.string.KEYMODE_DIRECT_label);
-                    default:
-                        return "";
-                }
+                return switch (keyMode) {
+                    case 0 -> MyApplication.getContext().getString(R.string.keymode_default_label);
+                    case 1 -> MyApplication.getContext().getString(R.string.keymode_custom_label);
+                    case 2 -> MyApplication.getContext().getString(R.string.keymode_media_label);
+                    case 3 -> MyApplication.getContext().getString(R.string.KEYMODE_DIRECT_label);
+                    default -> "";
+                };
             case doublePressSensitivity:
                 return String.valueOf(RTKSensitivity * 50);
             case longPressSensitivity:
@@ -660,7 +645,7 @@ public class WLQ_X extends WLQ_BASE {
             case pdmChannel3:
                 tempConfig[pdmChannel3_INDEX] = value;
             case pdmChannel4:
-                tempConfig[pdmChannel2_INDEX] = value;
+                tempConfig[pdmChannel4_INDEX] = value;
             default:
                 Log.d(TAG, "Unknown ActionID: " + id);
         }
@@ -668,149 +653,92 @@ public class WLQ_X extends WLQ_BASE {
 
     @Override
     public byte getActionKeyType(int id){
-        switch (id){
-            case RTKPage:
-                return RTKPagePressKeyType;
-            case RTKPageDoublePress:
-                return RTKPageDoublePressKeyType;
-            case RTKZoomPlus:
-                return RTKZoomPPressKeyType;
-            case RTKZoomPlusDoublePress:
-                return RTKZoomPDoublePressKeyType;
-            case RTKZoomMinus:
-                return RTKZoomMPressKeyType;
-            case RTKZoomMinusDoublePress:
-                return RTKZoomMDoublePressKeyType;
-            case RTKSpeak:
-                return RTKSpeakPressKeyType;
-            case RTKSpeakDoublePress:
-                return RTKSpeakDoublePressKeyType;
-            case RTKMute:
-                return RTKMutePressKeyType;
-            case RTKMuteDoublePress:
-                return RTKMuteDoublePressKeyType;
-            case RTKDisplayOff:
-                return RTKDisplayPressKeyType;
-            case RTKDisplayOffDoublePress:
-                return RTKDisplayDoublePressKeyType;
-            case fullScrollUp:
-                return fullScrollUpKeyType;
-            case fullScrollDown:
-                return fullScrollDownKeyType;
-            case fullToggleRight:
-                return fullRightPressKeyType;
-            case fullToggleRightLongPress:
-                return fullRightLongPressKeyType;
-            case fullToggleLeft:
-                return fullLeftPressKeyType;
-            case fullToggleLeftLongPress:
-                return fullLeftLongPressKeyType;
-            case fullSignalCancel:
-                return fullSignalPressKeyType;
-            case fullSignalCancelLongPress:
-                return fullSignalLongPressKeyType;
-            default:
+        return switch (id) {
+            case RTKPage -> RTKPagePressKeyType;
+            case RTKPageDoublePress -> RTKPageDoublePressKeyType;
+            case RTKZoomPlus -> RTKZoomPPressKeyType;
+            case RTKZoomPlusDoublePress -> RTKZoomPDoublePressKeyType;
+            case RTKZoomMinus -> RTKZoomMPressKeyType;
+            case RTKZoomMinusDoublePress -> RTKZoomMDoublePressKeyType;
+            case RTKSpeak -> RTKSpeakPressKeyType;
+            case RTKSpeakDoublePress -> RTKSpeakDoublePressKeyType;
+            case RTKMute -> RTKMutePressKeyType;
+            case RTKMuteDoublePress -> RTKMuteDoublePressKeyType;
+            case RTKDisplayOff -> RTKDisplayPressKeyType;
+            case RTKDisplayOffDoublePress -> RTKDisplayDoublePressKeyType;
+            case fullScrollUp -> fullScrollUpKeyType;
+            case fullScrollDown -> fullScrollDownKeyType;
+            case fullToggleRight -> fullRightPressKeyType;
+            case fullToggleRightLongPress -> fullRightLongPressKeyType;
+            case fullToggleLeft -> fullLeftPressKeyType;
+            case fullToggleLeftLongPress -> fullLeftLongPressKeyType;
+            case fullSignalCancel -> fullSignalPressKeyType;
+            case fullSignalCancelLongPress -> fullSignalLongPressKeyType;
+            default -> {
                 Log.d(TAG, "Unknown ActionID");
-                return 0x00;
-        }
+                yield 0x00;
+            }
+        };
     }
 
     @Override
     public byte getActionKey(int id) {
-        switch (id) {
-            case RTKPage:
-                return RTKPagePressKey;
-            case RTKPageDoublePress:
-                return RTKPageDoublePressKey;
-            case RTKZoomPlus:
-                return RTKZoomPPressKey;
-            case RTKZoomPlusDoublePress:
-                return RTKZoomPDoublePressKey;
-            case RTKZoomMinus:
-                return RTKZoomMPressKey;
-            case RTKZoomMinusDoublePress:
-                return RTKZoomMDoublePressKey;
-            case RTKSpeak:
-                return RTKSpeakPressKey;
-            case RTKSpeakDoublePress:
-                return RTKSpeakDoublePressKey;
-            case RTKMute:
-                return RTKMutePressKey;
-            case RTKMuteDoublePress:
-                return RTKMuteDoublePressKey;
-            case RTKDisplayOff:
-                return RTKDisplayPressKey;
-            case RTKDisplayOffDoublePress:
-                return RTKDisplayDoublePressKey;
-            case fullScrollUp:
-                return fullScrollUpKey;
-            case fullScrollDown:
-                return fullScrollDownKey;
-            case fullToggleRight:
-                return fullRightPressKey;
-            case fullToggleRightLongPress:
-                return fullRightLongPressKey;
-            case fullToggleLeft:
-                return fullLeftPressKey;
-            case fullToggleLeftLongPress:
-                return fullLeftLongPressKey;
-            case fullSignalCancel:
-                return fullSignalPressKey;
-            case fullSignalCancelLongPress:
-                return fullSignalLongPressKey;
-            default:
+        return switch (id) {
+            case RTKPage -> RTKPagePressKey;
+            case RTKPageDoublePress -> RTKPageDoublePressKey;
+            case RTKZoomPlus -> RTKZoomPPressKey;
+            case RTKZoomPlusDoublePress -> RTKZoomPDoublePressKey;
+            case RTKZoomMinus -> RTKZoomMPressKey;
+            case RTKZoomMinusDoublePress -> RTKZoomMDoublePressKey;
+            case RTKSpeak -> RTKSpeakPressKey;
+            case RTKSpeakDoublePress -> RTKSpeakDoublePressKey;
+            case RTKMute -> RTKMutePressKey;
+            case RTKMuteDoublePress -> RTKMuteDoublePressKey;
+            case RTKDisplayOff -> RTKDisplayPressKey;
+            case RTKDisplayOffDoublePress -> RTKDisplayDoublePressKey;
+            case fullScrollUp -> fullScrollUpKey;
+            case fullScrollDown -> fullScrollDownKey;
+            case fullToggleRight -> fullRightPressKey;
+            case fullToggleRightLongPress -> fullRightLongPressKey;
+            case fullToggleLeft -> fullLeftPressKey;
+            case fullToggleLeftLongPress -> fullLeftLongPressKey;
+            case fullSignalCancel -> fullSignalPressKey;
+            case fullSignalCancelLongPress -> fullSignalLongPressKey;
+            default -> {
                 Log.d(TAG, "Unknown ActionID");
-                return 0x00;
-        }
+                yield 0x00;
+            }
+        };
     }
 
     @Override
     public byte getActionKeyModifiers(int id) {
-        switch (id) {
-            case RTKPage:
-                return RTKPagePressKeyModifier;
-            case RTKPageDoublePress:
-                return RTKPageDoublePressKeyModifier;
-            case RTKZoomPlus:
-                return RTKZoomPPressKeyModifier;
-            case RTKZoomPlusDoublePress:
-                return RTKZoomPDoublePressKeyModifier;
-            case RTKZoomMinus:
-                return RTKZoomMPressKeyModifier;
-            case RTKZoomMinusDoublePress:
-                return RTKZoomMDoublePressKeyModifier;
-            case RTKSpeak:
-                return RTKSpeakPressKeyModifier;
-            case RTKSpeakDoublePress:
-                return RTKSpeakDoublePressKeyModifier;
-            case RTKMute:
-                return RTKMutePressKeyModifier;
-            case RTKMuteDoublePress:
-                return RTKMuteDoublePressKeyModifier;
-            case RTKDisplayOff:
-                return RTKDisplayPressKeyModifier;
-            case RTKDisplayOffDoublePress:
-                return RTKDisplayDoublePressKeyModifier;
-            case fullScrollUp:
-                return fullScrollUpKeyModifier;
-            case fullScrollDown:
-                return fullScrollDownKeyModifier;
-            case fullToggleRight:
-                return fullRightPressKeyModifier;
-            case fullToggleRightLongPress:
-                return fullRightLongPressKeyModifier;
-            case fullToggleLeft:
-                return fullLeftPressKeyModifier;
-            case fullToggleLeftLongPress:
-                return fullLeftLongPressKeyModifier;
-            case fullSignalCancel:
-                return fullSignalPressKeyModifier;
-            case fullSignalCancelLongPress:
-                return fullSignalLongPressKeyModifier;
-            default:
+        return switch (id) {
+            case RTKPage -> RTKPagePressKeyModifier;
+            case RTKPageDoublePress -> RTKPageDoublePressKeyModifier;
+            case RTKZoomPlus -> RTKZoomPPressKeyModifier;
+            case RTKZoomPlusDoublePress -> RTKZoomPDoublePressKeyModifier;
+            case RTKZoomMinus -> RTKZoomMPressKeyModifier;
+            case RTKZoomMinusDoublePress -> RTKZoomMDoublePressKeyModifier;
+            case RTKSpeak -> RTKSpeakPressKeyModifier;
+            case RTKSpeakDoublePress -> RTKSpeakDoublePressKeyModifier;
+            case RTKMute -> RTKMutePressKeyModifier;
+            case RTKMuteDoublePress -> RTKMuteDoublePressKeyModifier;
+            case RTKDisplayOff -> RTKDisplayPressKeyModifier;
+            case RTKDisplayOffDoublePress -> RTKDisplayDoublePressKeyModifier;
+            case fullScrollUp -> fullScrollUpKeyModifier;
+            case fullScrollDown -> fullScrollDownKeyModifier;
+            case fullToggleRight -> fullRightPressKeyModifier;
+            case fullToggleRightLongPress -> fullRightLongPressKeyModifier;
+            case fullToggleLeft -> fullLeftPressKeyModifier;
+            case fullToggleLeftLongPress -> fullLeftLongPressKeyModifier;
+            case fullSignalCancel -> fullSignalPressKeyModifier;
+            case fullSignalCancelLongPress -> fullSignalLongPressKeyModifier;
+            default -> {
                 Log.d(TAG, "Unknown ActionID");
-                return 0x00;
-        }
+                yield 0x00;
+            }
+        };
     }
 
     @Override

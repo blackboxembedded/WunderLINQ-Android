@@ -28,7 +28,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
@@ -37,6 +37,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -112,7 +113,7 @@ public class FirstRunActivity extends AppCompatActivity {
                             Log.d(TAG, "NO ERROR exitCode: " + exitCode);
                         }
                     } catch (IOException | InterruptedException e) {
-                        e.printStackTrace();
+                        Log.d(TAG, "Unable to start debug logging. Error: " + e);
                     }
                 }
             }).start();
@@ -132,7 +133,7 @@ public class FirstRunActivity extends AppCompatActivity {
         }
     }
 
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
+    private final View.OnClickListener mClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (step) {
@@ -300,7 +301,7 @@ public class FirstRunActivity extends AppCompatActivity {
     };
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case PERMISSION_REQUEST_CAMERA: {

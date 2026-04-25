@@ -28,16 +28,15 @@ import java.util.List;
 
 public class WaypointDatasource {
     final String TAG = "WptDataSource";
-    private SQLiteDatabase db;
-    private WaypointDatabase dbHelper;
-    private String sqlTable = "records";
+    private final WaypointDatabase dbHelper;
+    private final String sqlTable = "records";
 
     public WaypointDatasource(Context context) {
         dbHelper = new WaypointDatabase(context);
     }
 
     public void open() throws SQLException {
-        db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
     }
 
     public void close() {
@@ -51,9 +50,7 @@ public class WaypointDatasource {
 
         Cursor c = db.query(sqlTable, new String[] {"_id", "date", "data", "label"}, null, null, null, null,  "date DESC");
 
-        if (c != null) {
-            c.moveToFirst();
-        }
+        c.moveToFirst();
         while (!c.isAfterLast()) {
             WaypointRecord record = cursorToRecord(c);
             pageList.add(record);
@@ -96,9 +93,7 @@ public class WaypointDatasource {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         Cursor c = db.query(sqlTable, new String[] {"_id", "date", "data", "label"}, "_id=?", new String[] {id}, null, null, null);
-        if (c != null) {
-            c.moveToFirst();
-        }
+        c.moveToFirst();
         WaypointRecord record = cursorToRecord(c);
         db.close();
         return record;
@@ -107,9 +102,7 @@ public class WaypointDatasource {
     public Cursor getAllRecordsCursor() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c = db.query(sqlTable, new String[] {"date", "data", "label"}, null, null, null, null,  "date DESC");
-        if (c != null) {
-            c.moveToFirst();
-        }
+        c.moveToFirst();
         db.close();
         return c;
     }

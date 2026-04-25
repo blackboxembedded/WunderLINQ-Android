@@ -23,13 +23,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 public class WaypointsAdapter extends RecyclerView.Adapter<WaypointsAdapter.ViewHolder> {
-    private List<WaypointRecord> mData;
-    private LayoutInflater mInflater;
+    private final List<WaypointRecord> mData;
+    private final LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     WaypointsAdapter(Context context, List<WaypointRecord> data) {
@@ -37,15 +38,16 @@ public class WaypointsAdapter extends RecyclerView.Adapter<WaypointsAdapter.View
         this.mData = data;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.item_waypoint, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        WaypointRecord record = (WaypointRecord) mData.get(position);
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        WaypointRecord record = mData.get(position);
         if (!record.getLabel().isEmpty()){
             holder.myTextView.setText(record.getLabel());
         } else {

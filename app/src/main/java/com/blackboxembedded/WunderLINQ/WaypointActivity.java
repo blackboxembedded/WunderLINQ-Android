@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -58,12 +59,12 @@ public class WaypointActivity extends AppCompatActivity {
 
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 return false;
             }
 
             @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 // Display dialog text here......
                 final AlertDialog.Builder builder = new AlertDialog.Builder(WaypointActivity.this);
                 builder.setTitle(getString(R.string.delete_waypoint_alert_title));
@@ -127,18 +128,14 @@ public class WaypointActivity extends AppCompatActivity {
         forwardButton.setOnClickListener(mClickListener);
     }
 
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            int id = v.getId();
-            if (id == R.id.action_back) {
-                Intent backIntent = new Intent(WaypointActivity.this, GeoDataActivity.class);
-                startActivity(backIntent);
-            } else if (id == R.id.action_forward) {
-                Intent addIntent = new Intent(WaypointActivity.this, AddWaypointActivity.class);
-                startActivity(addIntent);
-            }
+    private final View.OnClickListener mClickListener = v -> {
+        int id = v.getId();
+        if (id == R.id.action_back) {
+            Intent backIntent = new Intent(WaypointActivity.this, GeoDataActivity.class);
+            startActivity(backIntent);
+        } else if (id == R.id.action_forward) {
+            Intent addIntent = new Intent(WaypointActivity.this, AddWaypointActivity.class);
+            startActivity(addIntent);
         }
     };
 

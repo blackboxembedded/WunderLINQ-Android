@@ -28,6 +28,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ServiceInfo;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -92,7 +93,6 @@ public class VideoRecService extends Service {
 
     // Chosen camera info
     private String cameraId;
-    private int lensFacing = CameraCharacteristics.LENS_FACING_BACK;
     private int sensorOrientation = 0;
     private Size videoSize;
 
@@ -198,7 +198,6 @@ public class VideoRecService extends Service {
             if (best == null) continue;
 
             cameraId = id;
-            lensFacing = facing;
             Integer so = cc.get(CameraCharacteristics.SENSOR_ORIENTATION);
             sensorOrientation = (so != null) ? so : 0;
             videoSize = best;
@@ -215,7 +214,6 @@ public class VideoRecService extends Service {
 
             cameraId = id;
             Integer facing = cc.get(CameraCharacteristics.LENS_FACING);
-            lensFacing = (facing != null) ? facing : CameraCharacteristics.LENS_FACING_BACK;
             Integer so = cc.get(CameraCharacteristics.SENSOR_ORIENTATION);
             sensorOrientation = (so != null) ? so : 0;
             videoSize = chooseVideoSize(recorderSizes);
@@ -466,22 +464,26 @@ public class VideoRecService extends Service {
     // ---------------- Foreground notification ----------------
 
     private void createNotification() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel ch = new NotificationChannel(
-                    CHANNEL_ID,
-                    getString(R.string.title_video_notification),
-                    NotificationManager.IMPORTANCE_DEFAULT
-            );
-            ch.setShowBadge(false);
-            ch.setSound(null, null);
-            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).createNotificationChannel(ch);
-        }
+        NotificationChannel ch = new NotificationChannel(
+                CHANNEL_ID,
+                getString(R.string.title_video_notification),
+                NotificationManager.IMPORTANCE_DEFAULT
+        );
+        ch.setShowBadge(false);
+        ch.setSound(null, null);
+        ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).createNotificationChannel(ch);
         Notification notif = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle(getString(R.string.title_video_notification))
                 .setContentText("")
                 .setSmallIcon(R.drawable.ic_video_camera)
                 .build();
-        startForeground(NOTIF_ID, notif);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            startForeground(NOTIF_ID, notif, ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE | ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(NOTIF_ID, notif, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK);
+        } else {
+            startForeground(NOTIF_ID, notif);
+        }
     }
 
     // ---------------- Teardown ----------------

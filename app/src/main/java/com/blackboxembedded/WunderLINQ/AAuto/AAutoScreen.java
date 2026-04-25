@@ -42,7 +42,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.core.content.ContextCompat;
@@ -260,12 +260,11 @@ public class AAutoScreen extends Screen {
     }
 
     private Action createFabBackAction() {
-        Action action = new Action.Builder()
+        return new Action.Builder()
                 .setIcon(CarIcon.BACK)
                 .setBackgroundColor(CarColor.BLUE)
                 .setOnClickListener(() -> getScreenManager().pop())
                 .build();
-        return action;
     }
 
 }

@@ -4,14 +4,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import androidx.appcompat.app.AlertDialog;
 
 public class MultiSpinner extends androidx.appcompat.widget.AppCompatSpinner {
 
-    private CharSequence[] entries;
+    private final CharSequence[] entries;
     public boolean[] selected;
     private MultiSpinnerListener listener;
 
@@ -26,20 +25,17 @@ public class MultiSpinner extends androidx.appcompat.widget.AppCompatSpinner {
         a.recycle();
     }
 
-    private DialogInterface.OnMultiChoiceClickListener mOnMultiChoiceClickListener = new DialogInterface.OnMultiChoiceClickListener() {
+    private final DialogInterface.OnMultiChoiceClickListener mOnMultiChoiceClickListener = new DialogInterface.OnMultiChoiceClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which, boolean isChecked) {
             selected[which] = isChecked;
         }
     };
 
-    private DialogInterface.OnClickListener mOnClickListener = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            // build new spinner text & delimiter management
-            updateText();
-            dialog.dismiss();
-        }
+    private final DialogInterface.OnClickListener mOnClickListener = (dialog, which) -> {
+        // build new spinner text & delimiter management
+        updateText();
+        dialog.dismiss();
     };
 
     @Override
@@ -52,7 +48,7 @@ public class MultiSpinner extends androidx.appcompat.widget.AppCompatSpinner {
     }
 
     public void updateText(){
-        StringBuffer spinnerBuffer = new StringBuffer();
+        StringBuilder spinnerBuffer = new StringBuilder();
         for (int i = 0; i < entries.length; i++) {
             if (selected[i]) {
                 spinnerBuffer.append(entries[i]);
@@ -81,6 +77,6 @@ public class MultiSpinner extends androidx.appcompat.widget.AppCompatSpinner {
     }
 
     public interface MultiSpinnerListener {
-        public void onItemsSelected(boolean[] selected);
+        void onItemsSelected(boolean[] selected);
     }
 }

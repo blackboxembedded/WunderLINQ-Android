@@ -39,7 +39,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.util.TypedValue;
@@ -261,7 +261,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
 
@@ -366,19 +366,15 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
         updateTasks();
     }
 
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            int id = v.getId();
-            if (id == R.id.action_back) {
-                goBack();
-            } else if (id == R.id.action_forward) {
-                goForward();
-            } else if (id == R.id.action_faults) {
-                Intent faultIntent = new Intent(TaskActivity.this, FaultActivity.class);
-                startActivity(faultIntent);
-            }
+    private final View.OnClickListener mClickListener = v -> {
+        int id = v.getId();
+        if (id == R.id.action_back) {
+            goBack();
+        } else if (id == R.id.action_forward) {
+            goForward();
+        } else if (id == R.id.action_faults) {
+            Intent faultIntent = new Intent(TaskActivity.this, FaultActivity.class);
+            startActivity(faultIntent);
         }
     };
 
@@ -544,10 +540,10 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                                         Toast.makeText(TaskActivity.this, R.string.nav_app_feature_not_supported, Toast.LENGTH_LONG).show();
                                     }
                                 } catch (NullPointerException e) {
-                                    e.printStackTrace();
+                                    Log.d(TAG, "Unable to get Provider: " + e);
                                 }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
+                            } catch (Exception e) {
+                                Log.d(TAG, "Unable to get Location Manager: " + e);
                             }
                         }
                     } else {
@@ -563,7 +559,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                     Toast.makeText(TaskActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                 } else {
                     String phoneNumber = sharedPrefs.getString("prefHomePhone", "");
-                    if (!phoneNumber.equals("")) {
+                    if (!phoneNumber.isEmpty()) {
                         String encodedPhoneNumber = String.format("tel:%s", Uri.encode(phoneNumber));
                         Uri number = Uri.parse(encodedPhoneNumber);
                         Intent callHomeIntent = new Intent(Intent.ACTION_CALL);
@@ -686,11 +682,11 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
                             Toast.makeText(TaskActivity.this, R.string.toast_waypoint_saved, Toast.LENGTH_LONG).show();
 
                         } catch (NullPointerException e) {
-                            e.printStackTrace();
+                            Log.d(TAG, "Unable to get location: " + e);
                         }
 
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
+                    } catch (Exception e) {
+                        Log.d(TAG, "Unable to get location: " + e);
                     }
                 }
                 break;
@@ -842,14 +838,13 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             if (address == null) {
                 return null;
             }
-            if (address.size() > 0) {
+            if (!address.isEmpty()) {
                 Address location = address.get(0);
                 p1 = new LatLng(location.getLatitude(), location.getLongitude());
             }
 
-        } catch (IOException ex) {
-
-            ex.printStackTrace();
+        } catch (IOException e) {
+            Log.d(TAG, "Unable to get location from address. Error: " + e);
         }
 
         return p1;

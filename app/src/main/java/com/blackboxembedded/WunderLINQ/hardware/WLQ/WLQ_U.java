@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package com.blackboxembedded.WunderLINQ.hardware.WLQ;
 
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.util.Log;
 
 import com.blackboxembedded.WunderLINQ.MyApplication;
@@ -32,13 +32,13 @@ public class WLQ_U extends WLQ_BASE {
 
     private final static String TAG = "WLQ_U";
 
-    private static String hardwareVersion1 = "WLQU1.0";
+    public static String hardwareVersion1 = "WLQU1.0";
 
-    private static int configFlashSize = 42;
-    private static int firmwareVersionMajor_INDEX = 0;
-    private static int firmwareVersionMinor_INDEX = 1;
+    private static final int configFlashSize = 42;
+    private static final int firmwareVersionMajor_INDEX = 0;
+    private static final int firmwareVersionMinor_INDEX = 1;
 
-    private static byte[] defaultConfig = {
+    private static final byte[] defaultConfig = {
             0x00,                               // Orientation
             0x11,                               // Long Press Sensitivity
             0x01, 0x00, 0x52, 0x00, 0x00, 0x00, // Up - Arrow Up
@@ -54,59 +54,59 @@ public class WLQ_U extends WLQ_BASE {
     };
 
     // Config message
-    private static int keyMode_INDEX = 5;
-    private static int orientation_INDEX = 0;
-    private static int sensitivity_INDEX = 1;
-    private static int upKeyType_INDEX = 2;
-    private static int upKeyModifier_INDEX = 3;
-    private static int upKey_INDEX = 4;
-    private static int upLongKeyType_INDEX = 5;
-    private static int upLongKeyModifier_INDEX = 6;
-    private static int upLongKey_INDEX = 7;
-    private static int downKeyType_INDEX = 8;
-    private static int downKeyModifier_INDEX = 9;
-    private static int downKey_INDEX = 10;
-    private static int downLongKeyType_INDEX = 11;
-    private static int downLongKeyModifier_INDEX = 12;
-    private static int downLongKey_INDEX = 13;
-    private static int leftKeyType_INDEX = 14;
-    private static int leftKeyModifier_INDEX = 15;
-    private static int leftKey_INDEX = 16;
-    private static int leftLongKeyType_INDEX = 17;
-    private static int leftLongKeyModifier_INDEX = 18;
-    private static int leftLongKey_INDEX = 19;
-    private static int rightKeyType_INDEX = 20;
-    private static int rightKeyModifier_INDEX = 21;
-    private static int rightKey_INDEX = 22;
-    private static int rightLongKeyType_INDEX = 23;
-    private static int rightLongKeyModifier_INDEX = 24;
-    private static int rightLongKey_INDEX = 25;
-    private static int fx1KeyType_INDEX = 26;
-    private static int fx1KeyModifier_INDEX = 27;
-    private static int fx1Key_INDEX = 28;
-    private static int fx1LongKeyType_INDEX = 29;
-    private static int fx1LongKeyModifier_INDEX = 30;
-    private static int fx1LongKey_INDEX = 31;
-    private static int fx2KeyType_INDEX = 32;
-    private static int fx2KeyModifier_INDEX = 33;
-    private static int fx2Key_INDEX = 34;
-    private static int fx2LongKeyType_INDEX = 35;
-    private static int fx2LongKeyModifier_INDEX = 36;
-    private static int fx2LongKey_INDEX = 37;
-    private static int pdmChannel1_INDEX = 38;
-    private static int pdmChannel2_INDEX = 39;
-    private static int pdmChannel3_INDEX = 40;
-    private static int pdmChannel4_INDEX = 41;
-    private static int accessories_INDEX = 45;
+    private static final int keyMode_INDEX = 5;
+    private static final int orientation_INDEX = 0;
+    private static final int sensitivity_INDEX = 1;
+    private static final int upKeyType_INDEX = 2;
+    private static final int upKeyModifier_INDEX = 3;
+    private static final int upKey_INDEX = 4;
+    private static final int upLongKeyType_INDEX = 5;
+    private static final int upLongKeyModifier_INDEX = 6;
+    private static final int upLongKey_INDEX = 7;
+    private static final int downKeyType_INDEX = 8;
+    private static final int downKeyModifier_INDEX = 9;
+    private static final int downKey_INDEX = 10;
+    private static final int downLongKeyType_INDEX = 11;
+    private static final int downLongKeyModifier_INDEX = 12;
+    private static final int downLongKey_INDEX = 13;
+    private static final int leftKeyType_INDEX = 14;
+    private static final int leftKeyModifier_INDEX = 15;
+    private static final int leftKey_INDEX = 16;
+    private static final int leftLongKeyType_INDEX = 17;
+    private static final int leftLongKeyModifier_INDEX = 18;
+    private static final int leftLongKey_INDEX = 19;
+    private static final int rightKeyType_INDEX = 20;
+    private static final int rightKeyModifier_INDEX = 21;
+    private static final int rightKey_INDEX = 22;
+    private static final int rightLongKeyType_INDEX = 23;
+    private static final int rightLongKeyModifier_INDEX = 24;
+    private static final int rightLongKey_INDEX = 25;
+    private static final int fx1KeyType_INDEX = 26;
+    private static final int fx1KeyModifier_INDEX = 27;
+    private static final int fx1Key_INDEX = 28;
+    private static final int fx1LongKeyType_INDEX = 29;
+    private static final int fx1LongKeyModifier_INDEX = 30;
+    private static final int fx1LongKey_INDEX = 31;
+    private static final int fx2KeyType_INDEX = 32;
+    private static final int fx2KeyModifier_INDEX = 33;
+    private static final int fx2Key_INDEX = 34;
+    private static final int fx2LongKeyType_INDEX = 35;
+    private static final int fx2LongKeyModifier_INDEX = 36;
+    private static final int fx2LongKey_INDEX = 37;
+    private static final int pdmChannel1_INDEX = 38;
+    private static final int pdmChannel2_INDEX = 39;
+    private static final int pdmChannel3_INDEX = 40;
+    private static final int pdmChannel4_INDEX = 41;
+    private static final int accessories_INDEX = 45;
 
     // PDM Status message
-    private static int statusSize = 6;
-    private static int NUM_CHAN_INDEX = 0;
-    private static int ACTIVE_CHAN_INDEX = 1;
-    private static int ACC_PDM_CHANNEL1_VAL_RAW_INDEX = 2;
-    private static int ACC_PDM_CHANNEL2_VAL_RAW_INDEX = 3;
-    private static int ACC_PDM_CHANNEL3_VAL_RAW_INDEX = 4;
-    private static int ACC_PDM_CHANNEL4_VAL_RAW_INDEX = 5;
+    private static final int statusSize = 6;
+    private static final int NUM_CHAN_INDEX = 0;
+    private static final int ACTIVE_CHAN_INDEX = 1;
+    private static final int ACC_PDM_CHANNEL1_VAL_RAW_INDEX = 2;
+    private static final int ACC_PDM_CHANNEL2_VAL_RAW_INDEX = 3;
+    private static final int ACC_PDM_CHANNEL3_VAL_RAW_INDEX = 4;
+    private static final int ACC_PDM_CHANNEL4_VAL_RAW_INDEX = 5;
 
     private static byte[] wunderLINQStatus;
     private static int activeChannel;
@@ -241,76 +241,52 @@ public class WLQ_U extends WLQ_BASE {
 
     @Override
     public String getActionName(int id){
-        switch (id){
-            case ORIENTATION:
-                return MyApplication.getContext().getString(R.string.orientation_label);
-            case longPressSensitivity:
-                return MyApplication.getContext().getString(R.string.long_press_label);
-            case up:
-                return MyApplication.getContext().getString(R.string.up_label);
-            case upLong:
-                return MyApplication.getContext().getString(R.string.up_long_label);
-            case down:
-                return MyApplication.getContext().getString(R.string.down_label);
-            case downLong:
-                return MyApplication.getContext().getString(R.string.down_long_label);
-            case right:
-                return MyApplication.getContext().getString(R.string.right_label);
-            case rightLong:
-                return MyApplication.getContext().getString(R.string.right_long_label);
-            case left:
-                return MyApplication.getContext().getString(R.string.left_label);
-            case leftLong:
-                return MyApplication.getContext().getString(R.string.left_long_label);
-            case fx1:
-                return MyApplication.getContext().getString(R.string.fx1_label);
-            case fx1Long:
-                return MyApplication.getContext().getString(R.string.fx1_long_label);
-            case fx2:
-                return MyApplication.getContext().getString(R.string.fx2_label);
-            case fx2Long:
-                return MyApplication.getContext().getString(R.string.fx2_long_label);
-            case pdmChannel1:
-                return MyApplication.getContext().getString(R.string.pdm_channel1_label);
-            case pdmChannel2:
-                return MyApplication.getContext().getString(R.string.pdm_channel2_label);
-            case pdmChannel3:
-                return MyApplication.getContext().getString(R.string.pdm_channel3_label);
-            case pdmChannel4:
-                return MyApplication.getContext().getString(R.string.pdm_channel4_label);
-            default:
+        return switch (id) {
+            case ORIENTATION -> MyApplication.getContext().getString(R.string.orientation_label);
+            case longPressSensitivity ->
+                    MyApplication.getContext().getString(R.string.long_press_label);
+            case up -> MyApplication.getContext().getString(R.string.up_label);
+            case upLong -> MyApplication.getContext().getString(R.string.up_long_label);
+            case down -> MyApplication.getContext().getString(R.string.down_label);
+            case downLong -> MyApplication.getContext().getString(R.string.down_long_label);
+            case right -> MyApplication.getContext().getString(R.string.right_label);
+            case rightLong -> MyApplication.getContext().getString(R.string.right_long_label);
+            case left -> MyApplication.getContext().getString(R.string.left_label);
+            case leftLong -> MyApplication.getContext().getString(R.string.left_long_label);
+            case fx1 -> MyApplication.getContext().getString(R.string.fx1_label);
+            case fx1Long -> MyApplication.getContext().getString(R.string.fx1_long_label);
+            case fx2 -> MyApplication.getContext().getString(R.string.fx2_label);
+            case fx2Long -> MyApplication.getContext().getString(R.string.fx2_long_label);
+            case pdmChannel1 -> MyApplication.getContext().getString(R.string.pdm_channel1_label);
+            case pdmChannel2 -> MyApplication.getContext().getString(R.string.pdm_channel2_label);
+            case pdmChannel3 -> MyApplication.getContext().getString(R.string.pdm_channel3_label);
+            case pdmChannel4 -> MyApplication.getContext().getString(R.string.pdm_channel4_label);
+            default -> {
                 Log.d(TAG, "Unknown ActionID");
-                return "";
-        }
+                yield "";
+            }
+        };
     }
 
     @Override
     public String getActionValue(int id){
         switch (id){
             case KEYMODE:
-                switch (keyMode){
-                    case 0:
-                        return MyApplication.getContext().getString(R.string.keymode_default_label);
-                    case 1:
-                        return MyApplication.getContext().getString(R.string.keymode_custom_label);
-                    case 2:
-                        return MyApplication.getContext().getString(R.string.keymode_media_label);
-                    case 3:
-                        return MyApplication.getContext().getString(R.string.KEYMODE_DIRECT_label);
-                    default:
-                        return "";
-                }
+                return switch (keyMode) {
+                    case 0 -> MyApplication.getContext().getString(R.string.keymode_default_label);
+                    case 1 -> MyApplication.getContext().getString(R.string.keymode_custom_label);
+                    case 2 -> MyApplication.getContext().getString(R.string.keymode_media_label);
+                    case 3 -> MyApplication.getContext().getString(R.string.KEYMODE_DIRECT_label);
+                    default -> "";
+                };
             case ORIENTATION:
-                switch (orientation){
-                    case 1:
-                        return MyApplication.getContext().getString(R.string.orientation_180_label);
-                    case 2:
-                        return MyApplication.getContext().getString(R.string.orientation_270_label);
-                    case 3:
-                        return MyApplication.getContext().getString(R.string.orientation_90_label);
-                    default:
-                        return MyApplication.getContext().getString(R.string.orientation_default_label);
-                }
+                return switch (orientation) {
+                    case 1 -> MyApplication.getContext().getString(R.string.orientation_180_label);
+                    case 2 -> MyApplication.getContext().getString(R.string.orientation_270_label);
+                    case 3 -> MyApplication.getContext().getString(R.string.orientation_90_label);
+                    default ->
+                            MyApplication.getContext().getString(R.string.orientation_default_label);
+                };
             case longPressSensitivity:
                 return String.valueOf(sensitivity * 50);
             case up:
@@ -493,7 +469,7 @@ public class WLQ_U extends WLQ_BASE {
             case pdmChannel3:
                 tempConfig[pdmChannel3_INDEX] = value;
             case pdmChannel4:
-                tempConfig[pdmChannel2_INDEX] = value;
+                tempConfig[pdmChannel4_INDEX] = value;
             default:
                 Log.d(TAG, "Unknown ActionID");
         }
@@ -501,101 +477,68 @@ public class WLQ_U extends WLQ_BASE {
 
     @Override
     public byte getActionKeyType(int id){
-        switch (id){
-            case up:
-                return upKeyType;
-            case upLong:
-                return upLongKeyType;
-            case down:
-                return downKeyType;
-            case downLong:
-                return downLongKeyType;
-            case right:
-                return rightKeyType;
-            case rightLong:
-                return rightLongKeyType;
-            case left:
-                return leftKeyType;
-            case leftLong:
-                return leftLongKeyType;
-            case fx1:
-                return fx1KeyType;
-            case fx1Long:
-                return fx1LongKeyType;
-            case fx2:
-                return fx2KeyType;
-            case fx2Long:
-                return fx2LongKeyType;
-            default:
+        return switch (id) {
+            case up -> upKeyType;
+            case upLong -> upLongKeyType;
+            case down -> downKeyType;
+            case downLong -> downLongKeyType;
+            case right -> rightKeyType;
+            case rightLong -> rightLongKeyType;
+            case left -> leftKeyType;
+            case leftLong -> leftLongKeyType;
+            case fx1 -> fx1KeyType;
+            case fx1Long -> fx1LongKeyType;
+            case fx2 -> fx2KeyType;
+            case fx2Long -> fx2LongKeyType;
+            default -> {
                 Log.d(TAG, "Unknown ActionID");
-                return 0x00;
-        }
+                yield 0x00;
+            }
+        };
     }
 
     @Override
     public byte getActionKey(int id) {
-        switch (id) {
-            case up:
-                return upKey;
-            case upLong:
-                return upLongKey;
-            case down:
-                return downKey;
-            case downLong:
-                return downLongKey;
-            case right:
-                return rightKey;
-            case rightLong:
-                return rightLongKey;
-            case left:
-                return leftKey;
-            case leftLong:
-                return leftLongKey;
-            case fx1:
-                return fx1Key;
-            case fx1Long:
-                return fx1LongKey;
-            case fx2:
-                return fx2Key;
-            case fx2Long:
-                return fx2LongKey;
-            default:
+        return switch (id) {
+            case up -> upKey;
+            case upLong -> upLongKey;
+            case down -> downKey;
+            case downLong -> downLongKey;
+            case right -> rightKey;
+            case rightLong -> rightLongKey;
+            case left -> leftKey;
+            case leftLong -> leftLongKey;
+            case fx1 -> fx1Key;
+            case fx1Long -> fx1LongKey;
+            case fx2 -> fx2Key;
+            case fx2Long -> fx2LongKey;
+            default -> {
                 Log.d(TAG, "Unknown ActionID");
-                return 0x00;
-        }
+                yield 0x00;
+            }
+        };
     }
 
     @Override
     public byte getActionKeyModifiers(int id) {
-        switch (id) {
-            case up:
-                return upKeyModifier;
-            case upLong:
-                return upLongKeyModifier;
-            case down:
-                return downKeyModifier;
-            case downLong:
-                return downLongKeyModifier;
-            case right:
-                return rightKeyModifier;
-            case rightLong:
-                return rightLongKeyModifier;
-            case left:
-                return leftKeyModifier;
-            case leftLong:
-                return leftLongKeyModifier;
-            case fx1:
-                return fx1KeyModifier;
-            case fx1Long:
-                return fx1LongKeyModifier;
-            case fx2:
-                return fx2KeyModifier;
-            case fx2Long:
-                return fx2LongKeyModifier;
-            default:
+        return switch (id) {
+            case up -> upKeyModifier;
+            case upLong -> upLongKeyModifier;
+            case down -> downKeyModifier;
+            case downLong -> downLongKeyModifier;
+            case right -> rightKeyModifier;
+            case rightLong -> rightLongKeyModifier;
+            case left -> leftKeyModifier;
+            case leftLong -> leftLongKeyModifier;
+            case fx1 -> fx1KeyModifier;
+            case fx1Long -> fx1LongKeyModifier;
+            case fx2 -> fx2KeyModifier;
+            case fx2Long -> fx2LongKeyModifier;
+            default -> {
                 Log.d(TAG, "Unknown ActionID");
-                return 0x00;
-        }
+                yield 0x00;
+            }
+        };
     }
 
     @Override

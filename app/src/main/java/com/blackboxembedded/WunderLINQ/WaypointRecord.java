@@ -17,6 +17,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ;
 
+import androidx.annotation.NonNull;
+
 public class WaypointRecord {
 
     public final static String TAG = "WaypointRecord";
@@ -66,6 +68,7 @@ public class WaypointRecord {
         return this._label;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return _date + "    " + _data ;
@@ -78,10 +81,9 @@ public class WaypointRecord {
 
     @Override
     public boolean equals(Object other) {
-        if (!(other instanceof WaypointRecord)) {
+        if (!(other instanceof WaypointRecord otherPoint)) {
             return false;
         }
-        WaypointRecord otherPoint = (WaypointRecord)other;
         return otherPoint._id == this._id;
     }
 }

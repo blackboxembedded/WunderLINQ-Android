@@ -30,6 +30,7 @@ public class AAutoService extends CarAppService {
         return HostValidator.ALLOW_ALL_HOSTS_VALIDATOR;
     }
 
+    @NonNull
     public Session onCreateSession() {
         return new Session() {
             @NonNull

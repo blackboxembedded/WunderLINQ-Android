@@ -54,7 +54,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.telephony.CellInfoGsm;
 import android.telephony.CellInfoLte;
 import android.telephony.CellInfoNr;
@@ -138,12 +138,7 @@ public class BluetoothLeService extends Service {
 
     private static final long BROADCAST_THROTTLE_MS = 100;
     private static long lastBroadcastTime = 0;
-    private static final Runnable broadcastRunnable = new Runnable() {
-        @Override
-        public void run() {
-            sendDataBroadcastInternal();
-        }
-    };
+    private static final Runnable broadcastRunnable = BluetoothLeService::sendDataBroadcastInternal;
 
     public enum WriteType {
         WITH_RESPONSE,
@@ -190,7 +185,7 @@ public class BluetoothLeService extends Service {
 
 
     private int lastDirection;
-    private static HashMap<Integer, byte[]> messages = new HashMap<>();
+    private static final HashMap<Integer, byte[]> messages = new HashMap<>();
 
     private static BluetoothGattCharacteristic mNotifyCharacteristic;
     public static BluetoothGattCharacteristic gattCommandCharacteristic;
@@ -293,7 +288,7 @@ public class BluetoothLeService extends Service {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             List<Location> locationList = locationResult.getLocations();
-            if (locationList.size() > 0) {
+            if (!locationList.isEmpty()) {
                 //The last location in the list is the newest
                 Location location = locationList.get(locationList.size() - 1);
                 updateLocationData(location);
@@ -327,7 +322,10 @@ public class BluetoothLeService extends Service {
                         MotorcycleData.setCellularSignal(dBm);
                     } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         if (cellInfo instanceof CellInfoNr) {
-                            CellSignalStrengthNr signalStrengthNr = (CellSignalStrengthNr) ((CellInfoNr) cellInfo).getCellSignalStrength();
+                            CellSignalStrengthNr signalStrengthNr = null;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                                signalStrengthNr = (CellSignalStrengthNr) cellInfo.getCellSignalStrength();
+                            }
                             int dBm = signalStrengthNr.getDbm();
                             MotorcycleData.setCellularSignal(dBm);
                         }
@@ -454,7 +452,7 @@ public class BluetoothLeService extends Service {
         stopLocationUpdates();
     }
 
-    private BroadcastReceiver batteryReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver batteryReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
@@ -1076,41 +1074,38 @@ public class BluetoothLeService extends Service {
      *
      * @param characteristic The characteristic to read from.
      */
-    public static boolean readCharacteristic(final BluetoothGattCharacteristic characteristic) {
+    public static void readCharacteristic(final BluetoothGattCharacteristic characteristic) {
         if(mBluetoothGatt == null) {
             Log.e(TAG, "ERROR: Gatt is 'null', ignoring read request");
-            return false;
+            return;
         }
 
         // Check if characteristic is valid
         if(characteristic == null) {
             Log.e(TAG, "ERROR: Characteristic is 'null', ignoring read request");
-            return false;
+            return;
         }
 
         // Check if this characteristic actually has READ property
         if((characteristic.getProperties() & BluetoothGattCharacteristic.PROPERTY_READ) == 0 ) {
             Log.e(TAG, "ERROR: Characteristic cannot be read");
-            return false;
+            return;
         }
 
         // Enqueue the read command now that all checks have been passed
-        boolean result = commandQueue.add(new Runnable() {
-            @Override
-            public void run() {
-                if ((ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED)
-                        || (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)) {
-                    if (!mBluetoothGatt.readCharacteristic(characteristic)) {
-                        Log.e(TAG, String.format("ERROR: readCharacteristic failed for characteristic: %s", characteristic.getUuid()));
-                        completedCommand();
-                    } else {
-                        Log.d(TAG, String.format("Reading characteristic <%s>", characteristic.getUuid()));
-                        nrTries++;
-                    }
+        boolean result = commandQueue.add(() -> {
+            if ((ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED)
+                    || (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)) {
+                if (!mBluetoothGatt.readCharacteristic(characteristic)) {
+                    Log.e(TAG, String.format("ERROR: readCharacteristic failed for characteristic: %s", characteristic.getUuid()));
+                    completedCommand();
                 } else {
-                    //Request permission
-                    Log.d(TAG, "No BLUETOOTH_CONNECT permission granted");
+                    Log.d(TAG, String.format("Reading characteristic <%s>", characteristic.getUuid()));
+                    nrTries++;
                 }
+            } else {
+                //Request permission
+                Log.d(TAG, "No BLUETOOTH_CONNECT permission granted");
             }
         });
 
@@ -1119,14 +1114,13 @@ public class BluetoothLeService extends Service {
         } else {
             Log.e(TAG, "ERROR: Could not enqueue read characteristic command");
         }
-        return result;
     }
 
-    public static boolean writeCharacteristic(final BluetoothGattCharacteristic characteristic, final byte[] value, final WriteType writeType) {
+    public static void writeCharacteristic(final BluetoothGattCharacteristic characteristic, final byte[] value, final WriteType writeType) {
 
         if (!isConnected()) {
             Log.d(TAG, "Hardware Not Connected");
-            return false;
+            return;
         }
 
         // Copy the value to avoid race conditions
@@ -1134,54 +1128,50 @@ public class BluetoothLeService extends Service {
 
         // Check if this characteristic actually supports this writeType
         int writeProperty;
-        final int writeTypeInternal;
-        switch (writeType) {
-            case WITH_RESPONSE:
+        final int writeTypeInternal = switch (writeType) {
+            case WITH_RESPONSE -> {
                 writeProperty = BluetoothGattCharacteristic.PROPERTY_WRITE;
-                writeTypeInternal = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
-                break;
-            case WITHOUT_RESPONSE:
+                yield BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
+            }
+            case WITHOUT_RESPONSE -> {
                 writeProperty = BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE;
-                writeTypeInternal = BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE;
-                break;
-            case SIGNED:
+                yield BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE;
+            }
+            case SIGNED -> {
                 writeProperty = BluetoothGattCharacteristic.PROPERTY_SIGNED_WRITE;
-                writeTypeInternal = BluetoothGattCharacteristic.WRITE_TYPE_SIGNED;
-                break;
-            default:
+                yield BluetoothGattCharacteristic.WRITE_TYPE_SIGNED;
+            }
+            default -> {
                 writeProperty = 0;
-                writeTypeInternal = 0;
-                break;
-        }
+                yield 0;
+            }
+        };
         if ((characteristic.getProperties() & writeProperty) == 0) {
             Log.d(TAG, "Characteristic does not support writeType");
-            return false;
+            return;
         }
 
-        boolean result = commandQueue.add(new Runnable() {
-            @Override
-            public void run() {
-                if (isConnected()) {
-                    characteristic.setWriteType(writeTypeInternal);
-                    characteristic.setValue(bytesToWrite);
-                    if ((ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED)
-                            || (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)) {
-                        if (!mBluetoothGatt.writeCharacteristic(characteristic)) {
-                            Log.d(TAG, String.format("writeCharacteristic failed for characteristic: %s", characteristic.getUuid()));
-                            completedCommand();
-                        } else {
-                            if (bytesToWrite[3] != 0x43) { //Hack notification not working.
-                                readCharacteristic(characteristic);
-                            }
-                            if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
-                                Log.d(TAG, String.format("Writing <%s> to characteristic <%s>", Utils.ByteArrayToHex(bytesToWrite), characteristic.getUuid()));
-                            }
-                            nrTries++;
+        boolean result = commandQueue.add(() -> {
+            if (isConnected()) {
+                characteristic.setWriteType(writeTypeInternal);
+                characteristic.setValue(bytesToWrite);
+                if ((ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED)
+                        || (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)) {
+                    if (!mBluetoothGatt.writeCharacteristic(characteristic)) {
+                        Log.d(TAG, String.format("writeCharacteristic failed for characteristic: %s", characteristic.getUuid()));
+                        completedCommand();
+                    } else {
+                        if (bytesToWrite[3] != 0x43) { //Hack notification not working.
+                            readCharacteristic(characteristic);
                         }
+                        if (sharedPrefs.getBoolean("prefDebugLogging", false)) {
+                            Log.d(TAG, String.format("Writing <%s> to characteristic <%s>", Utils.ByteArrayToHex(bytesToWrite), characteristic.getUuid()));
+                        }
+                        nrTries++;
                     }
-                } else {
-                    completedCommand();
                 }
+            } else {
+                completedCommand();
             }
         });
 
@@ -1190,7 +1180,6 @@ public class BluetoothLeService extends Service {
         } else {
             Log.d(TAG, "Could not enqueue write characteristic command");
         }
-        return result;
     }
 
     /**
@@ -1203,42 +1192,39 @@ public class BluetoothLeService extends Service {
             final BluetoothGattCharacteristic characteristic, final boolean enabled) {
         if (mBluetoothGatt == null) return;
 
-        boolean result = commandQueue.add(new Runnable() {
-            @Override
-            public void run() {
-                if ((ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED)
-                        || (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)) {
-                    if (mBluetoothGatt == null) {
-                        completedCommand();
-                        return;
-                    }
+        boolean result = commandQueue.add(() -> {
+            if ((ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED)
+                    || (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)) {
+                if (mBluetoothGatt == null) {
+                    completedCommand();
+                    return;
+                }
 
-                    boolean hasDescriptor = false;
-                    BluetoothGattDescriptor descriptor = characteristic.getDescriptor(UUID.fromString(GattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
-                    if (descriptor != null) {
-                        if (enabled) {
-                            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-                        } else {
-                            descriptor.setValue(BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
-                        }
-                        if (mBluetoothGatt.writeDescriptor(descriptor)) {
-                            hasDescriptor = true;
-                            nrTries++;
-                            Log.d(TAG, (enabled ? "Start" : "Stop") + " notification request sent");
-                        }
+                boolean hasDescriptor = false;
+                BluetoothGattDescriptor descriptor = characteristic.getDescriptor(UUID.fromString(GattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
+                if (descriptor != null) {
+                    if (enabled) {
+                        descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+                    } else {
+                        descriptor.setValue(BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
                     }
+                    if (mBluetoothGatt.writeDescriptor(descriptor)) {
+                        hasDescriptor = true;
+                        nrTries++;
+                        Log.d(TAG, (enabled ? "Start" : "Stop") + " notification request sent");
+                    }
+                }
 
-                    if (!mBluetoothGatt.setCharacteristicNotification(characteristic, enabled)) {
-                        Log.e(TAG, "setCharacteristicNotification failed for characteristic: " + characteristic.getUuid());
-                    }
+                if (!mBluetoothGatt.setCharacteristicNotification(characteristic, enabled)) {
+                    Log.e(TAG, "setCharacteristicNotification failed for characteristic: " + characteristic.getUuid());
+                }
 
-                    if (!hasDescriptor) {
-                        completedCommand();
-                    }
-                } else {
-                    Log.d(TAG, "No BLUETOOTH_CONNECT permission granted");
+                if (!hasDescriptor) {
                     completedCommand();
                 }
+            } else {
+                Log.d(TAG, "No BLUETOOTH_CONNECT permission granted");
+                completedCommand();
             }
         });
 
@@ -1263,7 +1249,7 @@ public class BluetoothLeService extends Service {
 
     public static void bondDevice() {
         try {
-            Class class1 = Class.forName("android.bluetooth.BluetoothDevice");
+            Class<?> class1 = Class.forName("android.bluetooth.BluetoothDevice");
             Method createBondMethod = class1.getMethod("createBond");
             Boolean returnValue = (Boolean) createBondMethod.invoke(mBluetoothGatt.getDevice());
             Log.d(TAG,"Pair initiates status-->" + returnValue);
@@ -1300,12 +1286,11 @@ public class BluetoothLeService extends Service {
 
     public static void removeEnabledCharacteristic(BluetoothGattCharacteristic
                                                            bluetoothGattCharacteristic) {
-        if (mEnabledCharacteristics.contains(bluetoothGattCharacteristic))
-            mEnabledCharacteristics.remove(bluetoothGattCharacteristic);
+        mEnabledCharacteristics.remove(bluetoothGattCharacteristic);
     }
 
     public static void disableAllEnabledCharacteristics() {
-        if (mEnabledCharacteristics.size() > 0) {
+        if (!mEnabledCharacteristics.isEmpty()) {
             mDisableNotificationFlag = true;
             BluetoothGattCharacteristic bluetoothGattCharacteristic = mEnabledCharacteristics.
                     get(0);
@@ -1469,7 +1454,7 @@ public class BluetoothLeService extends Service {
         if(Faults.getGeneralShowsRedActive()){
             body.append(MyApplication.getContext().getResources().getString(R.string.fault_GENWARNSHRED)).append("\n");
         }
-        if(!body.toString().equals("")){
+        if(!body.toString().isEmpty()){
             showNotification(MyApplication.getContext(), MyApplication.getContext().getResources().getString(R.string.fault_title), body.toString());
         } else {
             Log.d(TAG,"Clearing notification");
@@ -1495,7 +1480,7 @@ public class BluetoothLeService extends Service {
         try {
             notificationManager.createNotificationChannel(mChannel);
         } catch (NullPointerException e){
-            Log.d(TAG, "Error creating notification channel: " + e.toString());
+            Log.d(TAG, "Error creating notification channel: " + e);
         }
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, channelId)
@@ -1634,21 +1619,18 @@ public class BluetoothLeService extends Service {
         }
 
         // Execute the next command in the queue
-        if (commandQueue.size() > 0) {
+        if (!commandQueue.isEmpty()) {
             final Runnable bluetoothCommand = commandQueue.peek();
             commandQueueBusy = true;
             if (!isRetrying) {
                 nrTries = 0;
             }
 
-            bleHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        bluetoothCommand.run();
-                    } catch (Exception ex) {
-                        Log.d(TAG, "ERROR: Command exception for device");
-                    }
+            bleHandler.post(() -> {
+                try {
+                    bluetoothCommand.run();
+                } catch (Exception ex) {
+                    Log.d(TAG, "ERROR: Command exception for device");
                 }
             });
         }

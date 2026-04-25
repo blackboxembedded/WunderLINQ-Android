@@ -38,6 +38,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -162,11 +163,9 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
                                         is = new FileInputStream(file.getAbsolutePath());
                                         parsedGpx = parser.parse(is);
                                     } catch (IOException | XmlPullParserException e) {
-                                        e.printStackTrace();
+                                        Log.d(TAG,"Problem parsing GPX. Error: " + e);
                                     }
-                                    if (parsedGpx == null) {
-                                        // Error parsing GPX
-                                    } else {
+                                    if (parsedGpx != null) {
                                         // Do something with the parsed GPX
                                         // Open database
                                         WaypointDatasource datasource = new WaypointDatasource(AddWaypointActivity.this);
@@ -192,7 +191,7 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
                                             WaypointRecord record = new WaypointRecord(time, wpt, label);
                                             datasource.addRecord(record);
 
-                                            LatLng latLong = new LatLng(waypoint.getLatitude().doubleValue(), waypoint.getLongitude().doubleValue());
+                                            LatLng latLong = new LatLng(waypoint.getLatitude(), waypoint.getLongitude());
                                             etLatitude.setText(String.valueOf(waypoint.getLatitude().doubleValue()));
                                             etLongitude.setText(String.valueOf(waypoint.getLongitude().doubleValue()));
                                             etLabel.setText(label);
@@ -223,7 +222,7 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
                                         is = resolver.openInputStream(uri);
                                         parsedGpx = parser.parse(is);
                                     } catch (IOException | XmlPullParserException e) {
-                                        e.printStackTrace();
+                                        Log.d(TAG,"Problem parsing GPX. Error: " + e);
                                     }
                                     if (parsedGpx == null) {
                                         // Error parsing GPX
@@ -253,7 +252,7 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
                                             WaypointRecord record = new WaypointRecord(time, wpt, label);
                                             datasource.addRecord(record);
 
-                                            LatLng latLong = new LatLng(waypoint.getLatitude().doubleValue(), waypoint.getLongitude().doubleValue());
+                                            LatLng latLong = new LatLng(waypoint.getLatitude(), waypoint.getLongitude());
                                             etLatitude.setText(String.valueOf(waypoint.getLatitude().doubleValue()));
                                             etLongitude.setText(String.valueOf(waypoint.getLongitude().doubleValue()));
                                             etLabel.setText(label);
@@ -272,7 +271,7 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
     }
 
     @Override
-    public void onMapReady(GoogleMap map) {
+    public void onMapReady(@NonNull GoogleMap map) {
         googleMap = map;
         googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         googleMap.setTrafficEnabled(true);
@@ -281,7 +280,7 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
         googleMap.getUiSettings().setZoomControlsEnabled(false);
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
-            public void onMapClick(LatLng point) {
+            public void onMapClick(@NonNull LatLng point) {
                 googleMap.clear();
                 googleMap.addMarker(new MarkerOptions().position(point));
                 etLatitude.setText(String.valueOf(point.latitude));
@@ -297,19 +296,15 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
         }
     }
 
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            int id = v.getId();
-            if (id == R.id.action_back) {
-                Intent backIntent = new Intent(AddWaypointActivity.this, WaypointActivity.class);
-                startActivity(backIntent);
-            } else if (id == R.id.btSearch) {
-                lookupGeoCode();
-            } else if (id == R.id.btSave) {
-                saveWaypoint();
-            }
+    private final View.OnClickListener mClickListener = v -> {
+        int id = v.getId();
+        if (id == R.id.action_back) {
+            Intent backIntent = new Intent(AddWaypointActivity.this, WaypointActivity.class);
+            startActivity(backIntent);
+        } else if (id == R.id.btSearch) {
+            lookupGeoCode();
+        } else if (id == R.id.btSave) {
+            saveWaypoint();
         }
     };
 
@@ -334,7 +329,7 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
     }
 
     private void lookupGeoCode(){
-        if(!etSearch.getText().toString().equals("")){
+        if(!etSearch.getText().toString().isEmpty()){
             Geocoder coder = new Geocoder(this);
             List<Address> address;
 
@@ -344,7 +339,7 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
                 if (address == null) {
                     Toast.makeText(this, R.string.geocode_error, Toast.LENGTH_LONG).show();
                 }
-                if (address.size() > 0) {
+                if (!address.isEmpty()) {
                     Address location = address.get(0);
                     LatLng latLong = new LatLng(location.getLatitude(), location.getLongitude());
                     etLatitude.setText(String.valueOf(location.getLatitude()));
@@ -356,15 +351,15 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
                     Toast.makeText(this, R.string.geocode_error, Toast.LENGTH_LONG).show();
                 }
 
-            } catch (IOException ex) {
-                ex.printStackTrace();
+            } catch (IOException e) {
+                Log.d(TAG,"Problem looking up geocode. Error: " + e);
                 Toast.makeText(this, R.string.geocode_error, Toast.LENGTH_LONG).show();
             }
         }
     }
 
     private void saveWaypoint(){
-        if(!etLatitude.getText().toString().equals("") && !etLongitude.getText().toString().equals("")) {
+        if(!etLatitude.getText().toString().isEmpty() && !etLongitude.getText().toString().isEmpty()) {
             // Get current date/time
             Calendar cal = Calendar.getInstance();
             Date date = cal.getTime();

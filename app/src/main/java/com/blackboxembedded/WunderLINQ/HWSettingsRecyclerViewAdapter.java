@@ -24,13 +24,14 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 public class HWSettingsRecyclerViewAdapter extends RecyclerView.Adapter<HWSettingsRecyclerViewAdapter.ViewHolder>  {
-    private ArrayList<ActionItem> mData;
-    private LayoutInflater mInflater;
+    private final ArrayList<ActionItem> mData;
+    private final LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     HWSettingsRecyclerViewAdapter(Context context, ArrayList<ActionItem> data) {
@@ -38,8 +39,9 @@ public class HWSettingsRecyclerViewAdapter extends RecyclerView.Adapter<HWSettin
         this.mData = data;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.item_hwsettings, parent, false);
         return new ViewHolder(view);
     }
@@ -50,7 +52,7 @@ public class HWSettingsRecyclerViewAdapter extends RecyclerView.Adapter<HWSettin
         String key = mData.get(position).getKey();
         holder.actionLabelTV.setText(label);
         holder.actionKeyTV.setText(key);
-        if(key.equals("")){
+        if(key.isEmpty()){
             holder.actionLabelTV.setTextSize(32);
             holder.actionKeyTV.setVisibility(View.GONE);
         } else {
@@ -98,9 +100,9 @@ public class HWSettingsRecyclerViewAdapter extends RecyclerView.Adapter<HWSettin
 }
 
 class ActionItem {
-    private int id;
-    private String label;
-    private String key;
+    private final int id;
+    private final String label;
+    private final String key;
 
     public ActionItem(int id, String label, String key) {
         this.id = id;

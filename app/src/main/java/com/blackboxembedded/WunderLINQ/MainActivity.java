@@ -43,7 +43,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
@@ -69,6 +69,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -303,7 +304,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
                 countDownTimer.cancel();  // Cancel the countdown timer if button is clicked manually
                 try {
-                    if (dialog != null && dialog.isShowing()) {
+                    if (dialog.isShowing()) {
                         dialog.dismiss();
                     }
                 } catch (IllegalArgumentException e) {
@@ -421,7 +422,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         return true;
     }
 
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
+    private final View.OnClickListener mClickListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
@@ -595,7 +596,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Log.d(TAG, "In onConfigChange");
         gridChange(true);
@@ -643,7 +644,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
                 blePermission = false;
-                //TODO Request Permission
                 Log.d(TAG, "NO BLUETOOTH_CONNECT Permission");
             }
         }
@@ -667,21 +667,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 builder.setTitle(getString(R.string.no_pairing_alert_title));
                 builder.setMessage(getString(R.string.no_pairing_alert_body));
                 builder.setPositiveButton(R.string.alert_btn_ok,
-                        new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
+                        (dialog, which) -> dialog.cancel());
                 builder.setNegativeButton(R.string.task_title_settings,
-                        new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent settings_intent = new Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
-                                startActivityForResult(settings_intent, 0);
-                            }
+                        (dialog, which) -> {
+                            Intent settings_intent = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+                            startActivityForResult(settings_intent, 0);
                         });
                 builder.show();
             } else if (wlqCnt == 1) {
@@ -697,21 +687,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 builder.setTitle(getString(R.string.too_many_pairings_alert_title));
                 builder.setMessage(getString(R.string.too_many_pairings_alert_body));
                 builder.setPositiveButton(R.string.alert_btn_ok,
-                        new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
+                        (dialog, which) -> dialog.cancel());
                 builder.setNegativeButton(R.string.task_title_settings,
-                        new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent settings_intent = new Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
-                                startActivityForResult(settings_intent, 0);
-                            }
+                        (dialog, which) -> {
+                            Intent settings_intent = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+                            startActivityForResult(settings_intent, 0);
                         });
                 builder.show();
             }
@@ -721,18 +701,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             builder.setTitle(getString(R.string.negative_alert_title));
             builder.setMessage(getString(R.string.btconnect_alert_body));
             builder.setPositiveButton(R.string.alert_btn_ok,
-                    new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                                    Log.d(TAG, "Requesting BT_CONNECT permission");
-                                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, PERMISSION_REQUEST_BLUETOOTH_CONNECT);
-                                }
-                            }
-                            dialog.cancel();
+                    (dialog, which) -> {
+                        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                            Log.d(TAG, "Requesting BT_CONNECT permission");
+                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, PERMISSION_REQUEST_BLUETOOTH_CONNECT);
                         }
+                        dialog.cancel();
                     });
             builder.setNegativeButton(R.string.disclaimer_quit,
                     new DialogInterface.OnClickListener() {
@@ -890,28 +864,27 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_ESCAPE:
-                return true;
-            case KeyEvent.KEYCODE_DPAD_LEFT:
+        return switch (keyCode) {
+            case KeyEvent.KEYCODE_ESCAPE -> true;
+            case KeyEvent.KEYCODE_DPAD_LEFT -> {
                 goBack();
-                return true;
-            case KeyEvent.KEYCODE_DPAD_RIGHT:
+                yield true;
+            }
+            case KeyEvent.KEYCODE_DPAD_RIGHT -> {
                 goForward();
-                return true;
-            case KeyEvent.KEYCODE_DPAD_UP:
-            case KeyEvent.KEYCODE_PLUS:
-            case KeyEvent.KEYCODE_NUMPAD_ADD:
+                yield true;
+            }
+            case KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_PLUS, KeyEvent.KEYCODE_NUMPAD_ADD -> {
                 goUp();
-                return true;
-            case KeyEvent.KEYCODE_DPAD_DOWN:
-            case KeyEvent.KEYCODE_MINUS:
-            case KeyEvent.KEYCODE_NUMPAD_SUBTRACT:
+                yield true;
+            }
+            case KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_MINUS,
+                 KeyEvent.KEYCODE_NUMPAD_SUBTRACT -> {
                 goDown();
-                return true;
-            default:
-                return super.onKeyUp(keyCode, event);
-        }
+                yield true;
+            }
+            default -> super.onKeyUp(keyCode, event);
+        };
     }
 
     public static boolean isAccessibilityServiceEnabled(Context context, Class<?> accessibilityService) {
@@ -991,29 +964,16 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         int nextCellCount = 1;
         SharedPreferences.Editor editor = sharedPrefs.edit();
 
-        switch (currentCellCount){
-            case 15:
-                nextCellCount = 1;
-                break;
-            case 12:
-                nextCellCount = 15;
-                break;
-            case 10:
-                nextCellCount = 12;
-                break;
-            case 8:
-                nextCellCount = 10;
-                break;
-            case 4:
-                nextCellCount = 8;
-                break;
-            case 2:
-                nextCellCount = 4;
-                break;
-            case 1:
-                nextCellCount = 2;
-                break;
-        }
+        nextCellCount = switch (currentCellCount) {
+            case 15 -> 1;
+            case 12 -> 15;
+            case 10 -> 12;
+            case 8 -> 10;
+            case 4 -> 8;
+            case 2 -> 4;
+            case 1 -> 2;
+            default -> nextCellCount;
+        };
         editor.putString("CELL_COUNT", String.valueOf(nextCellCount));
         editor.apply();
 
@@ -1028,29 +988,16 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         int nextCellCount = 1;
         SharedPreferences.Editor editor = sharedPrefs.edit();
 
-        switch (currentCellCount){
-            case 15:
-                nextCellCount = 12;
-                break;
-            case 12:
-                nextCellCount = 10;
-                break;
-            case 10:
-                nextCellCount = 8;
-                break;
-            case 8:
-                nextCellCount = 4;
-                break;
-            case 4:
-                nextCellCount = 2;
-                break;
-            case 2:
-                nextCellCount = 1;
-                break;
-            case 1:
-                nextCellCount = 15;
-                break;
-        }
+        nextCellCount = switch (currentCellCount) {
+            case 15 -> 12;
+            case 12 -> 10;
+            case 10 -> 8;
+            case 8 -> 4;
+            case 4 -> 2;
+            case 2 -> 1;
+            case 1 -> 15;
+            default -> nextCellCount;
+        };
         editor.putString("CELL_COUNT", String.valueOf(nextCellCount));
         editor.apply();
 
@@ -1059,29 +1006,25 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case PERMISSION_REQUEST_BLUETOOTH_CONNECT: {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d(TAG, "BLUETOOTH_CONNECT permission granted");
-                } else {
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle(getString(R.string.negative_alert_title));
-                    builder.setMessage(getString(R.string.negative_btconnect_alert_body));
-                    builder.setPositiveButton(android.R.string.ok, null);
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                        }
-                    });
-                    builder.show();
-                }
-                break;
+        if (requestCode == PERMISSION_REQUEST_BLUETOOTH_CONNECT) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "BLUETOOTH_CONNECT permission granted");
+            } else {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(getString(string.negative_alert_title));
+                builder.setMessage(getString(string.negative_btconnect_alert_body));
+                builder.setPositiveButton(android.R.string.ok, null);
+                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                    }
+                });
+                builder.show();
             }
-            default:
-                Log.d(TAG, "Unknown Permissions Request Code");
-                break;
+        } else {
+            Log.d(TAG, "Unknown Permissions Request Code");
         }
     }
 

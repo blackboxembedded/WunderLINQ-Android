@@ -20,7 +20,6 @@ package com.blackboxembedded.WunderLINQ.Utils;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.util.Log;
 
 import com.blackboxembedded.WunderLINQ.MemCache;
@@ -85,11 +84,6 @@ public class Utils {
         long secondsInMilli = 1000;
         long minutesInMilli = secondsInMilli * 60;
         long hoursInMilli = minutesInMilli * 60;
-        long daysInMilli = hoursInMilli * 24;
-
-        //long elapsedDays = different / daysInMilli;
-        //different = different % daysInMilli;
-
         long elapsedHours = different / hoursInMilli;
         different = different % hoursInMilli;
 
@@ -97,8 +91,7 @@ public class Utils {
         different = different % minutesInMilli;
 
         long elapsedSeconds = different / secondsInMilli;
-        long[] duration = new long[]{elapsedSeconds,elapsedMinutes,elapsedHours};
-        return duration;
+        return new long[]{elapsedSeconds,elapsedMinutes,elapsedHours};
     }
 
     // return rate of climb
@@ -200,12 +193,8 @@ public class Utils {
 
     public static String toOneDecimalString(double num) {
         DecimalFormat decimalFormat =  (DecimalFormat) Utils.getLocalizedOneDigitFormat();
-        String value  = decimalFormat.format(Math.round(num * 100d)/100d );
-
-        return value;
+        return decimalFormat.format(Math.round(num * 100d)/100d );
     }
-
-
 
     public static String toZeroDecimalString(double num) {
         return toZeroDecimalString(num, false);

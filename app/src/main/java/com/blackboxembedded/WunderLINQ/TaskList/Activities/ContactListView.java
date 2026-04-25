@@ -26,6 +26,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.blackboxembedded.WunderLINQ.R;
 
 import java.util.ArrayList;
@@ -44,19 +46,35 @@ public class ContactListView extends ArrayAdapter<String>{
         this.icon = icon;
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
-        LayoutInflater inflater = context.getLayoutInflater();
-        View rowView= inflater.inflate(R.layout.item_contact, null, true);
-        TextView txtTitle = rowView.findViewById(R.id.tv_label);
-        ImageView imageView = rowView.findViewById(R.id.iv_icon);
+    public View getView(int position, View view, @NonNull ViewGroup parent) {
+        View rowView = view;
+        ViewHolder holder;
+        if (rowView == null) {
+            LayoutInflater inflater = context.getLayoutInflater();
+            rowView = inflater.inflate(R.layout.item_contact, parent, false);
+            holder = new ViewHolder();
+            holder.txtTitle = rowView.findViewById(R.id.tv_label);
+            holder.imageView = rowView.findViewById(R.id.iv_icon);
+            rowView.setTag(holder);
+        } else {
+            holder = (ViewHolder) rowView.getTag();
+        }
 
-        txtTitle.setText(label.get(position));
+        holder.txtTitle.setText(label.get(position));
         if (icon.get(position) != null) {
-            imageView.setImageDrawable(icon.get(position));
-            imageView.setImageTintMode(null);
+            holder.imageView.setImageDrawable(icon.get(position));
+            holder.imageView.setImageTintMode(null);
+        } else {
+            holder.imageView.setImageDrawable(null);
         }
 
         return rowView;
+    }
+
+    static class ViewHolder {
+        TextView txtTitle;
+        ImageView imageView;
     }
 }

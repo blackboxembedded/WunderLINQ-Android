@@ -11,7 +11,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -80,7 +80,6 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
     private Marker mMarker;
     private TileOverlay tileOverlay;
     private ValueAnimator animator;
-    private SharedPreferences sharedPrefs;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
 
@@ -137,7 +136,7 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         setContentView(R.layout.activity_weather);
 
@@ -278,7 +277,6 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
         updateMarkerAndCamera(true);
         setupRadarOverlay();
 
-        tvDate.setText("Loading radar...");
         startRuntimeTasks();
     }
 

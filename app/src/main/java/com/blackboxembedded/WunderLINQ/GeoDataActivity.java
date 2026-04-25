@@ -81,21 +81,17 @@ public class GeoDataActivity extends AppCompatActivity {
         forwardButton.setVisibility(View.INVISIBLE);
     }
 
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            int id = v.getId();
-            if (id == R.id.action_back) {
-                Intent backIntent = new Intent(GeoDataActivity.this, MainActivity.class);
-                startActivity(backIntent);
-            } else if (id == R.id.llTrips) {
-                Intent tripsIntent = new Intent(GeoDataActivity.this, TripsActivity.class);
-                startActivity(tripsIntent);
-            } else if (id == R.id.llWaypoints) {
-                Intent waypointsIntent = new Intent(GeoDataActivity.this, WaypointActivity.class);
-                startActivity(waypointsIntent);
-            }
+    private final View.OnClickListener mClickListener = v -> {
+        int id = v.getId();
+        if (id == R.id.action_back) {
+            Intent backIntent = new Intent(GeoDataActivity.this, MainActivity.class);
+            startActivity(backIntent);
+        } else if (id == R.id.llTrips) {
+            Intent tripsIntent = new Intent(GeoDataActivity.this, TripsActivity.class);
+            startActivity(tripsIntent);
+        } else if (id == R.id.llWaypoints) {
+            Intent waypointsIntent = new Intent(GeoDataActivity.this, WaypointActivity.class);
+            startActivity(waypointsIntent);
         }
     };
 }

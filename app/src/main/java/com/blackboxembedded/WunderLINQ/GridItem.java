@@ -25,13 +25,13 @@ import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 public class GridItem {
     private final static String TAG = "GridItem";
 
-    private  MotorcycleData.DataType dataType;
+    private final MotorcycleData.DataType dataType;
 
-    private String label;
-    private String value;
+    private final String label;
+    private final String value;
     @ColorInt
-    private Integer valueColor;
-    private Drawable icon;
+    private final Integer valueColor;
+    private final Drawable icon;
 
     public GridItem(Drawable icon, String label, String value, Integer valueColor,  MotorcycleData.DataType type) {
         this.icon = icon;
@@ -52,9 +52,6 @@ public class GridItem {
     }
     public Drawable getIcon() {
         return icon;
-    }
-    public  MotorcycleData.DataType dataType() {
-        return dataType;
     }
 
     public static GridItem getCellData( MotorcycleData.DataType dataPoint){

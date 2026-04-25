@@ -17,6 +17,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ;
 
+import androidx.annotation.NonNull;
+
 public class PermissionRecord {
 
     int _id;
@@ -53,6 +55,7 @@ public class PermissionRecord {
         return this._enabled;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return _label ;

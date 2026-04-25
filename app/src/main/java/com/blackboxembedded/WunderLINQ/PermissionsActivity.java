@@ -17,6 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -67,7 +68,6 @@ public class PermissionsActivity extends AppCompatActivity {
     public static final int PERMISSION_BLUETOOTH_CONNECT = 11;
     public static final int PERMISSION_READ_PHONE_STATE = 12;
 
-    private ListView permissionsList;
     List<PermissionRecord> listValues;
     ArrayAdapter<PermissionRecord> adapter;
 
@@ -77,7 +77,7 @@ public class PermissionsActivity extends AppCompatActivity {
 
         AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
         setContentView(R.layout.activity_permissions);
-        permissionsList = findViewById(R.id.lv_permissions);
+        ListView permissionsList = findViewById(R.id.lv_permissions);
         showActionBar();
 
         updateListing();
@@ -190,61 +190,39 @@ public class PermissionsActivity extends AppCompatActivity {
 
     }
 
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            int id = v.getId();
-            if (id == R.id.action_back) {
-                Intent backIntent = new Intent(PermissionsActivity.this, SettingsActivity.class);
-                startActivity(backIntent);
-            }
+    private final View.OnClickListener mClickListener = v -> {
+        int id = v.getId();
+        if (id == R.id.action_back) {
+            Intent backIntent = new Intent(PermissionsActivity.this, SettingsActivity.class);
+            startActivity(backIntent);
         }
     };
 
     private void updateListing(){
         listValues = new ArrayList<>();
         // Location permission
-        boolean locationPermission = false;
-        if (ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationPermission = true;
-        }
+        boolean locationPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
         listValues.add(new PermissionRecord(PERMISSION_LOCATION, getString(R.string.permission_location_label), locationPermission));
 
         //Contacts
-        boolean contactsPermission = false;
-        if (ActivityCompat.checkSelfPermission(this,Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            contactsPermission = true;
-        }
+        boolean contactsPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED;
         listValues.add(new PermissionRecord(PERMISSION_CONTACTS, getString(R.string.permission_contacts_label), contactsPermission));
 
         //Microphone
-        boolean microphonePermission = false;
-        if (ActivityCompat.checkSelfPermission(this,Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
-            microphonePermission = true;
-        }
+        boolean microphonePermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED;
         listValues.add(new PermissionRecord(PERMISSION_RECORD_AUDIO, getString(R.string.permission_microphone_label), microphonePermission));
 
         //Camera
-        boolean cameraPermission = false;
-        if (ActivityCompat.checkSelfPermission(this,Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            cameraPermission = true;
-        }
+        boolean cameraPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
         listValues.add(new PermissionRecord(PERMISSION_CAMERA, getString(R.string.permission_camera_label), cameraPermission));
 
         //Phone
-        boolean phonePermission = false;
-        if (ActivityCompat.checkSelfPermission(this,Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-            phonePermission = true;
-        }
+        boolean phonePermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED;
         listValues.add(new PermissionRecord(PERMISSION_PHONE, getString(R.string.permission_phone_label), phonePermission));
 
         //Notification Access
-        boolean notificationPermission = false;
-        if (Settings.Secure.getString(getApplication().getContentResolver(),"enabled_notification_listeners") != null
-                || Settings.Secure.getString(getApplication().getContentResolver(),"enabled_notification_listeners").contains(getApplicationContext().getPackageName())) {
-            notificationPermission = true;
-        }
+        boolean notificationPermission = Settings.Secure.getString(getApplication().getContentResolver(), "enabled_notification_listeners") != null
+                || Settings.Secure.getString(getApplication().getContentResolver(), "enabled_notification_listeners").contains(getApplicationContext().getPackageName());
         listValues.add(new PermissionRecord(PERMISSION_NOTIFICATION, getString(R.string.permission_notification_label), notificationPermission));
 
         //Overlay
@@ -270,15 +248,12 @@ public class PermissionsActivity extends AppCompatActivity {
         listValues.add(new PermissionRecord(PERMISSION_BLUETOOTH_CONNECT, getString(R.string.permission_btconnect_label), btConnectPermission));
 
         //READ_PHONE_STATE
-        boolean phoneStatePermission = false;
-        if (ActivityCompat.checkSelfPermission(this,Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
-            phoneStatePermission = true;
-        }
+        boolean phoneStatePermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED;
         listValues.add(new PermissionRecord(PERMISSION_READ_PHONE_STATE, getString(R.string.permission_phonestate_label), phoneStatePermission));
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case PERMISSION_CAMERA: {

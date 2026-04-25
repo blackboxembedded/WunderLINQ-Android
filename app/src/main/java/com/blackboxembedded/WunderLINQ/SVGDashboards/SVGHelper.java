@@ -1,15 +1,12 @@
 package com.blackboxembedded.WunderLINQ.SVGDashboards;
 
-import static android.content.Context.WINDOW_SERVICE;
-
 import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Build;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Display;
-import android.view.Surface;
 import android.view.WindowManager;
 import android.view.WindowMetrics;
 
@@ -46,8 +43,7 @@ public class SVGHelper {
     }
 
     private void fillCache(Node node) {
-        if (node instanceof Element) {
-            Element e = (Element) node;
+        if (node instanceof Element e) {
             String id = e.getAttribute("id");
             if (id != null && !id.isEmpty()) {
                 elementCache.put(id, e);
@@ -209,24 +205,20 @@ public class SVGHelper {
                     break;
                 case 2://Trip1
                     if (MotorcycleData.getTripOne() != null) {
-                        if (MotorcycleData.getTripOne() != null) {
-                            double trip1 = MotorcycleData.getTripOne();
-                            if (s.distanceFormat.contains("1")) {
-                                trip1 = Utils.kmToMiles(trip1);
-                            }
-                            dataVal = Utils.toOneDecimalString(trip1) + " " + s.distanceUnit;
+                        double trip1 = MotorcycleData.getTripOne();
+                        if (s.distanceFormat.contains("1")) {
+                            trip1 = Utils.kmToMiles(trip1);
                         }
+                        dataVal = Utils.toOneDecimalString(trip1) + " " + s.distanceUnit;
                     }
                     break;
                 case 3://Trip2
                     if (MotorcycleData.getTripTwo() != null) {
-                        if (MotorcycleData.getTripTwo() != null) {
-                            double trip2 = MotorcycleData.getTripTwo();
-                            if (s.distanceFormat.contains("1")) {
-                                trip2 = Utils.kmToMiles(trip2);
-                            }
-                            dataVal = Utils.toOneDecimalString(trip2) + " " + s.distanceUnit;
+                        double trip2 = MotorcycleData.getTripTwo();
+                        if (s.distanceFormat.contains("1")) {
+                            trip2 = Utils.kmToMiles(trip2);
                         }
+                        dataVal = Utils.toOneDecimalString(trip2) + " " + s.distanceUnit;
                     }
                     break;
                 case 4://Altitude
@@ -1682,25 +1674,25 @@ public class SVGHelper {
                     if ((MotorcycleData.getRPM() >= 7875) && (MotorcycleData.getRPM() <= 8000)) {
                         doc.getElementById("rpmNeedle37").setAttribute("style", "display:inline");
                     }
-                    if ((MotorcycleData.getRPM() >= 8001) && (MotorcycleData.getRPM() <= 6142)) {
+                    if ((MotorcycleData.getRPM() >= 8001) && (MotorcycleData.getRPM() <= 8142)) {
                         doc.getElementById("rpmNeedle38").setAttribute("style", "display:inline");
                     }
-                    if ((MotorcycleData.getRPM() >= 6143) && (MotorcycleData.getRPM() <= 6285)) {
+                    if ((MotorcycleData.getRPM() >= 8143) && (MotorcycleData.getRPM() <= 8285)) {
                         doc.getElementById("rpmNeedle39").setAttribute("style", "display:inline");
                     }
-                    if ((MotorcycleData.getRPM() >= 6286) && (MotorcycleData.getRPM() <= 6428)) {
+                    if ((MotorcycleData.getRPM() >= 8286) && (MotorcycleData.getRPM() <= 8428)) {
                         doc.getElementById("rpmNeedle40").setAttribute("style", "display:inline");
                     }
-                    if ((MotorcycleData.getRPM() >= 6429) && (MotorcycleData.getRPM() <= 6571)) {
+                    if ((MotorcycleData.getRPM() >= 8429) && (MotorcycleData.getRPM() <= 8571)) {
                         doc.getElementById("rpmNeedle41").setAttribute("style", "display:inline");
                     }
-                    if ((MotorcycleData.getRPM() >= 6572) && (MotorcycleData.getRPM() <= 6714)) {
+                    if ((MotorcycleData.getRPM() >= 8572) && (MotorcycleData.getRPM() <= 8714)) {
                         doc.getElementById("rpmNeedle42").setAttribute("style", "display:inline");
                     }
-                    if ((MotorcycleData.getRPM() >= 6715) && (MotorcycleData.getRPM() <= 6857)) {
+                    if ((MotorcycleData.getRPM() >= 8715) && (MotorcycleData.getRPM() <= 8857)) {
                         doc.getElementById("rpmNeedle43").setAttribute("style", "display:inline");
                     }
-                    if ((MotorcycleData.getRPM() >= 6858) && (MotorcycleData.getRPM() <= 6999)) {
+                    if ((MotorcycleData.getRPM() >= 8858) && (MotorcycleData.getRPM() <= 8999)) {
                         doc.getElementById("rpmNeedle44").setAttribute("style", "display:inline");
                     }
                     if ((MotorcycleData.getRPM() >= 9000) && (MotorcycleData.getRPM() <= 9142)) {
@@ -2369,17 +2361,15 @@ public class SVGHelper {
         return;
     }
 
-    private static boolean setText(Document doc, String id, String text) {
+    private static void setText(Document doc, String id, String text) {
         try {
             org.w3c.dom.Element e = doc.getElementById(id);
             if (e != null) {
                 e.setTextContent(text);
-                return true;
             }
         } catch (Exception E) {
             Log.d(TAG, "Exception Setting Text: " + E.toString());
         }
-        return false;
     }
 
 

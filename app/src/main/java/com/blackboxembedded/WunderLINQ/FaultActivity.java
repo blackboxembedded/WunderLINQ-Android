@@ -23,7 +23,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -40,7 +40,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.blackboxembedded.WunderLINQ.Utils.AppUtils;
-import com.blackboxembedded.WunderLINQ.Utils.SoundManager;
 import com.blackboxembedded.WunderLINQ.comms.BLE.BluetoothLeService;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 
@@ -53,9 +52,6 @@ public class FaultActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Faults faults;
-        faults = (new Faults(this));
         ListView faultList;
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -75,7 +71,7 @@ public class FaultActivity extends AppCompatActivity {
         });
 
 
-        faultListData = faults.getAllActiveDesc();
+        faultListData = Faults.getAllActiveDesc();
 
         faultList.setAdapter(new ArrayAdapter<String>(this, R.layout.item_fault,faultListData));
 
@@ -128,8 +124,7 @@ public class FaultActivity extends AppCompatActivity {
     }
 
     private void updateFaultList() {
-        Faults faults = new Faults(this);
-        faultListData = faults.getAllActiveDesc();
+        faultListData = Faults.getAllActiveDesc();
         ListView faultList = findViewById(R.id.lv_faults);
         if (faultList != null) {
             faultList.setAdapter(new ArrayAdapter<String>(this, R.layout.item_fault, faultListData));
@@ -147,13 +142,11 @@ public class FaultActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_DPAD_LEFT:
-                finish();
-                return true;
-            default:
-                return super.onKeyUp(keyCode, event);
+        if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+            finish();
+            return true;
         }
+        return super.onKeyUp(keyCode, event);
     }
 
     private void showActionBar(){
@@ -175,14 +168,10 @@ public class FaultActivity extends AppCompatActivity {
         forwardButton.setVisibility(View.INVISIBLE);
     }
 
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            int id = v.getId();
-            if (id == R.id.action_back) {
-                finish();
-            }
+    private final View.OnClickListener mClickListener = v -> {
+        int id = v.getId();
+        if (id == R.id.action_back) {
+            finish();
         }
     };
 }

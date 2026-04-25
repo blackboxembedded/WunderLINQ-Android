@@ -40,7 +40,7 @@ import android.media.session.PlaybackState;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.util.TypedValue;
@@ -85,7 +85,7 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
     private MediaController.TransportControls controls;
     private MediaController controller;
 
-    private Handler mHandler = new Handler();
+    private final Handler mHandler = new Handler();
 
     private GestureDetectorListener gestureDetector;
 
@@ -103,7 +103,7 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         List<MediaController> controllers = mm.getActiveSessions(
                 new ComponentName(this, NotificationListener.class));
 
-        MediaController newController = controllers.size() > 0 ? controllers.get(0) : null;
+        MediaController newController = !controllers.isEmpty() ? controllers.get(0) : null;
 
         if (controller != newController) {
             if (controller != null) {
@@ -120,7 +120,7 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         refreshMetaData();
     }
 
-    private OnClickListener mClickListener = new OnClickListener() {
+    private final OnClickListener mClickListener = new OnClickListener() {
 
         @Override
         public void onClick(View v) {
@@ -203,22 +203,6 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         View view = findViewById(R.id.layout_music);
 
         gestureDetector = new GestureDetectorListener(this){
-
-            @Override
-            public void onPressLong() {
-
-            }
-
-            @Override
-            public void onSwipeUp() {
-
-            }
-
-            @Override
-            public void onSwipeDown() {
-
-            }
-
             @Override
             public void onSwipeLeft() {
                 goForward();
@@ -440,7 +424,7 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         }
     }
 
-    private Runnable mUpdateUI = new Runnable() {
+    private final Runnable mUpdateUI = new Runnable() {
         @Override
         public void run() {
             //Update display - focus and faults

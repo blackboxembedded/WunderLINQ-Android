@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,8 +46,6 @@ public class TripsActivity extends AppCompatActivity {
 
     private static final String TAG = "TripsActivity";
 
-    private RecyclerView tripList;
-
     private ArrayList<String> trips;
     private TripsAdapter adapter;
 
@@ -58,7 +57,7 @@ public class TripsActivity extends AppCompatActivity {
         AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
         setContentView(R.layout.activity_trips);
 
-        tripList = findViewById(R.id.rv_trips);
+        RecyclerView tripList = findViewById(R.id.rv_trips);
         tripList.setLayoutManager(new LinearLayoutManager(this));
         trips = new ArrayList<String>();
         adapter = new TripsAdapter(this, trips);
@@ -67,18 +66,18 @@ public class TripsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View view, int position) {
                 Intent tripViewIntent = new Intent(TripsActivity.this, TripViewActivity.class);
-                tripViewIntent.putExtra("FILE", trips.get(position).toString());
+                tripViewIntent.putExtra("FILE", trips.get(position));
                 startActivity(tripViewIntent);
             }
         });
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 return false;
             }
 
             @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 // Display dialog text here......
                 final AlertDialog.Builder builder = new AlertDialog.Builder(TripsActivity.this);
                 builder.setTitle(getString(R.string.delete_trip_alert_title));
@@ -88,7 +87,7 @@ public class TripsActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 int position = viewHolder.getAdapterPosition();
-                                String fileName = trips.get(position).toString();
+                                String fileName = trips.get(position);
                                 File file = new File(MyApplication.getContext().getExternalFilesDir(null), "/logs/" + fileName);
                                 file.delete();
                                 trips.remove(position);  // mData is your data list
@@ -144,14 +143,11 @@ public class TripsActivity extends AppCompatActivity {
         forwardButton.setVisibility(View.INVISIBLE);
     }
 
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            int id = v.getId();
-            if (id == R.id.action_back) {
-                Intent backIntent = new Intent(TripsActivity.this, GeoDataActivity.class);
-                startActivity(backIntent);
-            }
+    private final View.OnClickListener mClickListener = v -> {
+        int id = v.getId();
+        if (id == R.id.action_back) {
+            Intent backIntent = new Intent(TripsActivity.this, GeoDataActivity.class);
+            startActivity(backIntent);
         }
     };
 
@@ -170,7 +166,7 @@ public class TripsActivity extends AppCompatActivity {
                 trips.add(file.getName());
             }
         }
-        if (trips.size() > 0 ) {
+        if (!trips.isEmpty()) {
             adapter.notifyDataSetChanged();
         }
     }

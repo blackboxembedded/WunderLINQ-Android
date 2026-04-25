@@ -33,9 +33,10 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,7 +65,6 @@ import java.util.HashSet;
 public class ContactListActivity extends AppCompatActivity {
 
     public final static String TAG = "ContactList";
-    private ImageButton faultButton;
 
     private ListView contactList;
 
@@ -254,7 +254,7 @@ public class ContactListActivity extends AppCompatActivity {
                                                                 Uri.parse(photoURI));
                                                 photo = new BitmapDrawable(getResources(), photoBitmap);
                                             } catch (IOException e) {
-                                                e.printStackTrace();
+                                                Log.d(TAG, "Unable to get contact photo. Error: " + e);
                                             }
                                         }
                                         photoId.add(photo);
@@ -271,7 +271,7 @@ public class ContactListActivity extends AppCompatActivity {
                                                                 Uri.parse(photoURI));
                                                 photo = new BitmapDrawable(getResources(), photoBitmap);
                                             } catch (IOException e) {
-                                                e.printStackTrace();
+                                                Log.d(TAG, "Unable to get contact photo. Error: " + e);
                                             }
                                         }
                                         photoId.add(photo);
@@ -326,73 +326,30 @@ public class ContactListActivity extends AppCompatActivity {
         }
     }
     String typeIDtoString (int typeID){
-        String type = "";
-        switch (typeID){
-            case 0:
-                type = getResources().getString(R.string.contact_type_0);
-                break;
-            case 1:
-                type = getResources().getString(R.string.contact_type_1);
-                break;
-            case 2:
-                type = getResources().getString(R.string.contact_type_2);
-                break;
-            case 3:
-                type = getResources().getString(R.string.contact_type_3);
-                break;
-            case 4:
-                type = getResources().getString(R.string.contact_type_4);
-                break;
-            case 5:
-                type = getResources().getString(R.string.contact_type_5);
-                break;
-            case 6:
-                type = getResources().getString(R.string.contact_type_6);
-                break;
-            case 7:
-                type = getResources().getString(R.string.contact_type_7);
-                break;
-            case 8:
-                type = getResources().getString(R.string.contact_type_8);
-                break;
-            case 9:
-                type = getResources().getString(R.string.contact_type_9);
-                break;
-            case 10:
-                type = getResources().getString(R.string.contact_type_10);
-                break;
-            case 11:
-                type = getResources().getString(R.string.contact_type_11);
-                break;
-            case 12:
-                type = getResources().getString(R.string.contact_type_12);
-                break;
-            case 13:
-                type = getResources().getString(R.string.contact_type_13);
-                break;
-            case 14:
-                type = getResources().getString(R.string.contact_type_14);
-                break;
-            case 15:
-                type = getResources().getString(R.string.contact_type_15);
-                break;
-            case 16:
-                type = getResources().getString(R.string.contact_type_16);
-                break;
-            case 17:
-                type = getResources().getString(R.string.contact_type_17);
-                break;
-            case 18:
-                type = getResources().getString(R.string.contact_type_18);
-                break;
-            case 19:
-                type = getResources().getString(R.string.contact_type_19);
-                break;
-            case 20:
-                type = getResources().getString(R.string.contact_type_20);
-                break;
-        }
-        return type;
+        return switch (typeID) {
+            case 0 -> getResources().getString(R.string.contact_type_0);
+            case 1 -> getResources().getString(R.string.contact_type_1);
+            case 2 -> getResources().getString(R.string.contact_type_2);
+            case 3 -> getResources().getString(R.string.contact_type_3);
+            case 4 -> getResources().getString(R.string.contact_type_4);
+            case 5 -> getResources().getString(R.string.contact_type_5);
+            case 6 -> getResources().getString(R.string.contact_type_6);
+            case 7 -> getResources().getString(R.string.contact_type_7);
+            case 8 -> getResources().getString(R.string.contact_type_8);
+            case 9 -> getResources().getString(R.string.contact_type_9);
+            case 10 -> getResources().getString(R.string.contact_type_10);
+            case 11 -> getResources().getString(R.string.contact_type_11);
+            case 12 -> getResources().getString(R.string.contact_type_12);
+            case 13 -> getResources().getString(R.string.contact_type_13);
+            case 14 -> getResources().getString(R.string.contact_type_14);
+            case 15 -> getResources().getString(R.string.contact_type_15);
+            case 16 -> getResources().getString(R.string.contact_type_16);
+            case 17 -> getResources().getString(R.string.contact_type_17);
+            case 18 -> getResources().getString(R.string.contact_type_18);
+            case 19 -> getResources().getString(R.string.contact_type_19);
+            case 20 -> getResources().getString(R.string.contact_type_20);
+            default -> "";
+        };
     }
 
     private void showActionBar(){
@@ -413,7 +370,7 @@ public class ContactListActivity extends AppCompatActivity {
 
         ImageButton forwardButton = findViewById(R.id.action_forward);
         forwardButton.setVisibility(View.INVISIBLE);
-        faultButton = findViewById(R.id.action_faults);
+        ImageButton faultButton = findViewById(R.id.action_faults);
         faultButton.setOnClickListener(mClickListener);
 
         //Check for active faults
@@ -438,18 +395,14 @@ public class ContactListActivity extends AppCompatActivity {
         lastPosition = contactList.getSelectedItemPosition();
     }
 
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            int id = v.getId();
-            if (id == R.id.action_back) {
-                // Go back
-                goBack();
-            } else if (id == R.id.action_faults) {
-                Intent faultIntent = new Intent(ContactListActivity.this, FaultActivity.class);
-                startActivity(faultIntent);
-            }
+    private final View.OnClickListener mClickListener = v -> {
+        int id = v.getId();
+        if (id == R.id.action_back) {
+            // Go back
+            goBack();
+        } else if (id == R.id.action_faults) {
+            Intent faultIntent = new Intent(ContactListActivity.this, FaultActivity.class);
+            startActivity(faultIntent);
         }
     };
 

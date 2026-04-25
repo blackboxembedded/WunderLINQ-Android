@@ -19,7 +19,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
@@ -62,7 +62,7 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
     private ProgressBar channelTwoValuePB;
 
     // class member variable to save the X,Y coordinates
-    private float[] lastTouchDownXY = new float[2];
+    private final float[] lastTouchDownXY = new float[2];
 
     private CountDownTimer cTimer = null;
     private boolean timerRunning = false;
@@ -114,9 +114,8 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
                 Display display = getWindowManager().getDefaultDisplay();
                 Point size = new Point();
                 display.getSize(size);
-                int width = size.x;
                 int height = size.y;
-                if (y < (height / 2)){
+                if (y < ((float) height / 2)){
                     channelOneHeaderTV.setVisibility(View.INVISIBLE);
                     channelOneHeaderET.setVisibility(View.VISIBLE);
                     if (channelOneHeaderET.requestFocus()) {
@@ -167,14 +166,6 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
                         }
                     });
                 }
-            }
-
-            @Override
-            public void onSwipeUp() {
-            }
-
-            @Override
-            public void onSwipeDown() {
             }
 
             @Override
@@ -292,33 +283,31 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
         return true;
     }
 
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            int id = v.getId();
-            if (id == R.id.action_back) {
-                goBack();
-            } else if (id == R.id.action_forward) {
-                goForward();
-            } else if (id == R.id.action_faults) {
-                Intent faultIntent = new Intent(AccessoryActivity.this, FaultActivity.class);
-                startActivity(faultIntent);
-            }
+    private final View.OnClickListener mClickListener = v -> {
+        int id = v.getId();
+        if (id == R.id.action_back) {
+            goBack();
+        } else if (id == R.id.action_forward) {
+            goForward();
+        } else if (id == R.id.action_faults) {
+            Intent faultIntent = new Intent(AccessoryActivity.this, FaultActivity.class);
+            startActivity(faultIntent);
         }
     };
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_DPAD_LEFT:
+        return switch (keyCode) {
+            case KeyEvent.KEYCODE_DPAD_LEFT -> {
                 goBack();
-                return true;
-            case KeyEvent.KEYCODE_DPAD_RIGHT:
+                yield true;
+            }
+            case KeyEvent.KEYCODE_DPAD_RIGHT -> {
                 goForward();
-                return true;
-            default:
-                return super.onKeyUp(keyCode, event);
-        }
+                yield true;
+            }
+            default -> super.onKeyUp(keyCode, event);
+        };
     }
 
     //Go to next screen

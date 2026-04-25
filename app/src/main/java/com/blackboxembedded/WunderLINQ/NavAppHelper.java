@@ -27,26 +27,21 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.location.Location;
 import android.net.Uri;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
+import android.util.Log;
 
 import java.util.List;
 
 import static android.content.Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT;
 
 public class NavAppHelper {
-
+    public final static String TAG = "NavAppHelper";
     static public void open(Activity activity){
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
         String navApp = sharedPrefs.getString("prefNavApp", "1");
         Intent navIntent = new Intent(android.content.Intent.ACTION_MAIN);
         String url = "google.navigation://?free=1&mode=d&entry=fnls";
         switch (navApp){
-            default: case "1": //Android Default or Google Maps
-                //Nothing to do
-                navIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                url = "geo:";
-                navIntent.setData(Uri.parse(url));
-                break;
             case "2": //Google Maps
                 navIntent.setPackage("com.google.android.apps.maps");
                 navIntent = new Intent(android.content.Intent.ACTION_VIEW);
@@ -91,13 +86,13 @@ public class NavAppHelper {
                 break;
             case "11": //BMW ConnectedRide
                 String discoveredBMWApp = installedApps(activity,"com.bmw.ConnectedRide");
-                if (!discoveredBMWApp.equals("")) {
+                if (!discoveredBMWApp.isEmpty()) {
                     navIntent = activity.getPackageManager().getLaunchIntentForPackage(discoveredBMWApp);
                 }
                 break;
             case "12": //Calimoto
                 String discoveredCalimotoApp = installedApps(activity, "com.calimoto.calimoto");
-                if (!discoveredCalimotoApp.equals("")) {
+                if (!discoveredCalimotoApp.isEmpty()) {
                     navIntent = activity.getPackageManager().getLaunchIntentForPackage(discoveredCalimotoApp);
                 }
                 break;
@@ -164,6 +159,11 @@ public class NavAppHelper {
                 url = "bmaps://";
                 navIntent.setData(Uri.parse(url));
                 break;
+            default: //Android Default or Google Maps
+                navIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                url = "geo:";
+                navIntent.setData(Uri.parse(url));
+                break;
         }
         try {
             if (navIntent != null) {
@@ -185,11 +185,6 @@ public class NavAppHelper {
         String url = "google.navigation:q=fuel+station";
         boolean supported = false;
         switch (navApp){
-            default: case "1": //Android Default
-                supported = true;
-                url = "google.navigation:q=fuel+station";
-                navIntent.setData(Uri.parse(url));
-                break;
             case "2": //Google Maps
                 supported = true;
                 navIntent.setPackage("com.google.android.apps.maps");
@@ -298,18 +293,21 @@ public class NavAppHelper {
                 url = "bmaps://search?fuel";
                 navIntent.setData(Uri.parse(url));
                 break;
+            default: //Android Default
+                supported = true;
+                url = "google.navigation:q=fuel+station";
+                navIntent.setData(Uri.parse(url));
+                break;
         }
         if (supported) {
             if (!navApp.equals("6")) { // If NOT OsmAnd
                 try {
-                    if (navIntent != null) {
-                        if (activity.isInMultiWindowMode()) {
-                            if(sharedPrefs.getString("prefAppLaunchOptions", "1").equals("0")){
-                                navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
-                            }
+                    if (activity.isInMultiWindowMode()) {
+                        if (sharedPrefs.getString("prefAppLaunchOptions", "1").equals("0")) {
+                            navIntent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
                         }
-                        activity.startActivity(navIntent);
                     }
+                    activity.startActivity(navIntent);
                 } catch (ActivityNotFoundException ex) {
                     return false;
                 }
@@ -325,10 +323,6 @@ public class NavAppHelper {
         String navUrl = "google.navigation:q=" + end.getLatitude() + "," + end.getLongitude() + "&navigate=yes";
         boolean supported = false;
         switch (navApp){
-            default: case "1": //Android Default
-                supported = true;
-                homeNavIntent.setData(Uri.parse(navUrl));
-                break;
             case "2": //Google Maps
                 supported = true;
                 homeNavIntent.setPackage("com.google.android.apps.maps");
@@ -462,6 +456,10 @@ public class NavAppHelper {
                 navUrl = "bmaps://route?geo=" + end.getLatitude() + "," + end.getLongitude();
                 homeNavIntent.setData(Uri.parse(navUrl));
                 break;
+            default: //Android Default
+                supported = true;
+                homeNavIntent.setData(Uri.parse(navUrl));
+                break;
         }
         if (supported) {
             if (!navApp.equals("6")) { // If NOT OsmAnd
@@ -487,11 +485,6 @@ public class NavAppHelper {
         String navUrl = "geo:0,0?q=" + String.valueOf(waypoint.getLatitude()) + "," + String.valueOf(waypoint.getLongitude()) + "(" + label + ")";
         boolean supported = false;
         switch (navApp){
-            default: case "1": //Android Default
-                //Nothing to do
-                supported = true;
-                navIntent.setData(Uri.parse(navUrl));
-                break;
             case "2": //Google Maps
                 supported = true;
                 navIntent.setPackage("com.google.android.apps.maps");
@@ -624,6 +617,11 @@ public class NavAppHelper {
                 navUrl = "bmaps://view?geo=" + waypoint.getLatitude() + "," + waypoint.getLongitude() ;
                 navIntent.setData(Uri.parse(navUrl));
                 break;
+            default: //Android Default
+                //Nothing to do
+                supported = true;
+                navIntent.setData(Uri.parse(navUrl));
+                break;
         }
         if (supported) {
             if (!navApp.equals("6")) { // If NOT OsmAnd
@@ -644,14 +642,8 @@ public class NavAppHelper {
 
     static public void roadbook(Activity activity){
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        String roadbookApp = sharedPrefs.getString("prefRoadBookApp", "1");
         Intent roadbookIntent = new Intent(android.content.Intent.ACTION_VIEW);
         String url = "rabbitrally://app?back_url=wunderlinq://quicktasks";
-        switch (roadbookApp){
-            default: case "1": //Android Default or Google Maps
-                //Nothing to do
-                break;
-        }
         try {
             roadbookIntent.setData(Uri.parse(url));
             if (activity.isInMultiWindowMode()) {
@@ -660,7 +652,8 @@ public class NavAppHelper {
                 }
             }
             activity.startActivity(roadbookIntent);
-        } catch ( ActivityNotFoundException ex  ) {
+        } catch ( ActivityNotFoundException e ) {
+            Log.d(TAG,"Road book Activity Not Found. Error: " + e);
         }
     }
 
@@ -678,8 +671,7 @@ public class NavAppHelper {
         for (int i=0; i < packList.size(); i++)
         {
             PackageInfo packInfo = packList.get(i);
-            if (  (packInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0)
-            {
+            if ( (packInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0){
                 String packageName = packInfo.packageName;
                 if (packageName.contains(app)){
                     return packageName;

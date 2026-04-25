@@ -223,11 +223,11 @@ public final class BluetoothMicRouter {
         }
         try {
             List<AudioDeviceInfo> comm = audioManager.getAvailableCommunicationDevices();
-            if (comm == null || comm.isEmpty()) return null;
+            if (comm.isEmpty()) return null;
 
             AudioDeviceInfo ble = null, sco = null;
             for (AudioDeviceInfo d : comm) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && d.getType() == AudioDeviceInfo.TYPE_BLE_HEADSET) ble = d;
+                if (d.getType() == AudioDeviceInfo.TYPE_BLE_HEADSET) ble = d;
                 if (d.getType() == AudioDeviceInfo.TYPE_BLUETOOTH_SCO) sco = d;
             }
             if (preferSco) return (sco != null) ? sco : ble;
@@ -246,23 +246,12 @@ public final class BluetoothMicRouter {
                     .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
                     .build();
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                focusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE)
-                        .setAudioAttributes(attrs)
-                        .setOnAudioFocusChangeListener(fc -> {})
-                        .build();
-                int res = audioManager.requestAudioFocus(focusRequest);
-                Log.d(TAG, "requestAudioFocus(26+) -> " + res);
-            } else {
-                legacyFocusCb = fc -> {};
-                @SuppressWarnings("deprecation")
-                int res = audioManager.requestAudioFocus(
-                        legacyFocusCb,
-                        AudioManager.STREAM_VOICE_CALL,
-                        AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE
-                );
-                Log.d(TAG, "requestAudioFocus(legacy) -> " + res);
-            }
+            focusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE)
+                    .setAudioAttributes(attrs)
+                    .setOnAudioFocusChangeListener(fc -> {})
+                    .build();
+            int res = audioManager.requestAudioFocus(focusRequest);
+            Log.d(TAG, "requestAudioFocus(26+) -> " + res);
         } catch (Throwable t) {
             Log.w(TAG, "requestVoiceCommFocus failed", t);
         }
@@ -271,16 +260,9 @@ public final class BluetoothMicRouter {
     private void abandonVoiceCommFocus() {
         if (audioManager == null) return;
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                if (focusRequest != null) {
-                    audioManager.abandonAudioFocusRequest(focusRequest);
-                    focusRequest = null;
-                }
-            } else if (legacyFocusCb != null) {
-                @SuppressWarnings("deprecation")
-                int res = audioManager.abandonAudioFocus(legacyFocusCb);
-                legacyFocusCb = null;
-                Log.d(TAG, "abandonAudioFocus(legacy) -> " + res);
+            if (focusRequest != null) {
+                audioManager.abandonAudioFocusRequest(focusRequest);
+                focusRequest = null;
             }
         } catch (Throwable ignored) {}
     }

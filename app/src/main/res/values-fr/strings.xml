@@ -376,7 +376,6 @@
     <string name="nav_app_bmwconnectedride">BMW Motorrad Connecté</string>
     <string name="nav_app_calimoto">Calimoto</string>
     <string name="addwaypoint_view_tv_search_label">Emplacement ou adresse</string>
-    <string name="sendlogs_subject" translatable="false">Journaux de débogage WunderINQ pour Android</string>
     <string name="consumption_km">km/L</string>
     <string name="consumption_gallon_imperial">mpg (impérial)</string>
     <string name="consumption_gallon_us">mpg(US)</string>

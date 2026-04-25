@@ -28,7 +28,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -53,12 +53,10 @@ import java.util.List;
 public class AppListActivity extends AppCompatActivity {
 
     public final static String TAG = "AppList";
-    private ImageButton faultButton;
 
     private ListView appList;
 
     PackageManager packageManager;
-    private SharedPreferences sharedPrefs;
 
     private static List<AppInfo> apps;
     private int lastPosition = 0;
@@ -78,7 +76,7 @@ public class AppListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_list);
 
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
         // Keep screen on
@@ -138,7 +136,7 @@ public class AppListActivity extends AppCompatActivity {
 
         ImageButton forwardButton = findViewById(R.id.action_forward);
         forwardButton.setVisibility(View.INVISIBLE);
-        faultButton = findViewById(R.id.action_faults);
+        ImageButton faultButton = findViewById(R.id.action_faults);
         faultButton.setOnClickListener(mClickListener);
 
         //Check for active faults
@@ -155,17 +153,14 @@ public class AppListActivity extends AppCompatActivity {
         startActivity(backIntent);
     }
 
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            int id = v.getId();
-            if (id == R.id.action_back) {
-                // Go back
-                goBack();
-            } else if (id == R.id.action_faults) {
-                Intent faultIntent = new Intent(AppListActivity.this, FaultActivity.class);
-                startActivity(faultIntent);
-            }
+    private final View.OnClickListener mClickListener = v -> {
+        int id = v.getId();
+        if (id == R.id.action_back) {
+            // Go back
+            goBack();
+        } else if (id == R.id.action_faults) {
+            Intent faultIntent = new Intent(AppListActivity.this, FaultActivity.class);
+            startActivity(faultIntent);
         }
     };
 
@@ -232,8 +227,8 @@ public class AppListActivity extends AppCompatActivity {
                     apps.add(appinfo);
                 }
             }
-        } catch (Exception ex) {
-            Log.e(TAG, ex.getMessage().toString() + " loadApps");
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage() + " loadApps");
         }
     }
 }

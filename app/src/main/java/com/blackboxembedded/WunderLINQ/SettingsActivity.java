@@ -28,10 +28,10 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
-import androidx.fragment.app.Fragment;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -47,8 +47,8 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
 
     private final static String TAG = "SettingsActivity";
 
-    private static PreferenceScreen root;
-    private static PreferenceScreen last;
+    private PreferenceScreen root;
+    private PreferenceScreen last;
 
     ImageButton backButton;
 
@@ -98,20 +98,25 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
         forwardButton.setVisibility(View.INVISIBLE);
     }
 
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
+    private final View.OnClickListener mClickListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
             if(v.getId() == R.id.action_back) {
-                Log.d(TAG, "last.getKey() == " + last.getKey());
-                if (last.getKey().equals("prefScreenRoot")) {
+                if (last != null && last.getKey() != null) {
+                    Log.d(TAG, "last.getKey() == " + last.getKey());
+                    if (last.getKey().equals("prefScreenRoot")) {
+                        Intent backIntent = new Intent(SettingsActivity.this, MainActivity.class);
+                        startActivity(backIntent);
+                    } else {
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.settings_fragment_container, new UserSettingActivityFragment())
+                                .commit();
+                        last = root;
+                    }
+                } else {
                     Intent backIntent = new Intent(SettingsActivity.this, MainActivity.class);
                     startActivity(backIntent);
-                } else {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.settings_fragment_container, new UserSettingActivityFragment())
-                            .commit();
-                    last = root;
                 }
             }
         }
@@ -174,12 +179,15 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.settings);
-            root = this.getPreferenceScreen();
-            last = root;
+            if (getActivity() instanceof SettingsActivity) {
+                SettingsActivity activity = (SettingsActivity) getActivity();
+                activity.root = this.getPreferenceScreen();
+                activity.last = activity.root;
+            }
         }
 
         @Override
-        public void onDisplayPreferenceDialog(Preference preference) {
+        public void onDisplayPreferenceDialog(@NonNull Preference preference) {
             if (preference instanceof ColorPreference) {
                 ((ColorPreference) preference).showDialog(this, 0);
             } else super.onDisplayPreferenceDialog(preference);
@@ -508,13 +516,13 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
             }
         }
 
-        @Override
-        public Fragment getCallbackFragment() {
-            return this;
-        }
-
         public void goToRoot(){
-            setPreferenceScreen(root);
+            if (getActivity() instanceof SettingsActivity) {
+                SettingsActivity activity = (SettingsActivity) getActivity();
+                if (activity.root != null) {
+                    setPreferenceScreen(activity.root);
+                }
+            }
         }
     }
 }

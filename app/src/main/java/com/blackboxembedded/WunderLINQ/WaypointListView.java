@@ -24,6 +24,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 public class WaypointListView extends ArrayAdapter {
@@ -37,19 +39,32 @@ public class WaypointListView extends ArrayAdapter {
         this.label = label;
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
-        LayoutInflater inflater = context.getLayoutInflater();
-        View rowView= inflater.inflate(R.layout.item_waypoint, null, true);
-        TextView txtTitle = rowView.findViewById(R.id.tv_label);
+    public View getView(int position, View view, @NonNull ViewGroup parent) {
+        View rowView = view;
+        ViewHolder holder;
+        if (rowView == null) {
+            LayoutInflater inflater = context.getLayoutInflater();
+            rowView = inflater.inflate(R.layout.item_waypoint, parent, false);
+            holder = new ViewHolder();
+            holder.txtTitle = rowView.findViewById(R.id.tv_label);
+            rowView.setTag(holder);
+        } else {
+            holder = (ViewHolder) rowView.getTag();
+        }
 
         WaypointRecord record = label.get(position);
-        if (!record.getLabel().equals("")){
-            txtTitle.setText(record.getLabel());
+        if (!record.getLabel().isEmpty()){
+            holder.txtTitle.setText(record.getLabel());
         } else {
-            txtTitle.setText(record.getDate());
+            holder.txtTitle.setText(record.getDate());
         }
 
         return rowView;
+    }
+
+    static class ViewHolder {
+        TextView txtTitle;
     }
 }

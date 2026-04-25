@@ -21,8 +21,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class GattAttributes {
-    private static HashMap<String, String> attributes = new HashMap();
-    private static HashMap<UUID, String> attributesUUID = new HashMap<UUID, String>();
+    private static final HashMap<UUID, String> attributesUUID = new HashMap<>();
 
     /**
      * WunderLINQ Service and Characteristics

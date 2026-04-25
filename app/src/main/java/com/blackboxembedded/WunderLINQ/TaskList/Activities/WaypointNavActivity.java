@@ -29,7 +29,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -64,15 +64,12 @@ import java.util.List;
 public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelper.OnOsmandMissingListener {
 
     public final static String TAG = "WaypointNav";
-    private ImageButton faultButton;
 
     private ListView waypointList;
     List<WaypointRecord> listValues;
     ArrayAdapter<WaypointRecord> adapter;
 
     private int lastPosition = 0;
-
-    private SharedPreferences sharedPrefs;
 
     @Override
     public void osmandMissing() {
@@ -94,7 +91,7 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         AppUtils.adjustDisplayScale(this, getResources().getConfiguration());
         setContentView(R.layout.activity_waypoint_nav);
@@ -165,7 +162,7 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
                             Toast.makeText(WaypointNavActivity.this, R.string.nav_app_feature_not_supported, Toast.LENGTH_LONG).show();
                         }
                     } catch (SecurityException|NullPointerException e) {
-                        e.printStackTrace();
+                        Log.d(TAG, "Unable to get lcaotion. Error: " + e);
                     }
                 }
             }
@@ -216,7 +213,7 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
         ImageButton forwardButton = findViewById(R.id.action_forward);
         backButton.setOnClickListener(mClickListener);
         forwardButton.setVisibility(View.INVISIBLE);
-        faultButton = findViewById(R.id.action_faults);
+        ImageButton faultButton = findViewById(R.id.action_faults);
         faultButton.setOnClickListener(mClickListener);
 
         //Check for active faults
@@ -233,17 +230,13 @@ public class WaypointNavActivity extends AppCompatActivity implements OsmAndHelp
         startActivity(backIntent);
     }
 
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            int id = v.getId();
-            if (id == R.id.action_back) {
-                goBack();
-            } else if (id == R.id.action_faults) {
-                Intent faultIntent = new Intent(WaypointNavActivity.this, FaultActivity.class);
-                startActivity(faultIntent);
-            }
+    private final View.OnClickListener mClickListener = v -> {
+        int id = v.getId();
+        if (id == R.id.action_back) {
+            goBack();
+        } else if (id == R.id.action_faults) {
+            Intent faultIntent = new Intent(WaypointNavActivity.this, FaultActivity.class);
+            startActivity(faultIntent);
         }
     };
 

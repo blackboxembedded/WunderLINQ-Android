@@ -10,7 +10,7 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
@@ -334,7 +334,6 @@ public class OsmAndHelper {
         sendRequest(new OsmAndIntentBuilder(SHOW_GPX).setExtraData(extraData));
     }
 
-    @TargetApi(16)
     /**
      * Show GPX file on map.
      * Recommended way to share file.
@@ -386,7 +385,6 @@ public class OsmAndHelper {
                 .setExtraData(extraData));
     }
 
-    @TargetApi(16)
     /**
      * Navigate GPX file.
      * Recommended way to share file.

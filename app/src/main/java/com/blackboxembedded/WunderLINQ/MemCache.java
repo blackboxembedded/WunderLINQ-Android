@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.util.Log;
 
 import com.blackboxembedded.WunderLINQ.Utils.Utils;
@@ -55,6 +55,7 @@ public class MemCache {
         if (getCache().containsKey(key)) {
             retValue = (String) getCache().get(key);
 
+            assert retValue != null;
             if (retValue.isBlank()) {
                 Log.d("MemCache GetString", "Not Found: " + key);
             }
@@ -163,13 +164,11 @@ public class MemCache {
             //Consumption Rate
             String consumptionUnit = "L/100";
             String consumptionFormat = sharedPrefs.getString("prefConsumption", "0");
-            switch (consumptionFormat){
-                case "1":
-                case "2":
-                    consumptionUnit = "mpg"; break;
-                case "3":
-                    consumptionUnit = "km/L"; break;
-            }
+            consumptionUnit = switch (consumptionFormat) {
+                case "1", "2" -> "mpg";
+                case "3" -> "km/L";
+                default -> consumptionUnit;
+            };
             putString("consumptionFormat",consumptionFormat);
             putString("consumptionUnit",consumptionUnit);
 

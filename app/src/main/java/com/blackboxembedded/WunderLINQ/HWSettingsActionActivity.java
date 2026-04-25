@@ -59,8 +59,6 @@ public class HWSettingsActionActivity extends AppCompatActivity {
     private Spinner actionKeySP;
     private MultiSpinner actionModifiersSP;
     private Button saveBT;
-    private Button cancelBT;
-    private ArrayAdapter<Integer> sensitivity;
     private ArrayAdapter<String> types;
     private ArrayAdapter<String> keyboard;
     private ArrayAdapter<String> consumer;
@@ -84,7 +82,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         actionKeySP = findViewById(R.id.spKey);
         actionModifiersSP = findViewById(R.id.msModifiers);
         saveBT = findViewById(R.id.btSave);
-        cancelBT = findViewById(R.id.btCancel);
+        Button cancelBT = findViewById(R.id.btCancel);
 
         types = new ArrayAdapter<String>(this,
                 R.layout.item_hwsettings_spinners, getResources().getStringArray(R.array.hid_type_names_array));
@@ -242,7 +240,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         updateDisplay();
     }
 
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
+    private final View.OnClickListener mClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.action_back) {
@@ -315,6 +313,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
     private void updateDisplay(){
         saveBT.setVisibility(View.INVISIBLE);
         actionLabelTV.setText(MotorcycleData.wlq.getActionName(actionID));
+        ArrayAdapter<Integer> sensitivity;
         if (actionID == WLQ.KEYMODE){ //Key mode
             actionTypeSP.setAdapter(new ArrayAdapter<String>(this,
                     R.layout.item_hwsettings_spinners, getResources().getStringArray(R.array.keymode_names_array)));

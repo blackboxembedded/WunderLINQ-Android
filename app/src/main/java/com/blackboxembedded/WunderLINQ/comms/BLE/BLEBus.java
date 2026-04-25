@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package com.blackboxembedded.WunderLINQ.comms.BLE;
 
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
@@ -191,7 +191,7 @@ public class BLEBus {
                     double rdcFront = (data[4] & 0xFF) / 50.0;
                     MotorcycleData.setFrontTirePressure(rdcFront);
                     if (sharedPrefs.getBoolean("prefTPMSAlert", false)) {
-                        Double pressureThreshold = Double.parseDouble(sharedPrefs.getString("prefTPMSAlertThreshold", "30.0"));
+                        double pressureThreshold = Double.parseDouble(sharedPrefs.getString("prefTPMSAlertThreshold", "30.0"));
                         if (pressureThreshold >= 0) {
                             String pressureFormat = sharedPrefs.getString("prefPressureF", "0");
                             if (pressureFormat.contains("1")) {
@@ -230,7 +230,7 @@ public class BLEBus {
                     double rdcRear = (data[5] & 0xFF) / 50.0;
                     MotorcycleData.setRearTirePressure(rdcRear);
                     if (sharedPrefs.getBoolean("prefTPMSAlert",false)) {
-                        Double pressureThreshold = Double.parseDouble(sharedPrefs.getString("prefTPMSAlertThreshold", "30.0"));
+                        double pressureThreshold = Double.parseDouble(sharedPrefs.getString("prefTPMSAlertThreshold", "30.0"));
                         if (pressureThreshold >= 0) {
                             String pressureFormat = sharedPrefs.getString("prefPressureF", "0");
                             if (pressureFormat.contains("1")) {
@@ -392,31 +392,16 @@ public class BLEBus {
                 if ((((data[2] & 0xFF) >> 4) & 0x0f) != 0xF) {
                     String gear;
                     int gearValue = ((data[2] & 0xFF) >> 4) & 0x0f; // the highest 4 bits.
-                    switch (gearValue) {
-                        case 0x1:
-                            gear = "1";
-                            break;
-                        case 0x2:
-                            gear = "N";
-                            break;
-                        case 0x4:
-                            gear = "2";
-                            break;
-                        case 0x7:
-                            gear = "3";
-                            break;
-                        case 0x8:
-                            gear = "4";
-                            break;
-                        case 0xB:
-                            gear = "5";
-                            break;
-                        case 0xD:
-                            gear = "6";
-                            break;
-                        default:
-                            gear = "-";
-                    }
+                    gear = switch (gearValue) {
+                        case 0x1 -> "1";
+                        case 0x2 -> "N";
+                        case 0x4 -> "2";
+                        case 0x7 -> "3";
+                        case 0x8 -> "4";
+                        case 0xB -> "5";
+                        case 0xD -> "6";
+                        default -> "-";
+                    };
                     if (MotorcycleData.getGear() != null) {
                         if (!MotorcycleData.getGear().equals(gear) && !gear.equals("-")) {
                             MotorcycleData.setNumberOfShifts(MotorcycleData.getNumberOfShifts() + 1);
@@ -696,11 +681,7 @@ public class BLEBus {
                     double ambientTemp = ((data[1] & 0xFF) * 0.50) - 40;
                     if (ambientTemp >= -20.0 && ambientTemp <= 45.0) { // Filter out improbable values
                         MotorcycleData.setAmbientTemperature(ambientTemp);
-                        if (ambientTemp <= 0.0) {
-                            Faults.setIceWarnActive(true);
-                        } else {
-                            Faults.setIceWarnActive(false);
-                        }
+                        Faults.setIceWarnActive(ambientTemp <= 0.0);
                     }
                 }
 
@@ -1152,11 +1133,7 @@ public class BLEBus {
 
                     // Comparing the two dates
                     int comparison = nextServiceDate.compareTo(currentDate);
-                    if (comparison <= 0) {
-                        Faults.setServiceActive(true);
-                    } else {
-                        Faults.setServiceActive(false);
-                    }
+                    Faults.setServiceActive(comparison <= 0);
                 }
                 if ((data[4] & 0xFF) != 0xFF){
                     int nextService = data[4] * 100;

@@ -147,7 +147,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 public void onSwipeLeft() {
                     if (index != (tripFileList.size() - 1)) {
                         Intent tripViewIntent = new Intent(TripViewActivity.this, TripViewActivity.class);
-                        tripViewIntent.putExtra("FILE", tripFileList.get(index + 1).toString());
+                        tripViewIntent.putExtra("FILE", tripFileList.get(index + 1));
                         startActivity(tripViewIntent);
                     }
                 }
@@ -155,7 +155,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 public void onSwipeRight() {
                     if (index > 0) {
                         Intent tripViewIntent = new Intent(TripViewActivity.this, TripViewActivity.class);
-                        tripViewIntent.putExtra("FILE", tripFileList.get(index - 1).toString());
+                        tripViewIntent.putExtra("FILE", tripFileList.get(index - 1));
                         startActivity(tripViewIntent);
                     }
                 }
@@ -192,7 +192,6 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 } catch (CsvException e) {
                     // Handle the CsvException here
                     Log.e(TAG, "Error reading CSV file: " + e.getMessage());
-                    e.printStackTrace();
                 }
                 int lineNumber = 0;
                 for(String[] nextLine : myEntries) {
@@ -208,7 +207,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                                 endTime = df.parse(nextLine[0]);
                             }
                         } catch (ParseException e){
-                            e.printStackTrace();
+                            Log.e(TAG, "Error reading CSV file: " + e.getMessage());
                         }
                         if((lineNumber > 1) && (!nextLine[1].equals("No Fix") && (!nextLine[2].equals("No Fix")))) {
                             try {
@@ -405,7 +404,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 // Calculate Duration
                 if (startTime != null && endTime != null) {
                     long[] duration = Utils.calculateDuration(startTime, endTime);
-                    tvDuration.setText( String.valueOf(duration[2]) + " " + getString(R.string.hours) + ", " + String.valueOf(duration[1]) + " " + getString(R.string.minutes) + ", " + String.valueOf(duration[0]) + " " + getString(R.string.seconds));
+                    tvDuration.setText(duration[2] + " " + getString(R.string.hours) + ", " + duration[1] + " " + getString(R.string.minutes) + ", " + duration[0] + " " + getString(R.string.seconds));
                 }
 
             } catch (IOException e){
@@ -576,7 +575,6 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
                 } catch (CsvException e) {
                     // Handle the CsvException here
                     Log.e(TAG, "Error reading CSV file: " + e.getMessage());
-                    e.printStackTrace();
                 }
                 int lineNumber = 0;
                 for (String[] nextLine : myEntries) {
@@ -606,7 +604,7 @@ public class TripViewActivity extends AppCompatActivity implements OnMapReadyCal
         }
     }
 
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
+    private final View.OnClickListener mClickListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {

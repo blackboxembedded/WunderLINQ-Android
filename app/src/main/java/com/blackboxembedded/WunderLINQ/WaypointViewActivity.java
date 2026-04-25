@@ -27,7 +27,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -325,7 +325,7 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
                     Toast.makeText(WaypointViewActivity.this, R.string.nav_app_feature_not_supported, Toast.LENGTH_LONG).show();
                 }
             } catch (SecurityException | NullPointerException e) {
-                e.printStackTrace();
+                Log.d(TAG,"Unable to get location. Error: " + e.getMessage());
             }
         }
     }
@@ -356,7 +356,7 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
             }
             if(root.canWrite()){
                 String label = getString(R.string.waypoint_view_waypoint_label);
-                if (!record.getLabel().equals("")){
+                if (!record.getLabel().isEmpty()){
                     label = record.getLabel();
                 }
                 File gpxFile = new File( root, label + ".gpx" );
@@ -394,7 +394,7 @@ public class WaypointViewActivity extends AppCompatActivity implements OnMapRead
         }
     }
 
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
+    private final View.OnClickListener mClickListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {

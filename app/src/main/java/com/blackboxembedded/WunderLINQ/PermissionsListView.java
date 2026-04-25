@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
 
 import java.util.List;
@@ -39,17 +40,31 @@ public class PermissionsListView extends ArrayAdapter {
         this.label = label;
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
-        LayoutInflater inflater = context.getLayoutInflater();
-        View rowView= inflater.inflate(R.layout.item_permission, null, true);
-        TextView txtTitle = rowView.findViewById(R.id.tv_label);
-        SwitchCompat swEnable = rowView.findViewById(R.id.sw_switch);
+    public View getView(int position, View view, @NonNull ViewGroup parent) {
+        View rowView = view;
+        ViewHolder holder;
+        if (rowView == null) {
+            LayoutInflater inflater = context.getLayoutInflater();
+            rowView = inflater.inflate(R.layout.item_permission, parent, false);
+            holder = new ViewHolder();
+            holder.txtTitle = rowView.findViewById(R.id.tv_label);
+            holder.swEnable = rowView.findViewById(R.id.sw_switch);
+            rowView.setTag(holder);
+        } else {
+            holder = (ViewHolder) rowView.getTag();
+        }
 
         PermissionRecord record = label.get(position);
-        txtTitle.setText(record.getLabel());
-        swEnable.setChecked(record.getEnabled());
+        holder.txtTitle.setText(record.getLabel());
+        holder.swEnable.setChecked(record.getEnabled());
 
         return rowView;
+    }
+
+    static class ViewHolder {
+        TextView txtTitle;
+        SwitchCompat swEnable;
     }
 }

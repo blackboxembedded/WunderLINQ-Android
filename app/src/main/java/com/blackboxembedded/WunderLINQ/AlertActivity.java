@@ -24,7 +24,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -174,7 +174,7 @@ public class AlertActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
+    private final View.OnClickListener mClickListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
@@ -216,25 +216,20 @@ public class AlertActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_DPAD_LEFT:
+        return switch (keyCode) {
+            case KeyEvent.KEYCODE_DPAD_LEFT -> {
                 finish();
-                return true;
-            case KeyEvent.KEYCODE_DPAD_RIGHT:
-                if (type != ALERT_PHOTO) {
+                yield true;
+            }
+            case KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                if (type == ALERT_PHOTO) {
+                    finish();
+                } else {
                     btnOK.performClick();
                 }
-                switch (type){
-                    case ALERT_PHOTO:
-                        finish();
-                        break;
-                    default:
-                        btnOK.performClick();
-                        break;
-                }
-                return true;
-            default:
-                return super.onKeyUp(keyCode, event);
-        }
+                yield true;
+            }
+            default -> super.onKeyUp(keyCode, event);
+        };
     }
 }

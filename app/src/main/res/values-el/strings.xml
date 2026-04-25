@@ -360,7 +360,6 @@
     <string name="addwaypoint_view_bt_search">Αναζήτηση</string>
     <string name="addwaypoint_view_bt_save">Αποθήκευση</string>
     <string name="addwaypoint_view_title">Προσθήκη προορισμού</string>
-    <string name="sendlogs_subject" translatable="false">Αρχεία αποσφαλμάτωσης εφαρμογής WunderLINQ για Android</string>
     <string name="config_reset_label">Επαναφορά ρυθμίσεων</string>
     <string name="fw_version_label">Έκδοση firmware</string>
     <string name="reset_btn_label">Επαναφορά</string>

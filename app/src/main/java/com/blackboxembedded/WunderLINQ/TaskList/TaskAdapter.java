@@ -19,7 +19,6 @@ package com.blackboxembedded.WunderLINQ.TaskList;
 
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,9 +39,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.RecyclerViewHo
     public interface AdapterCallback{
         void onItemClicked(Integer menuPosition);
     }
-    private AdapterCallback callback;
+    private final AdapterCallback callback;
 
-    private Context context;
+    private final Context context;
 
     public int selected = 0;
 
@@ -55,8 +54,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.RecyclerViewHo
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_task,parent,false);
-        RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view);
-        return recyclerViewHolder;
+        return new RecyclerViewHolder(view);
     }
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder
@@ -111,8 +109,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.RecyclerViewHo
 }
 
 class TaskItem {
-    private String text;
-    private int image;
+    private final String text;
+    private final int image;
 
     public TaskItem(int image, String text) {
         this.image = image;

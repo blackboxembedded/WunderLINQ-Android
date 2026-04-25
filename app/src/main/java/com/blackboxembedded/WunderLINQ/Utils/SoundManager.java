@@ -31,12 +31,7 @@ public class SoundManager {
         mediaPlayer = MediaPlayer.create(context, soundResId);
 
         if (mediaPlayer != null) {
-            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    mp.release();
-                }
-            });
+            mediaPlayer.setOnCompletionListener(MediaPlayer::release);
             mediaPlayer.start();
         }
     }

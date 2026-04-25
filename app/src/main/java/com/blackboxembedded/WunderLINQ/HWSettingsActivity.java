@@ -118,7 +118,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
         try {
             unregisterReceiver(mGattUpdateReceiver);
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            Log.d(TAG,"Error: " + e);
         }
     }
 

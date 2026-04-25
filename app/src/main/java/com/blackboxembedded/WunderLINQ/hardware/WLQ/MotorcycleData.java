@@ -21,7 +21,7 @@ import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
@@ -173,7 +173,7 @@ public class MotorcycleData {
     }
 
     //Rate of ascent/descent
-    private static Queue<AltitudeData> elevationWindow = new LinkedList<>();
+    private static final Queue<AltitudeData> elevationWindow = new LinkedList<>();
     public static Double getElevationChange() {
         return Utils.calculateRateOfClimb(elevationWindow);
     }
@@ -577,231 +577,85 @@ public class MotorcycleData {
         leanAngleBikeMaxR = null;
     }
     public static String getExtraKey(DataType dataPoint){
-        String key = "";
-        switch (dataPoint){
-            case GEAR:
-                key = "gear";
-                break;
-            case ENGINE_TEMP:
-                key = "engineTemperature";
-                break;
-            case AIR_TEMP:
-                key = "ambientTemperature";
-                break;
-            case FRONT_RDC:
-                key = "frontTirePressure";
-                break;
-            case REAR_RDC:
-                key = "rearTirePressure";
-                break;
-            case ODOMETER:
-                key = "odometer";
-                break;
-            case VOLTAGE:
-                key = "voltage";
-                break;
-            case THROTTLE:
-                key = "throttlePosition";
-                break;
-            case FRONT_BRAKE:
-                key = "frontBrake";
-                break;
-            case REAR_BRAKE:
-                key = "rearBrake";
-                break;
-            case AMBIENT_LIGHT:
-                key = "ambientLight";
-                break;
-            case TRIP_ONE:
-                key = "tripOne";
-                break;
-            case TRIP_TWO:
-                key = "tripTwo";
-                break;
-            case TRIP_AUTO:
-                key = "tripAuto";
-                break;
-            case SPEED:
-                key = "speed";
-                break;
-            case AVG_SPEED:
-                key = "avgSpeed";
-                break;
-            case CURRENT_CONSUMPTION:
-                key = "currentConsumption";
-                break;
-            case ECONOMY_ONE:
-                key = "fuelEconomyOne";
-                break;
-            case ECONOMY_TWO:
-                key = "fuelEconomyTwo";
-                break;
-            case RANGE:
-                key = "fuelRange";
-                break;
-            case SHIFTS:
-                key = "numberOfShifts";
-                break;
-            case LEAN_DEVICE:
-                key = "leanAngleDevice";
-                break;
-            case GFORCE_DEVICE:
-                key = "gForce";
-                break;
-            case BEARING_DEVICE:
-                key = "bearing";
-                break;
-            case TIME_DEVICE:
-                key = "time";
-                break;
-            case BAROMETRIC_DEVICE:
-                key = "barometricPressure";
-                break;
-            case SPEED_DEVICE:
-                key = "gpsSpeed";
-                break;
-            case ALTITUDE_DEVICE:
-                key = "gpsAltitude";
-                break;
-            case SUN_DEVICE:
-                key = "sunRiseSet";
-                break;
-            case RPM:
-                key = "rpm";
-                break;
-            case LEAN_BIKE:
-                key = "leanAngleDevice";
-                break;
-            case REAR_SPEED:
-                key = "rearSpeed";
-                break;
-            case CELL_SIGNAL:
-                key = "cellSignal";
-                break;
-            case BATTERY_DEVICE:
-                key = "battery";
-                break;
-            case ELEVATION_CHANGE_DEVICE:
-                key = "elevationChange";
-                break;
-            default:
-                key = "?";
-        }
-        return key;
+        return switch (dataPoint) {
+            case GEAR -> "gear";
+            case ENGINE_TEMP -> "engineTemperature";
+            case AIR_TEMP -> "ambientTemperature";
+            case FRONT_RDC -> "frontTirePressure";
+            case REAR_RDC -> "rearTirePressure";
+            case ODOMETER -> "odometer";
+            case VOLTAGE -> "voltage";
+            case THROTTLE -> "throttlePosition";
+            case FRONT_BRAKE -> "frontBrake";
+            case REAR_BRAKE -> "rearBrake";
+            case AMBIENT_LIGHT -> "ambientLight";
+            case TRIP_ONE -> "tripOne";
+            case TRIP_TWO -> "tripTwo";
+            case TRIP_AUTO -> "tripAuto";
+            case SPEED -> "speed";
+            case AVG_SPEED -> "avgSpeed";
+            case CURRENT_CONSUMPTION -> "currentConsumption";
+            case ECONOMY_ONE -> "fuelEconomyOne";
+            case ECONOMY_TWO -> "fuelEconomyTwo";
+            case RANGE -> "fuelRange";
+            case SHIFTS -> "numberOfShifts";
+            case LEAN_DEVICE -> "leanAngleDevice";
+            case GFORCE_DEVICE -> "gForce";
+            case BEARING_DEVICE -> "bearing";
+            case TIME_DEVICE -> "time";
+            case BAROMETRIC_DEVICE -> "barometricPressure";
+            case SPEED_DEVICE -> "gpsSpeed";
+            case ALTITUDE_DEVICE -> "gpsAltitude";
+            case SUN_DEVICE -> "sunRiseSet";
+            case RPM -> "rpm";
+            case LEAN_BIKE -> "leanAngleDevice";
+            case REAR_SPEED -> "rearSpeed";
+            case CELL_SIGNAL -> "cellSignal";
+            case BATTERY_DEVICE -> "battery";
+            case ELEVATION_CHANGE_DEVICE -> "elevationChange";
+            default -> "?";
+        };
     }
 
     public static String getLabel(DataType dataPoint){
-        String label = " ";
-        switch (dataPoint){
-            case GEAR:
-                label = MemCache.gearLabel();
-                break;
-            case ENGINE_TEMP:
-                label = MemCache.temperatureUnitEngine();
-                break;
-            case AIR_TEMP:
-                label = MemCache.temperatureUnitAir();
-                break;
-            case FRONT_RDC:
-                label = MemCache.pressureUnitLabelF();
-                break;
-            case REAR_RDC:
-                label = MemCache.pressureUnitLabelR();
-                break;
-            case ODOMETER:
-                label = MemCache.odometerLabel();
-                break;
-            case VOLTAGE:
-                label = MemCache.voltageUnitLabel();
-                break;
-            case THROTTLE:
-                label = MemCache.throttleUnitLabel();
-                break;
-            case FRONT_BRAKE:
-                label = MemCache.brakeLabelF();
-                break;
-            case REAR_BRAKE:
-                label = MemCache.brakeLabelR();
-                break;
-            case AMBIENT_LIGHT:
-                label = MemCache.ambientLightLabel();
-                break;
-            case TRIP_ONE:
-                label = MemCache.trip1Label();
-                break;
-            case TRIP_TWO:
-                label = MemCache.trip2Label();
-                break;
-            case TRIP_AUTO:
-                label = MemCache.tripAutoLabel();
-                break;
-            case SPEED:
-                label = MemCache.speedLabel();
-                break;
-            case AVG_SPEED:
-                label = MemCache.avgSpeedLabel();
-                break;
-            case CURRENT_CONSUMPTION:
-                label = MemCache.consumptionLabel();
-                break;
-            case ECONOMY_ONE:
-                label = MemCache.economy1Label();
-                break;
-            case ECONOMY_TWO:
-                label = MemCache.economy2Label();
-                break;
-            case RANGE:
-                label = MemCache.rangeLabel();
-                break;
-            case SHIFTS:
-                label = MemCache.shiftsLabel();
-                break;
-            case LEAN_DEVICE:
-                label = MemCache.leanLabelBt();
-                break;
-            case GFORCE_DEVICE:
-                label = MemCache.gforceLabel();
-                break;
-            case BEARING_DEVICE:
-                label = MemCache.bearingLabel();
-                break;
-            case TIME_DEVICE:
-                label = MemCache.timeLabel();
-                break;
-            case BAROMETRIC_DEVICE:
-                label = MemCache.barometricLabel();
-                break;
-            case SPEED_DEVICE:
-                label = MemCache.speedLabelG();
-                break;
-            case ALTITUDE_DEVICE:
-                label = MemCache.altitudeLabel();
-                break;
-            case SUN_DEVICE:
-                label = MemCache.sunLabel();
-                break;
-            case RPM:
-                label = MemCache.rpmLabel();
-                break;
-            case LEAN_BIKE:
-                label = MemCache.leanLabel();
-                break;
-            case REAR_SPEED:
-                label = MemCache.speedLabelW();
-                break;
-            case CELL_SIGNAL:
-                label = MemCache.signalLabel();
-                break;
-            case BATTERY_DEVICE:
-                label = MemCache.batteryLabel();
-                break;
-            case ELEVATION_CHANGE_DEVICE:
-                label = MemCache.elevationChangeLabel();
-                break;
-            default:
-                label = " ";
-        }
-        return label;
+        return switch (dataPoint) {
+            case GEAR -> MemCache.gearLabel();
+            case ENGINE_TEMP -> MemCache.temperatureUnitEngine();
+            case AIR_TEMP -> MemCache.temperatureUnitAir();
+            case FRONT_RDC -> MemCache.pressureUnitLabelF();
+            case REAR_RDC -> MemCache.pressureUnitLabelR();
+            case ODOMETER -> MemCache.odometerLabel();
+            case VOLTAGE -> MemCache.voltageUnitLabel();
+            case THROTTLE -> MemCache.throttleUnitLabel();
+            case FRONT_BRAKE -> MemCache.brakeLabelF();
+            case REAR_BRAKE -> MemCache.brakeLabelR();
+            case AMBIENT_LIGHT -> MemCache.ambientLightLabel();
+            case TRIP_ONE -> MemCache.trip1Label();
+            case TRIP_TWO -> MemCache.trip2Label();
+            case TRIP_AUTO -> MemCache.tripAutoLabel();
+            case SPEED -> MemCache.speedLabel();
+            case AVG_SPEED -> MemCache.avgSpeedLabel();
+            case CURRENT_CONSUMPTION -> MemCache.consumptionLabel();
+            case ECONOMY_ONE -> MemCache.economy1Label();
+            case ECONOMY_TWO -> MemCache.economy2Label();
+            case RANGE -> MemCache.rangeLabel();
+            case SHIFTS -> MemCache.shiftsLabel();
+            case LEAN_DEVICE -> MemCache.leanLabelBt();
+            case GFORCE_DEVICE -> MemCache.gforceLabel();
+            case BEARING_DEVICE -> MemCache.bearingLabel();
+            case TIME_DEVICE -> MemCache.timeLabel();
+            case BAROMETRIC_DEVICE -> MemCache.barometricLabel();
+            case SPEED_DEVICE -> MemCache.speedLabelG();
+            case ALTITUDE_DEVICE -> MemCache.altitudeLabel();
+            case SUN_DEVICE -> MemCache.sunLabel();
+            case RPM -> MemCache.rpmLabel();
+            case LEAN_BIKE -> MemCache.leanLabel();
+            case REAR_SPEED -> MemCache.speedLabelW();
+            case CELL_SIGNAL -> MemCache.signalLabel();
+            case BATTERY_DEVICE -> MemCache.batteryLabel();
+            case ELEVATION_CHANGE_DEVICE -> MemCache.elevationChangeLabel();
+            default -> " ";
+        };
     }
 
     public static String getValue(DataType dataPoint){
@@ -1022,8 +876,8 @@ public class MotorcycleData {
                 break;
             case BEARING_DEVICE:
                 if (MotorcycleData.getBearing() != null) {
-                    Integer bearingValue = MotorcycleData.getBearing();
-                    String bearing = bearingValue.toString() + "°";
+                    int bearingValue = MotorcycleData.getBearing();
+                    String bearing = Integer.toString(bearingValue) + "°";
                     if (!sharedPrefs.getString("prefBearing", "0").contains("0")) {
                         if (bearingValue > 331 || bearingValue <= 28) {
                             bearing = MyApplication.getContext().getString(R.string.north);
@@ -1126,7 +980,7 @@ public class MotorcycleData {
                 }
                 break;
             case ELEVATION_CHANGE_DEVICE:
-                Double elevationChange = MotorcycleData.getElevationChange();
+                double elevationChange = MotorcycleData.getElevationChange();
                 if (distanceFormat.contains("1")) {
                     elevationChange = Utils.mToFeet(elevationChange);
                 }
@@ -1397,14 +1251,12 @@ public class MotorcycleData {
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_gas_pump);
 
                     if (currentConsumption != null){
-                        switch (MemCache.consumptionFormat()) {
-                            case "1":
-                                currentConsumption = Utils.l100ToMpg(currentConsumption); break;
-                            case "2":
-                                currentConsumption = Utils.l100ToMpgI(currentConsumption); break;
-                            case "3":
-                                currentConsumption = Utils.l100ToKmL(currentConsumption); break;
-                        }
+                        currentConsumption = switch (MemCache.consumptionFormat()) {
+                            case "1" -> Utils.l100ToMpg(currentConsumption);
+                            case "2" -> Utils.l100ToMpgI(currentConsumption);
+                            case "3" -> Utils.l100ToKmL(currentConsumption);
+                            default -> currentConsumption;
+                        };
                         value = Utils.toOneDecimalString(currentConsumption);
                     }
                     break;
@@ -1414,15 +1266,13 @@ public class MotorcycleData {
                     label = MemCache.economy1Label();
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_gas_pump);
 
-                    if( MotorcycleData.getFuelEconomyOne() != null){
-                        switch (MemCache.consumptionFormat()) {
-                            case "1":
-                                fuelEconomyOne = Utils.l100ToMpg(fuelEconomyOne); break;
-                            case "2":
-                                fuelEconomyOne = Utils.l100ToMpgI(fuelEconomyOne); break;
-                            case "3":
-                                fuelEconomyOne = Utils.l100ToKmL(fuelEconomyOne); break;
-                        }
+                    if(MotorcycleData.getFuelEconomyOne() != null){
+                        fuelEconomyOne = switch (MemCache.consumptionFormat()) {
+                            case "1" -> Utils.l100ToMpg(fuelEconomyOne);
+                            case "2" -> Utils.l100ToMpgI(fuelEconomyOne);
+                            case "3" -> Utils.l100ToKmL(fuelEconomyOne);
+                            default -> fuelEconomyOne;
+                        };
                         value = Utils.toOneDecimalString(fuelEconomyOne);
                     }
                     break;
@@ -1433,14 +1283,12 @@ public class MotorcycleData {
                     icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_gas_pump);
 
                     if(fuelEconomyTwo != null){
-                        switch (MemCache.consumptionFormat()) {
-                            case "1":
-                                fuelEconomyTwo = Utils.l100ToMpg(fuelEconomyTwo); break;
-                            case "2":
-                                fuelEconomyTwo = Utils.l100ToMpgI(fuelEconomyTwo); break;
-                            case "3":
-                                fuelEconomyTwo = Utils.l100ToKmL(fuelEconomyTwo); break;
-                        }
+                        fuelEconomyTwo = switch (MemCache.consumptionFormat()) {
+                            case "1" -> Utils.l100ToMpg(fuelEconomyTwo);
+                            case "2" -> Utils.l100ToMpgI(fuelEconomyTwo);
+                            case "3" -> Utils.l100ToKmL(fuelEconomyTwo);
+                            default -> fuelEconomyTwo;
+                        };
                         value = Utils.toOneDecimalString(fuelEconomyTwo);
                     }
                     break;

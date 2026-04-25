@@ -17,6 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
@@ -30,6 +31,7 @@ import java.util.Set;
 
 public class MyApplication extends Application implements Application.ActivityLifecycleCallbacks {
 
+    @SuppressLint("StaticFieldLeak")
     private static Context mContext;
     private static final Set<String> visibleActivities = new HashSet<>();
 

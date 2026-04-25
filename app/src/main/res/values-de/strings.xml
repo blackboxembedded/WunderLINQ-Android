@@ -348,7 +348,6 @@
     <string name="nav_app_sygic">Sygic</string>
     <string name="nav_app_mapfactor">Mapfactor Navigator</string>
     <string name="toast_permission_denied">Erforderliche Erlaubnis nicht erteilt.</string>
-    <string name="sendlogs_subject" translatable="false">WunderLINQ Android Fehlerprotokolle</string>
     <string name="too_many_pairings_alert_body">Mehr als ein WunderLINQ gekoppelt. Bitte entferne alte Kopplungen in den Bluetooth-Einstellungen.</string>
     <string name="too_many_pairings_alert_title">Mehr als ein WunderLINQ gekoppelt</string>
     <string name="no_pairing_alert_body">Kein WunderLINQ gekoppelt. Bitte kopple Dein WunderLINQ in den Bluetooth-Einstellungen.</string>
