@@ -27,7 +27,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
