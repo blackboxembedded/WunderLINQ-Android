@@ -516,7 +516,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
             case 1:
                 // Navigate Home
                 String address = sharedPrefs.getString("prefHomeAddress","");
-                if (!address.equals("")) {
+                if (!address.isEmpty()) {
                     LatLng location = getLocationFromAddress(TaskActivity.this, address);
                     if (location != null) {
                         Location destination = new Location(LocationManager.GPS_PROVIDER);
@@ -866,7 +866,7 @@ public class TaskActivity extends AppCompatActivity implements OsmAndHelper.OnOs
 
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(BluetoothLeService.ACTION_PERFORMANCE_DATA_AVAILABLE);
+        //intentFilter.addAction(BluetoothLeService.ACTION_PERFORMANCE_DATA_AVAILABLE);
         intentFilter.addAction(BluetoothLeService.ACTION_ACCSTATUS_AVAILABLE);
         return intentFilter;
     }

@@ -11,6 +11,8 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+
+import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -56,6 +58,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyCallback, OnMapsSdkInitializedCallback {
 
@@ -258,19 +261,14 @@ public class WeatherMapActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     @Override
-    public void onMapsSdkInitialized(MapsInitializer.Renderer renderer) {
-        switch (renderer) {
-            case LATEST:
-                Log.d(TAG, "The latest version of the renderer is used.");
-                break;
-            case LEGACY:
-                Log.d(TAG, "The legacy version of the renderer is used.");
-                break;
+    public void onMapsSdkInitialized(@NonNull MapsInitializer.Renderer renderer) {
+        if (Objects.requireNonNull(renderer) == MapsInitializer.Renderer.LATEST) {
+            Log.d(TAG, "The latest version of the renderer is used.");
         }
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
         Log.d(TAG, "onMapReady()");
 

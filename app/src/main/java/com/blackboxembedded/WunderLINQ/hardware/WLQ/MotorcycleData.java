@@ -1100,14 +1100,15 @@ public class MotorcycleData {
                         icon = AppCompatResources.getDrawable(MyApplication.getContext().getApplicationContext(), R.drawable.ic_tire);
                     }
                     if(rdcRear != null) {
-                        switch (MemCache.pressureFormat()) {
-                            case "1": // KPa
-                                rdcRear = Utils.barTokPa(rdcRear);break;
-                            case "2":// Kg-f
-                                rdcRear = Utils.barToKgF(rdcRear);break;
-                            case "3":// Psi
-                                rdcRear = Utils.barToPsi(rdcRear);break;
-                        }
+                        rdcRear = switch (MemCache.pressureFormat()) {
+                            case "1" -> // KPa
+                                    Utils.barTokPa(rdcRear);
+                            case "2" ->// Kg-f
+                                    Utils.barToKgF(rdcRear);
+                            case "3" ->// Psi
+                                    Utils.barToPsi(rdcRear);
+                            default -> rdcRear;
+                        };
                         value = Utils.toOneDecimalString(rdcRear);
                     }
                     break;

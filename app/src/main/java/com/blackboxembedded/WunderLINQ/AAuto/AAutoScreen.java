@@ -58,7 +58,6 @@ import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class AAutoScreen extends Screen {
 
@@ -125,9 +124,7 @@ public class AAutoScreen extends Screen {
 
         // If either permission missing, show a friendly placeholder template
         if (!hasLocation || !hasBluetooth) {
-            StringBuilder message = new StringBuilder(MyApplication.getContext().getString(R.string.permission_required_message));
-
-            return new androidx.car.app.model.MessageTemplate.Builder(message.toString())
+            return new androidx.car.app.model.MessageTemplate.Builder(MyApplication.getContext().getString(R.string.permission_required_message))
                     .setTitle(MyApplication.getContext().getString(R.string.permission_required))
                     .setHeaderAction(Action.APP_ICON)
                     .addAction(
@@ -159,7 +156,7 @@ public class AAutoScreen extends Screen {
         ItemList.Builder listBuilder = new ItemList.Builder();
         Faults faults;
         faults = (new Faults(MyApplication.getContext()));
-        ArrayList<String> activeDesc = faults.getAllActiveDesc();
+        ArrayList<String> activeDesc = Faults.getAllActiveDesc();
         for (String desc : activeDesc) {
                 listBuilder.addItem(new Row.Builder()
                         .setTitle(desc).build());

@@ -67,7 +67,7 @@ public class BTConnectReceiver extends BroadcastReceiver {
                     // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
-                if (device.getName() != null) {
+                if (device != null && device.getName() != null) {
                     if (device.getName().contains("WunderLINQ")) {
                         if (device.getBondState() == BluetoothDevice.BOND_BONDED) {
                             String topPackageName;
