@@ -279,15 +279,15 @@ public final class BluetoothMicRouter {
     }
 
     private static String deviceLabel(@NonNull AudioDeviceInfo dev) {
-        String addr = null;
+        String address = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            try { addr = dev.getAddress(); } catch (Throwable ignored) {}
+            try { address = dev.getAddress(); } catch (Throwable ignored) {}
         }
         CharSequence pn = dev.getProductName();
         String name = (pn != null) ? pn.toString() : "unknown";
         return "type=" + dev.getType()
                 + " id=" + dev.getId()
                 + " name=" + name
-                + ((addr != null && !addr.isEmpty()) ? " addr=" + addr : "");
+                + ((address != null && !address.isEmpty()) ? " address=" + address : "");
     }
 }

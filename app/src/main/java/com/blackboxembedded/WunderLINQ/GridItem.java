@@ -23,9 +23,6 @@ import androidx.annotation.ColorInt;
 import com.blackboxembedded.WunderLINQ.hardware.WLQ.MotorcycleData;
 
 public class GridItem {
-    private final static String TAG = "GridItem";
-
-    private final MotorcycleData.DataType dataType;
 
     private final String label;
     private final String value;
@@ -38,7 +35,6 @@ public class GridItem {
         this.label = label;
         this.value = value;
         this.valueColor = valueColor;
-        this.dataType = type;
     }
 
     public String getLabel() {

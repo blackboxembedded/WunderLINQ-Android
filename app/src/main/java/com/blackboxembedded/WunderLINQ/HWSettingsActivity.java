@@ -19,7 +19,6 @@ package com.blackboxembedded.WunderLINQ;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -402,35 +401,27 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
         resetBuilder.setTitle(getString(R.string.hwsave_alert_title));
         resetBuilder.setMessage(getString(R.string.hwreset_alert_body));
         resetBuilder.setPositiveButton(R.string.hwsave_alert_btn_ok,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            if (MotorcycleData.wlq != null) {
-                                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                                outputStream.write(MotorcycleData.wlq.WRITE_CONFIG_CMD());
-                                outputStream.write(MotorcycleData.wlq.getDefaultConfig());
-                                outputStream.write(MotorcycleData.wlq.CMD_EOM());
-                                byte[] writeConfigCmd = outputStream.toByteArray();
-                                Log.d(TAG, "Reset Command Sent: " + Utils.ByteArrayToHex(writeConfigCmd));
-                                BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
-                            }
-                        } catch (IOException e) {
-                            Log.d(TAG, e.toString());
+                (dialog, which) -> {
+                    try {
+                        if (MotorcycleData.wlq != null) {
+                            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                            outputStream.write(MotorcycleData.wlq.WRITE_CONFIG_CMD());
+                            outputStream.write(MotorcycleData.wlq.getDefaultConfig());
+                            outputStream.write(MotorcycleData.wlq.CMD_EOM());
+                            byte[] writeConfigCmd = outputStream.toByteArray();
+                            Log.d(TAG, "Reset Command Sent: " + Utils.ByteArrayToHex(writeConfigCmd));
+                            BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
                         }
-                        finish();
-                        Intent backIntent = new Intent(HWSettingsActivity.this, MainActivity.class);
-                        backIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(backIntent);
+                    } catch (IOException e) {
+                        Log.d(TAG, e.toString());
                     }
+                    finish();
+                    Intent backIntent = new Intent(HWSettingsActivity.this, MainActivity.class);
+                    backIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(backIntent);
                 });
         resetBuilder.setNegativeButton(R.string.hwsave_alert_btn_cancel,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+                (dialog, which) -> dialog.cancel());
         resetBuilder.show();
     }
 
@@ -441,33 +432,25 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
         resetBuilder.setTitle(getString(R.string.hwsave_alert_title));
         resetBuilder.setMessage(getString(R.string.hwsave_alert_body));
         resetBuilder.setPositiveButton(R.string.hwsave_alert_btn_ok,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                            outputStream.write(MotorcycleData.wlq.WRITE_CONFIG_CMD());
-                            outputStream.write(MotorcycleData.wlq.getTempConfig());
-                            outputStream.write(MotorcycleData.wlq.CMD_EOM());
-                            byte[] writeConfigCmd = outputStream.toByteArray();
-                            Log.d(TAG, "Set HWConfig Command Sent: " + Utils.ByteArrayToHex(writeConfigCmd));
-                            BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
-                        } catch (IOException e) {
-                            Log.d(TAG, e.toString());
-                        }
-                        finish();
-                        Intent backIntent = new Intent(HWSettingsActivity.this, MainActivity.class);
-                        backIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(backIntent);
+                (dialog, which) -> {
+                    try {
+                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                        outputStream.write(MotorcycleData.wlq.WRITE_CONFIG_CMD());
+                        outputStream.write(MotorcycleData.wlq.getTempConfig());
+                        outputStream.write(MotorcycleData.wlq.CMD_EOM());
+                        byte[] writeConfigCmd = outputStream.toByteArray();
+                        Log.d(TAG, "Set HWConfig Command Sent: " + Utils.ByteArrayToHex(writeConfigCmd));
+                        BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
+                    } catch (IOException e) {
+                        Log.d(TAG, e.toString());
                     }
+                    finish();
+                    Intent backIntent = new Intent(HWSettingsActivity.this, MainActivity.class);
+                    backIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(backIntent);
                 });
         resetBuilder.setNegativeButton(R.string.hwsave_alert_btn_cancel,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+                (dialog, which) -> dialog.cancel());
         resetBuilder.show();
 
     }

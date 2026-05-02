@@ -22,7 +22,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -84,11 +83,11 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         saveBT = findViewById(R.id.btSave);
         Button cancelBT = findViewById(R.id.btCancel);
 
-        types = new ArrayAdapter<String>(this,
+        types = new ArrayAdapter<>(this,
                 R.layout.item_hwsettings_spinners, getResources().getStringArray(R.array.hid_type_names_array));
-        keyboard = new ArrayAdapter<String>(this,
+        keyboard = new ArrayAdapter<>(this,
                 R.layout.item_hwsettings_spinners, getResources().getStringArray(R.array.hid_keyboard_usage_table_names_array));
-        consumer = new ArrayAdapter<String>(this,
+        consumer = new ArrayAdapter<>(this,
                 R.layout.item_hwsettings_spinners, getResources().getStringArray(R.array.hid_consumer_usage_table_names_array));
 
         actionTypeSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -315,13 +314,13 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         actionLabelTV.setText(MotorcycleData.wlq.getActionName(actionID));
         ArrayAdapter<Integer> sensitivity;
         if (actionID == WLQ.KEYMODE){ //Key mode
-            actionTypeSP.setAdapter(new ArrayAdapter<String>(this,
+            actionTypeSP.setAdapter(new ArrayAdapter<>(this,
                     R.layout.item_hwsettings_spinners, getResources().getStringArray(R.array.keymode_names_array)));
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
             actionTypeSP.setSelection(MotorcycleData.wlq.getKeyMode());
         } else if (actionID ==  WLQ.USB){ //USB
-            actionTypeSP.setAdapter(new ArrayAdapter<String>(this,
+            actionTypeSP.setAdapter(new ArrayAdapter<>(this,
                     R.layout.item_hwsettings_spinners, getResources().getStringArray(R.array.usbcontrol_names_array)));
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
@@ -336,7 +335,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             for(int i = 0; i < RTKSensitivityMax; i++) {
                 intArray[i] = i * 50;
             }
-            sensitivity = new ArrayAdapter<Integer>(this,
+            sensitivity = new ArrayAdapter<>(this,
                     R.layout.item_hwsettings_spinners, intArray);
             actionTypeSP.setAdapter(sensitivity);
             actionKeySP.setVisibility(View.INVISIBLE);
@@ -350,7 +349,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             for(int i = 0; i < fullSensitivityMax; i++) {
                 intArray[i] = i * 50;
             }
-            sensitivity = new ArrayAdapter<Integer>(this,
+            sensitivity = new ArrayAdapter<>(this,
                     R.layout.item_hwsettings_spinners, intArray);
             actionTypeSP.setAdapter(sensitivity);
             actionKeySP.setVisibility(View.INVISIBLE);
@@ -359,7 +358,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             int index = list.indexOf(Integer.parseInt(MotorcycleData.wlq.getActionValue(actionID)));
             actionTypeSP.setSelection(index);
         } else if (actionID == WLQ.ORIENTATION) {
-            actionTypeSP.setAdapter(new ArrayAdapter<String>(this,
+            actionTypeSP.setAdapter(new ArrayAdapter<>(this,
                     R.layout.item_hwsettings_spinners, getResources().getStringArray(R.array.orientation_names_array)));
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
@@ -368,7 +367,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             ).indexOf(MotorcycleData.wlq.getActionValue(actionID));
             actionTypeSP.setSelection(index);
         } else if (actionID == WLQ.pdmChannel1 || actionID == WLQ.pdmChannel2 || actionID == WLQ.pdmChannel3 || actionID == WLQ.pdmChannel4) {
-            actionTypeSP.setAdapter(new ArrayAdapter<String>(this,
+            actionTypeSP.setAdapter(new ArrayAdapter<>(this,
                     R.layout.item_hwsettings_spinners, getResources().getStringArray(R.array.pdm_mode_array)));
             actionKeySP.setVisibility(View.INVISIBLE);
             actionModifiersSP.setVisibility(View.INVISIBLE);
@@ -380,7 +379,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
             if (MotorcycleData.wlq.getHardwareVersion() != null) {
                 //TODO: fix device specific
                 if (MotorcycleData.wlq.getHardwareVersion().equals(WLQ_N.hardwareVersion1)){
-                    types = new ArrayAdapter<String>(this,
+                    types = new ArrayAdapter<>(this,
                             R.layout.item_hwsettings_spinners, getResources().getStringArray(R.array.hw1_hid_type_names_array));
                 }
             }
@@ -440,32 +439,24 @@ public class HWSettingsActionActivity extends AppCompatActivity {
         resetBuilder.setTitle(getString(R.string.hwsave_alert_title));
         resetBuilder.setMessage(getString(R.string.hwsave_alert_body));
         resetBuilder.setPositiveButton(R.string.hwsave_alert_btn_ok,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                            outputStream.write(MotorcycleData.wlq.WRITE_MODE_CMD());
-                            outputStream.write(mode);
-                            outputStream.write(MotorcycleData.wlq.CMD_EOM());
-                            byte[] writeConfigCmd = outputStream.toByteArray();
-                            BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
-                        } catch (IOException e) {
-                            Log.d(TAG, e.toString());
-                        }
-                        finish();
-                        Intent backIntent = new Intent(HWSettingsActionActivity.this, MainActivity.class);
-                        backIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(backIntent);
+                (dialog, which) -> {
+                    try {
+                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                        outputStream.write(MotorcycleData.wlq.WRITE_MODE_CMD());
+                        outputStream.write(mode);
+                        outputStream.write(MotorcycleData.wlq.CMD_EOM());
+                        byte[] writeConfigCmd = outputStream.toByteArray();
+                        BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
+                    } catch (IOException e) {
+                        Log.d(TAG, e.toString());
                     }
+                    finish();
+                    Intent backIntent = new Intent(HWSettingsActionActivity.this, MainActivity.class);
+                    backIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(backIntent);
                 });
         resetBuilder.setNegativeButton(R.string.hwsave_alert_btn_cancel,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+                (dialog, which) -> dialog.cancel());
         resetBuilder.show();
     }
 }

@@ -110,7 +110,7 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
             @Override
             public void onPressLong() {
                 // retrieve the stored coordinates
-                float x = lastTouchDownXY[0];
+                //float x = lastTouchDownXY[0];
                 float y = lastTouchDownXY[1];
 
                 Display display = getWindowManager().getDefaultDisplay();
@@ -127,20 +127,17 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
 
                     }
                     channelOneHeaderTV.setText(channelOneHeaderET.getText().toString());
-                    channelOneHeaderET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                        @Override
-                        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                            if(actionId== EditorInfo.IME_ACTION_DONE){
-                                channelOneHeaderET.setVisibility(View.INVISIBLE);
-                                channelOneHeaderTV.bringToFront();
-                                channelOneHeaderTV.setVisibility(View.VISIBLE);
-                                channelOneHeaderTV.setText(channelOneHeaderET.getText().toString());
-                                SharedPreferences.Editor editor = sharedPrefs.edit();
-                                editor.putString("ACC_CHAN_1", channelOneHeaderET.getText().toString());
-                                editor.apply();
-                            }
-                            return false;
+                    channelOneHeaderET.setOnEditorActionListener((v, actionId, event) -> {
+                        if(actionId== EditorInfo.IME_ACTION_DONE){
+                            channelOneHeaderET.setVisibility(View.INVISIBLE);
+                            channelOneHeaderTV.bringToFront();
+                            channelOneHeaderTV.setVisibility(View.VISIBLE);
+                            channelOneHeaderTV.setText(channelOneHeaderET.getText().toString());
+                            SharedPreferences.Editor editor = sharedPrefs.edit();
+                            editor.putString("ACC_CHAN_1", channelOneHeaderET.getText().toString());
+                            editor.apply();
                         }
+                        return false;
                     });
                 } else {
                     channelTwoHeaderTV.setVisibility(View.INVISIBLE);
@@ -152,20 +149,17 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
 
                     }
                     channelTwoHeaderTV.setText(channelTwoHeaderET.getText().toString());
-                    channelTwoHeaderET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                        @Override
-                        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                            if(actionId== EditorInfo.IME_ACTION_DONE){
-                                channelTwoHeaderET.setVisibility(View.INVISIBLE);
-                                channelTwoHeaderTV.bringToFront();
-                                channelTwoHeaderTV.setVisibility(View.VISIBLE);
-                                channelTwoHeaderTV.setText(channelTwoHeaderET.getText().toString());
-                                SharedPreferences.Editor editor = sharedPrefs.edit();
-                                editor.putString("ACC_CHAN_2", channelTwoHeaderET.getText().toString());
-                                editor.apply();
-                            }
-                            return false;
+                    channelTwoHeaderET.setOnEditorActionListener((v, actionId, event) -> {
+                        if(actionId== EditorInfo.IME_ACTION_DONE){
+                            channelTwoHeaderET.setVisibility(View.INVISIBLE);
+                            channelTwoHeaderTV.bringToFront();
+                            channelTwoHeaderTV.setVisibility(View.VISIBLE);
+                            channelTwoHeaderTV.setText(channelTwoHeaderET.getText().toString());
+                            SharedPreferences.Editor editor = sharedPrefs.edit();
+                            editor.putString("ACC_CHAN_2", channelTwoHeaderET.getText().toString());
+                            editor.apply();
                         }
+                        return false;
                     });
                 }
             }
@@ -338,12 +332,9 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
             final ActionBar actionBar = getSupportActionBar();
             if (actionBar != null) {
                 final int finalColor = color;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(TAG, "updateDisplay: Setting NavBar color to " + String.format("#%06X", (0xFFFFFF & finalColor)) + " (hasFocus=" + MotorcycleData.getHasFocus() + ")");
-                        actionBar.setBackgroundDrawable(new ColorDrawable(finalColor));
-                    }
+                runOnUiThread(() -> {
+                    Log.d(TAG, "updateDisplay: Setting NavBar color to " + String.format("#%06X", (0xFFFFFF & finalColor)) + " (hasFocus=" + MotorcycleData.getHasFocus() + ")");
+                    actionBar.setBackgroundDrawable(new ColorDrawable(finalColor));
                 });
             }
         }

@@ -19,9 +19,7 @@ package com.blackboxembedded.WunderLINQ;
 
 import android.Manifest;
 import android.app.AppOpsManager;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -30,7 +28,6 @@ import android.os.Build;
 import android.os.Bundle;
 import androidx.preference.PreferenceManager;
 import android.provider.Settings;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -46,7 +43,6 @@ import static android.app.AppOpsManager.MODE_ALLOWED;
 import static android.app.AppOpsManager.OPSTR_GET_USAGE_STATS;
 import static android.os.Process.myUid;
 
-import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 
@@ -95,26 +91,23 @@ public class FirstRunActivity extends AppCompatActivity {
             }
 
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Log.d(TAG, "Starting Log File: " + outputFile.getAbsolutePath());
-                        Process process = Runtime.getRuntime().exec("logcat -f " + outputFile.getAbsolutePath());
+            new Thread(() -> {
+                try {
+                    Log.d(TAG, "Starting Log File: " + outputFile.getAbsolutePath());
+                    Process process = Runtime.getRuntime().exec("logcat -f " + outputFile.getAbsolutePath());
 
-                        // Wait for the process to complete.
-                        int exitCode = process.waitFor();
+                    // Wait for the process to complete.
+                    int exitCode = process.waitFor();
 
-                        // Do some more work after the process completes.
-                        if (exitCode != 0) {
-                            // Handle error.
-                            Log.d(TAG, "ERROR exitCode: " + exitCode);
-                        } else {
-                            Log.d(TAG, "NO ERROR exitCode: " + exitCode);
-                        }
-                    } catch (IOException | InterruptedException e) {
-                        Log.d(TAG, "Unable to start debug logging. Error: " + e);
+                    // Do some more work after the process completes.
+                    if (exitCode != 0) {
+                        // Handle error.
+                        Log.d(TAG, "ERROR exitCode: " + exitCode);
+                    } else {
+                        Log.d(TAG, "NO ERROR exitCode: " + exitCode);
                     }
+                } catch (IOException | InterruptedException e) {
+                    Log.d(TAG, "Unable to start debug logging. Error: " + e);
                 }
             }).start();
         }
@@ -278,7 +271,7 @@ public class FirstRunActivity extends AppCompatActivity {
                     step = step + 1;
                     if (v.getId() == R.id.buttonOK) {
                         String[] navAppIDs = getResources().getStringArray(R.array.nav_apps_arrayValues);
-                        String selected = "1";
+                        String selected;
                         selected = navAppIDs[spSelector.getSelectedItemPosition()];
                         SharedPreferences.Editor editor = sharedPrefs.edit();
                         editor.putString("prefNavApp", selected);
@@ -312,10 +305,7 @@ public class FirstRunActivity extends AppCompatActivity {
                     builder.setTitle(getString(R.string.negative_alert_title));
                     builder.setMessage(getString(R.string.negative_camera_alert_body));
                     builder.setPositiveButton(android.R.string.ok, null);
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                        }
+                    builder.setOnDismissListener(dialog -> {
                     });
                     builder.show();
                 }
@@ -329,10 +319,7 @@ public class FirstRunActivity extends AppCompatActivity {
                     builder.setTitle(getString(R.string.negative_alert_title));
                     builder.setMessage(getString(R.string.negative_call_alert_body));
                     builder.setPositiveButton(android.R.string.ok, null);
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                        }
+                    builder.setOnDismissListener(dialog -> {
                     });
                     builder.show();
                 }
@@ -346,10 +333,7 @@ public class FirstRunActivity extends AppCompatActivity {
                     builder.setTitle(getString(R.string.negative_alert_title));
                     builder.setMessage(getString(R.string.negative_contacts_alert_body));
                     builder.setPositiveButton(android.R.string.ok, null);
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                        }
+                    builder.setOnDismissListener(dialog -> {
                     });
                     builder.show();
                 }
@@ -363,10 +347,7 @@ public class FirstRunActivity extends AppCompatActivity {
                     builder.setTitle(getString(R.string.negative_alert_title));
                     builder.setMessage(getString(R.string.negative_record_audio_alert_body));
                     builder.setPositiveButton(android.R.string.ok, null);
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                        }
+                    builder.setOnDismissListener(dialog -> {
                     });
                     builder.show();
                 }
@@ -380,10 +361,7 @@ public class FirstRunActivity extends AppCompatActivity {
                     builder.setTitle(getString(R.string.negative_alert_title));
                     builder.setMessage(getString(R.string.negative_location_alert_body));
                     builder.setPositiveButton(android.R.string.ok, null);
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                        }
+                    builder.setOnDismissListener(dialog -> {
                     });
                     builder.show();
                 }
@@ -397,10 +375,7 @@ public class FirstRunActivity extends AppCompatActivity {
                     builder.setTitle(getString(R.string.negative_alert_title));
                     builder.setMessage(getString(R.string.negative_btconnect_alert_body));
                     builder.setPositiveButton(android.R.string.ok, null);
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                        }
+                    builder.setOnDismissListener(dialog -> {
                     });
                     builder.show();
                 }
@@ -414,10 +389,7 @@ public class FirstRunActivity extends AppCompatActivity {
                     builder.setTitle(getString(R.string.negative_alert_title));
                     builder.setMessage(getString(R.string.negative_phone_state_alert_body));
                     builder.setPositiveButton(android.R.string.ok, null);
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                        }
+                    builder.setOnDismissListener(dialog -> {
                     });
                     builder.show();
                 }
@@ -427,30 +399,5 @@ public class FirstRunActivity extends AppCompatActivity {
                 Log.d(TAG, "Unknown Permissions Request Code");
                 break;
         }
-    }
-
-    public void moveDirectory(File source, File destination) throws IOException {
-        FileUtils.copyDirectoryToDirectory(source, destination);
-    }
-
-    public static boolean isAccessibilityServiceEnabled(Context context, Class<?> accessibilityService) {
-        ComponentName expectedComponentName = new ComponentName(context, accessibilityService);
-
-        String enabledServicesSetting = Settings.Secure.getString(context.getContentResolver(),  Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
-        if (enabledServicesSetting == null)
-            return false;
-
-        TextUtils.SimpleStringSplitter colonSplitter = new TextUtils.SimpleStringSplitter(':');
-        colonSplitter.setString(enabledServicesSetting);
-
-        while (colonSplitter.hasNext()) {
-            String componentNameString = colonSplitter.next();
-            ComponentName enabledService = ComponentName.unflattenFromString(componentNameString);
-
-            if (enabledService != null && enabledService.equals(expectedComponentName))
-                return true;
-        }
-
-        return false;
     }
 }

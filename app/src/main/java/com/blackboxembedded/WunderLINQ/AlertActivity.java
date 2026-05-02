@@ -113,19 +113,13 @@ public class AlertActivity extends AppCompatActivity {
         }
         tvAlertBody.setText(body);
 
-        switch (type){
-            case ALERT_FUEL:
-                break;
-            case ALERT_PHOTO:
-                btnOK.setVisibility(View.INVISIBLE);
-                if(!backgroundPath.equals("")){
-                    backgroundImageView = findViewById(R.id.imageViewBackground);
-                    backgroundImageView.setImageDrawable(Drawable.createFromPath(backgroundPath));
-                    backgroundImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                }
-                break;
-            default:
-                break;
+        if (type == ALERT_PHOTO) {
+            btnOK.setVisibility(View.INVISIBLE);
+            if (!backgroundPath.isEmpty()) {
+                backgroundImageView = findViewById(R.id.imageViewBackground);
+                backgroundImageView.setImageDrawable(Drawable.createFromPath(backgroundPath));
+                backgroundImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            }
         }
         showActionBar();
 
@@ -140,8 +134,6 @@ public class AlertActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                // Previously was being called rather than close.  Need to investigate the differences
-                // finish();
                 if (btnClose != null) {
                     btnClose.performClick();
                 }

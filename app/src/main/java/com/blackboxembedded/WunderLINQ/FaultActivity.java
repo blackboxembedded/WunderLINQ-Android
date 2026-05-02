@@ -28,8 +28,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -46,7 +44,7 @@ import com.blackboxembedded.WunderLINQ.hardware.WLQ.Faults;
 import java.util.ArrayList;
 
 public class FaultActivity extends AppCompatActivity {
-    ArrayList<String> faultListData = new ArrayList<String>();
+    ArrayList<String> faultListData = new ArrayList<>();
     SharedPreferences sharedPrefs;
 
     @Override
@@ -73,16 +71,11 @@ public class FaultActivity extends AppCompatActivity {
 
         faultListData = Faults.getAllActiveDesc();
 
-        faultList.setAdapter(new ArrayAdapter<String>(this, R.layout.item_fault,faultListData));
+        faultList.setAdapter(new ArrayAdapter<>(this, R.layout.item_fault, faultListData));
 
         faultList.setTextFilterEnabled(true);
-        faultList.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                Toast.makeText(getApplicationContext(),
-                        ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        faultList.setOnItemClickListener((parent, view, position, id) -> Toast.makeText(getApplicationContext(),
+                ((TextView) view).getText(), Toast.LENGTH_SHORT).show());
 
     }
 
@@ -127,7 +120,7 @@ public class FaultActivity extends AppCompatActivity {
         faultListData = Faults.getAllActiveDesc();
         ListView faultList = findViewById(R.id.lv_faults);
         if (faultList != null) {
-            faultList.setAdapter(new ArrayAdapter<String>(this, R.layout.item_fault, faultListData));
+            faultList.setAdapter(new ArrayAdapter<>(this, R.layout.item_fault, faultListData));
         }
     }
 

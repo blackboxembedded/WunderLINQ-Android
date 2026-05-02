@@ -27,7 +27,6 @@ import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -93,43 +92,35 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
         Button btSave = findViewById(R.id.btSave);
         btSave.setOnClickListener(mClickListener);
 
-        etLatitude.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        etLatitude.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-
-                    LatLng latLong = new LatLng(Double.parseDouble(etLatitude.getText().toString()), Double.parseDouble(etLongitude.getText().toString()));
-                    if(etLatitude.getText().toString().matches(Utils.LATITUDE_PATTERN) && etLongitude.getText().toString().matches(Utils.LONGITUDE_PATTERN)){
-                        googleMap.clear();
-                        googleMap.addMarker(new MarkerOptions().position(latLong));
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLong,15));
-                    }
-                    return true;
+                LatLng latLong = new LatLng(Double.parseDouble(etLatitude.getText().toString()), Double.parseDouble(etLongitude.getText().toString()));
+                if(etLatitude.getText().toString().matches(Utils.LATITUDE_PATTERN) && etLongitude.getText().toString().matches(Utils.LONGITUDE_PATTERN)){
+                    googleMap.clear();
+                    googleMap.addMarker(new MarkerOptions().position(latLong));
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLong,15));
                 }
-                return false;
+                return true;
             }
+            return false;
         });
-        etLongitude.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        etLongitude.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-
-                    LatLng latLong = new LatLng(Double.parseDouble(etLatitude.getText().toString()), Double.parseDouble(etLongitude.getText().toString()));
-                    if(etLatitude.getText().toString().matches(Utils.LATITUDE_PATTERN) && etLongitude.getText().toString().matches(Utils.LONGITUDE_PATTERN)){
-                        googleMap.clear();
-                        googleMap.addMarker(new MarkerOptions().position(latLong));
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLong,15));
-                    }
-                    return true;
+                LatLng latLong = new LatLng(Double.parseDouble(etLatitude.getText().toString()), Double.parseDouble(etLongitude.getText().toString()));
+                if(etLatitude.getText().toString().matches(Utils.LATITUDE_PATTERN) && etLongitude.getText().toString().matches(Utils.LONGITUDE_PATTERN)){
+                    googleMap.clear();
+                    googleMap.addMarker(new MarkerOptions().position(latLong));
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLong,15));
                 }
-                return false;
+                return true;
             }
+            return false;
         });
 
         FragmentManager myFragmentManager = getSupportFragmentManager();
@@ -224,9 +215,7 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
                                     } catch (IOException | XmlPullParserException e) {
                                         Log.d(TAG,"Problem parsing GPX. Error: " + e);
                                     }
-                                    if (parsedGpx == null) {
-                                        // Error parsing GPX
-                                    } else {
+                                    if (parsedGpx != null) {
                                         // Do something with the parsed GPX
                                         // Open database
                                         WaypointDatasource datasource = new WaypointDatasource(AddWaypointActivity.this);
@@ -278,14 +267,11 @@ public class AddWaypointActivity extends AppCompatActivity implements OnMapReady
         googleMap.setIndoorEnabled(false);
         googleMap.setBuildingsEnabled(true);
         googleMap.getUiSettings().setZoomControlsEnabled(false);
-        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(@NonNull LatLng point) {
-                googleMap.clear();
-                googleMap.addMarker(new MarkerOptions().position(point));
-                etLatitude.setText(String.valueOf(point.latitude));
-                etLongitude.setText(String.valueOf(point.longitude));
-            }
+        googleMap.setOnMapClickListener(point -> {
+            googleMap.clear();
+            googleMap.addMarker(new MarkerOptions().position(point));
+            etLatitude.setText(String.valueOf(point.latitude));
+            etLongitude.setText(String.valueOf(point.longitude));
         });
 
         // Add a marker and move the camera
