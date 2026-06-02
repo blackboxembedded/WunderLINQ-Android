@@ -46,7 +46,7 @@ dependencies {
     androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    def camerax_version = "1.6.0"
+    def camerax_version = "1.6.1"
     implementation "androidx.camera:camera-core:$camerax_version"
     implementation "androidx.camera:camera-camera2:$camerax_version"
     implementation "androidx.camera:camera-lifecycle:$camerax_version"
@@ -61,7 +61,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel:2.10.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.android.material:material:1.13.0'
+    implementation 'com.google.android.material:material:1.14.0'
     implementation 'com.google.android.gms:play-services-location:21.3.0'
     implementation 'com.google.android.gms:play-services-maps:20.0.0'
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1'
@@ -69,7 +69,7 @@ dependencies {
     implementation 'ca.rmen:lib-sunrise-sunset:1.1.2'
     implementation 'com.github.martin-stone:hsv-alpha-color-picker-android:3.1.0'
     implementation 'io.jenetics:jpx:3.2.1'
-    implementation 'com.fasterxml.woodstox:woodstox-core:7.1.1'
+    implementation 'com.fasterxml.woodstox:woodstox-core:7.2.0'
     implementation 'stax:stax:1.2.0'
     implementation 'com.github.ticofab:android-gpx-parser:2.3.1'
     implementation 'com.caverock:androidsvg-aar:1.4'
