@@ -913,7 +913,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         return false;
     }
 
-    //start timer function
+    //ActionBar Hiding start timer
     void startTimer() {
         if (sharedPrefs.getBoolean("prefHideNavBar", false)) {
             cancelTimer();
@@ -933,7 +933,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         }
     }
 
-    //cancel timer
+    //ActionBar Hiding cancel timer
     void cancelTimer() {
         if (cTimer != null) {
             cTimer.cancel();

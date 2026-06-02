@@ -401,29 +401,33 @@ public class AccessoryActivity extends AppCompatActivity implements View.OnTouch
         }
     }
 
-    //start timer function
+    //ActionBar Hiding start timer
     void startTimer() {
         if (sharedPrefs.getBoolean("prefHideNavBar", false)) {
-            if (!timerRunning) {
-                cTimer = new CountDownTimer(10000, 1000) {
-                    public void onTick(long millisUntilFinished) {
-                    }
+            cancelTimer();
+            cTimer = new CountDownTimer(10000, 1000) {
+                public void onTick(long millisUntilFinished) {
+                }
 
-                    public void onFinish() {
+                public void onFinish() {
+                    if (getSupportActionBar() != null) {
                         getSupportActionBar().hide();
-                        timerRunning = false;
                     }
-                };
-                timerRunning = true;
-                cTimer.start();
-            }
+                    timerRunning = false;
+                }
+            };
+            timerRunning = true;
+            cTimer.start();
         }
     }
 
-    //Cancel timer
+    //ActionBar Hiding cancel timer
     void cancelTimer() {
-        if(cTimer!=null)
+        if (cTimer != null) {
             cTimer.cancel();
+            cTimer = null;
+        }
+        timerRunning = false;
     }
 
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {

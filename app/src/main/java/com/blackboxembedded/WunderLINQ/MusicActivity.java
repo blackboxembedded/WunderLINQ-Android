@@ -563,29 +563,33 @@ public class MusicActivity extends AppCompatActivity implements View.OnTouchList
         }
     }
 
-    //start timer function
+    //ActionBar Hiding start timer
     void startTimer() {
         if (sharedPrefs.getBoolean("prefHideNavBar", false)) {
-            if (!timerRunning) {
-                cTimer = new CountDownTimer(10000, 1000) {
-                    public void onTick(long millisUntilFinished) {
-                    }
+            cancelTimer();
+            cTimer = new CountDownTimer(10000, 1000) {
+                public void onTick(long millisUntilFinished) {
+                }
 
-                    public void onFinish() {
+                public void onFinish() {
+                    if (getSupportActionBar() != null) {
                         getSupportActionBar().hide();
-                        timerRunning = false;
                     }
-                };
-                timerRunning = true;
-                cTimer.start();
-            }
+                    timerRunning = false;
+                }
+            };
+            timerRunning = true;
+            cTimer.start();
         }
     }
 
-    //cancel timer
+    //ActionBar Hiding cancel timer
     void cancelTimer() {
-        if(cTimer!=null)
+        if (cTimer != null) {
             cTimer.cancel();
+            cTimer = null;
+        }
+        timerRunning = false;
     }
 
     // Handles various events fired by the Service.
