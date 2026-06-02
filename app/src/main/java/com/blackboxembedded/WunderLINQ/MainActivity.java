@@ -584,11 +584,16 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         if (isInPIPMode) {
             inPIP = true;
             //Hide your clickable components
-            getSupportActionBar().hide();
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().hide();
+            }
         } else {
             inPIP = false;
             //Show your clickable components
-            getSupportActionBar().show();
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().show();
+            }
+            startTimer();
         }
         gridChange(true);
         updateDisplay();
@@ -911,26 +916,30 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     //start timer function
     void startTimer() {
         if (sharedPrefs.getBoolean("prefHideNavBar", false)) {
-            if (!timerRunning) {
-                cTimer = new CountDownTimer(10000, 1000) {
-                    public void onTick(long millisUntilFinished) {
-                    }
+            cancelTimer();
+            cTimer = new CountDownTimer(10000, 1000) {
+                public void onTick(long millisUntilFinished) {
+                }
 
-                    public void onFinish() {
+                public void onFinish() {
+                    if (getSupportActionBar() != null) {
                         getSupportActionBar().hide();
-                        timerRunning = false;
                     }
-                };
-                timerRunning = true;
-                cTimer.start();
-            }
+                    timerRunning = false;
+                }
+            };
+            timerRunning = true;
+            cTimer.start();
         }
     }
 
     //cancel timer
     void cancelTimer() {
-        if(cTimer!=null)
+        if (cTimer != null) {
             cTimer.cancel();
+            cTimer = null;
+        }
+        timerRunning = false;
     }
 
     //Go to next screen
