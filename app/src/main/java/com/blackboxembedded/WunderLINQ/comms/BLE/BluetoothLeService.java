@@ -625,7 +625,12 @@ public class BluetoothLeService extends Service {
 
                 // Check for auto-trip logging
                 if (sharedPrefs.getBoolean("prefAutoTripLogging", false)) {
-                    LoggingService.startLoggingService(MyApplication.getContext());
+                    if (ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                            || ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        LoggingService.startLoggingService(MyApplication.getContext());
+                    } else {
+                        Log.w(TAG, "Auto-trip logging enabled but location permission not granted.");
+                    }
                 }
 
                 String dataLog = "GATT Connected: [" + mBluetoothDeviceName + "|" + mBluetoothDeviceAddress + "] " +

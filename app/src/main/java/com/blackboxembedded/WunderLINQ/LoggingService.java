@@ -146,10 +146,30 @@ public class LoggingService extends Service {
                 .setCategory(NotificationCompat.CATEGORY_SERVICE)
                 .build();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            startForeground(1234, notification, FOREGROUND_SERVICE_TYPE_LOCATION);
-        } else {
-            startForeground(1234, notification);
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                // Starting with Android 14 (API 34), using FOREGROUND_SERVICE_TYPE_LOCATION
+                // requires the FOREGROUND_SERVICE_LOCATION permission in the manifest
+                // AND runtime location permission (fine or coarse).
+                boolean hasLocationPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                        || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+
+                if (hasLocationPermission) {
+                    startForeground(1234, notification, FOREGROUND_SERVICE_TYPE_LOCATION);
+                } else {
+                    Log.e(TAG, "Location permission not granted; cannot start as location foreground service.");
+                    // On API 34+, calling startForeground without a type when one is declared in manifest
+                    // throws MissingForegroundServiceTypeException.
+                    // If we don't have permission, we can't use the type. Best to stop the service.
+                    stopSelf();
+                    return;
+                }
+            } else {
+                startForeground(1234, notification);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to start foreground service", e);
+            stopSelf();
         }
 
         ((MyApplication) this.getApplication()).setTripRecording(true);
