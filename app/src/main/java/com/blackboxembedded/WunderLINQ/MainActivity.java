@@ -220,6 +220,36 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         showActionBar();
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (sharedPrefs.getBoolean("prefPIP", false) && !isInMultiWindowMode()) {
+                Log.w("PiP", "prefPIP true");
+                int contentWidth = getWindow().getDecorView().getWidth();
+                int contentHeight = getWindow().getDecorView().getHeight();
+
+                if (contentWidth > 0 && contentHeight > 0) {
+                    // Compute raw aspect ratio
+                    float rawRatio = (float) contentWidth / contentHeight;
+
+                    // PiP bounds: [1/2.39, 2.39]
+                    final float MIN_ASPECT = 1f / 2.39f;
+                    final float MAX_ASPECT = 2.39f;
+
+                    // Clamp
+                    float clampedRatio = Math.max(MIN_ASPECT, Math.min(rawRatio, MAX_ASPECT));
+
+                    // Recompute a Rational with the clamped width
+                    int clampedWidth = Math.round(clampedRatio * contentHeight);
+                    Rational pipAspectRatio = new Rational(clampedWidth, contentHeight);
+
+                    PictureInPictureParams params = new PictureInPictureParams.Builder()
+                            .setAspectRatio(pipAspectRatio)
+                            .setAutoEnterEnabled(true) // Automatically enters PiP on Home press
+                            .build();
+                    setPictureInPictureParams(params);
+                }
+            }
+        }
+
         // Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
@@ -547,6 +577,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         getWindow().setAttributes(lp);
 
         if (sharedPrefs.getBoolean("prefPIP", false) && !isInMultiWindowMode()) {
+            Log.w("PiP", "prefPIP true");
             int contentWidth  = getWindow().getDecorView().getWidth();
             int contentHeight = getWindow().getDecorView().getHeight();
 
@@ -577,7 +608,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         super.onUserLeaveHint();
     }
-
 
     @Override
     public void onPictureInPictureModeChanged(boolean isInPIPMode) {
