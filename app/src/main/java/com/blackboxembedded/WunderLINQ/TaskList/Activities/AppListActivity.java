@@ -17,6 +17,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package com.blackboxembedded.WunderLINQ.TaskList.Activities;
 
+import static android.content.Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -206,6 +208,11 @@ public class AppListActivity extends AppCompatActivity {
                 SoundManager.playSound(AppListActivity.this, R.raw.enter);
                 lastPosition = position;
                 Intent intent = packageManager.getLaunchIntentForPackage(apps.get(position).name.toString());
+                if (AppListActivity.this.isInMultiWindowMode()) {
+                    if(androidx.preference.PreferenceManager.getDefaultSharedPreferences(AppListActivity.this).getString("prefAppLaunchOptions", "1").equals("0")){
+                        intent.setFlags(FLAG_ACTIVITY_LAUNCH_ADJACENT);
+                    }
+                }
                 AppListActivity.this.startActivity(intent);
             }
         });
