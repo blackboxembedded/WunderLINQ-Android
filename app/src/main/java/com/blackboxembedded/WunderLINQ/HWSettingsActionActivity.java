@@ -280,6 +280,17 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                     }
                     MotorcycleData.wlq.setActionKey(actionID, type, modifiers, key);
                 }
+                try {
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    outputStream.write(MotorcycleData.wlq.WRITE_CONFIG_CMD());
+                    outputStream.write(MotorcycleData.wlq.getTempConfig());
+                    outputStream.write(MotorcycleData.wlq.CMD_EOM());
+                    byte[] writeConfigCmd = outputStream.toByteArray();
+                    Log.d(TAG, "Set HWConfig Command Sent: " + Utils.ByteArrayToHex(writeConfigCmd));
+                    BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, writeConfigCmd, BluetoothLeService.WriteType.WITH_RESPONSE);
+                } catch (IOException e) {
+                    Log.d(TAG, e.toString());
+                }
                 Intent backIntent = new Intent(HWSettingsActionActivity.this, HWSettingsActivity.class);
                 startActivity(backIntent);
             } else if (v.getId() == R.id.btCancel) {
@@ -450,8 +461,7 @@ public class HWSettingsActionActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         Log.d(TAG, e.toString());
                     }
-                    finish();
-                    Intent backIntent = new Intent(HWSettingsActionActivity.this, MainActivity.class);
+                    Intent backIntent = new Intent(HWSettingsActionActivity.this, HWSettingsActivity.class);
                     backIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(backIntent);
                 });

@@ -172,67 +172,65 @@ public class WLQ_S extends WLQ_BASE {
         byte[] flashConfigPart = new byte[configFlashSize];
         System.arraycopy(bytes, 6, flashConfigPart, 0, configFlashSize);
 
-        if (!Arrays.equals(flashConfig, flashConfigPart)) {
-            flashConfig = new byte[configFlashSize];
-            System.arraycopy(flashConfigPart, 0, flashConfig, 0, flashConfigPart.length);
+        flashConfig = new byte[configFlashSize];
+        System.arraycopy(flashConfigPart, 0, flashConfig, 0, flashConfigPart.length);
 
-            tempConfig = new byte[flashConfig.length];
-            System.arraycopy(flashConfig, 0, tempConfig, 0, flashConfig.length);
+        tempConfig = new byte[flashConfig.length];
+        System.arraycopy(flashConfig, 0, tempConfig, 0, flashConfig.length);
 
-            Log.d(TAG, "New flashConfig: " + Utils.ByteArrayToHex(flashConfig));
+        Log.d(TAG, "New flashConfig: " + Utils.ByteArrayToHex(flashConfig));
 
-            firmwareVersion = bytes[firmwareVersionMajor_INDEX] + "." + bytes[firmwareVersionMinor_INDEX];
+        firmwareVersion = bytes[firmwareVersionMajor_INDEX] + "." + bytes[firmwareVersionMinor_INDEX];
 
-            Log.d(TAG, "Firmware Version: " + firmwareVersion);
+        Log.d(TAG, "Firmware Version: " + firmwareVersion);
 
-            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext()).edit();
-            editor.putString("firmwareVersion", firmwareVersion);
-            editor.apply();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext()).edit();
+        editor.putString("firmwareVersion", firmwareVersion);
+        editor.apply();
 
-            keyMode = bytes[keyMode_INDEX];
-            sensitivity = flashConfig[sensitivity_INDEX];
-            rightKeyType = flashConfig[rightKeyType_INDEX];
-            rightKeyModifier = flashConfig[rightKeyModifier_INDEX];
-            rightKey = flashConfig[rightKey_INDEX];
-            rightLongKeyType = flashConfig[rightLongKeyType_INDEX];
-            rightLongKeyModifier = flashConfig[rightLongKeyModifier_INDEX];
-            rightLongKey = flashConfig[rightLongKey_INDEX];
-            leftKeyType = flashConfig[leftKeyType_INDEX];
-            leftKeyModifier = flashConfig[leftKeyModifier_INDEX];
-            leftKey = flashConfig[leftKey_INDEX];
-            leftLongKeyType = flashConfig[leftLongKeyType_INDEX];
-            leftLongKeyModifier = flashConfig[leftLongKeyModifier_INDEX];
-            leftLongKey = flashConfig[leftLongKey_INDEX];
-            upKeyType = flashConfig[upKeyType_INDEX];
-            upKeyModifier = flashConfig[upKeyModifier_INDEX];
-            upKey = flashConfig[upKey_INDEX];
-            upLongKeyType = flashConfig[upLongKeyType_INDEX];
-            upLongKeyModifier = flashConfig[upLongKeyModifier_INDEX];
-            upLongKey = flashConfig[upLongKey_INDEX];
-            downKeyType = flashConfig[downKeyType_INDEX];
-            downKeyModifier = flashConfig[downKeyModifier_INDEX];
-            downKey = flashConfig[downKey_INDEX];
-            downLongKeyType = flashConfig[downLongKeyType_INDEX];
-            downLongKeyModifier = flashConfig[downLongKeyModifier_INDEX];
-            downLongKey = flashConfig[downLongKey_INDEX];
-            fx1KeyType = flashConfig[fx1KeyType_INDEX];
-            fx1KeyModifier = flashConfig[fx1KeyModifier_INDEX];
-            fx1Key = flashConfig[fx1Key_INDEX];
-            fx1LongKeyType = flashConfig[fx1LongKeyType_INDEX];
-            fx1LongKeyModifier = flashConfig[fx1LongKeyModifier_INDEX];
-            fx1LongKey = flashConfig[fx1LongKey_INDEX];
-            fx2KeyType = flashConfig[fx2KeyType_INDEX];
-            fx2KeyModifier = flashConfig[fx2KeyModifier_INDEX];
-            fx2Key = flashConfig[fx2Key_INDEX];
-            fx2LongKeyType = flashConfig[fx2LongKeyType_INDEX];
-            fx2LongKeyModifier = flashConfig[fx2LongKeyModifier_INDEX];
-            fx2LongKey = flashConfig[fx2LongKey_INDEX];
-            pdmChannel1Setting = flashConfig[pdmChannel1_INDEX];
-            pdmChannel2Setting = flashConfig[pdmChannel2_INDEX];
-            pdmChannel3Setting = flashConfig[pdmChannel3_INDEX];
-            pdmChannel4Setting = flashConfig[pdmChannel4_INDEX];
-            accessories = bytes[accessories_INDEX];
-        }
+        keyMode = bytes[keyMode_INDEX];
+        sensitivity = flashConfig[sensitivity_INDEX];
+        rightKeyType = flashConfig[rightKeyType_INDEX];
+        rightKeyModifier = flashConfig[rightKeyModifier_INDEX];
+        rightKey = flashConfig[rightKey_INDEX];
+        rightLongKeyType = flashConfig[rightLongKeyType_INDEX];
+        rightLongKeyModifier = flashConfig[rightLongKeyModifier_INDEX];
+        rightLongKey = flashConfig[rightLongKey_INDEX];
+        leftKeyType = flashConfig[leftKeyType_INDEX];
+        leftKeyModifier = flashConfig[leftKeyModifier_INDEX];
+        leftKey = flashConfig[leftKey_INDEX];
+        leftLongKeyType = flashConfig[leftLongKeyType_INDEX];
+        leftLongKeyModifier = flashConfig[leftLongKeyModifier_INDEX];
+        leftLongKey = flashConfig[leftLongKey_INDEX];
+        upKeyType = flashConfig[upKeyType_INDEX];
+        upKeyModifier = flashConfig[upKeyModifier_INDEX];
+        upKey = flashConfig[upKey_INDEX];
+        upLongKeyType = flashConfig[upLongKeyType_INDEX];
+        upLongKeyModifier = flashConfig[upLongKeyModifier_INDEX];
+        upLongKey = flashConfig[upLongKey_INDEX];
+        downKeyType = flashConfig[downKeyType_INDEX];
+        downKeyModifier = flashConfig[downKeyModifier_INDEX];
+        downKey = flashConfig[downKey_INDEX];
+        downLongKeyType = flashConfig[downLongKeyType_INDEX];
+        downLongKeyModifier = flashConfig[downLongKeyModifier_INDEX];
+        downLongKey = flashConfig[downLongKey_INDEX];
+        fx1KeyType = flashConfig[fx1KeyType_INDEX];
+        fx1KeyModifier = flashConfig[fx1KeyModifier_INDEX];
+        fx1Key = flashConfig[fx1Key_INDEX];
+        fx1LongKeyType = flashConfig[fx1LongKeyType_INDEX];
+        fx1LongKeyModifier = flashConfig[fx1LongKeyModifier_INDEX];
+        fx1LongKey = flashConfig[fx1LongKey_INDEX];
+        fx2KeyType = flashConfig[fx2KeyType_INDEX];
+        fx2KeyModifier = flashConfig[fx2KeyModifier_INDEX];
+        fx2Key = flashConfig[fx2Key_INDEX];
+        fx2LongKeyType = flashConfig[fx2LongKeyType_INDEX];
+        fx2LongKeyModifier = flashConfig[fx2LongKeyModifier_INDEX];
+        fx2LongKey = flashConfig[fx2LongKey_INDEX];
+        pdmChannel1Setting = flashConfig[pdmChannel1_INDEX];
+        pdmChannel2Setting = flashConfig[pdmChannel2_INDEX];
+        pdmChannel3Setting = flashConfig[pdmChannel3_INDEX];
+        pdmChannel4Setting = flashConfig[pdmChannel4_INDEX];
+        accessories = bytes[accessories_INDEX];
     }
 
     @Override

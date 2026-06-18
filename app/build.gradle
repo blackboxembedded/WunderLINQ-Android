@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdk = 36
+    compileSdk = 37
     defaultConfig {
         applicationId "com.blackboxembedded.WunderLINQ"
         minSdkVersion 26
         targetSdkVersion 36
-        versionCode 216
-        versionName "2.99.7"
+        versionCode 215
+        versionName "2.99.6"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         Properties properties = new Properties()
@@ -58,8 +58,8 @@ dependencies {
     implementation 'androidx.preference:preference:1.2.1'
     implementation 'androidx.gridlayout:gridlayout:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
-    implementation "androidx.lifecycle:lifecycle-viewmodel:2.10.0"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:2.11.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.11.0"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.14.0'
     implementation 'com.google.android.gms:play-services-location:21.3.0'
@@ -69,7 +69,7 @@ dependencies {
     implementation 'ca.rmen:lib-sunrise-sunset:1.1.2'
     implementation 'com.github.martin-stone:hsv-alpha-color-picker-android:3.1.0'
     implementation 'io.jenetics:jpx:3.2.1'
-    implementation 'com.fasterxml.woodstox:woodstox-core:7.2.0'
+    implementation 'com.fasterxml.woodstox:woodstox-core:7.2.1'
     implementation 'stax:stax:1.2.0'
     implementation 'com.github.ticofab:android-gpx-parser:2.3.1'
     implementation 'com.caverock:androidsvg-aar:1.4'

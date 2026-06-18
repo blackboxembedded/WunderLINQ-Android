@@ -384,7 +384,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                     hwConfigBtn.setVisibility(View.VISIBLE);
                 }
             }
-
+            
         } else {
             //TODO: Add No Config msg & get Config button
             // Read config
@@ -392,6 +392,7 @@ public class HWSettingsActivity extends AppCompatActivity implements HWSettingsR
                 BluetoothLeService.writeCharacteristic(BluetoothLeService.gattCommandCharacteristic, WLQ_BASE.GET_CONFIG_CMD, BluetoothLeService.WriteType.WITH_RESPONSE);
             }
         }
+        adapter.notifyDataSetChanged();
     }
 
     private void resetHWConfig(){
